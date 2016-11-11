@@ -43,7 +43,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     public static final String TAG = "GSYVideoPlayer";
 
-
     protected static final int CURRENT_STATE_NORMAL = 0;
     protected static final int CURRENT_STATE_PREPAREING = 1;
     protected static final int CURRENT_STATE_PLAYING = 2;
@@ -56,26 +55,28 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     protected boolean mTouchingProgressBar = false;
     protected boolean mIfCurrentIsFullscreen = false;
     protected boolean mIsTouchWiget = false;
-    protected boolean mIfFullscreenIsDirectly = false;
+
     protected static boolean IF_FULLSCREEN_FROM_NORMAL = false;//to prevent infinite looping
-    public static boolean IF_RELEASE_WHEN_ON_PAUSE = true;
+
     protected static long CLICK_QUIT_FULLSCREEN_TIME = 0;
+
+    public static boolean IF_RELEASE_WHEN_ON_PAUSE = true;
     public static final int FULL_SCREEN_NORMAL_DELAY = 2000;
 
-
-    protected static Timer UPDATE_PROGRESS_TIMER;
-    protected static VideoAllCallBack videoAllCallBack;
     public static boolean WIFI_TIP_DIALOG_SHOWED = false;
 
-    public ImageView startButton;
-    public SeekBar progressBar;
-    public ImageView fullscreenButton;
-    public TextView currentTimeTextView, totalTimeTextView;
-    public ViewGroup textureViewContainer;
-    public ViewGroup topContainer, bottomContainer;
-    public GSYTextureView textureView;
-    public Surface mSurface;
-    public Activity activity;
+    protected static Timer UPDATE_PROGRESS_TIMER;
+    protected VideoAllCallBack videoAllCallBack;
+
+    protected ImageView startButton;
+    protected SeekBar progressBar;
+    protected ImageView fullscreenButton;
+    protected TextView currentTimeTextView, totalTimeTextView;
+    protected ViewGroup textureViewContainer;
+    protected ViewGroup topContainer, bottomContainer;
+    protected GSYTextureView textureView;
+    protected Surface mSurface;
+    protected Activity activity;
 
     protected String mUrl;
     protected Object[] mObjects;
@@ -96,7 +97,7 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     protected int mScreenWidth;
     protected int mScreenHeight;
     protected int mThreshold = 80;
-    public int seekToInAdvance = -1;
+    protected int seekToInAdvance = -1;
     private int rotate = 0;
 
     private long pauseTime;
@@ -110,6 +111,7 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     protected int mSeekTimePosition;
 
+    public abstract int getLayoutId();
 
     public GSYVideoPlayer(Context context) {
         super(context);
@@ -149,10 +151,9 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
         activity = (Activity) context;
     }
 
-    public abstract int getLayoutId();
 
-    protected static void setJcBuriedPoint(VideoAllCallBack jcBuriedPoint) {
-        videoAllCallBack = jcBuriedPoint;
+    protected void setVideoAllCallBack(VideoAllCallBack videoAllCallBack) {
+        this.videoAllCallBack = videoAllCallBack;
     }
 
     public boolean setUp(String url, boolean cacheWithPlay, Object... objects) {
@@ -215,7 +216,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.start) {
-            Log.i(TAG, "onClick start [" + this.hashCode() + "] ");
             if (TextUtils.isEmpty(mUrl)) {
                 Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
                 return;
@@ -227,7 +227,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
                 }
                 startButtonLogic();
             } else if (mCurrentState == CURRENT_STATE_PLAYING) {
-                Log.d(TAG, "pauseVideo [" + this.hashCode() + "] ");
                 GSYVideoManager.instance().getMediaPlayer().pause();
                 setStateAndUi(CURRENT_STATE_PAUSE);
                 if (videoAllCallBack != null && isCurrentMediaListener()) {
@@ -250,25 +249,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
             } else if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE) {
                 startButtonLogic();
             }
-        } else if (i == R.id.fullscreen) {
-            /*Log.i(TAG, "onClick fullscreen [" + this.hashCode() + "] ");
-            if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE) return;
-            if (mIfCurrentIsFullscreen) {
-                //quit fullscreen
-                backFullscreen();
-            } else {
-                Log.d(TAG, "toFullscreenActivity [" + this.hashCode() + "] ");
-                if (JC_BURIED_POINT != null && isCurrentMediaListener()) {
-                    JC_BURIED_POINT.onEnterFullscreen(mUrl, mObjects);
-                }
-                //to fullscreen
-                GSYVideoManager.instance().setDisplay(null);
-                GSYVideoManager.instance().setLastListener(this);
-                GSYVideoManager.instance().setListener(null);
-                IF_FULLSCREEN_FROM_NORMAL = true;
-                IF_RELEASE_WHEN_ON_PAUSE = false;
-                JCFullScreenActivity.startActivityFromNormal(getContext(), mCurrentState, mUrl, JCVideoPlayer.this, rotate, JCVideoPlayer.this.getClass(), this.mObjects);
-            }*/
         } else if (i == R.id.surface_container && mCurrentState == CURRENT_STATE_ERROR) {
             if (videoAllCallBack != null) {
                 videoAllCallBack.onClickStartError(mUrl, mObjects);
@@ -357,7 +337,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
 
     protected void addTextureView() {
-        Log.d(TAG, "addTextureView [" + this.hashCode() + "] ");
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
@@ -416,19 +395,16 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
         if (id == R.id.surface_container) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.i(TAG, "onTouch surfaceContainer actionDown [" + this.hashCode() + "] ");
                     mTouchingProgressBar = true;
-
                     mDownX = x;
                     mDownY = y;
                     mChangeVolume = false;
                     mChangePosition = false;
                     mBrightness = false;
                     firstTouch = true;
-                    /////////////////////
+
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.i(TAG, "onTouch surfaceContainer actionMove [" + this.hashCode() + "] ");
                     float deltaX = x - mDownX;
                     float deltaY = y - mDownY;
                     float absDeltaX = Math.abs(deltaX);
@@ -484,7 +460,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
                     break;
                 case MotionEvent.ACTION_UP:
-                    Log.i(TAG, "onTouch surfaceContainer actionUp [" + this.hashCode() + "] ");
                     mTouchingProgressBar = false;
                     dismissProgressDialog();
                     dismissVolumeDialog();
@@ -495,7 +470,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
                         int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
                         progressBar.setProgress(progress);
                     }
-                    /////////////////////
                     startProgressTimer();
                     if (videoAllCallBack != null && isCurrentMediaListener()) {
                         if (mIfCurrentIsFullscreen) {
@@ -506,11 +480,10 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
                     }
                     break;
             }
-        } else if (id == R.id.progress) {//if I am seeking bar,no mater whoever can not intercept my event
+        } else if (id == R.id.progress) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_MOVE:
-                    Log.i(TAG, "onTouch bottomProgress actionUp [" + this.hashCode() + "] ");
                     cancelProgressTimer();
                     ViewParent vpdown = getParent();
                     while (vpdown != null) {
@@ -519,7 +492,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    Log.i(TAG, "onTouch bottomProgress actionDown [" + this.hashCode() + "] ");
                     startProgressTimer();
                     ViewParent vpup = getParent();
                     while (vpup != null) {
@@ -576,7 +548,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
         if (GSYVideoManager.instance().getMediaPlayer() != null && GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
             int time = seekBar.getProgress() * getDuration() / 100;
             GSYVideoManager.instance().getMediaPlayer().seekTo(time);
-            Log.i(TAG, "seekTo " + time + " [" + this.hashCode() + "] ");
         }
     }
 
@@ -594,7 +565,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     @Override
     public void onAutoCompletion() {
-        //make me normal first
         if (videoAllCallBack != null && isCurrentMediaListener()) {
             if (mIfCurrentIsFullscreen) {
                 videoAllCallBack.onAutoCompleteFullscreen(mUrl, mObjects);
@@ -642,7 +612,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     @Override
     public void onBufferingUpdate(int percent) {
         if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
-            Log.v(TAG, "onBufferingUpdate " + percent + " [" + this.hashCode() + "] ");
             setTextAndProgress(percent);
         }
     }
@@ -654,7 +623,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     @Override
     public void onError(int what, int extra) {
-        Log.e(TAG, "onError " + what + " - " + extra + " [" + this.hashCode() + "] ");
         if (what != 38 && what != -38) {
             setStateAndUi(CURRENT_STATE_ERROR);
         }
@@ -662,20 +630,16 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     @Override
     public void onInfo(int what, int extra) {
-        Log.d(TAG, "onInfo what - " + what + " extra - " + extra);
         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
             BACKUP_PLAYING_BUFFERING_STATE = mCurrentState;
             setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
-            Log.d(TAG, "MEDIA_INFO_BUFFERING_START");
         } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
             if (BACKUP_PLAYING_BUFFERING_STATE != -1) {
                 setStateAndUi(BACKUP_PLAYING_BUFFERING_STATE);
                 BACKUP_PLAYING_BUFFERING_STATE = -1;
             }
-            Log.d(TAG, "MEDIA_INFO_BUFFERING_END");
         } else if (what == IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED) {
             rotate = extra;
-            Log.e(TAG, "MEDIA_INFO_VIDEO_ROTATION_CHANGED: " + rotate);
             if (textureView != null)
                 textureView.setRotation(rotate);
         }
@@ -718,9 +682,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
         @Override
         public void run() {
             if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
-                int position = getCurrentPositionWhenPlaying();
-                int duration = getDuration();
-                Log.v(TAG, "onProgressUpdate " + position + "/" + duration + " [" + this.hashCode() + "] ");
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -758,7 +719,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     protected void setTextAndProgress(int secProgress) {
         int position = getCurrentPositionWhenPlaying();
         int duration = getDuration();
-        // if duration == 0 (e.g. in HLS streams) avoids ArithmeticException
         int progress = position * 100 / (duration == 0 ? 1 : duration);
         setProgressAndTime(progress, secProgress, position, duration);
     }
@@ -780,34 +740,8 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
         totalTimeTextView.setText(CommonUtil.stringForTime(0));
     }
 
-    protected void quitFullScreenGoToNormal() {
-        Log.d(TAG, "quitFullScreenGoToNormal [" + this.hashCode() + "] ");
-        if (videoAllCallBack != null && isCurrentMediaListener()) {
-            videoAllCallBack.onQuitFullscreen(mUrl, mObjects);
-        }
-        GSYVideoManager.instance().setDisplay(null);
-        GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
-        GSYVideoManager.instance().setLastListener(null);
-        GSYVideoManager.instance().setLastState(mCurrentState);//save state
-        if (GSYVideoManager.instance().listener() != null)
-            GSYVideoManager.instance().listener().onBackFullscreen();
-        if (mCurrentState == CURRENT_STATE_PAUSE) {
-            GSYVideoManager.instance().getMediaPlayer().seekTo(GSYVideoManager.instance().getMediaPlayer().getCurrentPosition());
-        }
-    }
-
-    public void backFullscreen() {
-        Log.d(TAG, "quitFullscreen [" + this.hashCode() + "] ");
-        IF_FULLSCREEN_FROM_NORMAL = false;
-        CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
-        IF_RELEASE_WHEN_ON_PAUSE = false;
-        quitFullScreenGoToNormal();
-
-    }
-
     public static void releaseAllVideos() {
         if (IF_RELEASE_WHEN_ON_PAUSE) {
-            Log.d(TAG, "releaseAllVideos");
             if (GSYVideoManager.instance().listener() != null) {
                 GSYVideoManager.instance().listener().onCompletion();
             }
@@ -823,7 +757,6 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     public void release() {
         if (isCurrentMediaListener() &&
                 (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) > FULL_SCREEN_NORMAL_DELAY) {
-            Log.d(TAG, "release [" + this.hashCode() + "]");
             releaseAllVideos();
         }
     }
@@ -864,5 +797,13 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     public void setIsTouchWiget(boolean isTouchWiget) {
         this.mIsTouchWiget = isTouchWiget;
+    }
+
+    public ImageView getStartButton() {
+        return startButton;
+    }
+
+    public ImageView getFullscreenButton() {
+        return fullscreenButton;
     }
 }

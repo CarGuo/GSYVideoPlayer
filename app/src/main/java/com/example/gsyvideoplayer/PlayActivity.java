@@ -47,20 +47,20 @@ public class PlayActivity extends AppCompatActivity {
         //standardPlayer.thumbImageView.setImageURI(uri);
         //standardPlayer.titleTextView.setVisibility(View.GONE);
 
-        videoPlayer.backButton.setVisibility(View.VISIBLE);
+        videoPlayer.getBackButton().setVisibility(View.VISIBLE);
         videoPlayer.setIsTouchWiget(true);
 
 
         orientationUtils = new OrientationUtils(this, videoPlayer);
 
-        videoPlayer.fullscreenButton.setOnClickListener(new View.OnClickListener() {
+        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 orientationUtils.resolveByClick();
             }
         });
 
-        videoPlayer.backButton.setOnClickListener(new View.OnClickListener() {
+        videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -91,10 +91,10 @@ public class PlayActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            videoPlayer.fullscreenButton.performClick();
+            videoPlayer.getFullscreenButton().performClick();
             return;
         }
-        StandardGSYVideoPlayer.setJcBuriedPointStandard(null);
+        videoPlayer.setStandardVideoAllCallBack(null);
         GSYVideoPlayer.releaseAllVideos();
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onBackPressed();
@@ -112,7 +112,7 @@ public class PlayActivity extends AppCompatActivity {
             addTransitionListener();
             startPostponedEnterTransition();
         } else {
-            videoPlayer.startPlayLocic();
+            videoPlayer.startPlayLogic();
         }
     }
 
@@ -123,8 +123,7 @@ public class PlayActivity extends AppCompatActivity {
             transition.addListener(new OnTransitionListener() {
                 @Override
                 public void onTransitionEnd(Transition transition) {
-                    videoPlayer.startPlayLocic();
-                    // Make sure we remove ourselves as a listener
+                    videoPlayer.startPlayLogic();
                     transition.removeListener(this);
                 }
             });

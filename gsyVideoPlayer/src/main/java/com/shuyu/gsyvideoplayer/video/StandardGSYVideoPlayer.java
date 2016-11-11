@@ -35,21 +35,27 @@ import java.util.TimerTask;
 public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
 
-    protected static StandardVideoAllCallBack JC_BURIED_POINT_STANDARD;
     protected static Timer DISSMISS_CONTROL_VIEW_TIMER;
 
-    public ImageView backButton;
-    public ProgressBar bottomProgressBar, loadingProgressBar;
-    public TextView titleTextView;
-    public ImageView thumbImageView;
-    public ImageView coverImageView;
+    protected ImageView backButton;
+    protected ProgressBar bottomProgressBar, loadingProgressBar;
+    protected TextView titleTextView;
+    protected ImageView thumbImageView;
+    protected ImageView coverImageView;
+
+    protected Dialog mBrightnessDialog;
+    protected TextView mBrightnessDialogTv;
+    protected Dialog mVolumeDialog;
+    protected ProgressBar mDialogVolumeProgressBar;
+    protected StandardVideoAllCallBack standardVideoAllCallBack;
+
 
     protected DismissControlViewTimerTask mDismissControlViewTimerTask;
 
 
-    public static void setJcBuriedPointStandard(StandardVideoAllCallBack jcBuriedPointStandard) {
-        JC_BURIED_POINT_STANDARD = jcBuriedPointStandard;
-        GSYVideoPlayer.setJcBuriedPoint(jcBuriedPointStandard);
+    public void setStandardVideoAllCallBack(StandardVideoAllCallBack standardVideoAllCallBack) {
+        this.standardVideoAllCallBack = standardVideoAllCallBack;
+        setVideoAllCallBack(standardVideoAllCallBack);
     }
 
     public StandardGSYVideoPlayer(Context context) {
@@ -177,21 +183,19 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                     showWifiDialog();
                     return;
                 }
-                startPlayLocic();
+                startPlayLogic();
             } else if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE) {
                 onClickUiToggle();
             }
         } else if (i == R.id.surface_container) {
-            if (JC_BURIED_POINT_STANDARD != null && isCurrentMediaListener()) {
+            if (standardVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
-                    JC_BURIED_POINT_STANDARD.onClickBlankFullscreen(mUrl, mObjects);
+                    standardVideoAllCallBack.onClickBlankFullscreen(mUrl, mObjects);
                 } else {
-                    JC_BURIED_POINT_STANDARD.onClickBlank(mUrl, mObjects);
+                    standardVideoAllCallBack.onClickBlank(mUrl, mObjects);
                 }
             }
             startDismissControlViewTimer();
-        } else if (i == R.id.back) {
-            backFullscreen();
         }
     }
 
@@ -204,7 +208,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                startPlayLocic();
+                startPlayLogic();
                 WIFI_TIP_DIALOG_SHOWED = true;
             }
         });
@@ -217,9 +221,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         builder.create().show();
     }
 
-    public void startPlayLocic() {
-        if (JC_BURIED_POINT_STANDARD != null) {
-            JC_BURIED_POINT_STANDARD.onClickStartThumb(mUrl, mObjects);
+    public void startPlayLogic() {
+        if (standardVideoAllCallBack != null) {
+            standardVideoAllCallBack.onClickStartThumb(mUrl, mObjects);
         }
         prepareVideo();
         startDismissControlViewTimer();
@@ -459,12 +463,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
     }
 
-
-    protected Dialog mBrightnessDialog;
-    protected TextView mBrightnessDialogTv;
-    protected Dialog mVolumeDialog;
-    protected ProgressBar mDialogVolumeProgressBar;
-
     @Override
     protected void showVolumeDialog(float deltaY, int volumePercent) {
         super.showVolumeDialog(deltaY, volumePercent);
@@ -566,5 +564,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                 }
             }
         }
+    }
+
+    public TextView getTitleTextView() {
+        return titleTextView;
+    }
+
+    public ImageView getBackButton() {
+        return backButton;
     }
 }

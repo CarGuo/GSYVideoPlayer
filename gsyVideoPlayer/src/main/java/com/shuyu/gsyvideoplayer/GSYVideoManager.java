@@ -1,6 +1,6 @@
 package com.shuyu.gsyvideoplayer;
 
-import android.app.Application;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -22,6 +22,8 @@ import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
+ * 视频管理，单例
+ * 目前使用的是IJK封装的谷歌EXOPlayer
  * Created by shuyu on 2016/11/11.
  */
 
@@ -46,11 +48,11 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private WeakReference<GSYMediaPlayerListener> listener;
     private WeakReference<GSYMediaPlayerListener> lastListener;
 
-    private HttpProxyCacheServer proxy;
+    private HttpProxyCacheServer proxy; //视频代理
 
-    private int currentVideoWidth = 0;
-    private int currentVideoHeight = 0;
-    private int lastState;
+    private int currentVideoWidth = 0; //当前播放的视频宽的高
+    private int currentVideoHeight = 0; //当前播放的视屏的高
+    private int lastState;//当前视频的最后状态
 
     /**
      * 初始化，必须的
@@ -67,11 +69,17 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         return videoManager;
     }
 
+    /**
+     * 获取缓存代理服务
+     */
     public static HttpProxyCacheServer getProxy(Context context) {
         HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
         return proxy == null ? (proxy = GSYVideoManager.instance().newProxy(context)) : proxy;
     }
 
+    /**
+     * 创建缓存代理服务
+     */
     private HttpProxyCacheServer newProxy(Context context) {
         return new HttpProxyCacheServer(context.getApplicationContext());
     }
