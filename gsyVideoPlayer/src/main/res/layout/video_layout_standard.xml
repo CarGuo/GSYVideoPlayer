@@ -24,7 +24,7 @@
         android:layout_alignParentTop="true"
         android:background="#222222" />
 
-    <ImageView
+    <RelativeLayout
         android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

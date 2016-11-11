@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +41,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected ImageView backButton;
     protected ProgressBar bottomProgressBar, loadingProgressBar;
     protected TextView titleTextView;
-    protected ImageView thumbImageView;
+    protected RelativeLayout thumbImageViewLayout;
     protected ImageView coverImageView;
+    private View thumbImageView;
 
     protected Dialog mBrightnessDialog;
     protected TextView mBrightnessDialogTv;
@@ -72,12 +74,17 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomProgressBar = (ProgressBar) findViewById(R.id.bottom_progressbar);
         titleTextView = (TextView) findViewById(R.id.title);
         backButton = (ImageView) findViewById(R.id.back);
-        thumbImageView = (ImageView) findViewById(R.id.thumb);
+        thumbImageViewLayout = (RelativeLayout) findViewById(R.id.thumb);
         coverImageView = (ImageView) findViewById(R.id.cover);
         loadingProgressBar = (ProgressBar) findViewById(R.id.loading);
 
-        thumbImageView.setOnClickListener(this);
+        thumbImageViewLayout.setVisibility(GONE);
+        thumbImageViewLayout.setOnClickListener(this);
         backButton.setOnClickListener(this);
+        if (thumbImageView != null) {
+            thumbImageViewLayout.removeAllViews();
+            resolveThumbImage(thumbImageView);
+        }
 
     }
 
@@ -283,7 +290,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
         loadingProgressBar.setVisibility(View.INVISIBLE);
-        thumbImageView.setVisibility(View.VISIBLE);
+        thumbImageViewLayout.setVisibility(View.VISIBLE);
         coverImageView.setVisibility(View.VISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
         updateStartImage();
@@ -294,7 +301,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.VISIBLE);
         startButton.setVisibility(View.INVISIBLE);
         loadingProgressBar.setVisibility(View.VISIBLE);
-        thumbImageView.setVisibility(View.INVISIBLE);
+        thumbImageViewLayout.setVisibility(View.INVISIBLE);
         coverImageView.setVisibility(View.VISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
     }
@@ -303,7 +310,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         topContainer.setVisibility(View.INVISIBLE);
         bottomContainer.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.INVISIBLE);
-        thumbImageView.setVisibility(View.INVISIBLE);
+        thumbImageViewLayout.setVisibility(View.INVISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
         coverImageView.setVisibility(View.VISIBLE);
     }
@@ -313,7 +320,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.VISIBLE);
         startButton.setVisibility(View.VISIBLE);
         loadingProgressBar.setVisibility(View.INVISIBLE);
-        thumbImageView.setVisibility(View.INVISIBLE);
+        thumbImageViewLayout.setVisibility(View.INVISIBLE);
         coverImageView.setVisibility(View.INVISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
         updateStartImage();
@@ -329,7 +336,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.VISIBLE);
         startButton.setVisibility(View.VISIBLE);
         loadingProgressBar.setVisibility(View.INVISIBLE);
-        thumbImageView.setVisibility(View.INVISIBLE);
+        thumbImageViewLayout.setVisibility(View.INVISIBLE);
         coverImageView.setVisibility(View.INVISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
         updateStartImage();
@@ -345,7 +352,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.VISIBLE);
         startButton.setVisibility(View.INVISIBLE);
         loadingProgressBar.setVisibility(View.VISIBLE);
-        thumbImageView.setVisibility(View.INVISIBLE);
+        thumbImageViewLayout.setVisibility(View.INVISIBLE);
         coverImageView.setVisibility(View.INVISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
     }
@@ -355,7 +362,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.INVISIBLE);
         loadingProgressBar.setVisibility(View.VISIBLE);
-        thumbImageView.setVisibility(View.INVISIBLE);
+        thumbImageViewLayout.setVisibility(View.INVISIBLE);
         coverImageView.setVisibility(View.INVISIBLE);
         bottomProgressBar.setVisibility(View.VISIBLE);
         updateStartImage();
@@ -366,7 +373,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.INVISIBLE);
         loadingProgressBar.setVisibility(View.INVISIBLE);
-        thumbImageView.setVisibility(View.INVISIBLE);
+        thumbImageViewLayout.setVisibility(View.INVISIBLE);
         coverImageView.setVisibility(View.INVISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
     }
@@ -376,7 +383,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.VISIBLE);
         startButton.setVisibility(View.VISIBLE);
         loadingProgressBar.setVisibility(View.INVISIBLE);
-        thumbImageView.setVisibility(View.VISIBLE);
+        thumbImageViewLayout.setVisibility(View.VISIBLE);
         coverImageView.setVisibility(View.INVISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
         updateStartImage();
@@ -387,7 +394,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
         loadingProgressBar.setVisibility(View.INVISIBLE);
-        thumbImageView.setVisibility(View.VISIBLE);
+        thumbImageViewLayout.setVisibility(View.VISIBLE);
         coverImageView.setVisibility(View.INVISIBLE);
         bottomProgressBar.setVisibility(View.VISIBLE);
         updateStartImage();
@@ -398,7 +405,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         bottomContainer.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
         loadingProgressBar.setVisibility(View.INVISIBLE);
-        thumbImageView.setVisibility(View.INVISIBLE);
+        thumbImageViewLayout.setVisibility(View.INVISIBLE);
         coverImageView.setVisibility(View.VISIBLE);
         bottomProgressBar.setVisibility(View.INVISIBLE);
         updateStartImage();
@@ -565,6 +572,34 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             }
         }
     }
+
+    private void resolveThumbImage(View thumb) {
+        thumbImageViewLayout.addView(thumb);
+        ViewGroup.LayoutParams layoutParams = thumb.getLayoutParams();
+        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        thumb.setLayoutParams(layoutParams);
+    }
+
+    /***
+     * 设置封面
+     */
+    public void setThumbImageView(View view) {
+        if (thumbImageViewLayout != null) {
+            thumbImageView = view;
+            resolveThumbImage(view);
+        }
+    }
+
+    /***
+     * 清除封面
+     */
+    public void clearThumbImageView() {
+        if (thumbImageViewLayout != null) {
+            thumbImageViewLayout.removeAllViews();
+        }
+    }
+
 
     public TextView getTitleTextView() {
         return titleTextView;

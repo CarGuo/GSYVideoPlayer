@@ -8,6 +8,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
 import android.view.View;
+import android.widget.ImageView;
 
 
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
@@ -47,16 +48,24 @@ public class PlayActivity extends AppCompatActivity {
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         videoPlayer.setUp(url, true, "");
 
-        //Uri uri = Uri.parse(cover);
-        //standardPlayer.thumbImageView.setImageURI(uri);
-        //standardPlayer.titleTextView.setVisibility(View.GONE);
+        //增加封面
+        ImageView imageView = new ImageView(this);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageResource(R.mipmap.xxx1);
+        videoPlayer.setThumbImageView(imageView);
 
+        //增加title
+        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+        videoPlayer.getTitleTextView().setText("测试视频");
+
+        //设置返回键
         videoPlayer.getBackButton().setVisibility(View.VISIBLE);
         videoPlayer.setIsTouchWiget(true);
 
-
+        //设置旋转
         orientationUtils = new OrientationUtils(this, videoPlayer);
 
+        //设置全屏按键功能
         videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +73,7 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
+        //设置返回按键功能
         videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +81,7 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
+        //过渡动画
         initTransition();
     }
 
@@ -93,11 +104,12 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        //先返回正常状态
         if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             videoPlayer.getFullscreenButton().performClick();
             return;
         }
+        //释放所有
         videoPlayer.setStandardVideoAllCallBack(null);
         GSYVideoPlayer.releaseAllVideos();
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
