@@ -35,6 +35,7 @@ public class ListVideoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         listVideoAdapter = new ListVideoAdapter(this);
+        listVideoAdapter.setRootView(activityListVideo);
         videoList.setAdapter(listVideoAdapter);
 
     }

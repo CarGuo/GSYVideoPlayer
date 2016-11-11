@@ -15,6 +15,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -42,6 +44,8 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClickListener, View.OnTouchListener, SeekBar.OnSeekBarChangeListener, GSYMediaPlayerListener, TextureView.SurfaceTextureListener {
 
     public static final String TAG = "GSYVideoPlayer";
+
+    public static final int FULLSCREEN_ID = 83797;
 
     protected static final int CURRENT_STATE_NORMAL = 0;
     protected static final int CURRENT_STATE_PREPAREING = 1;
@@ -108,10 +112,13 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     protected boolean mBrightness = false;
     protected boolean firstTouch = false;
     protected boolean mLooping = false;
+    protected boolean mCache = false;
 
     protected int mSeekTimePosition;
 
     public abstract int getLayoutId();
+
+    public abstract void startPlayLogic();
 
     public GSYVideoPlayer(Context context) {
         super(context);
@@ -157,6 +164,7 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     }
 
     public boolean setUp(String url, boolean cacheWithPlay, Object... objects) {
+        mCache = cacheWithPlay;
         if (isCurrentMediaListener() &&
                 (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) < FULL_SCREEN_NORMAL_DELAY)
             return false;

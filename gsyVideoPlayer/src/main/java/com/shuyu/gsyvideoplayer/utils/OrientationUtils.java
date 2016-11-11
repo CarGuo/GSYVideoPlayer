@@ -121,6 +121,21 @@ public class OrientationUtils {
 
     }
 
+    /**
+     * 列表返回的样式判断。因为立即旋转会导致界面跳动的问题
+     */
+    public int backToProtVideo() {
+        if (mIsLand > 0) {
+            mClick = true;
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            mIsLand = 0;
+            mClickPort = false;
+            return 500;
+        }
+        return 0;
+    }
+
+
     public boolean isEnable() {
         return mEnable;
     }

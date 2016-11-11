@@ -228,6 +228,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         builder.create().show();
     }
 
+
+    @Override
     public void startPlayLogic() {
         if (standardVideoAllCallBack != null) {
             standardVideoAllCallBack.onClickStartThumb(mUrl, mObjects);
