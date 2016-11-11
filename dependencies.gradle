@@ -1,0 +1,46 @@
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+ext {
+    //Android
+    androidBuildToolsVersion = "23.0.1"
+    androidMinSdkVersion = 19
+    androidTargetSdkVersion = 22
+    androidCompileSdkVersion = 22
+    supportLibraryVersion = '24.2.0'
+    otherLibraryVersion = '22.2.1'
+
+    //ViewLibraries
+    butterKnifeVersion = '8.2.1'
+
+    //ViewLibraries
+    butterKnifeVersion = '8.2.1'
+    ijkplayer = '0.7.2'
+
+    //DataLibraries
+    videocache = '2.6.3'
+
+    androidDependencies = [
+            recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
+            appcompat_v7: "com.android.support:appcompat-v7:${otherLibraryVersion}",
+            cardview_v7 : "com.android.support:cardview-v7:23.2.0",
+            support_v4  : "com.android.support:support-v4:${supportLibraryVersion}",
+            design      : "com.android.support:design:${otherLibraryVersion}",
+    ]
+
+    viewDependencies = [
+            butterKnife     : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            apt_butterKnife : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+            ijkplayer_java  : "tv.danmaku.ijk.media:ijkplayer-java:${ijkplayer}",
+            ijkplayer_armv7a: "tv.danmaku.ijk.media:ijkplayer-armv7a:${ijkplayer}",
+            ijkplayer_armv5 : "tv.danmaku.ijk.media:ijkplayer-armv5:${ijkplayer}",
+            ijkplayer_exo   : "tv.danmaku.ijk.media:ijkplayer-exo:${ijkplayer}",
+    ]
+
+    dataDependencies = [
+            videocache     : "com.danikula:videocache:${videocache}",
+    ]
+}
