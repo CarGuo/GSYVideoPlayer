@@ -18,6 +18,10 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 单独的视频播放页面
+ * Created by shuyu on 2016/11/11.
+ */
 public class PlayActivity extends AppCompatActivity {
 
     public final static String IMG_TRANSITION = "IMG_TRANSITION";

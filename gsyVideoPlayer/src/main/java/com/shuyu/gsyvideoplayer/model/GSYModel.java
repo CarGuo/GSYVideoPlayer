@@ -3,10 +3,12 @@ package com.shuyu.gsyvideoplayer.model;
 import java.util.Map;
 
 /**
+ * 视频内部接受数据model
  * Created by shuyu on 2016/11/11.
  */
 
 public class GSYModel {
+
     String url;
     Map<String, String> mapHeadData;
     boolean looping;

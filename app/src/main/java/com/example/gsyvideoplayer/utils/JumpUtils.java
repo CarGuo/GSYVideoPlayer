@@ -17,6 +17,8 @@ import com.example.gsyvideoplayer.R;
 public class JumpUtils {
 
     /**
+     * 跳转到视频播放
+     *
      * @param activity
      * @param view
      */

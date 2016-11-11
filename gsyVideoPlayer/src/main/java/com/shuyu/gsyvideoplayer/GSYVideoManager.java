@@ -74,7 +74,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
      */
     public static HttpProxyCacheServer getProxy(Context context) {
         HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
-        return proxy == null ? (proxy = GSYVideoManager.instance().newProxy(context)) : proxy;
+        return proxy == null ? (GSYVideoManager.instance().proxy =
+                GSYVideoManager.instance().newProxy(context)) : proxy;
     }
 
     /**
@@ -157,6 +158,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                         Surface holder = (Surface) msg.obj;
                         if (holder.isValid()) {
                             mediaPlayer.setSurface(holder);
+                            //exoPlayer在一些手机上在onPause后会声音先出来，画面黑一段时间，目前通过seekTo之后重新渲染解决
                             if (mediaPlayer != null && mediaPlayer.getDuration() > 30
                                     && mediaPlayer.getCurrentPosition() < mediaPlayer.getDuration()) {
                                 mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 20);

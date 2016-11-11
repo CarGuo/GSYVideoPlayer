@@ -5,6 +5,7 @@ import android.os.Build;
 import android.transition.Transition;
 
 /**
+ * 重载了过渡动画的方法
  * Created by shuyu on 2016/8/15.
  */
 

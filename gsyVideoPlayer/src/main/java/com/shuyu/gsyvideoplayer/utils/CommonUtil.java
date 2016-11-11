@@ -8,6 +8,7 @@ import java.util.Formatter;
 import java.util.Locale;
 
 /**
+ * 公共类
  * Created by shuyu on 2016/11/11.
  */
 
