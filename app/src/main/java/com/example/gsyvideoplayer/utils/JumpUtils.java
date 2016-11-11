@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 
+import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
 import com.example.gsyvideoplayer.R;
 
@@ -34,5 +35,16 @@ public class JumpUtils {
             activity.startActivity(intent);
             activity.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
         }
+    }
+
+    /**
+     * 跳转到视频列表
+     *
+     * @param activity
+     */
+    public static void goToVideoPlayer(Activity activity) {
+        Intent intent = new Intent(activity, ListVideoActivity.class);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+        ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
     }
 }
