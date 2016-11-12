@@ -13,6 +13,7 @@ import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +50,13 @@ public class ListVideoActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
+            return;
+        }
+        super.onBackPressed();
+    }
 
     @Override
     protected void onDestroy() {

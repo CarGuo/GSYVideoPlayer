@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -21,13 +22,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 
+import java.lang.reflect.Constructor;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideSupportActionBar;
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showSupportActionBar;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -38,7 +44,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     protected static Timer DISSMISS_CONTROL_VIEW_TIMER;
 
-    protected ImageView backButton;
     protected ProgressBar bottomProgressBar, loadingProgressBar;
     protected TextView titleTextView;
     protected RelativeLayout thumbImageViewLayout;
@@ -51,6 +56,11 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected ProgressBar mDialogVolumeProgressBar;
     protected StandardVideoAllCallBack standardVideoAllCallBack;
 
+    protected Dialog mProgressDialog;
+    protected ProgressBar mDialogProgressBar;
+    protected TextView mDialogSeekTime;
+    protected TextView mDialogTotalTime;
+    protected ImageView mDialogIcon;
 
     protected DismissControlViewTimerTask mDismissControlViewTimerTask;
 
@@ -73,7 +83,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         super.init(context);
         bottomProgressBar = (ProgressBar) findViewById(R.id.bottom_progressbar);
         titleTextView = (TextView) findViewById(R.id.title);
-        backButton = (ImageView) findViewById(R.id.back);
         thumbImageViewLayout = (RelativeLayout) findViewById(R.id.thumb);
         coverImageView = (ImageView) findViewById(R.id.cover);
         loadingProgressBar = (ProgressBar) findViewById(R.id.loading);
@@ -423,12 +432,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
     }
 
-    protected Dialog mProgressDialog;
-    protected ProgressBar mDialogProgressBar;
-    protected TextView mDialogSeekTime;
-    protected TextView mDialogTotalTime;
-    protected ImageView mDialogIcon;
-
     @Override
     protected void showProgressDialog(float deltaX, String seekTime, int seekTimePosition, String totalTime, int totalTimeDuration) {
         super.showProgressDialog(deltaX, seekTime, seekTimePosition, totalTime, totalTimeDuration);
@@ -607,7 +610,21 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         return titleTextView;
     }
 
-    public ImageView getBackButton() {
-        return backButton;
+    @Override
+    public void onBackFullscreen() {
+        clearFullscreenLayout(getContext(), actionBar, statusBar);
     }
+
+    public static boolean backFromWindowFull(Context context) {
+        boolean backFrom = false;
+        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(context)).findViewById(Window.ID_ANDROID_CONTENT);
+        View oldF = vp.findViewById(FULLSCREEN_ID);
+        if (oldF != null) {
+            backFrom = true;
+            GSYVideoManager.instance().lastListener().onBackFullscreen();
+        }
+        return backFrom;
+    }
+
+
 }
