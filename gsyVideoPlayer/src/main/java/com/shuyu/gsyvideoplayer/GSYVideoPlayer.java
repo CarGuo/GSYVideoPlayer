@@ -383,6 +383,8 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        GSYVideoManager.instance().setDisplay(null);
+        //// TODO: 2016/11/12 在此处是判断是否列表播放的要暂停或者销毁了
         surface.release();
         return true;
     }

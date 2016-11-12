@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
+import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +22,7 @@ public class ListVideoActivity extends AppCompatActivity {
     RelativeLayout activityListVideo;
 
     ListVideoAdapter listVideoAdapter;
+    ListVideoUtil listVideoUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,18 @@ public class ListVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_video);
         ButterKnife.bind(this);
 
-        listVideoAdapter = new ListVideoAdapter(this);
+        listVideoUtil = new ListVideoUtil(this);
+
+        listVideoAdapter = new ListVideoAdapter(this, listVideoUtil);
         listVideoAdapter.setRootView(activityListVideo);
         videoList.setAdapter(listVideoAdapter);
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        listVideoUtil.releaseVideoPlayer();
     }
 }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -33,6 +34,8 @@ import static com.example.gsyvideoplayer.utils.CommonUtil.setViewHeight;
 
 public class ListVideoAdapter extends BaseAdapter {
 
+    private String TAG = "TT";
+
     private List<VideoModel> list = new ArrayList<>();
     private LayoutInflater inflater = null;
     private Context context;
@@ -42,9 +45,13 @@ public class ListVideoAdapter extends BaseAdapter {
 
     private boolean isFullVideo;
 
-    public ListVideoAdapter(Context context) {
+    private ListVideoUtil listVideoUtil;
+
+    public ListVideoAdapter(Context context, ListVideoUtil listVideoUtil) {
         super();
         this.context = context;
+        this.listVideoUtil = listVideoUtil;
+
         inflater = LayoutInflater.from(context);
         for (int i = 0; i < 40; i++) {
             list.add(new VideoModel());
@@ -68,84 +75,38 @@ public class ListVideoAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.list_video_item, null);
-            holder.standardGSYVideoPlayer = (StandardGSYVideoPlayer) convertView.findViewById(R.id.list_item_video);
+            holder.videoContainer = (FrameLayout) convertView.findViewById(R.id.list_item_container);
+            holder.playerBtn = (ImageView) convertView.findViewById(R.id.list_item_btn);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        holder.standardGSYVideoPlayer.setUp(url, true, "");
+        listVideoUtil.addVideoPlayer(context, position, R.mipmap.xxx1, TAG, holder.videoContainer, holder.playerBtn);
 
-        //增加封面
-        ImageView imageView = new ImageView(context);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.xxx1);
-        holder.standardGSYVideoPlayer.setThumbImageView(imageView);
-
-        //增加title
-        holder.standardGSYVideoPlayer.getTitleTextView().setVisibility(View.GONE);
-
-        //设置返回键
-        holder.standardGSYVideoPlayer.getBackButton().setVisibility(View.GONE);
-
-        //设置全屏按键功能
-        holder.standardGSYVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        holder.playerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resolveFullBtn(holder.standardGSYVideoPlayer);
+                notifyDataSetChanged();
+                listVideoUtil.setPlayPositionAndTag(position, TAG);
+                final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                listVideoUtil.startPlay(url);
             }
         });
+
+
         return convertView;
     }
 
-    /**
-     * 全屏幕按键处理
-     */
-    private void resolveFullBtn(final StandardGSYVideoPlayer standardGSYVideoPlayer) {
-        if (orientationUtils != null) {
-            orientationUtils.setEnable(false);
-        }
-        orientationUtils = new OrientationUtils((Activity) context, standardGSYVideoPlayer);
-        if (isFullVideo) {
-            orientationUtils.setEnable(false);
-            int delay = orientationUtils.backToProtVideo();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        TransitionManager.beginDelayedTransition(rootView);
-                    }
-                    /*standardGSYVideoPlayer.getBackButton().setVisibility(View.GONE);
-                    setViewHeight(standardGSYVideoPlayer, ViewGroup.LayoutParams.MATCH_PARENT,
-                            (int) context.getResources().getDimension(R.dimen.post_media_height));*/
-
-                    //standardGSYVideoPlayer.clearFullscreenLayout();
-                    standardGSYVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_enlarge);
-                    isFullVideo = false;
-                }
-            }, delay);
-        } else {
-            orientationUtils.setEnable(true);
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                TransitionManager.beginDelayedTransition(rootView);
-            }
-            standardGSYVideoPlayer.getBackButton().setVisibility(View.VISIBLE);
-            setViewHeight(standardGSYVideoPlayer, ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT);*/
-            //standardGSYVideoPlayer.startWindowFullscreen();
-            standardGSYVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
-            isFullVideo = true;
-        }
-    }
 
     class ViewHolder {
-        StandardGSYVideoPlayer standardGSYVideoPlayer;
+        FrameLayout videoContainer;
+        ImageView playerBtn;
     }
 
     public void setRootView(ViewGroup rootView) {
