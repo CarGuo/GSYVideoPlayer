@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
+import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 
 import butterknife.BindView;
@@ -21,7 +24,7 @@ public class ListVideoActivity extends AppCompatActivity {
     @BindView(R.id.activity_list_video)
     RelativeLayout activityListVideo;
 
-    ListVideoAdapter listVideoAdapter;
+    //ListVideoAdapter listVideoAdapter;
     ListVideoUtil listVideoUtil;
 
     @Override
@@ -38,9 +41,11 @@ public class ListVideoActivity extends AppCompatActivity {
 
         listVideoUtil = new ListVideoUtil(this);
 
-        listVideoAdapter = new ListVideoAdapter(this, listVideoUtil);
-        listVideoAdapter.setRootView(activityListVideo);
-        videoList.setAdapter(listVideoAdapter);
+        //listVideoAdapter = new ListVideoAdapter(this, listVideoUtil);
+        //listVideoAdapter.setRootView(activityListVideo);
+
+        ListNormalAdapter listNormalAdapter = new ListNormalAdapter(this);
+        videoList.setAdapter(listNormalAdapter);
 
     }
 
@@ -49,5 +54,6 @@ public class ListVideoActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         listVideoUtil.releaseVideoPlayer();
+        GSYVideoPlayer.releaseAllVideos();
     }
 }

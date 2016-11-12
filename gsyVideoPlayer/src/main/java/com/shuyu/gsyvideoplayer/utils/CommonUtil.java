@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.view.ContextThemeWrapper;
+import android.view.WindowManager;
 
 import java.util.Formatter;
 import java.util.Locale;
@@ -56,6 +60,66 @@ public class CommonUtil {
             return scanForActivity(((ContextWrapper) context).getBaseContext());
         }
 
+        return null;
+    }
+
+    /**
+     * 获取状态栏高度
+     *
+     * @param context 上下文
+     * @return 状态栏高度
+     */
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources()
+                .getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    public static void hideSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
+        if (actionBar) {
+            ActionBar ab = CommonUtil.getAppCompActivity(context).getSupportActionBar();
+            if (ab != null) {
+                ab.setShowHideAnimationEnabled(false);
+                ab.hide();
+            }
+        }
+        if (statusBar) {
+            CommonUtil.getAppCompActivity(context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
+    public static void showSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
+        if (actionBar) {
+            ActionBar ab = CommonUtil.getAppCompActivity(context).getSupportActionBar();
+            if (ab != null) {
+                ab.setShowHideAnimationEnabled(false);
+                ab.show();
+            }
+        }
+        if (statusBar) {
+            CommonUtil.getAppCompActivity(context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
+
+    /**
+     * Get AppCompatActivity from context
+     *
+     * @param context
+     * @return AppCompatActivity if it's not null
+     */
+    public static AppCompatActivity getAppCompActivity(Context context) {
+        if (context == null) return null;
+        if (context instanceof AppCompatActivity) {
+            return (AppCompatActivity) context;
+        } else if (context instanceof ContextThemeWrapper) {
+            return getAppCompActivity(((ContextThemeWrapper) context).getBaseContext());
+        }
         return null;
     }
 }

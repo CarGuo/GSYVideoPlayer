@@ -116,7 +116,8 @@ public class ListVideoUtil {
 
     public void releaseVideoPlayer() {
         ViewGroup viewGroup = (ViewGroup) gsyVideoPlayer.getParent();
-        viewGroup.removeAllViews();
+        if (viewGroup != null)
+            viewGroup.removeAllViews();
         playPosition = -1;
         TAG = "NULL";
 
