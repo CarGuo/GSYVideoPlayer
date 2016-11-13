@@ -23,7 +23,7 @@
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
 
-## GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考
+## GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考 StandardGSYVideoPlayer
 
 ## 记得调用销毁
 ```java
