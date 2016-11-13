@@ -1,0 +1,130 @@
+<h4>基于IJKPlayer的播放器，直接参考了<a herf="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>进行了一些自己想要的调整</h4>
+======================
+
+* <h4>支持基本的拖动，声音、亮度调节</h4>
+* <h4>支持边播边缓存，使用了<a herf="https://github.com/danikula/AndroidVideoCache">AndroidVideoCache</a>的代理模式实现</h4>
+* <h4>支持视频本身自带rotation的旋转</h4>
+* <h4>增加了重力旋转与手动旋转的同步支持</h4>
+* <h4>支持列表播放</h4>
+* <h4>直接添加控件为封面</h4>
+* <h4>兼容一些5.0的过场效果</h4>
+
+## 效果
+* 1、打开一个播放
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
+* 2、列表
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.gif" width="240px" height="426px"/>
+* 3、详情模式
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+## GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考
+
+## 记得调用销毁
+```java
+@Override
+ protected void onDestroy() {
+     super.onDestroy();
+     GSYVideoPlayer.releaseAllVideos();
+}
+```
+
+## StandardGSYVideoPlayer 标准的播放播放器
+```java
+
+设置播放url，第二个参数表示需要边播边缓存
+videoPlayer.setUp(url, true, "");
+
+//增加封面
+ImageView imageView = new ImageView(this);
+imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+imageView.setImageResource(R.mipmap.xxx1);
+videoPlayer.setThumbImageView(imageView);
+
+//增加title
+videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+videoPlayer.getTitleTextView().setText("测试视频");
+
+//设置返回键
+videoPlayer.getBackButton().setVisibility(View.VISIBLE);
+
+//设置旋转
+orientationUtils = new OrientationUtils(this, videoPlayer);
+
+//设置全屏按键功能
+videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        orientationUtils.resolveByClick();
+    }
+});
+
+//设置返回按键功能
+videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        onBackPressed();
+    }
+});
+
+//在列表中使用的接口，详情请看Demo中的ListVideoActivity
+
+/**
+ * 利用window层播放全屏效果
+ *
+ * @param context
+ * @param actionBar 是否有actionBar，有的话需要隐藏
+ * @param statusBar 是否有状态bar，有的话需要隐藏
+ */
+public void startWindowFullscreen(final Context context, final boolean actionBar, final boolean statusBar)
+
+
+/**
+ * 退出window层播放全屏效果
+ */
+public void clearFullscreenLayout()
+
+还有用于onBackPressed()的
+/**
+  * 退出全屏
+  *
+  */
+public static boolean backFromWindowFull(Context context)
+
+@Override
+public void onBackPressed() {
+    if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
+        return;
+    }
+    super.onBackPressed();
+}
+```
+
+## OrientationUtils 重力旋转的工具类
+```java
+//设置旋转
+OrientationUtils orientationUtils = new OrientationUtils(Activity, videoPlayer);
+```
+## ListVideoUtil 列表模式支持支持滑出屏幕继续播放和全屏的工具类
+与上面的StandardGSYVideoPlayer实现列表播放和全屏播放不大一样，ListVideoUtil只有一个StandardGSYVideoPlayer，使用外部container来是先全屏
+具体可以查看demo里的ListVideoActivity和ListVideo2Activity.
+```java
+listVideoUtil = new ListVideoUtil(Activity);
+设置需要全屏显示的父类
+listVideoUtil.setFullViewContainer(videoFullContainer);
+.....
+//对列表进行处理，传入每个item的位置，封面，TAG(如果有多个不同列表，用不同TAG区分)，视频列表item的父容器，播放按键
+listVideoUtil.addVideoPlayer(context, position, R.mipmap.xxx1, TAG, holder.videoContainer, holder.playerBtn);
+holder.playerBtn.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        notifyDataSetChanged();
+        //设置播放的位置和TAG
+        listVideoUtil.setPlayPositionAndTag(position, TAG);
+        final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //开始播放
+        listVideoUtil.startPlay(url);
+    }
+});
+```

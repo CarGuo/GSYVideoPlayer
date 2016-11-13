@@ -60,7 +60,6 @@ public class PlayActivity extends AppCompatActivity {
 
         //设置返回键
         videoPlayer.getBackButton().setVisibility(View.VISIBLE);
-        videoPlayer.setIsTouchWiget(true);
 
         //设置旋转
         orientationUtils = new OrientationUtils(this, videoPlayer);

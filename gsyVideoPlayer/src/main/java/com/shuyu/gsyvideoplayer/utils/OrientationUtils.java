@@ -24,6 +24,10 @@ public class OrientationUtils {
     private int mIsLand;
     private boolean mEnable = true;
 
+    /**
+     * @param activity
+     * @param gsyVideoPlayer
+     */
     public OrientationUtils(Activity activity, GSYVideoPlayer gsyVideoPlayer) {
         this.activity = activity;
         this.gsyVideoPlayer = gsyVideoPlayer;

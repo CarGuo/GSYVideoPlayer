@@ -1008,6 +1008,8 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     /**
      * 退出全屏
+     *
+     * @return 返回是否全屏
      */
     public static boolean backFromWindowFull(Context context) {
         boolean backFrom = false;
