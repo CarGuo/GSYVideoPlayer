@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.open_btn, R.id.list_btn})
+    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.open_btn:
@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.list_btn:
                 JumpUtils.goToVideoPlayer(this);
+                break;
+            case R.id.list_btn_2:
+                JumpUtils.goToVideoPlayer2(this);
                 break;
         }
     }

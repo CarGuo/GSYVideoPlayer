@@ -897,8 +897,8 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
             gsyVideoPlayer.setRotation(90);
-            gsyVideoPlayer.getmFullscreenButton().setImageResource(R.drawable.video_shrink);
-            gsyVideoPlayer.getmFullscreenButton().setOnClickListener(new OnClickListener() {
+            gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
+            gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clearFullscreenLayout();
@@ -988,7 +988,7 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
     /**
      * 获取全屏按键
      */
-    public ImageView getmFullscreenButton() {
+    public ImageView getFullscreenButton() {
         return mFullscreenButton;
     }
 

@@ -81,7 +81,7 @@ public class ListNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
 
         //设置全屏按键功能
-        holder.gsyVideoPlayer.getmFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        holder.gsyVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resolveFullBtn(holder.gsyVideoPlayer);

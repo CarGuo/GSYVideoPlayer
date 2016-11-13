@@ -5,22 +5,29 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
+import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListVideoActivity extends AppCompatActivity {
+public class ListVideo2Activity extends AppCompatActivity {
 
     @BindView(R.id.video_list)
     ListView videoList;
+    @BindView(R.id.video_full_container)
+    FrameLayout videoFullContainer;
     @BindView(R.id.activity_list_video)
     RelativeLayout activityListVideo;
+
+    ListVideoUtil listVideoUtil;
+    ListVideoAdapter listVideoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,25 +38,32 @@ public class ListVideoActivity extends AppCompatActivity {
             getWindow().setExitTransition(new Explode());
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_video);
+        setContentView(R.layout.activity_list_video2);
         ButterKnife.bind(this);
 
-        ListNormalAdapter listNormalAdapter = new ListNormalAdapter(this);
-        videoList.setAdapter(listNormalAdapter);
+        listVideoUtil = new ListVideoUtil(this);
+        listVideoUtil.setFullViewContainer(videoFullContainer);
+        listVideoAdapter = new ListVideoAdapter(this, listVideoUtil);
+        listVideoAdapter.setRootView(activityListVideo);
+        videoList.setAdapter(listVideoAdapter);
 
     }
 
+
     @Override
     public void onBackPressed() {
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
+        if (listVideoUtil.backFromFull()) {
             return;
         }
         super.onBackPressed();
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        listVideoUtil.releaseVideoPlayer();
         GSYVideoPlayer.releaseAllVideos();
     }
+
 }

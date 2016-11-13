@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 
+import com.example.gsyvideoplayer.ListVideo2Activity;
 import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
 import com.example.gsyvideoplayer.R;
@@ -44,6 +45,17 @@ public class JumpUtils {
      */
     public static void goToVideoPlayer(Activity activity) {
         Intent intent = new Intent(activity, ListVideoActivity.class);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+        ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+    }
+
+    /**
+     * 跳转到视频列表2
+     *
+     * @param activity
+     */
+    public static void goToVideoPlayer2(Activity activity) {
+        Intent intent = new Intent(activity, ListVideo2Activity.class);
         ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
         ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
     }
