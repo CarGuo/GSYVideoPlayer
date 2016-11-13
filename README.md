@@ -140,3 +140,5 @@ holder.playerBtn.setOnClickListener(new View.OnClickListener() {
     }
 });
 ```
+* <h4>//TODO 优化全屏的动画和全屏的效果</h4>
+* <h4>//TODO 优化接入的效果</h4>
