@@ -34,7 +34,7 @@
 }
 ```
 
-## StandardGSYVideoPlayer 标准的播放播放器
+## StandardGSYVideoPlayer 标准的播放播放器,可参考demo中的playActivity
 ```java
 
 设置播放url，第二个参数表示需要边播边缓存
