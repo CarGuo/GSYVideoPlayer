@@ -10,6 +10,10 @@
 * <h4>兼容一些5.0的过场效果</h4>
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.jpg" width="426px" height="240px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.jpg" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.jpg" width="240px" height="426px"/>
+<p></p>
 * <h4>1、打开一个播放</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
