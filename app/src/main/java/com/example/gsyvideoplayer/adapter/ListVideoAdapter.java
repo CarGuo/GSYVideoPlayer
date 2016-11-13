@@ -87,7 +87,12 @@ public class ListVideoAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        listVideoUtil.addVideoPlayer(context, position, R.mipmap.xxx1, TAG, holder.videoContainer, holder.playerBtn);
+        //增加封面
+        ImageView imageView = new ImageView(context);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageResource(R.mipmap.xxx1);
+
+        listVideoUtil.addVideoPlayer(position, imageView, TAG, holder.videoContainer, holder.playerBtn);
 
         holder.playerBtn.setOnClickListener(new View.OnClickListener() {
             @Override

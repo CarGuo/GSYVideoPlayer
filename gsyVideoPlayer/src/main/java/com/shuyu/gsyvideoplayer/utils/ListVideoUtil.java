@@ -33,7 +33,16 @@ public class ListVideoUtil {
         this.context = context;
     }
 
-    public void addVideoPlayer(Context context, final int position, int imgId, String tag,
+    /**
+     * 动态添加视频播放
+     *
+     * @param position  位置
+     * @param imgView   封面
+     * @param tag       TAG类型
+     * @param container player的容器
+     * @param playBtn   播放按键
+     */
+    public void addVideoPlayer(final int position, View imgView, String tag,
                                ViewGroup container, View playBtn) {
         container.removeAllViews();
         if (isCurrentViewPlaying(position, tag)) {
@@ -47,10 +56,7 @@ public class ListVideoUtil {
         } else {
             playBtn.setVisibility(View.VISIBLE);
             container.removeAllViews();   //增加封面
-            ImageView imageView = new ImageView(context);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageResource(imgId);
-            container.addView(imageView);
+            container.addView(imgView);
         }
     }
 

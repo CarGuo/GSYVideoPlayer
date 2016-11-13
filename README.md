@@ -108,14 +108,26 @@ OrientationUtils orientationUtils = new OrientationUtils(Activity, videoPlayer);
 ```
 ## ListVideoUtil 列表模式支持支持滑出屏幕继续播放和全屏的工具类
 与上面的StandardGSYVideoPlayer实现列表播放和全屏播放不大一样，ListVideoUtil只有一个StandardGSYVideoPlayer，使用外部container来是先全屏
-具体可以查看demo里的ListVideoActivity和ListVideo2Activity.
+列表滑动不会影响到播放，具体可以查看demo里的ListVideoActivity和ListVideo2Activity.
 ```java
 listVideoUtil = new ListVideoUtil(Activity);
 设置需要全屏显示的父类
 listVideoUtil.setFullViewContainer(videoFullContainer);
 .....
+
 //对列表进行处理，传入每个item的位置，封面，TAG(如果有多个不同列表，用不同TAG区分)，视频列表item的父容器，播放按键
-listVideoUtil.addVideoPlayer(context, position, R.mipmap.xxx1, TAG, holder.videoContainer, holder.playerBtn);
+/**
+ * 动态添加视频播放
+ *
+ * @param position  位置
+ * @param imgView   封面
+ * @param tag       TAG类型
+ * @param container player的容器
+ * @param playBtn   播放按键
+ */
+public void addVideoPlayer(final int position, View imgView, String tag,
+                               ViewGroup container, View playBtn)
+
 holder.playerBtn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
