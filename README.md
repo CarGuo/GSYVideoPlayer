@@ -1,21 +1,21 @@
-<h4>基于IJKPlayer的播放器，直接参考了<a herf="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>进行了一些自己想要的调整</h4>
+<h4>基于IJKPlayer的播放器，直接参考了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>进行了一些自己想要的调整</h4>
 ======================
 
 * <h4>支持基本的拖动，声音、亮度调节</h4>
-* <h4>支持边播边缓存，使用了<a herf="https://github.com/danikula/AndroidVideoCache">AndroidVideoCache</a>的代理模式实现</h4>
+* <h4>支持边播边缓存，使用了<a href="https://github.com/danikula/AndroidVideoCache">AndroidVideoCache</a>的代理模式实现</h4>
 * <h4>支持视频本身自带rotation的旋转</h4>
 * <h4>增加了重力旋转与手动旋转的同步支持</h4>
 * <h4>支持列表播放</h4>
 * <h4>直接添加控件为封面</h4>
 * <h4>兼容一些5.0的过场效果</h4>
 
-## 效果
-* 1、打开一个播放
+## 效果,录屏下的屏幕旋转和实际有些出入
+* <h4>1、打开一个播放</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
-* 2、列表
+* <h4>2、列表</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.gif" width="240px" height="426px"/>
-* 3、详情模式
+* <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
 
