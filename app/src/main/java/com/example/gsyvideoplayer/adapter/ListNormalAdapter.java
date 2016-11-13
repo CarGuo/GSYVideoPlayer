@@ -1,8 +1,6 @@
 package com.example.gsyvideoplayer.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,6 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
@@ -84,7 +81,7 @@ public class ListNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
 
         //设置全屏按键功能
-        holder.gsyVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        holder.gsyVideoPlayer.getmFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resolveFullBtn(holder.gsyVideoPlayer);

@@ -66,7 +66,7 @@ public class PlayActivity extends AppCompatActivity {
         orientationUtils = new OrientationUtils(this, videoPlayer);
 
         //设置全屏按键功能
-        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        videoPlayer.getmFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 orientationUtils.resolveByClick();
@@ -106,7 +106,7 @@ public class PlayActivity extends AppCompatActivity {
     public void onBackPressed() {
         //先返回正常状态
         if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            videoPlayer.getFullscreenButton().performClick();
+            videoPlayer.getmFullscreenButton().performClick();
             return;
         }
         //释放所有

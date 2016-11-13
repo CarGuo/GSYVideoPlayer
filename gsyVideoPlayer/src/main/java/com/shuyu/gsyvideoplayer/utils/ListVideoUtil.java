@@ -1,16 +1,10 @@
 package com.shuyu.gsyvideoplayer.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
-import android.os.Build;
-import android.os.Handler;
-import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 /**
@@ -74,7 +68,7 @@ public class ListVideoUtil {
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
 
         //设置全屏按键功能
-        gsyVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        gsyVideoPlayer.getmFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //resolveFullBtn(holder.standardGSYVideoPlayer);
@@ -82,35 +76,6 @@ public class ListVideoUtil {
         });
 
         gsyVideoPlayer.startPlayLogic();
-    }
-
-
-    /**
-     * 全屏幕按键处理
-     */
-    private void resolveFullBtn(final StandardGSYVideoPlayer standardGSYVideoPlayer) {
-        /*if (orientationUtils != null) {
-            orientationUtils.setEnable(false);
-        }
-        orientationUtils = new OrientationUtils((Activity) context, standardGSYVideoPlayer);
-        if (isFullVideo) {
-            orientationUtils.setEnable(false);
-            int delay = orientationUtils.backToProtVideo();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        TransitionManager.beginDelayedTransition(rootView);
-                    }
-                    standardGSYVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_enlarge);
-                    isFullVideo = false;
-                }
-            }, delay);
-        } else {
-            orientationUtils.setEnable(true);
-            standardGSYVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
-            isFullVideo = true;
-        }*/
     }
 
 

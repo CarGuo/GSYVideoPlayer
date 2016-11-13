@@ -54,7 +54,7 @@ public class OrientationUtils {
                         if (mIsLand > 0) {
                             screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
                             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                            gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_enlarge);
+                            gsyVideoPlayer.getmFullscreenButton().setImageResource(R.drawable.video_enlarge);
                             mIsLand = 0;
                             mClick = false;
                         }
@@ -74,7 +74,7 @@ public class OrientationUtils {
                         if (!(mIsLand == 1)) {
                             screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
                             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                            gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
+                            gsyVideoPlayer.getmFullscreenButton().setImageResource(R.drawable.video_shrink);
                             mIsLand = 1;
                             mClick = false;
                         }
@@ -93,7 +93,7 @@ public class OrientationUtils {
                     } else if (!(mIsLand == 2)) {
                         screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
                         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                        gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
+                        gsyVideoPlayer.getmFullscreenButton().setImageResource(R.drawable.video_shrink);
                         mIsLand = 2;
                         mClick = false;
                     }
@@ -108,13 +108,13 @@ public class OrientationUtils {
         if (mIsLand == 0) {
             screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
+            gsyVideoPlayer.getmFullscreenButton().setImageResource(R.drawable.video_shrink);
             mIsLand = 1;
             mClickLand = false;
         } else {
             screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_enlarge);
+            gsyVideoPlayer.getmFullscreenButton().setImageResource(R.drawable.video_enlarge);
             mIsLand = 0;
             mClickPort = false;
         }
