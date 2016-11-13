@@ -31,4 +31,11 @@
         android:layout_marginTop="20dp"
         android:text="List Video2" />
 
+    <Button
+        android:id="@+id/list_detail"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Detail Video2" />
+
 </LinearLayout>

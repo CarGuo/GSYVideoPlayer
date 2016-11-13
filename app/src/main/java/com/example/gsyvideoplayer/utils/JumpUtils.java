@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 
+import com.example.gsyvideoplayer.DetailPlayer;
 import com.example.gsyvideoplayer.ListVideo2Activity;
 import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
@@ -58,5 +59,15 @@ public class JumpUtils {
         Intent intent = new Intent(activity, ListVideo2Activity.class);
         ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
         ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+    }
+
+    /**
+     * 跳转到详情播放
+     *
+     * @param activity
+     */
+    public static void goToDetailPlayer(Activity activity) {
+        Intent intent = new Intent(activity, DetailPlayer.class);
+        activity.startActivity(intent);
     }
 }
