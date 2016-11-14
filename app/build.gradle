@@ -32,5 +32,4 @@ dependencies {
     apt viewDependencies.apt_butterKnife
     compile viewDependencies.butterKnife
     compile project(':gsyVideoPlayer')
-    compile 'com.android.support:appcompat-v7:22.2.1'
 }
