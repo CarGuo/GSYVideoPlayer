@@ -34,7 +34,7 @@
 ## GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考 StandardGSYVideoPlayer
 
 ## 记得调用销毁
-```java
+```
 @Override
  protected void onDestroy() {
      super.onDestroy();
@@ -43,7 +43,7 @@
 ```
 
 ## StandardGSYVideoPlayer 标准的播放播放器,可参考demo中的playActivity
-```java
+```
 
 设置播放url，第二个参数表示需要边播边缓存
 videoPlayer.setUp(url, true, "");
@@ -114,14 +114,14 @@ public void onBackPressed() {
 ```
 
 ## OrientationUtils 重力旋转的工具类
-```java
+```
 //设置旋转
 OrientationUtils orientationUtils = new OrientationUtils(Activity, videoPlayer);
 ```
 ## ListVideoUtil 列表模式支持支持滑出屏幕继续播放和全屏的工具类
 与上面的StandardGSYVideoPlayer实现列表播放和全屏播放不大一样，ListVideoUtil只有一个StandardGSYVideoPlayer，使用外部container来是先全屏
 列表滑动不会影响到播放，具体可以查看demo里的ListVideoActivity和ListVideo2Activity.
-```java
+```
 listVideoUtil = new ListVideoUtil(Activity);
 设置需要全屏显示的父类
 listVideoUtil.setFullViewContainer(videoFullContainer);
