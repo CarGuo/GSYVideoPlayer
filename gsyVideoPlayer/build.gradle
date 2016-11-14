@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
+
 android {
 
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -8,7 +9,7 @@ android {
 
     defaultConfig {
 
-        minSdkVersion  globalConfiguration.androidMinSdkVersion
+        minSdkVersion globalConfiguration.androidMinSdkVersion
         targetSdkVersion globalConfiguration.androidTargetSdkVersion
 
         versionCode 1
@@ -40,3 +41,5 @@ dependencies {
     compile androidDependencies.cardview_v7
     compile androidDependencies.design
 }
+
+apply from: '../bintray.gradle'
