@@ -152,5 +152,11 @@ holder.playerBtn.setOnClickListener(new View.OnClickListener() {
     }
 });
 ```
+### 混淆
+```
+-keep class tv.danmaku.ijk.** { *; }
+-dontwarn tv.danmaku.ijk.**
+```
+
 * <h4>//TODO 优化全屏的动画和全屏的效果</h4>
 * <h4>//TODO 优化接入的效果</h4>
