@@ -1,11 +1,13 @@
 <h4>基于IJKPlayer的播放器，直接参考了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>进行了一些自己想要的调整</h4>
 ======================
+```
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
   <version>1.1.0</version>
   <type>pom</type>
 </dependency>
+```
 
 * <h4> compile 'com.shuyu:gsyVideoPlayer:1.1.0'</h4>
 
