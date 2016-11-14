@@ -8,8 +8,9 @@
   <type>pom</type>
 </dependency>
 ```
-
-* <h4> compile 'com.shuyu:gsyVideoPlayer:1.1.0'</h4>
+```
+<h4> compile 'com.shuyu:gsyVideoPlayer:1.1.0'</h4>
+```
 
 * <h4>支持基本的拖动，声音、亮度调节</h4>
 * <h4>支持边播边缓存，使用了<a href="https://github.com/danikula/AndroidVideoCache">AndroidVideoCache</a>的代理模式实现</h4>
