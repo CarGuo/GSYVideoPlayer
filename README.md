@@ -33,6 +33,8 @@
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+## （未提交JCenter）1.1.1
+* 增加了ListVideoUtil全屏是否显示横屏，全屏是否自动旋转
 
 ## GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考 StandardGSYVideoPlayer
 

@@ -27,8 +27,8 @@ public class ListVideoUtil {
     private Context context;
     private int playPosition = -1; // 播放的位置
     private boolean isFull; //当前是否全屏
-    private boolean autoRotation;//是否自动旋转
-    private boolean fullLandFrist; //是否全屏就马上横屏
+    private boolean autoRotation = true;//是否自动旋转
+    private boolean fullLandFrist= true; //是否全屏就马上横屏
 
     public ListVideoUtil(Context context) {
         gsyVideoPlayer = new StandardGSYVideoPlayer(context);
@@ -135,14 +135,16 @@ public class ListVideoUtil {
                 resolveToNormal();
             }
         });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (orientationUtils.getIsLand() != 1) {
-                    orientationUtils.resolveByClick();
+        if (isFullLandFrist()) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (orientationUtils.getIsLand() != 1) {
+                        orientationUtils.resolveByClick();
+                    }
                 }
-            }
-        }, 50);
+            }, 50);
+        }
     }
 
     /**
