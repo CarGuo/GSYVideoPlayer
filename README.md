@@ -157,6 +157,38 @@ holder.playerBtn.setOnClickListener(new View.OnClickListener() {
         listVideoUtil.startPlay(url);
     }
 });
+
+
+/**
+ * 是否自动旋转
+ *
+ * @param autoRotation 是否要支持重力旋转
+ */
+public void setAutoRotation(boolean autoRotation)
+
+
+/**
+ * 是否全屏就马上横屏
+ *
+ * @param fullLandFrist 如果是，那么全屏的时候就会切换到横屏
+ */
+public void setFullLandFrist(boolean fullLandFrist)
+
+/**
+ * 是否隐藏statusBar
+ *
+ * @param hideStatusBar true的话会隐藏statusBar，在退出全屏的时候会回复显示
+ */
+public void setHideStatusBar(boolean hideStatusBar)
+
+/**
+ * 是否隐藏actionBar
+ *
+ * @param hideActionBar true的话会隐藏actionbar，在退出全屏的会回复时候显示
+ */
+public void setHideActionBar(boolean hideActionBar)
+
+
 ```
 ### 混淆
 ```
