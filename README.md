@@ -10,7 +10,7 @@
 ```
 ```
 
-compile 'com.shuyu:gsyVideoPlayer:1.1.0'
+compile 'com.shuyu:gsyVideoPlayer:1.1.1'
 
 ```
 
@@ -35,7 +35,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.0'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
-## （未提交JCenter）1.1.1
+## 1.1.1
 * 增加了ListVideoUtil全屏是否显示横屏，全屏是否自动旋转
 * 增加了ListVideoUtils隐藏状态栏和title的接口
 
