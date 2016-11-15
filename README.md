@@ -9,7 +9,9 @@
 </dependency>
 ```
 ```
-<h4> compile 'com.shuyu:gsyVideoPlayer:1.1.0'</h4>
+
+compile 'com.shuyu:gsyVideoPlayer:1.1.0'
+
 ```
 
 * <h4>支持基本的拖动，声音、亮度调节</h4>
