@@ -19,14 +19,16 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 public class ListVideoUtil {
 
-    private int playPosition = -1; // 播放的位置
     private String TAG = "NULL"; //播放的标志
     private StandardGSYVideoPlayer gsyVideoPlayer;
     private ViewGroup fullViewContainer;
-    private ViewGroup listParent;
+    private ViewGroup listParent;//记录列表中item的父布局
     private OrientationUtils orientationUtils;
     private Context context;
-    private boolean isFull;
+    private int playPosition = -1; // 播放的位置
+    private boolean isFull; //当前是否全屏
+    private boolean autoRotation;//是否自动旋转
+    private boolean fullLandFrist; //是否全屏就马上横屏
 
     public ListVideoUtil(Context context) {
         gsyVideoPlayer = new StandardGSYVideoPlayer(context);
@@ -60,11 +62,22 @@ public class ListVideoUtil {
         }
     }
 
+    /**
+     * 设置列表播放中的位置和TAG,防止错位，回复播放位置
+     *
+     * @param playPosition 列表中的播放位置
+     * @param tag          播放的是哪个列表的tag
+     */
     public void setPlayPositionAndTag(int playPosition, String tag) {
         this.playPosition = playPosition;
         this.TAG = tag;
     }
 
+    /**
+     * 开始播放
+     *
+     * @param url 播放的URL
+     */
     public void startPlay(String url) {
         gsyVideoPlayer.release();
 
@@ -99,6 +112,9 @@ public class ListVideoUtil {
         }
     }
 
+    /**
+     * 处理全屏逻辑
+     */
     private void resolveToFull() {
         isFull = true;
         ViewGroup viewGroup = (ViewGroup) gsyVideoPlayer.getParent();
@@ -112,14 +128,26 @@ public class ListVideoUtil {
         gsyVideoPlayer.getBackButton().setVisibility(View.VISIBLE);
         //设置旋转
         orientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
+        orientationUtils.setEnable(isAutoRotation());
         gsyVideoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resolveToNormal();
             }
         });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (orientationUtils.getIsLand() != 1) {
+                    orientationUtils.resolveByClick();
+                }
+            }
+        }, 50);
     }
 
+    /**
+     * 处理正常逻辑
+     */
     private void resolveToNormal() {
         int delay = orientationUtils.backToProtVideo();
         new Handler().postDelayed(new Runnable() {
@@ -137,6 +165,20 @@ public class ListVideoUtil {
     }
 
 
+    /**
+     * 是否当前播放
+     */
+    private boolean isPlayView(int position, String tag) {
+        return playPosition == position && TAG.equals(tag);
+    }
+
+    private boolean isCurrentViewPlaying(int position, String tag) {
+        return isPlayView(position, tag);
+    }
+
+    /**
+     * 处理返回正常逻辑
+     */
     public boolean backFromFull() {
         boolean isFull = false;
         if (fullViewContainer.getChildCount() > 0) {
@@ -146,7 +188,9 @@ public class ListVideoUtil {
         return isFull;
     }
 
-
+    /**
+     * 释放持有的视频
+     */
     public void releaseVideoPlayer() {
         ViewGroup viewGroup = (ViewGroup) gsyVideoPlayer.getParent();
         if (viewGroup != null)
@@ -156,15 +200,45 @@ public class ListVideoUtil {
 
     }
 
-    private boolean isPlayView(int position, String tag) {
-        return playPosition == position && TAG.equals(tag);
-    }
-
-    private boolean isCurrentViewPlaying(int position, String tag) {
-        return isPlayView(position, tag);
-    }
-
+    /**
+     * 设置全屏显示的viewGroup
+     *
+     * @param fullViewContainer viewGroup
+     */
     public void setFullViewContainer(ViewGroup fullViewContainer) {
         this.fullViewContainer = fullViewContainer;
+    }
+
+    /**
+     * 是否全屏
+     */
+    public boolean isFull() {
+        return isFull;
+    }
+
+    public boolean isAutoRotation() {
+        return autoRotation;
+    }
+
+    /**
+     * 是否自动旋转
+     *
+     * @param autoRotation 是否要支持重力旋转
+     */
+    public void setAutoRotation(boolean autoRotation) {
+        this.autoRotation = autoRotation;
+    }
+
+    public boolean isFullLandFrist() {
+        return fullLandFrist;
+    }
+
+    /**
+     * 是否全屏就马上横屏
+     *
+     * @param fullLandFrist 如果是，那么全屏的时候就会切换到横屏
+     */
+    public void setFullLandFrist(boolean fullLandFrist) {
+        this.fullLandFrist = fullLandFrist;
     }
 }

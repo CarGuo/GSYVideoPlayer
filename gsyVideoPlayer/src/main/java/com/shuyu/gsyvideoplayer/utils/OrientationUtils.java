@@ -107,6 +107,9 @@ public class OrientationUtils {
         orientationEventListener.enable();
     }
 
+    /**
+     * 点击切换的逻辑，比如竖屏的时候点击了就是切换到横屏不会受屏幕的影响
+     */
     public void resolveByClick() {
         mClick = true;
         if (mIsLand == 0) {
