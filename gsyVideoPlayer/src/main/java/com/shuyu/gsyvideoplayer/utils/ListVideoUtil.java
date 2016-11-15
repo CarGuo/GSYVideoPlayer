@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -28,7 +29,9 @@ public class ListVideoUtil {
     private int playPosition = -1; // 播放的位置
     private boolean isFull; //当前是否全屏
     private boolean autoRotation = true;//是否自动旋转
-    private boolean fullLandFrist= true; //是否全屏就马上横屏
+    private boolean fullLandFrist = true; //是否全屏就马上横屏
+    private boolean hideStatusBar; //是否隐藏有状态bar
+    private boolean hideActionBar; //是否隐藏有状态ActionBar
 
     public ListVideoUtil(Context context) {
         gsyVideoPlayer = new StandardGSYVideoPlayer(context);
@@ -116,6 +119,7 @@ public class ListVideoUtil {
      * 处理全屏逻辑
      */
     private void resolveToFull() {
+        CommonUtil.hideSupportActionBar(context, hideActionBar, hideStatusBar);
         isFull = true;
         ViewGroup viewGroup = (ViewGroup) gsyVideoPlayer.getParent();
         if (viewGroup != null) {
@@ -151,6 +155,7 @@ public class ListVideoUtil {
      * 处理正常逻辑
      */
     private void resolveToNormal() {
+        CommonUtil.showSupportActionBar(context, hideActionBar, hideStatusBar);
         int delay = orientationUtils.backToProtVideo();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -242,5 +247,31 @@ public class ListVideoUtil {
      */
     public void setFullLandFrist(boolean fullLandFrist) {
         this.fullLandFrist = fullLandFrist;
+    }
+
+    public boolean isHideStatusBar() {
+        return hideStatusBar;
+    }
+
+    /**
+     * 是否隐藏statusBar
+     *
+     * @param hideStatusBar true的话会隐藏statusBar，在退出全屏的时候会回复显示
+     */
+    public void setHideStatusBar(boolean hideStatusBar) {
+        this.hideStatusBar = hideStatusBar;
+    }
+
+    public boolean isHideActionBar() {
+        return hideActionBar;
+    }
+
+    /**
+     * 是否隐藏actionBar
+     *
+     * @param hideActionBar true的话会隐藏actionbar，在退出全屏的会回复时候显示
+     */
+    public void setHideActionBar(boolean hideActionBar) {
+        this.hideActionBar = hideActionBar;
     }
 }

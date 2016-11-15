@@ -35,6 +35,7 @@
 
 ## （未提交JCenter）1.1.1
 * 增加了ListVideoUtil全屏是否显示横屏，全屏是否自动旋转
+* 增加了ListVideoUtils隐藏状态栏和title的接口
 
 ## GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考 StandardGSYVideoPlayer
 

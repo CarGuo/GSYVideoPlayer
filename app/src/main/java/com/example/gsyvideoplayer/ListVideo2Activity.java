@@ -43,6 +43,7 @@ public class ListVideo2Activity extends AppCompatActivity {
 
         listVideoUtil = new ListVideoUtil(this);
         listVideoUtil.setFullViewContainer(videoFullContainer);
+        listVideoUtil.setHideStatusBar(true);
         listVideoAdapter = new ListVideoAdapter(this, listVideoUtil);
         listVideoAdapter.setRootView(activityListVideo);
         videoList.setAdapter(listVideoAdapter);
