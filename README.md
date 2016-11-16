@@ -4,13 +4,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <type>pom</type>
 </dependency>
 ```
 ```
 
-compile 'com.shuyu:gsyVideoPlayer:1.1.1'
+compile 'com.shuyu:gsyVideoPlayer:1.1.2'
 
 ```
 
