@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
@@ -19,7 +21,8 @@ import java.util.List;
  */
 
 public class ListNormalAdapter extends BaseAdapter {
-    private String TAG = "TT";
+
+    public static final String TAG = "ListNormalAdapter";
 
     private List<VideoModel> list = new ArrayList<>();
     private LayoutInflater inflater = null;
@@ -87,6 +90,9 @@ public class ListNormalAdapter extends BaseAdapter {
                 resolveFullBtn(holder.gsyVideoPlayer);
             }
         });
+
+        holder.gsyVideoPlayer.setPlayTag(TAG);
+        holder.gsyVideoPlayer.setPlayPosition(position);
 
         return convertView;
     }

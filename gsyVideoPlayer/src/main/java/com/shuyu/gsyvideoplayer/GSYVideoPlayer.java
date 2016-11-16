@@ -94,6 +94,10 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
 
     protected Handler mHandler = new Handler();
 
+    protected String mPlayTag = ""; //播放的tag，防止错误，因为普通的url也可能重复
+
+    protected int mPlayPosition = -22; //播放的tag，防止错误，因为普通的url也可能重复
+
     protected float mDownX;//触摸的X
 
     protected float mDownY; //触摸的Y
@@ -350,6 +354,8 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
             GSYVideoManager.instance().listener().onCompletion();
         }
         GSYVideoManager.instance().setListener(this);
+        GSYVideoManager.instance().setPlayTag(mPlayTag);
+        GSYVideoManager.instance().setPlayPosition(mPlayPosition);
         addTextureView();
         AudioManager mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
@@ -856,6 +862,7 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
         }
     }
 
+
     protected boolean isCurrentMediaListener() {
         return GSYVideoManager.instance().listener() != null
                 && GSYVideoManager.instance().listener() == this;
@@ -1004,6 +1011,31 @@ public abstract class GSYVideoPlayer extends FrameLayout implements View.OnClick
      */
     public int getCurrentState() {
         return mCurrentState;
+    }
+
+    /**
+     * 播放tag防止错误，因为普通的url也可能重复
+     */
+    public String getPlayTag() {
+        return mPlayTag;
+    }
+
+    /**
+     * 播放tag防止错误，因为普通的url也可能重复
+     *
+     * @param playTag 保证不重复就好
+     */
+    public void setPlayTag(String playTag) {
+        this.mPlayTag = playTag;
+    }
+
+
+    public int getPlayPosition() {
+        return mPlayPosition;
+    }
+
+    public void setPlayPosition(int playPostion) {
+        this.mPlayPosition = playPostion;
     }
 
     /**

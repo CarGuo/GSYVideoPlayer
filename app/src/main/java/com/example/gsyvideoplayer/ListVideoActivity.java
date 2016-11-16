@@ -2,13 +2,17 @@ package com.example.gsyvideoplayer;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
+import android.util.Log;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -34,8 +38,27 @@ public class ListVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_video);
         ButterKnife.bind(this);
 
-        ListNormalAdapter listNormalAdapter = new ListNormalAdapter(this);
+        final ListNormalAdapter listNormalAdapter = new ListNormalAdapter(this);
         videoList.setAdapter(listNormalAdapter);
+
+        videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int lastVisibleItem = firstVisibleItem + visibleItemCount;
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    if (GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)
+                            && (position < firstVisibleItem || position > lastVisibleItem)) {
+                        GSYVideoPlayer.releaseAllVideos();
+                        listNormalAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
 
     }
 

@@ -53,6 +53,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private int currentVideoHeight = 0; //当前播放的视屏的高
     private int lastState;//当前视频的最后状态
 
+    private String playTag = ""; //播放的tag，防止错位置，因为普通的url也可能重复
+    private int playPosition = -22; //播放的tag，防止错位置，因为普通的url也可能重复
+
 
     public static synchronized GSYVideoManager instance() {
         if (videoManager == null) {
@@ -128,9 +131,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                         mediaPlayer.release();
                         mediaPlayer = new IjkMediaPlayer();
                         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        Class<IjkMediaPlayer> clazz = IjkMediaPlayer.class;
-                        Method method = clazz.getDeclaredMethod("setDataSource", String.class, Map.class);
-                        method.invoke(mediaPlayer, ((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
+                        mediaPlayer.setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
                         mediaPlayer.setOnCompletionListener(GSYVideoManager.this);
                         mediaPlayer.setOnBufferingUpdateListener(GSYVideoManager.this);
                         mediaPlayer.setScreenOnWhilePlaying(true);
@@ -176,6 +177,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         Message msg = new Message();
         msg.what = HANDLER_RELEASE;
         mMediaHandler.sendMessage(msg);
+        playTag = "";
+        playPosition = -22;
     }
 
     public void setDisplay(Surface holder) {
@@ -299,5 +302,21 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     public void setCurrentVideoWidth(int currentVideoWidth) {
         this.currentVideoWidth = currentVideoWidth;
+    }
+
+    public String getPlayTag() {
+        return playTag;
+    }
+
+    public void setPlayTag(String playTag) {
+        this.playTag = playTag;
+    }
+
+    public int getPlayPosition() {
+        return playPosition;
+    }
+
+    public void setPlayPosition(int playPosition) {
+        this.playPosition = playPosition;
     }
 }
