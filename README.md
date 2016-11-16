@@ -35,9 +35,46 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.1'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+## 1.1.2
+* 增加了TAG和position来实现第一种list列表（非ListVideoUtil模式的列表实现）的滑动错位问题
+
+```
+
+videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int lastVisibleItem = firstVisibleItem + visibleItemCount;
+        //大于0说明有播放
+        if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+            //当前播放的位置
+            int position = GSYVideoManager.instance().getPlayPosition();
+            //对应的播放列表TAG
+            if (GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)
+                    && (position < firstVisibleItem || position > lastVisibleItem)) {
+                //如果滑出去了上面和下面就是否，和今日头条一样
+                GSYVideoPlayer.releaseAllVideos();
+                listNormalAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+});
+
+····
+
+holder.gsyVideoPlayer.setPlayTag(TAG);
+holder.gsyVideoPlayer.setPlayPosition(position);
+
+```
+
 ## 1.1.1
 * 增加了ListVideoUtil全屏是否显示横屏，全屏是否自动旋转
 * 增加了ListVideoUtils隐藏状态栏和title的接口
+
+
 
 ## GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考 StandardGSYVideoPlayer
 
