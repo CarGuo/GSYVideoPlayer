@@ -1,18 +1,5 @@
-<h4>基于IJKPlayer的播放器，直接参考了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>进行了一些自己想要的调整</h4>
+<h4>基于IJKPlayer的播放器，直接参考了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>做了代码重构与优化调整，添加了自定义功能。</h4>
 ======================
-```
-<dependency>
-  <groupId>com.shuyu</groupId>
-  <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.3</version>
-  <type>pom</type>
-</dependency>
-```
-```
-
-compile 'com.shuyu:gsyVideoPlayer:1.1.3'
-
-```
 
 * <h4>支持基本的拖动，声音、亮度调节</h4>
 * <h4>支持边播边缓存，使用了<a href="https://github.com/danikula/AndroidVideoCache">AndroidVideoCache</a>的代理模式实现</h4>
@@ -21,6 +8,21 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.3'
 * <h4>支持列表播放</h4>
 * <h4>直接添加控件为封面</h4>
 * <h4>兼容一些5.0的过场效果</h4>
+* <h4>列表的全屏效果优化</h4>
+
+
+```
+<dependency>
+  <groupId>com.shuyu</groupId>
+  <artifactId>gsyVideoPlayer</artifactId>
+  <version>1.1.3</version>
+  <type>pom</type>
+</dependency>
+```
+
+```
+compile 'com.shuyu:gsyVideoPlayer:1.1.3'
+```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.jpg" width="218px" height="120px"/>
@@ -240,6 +242,3 @@ public void setHideActionBar(boolean hideActionBar)
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
 ```
-
-* <h4>//TODO 优化全屏的动画和全屏的效果</h4>
-* <h4>//TODO 优化接入的效果</h4>
