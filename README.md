@@ -4,13 +4,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.3</version>
   <type>pom</type>
 </dependency>
 ```
 ```
 
-compile 'com.shuyu:gsyVideoPlayer:1.1.2'
+compile 'com.shuyu:gsyVideoPlayer:1.1.3'
 
 ```
 
@@ -34,6 +34,12 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.2'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.gif" width="240px" height="426px"/>
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+## 1.1.3
+* 优化了第一种列表的全屏动画,5.0以上展开和返回过渡顺畅，支持自动旋转的开启与关闭
+
+* GIF 效果
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/0034.gif" width="240px" height="426px"/>
 
 ## 1.1.2
 * 增加了TAG和position来实现第一种list列表（非ListVideoUtil模式的列表实现）的滑动错位问题

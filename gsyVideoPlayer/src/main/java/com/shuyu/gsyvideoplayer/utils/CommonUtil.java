@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
+import android.util.TypedValue;
 import android.view.WindowManager;
 
 import java.util.Formatter;
@@ -78,6 +79,21 @@ public class CommonUtil {
         }
         return result;
     }
+
+    /**
+     * 获取ActionBar高度
+     *
+     * @param activity activity
+     * @return ActionBar高度
+     */
+    public static int getActionBarHeight(Activity activity) {
+        TypedValue tv = new TypedValue();
+        if (activity.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            return TypedValue.complexToDimensionPixelSize(tv.data, activity.getResources().getDisplayMetrics());
+        }
+        return 0;
+    }
+
 
     public static void hideSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
