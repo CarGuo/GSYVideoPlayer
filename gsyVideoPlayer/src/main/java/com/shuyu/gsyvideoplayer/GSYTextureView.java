@@ -39,43 +39,34 @@ public class GSYTextureView extends TextureView {
             int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
 
             if (widthSpecMode == MeasureSpec.EXACTLY && heightSpecMode == MeasureSpec.EXACTLY) {
-                // the size is fixed
                 width = widthSpecSize;
                 height = heightSpecSize;
 
-                // for compatibility, we adjust size based on aspect ratio
                 if (videoWidth * height < width * videoHeight) {
                     width = height * videoWidth / videoHeight;
                 } else if (videoWidth * height > width * videoHeight) {
                     height = width * videoHeight / videoWidth;
                 }
             } else if (widthSpecMode == MeasureSpec.EXACTLY) {
-                // only the width is fixed, adjust the height to match aspect ratio if possible
                 width = widthSpecSize;
                 height = width * videoHeight / videoWidth;
                 if (heightSpecMode == MeasureSpec.AT_MOST && height > heightSpecSize) {
-                    // couldn't match aspect ratio within the constraints
                     height = heightSpecSize;
                 }
             } else if (heightSpecMode == MeasureSpec.EXACTLY) {
-                // only the height is fixed, adjust the width to match aspect ratio if possible
                 height = heightSpecSize;
                 width = height * videoWidth / videoHeight;
                 if (widthSpecMode == MeasureSpec.AT_MOST && width > widthSpecSize) {
-                    // couldn't match aspect ratio within the constraints
                     width = widthSpecSize;
                 }
             } else {
-                // neither the width nor the height are fixed, try to use actual video size
                 width = videoWidth;
                 height = videoHeight;
                 if (heightSpecMode == MeasureSpec.AT_MOST && height > heightSpecSize) {
-                    // too tall, decrease both width and height
                     height = heightSpecSize;
                     width = height * videoWidth / videoHeight;
                 }
                 if (widthSpecMode == MeasureSpec.AT_MOST && width > widthSpecSize) {
-                    // too wide, decrease both width and height
                     width = widthSpecSize;
                     height = width * videoHeight / videoWidth;
                 }
@@ -85,25 +76,24 @@ public class GSYTextureView extends TextureView {
         }
 
         if (getRotation() != 0 && getRotation() % 90 == 0) {
-            if (widthS < heightS) {//旋转了90度，其实是竖的，适配宽度
-                if (width > height) {//竖版的视频
+            if (widthS < heightS) {
+                if (width > height) {
                     width = (int) (width * (float) widthS / height);
                     height = widthS;
-                } else {//横版的视频
+                } else {
                     height = (int) (height * (float) width / widthS);
                     width = widthS;
                 }
-            } else {//旋转了90度，其实是横的，适配高度
-                if (width > height) {//竖版的视频
+            } else {
+                if (width > height) {
                     height = (int) (height * (float) width / widthS);
                     width = widthS;
-                } else {//横版的视频
+                } else {
                     width = (int) (width * (float) widthS / height);
                     height = widthS;
                 }
             }
         }
-        //Log.e("back", "width " + width + " height " + height);
         setMeasuredDimension(width, height);
     }
 }

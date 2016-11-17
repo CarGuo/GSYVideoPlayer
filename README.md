@@ -33,17 +33,14 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.4'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
 * <h4>2、列表</h4>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/0034.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.gif" width="240px" height="426px"/>
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
 ## 1.1.4
 * 优化了第一种列表的全屏动画,5.0以上展开和返回过渡顺畅，支持自动旋转的开启与关闭
 * 修改了全屏下的滑动接口不正常问题，全屏下自动变为滑动的，非全屏可以设置。
-
-* GIF 效果
-</p>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/0034.gif" width="240px" height="426px"/>
 
 ```
 /**
