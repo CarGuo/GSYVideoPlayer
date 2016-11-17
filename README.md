@@ -41,6 +41,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.3'
 * 优化了第一种列表的全屏动画,5.0以上展开和返回过渡顺畅，支持自动旋转的开启与关闭
 
 * GIF 效果
+</p>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/0034.gif" width="240px" height="426px"/>
 
 ## 1.1.2
