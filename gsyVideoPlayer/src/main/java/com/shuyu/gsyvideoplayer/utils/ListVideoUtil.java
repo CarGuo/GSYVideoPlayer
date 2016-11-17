@@ -128,6 +128,7 @@ public class ListVideoUtil {
         }
         fullViewContainer.setBackgroundColor(Color.BLACK);
         fullViewContainer.addView(gsyVideoPlayer);
+        gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
         gsyVideoPlayer.getBackButton().setVisibility(View.VISIBLE);
         //设置旋转
@@ -163,6 +164,7 @@ public class ListVideoUtil {
                 isFull = false;
                 fullViewContainer.removeAllViews();
                 orientationUtils.setEnable(false);
+                gsyVideoPlayer.setIfCurrentIsFullscreen(false);
                 fullViewContainer.setBackgroundColor(Color.TRANSPARENT);
                 listParent.addView(gsyVideoPlayer);
                 gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_enlarge);

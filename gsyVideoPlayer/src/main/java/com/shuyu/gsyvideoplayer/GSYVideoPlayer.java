@@ -64,7 +64,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public static boolean WIFI_TIP_DIALOG_SHOWED = false;
 
 
-
     protected static Timer UPDATE_PROGRESS_TIMER;
 
 
@@ -115,8 +114,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected long mCurrentPosition; //当前的播放位置
 
     protected boolean mTouchingProgressBar = false;
-
-    protected boolean mIfCurrentIsFullscreen = false;
 
     protected boolean mIsTouchWiget = false;
 
@@ -880,6 +877,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         return mIsTouchWiget;
     }
 
+    /**
+     * 是否可以滑动界面改变进度，声音等
+     */
     public void setIsTouchWiget(boolean isTouchWiget) {
         this.mIsTouchWiget = isTouchWiget;
     }

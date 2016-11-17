@@ -72,6 +72,9 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
+        //是否可以滑动调整
+        videoPlayer.setIsTouchWiget(true);
+
         //设置返回按键功能
         videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override

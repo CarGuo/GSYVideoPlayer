@@ -53,6 +53,8 @@ public class DetailPlayer extends AppCompatActivity {
         orientationUtils = new OrientationUtils(this, detailPlayer);
         orientationUtils.setEnable(false);
 
+        detailPlayer.setIsTouchWiget(true);
+
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

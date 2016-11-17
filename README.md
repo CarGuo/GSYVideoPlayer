@@ -15,13 +15,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.3</version>
+  <version>1.1.4</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.1.3'
+compile 'com.shuyu:gsyVideoPlayer:1.1.4'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -37,12 +37,22 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.3'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
-## 1.1.3
+## 1.1.4
 * 优化了第一种列表的全屏动画,5.0以上展开和返回过渡顺畅，支持自动旋转的开启与关闭
+* 修改了全屏下的滑动接口不正常问题，全屏下自动变为滑动的，非全屏可以设置。
 
 * GIF 效果
 </p>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/0034.gif" width="240px" height="426px"/>
+
+```
+/**
+ * 是否可以滑动界面改变进度，声音等
+ */
+public void setIsTouchWiget(boolean isTouchWiget)
+
+```
+
 
 ## 1.1.2
 * 增加了TAG和position来实现第一种list列表（非ListVideoUtil模式的列表实现）的滑动错位问题

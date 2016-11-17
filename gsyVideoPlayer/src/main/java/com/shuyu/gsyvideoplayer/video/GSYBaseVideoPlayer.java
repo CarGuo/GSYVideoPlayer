@@ -54,6 +54,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mRotateViewAuto = true; //是否自动旋转
 
+    protected boolean mIfCurrentIsFullscreen = false;
+
     protected Context mContext;
 
     protected String mUrl;
@@ -123,6 +125,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.gravity = Gravity.CENTER;
         gsyVideoPlayer.setLayoutParams(lp);
+        gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
         mOrientationUtils.setEnable(mRotateViewAuto);
     }
@@ -335,6 +338,15 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     public boolean isRotateViewAuto() {
         return mRotateViewAuto;
+    }
+
+
+    public boolean isIfCurrentIsFullscreen() {
+        return mIfCurrentIsFullscreen;
+    }
+
+    public void setIfCurrentIsFullscreen(boolean ifCurrentIsFullscreen) {
+        this.mIfCurrentIsFullscreen = ifCurrentIsFullscreen;
     }
 
     /**
