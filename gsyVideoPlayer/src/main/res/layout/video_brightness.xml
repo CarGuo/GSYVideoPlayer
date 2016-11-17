@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:src="@drawable/ic_brightness_6_white_36dp" />
+            android:src="@drawable/video_brightness_6_white_36dp" />
 
         <TextView
             android:id="@+id/app_video_brightness"
