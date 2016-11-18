@@ -128,22 +128,20 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <ProgressBar
+    <moe.codeest.enviews.ENDownloadView
         android:id="@+id/loading"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:indeterminateDrawable="@drawable/video_loading"
         android:visibility="invisible" />
 
-    <ImageView
+    <moe.codeest.enviews.ENPlayView
         android:id="@+id/start"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/video_click_play_selector" />
+        android:layout_gravity="center_vertical" />
 
 </RelativeLayout>

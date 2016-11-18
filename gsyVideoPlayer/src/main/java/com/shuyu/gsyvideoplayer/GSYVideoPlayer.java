@@ -67,7 +67,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected static Timer UPDATE_PROGRESS_TIMER;
 
 
-    protected ImageView mStartButton;
+    protected View mStartButton;
     protected SeekBar mProgressBar;
     protected ImageView mFullscreenButton;
     protected TextView mCurrentTimeTextView, mTotalTimeTextView;
@@ -151,7 +151,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected void init(Context context) {
         this.mContext = context;
         View.inflate(context, getLayoutId(), this);
-        mStartButton = (ImageView) findViewById(R.id.start);
+        mStartButton = findViewById(R.id.start);
         mBackButton = (ImageView) findViewById(R.id.back);
         mFullscreenButton = (ImageView) findViewById(R.id.fullscreen);
         mProgressBar = (SeekBar) findViewById(R.id.progress);
@@ -887,7 +887,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     /**
      * 获取播放按键
      */
-    public ImageView getStartButton() {
+    public View getStartButton() {
         return mStartButton;
     }
 
