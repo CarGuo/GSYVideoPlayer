@@ -1,4 +1,4 @@
-<h4>基于IJKPlayer的播放器，直接参考了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>做了代码重构与优化调整，添加了自定义功能。</h4>
+<h4>基于IJKPlayer的播放器，重构了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>做了代码重构与优化调整，添加了自定义功能。</h4>
 ======================
 
 * <h4>支持基本的拖动，声音、亮度调节</h4>
