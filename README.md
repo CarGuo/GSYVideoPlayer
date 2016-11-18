@@ -43,7 +43,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.5'
 
 ## 1.1.5 优化了一些UI，增加了一些有趣的动画，比如播放按键。
 
-* 推荐这个动画效果<a href="http://p.codekk.com/detail/Android/codeestX/ENViews">ENViews</a>
+* 推荐这个动画效果<a href="https://github.com/codeestX/ENViews">ENViews</a>
 * 增加自定义继承模板**SampleExtendsPlayer**，个人建议直接拷贝**StandardGSYVideoPlayer**修改也行。
 
 ## 1.1.4
