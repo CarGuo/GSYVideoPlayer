@@ -15,28 +15,36 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.1.4'
+compile 'com.shuyu:gsyVideoPlayer:1.1.5'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.jpg" width="218px" height="120px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.jpg" width="120px" height="218px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.jpg" width="120px" height="218px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.jpg" width="120px" height="218px"/>
 <p></p>
+
 * <h4>1、打开一个播放</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.gif" width="240px" height="426px"/>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
+
 * <h4>2、列表</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.gif" width="240px" height="426px"/>
+
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+## 1.1.5 优化了一些UI，增加了一些有趣的动画，比如播放按键。
+
+　推荐这个动画效果<a href="http://p.codekk.com/detail/Android/codeestX/ENViews">ENViews</a>
+
 
 ## 1.1.4
 * 优化了第一种列表的全屏动画,5.0以上展开和返回过渡顺畅，支持自动旋转的开启与关闭

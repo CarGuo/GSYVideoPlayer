@@ -20,7 +20,6 @@ import com.shuyu.gsyvideoplayer.R;
 /**
  * Created by codeest on 2016/11/9.
  *
- * 感觉是这个系列里设计的最赞的一款了 >//<
  */
 
 public class ENDownloadView extends View {

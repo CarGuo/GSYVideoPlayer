@@ -18,7 +18,6 @@ import com.shuyu.gsyvideoplayer.R;
 /**
  * Created by codeest on 16/11/7.
  *
- * 论如何从直线到曲线再到三角形 =。=
  */
 
 public class ENPlayView extends View {
