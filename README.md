@@ -10,6 +10,7 @@
 * <h4>兼容一些5.0的过场效果</h4>
 * <h4>列表的全屏效果优化</h4>
 
+[简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
 ```
 <dependency>
