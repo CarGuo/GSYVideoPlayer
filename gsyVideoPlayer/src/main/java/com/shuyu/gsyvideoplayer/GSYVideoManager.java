@@ -15,7 +15,6 @@ import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;

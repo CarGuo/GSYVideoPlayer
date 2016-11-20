@@ -46,6 +46,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mCache = false;//是否播边边缓冲
 
+    private boolean mShowFullAnimation = true;//是否使用全屏动画效果
+
     protected int[] mListItemRect;//当前item框的屏幕位置
 
     protected int[] mListItemSize;//当前item的大小
@@ -67,6 +69,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     private OrientationUtils mOrientationUtils;
 
     private Handler mHandler = new Handler();
+
 
     public GSYBaseVideoPlayer(Context context) {
         super(context);
@@ -190,7 +193,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Color.BLACK);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mShowFullAnimation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getWidth(), getHeight());
                 lp.setMargins(mListItemRect[0], mListItemRect[1], 0, 0);
                 frameLayout.addView(gsyVideoPlayer, lp);
@@ -264,7 +267,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         final GSYVideoPlayer gsyVideoPlayer;
         if (oldF != null) {
             gsyVideoPlayer = (GSYVideoPlayer) oldF;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mShowFullAnimation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 TransitionManager.beginDelayedTransition(vp);
 
                 FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) gsyVideoPlayer.getLayoutParams();
@@ -354,5 +357,19 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void setRotateViewAuto(boolean rotateViewAuto) {
         this.mRotateViewAuto = rotateViewAuto;
+    }
+
+
+    public boolean ismShowFullAnimation() {
+        return mShowFullAnimation;
+    }
+
+    /**
+     * 全屏动画
+     *
+     * @param showFullAnimation 是否使用全屏动画效果
+     */
+    public void setShowFullAnimation(boolean showFullAnimation) {
+        this.mShowFullAnimation = showFullAnimation;
     }
 }

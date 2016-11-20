@@ -16,13 +16,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.1.5'
+compile 'com.shuyu:gsyVideoPlayer:1.1.6'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -41,6 +41,18 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.5'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+## 1.1.6 优化了第二种列表ListVideoUtil的全屏效果，和列表一的全屏效果一致，两种全屏效果增加是否打开关闭接口。
+
+```
+/**
+ * 全屏动画
+ *
+ * @param showFullAnimation 是否使用全屏动画效果
+ */
+public void setShowFullAnimation(boolean showFullAnimation)
+```
 
 ## 1.1.5 优化了一些UI，增加了一些有趣的动画，比如播放按键。
 
