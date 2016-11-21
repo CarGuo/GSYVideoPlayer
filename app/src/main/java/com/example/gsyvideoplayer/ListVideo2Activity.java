@@ -1,16 +1,21 @@
 package com.example.gsyvideoplayer;
 
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -47,6 +52,38 @@ public class ListVideo2Activity extends AppCompatActivity {
         listVideoAdapter = new ListVideoAdapter(this, listVideoUtil);
         listVideoAdapter.setRootView(activityListVideo);
         videoList.setAdapter(listVideoAdapter);
+
+
+        videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int lastVisibleItem = firstVisibleItem + visibleItemCount;
+                //大于0说明有播放,//对应的播放列表TAG
+                if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(ListVideoAdapter.TAG)) {
+                    //当前播放的位置
+                    int position = listVideoUtil.getPlayPosition();
+                    //不可视的是时候
+                    if ((position < firstVisibleItem || position > lastVisibleItem)) {
+                        //如果是小窗口就不需要处理
+                        if (!listVideoUtil.isSmall()) {
+                            //小窗口
+                            int size = CommonUtil.dip2px(ListVideo2Activity.this, 150);
+                            listVideoUtil.showSmallVideo(new Point(size, size), false, true);
+                        }
+                    } else {
+                        if (listVideoUtil.isSmall()) {
+                            listVideoUtil.smallVideoToNormal();
+                        }
+                    }
+                }
+            }
+
+        });
+
 
     }
 

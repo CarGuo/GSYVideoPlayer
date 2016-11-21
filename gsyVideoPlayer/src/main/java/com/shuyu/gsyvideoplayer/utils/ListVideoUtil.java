@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Handler;
 import android.transition.TransitionManager;
@@ -32,16 +33,17 @@ public class ListVideoUtil {
     private ViewGroup.LayoutParams listParams;
     private OrientationUtils orientationUtils;
     private Context context;
+
     private int playPosition = -1; // 播放的位置
     private boolean isFull; //当前是否全屏
+    private boolean isSmall; //当前是否小屏
     private boolean autoRotation = true;//是否自动旋转
     private boolean fullLandFrist = true; //是否全屏就马上横屏
     private boolean hideStatusBar; //是否隐藏有状态bar
     private boolean hideActionBar; //是否隐藏有状态ActionBar
 
-    protected int[] listItemRect;//当前item框的屏幕位置
-
-    protected int[] listItemSize;//当前item的大小
+    private int[] listItemRect;//当前item框的屏幕位置
+    private int[] listItemSize;//当前item的大小
 
     private Handler handler = new Handler();
 
@@ -50,6 +52,8 @@ public class ListVideoUtil {
     public ListVideoUtil(Context context) {
         gsyVideoPlayer = new StandardGSYVideoPlayer(context);
         this.context = context;
+        int smallVideoWidth = CommonUtil.getScreenWidth(context) / 2 - CommonUtil.dip2px(context, 20);
+        int smallVideoHeight = smallVideoWidth * 3 / 4;
     }
 
     /**
@@ -340,6 +344,30 @@ public class ListVideoUtil {
     }
 
     /**
+     * 显示小屏幕效果
+     *
+     * @param size      小视频的大小
+     * @param actionBar 是否有actionBar
+     * @param statusBar 是否有状态栏
+     */
+    public void showSmallVideo(Point size, final boolean actionBar, final boolean statusBar) {
+        if (gsyVideoPlayer.getCurrentState() == GSYVideoPlayer.CURRENT_STATE_PLAYING) {
+            gsyVideoPlayer.showSmallVideo(size, actionBar, statusBar);
+            isSmall = true;
+        }
+    }
+
+
+    /**
+     * 恢复小屏幕效果
+     */
+    public void smallVideoToNormal() {
+        isSmall = false;
+        gsyVideoPlayer.hideSmallVideo();
+    }
+
+
+    /**
      * 设置全屏显示的viewGroup
      *
      * @param fullViewContainer viewGroup
@@ -419,5 +447,17 @@ public class ListVideoUtil {
      */
     public void setShowFullAnimation(boolean showFullAnimation) {
         this.showFullAnimation = showFullAnimation;
+    }
+
+    public int getPlayPosition() {
+        return playPosition;
+    }
+
+    public String getPlayTAG() {
+        return TAG;
+    }
+
+    public boolean isSmall() {
+        return isSmall;
     }
 }

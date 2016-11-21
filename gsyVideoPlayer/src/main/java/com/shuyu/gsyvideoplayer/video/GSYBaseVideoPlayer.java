@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer.video;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Handler;
 import android.transition.TransitionManager;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.SmallVideoTouch;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -36,7 +38,9 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showSupportActionBar;
 
 public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMediaPlayerListener {
 
-    protected static final int FULLSCREEN_ID = 83797;
+    protected static final int FULLSCREEN_ID = 85597;
+
+    public static final int SMALL_ID = 84778;
 
     protected static long CLICK_QUIT_FULLSCREEN_TIME = 0;
 
@@ -91,8 +95,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     /**
      * 移除没用的
      */
-    private void removeVideo(ViewGroup vp) {
-        View old = vp.findViewById(FULLSCREEN_ID);
+    private void removeVideo(ViewGroup vp, int id) {
+        View old = vp.findViewById(id);
         if (old != null) {
             if (old.getParent() != null) {
                 ViewGroup viewGroup = (ViewGroup) old.getParent();
@@ -173,7 +177,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
         final ViewGroup vp = getViewGroup();
 
-        removeVideo(vp);
+        removeVideo(vp, FULLSCREEN_ID);
 
         if (mTextureViewContainer.getChildCount() > 0) {
             mTextureViewContainer.removeAllViews();
@@ -293,6 +297,81 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         }
     }
 
+    /**
+     * 显示小窗口
+     */
+    public void showSmallVideo(Point size, final boolean actionBar, final boolean statusBar) {
+
+        final ViewGroup vp = getViewGroup();
+
+        removeVideo(vp, SMALL_ID);
+
+        if (mTextureViewContainer.getChildCount() > 0) {
+            mTextureViewContainer.removeAllViews();
+        }
+
+        try {
+            Constructor<GSYBaseVideoPlayer> constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class);
+            GSYBaseVideoPlayer gsyVideoPlayer = constructor.newInstance(getContext());
+            gsyVideoPlayer.setId(SMALL_ID);
+
+            //int size = CommonUtil.
+
+            FrameLayout.LayoutParams lpParent = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            FrameLayout frameLayout = new FrameLayout(mContext);
+
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(size.x, size.y);
+            int marginLeft = CommonUtil.getScreenWidth(mContext) - size.x;
+            int marginTop = CommonUtil.getScreenHeight(mContext) - size.y;
+
+            if (actionBar) {
+                marginTop = marginTop - getActionBarHeight((Activity) mContext);
+            }
+
+            if (statusBar) {
+                marginTop = marginTop - getStatusBarHeight(mContext);
+            }
+
+            lp.setMargins(marginLeft, marginTop, 0, 0);
+            frameLayout.addView(gsyVideoPlayer, lp);
+
+            vp.addView(frameLayout, lpParent);
+
+            gsyVideoPlayer.setUp(mUrl, mCache, mObjects);
+            gsyVideoPlayer.setStateAndUi(mCurrentState);
+            gsyVideoPlayer.addTextureView();
+            gsyVideoPlayer.onClickUiToggle();
+            gsyVideoPlayer.setSmallVideoTextureView(new SmallVideoTouch(gsyVideoPlayer, marginLeft, marginTop));
+
+            GSYVideoManager.instance().setLastListener(this);
+            GSYVideoManager.instance().setListener(gsyVideoPlayer);
+
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 隐藏小窗口
+     */
+    public void hideSmallVideo() {
+        final ViewGroup vp = getViewGroup();
+        GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer) vp.findViewById(SMALL_ID);
+        removeVideo(vp, SMALL_ID);
+        mCurrentState = GSYVideoManager.instance().getLastState();
+        if (gsyVideoPlayer != null) {
+            mCurrentState = gsyVideoPlayer.getCurrentState();
+        }
+        GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
+        GSYVideoManager.instance().setLastListener(null);
+        setStateAndUi(mCurrentState);
+        addTextureView();
+        CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
+    }
+
 
     /**
      * 设置播放URL
@@ -327,6 +406,13 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * 添加播放的view
      */
     protected abstract void addTextureView();
+
+    /**
+     * 小窗口
+     **/
+    protected abstract void setSmallVideoTextureView(View.OnTouchListener onTouchListener);
+
+    protected abstract void onClickUiToggle();
 
     /**
      * 获取全屏按键

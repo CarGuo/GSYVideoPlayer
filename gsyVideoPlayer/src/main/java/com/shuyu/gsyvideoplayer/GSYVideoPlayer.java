@@ -45,13 +45,13 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public static final String TAG = "GSYVideoPlayer";
 
 
-    protected static final int CURRENT_STATE_NORMAL = 0; //正常
-    protected static final int CURRENT_STATE_PREPAREING = 1; //准备中
-    protected static final int CURRENT_STATE_PLAYING = 2; //播放中
-    protected static final int CURRENT_STATE_PLAYING_BUFFERING_START = 3; //开始缓冲
-    protected static final int CURRENT_STATE_PAUSE = 5; //暂停
-    protected static final int CURRENT_STATE_AUTO_COMPLETE = 6; //自动播放结束
-    protected static final int CURRENT_STATE_ERROR = 7; //错误状态
+    public static final int CURRENT_STATE_NORMAL = 0; //正常
+    public static final int CURRENT_STATE_PREPAREING = 1; //准备中
+    public static final int CURRENT_STATE_PLAYING = 2; //播放中
+    public static final int CURRENT_STATE_PLAYING_BUFFERING_START = 3; //开始缓冲
+    public static final int CURRENT_STATE_PAUSE = 5; //暂停
+    public static final int CURRENT_STATE_AUTO_COMPLETE = 6; //自动播放结束
+    public static final int CURRENT_STATE_ERROR = 7; //错误状态
 
     public static final int FULL_SCREEN_NORMAL_DELAY = 2000;
 
@@ -425,6 +425,18 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     }
 
     /**
+     * 小窗口
+     **/
+    @Override
+    protected void setSmallVideoTextureView(View.OnTouchListener onTouchListener) {
+        mTextureView.setOnTouchListener(onTouchListener);
+        mProgressBar.setOnTouchListener(null);
+        mFullscreenButton.setOnTouchListener(null);
+        mTextureView.setOnClickListener(null);
+    }
+
+
+    /**
      * 设置界面选择
      */
     public void setRotationView(int rotate) {
@@ -609,6 +621,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     }
 
     protected void dismissBrightnessDialog() {
+
+    }
+
+    protected void onClickUiToggle() {
 
     }
 

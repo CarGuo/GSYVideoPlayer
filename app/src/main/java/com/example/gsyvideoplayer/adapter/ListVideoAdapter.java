@@ -34,7 +34,7 @@ import static com.example.gsyvideoplayer.utils.CommonUtil.setViewHeight;
 
 public class ListVideoAdapter extends BaseAdapter {
 
-    private String TAG = "TT";
+    public final static String TAG = "TT2";
 
     private List<VideoModel> list = new ArrayList<>();
     private LayoutInflater inflater = null;

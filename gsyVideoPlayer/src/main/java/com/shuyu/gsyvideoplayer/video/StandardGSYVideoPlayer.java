@@ -256,7 +256,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         startDismissControlViewTimer();
     }
 
-    private void onClickUiToggle() {
+    @Override
+    protected void onClickUiToggle() {
         if (mCurrentState == CURRENT_STATE_PREPAREING) {
             if (mBottomContainer.getVisibility() == View.VISIBLE) {
                 changeUiToPrepareingClear();
