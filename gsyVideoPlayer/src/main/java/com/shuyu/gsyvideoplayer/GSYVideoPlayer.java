@@ -152,6 +152,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         this.mContext = context;
         View.inflate(context, getLayoutId(), this);
         mStartButton = findViewById(R.id.start);
+        mSmallClose = findViewById(R.id.small_close);
         mBackButton = (ImageView) findViewById(R.id.back);
         mFullscreenButton = (ImageView) findViewById(R.id.fullscreen);
         mProgressBar = (SeekBar) findViewById(R.id.progress);
@@ -433,8 +434,24 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mProgressBar.setOnTouchListener(null);
         mFullscreenButton.setOnTouchListener(null);
         mTextureView.setOnClickListener(null);
+        mSmallClose.setVisibility(VISIBLE);
+        mSmallClose.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSmallVideo();
+                releaseAllVideos();
+            }
+        });
     }
 
+
+    public void setSmallCloseShow() {
+        mSmallClose.setVisibility(VISIBLE);
+    }
+
+    public void setSmallCloseHide() {
+        mSmallClose.setVisibility(GONE);
+    }
 
     /**
      * 设置界面选择

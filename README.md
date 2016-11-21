@@ -9,6 +9,7 @@
 * <h4>直接添加控件为封面</h4>
 * <h4>兼容一些5.0的过场效果</h4>
 * <h4>列表的全屏效果优化</h4>
+* <h4>列表的小窗口播放，可拖动</h4>
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
@@ -16,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.6</version>
+  <version>1.1.7</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.1.6'
+compile 'com.shuyu:gsyVideoPlayer:1.1.7'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -37,11 +38,37 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.6'
 
 * <h4>2、列表</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+## 1.1.7 增加了第二种列表 ListVideoUtil可拖动小窗口支持
+
+```
+@Override
+public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    int lastVisibleItem = firstVisibleItem + visibleItemCount;
+    //大于0说明有播放,//对应的播放列表TAG
+    if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(ListVideoAdapter.TAG)) {
+        //当前播放的位置
+        int position = listVideoUtil.getPlayPosition();
+        //不可视的是时候
+        if ((position < firstVisibleItem || position > lastVisibleItem)) {
+            //如果是小窗口就不需要处理
+            if (!listVideoUtil.isSmall()) {
+                //小窗口
+                int size = CommonUtil.dip2px(ListVideo2Activity.this, 150);
+                listVideoUtil.showSmallVideo(new Point(size, size), false, true);
+            }
+        } else {
+            if (listVideoUtil.isSmall()) {
+                listVideoUtil.smallVideoToNormal();
+            }
+        }
+    }
+}
+```
 
 ## 1.1.6 优化了第二种列表ListVideoUtil的全屏效果，和列表一的全屏效果一致，两种全屏效果增加是否打开关闭接口。
 

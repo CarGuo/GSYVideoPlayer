@@ -144,4 +144,16 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical" />
 
+
+    <ImageView
+        android:id="@+id/small_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/video_small_close"
+        android:visibility="gone" />
+
+
 </RelativeLayout>

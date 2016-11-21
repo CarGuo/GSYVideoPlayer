@@ -100,6 +100,11 @@ public class ListVideoUtil {
      * @param url 播放的URL
      */
     public void startPlay(String url) {
+
+        if (isSmall()) {
+            smallVideoToNormal();
+        }
+
         gsyVideoPlayer.release();
 
         gsyVideoPlayer.setUp(url, true, "");

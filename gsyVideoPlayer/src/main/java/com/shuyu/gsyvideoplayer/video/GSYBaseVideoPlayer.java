@@ -74,6 +74,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     private Handler mHandler = new Handler();
 
+    protected View mSmallClose;
+
 
     public GSYBaseVideoPlayer(Context context) {
         super(context);
@@ -314,8 +316,6 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             Constructor<GSYBaseVideoPlayer> constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class);
             GSYBaseVideoPlayer gsyVideoPlayer = constructor.newInstance(getContext());
             gsyVideoPlayer.setId(SMALL_ID);
-
-            //int size = CommonUtil.
 
             FrameLayout.LayoutParams lpParent = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             FrameLayout frameLayout = new FrameLayout(mContext);
