@@ -64,7 +64,10 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected Context mContext;
 
+    protected String mOriginUrl; //原来的url
+
     protected String mUrl;
+
 
     protected Object[] mObjects;
 

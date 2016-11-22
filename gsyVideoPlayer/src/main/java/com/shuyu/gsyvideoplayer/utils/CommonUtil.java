@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
+import java.io.File;
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -183,5 +184,19 @@ public class CommonUtil {
         return outMetrics.heightPixels;
     }
 
+    public static void deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.isFile()) {
+                file.delete();
+            } else {
+                String[] filePaths = file.list();
+                for (String path : filePaths) {
+                    deleteFile(filePath + File.separator + path);
+                }
+                file.delete();
+            }
+        }
+    }
 
 }

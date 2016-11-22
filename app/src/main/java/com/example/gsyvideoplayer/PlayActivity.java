@@ -72,6 +72,13 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
+        videoPlayer.setBottomProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_progress));
+        videoPlayer.setDialogVolumeProgressBar(getResources().getDrawable(R.drawable.video_new_volume_progress_bg));
+        videoPlayer.setDialogProgressBar(getResources().getDrawable(R.drawable.video_new_progress));
+        videoPlayer.setBottomShowProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_seekbar_progress),
+                getResources().getDrawable(R.drawable.video_new_seekbar_thumb));
+        videoPlayer.setDialogProgressColor(getResources().getColor(R.color.colorAccent), -11);
+
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(true);
 

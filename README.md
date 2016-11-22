@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.7</version>
+  <version>1.1.8</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.1.7'
+compile 'com.shuyu:gsyVideoPlayer:1.1.8'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,39 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.7'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+### 1.1.8 增加了对Cache如果文件如果出现播放异常就清除缓存文件的处理（预防），StandardGSYVideoPlayer增加了一些UI配置接口
+
+```
+/**
+ * 底部进度条-弹出的
+ */
+public void setBottomShowProgressBarDrawable(Drawable drawable, Drawable thumb)
+
+
+/**
+ * 底部进度条-非弹出
+ */
+public void setBottomProgressBarDrawable(Drawable drawable)
+
+/**
+ * 声音进度条
+ */
+public void setDialogVolumeProgressBar(Drawable drawable)
+
+
+/**
+ * 中间进度条
+ */
+public void setDialogProgressBar(Drawable drawable)
+
+/**
+ * 中间进度条字体颜色
+ */
+public void setDialogProgressColor(int highLightColor, int normalColor)
+
+```
 
 ## 1.1.7 增加了第二种列表 ListVideoUtil可拖动小窗口支持
 

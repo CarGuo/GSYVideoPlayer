@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -73,6 +74,16 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected TextView mDialogTotalTime;
     protected ImageView mDialogIcon;
 
+    protected Drawable mBottomProgressDrawable;
+    protected Drawable mBottomShowProgressDrawable;
+    protected Drawable mBottomShowProgressThumbDrawable;
+    protected Drawable mVolumeProgressDrawable;
+    protected Drawable mDialogProgressBarDrawable;
+
+    private int mDialogProgressHighLightColor = -11;
+
+    private int mDialogProgressNormalColor = -11;
+
 
     public void setStandardVideoAllCallBack(StandardVideoAllCallBack standardVideoAllCallBack) {
         this.mStandardVideoAllCallBack = standardVideoAllCallBack;
@@ -102,6 +113,19 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         if (mThumbImageView != null) {
             mThumbImageViewLayout.removeAllViews();
             resolveThumbImage(mThumbImageView);
+        }
+
+
+        if (mBottomProgressDrawable != null) {
+            mBottomProgressBar.setProgressDrawable(mBottomProgressDrawable);
+        }
+
+        if (mBottomShowProgressDrawable != null) {
+            mProgressBar.setProgressDrawable(mBottomProgressDrawable);
+        }
+
+        if (mBottomShowProgressThumbDrawable != null) {
+            mProgressBar.setThumb(mBottomShowProgressThumbDrawable);
         }
 
     }
@@ -463,6 +487,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         if (mProgressDialog == null) {
             View localView = LayoutInflater.from(getContext()).inflate(R.layout.video_progress_dialog, null);
             mDialogProgressBar = ((ProgressBar) localView.findViewById(R.id.duration_progressbar));
+            if (mDialogProgressBarDrawable != null) {
+                mDialogProgressBar.setProgressDrawable(mDialogProgressBarDrawable);
+            }
             mDialogSeekTime = ((TextView) localView.findViewById(R.id.tv_current));
             mDialogTotalTime = ((TextView) localView.findViewById(R.id.tv_duration));
             mDialogIcon = ((ImageView) localView.findViewById(R.id.duration_image_tip));
@@ -472,6 +499,12 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             mProgressDialog.getWindow().addFlags(32);
             mProgressDialog.getWindow().addFlags(16);
             mProgressDialog.getWindow().setLayout(-2, -2);
+            if(mDialogProgressNormalColor != -11) {
+                mDialogTotalTime.setTextColor(mDialogProgressNormalColor);
+            }
+            if (mDialogProgressHighLightColor != -11) {
+                mDialogSeekTime.setTextColor(mDialogProgressHighLightColor);
+            }
             WindowManager.LayoutParams localLayoutParams = mProgressDialog.getWindow().getAttributes();
             localLayoutParams.gravity = Gravity.CENTER;
             //localLayoutParams.y = getResources().getDimensionPixelOffset(R.dimen.video_progress_dialog_margin_top);
@@ -506,6 +539,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         if (mVolumeDialog == null) {
             View localView = LayoutInflater.from(getContext()).inflate(R.layout.video_volume_dialog, null);
             mDialogVolumeProgressBar = ((ProgressBar) localView.findViewById(R.id.volume_progressbar));
+            if (mVolumeProgressDrawable != null) {
+                mDialogVolumeProgressBar.setProgressDrawable(mVolumeProgressDrawable);
+            }
             mVolumeDialog = new Dialog(getContext(), R.style.video_style_dialog_progress);
             mVolumeDialog.setContentView(localView);
             mVolumeDialog.getWindow().addFlags(8);
@@ -640,6 +676,51 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     public void onBackFullscreen() {
         clearFullscreenLayout();
+    }
+
+    /**
+     * 底部进度条-弹出的
+     */
+    public void setBottomShowProgressBarDrawable(Drawable drawable, Drawable thumb) {
+        mBottomShowProgressDrawable = drawable;
+        mBottomShowProgressThumbDrawable = thumb;
+        if (mProgressBar != null) {
+            mProgressBar.setProgressDrawable(drawable);
+            mProgressBar.setThumb(thumb);
+        }
+    }
+
+    /**
+     * 底部进度条-非弹出
+     */
+    public void setBottomProgressBarDrawable(Drawable drawable) {
+        mBottomProgressDrawable = drawable;
+        if (mBottomProgressBar != null) {
+            mBottomProgressBar.setProgressDrawable(drawable);
+        }
+    }
+
+    /**
+     * 声音进度条
+     */
+    public void setDialogVolumeProgressBar(Drawable drawable) {
+        mVolumeProgressDrawable = drawable;
+    }
+
+
+    /**
+     * 中间进度条
+     */
+    public void setDialogProgressBar(Drawable drawable) {
+        mDialogProgressBarDrawable = drawable;
+    }
+
+    /**
+     * 中间进度条字体颜色
+     */
+    public void setDialogProgressColor(int highLightColor, int normalColor) {
+        mDialogProgressHighLightColor = highLightColor;
+        mDialogProgressNormalColor = normalColor;
     }
 
 }

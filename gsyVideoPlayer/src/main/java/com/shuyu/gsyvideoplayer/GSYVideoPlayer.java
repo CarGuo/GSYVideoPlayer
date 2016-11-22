@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
@@ -28,6 +29,7 @@ import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -127,6 +129,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected boolean mLooping = false;//// TODO: 2016/11/13 循环
 
+    protected boolean mCacheFile = false; //是否是缓存的文件
+
 
     /**
      * 当前UI
@@ -191,9 +195,12 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) < FULL_SCREEN_NORMAL_DELAY)
             return false;
         mCurrentState = CURRENT_STATE_NORMAL;
-        if (cacheWithPlay && url.startsWith("http")) {
+        if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1")) {
+            mOriginUrl = url;
             HttpProxyCacheServer proxy = GSYVideoManager.getProxy(getContext().getApplicationContext());
             url = proxy.getProxyUrl(url);
+            mCacheFile = (!url.startsWith("http"));
+            //Log.i(TAG, "mCacheFile " + mCacheFile + " " + url);
         }
         this.mUrl = url;
         this.mObjects = objects;
@@ -740,6 +747,16 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public void onError(int what, int extra) {
         if (what != 38 && what != -38) {
             setStateAndUi(CURRENT_STATE_ERROR);
+            if (mCacheFile) {
+                Log.e(TAG, " mCacheFile Local Error " + mUrl);
+                //可能是因为缓存文件除了问题
+                CommonUtil.deleteFile(mUrl.replace("file://", ""));
+                mUrl = mOriginUrl;
+            } else if (mUrl.contains("127.0.0.1")) {
+                Log.e(TAG, " mCacheFile Download Error " + mUrl);
+                CommonUtil.deleteFile(mUrl.replace("file://", "") + ".downlad");
+                mUrl = mOriginUrl;
+            }
         }
     }
 
