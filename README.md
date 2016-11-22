@@ -44,7 +44,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.8'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
 
-### 1.1.8 增加了对Cache如果文件如果出现播放异常就清除缓存文件的处理（预防），StandardGSYVideoPlayer增加了一些UI配置接口
+### 1.1.8 增加了如果Cache文件出现播放异常，就清除缓存文件的处理（预防），StandardGSYVideoPlayer增加了一些UI配置接口
 
 ```
 /**
