@@ -358,7 +358,9 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.setUp(mUrl, mCache, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
+            //隐藏掉所有的弹出状态哟
             gsyVideoPlayer.onClickUiToggle();
+            gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
             gsyVideoPlayer.setSmallVideoTextureView(new SmallVideoTouch(gsyVideoPlayer, marginLeft, marginTop));
 
             GSYVideoManager.instance().setLastListener(this);

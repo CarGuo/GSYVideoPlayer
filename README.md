@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.0'
+compile 'com.shuyu:gsyVideoPlayer:1.2.1'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -44,8 +44,32 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.0'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
 
+### 1.2.1 调整了小窗口回调拦截错误的情况，增加了SampleListener在列表小窗口点击关闭的时候更新页面
+
+```
+//小窗口关闭被点击的时候回调处理回复页面
+listVideoUtil.setVideoAllCallBack(new SampleListener(){
+    @Override
+    public void onQuitSmallWidget(String url, Object... objects) {
+        super.onQuitSmallWidget(url, objects);
+        //大于0说明有播放,//对应的播放列表TAG
+        if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(ListVideoAdapter.TAG)) {
+            //当前播放的位置
+            int position = listVideoUtil.getPlayPosition();
+            //不可视的是时候
+            if ((position < firstVisibleItem || position > lastVisibleItem)) {
+                //释放掉视频
+                listVideoUtil.releaseVideoPlayer();
+                listVideoAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+});
+```
+　
 
 ### 1.2.0 去除了一些无用的依赖库，升级IJKPlayer到0.7.4
+　
 
 ### 1.1.9 修正了回调接口VideoAllCallBack的回调结果，添加了注释，可以根据需要继承后覆写。
 
