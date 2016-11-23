@@ -67,9 +67,8 @@ listVideoUtil.setVideoAllCallBack(new SampleListener(){
 });
 ```
 　
-
 ### 1.2.0 去除了一些无用的依赖库，升级IJKPlayer到0.7.4
-　
+　更容易导入，减少了无用的依赖情况，去除了import的时候需要配置gradle.properties的问题
 
 ### 1.1.9 修正了回调接口VideoAllCallBack的回调结果，添加了注释，可以根据需要继承后覆写。
 
