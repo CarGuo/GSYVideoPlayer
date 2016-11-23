@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.9</version>
+  <version>1.2.0</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.1.9'
+compile 'com.shuyu:gsyVideoPlayer:1.2.0'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,10 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.9'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+
+### 1.2.0 去除了一些无用的依赖库，升级IJKPlayer到0.7.4
 
 ### 1.1.9 修正了回调接口VideoAllCallBack的回调结果，添加了注释，可以根据需要继承后覆写。
 

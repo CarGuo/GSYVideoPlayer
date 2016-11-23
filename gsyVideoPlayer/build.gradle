@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
 
@@ -28,8 +27,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
     def dataDependencies = rootProject.ext.dataDependencies
-    apt viewDependencies.apt_butterKnife
-    compile viewDependencies.butterKnife
     compile viewDependencies.ijkplayer_java
     compile viewDependencies.ijkplayer_armv7a
     compile viewDependencies.ijkplayer_armv5
@@ -37,9 +34,6 @@ dependencies {
     compile dataDependencies.videocache
     compile androidDependencies.support_v4
     compile androidDependencies.appcompat_v7
-    compile androidDependencies.recyclerView
-    compile androidDependencies.cardview_v7
-    compile androidDependencies.design
 }
 
-apply from: '../bintray.gradle'
+//apply from: '../bintray.gradle'
