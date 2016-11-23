@@ -27,6 +27,7 @@ import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -239,8 +240,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         } else if (i == R.id.surface_container) {
             if (mStandardVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
+                    Debuger.printfLog("onClickBlankFullscreen");
                     mStandardVideoAllCallBack.onClickBlankFullscreen(mUrl, mObjects);
                 } else {
+                    Debuger.printfLog("onClickBlank");
                     mStandardVideoAllCallBack.onClickBlank(mUrl, mObjects);
                 }
             }
@@ -274,6 +277,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     public void startPlayLogic() {
         if (mStandardVideoAllCallBack != null) {
+            Debuger.printfLog("onClickStartThumb");
             mStandardVideoAllCallBack.onClickStartThumb(mUrl, mObjects);
         }
         prepareVideo();

@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
+import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -22,6 +24,8 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getStatusBarHeight;
 
 /**
  * Created by shuyu on 2016/11/12.
+ * 列表工具类
+ * 其中记得设置进来的fullViewContainer必须是在Activity布局下的最外层布局
  */
 
 public class ListVideoUtil {
@@ -32,6 +36,8 @@ public class ListVideoUtil {
     private ViewGroup listParent;//记录列表中item的父布局
     private ViewGroup.LayoutParams listParams;
     private OrientationUtils orientationUtils;
+    private StandardVideoAllCallBack videoAllCallBack;
+    private String url;
     private Context context;
 
     private int playPosition = -1; // 播放的位置
@@ -41,6 +47,7 @@ public class ListVideoUtil {
     private boolean fullLandFrist = true; //是否全屏就马上横屏
     private boolean hideStatusBar; //是否隐藏有状态bar
     private boolean hideActionBar; //是否隐藏有状态ActionBar
+
 
     private int[] listItemRect;//当前item框的屏幕位置
     private int[] listItemSize;//当前item的大小
@@ -104,6 +111,8 @@ public class ListVideoUtil {
         if (isSmall()) {
             smallVideoToNormal();
         }
+
+        this.url = url;
 
         gsyVideoPlayer.release();
 
@@ -243,6 +252,11 @@ public class ListVideoUtil {
                 listParent.addView(gsyVideoPlayer, listParams);
                 gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_enlarge);
                 gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
+                gsyVideoPlayer.setIfCurrentIsFullscreen(false);
+                if (videoAllCallBack != null) {
+                    Debuger.printfLog("onQuitFullscreen");
+                    videoAllCallBack.onQuitFullscreen(url);
+                }
             }
         }, delay);
     }
@@ -292,6 +306,11 @@ public class ListVideoUtil {
                     }
                 }
             }, time);
+        }
+        gsyVideoPlayer.setIfCurrentIsFullscreen(true);
+        if (videoAllCallBack != null) {
+            Debuger.printfLog("onEnterFullscreen");
+            videoAllCallBack.onEnterFullscreen(this.url);
         }
     }
 
@@ -452,6 +471,16 @@ public class ListVideoUtil {
      */
     public void setShowFullAnimation(boolean showFullAnimation) {
         this.showFullAnimation = showFullAnimation;
+    }
+
+    /**
+     * 视频接口回调
+     *
+     * @param videoAllCallBack 回调
+     */
+    public void setVideoAllCallBack(StandardVideoAllCallBack videoAllCallBack) {
+        this.videoAllCallBack = videoAllCallBack;
+        gsyVideoPlayer.setStandardVideoAllCallBack(videoAllCallBack);
     }
 
     public int getPlayPosition() {

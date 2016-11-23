@@ -1,32 +1,20 @@
 package com.example.gsyvideoplayer.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
-import android.os.Handler;
-import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.gsyvideoplayer.utils.CommonUtil.setViewHeight;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -104,7 +92,102 @@ public class ListVideoAdapter extends BaseAdapter {
             }
         });
 
+        listVideoUtil.setVideoAllCallBack(new StandardVideoAllCallBack() {
+            @Override
+            public void onClickStartThumb(String url, Object... objects) {
 
+            }
+
+            @Override
+            public void onClickBlank(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickBlankFullscreen(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickStartIcon(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickStartError(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickStop(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickStopFullscreen(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickResume(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickResumeFullscreen(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickSeekbar(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onClickSeekbarFullscreen(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onAutoComplete(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onEnterFullscreen(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onQuitFullscreen(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onQuitSmallWidget(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onEnterSmallWidget(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onTouchScreenSeekVolume(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onTouchScreenSeekPosition(String url, Object... objects) {
+
+            }
+
+            @Override
+            public void onTouchScreenSeekLight(String url, Object... objects) {
+
+            }
+        });
         return convertView;
     }
 

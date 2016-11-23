@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.1.8</version>
+  <version>1.1.9</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.1.8'
+compile 'com.shuyu:gsyVideoPlayer:1.1.9'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -43,6 +43,9 @@ compile 'com.shuyu:gsyVideoPlayer:1.1.8'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+### 1.1.9 修正了回调接口VideoAllCallBack的回调结果，添加了注释，可以根据需要继承后覆写。
+
+有全屏到非全屏，有小窗口到非小窗口，结束播放错误触摸等等的接口回调，增加了Debuger，可以使能或者关闭调试输出。
 
 ### 1.1.8 增加了如果Cache文件出现播放异常，就清除缓存文件的处理（预防），StandardGSYVideoPlayer增加了一些UI配置接口
 

@@ -21,7 +21,9 @@ import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.SmallVideoTouch;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
+import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
 import java.lang.reflect.Constructor;
@@ -38,9 +40,9 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showSupportActionBar;
 
 public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMediaPlayerListener {
 
-    protected static final int FULLSCREEN_ID = 85597;
-
     public static final int SMALL_ID = 84778;
+
+    protected static final int FULLSCREEN_ID = 85597;
 
     protected static long CLICK_QUIT_FULLSCREEN_TIME = 0;
 
@@ -68,16 +70,17 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected String mUrl;
 
-
     protected Object[] mObjects;
 
     protected ViewGroup mTextureViewContainer;
 
+    protected View mSmallClose;
+
+    protected VideoAllCallBack mVideoAllCallBack;
+
     private OrientationUtils mOrientationUtils;
 
     private Handler mHandler = new Handler();
-
-    protected View mSmallClose;
 
 
     public GSYBaseVideoPlayer(Context context) {
@@ -140,6 +143,11 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
         mOrientationUtils.setEnable(mRotateViewAuto);
+        if (mVideoAllCallBack != null) {
+            Debuger.printfError("onEnterFullscreen");
+            mVideoAllCallBack.onEnterFullscreen(mUrl, mObjects);
+        }
+        mIfCurrentIsFullscreen = true;
     }
 
     /**
@@ -159,6 +167,11 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         setStateAndUi(mCurrentState);
         addTextureView();
         CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
+        if (mVideoAllCallBack != null) {
+            Debuger.printfError("onQuitFullscreen");
+            mVideoAllCallBack.onQuitFullscreen(mUrl, mObjects);
+        }
+        mIfCurrentIsFullscreen = false;
     }
 
     /**
@@ -195,6 +208,9 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             Constructor<GSYBaseVideoPlayer> constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class);
             final GSYBaseVideoPlayer gsyVideoPlayer = constructor.newInstance(getContext());
             gsyVideoPlayer.setId(FULLSCREEN_ID);
+            gsyVideoPlayer.setIfCurrentIsFullscreen(true);
+            gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
+
             WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             final int w = wm.getDefaultDisplay().getWidth();
             final int h = wm.getDefaultDisplay().getHeight();
@@ -254,7 +270,6 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * 退出window层播放全屏效果
      */
     public void clearFullscreenLayout() {
-
         int delay = mOrientationUtils.backToProtVideo();
         mOrientationUtils.setEnable(false);
         mHandler.postDelayed(new Runnable() {
@@ -349,6 +364,11 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             GSYVideoManager.instance().setLastListener(this);
             GSYVideoManager.instance().setListener(gsyVideoPlayer);
 
+            if (mVideoAllCallBack != null) {
+                Debuger.printfError("onEnterSmallWidget");
+                mVideoAllCallBack.onEnterSmallWidget(mUrl, mObjects);
+            }
+
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -373,6 +393,10 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         setStateAndUi(mCurrentState);
         addTextureView();
         CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
+        if (mVideoAllCallBack != null) {
+            Debuger.printfLog("onQuitSmallWidget");
+            mVideoAllCallBack.onQuitSmallWidget(mUrl, mObjects);
+        }
     }
 
 
@@ -461,4 +485,15 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     public void setShowFullAnimation(boolean showFullAnimation) {
         this.mShowFullAnimation = showFullAnimation;
     }
+
+
+    /**
+     * 设置播放过程中的回调
+     *
+     * @param mVideoAllCallBack
+     */
+    public void setVideoAllCallBack(VideoAllCallBack mVideoAllCallBack) {
+        this.mVideoAllCallBack = mVideoAllCallBack;
+    }
+
 }
