@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
@@ -494,4 +495,27 @@ public class ListVideoUtil {
     public boolean isSmall() {
         return isSmall;
     }
+
+
+    /**
+     * 获取当前总时长
+     */
+    public int getDuration() {
+        return gsyVideoPlayer.getDuration();
+    }
+
+    /**
+     * 获取当前播放进度
+     */
+    public int getCurrentPositionWhenPlaying() {
+        return gsyVideoPlayer.getCurrentPositionWhenPlaying();
+    }
+
+    /**
+     * 获取播放器
+     */
+    public StandardGSYVideoPlayer getGsyVideoPlayer() {
+        return gsyVideoPlayer;
+    }
+
 }

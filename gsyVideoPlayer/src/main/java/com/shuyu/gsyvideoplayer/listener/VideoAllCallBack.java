@@ -6,6 +6,9 @@ package com.shuyu.gsyvideoplayer.listener;
  */
 public interface VideoAllCallBack {
 
+    //加载成功
+    void onPrepared(String url, Object... objects);
+
     //点击了开始按键播放
     void onClickStartIcon(String url, Object... objects);
 

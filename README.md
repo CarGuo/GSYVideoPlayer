@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.1'
+compile 'com.shuyu:gsyVideoPlayer:1.2.2'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,19 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.1'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+### 1.2.2 开放也获取时长和总时长的接口，增加了VideoAllCallBack的准备视频完成的回调onPrepared
+
+```
+
+ listVideoUtil.getDuration()
+ listVideoUtil.getCurrentPositionWhenPlaying();
+
+ GSYVideoPlayer.getDuration()
+ GSYVideoPlayer.getCurrentPositionWhenPlaying();
+
+```
 
 
 ### 1.2.1 调整了小窗口回调拦截错误的情况，增加了SampleListener在列表小窗口点击关闭的时候更新页面

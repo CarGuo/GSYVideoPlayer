@@ -676,6 +676,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         }
         startProgressTimer();
         setStateAndUi(CURRENT_STATE_PLAYING);
+        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+            Debuger.printfLog("onPrepared");
+            mVideoAllCallBack.onPrepared(mUrl, mObjects);
+        }
     }
 
     @Override
@@ -812,7 +816,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         }
     }
 
-    protected int getCurrentPositionWhenPlaying() {
+    /**
+     * 获取当前播放进度
+     */
+    public int getCurrentPositionWhenPlaying() {
         int position = 0;
         if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
             try {
@@ -825,7 +832,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         return position;
     }
 
-    protected int getDuration() {
+    /**
+     * 获取当前总时长
+     */
+    public int getDuration() {
         int duration = 0;
         try {
             duration = (int) GSYVideoManager.instance().getMediaPlayer().getDuration();

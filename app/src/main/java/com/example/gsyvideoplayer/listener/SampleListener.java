@@ -66,7 +66,6 @@ public class SampleListener implements StandardVideoAllCallBack {
 
     @Override
     public void onQuitSmallWidget(String url, Object... objects) {
-        Debuger.printfError("ffffffffffffffffffffffffffffffffffffffff");
     }
 
     @Override
@@ -101,6 +100,11 @@ public class SampleListener implements StandardVideoAllCallBack {
 
     @Override
     public void onClickBlankFullscreen(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onPrepared(String url, Object... objects) {
 
     }
 }
