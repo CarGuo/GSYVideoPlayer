@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Handler;
-import android.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -25,6 +24,7 @@ import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.transitionseverywhere.TransitionManager;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
@@ -218,7 +218,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Color.BLACK);
 
-            if (mShowFullAnimation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mShowFullAnimation) {
                 FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getWidth(), getHeight());
                 lp.setMargins(mListItemRect[0], mListItemRect[1], 0, 0);
                 frameLayout.addView(gsyVideoPlayer, lp);
@@ -291,7 +291,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         final GSYVideoPlayer gsyVideoPlayer;
         if (oldF != null) {
             gsyVideoPlayer = (GSYVideoPlayer) oldF;
-            if (mShowFullAnimation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mShowFullAnimation) {
                 TransitionManager.beginDelayedTransition(vp);
 
                 FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) gsyVideoPlayer.getLayoutParams();

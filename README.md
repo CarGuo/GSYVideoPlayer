@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.3'
+compile 'com.shuyu:gsyVideoPlayer:1.2.4'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,9 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.3'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+### 1.2.4 兼容API修改只16,全屏动画兼容全API
+　
 
 ### 1.2.3 增加了X86类型的依赖，个人可根据爱好在APP的build里面添加自己要的支持类型
 

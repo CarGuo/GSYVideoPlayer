@@ -7,7 +7,7 @@ allprojects {
 ext {
     //Android
     androidBuildToolsVersion = "23.0.1"
-    androidMinSdkVersion = 19
+    androidMinSdkVersion = 16
     androidTargetSdkVersion = 22
     androidCompileSdkVersion = 22
     supportLibraryVersion = '24.2.0'
@@ -16,9 +16,9 @@ ext {
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
 
-    //ViewLibraries
-    butterKnifeVersion = '8.2.1'
     ijkplayer = '0.7.4'
+
+    transitionseverywhere = '1.7.0'
 
     //DataLibraries
     videocache = '2.6.3'
@@ -32,15 +32,16 @@ ext {
     ]
 
     viewDependencies = [
-            butterKnife     : "com.jakewharton:butterknife:${butterKnifeVersion}",
-            apt_butterKnife : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
-            ijkplayer_java  : "tv.danmaku.ijk.media:ijkplayer-java:${ijkplayer}",
-            ijkplayer_armv7a: "tv.danmaku.ijk.media:ijkplayer-armv7a:${ijkplayer}",
-            ijkplayer_armv5 : "tv.danmaku.ijk.media:ijkplayer-armv5:${ijkplayer}",
-            ijkplayer_arm64 : "tv.danmaku.ijk.media:ijkplayer-arm64:${ijkplayer}",
-            ijkplayer_x86_64: "tv.danmaku.ijk.media:ijkplayer-x86_64:${ijkplayer}",
-            ijkplayer_x86   : "tv.danmaku.ijk.media:ijkplayer-x86:${ijkplayer}",
-            ijkplayer_exo   : "tv.danmaku.ijk.media:ijkplayer-exo:${ijkplayer}",
+            butterKnife          : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            apt_butterKnife      : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+            ijkplayer_java       : "tv.danmaku.ijk.media:ijkplayer-java:${ijkplayer}",
+            ijkplayer_armv7a     : "tv.danmaku.ijk.media:ijkplayer-armv7a:${ijkplayer}",
+            ijkplayer_armv5      : "tv.danmaku.ijk.media:ijkplayer-armv5:${ijkplayer}",
+            ijkplayer_arm64      : "tv.danmaku.ijk.media:ijkplayer-arm64:${ijkplayer}",
+            ijkplayer_x86_64     : "tv.danmaku.ijk.media:ijkplayer-x86_64:${ijkplayer}",
+            ijkplayer_x86        : "tv.danmaku.ijk.media:ijkplayer-x86:${ijkplayer}",
+            ijkplayer_exo        : "tv.danmaku.ijk.media:ijkplayer-exo:${ijkplayer}",
+            transitionseverywhere: "com.andkulikov:transitionseverywhere:${transitionseverywhere}",
     ]
 
     dataDependencies = [

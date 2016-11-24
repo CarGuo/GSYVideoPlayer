@@ -1,11 +1,9 @@
 package com.example.gsyvideoplayer;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +12,7 @@ import android.widget.RelativeLayout;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.transitionseverywhere.TransitionManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,9 +87,9 @@ public class DetailPlayer extends AppCompatActivity {
 
     private void toFull() {
         isFull = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            TransitionManager.beginDelayedTransition(activityDetailPlayer);
-        }
+
+        TransitionManager.beginDelayedTransition(activityDetailPlayer);
+
         setViewHeight(detailPlayer, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         resolveFullVideoUI();
@@ -104,9 +103,7 @@ public class DetailPlayer extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    TransitionManager.beginDelayedTransition(activityDetailPlayer);
-                }
+                TransitionManager.beginDelayedTransition(activityDetailPlayer);
                 setViewHeight(detailPlayer, ViewGroup.LayoutParams.MATCH_PARENT,
                         (int) getResources().getDimension(R.dimen.post_media_height));
             }

@@ -4,21 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Handler;
-import android.transition.TransitionManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
-import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.transitionseverywhere.TransitionManager;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getActionBarHeight;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getStatusBarHeight;
@@ -60,8 +57,6 @@ public class ListVideoUtil {
     public ListVideoUtil(Context context) {
         gsyVideoPlayer = new StandardGSYVideoPlayer(context);
         this.context = context;
-        int smallVideoWidth = CommonUtil.getScreenWidth(context) / 2 - CommonUtil.dip2px(context, 20);
-        int smallVideoHeight = smallVideoWidth * 3 / 4;
     }
 
     /**
@@ -172,7 +167,7 @@ public class ListVideoUtil {
                 resolveMaterialToNormal(gsyVideoPlayer);
             }
         });
-        if (showFullAnimation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (showFullAnimation) {
             if (fullViewContainer instanceof FrameLayout) {
                 //目前只做了frameLoayout的判断
                 resolveMaterialAnimation();
@@ -267,7 +262,7 @@ public class ListVideoUtil {
      * 动画回到正常效果
      */
     private void resolveMaterialToNormal(final GSYVideoPlayer gsyVideoPlayer) {
-        if (showFullAnimation && fullViewContainer instanceof FrameLayout && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (showFullAnimation && fullViewContainer instanceof FrameLayout) {
             int delay = orientationUtils.backToProtVideo();
             handler.postDelayed(new Runnable() {
                 @Override

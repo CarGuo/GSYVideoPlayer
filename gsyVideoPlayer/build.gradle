@@ -32,9 +32,10 @@ dependencies {
     compile viewDependencies.ijkplayer_armv5
     compile viewDependencies.ijkplayer_x86
     compile viewDependencies.ijkplayer_exo
+    compile viewDependencies.transitionseverywhere
     compile dataDependencies.videocache
     compile androidDependencies.support_v4
     compile androidDependencies.appcompat_v7
 }
 
-//apply from: '../bintray.gradle'
+apply from: '../bintray.gradle'
