@@ -30,6 +30,7 @@ dependencies {
     compile viewDependencies.ijkplayer_java
     compile viewDependencies.ijkplayer_armv7a
     compile viewDependencies.ijkplayer_armv5
+    compile viewDependencies.ijkplayer_x86
     compile viewDependencies.ijkplayer_exo
     compile dataDependencies.videocache
     compile androidDependencies.support_v4

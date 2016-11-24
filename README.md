@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.2</version>
+  <version>1.2.3</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.2'
+compile 'com.shuyu:gsyVideoPlayer:1.2.3'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,23 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.2'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+### 1.2.3 增加了X86类型的依赖，个人可根据爱好在APP的build里面添加自己要的支持类型
+
+arm64和-86_64的没有加入，如果需要自己添加即可，因为编译最低需要API21
+
+```
+android {
+···
+defaultConfig {
+    ···
+    ndk {
+        //设置支持的SO库架构
+        abiFilters 'armeabi', 'armeabi-v7a', 'x86'
+    }
+}
+
+```
 
 
 ### 1.2.2 开放了取时长和总时长的接口，增加了VideoAllCallBack的准备视频完成的回调onPrepared

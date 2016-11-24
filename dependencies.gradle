@@ -37,10 +37,13 @@ ext {
             ijkplayer_java  : "tv.danmaku.ijk.media:ijkplayer-java:${ijkplayer}",
             ijkplayer_armv7a: "tv.danmaku.ijk.media:ijkplayer-armv7a:${ijkplayer}",
             ijkplayer_armv5 : "tv.danmaku.ijk.media:ijkplayer-armv5:${ijkplayer}",
+            ijkplayer_arm64 : "tv.danmaku.ijk.media:ijkplayer-arm64:${ijkplayer}",
+            ijkplayer_x86_64: "tv.danmaku.ijk.media:ijkplayer-x86_64:${ijkplayer}",
+            ijkplayer_x86   : "tv.danmaku.ijk.media:ijkplayer-x86:${ijkplayer}",
             ijkplayer_exo   : "tv.danmaku.ijk.media:ijkplayer-exo:${ijkplayer}",
     ]
 
     dataDependencies = [
-            videocache     : "com.danikula:videocache:${videocache}",
+            videocache: "com.danikula:videocache:${videocache}",
     ]
 }
