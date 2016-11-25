@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -62,23 +61,25 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mRotateViewAuto = true; //是否自动旋转
 
-    protected boolean mIfCurrentIsFullscreen = false;
+    protected boolean mIfCurrentIsFullscreen = false;//当前是否全屏
+
+    protected boolean mLockLand = false;//当前全屏是否锁定全屏
 
     protected Context mContext;
 
     protected String mOriginUrl; //原来的url
 
-    protected String mUrl;
+    protected String mUrl; //转化后的URL
 
     protected Object[] mObjects;
 
-    protected ViewGroup mTextureViewContainer;
+    protected ViewGroup mTextureViewContainer; //渲染控件父类
 
-    protected View mSmallClose;
+    protected View mSmallClose; //小窗口关闭按键
 
     protected VideoAllCallBack mVideoAllCallBack;
 
-    private OrientationUtils mOrientationUtils;
+    private OrientationUtils mOrientationUtils; //旋转工具类
 
     private Handler mHandler = new Handler();
 
@@ -133,7 +134,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     /**
      * 全屏
      */
-    private void resolveFullVideoShow(Context context, GSYBaseVideoPlayer gsyVideoPlayer, int h, int w) {
+    private void resolveFullVideoShow(Context context, final GSYBaseVideoPlayer gsyVideoPlayer) {
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) gsyVideoPlayer.getLayoutParams();
         lp.setMargins(0, 0, 0, 0);
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -142,7 +143,20 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         gsyVideoPlayer.setLayoutParams(lp);
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
+
         mOrientationUtils.setEnable(mRotateViewAuto);
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mLockLand) {
+                    mOrientationUtils.resolveByClick();
+                }
+                gsyVideoPlayer.setVisibility(VISIBLE);
+            }
+        }, ismShowFullAnimation() ? 300 : 0);
+
+
         if (mVideoAllCallBack != null) {
             Debuger.printfError("onEnterFullscreen");
             mVideoAllCallBack.onEnterFullscreen(mUrl, mObjects);
@@ -154,7 +168,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * 恢复
      */
     private void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
-        if (oldF.getParent() != null) {
+        if (oldF != null && oldF.getParent() != null) {
             ViewGroup viewGroup = (ViewGroup) oldF.getParent();
             vp.removeView(viewGroup);
         }
@@ -211,11 +225,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.setIfCurrentIsFullscreen(true);
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
 
-            WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-            final int w = wm.getDefaultDisplay().getWidth();
-            final int h = wm.getDefaultDisplay().getHeight();
-            FrameLayout.LayoutParams lpParent = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            FrameLayout frameLayout = new FrameLayout(context);
+            final FrameLayout.LayoutParams lpParent = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            final FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Color.BLACK);
 
             if (mShowFullAnimation) {
@@ -227,14 +238,15 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                     @Override
                     public void run() {
                         TransitionManager.beginDelayedTransition(vp);
-                        resolveFullVideoShow(context, gsyVideoPlayer, h, w);
+                        resolveFullVideoShow(context, gsyVideoPlayer);
                     }
                 }, 300);
             } else {
                 FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getWidth(), getHeight());
                 frameLayout.addView(gsyVideoPlayer, lp);
                 vp.addView(frameLayout, lpParent);
-                resolveFullVideoShow(context, gsyVideoPlayer, h, w);
+                gsyVideoPlayer.setVisibility(INVISIBLE);
+                resolveFullVideoShow(context, gsyVideoPlayer);
             }
 
             gsyVideoPlayer.setUp(mUrl, mCache, mObjects);
@@ -302,7 +314,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 lp.gravity = Gravity.NO_GRAVITY;
                 gsyVideoPlayer.setLayoutParams(lp);
 
-                new Handler().postDelayed(new Runnable() {
+                mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
@@ -454,24 +466,12 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     public abstract ImageView getBackButton();
 
 
-    public boolean isRotateViewAuto() {
-        return mRotateViewAuto;
-    }
-
-
     public boolean isIfCurrentIsFullscreen() {
         return mIfCurrentIsFullscreen;
     }
 
     public void setIfCurrentIsFullscreen(boolean ifCurrentIsFullscreen) {
         this.mIfCurrentIsFullscreen = ifCurrentIsFullscreen;
-    }
-
-    /**
-     * 自动旋转
-     */
-    public void setRotateViewAuto(boolean rotateViewAuto) {
-        this.mRotateViewAuto = rotateViewAuto;
     }
 
 
@@ -498,4 +498,26 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         this.mVideoAllCallBack = mVideoAllCallBack;
     }
 
+
+    public boolean isRotateViewAuto() {
+        return mRotateViewAuto;
+    }
+
+    /**
+     * 是否开启自动旋转
+     */
+    public void setRotateViewAuto(boolean rotateViewAuto) {
+        this.mRotateViewAuto = rotateViewAuto;
+    }
+
+    public boolean isLockLand() {
+        return mLockLand;
+    }
+
+    /**
+     * 一全屏就锁屏横屏，默认false竖屏，可配合setRotateViewAuto使用
+     */
+    public void setLockLand(boolean lockLand) {
+        this.mLockLand = lockLand;
+    }
 }

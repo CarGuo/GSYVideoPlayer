@@ -41,8 +41,6 @@ public class ListVideoUtil {
     private int playPosition = -1; // 播放的位置
     private boolean isFull; //当前是否全屏
     private boolean isSmall; //当前是否小屏
-    private boolean autoRotation = true;//是否自动旋转
-    private boolean fullLandFrist = true; //是否全屏就马上横屏
     private boolean hideStatusBar; //是否隐藏有状态bar
     private boolean hideActionBar; //是否隐藏有状态ActionBar
 
@@ -50,9 +48,13 @@ public class ListVideoUtil {
     private int[] listItemRect;//当前item框的屏幕位置
     private int[] listItemSize;//当前item的大小
 
+
+    private boolean fullLandFrist = true; //是否全屏就马上横屏
+    private boolean autoRotation = true;//是否自动旋转
+    private boolean showFullAnimation = true;//是否需要全屏动画
+
     private Handler handler = new Handler();
 
-    private boolean showFullAnimation = true;
 
     public ListVideoUtil(Context context) {
         gsyVideoPlayer = new StandardGSYVideoPlayer(context);
@@ -403,10 +405,6 @@ public class ListVideoUtil {
         return isFull;
     }
 
-    public boolean isAutoRotation() {
-        return autoRotation;
-    }
-
     /**
      * 是否自动旋转
      *
@@ -416,8 +414,8 @@ public class ListVideoUtil {
         this.autoRotation = autoRotation;
     }
 
-    public boolean isFullLandFrist() {
-        return fullLandFrist;
+    public boolean isAutoRotation() {
+        return autoRotation;
     }
 
     /**
@@ -428,6 +426,24 @@ public class ListVideoUtil {
     public void setFullLandFrist(boolean fullLandFrist) {
         this.fullLandFrist = fullLandFrist;
     }
+
+    public boolean isFullLandFrist() {
+        return fullLandFrist;
+    }
+
+    /**
+     * 全屏动画
+     *
+     * @param showFullAnimation 是否使用全屏动画效果
+     */
+    public void setShowFullAnimation(boolean showFullAnimation) {
+        this.showFullAnimation = showFullAnimation;
+    }
+
+    public boolean isShowFullAnimation() {
+        return showFullAnimation;
+    }
+
 
     public boolean isHideStatusBar() {
         return hideStatusBar;
@@ -453,20 +469,6 @@ public class ListVideoUtil {
      */
     public void setHideActionBar(boolean hideActionBar) {
         this.hideActionBar = hideActionBar;
-    }
-
-
-    public boolean isShowFullAnimation() {
-        return showFullAnimation;
-    }
-
-    /**
-     * 全屏动画
-     *
-     * @param showFullAnimation 是否使用全屏动画效果
-     */
-    public void setShowFullAnimation(boolean showFullAnimation) {
-        this.showFullAnimation = showFullAnimation;
     }
 
     /**

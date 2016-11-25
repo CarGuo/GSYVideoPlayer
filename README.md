@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.4</version>
+  <version>1.2.5</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.4'
+compile 'com.shuyu:gsyVideoPlayer:1.2.5'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,61 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.4'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+### 1.2.5  增加了新接口，支持直接横屏锁住界面，关闭全屏动画，组合接口使用
+
+* GSYVideoPlayer
+
+```
+/**
+ * 全屏动画
+ *
+ * @param showFullAnimation 是否使用全屏动画效果
+ */
+public void setShowFullAnimation(boolean showFullAnimation)
+
+/**
+ * 是否开启自动旋转
+ */
+public void setRotateViewAuto(boolean rotateViewAuto)
+
+/**
+ * 一全屏就锁屏横屏，默认false竖屏，可配合setRotateViewAuto使用
+ */
+public void setLockLand(boolean lockLand)
+```
+
+* ListVideoUtil
+
+```
+/**
+ * 是否自动旋转
+ *
+ * @param autoRotation 是否要支持重力旋转
+ */
+public void setAutoRotation(boolean autoRotation) {
+    this.autoRotation = autoRotation;
+}
+
+/**
+ * 是否全屏就马上横屏
+ *
+ * @param fullLandFrist 如果是，那么全屏的时候就会切换到横屏
+ */
+public void setFullLandFrist(boolean fullLandFrist) {
+    this.fullLandFrist = fullLandFrist;
+}
+
+/**
+ * 全屏动画
+ *
+ * @param showFullAnimation 是否使用全屏动画效果
+ */
+public void setShowFullAnimation(boolean showFullAnimation) {
+    this.showFullAnimation = showFullAnimation;
+}
+```
+
 
 ### 1.2.4 兼容API修改至16,全屏动画兼容全API
 　
@@ -101,7 +156,8 @@ listVideoUtil.setVideoAllCallBack(new SampleListener(){
 ```
 　
 ### 1.2.0 去除了一些无用的依赖库，升级IJKPlayer到0.7.4
-　更容易导入，减少了无用的依赖情况，去除了import的时候需要配置gradle.properties的问题
+
+更容易导入，减少了无用的依赖情况，去除了import的时候需要配置gradle.properties的问题
 
 ### 1.1.9 修正了回调接口VideoAllCallBack的回调结果，添加了注释，可以根据需要继承后覆写。
 

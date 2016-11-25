@@ -51,9 +51,14 @@ public class ListVideo2Activity extends AppCompatActivity {
         listVideoUtil.setFullViewContainer(videoFullContainer);
         listVideoUtil.setHideStatusBar(true);
         //listVideoUtil.setHideActionBar(true);
+
         listVideoAdapter = new ListVideoAdapter(this, listVideoUtil);
         listVideoAdapter.setRootView(activityListVideo);
         videoList.setAdapter(listVideoAdapter);
+
+        //listVideoUtil.setShowFullAnimation(true);
+        //listVideoUtil.setAutoRotation(true);
+        //listVideoUtil.setFullLandFrist(true);
 
 
         videoList.setOnScrollListener(new AbsListView.OnScrollListener() {

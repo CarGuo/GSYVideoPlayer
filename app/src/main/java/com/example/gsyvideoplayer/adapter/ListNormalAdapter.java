@@ -91,8 +91,10 @@ public class ListNormalAdapter extends BaseAdapter {
                 resolveFullBtn(holder.gsyVideoPlayer);
             }
         });
-
+        holder.gsyVideoPlayer.setRotateViewAuto(true);
+        holder.gsyVideoPlayer.setLockLand(true);
         holder.gsyVideoPlayer.setPlayTag(TAG);
+        holder.gsyVideoPlayer.setShowFullAnimation(true);
         holder.gsyVideoPlayer.setPlayPosition(position);
 
         return convertView;
