@@ -43,6 +43,7 @@ public class ListVideoUtil {
     private boolean isSmall; //当前是否小屏
     private boolean hideStatusBar; //是否隐藏有状态bar
     private boolean hideActionBar; //是否隐藏有状态ActionBar
+    private boolean isLoop;//循环
 
 
     private int[] listItemRect;//当前item框的屏幕位置
@@ -113,6 +114,8 @@ public class ListVideoUtil {
         this.url = url;
 
         gsyVideoPlayer.release();
+
+        gsyVideoPlayer.setLooping(isLoop);
 
         gsyVideoPlayer.setUp(url, true, "");
 
@@ -494,6 +497,17 @@ public class ListVideoUtil {
     }
 
 
+    public boolean isLoop() {
+        return isLoop;
+    }
+
+    /**
+     * 循环
+     */
+    public void setLoop(boolean loop) {
+        isLoop = loop;
+    }
+
     /**
      * 获取当前总时长
      */
@@ -509,7 +523,7 @@ public class ListVideoUtil {
     }
 
     /**
-     * 获取播放器
+     * 获取播放器,直接拿播放器，根据需要自定义配置
      */
     public StandardGSYVideoPlayer getGsyVideoPlayer() {
         return gsyVideoPlayer;

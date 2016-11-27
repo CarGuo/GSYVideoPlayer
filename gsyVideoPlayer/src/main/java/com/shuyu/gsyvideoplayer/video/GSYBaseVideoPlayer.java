@@ -65,6 +65,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mLockLand = false;//当前全屏是否锁定全屏
 
+    protected boolean mLooping = false;//循环
+
     protected Context mContext;
 
     protected String mOriginUrl; //原来的url
@@ -195,7 +197,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * @param actionBar 是否有actionBar，有的话需要隐藏
      * @param statusBar 是否有状态bar，有的话需要隐藏
      */
-    public void startWindowFullscreen(final Context context, final boolean actionBar, final boolean statusBar) {
+    public GSYBaseVideoPlayer startWindowFullscreen(final Context context, final boolean actionBar, final boolean statusBar) {
 
         hideSupportActionBar(context, actionBar, statusBar);
 
@@ -224,7 +226,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.setId(FULLSCREEN_ID);
             gsyVideoPlayer.setIfCurrentIsFullscreen(true);
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
-
+            gsyVideoPlayer.setLooping(isLooping());
             final FrameLayout.LayoutParams lpParent = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             final FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Color.BLACK);
@@ -271,10 +273,11 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
             GSYVideoManager.instance().setLastListener(this);
             GSYVideoManager.instance().setListener(gsyVideoPlayer);
-
+            return gsyVideoPlayer;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 
@@ -332,7 +335,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     /**
      * 显示小窗口
      */
-    public void showSmallVideo(Point size, final boolean actionBar, final boolean statusBar) {
+    public GSYBaseVideoPlayer showSmallVideo(Point size, final boolean actionBar, final boolean statusBar) {
 
         final ViewGroup vp = getViewGroup();
 
@@ -373,6 +376,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             //隐藏掉所有的弹出状态哟
             gsyVideoPlayer.onClickUiToggle();
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
+            gsyVideoPlayer.setLooping(isLooping());
             gsyVideoPlayer.setSmallVideoTextureView(new SmallVideoTouch(gsyVideoPlayer, marginLeft, marginTop));
 
             GSYVideoManager.instance().setLastListener(this);
@@ -383,12 +387,11 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 mVideoAllCallBack.onEnterSmallWidget(mUrl, mObjects);
             }
 
-        } catch (InstantiationException e) {
-            e.printStackTrace();
+            return gsyVideoPlayer;
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        return null;
     }
 
     /**
@@ -486,6 +489,18 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void setShowFullAnimation(boolean showFullAnimation) {
         this.mShowFullAnimation = showFullAnimation;
+    }
+
+
+    public boolean isLooping() {
+        return mLooping;
+    }
+
+    /**
+     * 设置循环
+     */
+    public void setLooping(boolean looping) {
+        this.mLooping = looping;
     }
 
 

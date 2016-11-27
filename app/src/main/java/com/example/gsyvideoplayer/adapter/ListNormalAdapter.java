@@ -8,10 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
+import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
@@ -95,7 +97,10 @@ public class ListNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.setLockLand(true);
         holder.gsyVideoPlayer.setPlayTag(TAG);
         holder.gsyVideoPlayer.setShowFullAnimation(true);
+        //循环
+        holder.gsyVideoPlayer.setLooping(true);
         holder.gsyVideoPlayer.setPlayPosition(position);
+        holder.gsyVideoPlayer.setStandardVideoAllCallBack(sampleListener);
 
         return convertView;
     }
@@ -112,5 +117,32 @@ public class ListNormalAdapter extends BaseAdapter {
     class ViewHolder {
         StandardGSYVideoPlayer gsyVideoPlayer;
     }
+
+    //小窗口关闭被点击的时候回调处理回复页面
+   SampleListener sampleListener = new SampleListener(){
+        @Override
+        public void onPrepared(String url, Object... objects) {
+            super.onPrepared(url, objects);
+            Debuger.printfLog("onPrepared");
+        }
+
+        @Override
+        public void onQuitSmallWidget(String url, Object... objects) {
+            super.onQuitSmallWidget(url, objects);
+            Debuger.printfLog("onQuitSmallWidget");
+        }
+
+        @Override
+        public void onClickBlankFullscreen(String url, Object... objects) {
+            super.onClickBlankFullscreen(url, objects);
+            Debuger.printfLog("onClickBlankFullscreen");
+        }
+
+        @Override
+        public void onEnterFullscreen(String url, Object... objects) {
+            super.onEnterFullscreen(url, objects);
+            Debuger.printfLog("onEnterFullscreen");
+        }
+    };
 
 }

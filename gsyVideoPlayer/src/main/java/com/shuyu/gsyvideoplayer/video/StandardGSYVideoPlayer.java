@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -503,7 +504,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             mProgressDialog.getWindow().addFlags(32);
             mProgressDialog.getWindow().addFlags(16);
             mProgressDialog.getWindow().setLayout(-2, -2);
-            if(mDialogProgressNormalColor != -11) {
+            if (mDialogProgressNormalColor != -11) {
                 mDialogTotalTime.setTextColor(mDialogProgressNormalColor);
             }
             if (mDialogProgressHighLightColor != -11) {
@@ -603,6 +604,39 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
     }
 
+    @Override
+    protected void loopSetProgressAndTime() {
+        super.loopSetProgressAndTime();
+        mBottomProgressBar.setProgress(0);
+    }
+
+
+    @Override
+    public void onBackFullscreen() {
+        clearFullscreenLayout();
+    }
+
+
+    @Override
+    public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
+        GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
+        if (gsyBaseVideoPlayer != null) {
+            StandardGSYVideoPlayer gsyVideoPlayer = (StandardGSYVideoPlayer) gsyBaseVideoPlayer;
+            gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
+        }
+        return gsyBaseVideoPlayer;
+    }
+
+
+    @Override
+    public GSYBaseVideoPlayer showSmallVideo(Point size, boolean actionBar, boolean statusBar) {
+        GSYBaseVideoPlayer gsyBaseVideoPlayer = super.showSmallVideo(size, actionBar, statusBar);
+        if (gsyBaseVideoPlayer != null) {
+            StandardGSYVideoPlayer gsyVideoPlayer = (StandardGSYVideoPlayer) gsyBaseVideoPlayer;
+            gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
+        }
+        return gsyBaseVideoPlayer;
+    }
 
     private void startDismissControlViewTimer() {
         cancelDismissControlViewTimer();
@@ -677,10 +711,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         return mTitleTextView;
     }
 
-    @Override
-    public void onBackFullscreen() {
-        clearFullscreenLayout();
-    }
 
     /**
      * 底部进度条-弹出的

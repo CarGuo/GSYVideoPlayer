@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.5</version>
+  <version>1.2.6</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.5'
+compile 'com.shuyu:gsyVideoPlayer:1.2.6'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,16 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.5'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+### 1.2.6  修正了StandardGSYVideoPlayer的接口全屏回调问题，增加了循环播放的接口
+
+```
+
+public void setLooping(boolean looping)
+
+```
+
 
 ### 1.2.5  增加了新接口，支持直接横屏锁住界面，关闭全屏动画，组合接口使用
 

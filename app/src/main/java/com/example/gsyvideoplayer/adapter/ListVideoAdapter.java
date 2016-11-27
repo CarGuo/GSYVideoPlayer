@@ -86,6 +86,7 @@ public class ListVideoAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 notifyDataSetChanged();
+                listVideoUtil.setLoop(true);
                 listVideoUtil.setPlayPositionAndTag(position, TAG);
                 final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
                 listVideoUtil.startPlay(url);

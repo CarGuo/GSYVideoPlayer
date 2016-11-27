@@ -123,8 +123,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected boolean mFirstTouch = false;//是否首次触摸
 
-    protected boolean mLooping = false;//// TODO: 2016/11/13 循环
-
     protected boolean mCacheFile = false; //是否是缓存的文件
 
 
@@ -729,6 +727,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public void onBufferingUpdate(int percent) {
         if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
             setTextAndProgress(percent);
+            //循环清除进度
+            if (mLooping && percent == 0 && mProgressBar.getProgress() > 3) {
+                loopSetProgressAndTime();
+            }
         }
     }
 
@@ -863,11 +865,19 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
     }
 
+
     protected void resetProgressAndTime() {
         mProgressBar.setProgress(0);
         mProgressBar.setSecondaryProgress(0);
         mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
         mTotalTimeTextView.setText(CommonUtil.stringForTime(0));
+    }
+
+
+    protected void loopSetProgressAndTime() {
+        mProgressBar.setProgress(0);
+        mProgressBar.setSecondaryProgress(0);
+        mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
     }
 
     /**

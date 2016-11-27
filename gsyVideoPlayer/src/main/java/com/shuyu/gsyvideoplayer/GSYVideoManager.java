@@ -131,6 +131,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                         mediaPlayer = new IjkMediaPlayer();
                         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                         mediaPlayer.setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
+                        mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
                         mediaPlayer.setOnCompletionListener(GSYVideoManager.this);
                         mediaPlayer.setOnBufferingUpdateListener(GSYVideoManager.this);
                         mediaPlayer.setScreenOnWhilePlaying(true);
@@ -145,17 +146,19 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                     }
                     break;
                 case HANDLER_SETDISPLAY:
-                    if (msg.obj == null) {
+                    if (msg.obj == null && mediaPlayer != null) {
                         mediaPlayer.setSurface(null);
                     } else {
                         Surface holder = (Surface) msg.obj;
-                        if (holder.isValid()) {
+                        if (mediaPlayer != null && holder.isValid()) {
                             mediaPlayer.setSurface(holder);
                         }
                     }
                     break;
                 case HANDLER_RELEASE:
-                    mediaPlayer.release();
+                    if (mediaPlayer != null) {
+                        mediaPlayer.release();
+                    }
                     break;
             }
         }
