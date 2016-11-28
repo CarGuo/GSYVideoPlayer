@@ -43,7 +43,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.8'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
-### 1.2.8 增加了改变播放速度的方法，0 - 2左右的速度，但只支持6.0以上（= =），升级IJKPlayer到0.7.5。
+### 1.2.8 增加了改变播放速度(0-2左右的速度)，但只支持6.0以上，升级IJKPlayer到0.7.5。
 ```
 /**
  * 播放速度
