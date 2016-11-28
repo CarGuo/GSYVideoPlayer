@@ -140,6 +140,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                         mediaPlayer.setOnErrorListener(GSYVideoManager.this);
                         mediaPlayer.setOnInfoListener(GSYVideoManager.this);
                         mediaPlayer.setOnVideoSizeChangedListener(GSYVideoManager.this);
+                        if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
+                            mediaPlayer.setSpeed(((GSYModel) msg.obj).getSpeed());
+                        }
                         mediaPlayer.prepareAsync();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -166,11 +169,11 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
 
-    public void prepare(final String url, final Map<String, String> mapHeadData, boolean loop) {
+    public void prepare(final String url, final Map<String, String> mapHeadData, boolean loop, float speed) {
         if (TextUtils.isEmpty(url)) return;
         Message msg = new Message();
         msg.what = HANDLER_PREPARE;
-        GSYModel fb = new GSYModel(url, mapHeadData, loop);
+        GSYModel fb = new GSYModel(url, mapHeadData, loop, speed);
         msg.obj = fb;
         mMediaHandler.sendMessage(msg);
     }

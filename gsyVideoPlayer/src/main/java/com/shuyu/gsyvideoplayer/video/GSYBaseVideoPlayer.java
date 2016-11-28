@@ -59,6 +59,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected int mCurrentState = -1; //当前的播放状态
 
+    protected float mSpeed = 1;//播放速度，只支持6.0以上
+
     protected boolean mRotateViewAuto = true; //是否自动旋转
 
     protected boolean mIfCurrentIsFullscreen = false;//当前是否全屏
@@ -229,6 +231,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.setIfCurrentIsFullscreen(true);
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
             gsyVideoPlayer.setLooping(isLooping());
+            gsyVideoPlayer.setSpeed(getSpeed());
             final FrameLayout.LayoutParams lpParent = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             final FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Color.BLACK);
@@ -379,6 +382,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.onClickUiToggle();
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
             gsyVideoPlayer.setLooping(isLooping());
+            gsyVideoPlayer.setSpeed(getSpeed());
             gsyVideoPlayer.setSmallVideoTextureView(new SmallVideoTouch(gsyVideoPlayer, marginLeft, marginTop));
 
             GSYVideoManager.instance().setLastListener(this);
@@ -536,5 +540,17 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void setLockLand(boolean lockLand) {
         this.mLockLand = lockLand;
+    }
+
+
+    public float getSpeed() {
+        return mSpeed;
+    }
+
+    /**
+     * 播放速度，只支持6.0以上
+     */
+    public void setSpeed(float speed) {
+        this.mSpeed = speed;
     }
 }

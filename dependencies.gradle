@@ -16,7 +16,7 @@ ext {
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
 
-    ijkplayer = '0.7.4'
+    ijkplayer = '0.7.5'
 
     transitionseverywhere = '1.7.0'
 

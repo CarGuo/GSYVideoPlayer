@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.7</version>
+  <version>1.2.8</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.7'
+compile 'com.shuyu:gsyVideoPlayer:1.2.8'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -43,6 +43,13 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.7'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+### 1.2.8 增加了改变播放速度的方法，0 - 2左右的速度，但只支持6.0以上（= =），升级IJKPlayer到0.7.5。
+```
+/**
+ * 播放速度
+ */
+public void setSpeed(float speed)
+```
 
 ### 1.2.7 修改了循环播放的时候，重新播放不弹出控制UI；修改了FragmentActivity的actionBar问题
 

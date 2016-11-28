@@ -339,7 +339,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
         ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        GSYVideoManager.instance().prepare(mUrl, mMapHeadData, mLooping);
+        GSYVideoManager.instance().prepare(mUrl, mMapHeadData, mLooping, mSpeed);
         setStateAndUi(CURRENT_STATE_PREPAREING);
     }
 

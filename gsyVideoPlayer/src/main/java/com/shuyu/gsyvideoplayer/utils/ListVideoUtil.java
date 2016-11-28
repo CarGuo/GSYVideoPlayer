@@ -39,6 +39,7 @@ public class ListVideoUtil {
     private Context context;
 
     private int playPosition = -1; // 播放的位置
+    private int speed = 1; // 播放速度，仅支持6.0
     private boolean isFull; //当前是否全屏
     private boolean isSmall; //当前是否小屏
     private boolean hideStatusBar; //是否隐藏有状态bar
@@ -116,6 +117,8 @@ public class ListVideoUtil {
         gsyVideoPlayer.release();
 
         gsyVideoPlayer.setLooping(isLoop);
+
+        gsyVideoPlayer.setSpeed(speed);
 
         gsyVideoPlayer.setUp(url, true, "");
 
@@ -513,6 +516,18 @@ public class ListVideoUtil {
      */
     public int getDuration() {
         return gsyVideoPlayer.getDuration();
+    }
+
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    /**
+     * 播放速度，仅支持6.0
+     */
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     /**
