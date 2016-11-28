@@ -67,6 +67,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mLooping = false;//循环
 
+    protected boolean mHadPlay = false;//是否播放过
+
     protected Context mContext;
 
     protected String mOriginUrl; //原来的url

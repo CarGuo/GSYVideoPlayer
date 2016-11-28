@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.6</version>
+  <version>1.2.7</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.6'
+compile 'com.shuyu:gsyVideoPlayer:1.2.7'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,9 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.6'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+### 1.2.7 修改了循环播放的时候，重新播放不弹出控制UI；修改了FragmentActivity的actionBar问题
 
 
 ### 1.2.6  修正了StandardGSYVideoPlayer的接口全屏回调问题，增加了循环播放的接口

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
@@ -99,28 +100,54 @@ public class CommonUtil {
 
     public static void hideSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
-            ActionBar ab = CommonUtil.getAppCompActivity(context).getSupportActionBar();
-            if (ab != null) {
-                ab.setShowHideAnimationEnabled(false);
-                ab.hide();
+            if (context instanceof FragmentActivity) {
+                FragmentActivity fragmentActivity = (FragmentActivity)context;
+                android.app.ActionBar ab = fragmentActivity.getActionBar();if (ab != null) {
+                    ab.hide();
+                }
+            } else {
+                ActionBar ab = CommonUtil.getAppCompActivity(context).getSupportActionBar();
+                if (ab != null) {
+                    ab.setShowHideAnimationEnabled(false);
+                    ab.hide();
+                }
             }
         }
         if (statusBar) {
-            CommonUtil.getAppCompActivity(context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            if (context instanceof FragmentActivity) {
+                FragmentActivity fragmentActivity = (FragmentActivity)context;
+                fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            } else {
+                CommonUtil.getAppCompActivity(context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
         }
     }
 
     public static void showSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
-            ActionBar ab = CommonUtil.getAppCompActivity(context).getSupportActionBar();
-            if (ab != null) {
-                ab.setShowHideAnimationEnabled(false);
-                ab.show();
+            if (context instanceof FragmentActivity) {
+                FragmentActivity fragmentActivity = (FragmentActivity)context;
+                android.app.ActionBar ab = fragmentActivity.getActionBar();if (ab != null) {
+                    ab.show();
+                }
+            } else {
+                ActionBar ab = CommonUtil.getAppCompActivity(context).getSupportActionBar();
+                if (ab != null) {
+                    ab.setShowHideAnimationEnabled(false);
+                    ab.show();
+                }
             }
         }
+
         if (statusBar) {
-            CommonUtil.getAppCompActivity(context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            if (context instanceof FragmentActivity) {
+                FragmentActivity fragmentActivity = (FragmentActivity)context;
+                fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            } else {
+                CommonUtil.getAppCompActivity(context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
         }
     }
 

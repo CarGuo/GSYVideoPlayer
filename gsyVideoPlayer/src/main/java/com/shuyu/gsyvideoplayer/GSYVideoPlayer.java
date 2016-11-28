@@ -678,6 +678,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             Debuger.printfLog("onPrepared");
             mVideoAllCallBack.onPrepared(mUrl, mObjects);
         }
+        mHadPlay = true;
     }
 
     @Override
@@ -760,10 +761,18 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public void onInfo(int what, int extra) {
         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
             BACKUP_PLAYING_BUFFERING_STATE = mCurrentState;
-            setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
+            if (mLooping && mHadPlay) {
+                //循环在播放的不显示
+            } else {
+                setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
+            }
         } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
             if (BACKUP_PLAYING_BUFFERING_STATE != -1) {
-                setStateAndUi(BACKUP_PLAYING_BUFFERING_STATE);
+                if (mLooping && mHadPlay) {
+                    //循环在播放的不显示
+                } else {
+                    setStateAndUi(BACKUP_PLAYING_BUFFERING_STATE);
+                }
                 BACKUP_PLAYING_BUFFERING_STATE = -1;
             }
         } else if (what == IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED) {
@@ -902,6 +911,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) > FULL_SCREEN_NORMAL_DELAY) {
             releaseAllVideos();
         }
+        mHadPlay = false;
     }
 
 
