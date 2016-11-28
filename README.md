@@ -17,13 +17,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.8</version>
+  <version>1.2.9</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.8'
+compile 'com.shuyu:gsyVideoPlayer:1.2.9'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -42,6 +42,26 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.8'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+### 1.2.9 增加了下载速度的接口
+
+```
+/**
+ * 网络速度
+ * 注意，这里如果是开启了缓存，因为读取本地代理，缓存成功后还是存在速度的
+ * 再打开已经缓存的本地文件，网络速度才会回0.因为是播放本地文件了
+ */
+public long getNetSpeed()
+
+/**
+ * 网络速度
+ * 注意，这里如果是开启了缓存，因为读取本地代理，缓存成功后还是存在速度的
+ * 再打开已经缓存的本地文件，网络速度才会回0.因为是播放本地文件了
+ */
+public String getNetSpeedText()
+
+```
 
 ### 1.2.8 升级IJKPlayer到0.7.5;增加了改变播放速度(0-2左右的速度)，但只支持6.0以上。
 ```

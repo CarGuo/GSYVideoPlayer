@@ -34,6 +34,8 @@ import java.util.TimerTask;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
+
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -102,6 +104,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected int mThreshold = 80; //手势偏差值
 
     protected int mSeekToInAdvance = -1; //// TODO: 2016/11/13 跳过广告
+
 
     protected int mRotate = 0; //针对某些视频的旋转信息做了旋转处理
 
@@ -732,6 +735,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             if (mLooping && percent == 0 && mProgressBar.getProgress() > 3) {
                 loopSetProgressAndTime();
             }
+            Debuger.printfLog("Net speed: "  + getNetSpeedText());
         }
     }
 
@@ -1043,5 +1047,24 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         return backFrom;
     }
 
+    /**
+     * 网络速度
+     * 注意，这里如果是开启了缓存，因为读取本地代理，缓存成功后还是存在速度的
+     * 再打开已经缓存的本地文件，网络速度才会回0.因为是播放本地文件了
+     */
+    public long getNetSpeed() {
+        return GSYVideoManager.instance().getMediaPlayer().getTcpSpeed();
+
+    }
+
+    /**
+     * 网络速度
+     * 注意，这里如果是开启了缓存，因为读取本地代理，缓存成功后还是存在速度的
+     * 再打开已经缓存的本地文件，网络速度才会回0.因为是播放本地文件了
+     */
+    public String getNetSpeedText() {
+        long speed = GSYVideoManager.instance().getMediaPlayer().getTcpSpeed();
+        return getTextSpeed(speed);
+    }
 
 }

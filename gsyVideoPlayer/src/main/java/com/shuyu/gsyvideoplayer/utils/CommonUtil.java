@@ -101,8 +101,9 @@ public class CommonUtil {
     public static void hideSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
             if (context instanceof FragmentActivity) {
-                FragmentActivity fragmentActivity = (FragmentActivity)context;
-                android.app.ActionBar ab = fragmentActivity.getActionBar();if (ab != null) {
+                FragmentActivity fragmentActivity = (FragmentActivity) context;
+                android.app.ActionBar ab = fragmentActivity.getActionBar();
+                if (ab != null) {
                     ab.hide();
                 }
             } else {
@@ -115,7 +116,7 @@ public class CommonUtil {
         }
         if (statusBar) {
             if (context instanceof FragmentActivity) {
-                FragmentActivity fragmentActivity = (FragmentActivity)context;
+                FragmentActivity fragmentActivity = (FragmentActivity) context;
                 fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                         WindowManager.LayoutParams.FLAG_FULLSCREEN);
             } else {
@@ -128,8 +129,9 @@ public class CommonUtil {
     public static void showSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
             if (context instanceof FragmentActivity) {
-                FragmentActivity fragmentActivity = (FragmentActivity)context;
-                android.app.ActionBar ab = fragmentActivity.getActionBar();if (ab != null) {
+                FragmentActivity fragmentActivity = (FragmentActivity) context;
+                android.app.ActionBar ab = fragmentActivity.getActionBar();
+                if (ab != null) {
                     ab.show();
                 }
             } else {
@@ -143,7 +145,7 @@ public class CommonUtil {
 
         if (statusBar) {
             if (context instanceof FragmentActivity) {
-                FragmentActivity fragmentActivity = (FragmentActivity)context;
+                FragmentActivity fragmentActivity = (FragmentActivity) context;
                 fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             } else {
                 CommonUtil.getAppCompActivity(context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -209,6 +211,21 @@ public class CommonUtil {
         DisplayMetrics outMetrics = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(outMetrics);// 给白纸设置宽高
         return outMetrics.heightPixels;
+    }
+
+    /**
+     * 下载速度文本
+     */
+    public static String getTextSpeed(long speed) {
+        String text = "";
+        if (speed >= 0 && speed < 1024) {
+            text = speed + " KB/s";
+        } else if (speed >= 1024 && speed < (1024 * 1024)) {
+            text = Long.toString(speed / 1024) + " KB/s";
+        } else if (speed >= (1024 * 1024) && speed < (1024 * 1024 * 1024)) {
+            text = Long.toString(speed / (1024 * 1024)) + " MB/s";
+        }
+        return text;
     }
 
     public static void deleteFile(String filePath) {
