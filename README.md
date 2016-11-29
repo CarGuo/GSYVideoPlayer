@@ -46,7 +46,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.1'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
 
-### 1.3.1  更新了lastListener的判空问题
+### 1.3.1 更新了lastListener的判空问题，建议更新到这个版本。
 
 
 ### 1.3.0 支持配置缓存路径，添加了ListVideoUtils的一些接口
