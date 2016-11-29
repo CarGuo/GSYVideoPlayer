@@ -13,8 +13,11 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +49,9 @@ public class PlayActivity extends AppCompatActivity {
 
     private void init() {
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        videoPlayer.setUp(url, true, "");
+        //需要路径的
+        videoPlayer.setUp(url, true, new File(FileUtils.getPath()), "");
+        //videoPlayer.setUp(url, true, "");
 
         //增加封面
         ImageView imageView = new ImageView(this);

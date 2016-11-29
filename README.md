@@ -19,13 +19,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.2.9</version>
+  <version>1.3.0</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.2.9'
+compile 'com.shuyu:gsyVideoPlayer:1.3.0'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -44,6 +44,56 @@ compile 'com.shuyu:gsyVideoPlayer:1.2.9'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+### 1.3.0 支持配置缓存路径，添加了ListVideoUtils的一些接口
+
+正常模式
+
+```
+//默认缓存路径方式
+holder.gsyVideoPlayer.setUp(url, true, , ""));
+
+···
+
+//一个列表的视频缓存路径相同
+holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath(), ""));
+
+···
+
+//如果一个列表里的缓存路径不同，需要用下方的方式
+holder.gsyVideoPlayer.initUIState();
+//如果设置了点击封面可以播放，如果缓存列表路径不一致，还需要设置封面点击
+holder.gsyVideoPlayer.setThumbPlay(true);
+
+holder.gsyVideoPlayer.getStartButton().setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        //需要切换缓存路径的
+        holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath(), ""));
+        holder.gsyVideoPlayer.startPlayLogic();
+    }
+});
+
+holder.gsyVideoPlayer.getThumbImageViewLayout().setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        //需要切换缓存路径的
+        holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath(), ""));
+        holder.gsyVideoPlayer.startPlayLogic();
+    }
+});
+```
+ListVideoUtils
+
+```
+public void setCachePath(File cachePath)
+
+public void setObjects(Object[] objects)
+
+public void setMapHeadData(Map<String, String> mapHeadData)
+
+```
 
 
 ### 1.2.9 增加了下载速度的接口

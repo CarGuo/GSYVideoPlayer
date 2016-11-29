@@ -17,6 +17,9 @@ import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.transitionseverywhere.TransitionManager;
 
+import java.io.File;
+import java.util.Map;
+
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getActionBarHeight;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getStatusBarHeight;
 
@@ -37,6 +40,11 @@ public class ListVideoUtil {
     private StandardVideoAllCallBack videoAllCallBack;
     private String url;
     private Context context;
+    private File cachePath;
+
+    private Object[] objects;
+
+    private Map<String, String> mapHeadData;
 
     private int playPosition = -1; // 播放的位置
     private int speed = 1; // 播放速度，仅支持6.0
@@ -120,7 +128,7 @@ public class ListVideoUtil {
 
         gsyVideoPlayer.setSpeed(speed);
 
-        gsyVideoPlayer.setUp(url, true, "");
+        gsyVideoPlayer.setUp(url, true, cachePath, mapHeadData, objects);
 
         //增加title
         gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
@@ -528,6 +536,34 @@ public class ListVideoUtil {
      */
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+
+    public File getCachePath() {
+        return cachePath;
+    }
+
+    /**
+     * 缓存的路径
+     */
+    public void setCachePath(File cachePath) {
+        this.cachePath = cachePath;
+    }
+
+    public Object[] getObjects() {
+        return objects;
+    }
+
+    public void setObjects(Object[] objects) {
+        this.objects = objects;
+    }
+
+    public Map<String, String> getMapHeadData() {
+        return mapHeadData;
+    }
+
+    public void setMapHeadData(Map<String, String> mapHeadData) {
+        this.mapHeadData = mapHeadData;
     }
 
     /**

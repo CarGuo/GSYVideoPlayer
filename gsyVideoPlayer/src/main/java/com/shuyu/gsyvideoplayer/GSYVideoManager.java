@@ -14,6 +14,7 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
@@ -48,11 +49,14 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private HttpProxyCacheServer proxy; //视频代理
 
+    private File cacheFile;
+
+    private String playTag = ""; //播放的tag，防止错位置，因为普通的url也可能重复
+
     private int currentVideoWidth = 0; //当前播放的视频宽的高
     private int currentVideoHeight = 0; //当前播放的视屏的高
     private int lastState;//当前视频的最后状态
 
-    private String playTag = ""; //播放的tag，防止错位置，因为普通的url也可能重复
     private int playPosition = -22; //播放的tag，防止错位置，因为普通的url也可能重复
 
 
@@ -71,6 +75,52 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         return proxy == null ? (GSYVideoManager.instance().proxy =
                 GSYVideoManager.instance().newProxy(context)) : proxy;
     }
+
+    /**
+     * 获取缓存代理服务,带文件目录的
+     */
+    public static HttpProxyCacheServer getProxy(Context context, File file) {
+
+        //如果为空，返回默认的
+        if (file == null) {
+            return getProxy(context);
+        }
+
+        //如果已经有缓存文件路径，那么判断缓存文件路径是否一致
+        if (GSYVideoManager.instance().cacheFile != null
+                && !GSYVideoManager.instance().cacheFile.getAbsolutePath().equals(file.getAbsolutePath())) {
+            //不一致先关了旧的
+            HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
+
+            if (proxy != null) {
+                proxy.shutdown();
+            }
+            //开启新的
+            return (GSYVideoManager.instance().proxy =
+                    GSYVideoManager.instance().newProxy(context, file));
+        } else {
+            //还没有缓存文件的或者一致的，返回原来
+            HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
+
+            return proxy == null ? (GSYVideoManager.instance().proxy =
+                    GSYVideoManager.instance().newProxy(context, file)) : proxy;
+        }
+    }
+
+
+    /**
+     * 创建缓存代理服务,带文件目录的.
+     */
+    private HttpProxyCacheServer newProxy(Context context, File file) {
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        HttpProxyCacheServer.Builder builder = new HttpProxyCacheServer.Builder(context);
+        builder.cacheDirectory(file);
+        cacheFile = file;
+        return builder.build();
+    }
+
 
     /**
      * 创建缓存代理服务

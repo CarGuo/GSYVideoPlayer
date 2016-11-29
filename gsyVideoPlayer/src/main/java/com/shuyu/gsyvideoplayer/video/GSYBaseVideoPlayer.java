@@ -25,7 +25,9 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.transitionseverywhere.TransitionManager;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getActionBarHeight;
@@ -79,6 +81,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected Object[] mObjects;
 
+    protected File mCachePath;
+
     protected ViewGroup mTextureViewContainer; //渲染控件父类
 
     protected View mSmallClose; //小窗口关闭按键
@@ -86,6 +90,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     protected VideoAllCallBack mVideoAllCallBack;
 
     private OrientationUtils mOrientationUtils; //旋转工具类
+
+    protected Map<String, String> mMapHeadData = new HashMap<>();
 
     private Handler mHandler = new Handler();
 
@@ -256,7 +262,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 resolveFullVideoShow(context, gsyVideoPlayer);
             }
 
-            gsyVideoPlayer.setUp(mUrl, mCache, mObjects);
+            gsyVideoPlayer.setUp(mUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
 
@@ -375,7 +381,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
             vp.addView(frameLayout, lpParent);
 
-            gsyVideoPlayer.setUp(mUrl, mCache, mObjects);
+            gsyVideoPlayer.setUp(mUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
             //隐藏掉所有的弹出状态哟
@@ -431,7 +437,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * @param objects
      * @return
      */
-    public abstract boolean setUp(String url, boolean cacheWithPlay, Object... objects);
+    public abstract boolean setUp(String url, boolean cacheWithPlay, File cachePath,  Object... objects);
 
     /**
      * 设置播放URL
@@ -443,7 +449,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * @return
      */
 
-    public abstract boolean setUp(String url, boolean cacheWithPlay, Map<String, String> mapHeadData, Object... objects);
+    public abstract boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, Object... objects);
 
     /**
      * 设置播放显示状态
@@ -461,6 +467,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * 小窗口
      **/
     protected abstract void setSmallVideoTextureView(View.OnTouchListener onTouchListener);
+
 
     protected abstract void onClickUiToggle();
 

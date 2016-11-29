@@ -30,6 +30,8 @@ import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
+import java.io.File;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -86,6 +88,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     private int mDialogProgressNormalColor = -11;
 
+    private boolean mThumbPlay;//是否点击封面播放
 
     public void setStandardVideoAllCallBack(StandardVideoAllCallBack standardVideoAllCallBack) {
         this.mStandardVideoAllCallBack = standardVideoAllCallBack;
@@ -134,9 +137,15 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     @Override
     public boolean setUp(String url, boolean cacheWithPlay, Object... objects) {
-        if (objects.length == 0) return false;
-        if (super.setUp(url, cacheWithPlay, objects)) {
-            mTitleTextView.setText(objects[0].toString());
+        return setUp(url, cacheWithPlay, (File) null, objects);
+    }
+
+    @Override
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Object... objects) {
+        if (super.setUp(url, cacheWithPlay, cachePath, objects)) {
+            if (objects != null && objects.length > 0) {
+                mTitleTextView.setText(objects[0].toString());
+            }
             if (mIfCurrentIsFullscreen) {
                 mFullscreenButton.setImageResource(R.drawable.video_shrink);
             } else {
@@ -225,6 +234,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         super.onClick(v);
         int i = v.getId();
         if (i == R.id.thumb) {
+            if (!mThumbPlay) {
+                return;
+            }
             if (TextUtils.isEmpty(mUrl)) {
                 Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
                 return;
@@ -638,6 +650,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         return gsyBaseVideoPlayer;
     }
 
+    /**
+     * 初始化为正常状态
+     */
+    public void initUIState() {
+        setStateAndUi(CURRENT_STATE_NORMAL);
+    }
+
     private void startDismissControlViewTimer() {
         cancelDismissControlViewTimer();
         DISSMISS_CONTROL_VIEW_TIMER = new Timer();
@@ -757,4 +776,17 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mDialogProgressNormalColor = normalColor;
     }
 
+    /**
+     * 是否点击封面可以播放
+     */
+    public void setThumbPlay(boolean thumbPlay) {
+        this.mThumbPlay = thumbPlay;
+    }
+
+    /**
+     * 封面布局
+     */
+    public RelativeLayout getThumbImageViewLayout() {
+        return mThumbImageViewLayout;
+    }
 }

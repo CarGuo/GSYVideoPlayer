@@ -27,6 +27,7 @@ import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -77,8 +78,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected Surface mSurface;
     protected ImageView mBackButton;
 
-    protected Map<String, String> mMapHeadData = new HashMap<>();
     protected ProgressTimerTask mProgressTimerTask;
+
     protected AudioManager mAudioManager; //音频焦点的监听
 
     protected Handler mHandler = new Handler();
@@ -187,22 +188,29 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * @return
      */
     public boolean setUp(String url, boolean cacheWithPlay, Object... objects) {
-        mCache = cacheWithPlay;
-        if (isCurrentMediaListener() &&
-                (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) < FULL_SCREEN_NORMAL_DELAY)
-            return false;
-        mCurrentState = CURRENT_STATE_NORMAL;
-        if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1")) {
-            mOriginUrl = url;
-            HttpProxyCacheServer proxy = GSYVideoManager.getProxy(getContext().getApplicationContext());
-            url = proxy.getProxyUrl(url);
-            mCacheFile = (!url.startsWith("http"));
-            //Log.i(TAG, "mCacheFile " + mCacheFile + " " + url);
+        return setUp(url, cacheWithPlay, ((File) null), objects);
+    }
+
+
+    /**
+     * 设置播放URL
+     *
+     * @param url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param cachePath     缓存路径
+     * @param mapHeadData
+     * @param objects
+     * @return
+     */
+    @Override
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, Object... objects) {
+        if (setUp(url, cacheWithPlay, cachePath, objects)) {
+            this.mMapHeadData.clear();
+            if (mapHeadData != null)
+                this.mMapHeadData.putAll(mapHeadData);
+            return true;
         }
-        this.mUrl = url;
-        this.mObjects = objects;
-        setStateAndUi(CURRENT_STATE_NORMAL);
-        return true;
+        return false;
     }
 
     /**
@@ -210,18 +218,28 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      *
      * @param url
      * @param cacheWithPlay 是否边播边缓存
-     * @param mapHeadData
+     * @param cachePath     缓存路径
      * @param objects
      * @return
      */
-
-    public boolean setUp(String url, boolean cacheWithPlay, Map<String, String> mapHeadData, Object... objects) {
-        if (setUp(url, cacheWithPlay, objects)) {
-            this.mMapHeadData.clear();
-            this.mMapHeadData.putAll(mapHeadData);
-            return true;
+    @Override
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Object... objects) {
+        mCache = cacheWithPlay;
+        mCachePath = cachePath;
+        if (isCurrentMediaListener() &&
+                (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) < FULL_SCREEN_NORMAL_DELAY)
+            return false;
+        mCurrentState = CURRENT_STATE_NORMAL;
+        if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1")) {
+            mOriginUrl = url;
+            HttpProxyCacheServer proxy = GSYVideoManager.getProxy(getContext().getApplicationContext(), cachePath);
+            url = proxy.getProxyUrl(url);
+            mCacheFile = (!url.startsWith("http"));
         }
-        return false;
+        this.mUrl = url;
+        this.mObjects = objects;
+        setStateAndUi(CURRENT_STATE_NORMAL);
+        return true;
     }
 
     /**
@@ -735,7 +753,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             if (mLooping && percent == 0 && mProgressBar.getProgress() > 3) {
                 loopSetProgressAndTime();
             }
-            Debuger.printfLog("Net speed: "  + getNetSpeedText());
+            Debuger.printfLog("Net speed: " + getNetSpeedText());
         }
     }
 

@@ -11,8 +11,11 @@ import android.widget.ImageView;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +92,7 @@ public class ListVideoAdapter extends BaseAdapter {
                 listVideoUtil.setLoop(true);
                 listVideoUtil.setPlayPositionAndTag(position, TAG);
                 final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                listVideoUtil.setCachePath(new File(FileUtils.getPath()));
                 listVideoUtil.startPlay(url);
             }
         });
