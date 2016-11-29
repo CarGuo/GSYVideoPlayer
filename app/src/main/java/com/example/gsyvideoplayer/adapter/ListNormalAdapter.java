@@ -136,7 +136,7 @@ public class ListNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.setPlayTag(TAG);
         holder.gsyVideoPlayer.setShowFullAnimation(true);
         //循环
-        holder.gsyVideoPlayer.setLooping(true);
+        //holder.gsyVideoPlayer.setLooping(true);
         holder.gsyVideoPlayer.setPlayPosition(position);
         holder.gsyVideoPlayer.setStandardVideoAllCallBack(sampleListener);
 

@@ -715,9 +715,12 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
         if (IF_FULLSCREEN_FROM_NORMAL) {//如果在进入全屏后播放完就初始化自己非全屏的控件
             IF_FULLSCREEN_FROM_NORMAL = false;
-            GSYVideoManager.instance().lastListener().onAutoCompletion();
+            if (GSYVideoManager.instance().lastListener() != null) {
+                GSYVideoManager.instance().lastListener().onAutoCompletion();
+            }
         }
-        GSYVideoManager.instance().setLastListener(null);
+        if (!mIfCurrentIsFullscreen)
+            GSYVideoManager.instance().setLastListener(null);
         AudioManager mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -733,10 +736,14 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
         if (IF_FULLSCREEN_FROM_NORMAL) {//如果在进入全屏后播放完就初始化自己非全屏的控件
             IF_FULLSCREEN_FROM_NORMAL = false;
-            GSYVideoManager.instance().lastListener().onCompletion();//回到上面的onAutoCompletion
+            if (GSYVideoManager.instance().lastListener() != null) {
+                GSYVideoManager.instance().lastListener().onCompletion();//回到上面的onAutoCompletion
+            }
         }
-        GSYVideoManager.instance().setListener(null);
-        GSYVideoManager.instance().setLastListener(null);
+        if (!mIfCurrentIsFullscreen) {
+            GSYVideoManager.instance().setListener(null);
+            GSYVideoManager.instance().setLastListener(null);
+        }
         GSYVideoManager.instance().setCurrentVideoHeight(0);
         GSYVideoManager.instance().setCurrentVideoWidth(0);
 
@@ -1060,7 +1067,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         View oldF = vp.findViewById(FULLSCREEN_ID);
         if (oldF != null) {
             backFrom = true;
-            GSYVideoManager.instance().lastListener().onBackFullscreen();
+            if (GSYVideoManager.instance().lastListener() != null) {
+                GSYVideoManager.instance().lastListener().onBackFullscreen();
+            }
         }
         return backFrom;
     }

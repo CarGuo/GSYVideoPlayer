@@ -19,13 +19,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.3.0</version>
+  <version>1.3.1</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.3.0'
+compile 'com.shuyu:gsyVideoPlayer:1.3.1'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -44,6 +44,9 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.0'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+
+### 1.3.1  更新了lastListener的判空问题
 
 
 ### 1.3.0 支持配置缓存路径，添加了ListVideoUtils的一些接口
