@@ -62,7 +62,13 @@ holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath(), ""));
 ···
 
 //如果一个列表里的缓存路径不同，需要用下方的方式
-holder.gsyVideoPlayer.initUIState();
+
+//避免全屏返回的时候不可用了，只初始化不是当前位置的ui
+if (playPosition < 0 || playPosition != position ||
+        !GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)) {
+    holder.gsyVideoPlayer.initUIState();
+}
+
 //如果设置了点击封面可以播放，如果缓存列表路径不一致，还需要设置封面点击
 holder.gsyVideoPlayer.setThumbPlay(true);
 
