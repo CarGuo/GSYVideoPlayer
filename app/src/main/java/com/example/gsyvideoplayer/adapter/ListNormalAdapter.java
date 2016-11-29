@@ -83,20 +83,22 @@ public class ListNormalAdapter extends BaseAdapter {
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
         //默认缓存路径
-        //holder.gsyVideoPlayer.setUp(url, true, , ""));
+        holder.gsyVideoPlayer.setUp(url, true , "");
 
+        /************************下方为其他路径************************************/
         //如果一个列表的缓存路劲都一一致
         //holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath(), ""));
 
+        /************************下方为其他路径************************************/
         //如果一个列表里的缓存路劲不一致
-        int playPosition = GSYVideoManager.instance().getPlayPosition();
+        //int playPosition = GSYVideoManager.instance().getPlayPosition();
         //避免全屏返回的时候不可用了
-        if (playPosition < 0 || playPosition != position ||
+        /*if (playPosition < 0 || playPosition != position ||
                 !GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)) {
             holder.gsyVideoPlayer.initUIState();
-        }
+        }*/
         //如果设置了点击封面可以播放，如果缓存列表路径不一致，还需要设置封面点击
-        holder.gsyVideoPlayer.setThumbPlay(true);
+        /*holder.gsyVideoPlayer.setThumbPlay(true);
 
         holder.gsyVideoPlayer.getStartButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +116,7 @@ public class ListNormalAdapter extends BaseAdapter {
                 holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath(), ""));
                 holder.gsyVideoPlayer.startPlayLogic();
             }
-        });
+        });*/
 
         //增加title
         holder.gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);

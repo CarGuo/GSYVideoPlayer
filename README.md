@@ -52,7 +52,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.0'
 
 ```
 //默认缓存路径方式
-holder.gsyVideoPlayer.setUp(url, true, , ""));
+holder.gsyVideoPlayer.setUp(url, true , "");
 
 ···
 
