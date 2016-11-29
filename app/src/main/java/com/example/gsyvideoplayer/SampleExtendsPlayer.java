@@ -94,6 +94,8 @@ public class SampleExtendsPlayer extends GSYVideoPlayer {
 
     @Override
     public void startPlayLogic() {
+        //如果继承stand播放器的话要记得super
+        //super.startPlayLogic();
         //// TODO: 2016/11/18 播放开始的逻辑
     }
 
