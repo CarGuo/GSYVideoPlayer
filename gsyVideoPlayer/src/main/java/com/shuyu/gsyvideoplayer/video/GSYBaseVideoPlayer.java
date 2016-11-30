@@ -261,7 +261,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 gsyVideoPlayer.setVisibility(INVISIBLE);
                 resolveFullVideoShow(context, gsyVideoPlayer);
             }
-
+            gsyVideoPlayer.mHadPlay = mHadPlay;
             gsyVideoPlayer.setUp(mUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
@@ -382,7 +382,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             frameLayout.addView(gsyVideoPlayer, lp);
 
             vp.addView(frameLayout, lpParent);
-
+            gsyVideoPlayer.mHadPlay = mHadPlay;
             gsyVideoPlayer.setUp(mUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();

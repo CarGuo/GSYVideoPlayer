@@ -45,7 +45,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.3'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
-### 1.3.4 增加了清除默认缓存接口，优化了临时缓存文件错误的清理
+### 1.3.4 增加了清除默认缓存接口。优化了拖动进度条或者缓存导致播放时间从0跳动的问题。
 
 GSYVideoManager
 
