@@ -376,6 +376,8 @@ public class ListVideoUtil {
             viewGroup.removeAllViews();
         playPosition = -1;
         TAG = "NULL";
+        if (orientationUtils != null)
+            orientationUtils.releaseListener();
 
     }
 

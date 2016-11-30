@@ -19,7 +19,6 @@ import com.shuyu.gsyvideoplayer.R;
 
 /**
  * Created by codeest on 2016/11/9.
- *
  */
 
 public class ENDownloadView extends View {
@@ -70,7 +69,9 @@ public class ENDownloadView extends View {
 
     private Path mPath;
 
-    private RectF mRectF ,mClipRectF;
+    private RectF mRectF, mClipRectF;
+
+    ValueAnimator mValueAnimator;
 
     private float mFraction;
 
@@ -144,7 +145,7 @@ public class ENDownloadView extends View {
         mBaseRippleLength = 4.4f * mBaseLength / 12;
         mCurrentRippleX = mCenterX - mBaseRippleLength * 10;
         mRectF = new RectF(mCenterX - mCircleRadius, mCenterY - mCircleRadius, mCenterX + mCircleRadius, mCenterY + mCircleRadius);
-        mClipRectF = new RectF(mCenterX - 6 * mBaseRippleLength, 0 , mCenterX + 6 * mBaseRippleLength , mHeight);
+        mClipRectF = new RectF(mCenterX - 6 * mBaseRippleLength, 0, mCenterX + 6 * mBaseRippleLength, mHeight);
     }
 
     @Override
@@ -153,38 +154,38 @@ public class ENDownloadView extends View {
         switch (mCurrentState) {
             case STATE_PRE:
                 if (mFraction <= 0.4) {
-                    canvas.drawCircle(mCenterX, mCenterY ,mCircleRadius, mBgPaint);
+                    canvas.drawCircle(mCenterX, mCenterY, mCircleRadius, mBgPaint);
                     canvas.drawLine(mCenterX - mBaseLength, mCenterY, mCenterX, mCenterY + mBaseLength, mPaint);
-                    canvas.drawLine(mCenterX, mCenterY + mBaseLength, mCenterX + mBaseLength ,mCenterY , mPaint);
-                    canvas.drawLine(mCenterX , mCenterY + mBaseLength - 1.3f * mBaseLength / 0.4f * mFraction,
+                    canvas.drawLine(mCenterX, mCenterY + mBaseLength, mCenterX + mBaseLength, mCenterY, mPaint);
+                    canvas.drawLine(mCenterX, mCenterY + mBaseLength - 1.3f * mBaseLength / 0.4f * mFraction,
                             mCenterX, mCenterY - 1.6f * mBaseLength + 1.3f * mBaseLength / 0.4f * mFraction, mPaint);
-                } else if(mFraction <= 0.6) {
-                    canvas.drawCircle(mCenterX, mCenterY ,mCircleRadius, mBgPaint);
-                    canvas.drawCircle(mCenterX, mCenterY -0.3f * mBaseLength , 2, mPaint);
+                } else if (mFraction <= 0.6) {
+                    canvas.drawCircle(mCenterX, mCenterY, mCircleRadius, mBgPaint);
+                    canvas.drawCircle(mCenterX, mCenterY - 0.3f * mBaseLength, 2, mPaint);
                     canvas.drawLine(mCenterX - mBaseLength - mBaseLength * 1.2f / 0.2f * (mFraction - 0.4f), mCenterY, mCenterX, mCenterY + mBaseLength - mBaseLength / 0.2f * (mFraction - 0.4f), mPaint);
-                    canvas.drawLine(mCenterX, mCenterY + mBaseLength - mBaseLength / 0.2f * (mFraction - 0.4f), mCenterX + mBaseLength + mBaseLength * 1.2f / 0.2f * (mFraction - 0.4f) ,mCenterY , mPaint);
-                } else if (mFraction <= 1){
-                    canvas.drawCircle(mCenterX, mCenterY ,mCircleRadius, mBgPaint);
-                    canvas.drawCircle(mCenterX, mCenterY -0.3f * mBaseLength - (mCircleRadius - 0.3f * mBaseLength) / 0.4f * (mFraction - 0.6f), 2, mPaint);
-                    canvas.drawLine(mCenterX - mBaseLength * 2.2f , mCenterY , mCenterX + mBaseLength * 2.2f, mCenterY, mPaint);
+                    canvas.drawLine(mCenterX, mCenterY + mBaseLength - mBaseLength / 0.2f * (mFraction - 0.4f), mCenterX + mBaseLength + mBaseLength * 1.2f / 0.2f * (mFraction - 0.4f), mCenterY, mPaint);
+                } else if (mFraction <= 1) {
+                    canvas.drawCircle(mCenterX, mCenterY, mCircleRadius, mBgPaint);
+                    canvas.drawCircle(mCenterX, mCenterY - 0.3f * mBaseLength - (mCircleRadius - 0.3f * mBaseLength) / 0.4f * (mFraction - 0.6f), 2, mPaint);
+                    canvas.drawLine(mCenterX - mBaseLength * 2.2f, mCenterY, mCenterX + mBaseLength * 2.2f, mCenterY, mPaint);
                 } else {
-                    canvas.drawCircle(mCenterX, mCenterY ,mCircleRadius, mBgPaint);
-                    canvas.drawCircle(mCenterX, mCenterY - mCircleRadius - mBaseLength * 3 * (mFraction - 1), 3 ,mPaint);
-                    canvas.drawLine(mCenterX - mBaseLength * 2.2f , mCenterY , mCenterX + mBaseLength * 2.2f, mCenterY, mPaint);
+                    canvas.drawCircle(mCenterX, mCenterY, mCircleRadius, mBgPaint);
+                    canvas.drawCircle(mCenterX, mCenterY - mCircleRadius - mBaseLength * 3 * (mFraction - 1), 3, mPaint);
+                    canvas.drawLine(mCenterX - mBaseLength * 2.2f, mCenterY, mCenterX + mBaseLength * 2.2f, mCenterY, mPaint);
                 }
                 break;
             case STATE_DOWNLOADING:
                 if (mFraction <= 0.2) {
                     mTextPaint.setTextSize(mTextSize / 0.2f * mFraction);
                 }
-                canvas.drawCircle(mCenterX, mCenterY ,mCircleRadius, mBgPaint);
-                canvas.drawArc(mRectF, -90, 359.99f * mFraction, false ,mPaint);
+                canvas.drawCircle(mCenterX, mCenterY, mCircleRadius, mBgPaint);
+                canvas.drawArc(mRectF, -90, 359.99f * mFraction, false, mPaint);
                 mPath.reset();
                 mCurrentRippleX += DEFAULT_RIPPLE_SPEED;
                 if (mCurrentRippleX > mCenterX - mBaseRippleLength * 6)
                     mCurrentRippleX = mCenterX - mBaseRippleLength * 10;
-                mPath.moveTo(mCurrentRippleX , mCenterY);
-                for (int i = 0; i< 4 ; i++) {
+                mPath.moveTo(mCurrentRippleX, mCenterY);
+                for (int i = 0; i < 4; i++) {
                     mPath.rQuadTo(mBaseRippleLength, -(1 - mFraction) * mBaseRippleLength, mBaseRippleLength * 2, 0);
                     mPath.rQuadTo(mBaseRippleLength, (1 - mFraction) * mBaseRippleLength, mBaseRippleLength * 2, 0);
                 }
@@ -197,14 +198,14 @@ public class ENDownloadView extends View {
                 }
                 break;
             case STATE_END:
-                canvas.drawCircle(mCenterX, mCenterY ,mCircleRadius, mPaint);
+                canvas.drawCircle(mCenterX, mCenterY, mCircleRadius, mPaint);
                 if (mFraction <= 0.5) {
                     mTextPaint.setTextSize(mTextSize - mTextSize / 0.2f * mFraction);
                 } else {
                     mTextPaint.setTextSize(0);
                 }
                 if (mUnit != DownloadUnit.NONE && mCurrentSize > 0) {
-                    canvas.drawText(String.format("%.2f", mCurrentSize) + getUnitStr(mUnit), mCenterX , mCenterY + 1.4f * mBaseLength , mTextPaint);
+                    canvas.drawText(String.format("%.2f", mCurrentSize) + getUnitStr(mUnit), mCenterX, mCenterY + 1.4f * mBaseLength, mTextPaint);
                 }
                 canvas.drawLine(mCenterX - mBaseLength * 2.2f + mBaseLength * 1.2f * mFraction, mCenterY,
                         mCenterX - mBaseLength * 0.5f, mCenterY + mBaseLength * 0.5f * mFraction * 1.3f, mPaint);
@@ -212,7 +213,7 @@ public class ENDownloadView extends View {
                         mCenterX + mBaseLength * 2.2f - mBaseLength * mFraction, mCenterY - mBaseLength * mFraction * 1.3f, mPaint);
                 break;
             case STATE_RESET:
-                canvas.drawCircle(mCenterX, mCenterY ,mCircleRadius, mBgPaint);
+                canvas.drawCircle(mCenterX, mCenterY, mCircleRadius, mBgPaint);
                 canvas.drawLine(mCenterX - mBaseLength, mCenterY,
                         mCenterX - mBaseLength * 0.5f + mBaseLength * 0.5f * mFraction, mCenterY + mBaseLength * 0.65f + mBaseLength * 0.35f * mFraction, mPaint);
                 canvas.drawLine(mCenterX - mBaseLength * 0.5f + mBaseLength * 0.5f * mFraction, mCenterY + mBaseLength * 0.65f + mBaseLength * 0.35f * mFraction,
@@ -224,36 +225,63 @@ public class ENDownloadView extends View {
         }
     }
 
+    public void release() {
+        if (mValueAnimator != null) {
+            mValueAnimator.removeAllListeners();
+            mValueAnimator.removeAllUpdateListeners();
+            if (mValueAnimator.isRunning())
+                mValueAnimator.cancel();
+            mValueAnimator = null;
+        }
+    }
+
     public void start() {
+        if (mValueAnimator != null) {
+            mValueAnimator.removeAllListeners();
+            mValueAnimator.removeAllUpdateListeners();
+            if (mValueAnimator.isRunning())
+                mValueAnimator.cancel();
+            mValueAnimator = null;
+        }
         if (mCurrentState != STATE_PRE) {
             return;
         }
         mCurrentState = STATE_PRE;
-        ValueAnimator preAnim = ValueAnimator.ofFloat(1.f, 100.f);
-        preAnim.setDuration(1500);
-        preAnim.setInterpolator(new OvershootInterpolator());
-        preAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        mValueAnimator = ValueAnimator.ofFloat(1.f, 100.f);
+        mValueAnimator.setDuration(1500);
+        mValueAnimator.setInterpolator(new OvershootInterpolator());
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 mFraction = valueAnimator.getAnimatedFraction();
                 invalidate();
             }
         });
-        preAnim.addListener(new AnimatorListenerAdapter() {
+        mValueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mCurrentState = STATE_DOWNLOADING;
                 downloadAnim();
             }
         });
-        preAnim.start();
+        mValueAnimator.start();
     }
 
     private void downloadAnim() {
-        ValueAnimator downloadAnim = ValueAnimator.ofFloat(1.f, 100.f);
-        downloadAnim.setDuration(mDownloadTime);
-        downloadAnim.setInterpolator(new LinearInterpolator());
-        downloadAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        if (mValueAnimator != null) {
+            mValueAnimator.removeAllListeners();
+            mValueAnimator.removeAllUpdateListeners();
+            if (mValueAnimator.isRunning())
+                mValueAnimator.cancel();
+            mValueAnimator = null;
+        }
+        if (mCurrentState != STATE_DOWNLOADING) {
+            return;
+        }
+        mValueAnimator = ValueAnimator.ofFloat(1.f, 100.f);
+        mValueAnimator.setDuration(mDownloadTime);
+        mValueAnimator.setInterpolator(new LinearInterpolator());
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 mFraction = valueAnimator.getAnimatedFraction();
@@ -262,28 +290,35 @@ public class ENDownloadView extends View {
                 invalidate();
             }
         });
-        downloadAnim.addListener(new AnimatorListenerAdapter() {
+        mValueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                mCurrentState = STATE_END;
+                mCurrentState = STATE_DOWNLOADING;
                 downloadAnim();
             }
         });
-        downloadAnim.start();
+        mValueAnimator.start();
     }
 
     private void endAnim() {
-        ValueAnimator endAnim = ValueAnimator.ofFloat(1.f, 100.f);
-        endAnim.setDuration(700);
-        endAnim.setInterpolator(new OvershootInterpolator());
-        endAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        if (mValueAnimator != null) {
+            mValueAnimator.removeAllListeners();
+            mValueAnimator.removeAllUpdateListeners();
+            if (mValueAnimator.isRunning())
+                mValueAnimator.cancel();
+            mValueAnimator = null;
+        }
+        mValueAnimator= ValueAnimator.ofFloat(1.f, 100.f);
+        mValueAnimator.setDuration(700);
+        mValueAnimator.setInterpolator(new OvershootInterpolator());
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 mFraction = valueAnimator.getAnimatedFraction();
                 invalidate();
             }
         });
-        endAnim.addListener(new AnimatorListenerAdapter() {
+        mValueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mFraction = 0;
@@ -293,34 +328,19 @@ public class ENDownloadView extends View {
                 }
             }
         });
-        endAnim.start();
+        mValueAnimator.start();
     }
 
     public void reset() {
-        if (mCurrentState != STATE_RESET) {
-            return;
+        mFraction = 0;
+        mCurrentState = STATE_PRE;
+        if (mValueAnimator != null) {
+            mValueAnimator.removeAllListeners();
+            mValueAnimator.removeAllUpdateListeners();
+            if (mValueAnimator.isRunning())
+                mValueAnimator.cancel();
+            mValueAnimator = null;
         }
-        ValueAnimator resetAnim = ValueAnimator.ofFloat(1.f, 100.f);
-        resetAnim.setDuration(500);
-        resetAnim.setInterpolator(new OvershootInterpolator());
-        resetAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mFraction = valueAnimator.getAnimatedFraction();
-                invalidate();
-            }
-        });
-        resetAnim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mFraction = 0;
-                mCurrentState = STATE_PRE;
-                if (onDownloadStateListener != null) {
-                    onDownloadStateListener.onResetFinish();
-                }
-            }
-        });
-        resetAnim.start();
     }
 
     private String getUnitStr(DownloadUnit unit) {

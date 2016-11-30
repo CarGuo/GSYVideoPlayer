@@ -157,6 +157,13 @@ public class OrientationUtils {
         }
     }
 
+    public void releaseListener() {
+        if (orientationEventListener != null) {
+            orientationEventListener.disable();
+            orientationEventListener = null;
+        }
+    }
+
     public boolean isClick() {
         return mClick;
     }
