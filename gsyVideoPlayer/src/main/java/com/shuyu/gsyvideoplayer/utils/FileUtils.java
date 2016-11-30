@@ -30,4 +30,19 @@ public class FileUtils {
         return getAppPath(NAME_TEST);
     }
 
+    public static void deleteFiles(File root) {
+        File files[] = root.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (!f.isDirectory() && f.exists()) { // 判断是否存在
+                    try {
+                        f.delete();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
 }

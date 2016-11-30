@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.gsyvideoplayer.utils.JumpUtils;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import butterknife.BindView;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail})
+    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.open_btn:
@@ -43,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.list_detail:
                 //支持全屏重力旋转的列表播放，滑动后不会被销毁
                 JumpUtils.goToDetailPlayer(this);
+                break;
+            case R.id.clear_cache:
+                GSYVideoManager.clearAllDefaultCache(MainActivity.this);
+                //String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                //GSYVideoManager.clearDefaultCache(MainActivity.this, url);
                 break;
         }
     }

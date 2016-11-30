@@ -23,8 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 
 import java.io.File;
@@ -715,7 +717,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             mTextureViewContainer.removeAllViews();
         }
 
-        if (IF_FULLSCREEN_FROM_NORMAL) {//如果在进入全屏后播放完就初始化自己非全屏的控件
+        if (IF_FULLSCREEN_FROM_NORMAL) {
             IF_FULLSCREEN_FROM_NORMAL = false;
             if (GSYVideoManager.instance().lastListener() != null) {
                 GSYVideoManager.instance().lastListener().onAutoCompletion();
@@ -773,16 +775,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public void onError(int what, int extra) {
         if (what != 38 && what != -38) {
             setStateAndUi(CURRENT_STATE_ERROR);
-            if (mCacheFile) {
-                Debuger.printfError(" mCacheFile Local Error " + mUrl);
-                //可能是因为缓存文件除了问题
-                CommonUtil.deleteFile(mUrl.replace("file://", ""));
-                mUrl = mOriginUrl;
-            } else if (mUrl.contains("127.0.0.1")) {
-                Debuger.printfError(" mCacheFile Download Error " + mUrl);
-                CommonUtil.deleteFile(mUrl.replace("file://", "") + ".downlad");
-                mUrl = mOriginUrl;
-            }
+            deleteCacheFileWhenError();
         }
     }
 
@@ -823,6 +816,43 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     @Override
     public void onBackFullscreen() {
 
+    }
+
+    /**
+     * 清除当前缓存
+     */
+    public void clearCurrentCache() {
+        if (mCacheFile) {
+            //是否为缓存文件
+            Debuger.printfError(" mCacheFile Local Error " + mUrl);
+            //可能是因为缓存文件除了问题
+            CommonUtil.deleteFile(mUrl.replace("file://", ""));
+            mUrl = mOriginUrl;
+        } else if (mUrl.contains("127.0.0.1")) {
+            //是否为缓存了未完成的文件
+            Md5FileNameGenerator md5FileNameGenerator = new Md5FileNameGenerator();
+            String name = md5FileNameGenerator.generate(mOriginUrl);
+            if (mCachePath != null) {
+                String path = mCachePath.getAbsolutePath() + File.separator + name + ".download";
+                CommonUtil.deleteFile(path);
+            } else {
+                String path = StorageUtils.getIndividualCacheDirectory
+                        (getContext().getApplicationContext()).getAbsolutePath()
+                        + File.separator + name + ".download";
+                CommonUtil.deleteFile(path);
+            }
+        }
+
+    }
+
+
+    /**
+     * 播放错误的时候，删除缓存文件
+     */
+    private void deleteCacheFileWhenError() {
+        clearCurrentCache();
+        Debuger.printfError("Link Or mCache Error, Please Try Again" + mUrl);
+        mUrl = mOriginUrl;
     }
 
     protected void startProgressTimer() {

@@ -11,8 +11,12 @@ import android.text.TextUtils;
 import android.view.Surface;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
+import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
+import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -77,6 +81,32 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
     /**
+     * 删除默认所有缓存文件
+     */
+    public static void clearAllDefaultCache(Context context) {
+        String path = StorageUtils.getIndividualCacheDirectory
+                (context.getApplicationContext()).getAbsolutePath();
+        FileUtils.deleteFiles(new File(path));
+    }
+
+    /**
+     * 删除url对应默认缓存文件
+     */
+    public static void clearDefaultCache(Context context, String url) {
+        Md5FileNameGenerator md5FileNameGenerator = new Md5FileNameGenerator();
+        String name = md5FileNameGenerator.generate(url);
+        String pathTmp = StorageUtils.getIndividualCacheDirectory
+                (context.getApplicationContext()).getAbsolutePath()
+                + File.separator + name + ".download";
+        String path = StorageUtils.getIndividualCacheDirectory
+                (context.getApplicationContext()).getAbsolutePath()
+                + File.separator + name;
+        CommonUtil.deleteFile(pathTmp);
+        CommonUtil.deleteFile(path);
+
+    }
+
+    /**
      * 获取缓存代理服务,带文件目录的
      */
     public static HttpProxyCacheServer getProxy(Context context, File file) {
@@ -106,7 +136,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                     GSYVideoManager.instance().newProxy(context, file)) : proxy;
         }
     }
-
 
     /**
      * 创建缓存代理服务,带文件目录的.

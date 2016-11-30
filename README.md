@@ -45,6 +45,32 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.3'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+### 1.3.4 增加了清除默认缓存接口，优化了临时缓存文件错误的清理
+
+GSYVideoManager
+
+```
+/**
+ * 删除默认所有缓存文件
+ */
+public static void clearAllDefaultCache(Context context)
+
+/**
+ * 删除url对应默认缓存文件
+ */
+public static void clearDefaultCache(Context context, String url)
+```
+
+GSYVideoPlayer
+
+```
+
+/**
+ * 清除当前缓存
+ */
+public void clearCurrentCache()
+
+```
 
 ### 1.3.3 优化了一些内存泄漏问题，更新了demo
 
