@@ -100,14 +100,9 @@ public class CommonUtil {
 
     public static void hideSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
-            if (context instanceof FragmentActivity) {
-                FragmentActivity fragmentActivity = (FragmentActivity) context;
-                android.app.ActionBar ab = fragmentActivity.getActionBar();
-                if (ab != null) {
-                    ab.hide();
-                }
-            } else {
-                ActionBar ab = CommonUtil.getAppCompActivity(context).getSupportActionBar();
+            AppCompatActivity appCompatActivity = CommonUtil.getAppCompActivity(context);
+            if (appCompatActivity != null) {
+                ActionBar ab = appCompatActivity.getSupportActionBar();
                 if (ab != null) {
                     ab.setShowHideAnimationEnabled(false);
                     ab.hide();
@@ -128,14 +123,9 @@ public class CommonUtil {
 
     public static void showSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
-            if (context instanceof FragmentActivity) {
-                FragmentActivity fragmentActivity = (FragmentActivity) context;
-                android.app.ActionBar ab = fragmentActivity.getActionBar();
-                if (ab != null) {
-                    ab.show();
-                }
-            } else {
-                ActionBar ab = CommonUtil.getAppCompActivity(context).getSupportActionBar();
+            AppCompatActivity appCompatActivity = CommonUtil.getAppCompActivity(context);
+            if (appCompatActivity != null) {
+                ActionBar ab = appCompatActivity.getSupportActionBar();
                 if (ab != null) {
                     ab.setShowHideAnimationEnabled(false);
                     ab.show();

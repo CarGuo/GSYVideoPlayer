@@ -2,6 +2,7 @@ package com.example.gsyvideoplayer;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,7 +20,7 @@ import butterknife.ButterKnife;
 
 import static com.example.gsyvideoplayer.utils.CommonUtil.setViewHeight;
 
-public class DetailPlayer extends AppCompatActivity {
+public class DetailPlayer extends FragmentActivity {
 
     @BindView(R.id.post_detail_nested_scroll)
     NestedScrollView postDetailNestedScroll;
@@ -54,10 +55,18 @@ public class DetailPlayer extends AppCompatActivity {
 
         detailPlayer.setIsTouchWiget(true);
 
+
+        detailPlayer.setRotateViewAuto(false);
+        detailPlayer.setLockLand(true);
+        detailPlayer.setShowFullAnimation(false);
+
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toDo();
+                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+                detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
+                //这是以前旧的方式
+                //toDo();
             }
         });
 

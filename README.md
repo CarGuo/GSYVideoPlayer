@@ -1,4 +1,4 @@
-<h4>基于IJKPlayer的播放器，重构了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>，调整了代码和优化了动画，添加了自定义功能。</h4>
+<h4>基于IJKPlayer的播放器，重构了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>，调整了代码和优化了动画，添加了自定义功能。持续更新。</h4>
 ======================
 
 * <h4>支持基本的拖动，声音、亮度调节</h4>
@@ -19,13 +19,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.3.1</version>
+  <version>1.3.2</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.3.1'
+compile 'com.shuyu:gsyVideoPlayer:1.3.2'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -44,6 +44,8 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.1'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+### 1.3.2 解决了因为兼容FragmentActivity导致actionbar隐藏失败问题。
 
 
 ### 1.3.1 更新了lastListener的判空问题，建议更新到这个版本。
