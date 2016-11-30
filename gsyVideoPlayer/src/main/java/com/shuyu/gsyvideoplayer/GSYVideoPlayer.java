@@ -757,12 +757,14 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     @Override
     public void onBufferingUpdate(int percent) {
         if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
-            setTextAndProgress(percent);
+            if (percent != 0) {
+                setTextAndProgress(percent);
+            }
             //循环清除进度
-            if (mLooping && percent == 0 && mProgressBar.getProgress() > 3) {
+            if (mLooping && mHadPlay && percent == 0 && mProgressBar.getProgress() >= (mProgressBar.getMax() - 1)) {
                 loopSetProgressAndTime();
             }
-            Debuger.printfLog("Net speed: " + getNetSpeedText());
+            Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
         }
     }
 
@@ -928,9 +930,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             if (progress != 0) mProgressBar.setProgress(progress);
         }
         if (secProgress > 95) secProgress = 100;
-        if (secProgress != 0) mProgressBar.setSecondaryProgress(secProgress);
-        mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
+        if (secProgress != 0) mProgressBar.setSecondaryProgress(progress);
         mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
+        if (currentTime > 0)
+            mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
     }
 
 
