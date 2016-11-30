@@ -38,6 +38,8 @@ public class PlayActivity extends AppCompatActivity {
 
     private boolean isTransition;
 
+    private Transition transition;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,9 +113,15 @@ public class PlayActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (orientationUtils != null)
+            orientationUtils.releaseListener();
+        if (isTransition && transition != null) {
+            transition.removeListener(onTransitionListener);
+        }
     }
 
     @Override
@@ -148,18 +156,22 @@ public class PlayActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private boolean addTransitionListener() {
-        final Transition transition = getWindow().getSharedElementEnterTransition();
+        transition = getWindow().getSharedElementEnterTransition();
         if (transition != null) {
-            transition.addListener(new OnTransitionListener() {
-                @Override
-                public void onTransitionEnd(Transition transition) {
-                    videoPlayer.startPlayLogic();
-                    transition.removeListener(this);
-                }
-            });
+            transition.addListener(onTransitionListener);
             return true;
         }
         return false;
     }
+
+    OnTransitionListener onTransitionListener = new OnTransitionListener() {
+
+        @TargetApi(Build.VERSION_CODES.KITKAT)
+        @Override
+        public void onTransitionEnd(Transition transition) {
+            videoPlayer.startPlayLogic();
+            transition.removeListener(onTransitionListener);
+        }
+    };
 
 }

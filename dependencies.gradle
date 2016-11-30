@@ -22,6 +22,7 @@ ext {
 
     //DataLibraries
     videocache = '2.6.3'
+    leakcanary = '1.5'
 
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
@@ -46,5 +47,6 @@ ext {
 
     dataDependencies = [
             videocache: "com.danikula:videocache:${videocache}",
+            leakcanary: "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
     ]
 }

@@ -81,8 +81,7 @@ public class DetailPlayer extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if (isFull) {
-            detailPlayer.getBackButton().performClick();
+        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
             return;
         }
         super.onBackPressed();
@@ -92,6 +91,8 @@ public class DetailPlayer extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         GSYVideoPlayer.releaseAllVideos();
+        if (orientationUtils != null)
+            orientationUtils.releaseListener();
     }
 
     private void toFull() {

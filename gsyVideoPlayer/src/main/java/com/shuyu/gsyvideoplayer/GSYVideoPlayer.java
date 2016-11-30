@@ -66,7 +66,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public static boolean WIFI_TIP_DIALOG_SHOWED = false;
 
 
-    protected static Timer UPDATE_PROGRESS_TIMER;
+    protected Timer UPDATE_PROGRESS_TIMER;
 
 
     protected View mStartButton;
@@ -176,7 +176,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mFullscreenButton.setOnTouchListener(this);
         mScreenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
         mScreenHeight = getContext().getResources().getDisplayMetrics().heightPixels;
-        mAudioManager = (AudioManager) getContext().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
     }
 
     /**
@@ -254,6 +254,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 if (isCurrentMediaListener()) {
                     cancelProgressTimer();
                     GSYVideoManager.instance().releaseMediaPlayer();
+                }
+                if (mAudioManager != null) {
+                    mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
                 }
                 break;
             case CURRENT_STATE_PREPAREING:
@@ -356,9 +359,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         GSYVideoManager.instance().setPlayTag(mPlayTag);
         GSYVideoManager.instance().setPlayPosition(mPlayPosition);
         addTextureView();
-        AudioManager mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-
         ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         GSYVideoManager.instance().prepare(mUrl, mMapHeadData, mLooping, mSpeed);
         setStateAndUi(CURRENT_STATE_PREPAREING);
@@ -492,6 +493,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         GSYVideoManager.instance().setDisplay(null);
         surface.release();
+        cancelProgressTimer();
         return true;
     }
 
@@ -721,7 +723,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         }
         if (!mIfCurrentIsFullscreen)
             GSYVideoManager.instance().setLastListener(null);
-        AudioManager mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
@@ -747,7 +748,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         GSYVideoManager.instance().setCurrentVideoHeight(0);
         GSYVideoManager.instance().setCurrentVideoWidth(0);
 
-        AudioManager mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
