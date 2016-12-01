@@ -22,6 +22,8 @@ import java.util.Map;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getActionBarHeight;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getStatusBarHeight;
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showNavKey;
 
 /**
  * Created by shuyu on 2016/11/12.
@@ -48,11 +50,13 @@ public class ListVideoUtil {
 
     private int playPosition = -1; // 播放的位置
     private int speed = 1; // 播放速度，仅支持6.0
+    private int systemUiVisibility;
     private boolean isFull; //当前是否全屏
     private boolean isSmall; //当前是否小屏
     private boolean hideStatusBar; //是否隐藏有状态bar
     private boolean hideActionBar; //是否隐藏有状态ActionBar
     private boolean isLoop;//循环
+    private boolean hideKey = true;//隐藏按键
 
 
     private int[] listItemRect;//当前item框的屏幕位置
@@ -163,7 +167,11 @@ public class ListVideoUtil {
      * 处理全屏逻辑
      */
     private void resolveToFull() {
+        systemUiVisibility = ((Activity) context).getWindow().getDecorView().getSystemUiVisibility();
         CommonUtil.hideSupportActionBar(context, hideActionBar, hideStatusBar);
+        if (hideKey) {
+            hideNavKey(context);
+        }
         isFull = true;
         ViewGroup viewGroup = (ViewGroup) gsyVideoPlayer.getParent();
         listParams = gsyVideoPlayer.getLayoutParams();
@@ -268,6 +276,9 @@ public class ListVideoUtil {
                 if (videoAllCallBack != null) {
                     Debuger.printfLog("onQuitFullscreen");
                     videoAllCallBack.onQuitFullscreen(url);
+                }
+                if (hideKey) {
+                    showNavKey(context, systemUiVisibility);
                 }
             }
         }, delay);
@@ -580,6 +591,17 @@ public class ListVideoUtil {
      */
     public StandardGSYVideoPlayer getGsyVideoPlayer() {
         return gsyVideoPlayer;
+    }
+
+    public boolean isHideKey() {
+        return hideKey;
+    }
+
+    /**
+     * 隐藏虚拟按键
+     */
+    public void setHideKey(boolean hideKey) {
+        this.hideKey = hideKey;
     }
 
 }

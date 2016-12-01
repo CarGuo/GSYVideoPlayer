@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.WindowManager;
 
 import java.io.File;
@@ -141,6 +143,33 @@ public class CommonUtil {
                 CommonUtil.getAppCompActivity(context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
         }
+    }
+
+    public static void hideNavKey(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //       设置屏幕始终在前面，不然点击鼠标，重新出现虚拟按键
+            ((Activity) context).getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
+                            // bar
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        } else {
+            ((Activity) context).getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
+                            // bar
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+            );
+        }
+    }
+
+    public static void showNavKey(Context context, int systemUiVisibility) {
+        ((Activity) context).getWindow().getDecorView().setSystemUiVisibility(systemUiVisibility);
     }
 
 

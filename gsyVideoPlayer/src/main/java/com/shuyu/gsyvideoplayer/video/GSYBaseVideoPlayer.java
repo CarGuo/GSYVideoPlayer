@@ -32,7 +32,9 @@ import java.util.Map;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getActionBarHeight;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getStatusBarHeight;
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideSupportActionBar;
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showNavKey;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showSupportActionBar;
 
 /**
@@ -50,6 +52,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     protected boolean mActionBar = false;//是否需要在利用window实现全屏幕的时候隐藏actionbar
 
     protected boolean mStatusBar = false;//是否需要在利用window实现全屏幕的时候隐藏statusbar
+
+    protected boolean mHideKey = true;//是否隐藏虚拟按键
 
     protected boolean mCache = false;//是否播边边缓冲
 
@@ -94,6 +98,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     protected Map<String, String> mMapHeadData = new HashMap<>();
 
     private Handler mHandler = new Handler();
+
+    private int mSystemUiVisibility;
 
 
     public GSYBaseVideoPlayer(Context context) {
@@ -198,6 +204,9 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             mVideoAllCallBack.onQuitFullscreen(mUrl, mObjects);
         }
         mIfCurrentIsFullscreen = false;
+        if (mHideKey) {
+            showNavKey(mContext, mSystemUiVisibility);
+        }
     }
 
     /**
@@ -209,7 +218,13 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public GSYBaseVideoPlayer startWindowFullscreen(final Context context, final boolean actionBar, final boolean statusBar) {
 
+        mSystemUiVisibility = ((Activity) context).getWindow().getDecorView().getSystemUiVisibility();
+
         hideSupportActionBar(context, actionBar, statusBar);
+
+        if (mHideKey) {
+            hideNavKey(context);
+        }
 
         this.mActionBar = actionBar;
 
@@ -313,6 +328,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     private void backToNormal() {
         showSupportActionBar(mContext, mActionBar, mStatusBar);
+
         final ViewGroup vp = getViewGroup();
 
         final View oldF = vp.findViewById(FULLSCREEN_ID);
@@ -439,7 +455,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * @param objects
      * @return
      */
-    public abstract boolean setUp(String url, boolean cacheWithPlay, File cachePath,  Object... objects);
+    public abstract boolean setUp(String url, boolean cacheWithPlay, File cachePath, Object... objects);
 
     /**
      * 设置播放URL
@@ -561,5 +577,16 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void setSpeed(float speed) {
         this.mSpeed = speed;
+    }
+
+    public boolean isHideKey() {
+        return mHideKey;
+    }
+
+    /**
+     * 隐藏虚拟按键
+     */
+    public void setHideKey(boolean hideKey) {
+        this.mHideKey = hideKey;
     }
 }

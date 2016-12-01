@@ -38,6 +38,7 @@ import java.util.TimerTask;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 
 /**
@@ -287,6 +288,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     @Override
     public void onClick(View v) {
         int i = v.getId();
+        if (mHideKey && mIfCurrentIsFullscreen) {
+            hideNavKey(mContext);
+        }
         if (i == R.id.start) {
             if (TextUtils.isEmpty(mUrl)) {
                 Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
@@ -602,6 +606,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                         }
                     }
                     startProgressTimer();
+                    //不要和隐藏虚拟按键后，滑出虚拟按键冲突
+                    if (mHideKey && mChangePosition) {
+                        return true;
+                    }
                     break;
             }
         } else if (id == R.id.progress) {
