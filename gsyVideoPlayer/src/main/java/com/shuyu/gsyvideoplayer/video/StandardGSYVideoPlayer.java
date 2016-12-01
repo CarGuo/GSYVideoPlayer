@@ -57,8 +57,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     protected RelativeLayout mThumbImageViewLayout;//封面父布局
 
-    protected ImageView mCoverImageView; //未使用
-
     private View mThumbImageView; //封面
 
     protected Dialog mBrightnessDialog;
@@ -110,7 +108,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mBottomProgressBar = (ProgressBar) findViewById(R.id.bottom_progressbar);
         mTitleTextView = (TextView) findViewById(R.id.title);
         mThumbImageViewLayout = (RelativeLayout) findViewById(R.id.thumb);
-        mCoverImageView = (ImageView) findViewById(R.id.cover);
+
         mLoadingProgressBar = (ENDownloadView) findViewById(R.id.loading);
 
         mThumbImageViewLayout.setVisibility(GONE);

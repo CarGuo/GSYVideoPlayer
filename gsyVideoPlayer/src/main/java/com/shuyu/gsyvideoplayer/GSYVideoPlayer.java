@@ -77,9 +77,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected ImageView mFullscreenButton;
     protected TextView mCurrentTimeTextView, mTotalTimeTextView;
     protected ViewGroup mTopContainer, mBottomContainer;
-    protected GSYTextureView mTextureView;
     protected Surface mSurface;
     protected ImageView mBackButton;
+
 
     protected ProgressTimerTask mProgressTimerTask;
 
@@ -160,6 +160,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mStartButton = findViewById(R.id.start);
         mSmallClose = findViewById(R.id.small_close);
         mBackButton = (ImageView) findViewById(R.id.back);
+        mCoverImageView = (ImageView) findViewById(R.id.cover);
         mFullscreenButton = (ImageView) findViewById(R.id.fullscreen);
         mProgressBar = (SeekBar) findViewById(R.id.progress);
         mCurrentTimeTextView = (TextView) findViewById(R.id.current);
@@ -489,6 +490,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         mSurface = new Surface(surface);
         GSYVideoManager.instance().setDisplay(mSurface);
+        //显示暂停切换显示的图片
+        showPauseCover();
     }
 
     @Override
@@ -506,7 +509,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
+        //如果播放的是暂停全屏了
+        releasePauseCover();
     }
 
     /**
@@ -638,6 +642,36 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         return false;
     }
 
+    /**
+     * 显示暂停切换显示的bitmap
+     */
+    protected void showPauseCover() {
+        try {
+            if (mCurrentState == CURRENT_STATE_PAUSE && mFullPauseBitmap != null
+                    && !mFullPauseBitmap.isRecycled()) {
+                mCoverImageView.setImageBitmap(mFullPauseBitmap);
+                mCoverImageView.setVisibility(VISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 销毁暂停切换显示的bitmap
+     */
+    protected void releasePauseCover() {
+        try {
+            if (mCurrentState != CURRENT_STATE_PAUSE && mFullPauseBitmap != null
+                    && !mFullPauseBitmap.isRecycled()) {
+                mCoverImageView.setImageResource(R.drawable.empty_drawable);
+                mCoverImageView.setVisibility(GONE);
+                mFullPauseBitmap = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     protected void showProgressDialog(float deltaX,
                                       String seekTime, int seekTimePosition,

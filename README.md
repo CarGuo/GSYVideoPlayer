@@ -15,6 +15,8 @@
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
+## 下方个版本说明，可以当做简单的wiki使用~。
+
 ```
 <dependency>
   <groupId>com.shuyu</groupId>
