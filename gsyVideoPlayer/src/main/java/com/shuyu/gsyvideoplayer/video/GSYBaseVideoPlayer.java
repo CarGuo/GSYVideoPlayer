@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -383,7 +384,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     private void pauseFullCoverLogic() {
         if (mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE && mTextureView != null
                 && (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled())) {
-            mFullPauseBitmap = mTextureView.getBitmap();
+            Point point = CommonUtil.getPauseBitmapSize(getWidth(), getHeight());
+            mFullPauseBitmap = mTextureView.getBitmap(point.x, point.y);
         }
     }
 
@@ -399,8 +401,9 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                     && !gsyVideoPlayer.mFullPauseBitmap.isRecycled()) {
                 mFullPauseBitmap = gsyVideoPlayer.mFullPauseBitmap;
             } else {
+                Point point = CommonUtil.getPauseBitmapSize(getWidth(), getHeight());
                 //不在了说明已经播放过，还是暂停的话，我们拿回来就好
-                mFullPauseBitmap = gsyVideoPlayer.mTextureView.getBitmap();
+                mFullPauseBitmap = gsyVideoPlayer.mTextureView.getBitmap(point.x, point.y);
             }
         }
     }
