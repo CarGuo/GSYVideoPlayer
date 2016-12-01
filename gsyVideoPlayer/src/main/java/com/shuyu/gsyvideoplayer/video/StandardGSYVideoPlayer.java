@@ -544,7 +544,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             localLayoutParams.gravity = Gravity.TOP;
             localLayoutParams.width = getWidth();
             localLayoutParams.height = getHeight();
-            //localLayoutParams.y = getResources().getDimensionPixelOffset(R.dimen.video_progress_dialog_margin_top);
+            int location[] = new int[2];
+            getLocationOnScreen(location);
+            localLayoutParams.x = location[0];
+            localLayoutParams.y = location[1];
             mProgressDialog.getWindow().setAttributes(localLayoutParams);
         }
         if (!mProgressDialog.isShowing()) {
@@ -589,7 +592,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             localLayoutParams.width = getWidth();
             localLayoutParams.height = getHeight();
-            //localLayoutParams.x = getContext().getResources().getDimensionPixelOffset(R.dimen.video_volume_dialog_margin_left);
+            int location[] = new int[2];
+            getLocationOnScreen(location);
+            localLayoutParams.x = location[0];
+            localLayoutParams.y = location[1];
             mVolumeDialog.getWindow().setAttributes(localLayoutParams);
         }
         if (!mVolumeDialog.isShowing()) {
@@ -622,6 +628,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             localLayoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
             localLayoutParams.width = getWidth();
             localLayoutParams.height = getHeight();
+            int location[] = new int[2];
+            getLocationOnScreen(location);
+            localLayoutParams.x = location[0];
+            localLayoutParams.y = location[1];
             mBrightnessDialog.getWindow().setAttributes(localLayoutParams);
         }
         if (!mBrightnessDialog.isShowing()) {
