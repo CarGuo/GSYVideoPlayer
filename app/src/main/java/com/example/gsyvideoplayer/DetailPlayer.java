@@ -40,7 +40,7 @@ public class DetailPlayer extends FragmentActivity {
         ButterKnife.bind(this);
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        detailPlayer.setUp(url, true, "");
+        detailPlayer.setUp(url, true, null, "测试视频");
 
         //增加封面
         ImageView imageView = new ImageView(this);

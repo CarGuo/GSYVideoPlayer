@@ -29,6 +29,7 @@ import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 
 import java.io.File;
 import java.util.Map;
@@ -267,6 +268,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     public void showWifiDialog() {
         super.showWifiDialog();
+        if (!NetworkUtils.isAvailable(mContext)) {
+            Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getResources().getString(R.string.tips_not_wifi));
         builder.setPositiveButton(getResources().getString(R.string.tips_not_wifi_confirm), new DialogInterface.OnClickListener() {
@@ -802,4 +807,5 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     public RelativeLayout getThumbImageViewLayout() {
         return mThumbImageViewLayout;
     }
+
 }
