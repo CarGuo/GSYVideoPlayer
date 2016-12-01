@@ -2,6 +2,7 @@ package com.example.gsyvideoplayer;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -98,13 +99,11 @@ public class DetailPlayer extends FragmentActivity {
             @Override
             public void onAutoComplete(String url, Object... objects) {
                 super.onAutoComplete(url, objects);
-                isPlay = false;
             }
 
             @Override
             public void onClickStartError(String url, Object... objects) {
                 super.onClickStartError(url, objects);
-                isPlay = false;
             }
         });
 
@@ -112,6 +111,11 @@ public class DetailPlayer extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
+
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+
         if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
             return;
         }

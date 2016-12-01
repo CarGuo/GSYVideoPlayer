@@ -533,7 +533,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             mProgressDialog.getWindow().addFlags(Window.FEATURE_ACTION_BAR);
             mProgressDialog.getWindow().addFlags(32);
             mProgressDialog.getWindow().addFlags(16);
-            mProgressDialog.getWindow().setLayout(-2, -2);
+            mProgressDialog.getWindow().setLayout(getWidth(), getHeight());
             if (mDialogProgressNormalColor != -11) {
                 mDialogTotalTime.setTextColor(mDialogProgressNormalColor);
             }
@@ -541,7 +541,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                 mDialogSeekTime.setTextColor(mDialogProgressHighLightColor);
             }
             WindowManager.LayoutParams localLayoutParams = mProgressDialog.getWindow().getAttributes();
-            localLayoutParams.gravity = Gravity.CENTER;
+            localLayoutParams.gravity = Gravity.TOP;
+            localLayoutParams.width = getWidth();
+            localLayoutParams.height = getHeight();
             //localLayoutParams.y = getResources().getDimensionPixelOffset(R.dimen.video_progress_dialog_margin_top);
             mProgressDialog.getWindow().setAttributes(localLayoutParams);
         }
@@ -584,8 +586,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             mVolumeDialog.getWindow().addFlags(16);
             mVolumeDialog.getWindow().setLayout(-2, -2);
             WindowManager.LayoutParams localLayoutParams = mVolumeDialog.getWindow().getAttributes();
-            localLayoutParams.gravity = 19;
-            localLayoutParams.x = getContext().getResources().getDimensionPixelOffset(R.dimen.video_volume_dialog_margin_left);
+            localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+            localLayoutParams.width = getWidth();
+            localLayoutParams.height = getHeight();
+            //localLayoutParams.x = getContext().getResources().getDimensionPixelOffset(R.dimen.video_volume_dialog_margin_left);
             mVolumeDialog.getWindow().setAttributes(localLayoutParams);
         }
         if (!mVolumeDialog.isShowing()) {
@@ -615,8 +619,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             mBrightnessDialog.getWindow().addFlags(16);
             mBrightnessDialog.getWindow().setLayout(-2, -2);
             WindowManager.LayoutParams localLayoutParams = mBrightnessDialog.getWindow().getAttributes();
-            localLayoutParams.gravity = Gravity.CENTER | Gravity.RIGHT;
-            localLayoutParams.x = ViewGroup.LayoutParams.MATCH_PARENT;
+            localLayoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+            localLayoutParams.width = getWidth();
+            localLayoutParams.height = getHeight();
             mBrightnessDialog.getWindow().setAttributes(localLayoutParams);
         }
         if (!mBrightnessDialog.isShowing()) {

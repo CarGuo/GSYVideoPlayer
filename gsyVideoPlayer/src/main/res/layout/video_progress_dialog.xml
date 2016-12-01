@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="152dp"
@@ -21,7 +22,7 @@
                 android:layout_width="36dp"
                 android:layout_height="27dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -36,14 +37,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/style_color"
-                    android:textSize="14.0sp"/>
+                    android:textSize="14.0sp" />
 
                 <TextView
                     android:id="@+id/tv_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#ffffffff"
-                    android:textSize="14.0sp"/>
+                    android:textSize="14.0sp" />
             </LinearLayout>
 
             <ProgressBar
@@ -57,10 +58,10 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
                 android:max="100"
-                android:progressDrawable="@drawable/video_dialog_progress"/>
+                android:progressDrawable="@drawable/video_dialog_progress" />
         </LinearLayout>
 
     </RelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
