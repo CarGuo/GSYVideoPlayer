@@ -45,6 +45,10 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.5'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+
+### 1.3.6 区分了没有网络和没有wifi的提示；更新了Demo detailPlayer直接旋转全屏，返回正常的详情效果
+
+
 ### 1.3.5 增加了全屏隐藏虚拟按键；修复了缓冲过程中加载动画就停止了。
 
 ```

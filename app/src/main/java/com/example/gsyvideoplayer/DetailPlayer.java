@@ -1,5 +1,7 @@
 package com.example.gsyvideoplayer;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -10,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.gsyvideoplayer.listener.SampleListener;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.transitionseverywhere.TransitionManager;
@@ -30,6 +34,7 @@ public class DetailPlayer extends FragmentActivity {
     RelativeLayout activityDetailPlayer;
 
     private boolean isFull;
+    private boolean isPlay;
 
     private OrientationUtils orientationUtils;
 
@@ -51,20 +56,24 @@ public class DetailPlayer extends FragmentActivity {
         resolveNormalVideoUI();
 
         orientationUtils = new OrientationUtils(this, detailPlayer);
+        //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
         detailPlayer.setIsTouchWiget(true);
-
-
-        detailPlayer.setRotateViewAuto(false);
-        detailPlayer.setLockLand(true);
+        //打开自动旋转
+        detailPlayer.setRotateViewAuto(true);
+        detailPlayer.setLockLand(false);
         detailPlayer.setShowFullAnimation(false);
 
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //直接横屏
+                orientationUtils.resolveByClick();
+
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
                 detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
+
                 //这是以前旧的方式
                 //toDo();
             }
@@ -74,6 +83,28 @@ public class DetailPlayer extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 toNormal();
+            }
+        });
+
+        detailPlayer.setStandardVideoAllCallBack(new SampleListener() {
+            @Override
+            public void onPrepared(String url, Object... objects) {
+                super.onPrepared(url, objects);
+                //开始播放了才能旋转和全屏
+                orientationUtils.setEnable(true);
+                isPlay = true;
+            }
+
+            @Override
+            public void onAutoComplete(String url, Object... objects) {
+                super.onAutoComplete(url, objects);
+                isPlay = false;
+            }
+
+            @Override
+            public void onClickStartError(String url, Object... objects) {
+                super.onClickStartError(url, objects);
+                isPlay = false;
             }
         });
 
@@ -93,6 +124,24 @@ public class DetailPlayer extends FragmentActivity {
         GSYVideoPlayer.releaseAllVideos();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (isPlay) {
+            if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
+                if (!detailPlayer.isIfCurrentIsFullscreen()) {
+                    detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
+                }
+            } else {
+                //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
+                if (detailPlayer.isIfCurrentIsFullscreen()) {
+                    StandardGSYVideoPlayer.backFromWindowFull(this);
+                }
+            }
+        }
     }
 
     private void toFull() {

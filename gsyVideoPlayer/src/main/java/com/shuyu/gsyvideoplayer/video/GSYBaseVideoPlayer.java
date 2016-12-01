@@ -311,6 +311,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * 退出window层播放全屏效果
      */
     public void clearFullscreenLayout() {
+        mIfCurrentIsFullscreen = false;
         int delay = mOrientationUtils.backToProtVideo();
         mOrientationUtils.setEnable(false);
         if (mOrientationUtils != null)
