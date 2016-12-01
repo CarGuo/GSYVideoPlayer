@@ -348,6 +348,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     //Unified management Ui
     private void changeUiToNormal() {
+        Debuger.printfLog("changeUiToNormal");
         mTopContainer.setVisibility(View.VISIBLE);
         mBottomContainer.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
@@ -360,6 +361,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToPrepareingShow() {
+        Debuger.printfLog("changeUiToPrepareingShow");
         mTopContainer.setVisibility(View.VISIBLE);
         mBottomContainer.setVisibility(View.VISIBLE);
         mStartButton.setVisibility(View.INVISIBLE);
@@ -371,6 +373,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToPrepareingClear() {
+        Debuger.printfLog("changeUiToPrepareingClear");
         mTopContainer.setVisibility(View.INVISIBLE);
         mBottomContainer.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.INVISIBLE);
@@ -380,6 +383,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToPlayingShow() {
+        Debuger.printfLog("changeUiToPlayingShow");
         mTopContainer.setVisibility(View.VISIBLE);
         mBottomContainer.setVisibility(View.VISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
@@ -392,11 +396,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToPlayingClear() {
+        Debuger.printfLog("changeUiToPlayingClear");
         changeUiToClear();
         mBottomProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void changeUiToPauseShow() {
+        Debuger.printfLog("changeUiToPauseShow");
         mTopContainer.setVisibility(View.VISIBLE);
         mBottomContainer.setVisibility(View.VISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
@@ -409,11 +415,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToPauseClear() {
+        Debuger.printfLog("changeUiToPauseClear");
         changeUiToClear();
         mBottomProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void changeUiToPlayingBufferingShow() {
+        Debuger.printfLog("changeUiToPlayingBufferingShow");
         mTopContainer.setVisibility(View.VISIBLE);
         mBottomContainer.setVisibility(View.VISIBLE);
         mStartButton.setVisibility(View.INVISIBLE);
@@ -425,6 +433,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToPlayingBufferingClear() {
+        Debuger.printfLog("changeUiToPlayingBufferingClear");
         mTopContainer.setVisibility(View.INVISIBLE);
         mBottomContainer.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.INVISIBLE);
@@ -437,6 +446,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToClear() {
+        Debuger.printfLog("changeUiToClear");
         mTopContainer.setVisibility(View.INVISIBLE);
         mBottomContainer.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.INVISIBLE);
@@ -448,6 +458,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToCompleteShow() {
+        Debuger.printfLog("changeUiToCompleteShow");
         mTopContainer.setVisibility(View.VISIBLE);
         mBottomContainer.setVisibility(View.VISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
@@ -460,6 +471,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToCompleteClear() {
+        Debuger.printfLog("changeUiToCompleteClear");
         mTopContainer.setVisibility(View.INVISIBLE);
         mBottomContainer.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
@@ -472,6 +484,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     private void changeUiToError() {
+        Debuger.printfLog("changeUiToError");
         mTopContainer.setVisibility(View.INVISIBLE);
         mBottomContainer.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);

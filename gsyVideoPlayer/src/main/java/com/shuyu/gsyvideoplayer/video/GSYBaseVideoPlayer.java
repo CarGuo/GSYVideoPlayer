@@ -584,7 +584,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     }
 
     /**
-     * 隐藏虚拟按键
+     * 全屏隐藏虚拟按键，默认打开
      */
     public void setHideKey(boolean hideKey) {
         this.mHideKey = hideKey;

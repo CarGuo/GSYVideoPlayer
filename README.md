@@ -19,13 +19,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.3.4</version>
+  <version>1.3.5</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.3.4'
+compile 'com.shuyu:gsyVideoPlayer:1.3.5'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -44,6 +44,15 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.4'
 
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+
+### 1.3.5 增加了全屏隐藏虚拟按键；修复了缓冲过程中加载动画就停止了。
+
+```
+/**
+ * 全屏隐藏虚拟按键，默认打开
+ */
+public void setHideKey(boolean hideKey)
+```
 
 ### 1.3.4 增加了清除默认缓存接口；增加了播放偏移；优化了拖动进度条或者缓存导致播放时间跳动的问题。
 

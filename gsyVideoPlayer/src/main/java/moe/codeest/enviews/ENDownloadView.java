@@ -243,9 +243,6 @@ public class ENDownloadView extends View {
                 mValueAnimator.cancel();
             mValueAnimator = null;
         }
-        if (mCurrentState != STATE_PRE) {
-            return;
-        }
         mCurrentState = STATE_PRE;
         mValueAnimator = ValueAnimator.ofFloat(1.f, 100.f);
         mValueAnimator.setDuration(1500);
