@@ -25,15 +25,14 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':videoCache')
     def viewDependencies = rootProject.ext.viewDependencies
-    def dataDependencies = rootProject.ext.dataDependencies
     compile viewDependencies.ijkplayer_java
     compile viewDependencies.ijkplayer_armv7a
     compile viewDependencies.ijkplayer_armv5
     compile viewDependencies.ijkplayer_x86
     compile viewDependencies.ijkplayer_exo
     compile viewDependencies.transitionseverywhere
-    compile dataDependencies.videocache
     compile androidDependencies.support_v4
     compile androidDependencies.appcompat_v7
 }

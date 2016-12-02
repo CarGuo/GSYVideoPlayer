@@ -47,6 +47,9 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.7'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+### 1.3.8 添加了lib封面对复用封面的支持和demo
+
+
 ### 1.3.7 优化了弹出框；优化了暂停的时候(全屏/恢复全屏/退到)会是黑色的问题；解决了暂停的时候拖动进度条问题
 
 
