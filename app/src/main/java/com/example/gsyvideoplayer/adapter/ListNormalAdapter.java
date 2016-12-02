@@ -83,7 +83,7 @@ public class ListNormalAdapter extends BaseAdapter {
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
         //默认缓存路径
-        holder.gsyVideoPlayer.setUp(url, true , "");
+        holder.gsyVideoPlayer.setUp(url, true , null, "这是title");
 
         /************************下方为其他路径************************************/
         //如果一个列表的缓存路劲都一一致

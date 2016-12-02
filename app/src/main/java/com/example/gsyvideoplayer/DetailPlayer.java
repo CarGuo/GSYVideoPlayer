@@ -105,6 +105,14 @@ public class DetailPlayer extends FragmentActivity {
             public void onClickStartError(String url, Object... objects) {
                 super.onClickStartError(url, objects);
             }
+
+            @Override
+            public void onQuitFullscreen(String url, Object... objects) {
+                super.onQuitFullscreen(url, objects);
+                if (orientationUtils != null) {
+                    orientationUtils.backToProtVideo();
+                }
+            }
         });
 
     }
