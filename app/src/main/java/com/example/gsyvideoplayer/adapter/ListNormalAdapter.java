@@ -69,16 +69,24 @@ public class ListNormalAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.list_video_item_normal, null);
             holder.gsyVideoPlayer = (StandardGSYVideoPlayer) convertView.findViewById(R.id.video_item_player);
+            holder.imageView = new ImageView(context);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         //增加封面
-        ImageView imageView = new ImageView(context);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.xxx1);
-        holder.gsyVideoPlayer.setThumbImageView(imageView);
+        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        if (position % 2 == 0) {
+            holder.imageView.setImageResource(R.mipmap.xxx1);
+        } else {
+            holder.imageView.setImageResource(R.mipmap.xxx2);
+        }
+        if (holder.imageView.getParent() != null) {
+            ViewGroup viewGroup = (ViewGroup) holder.imageView.getParent();
+            viewGroup.removeView(holder.imageView);
+        }
+        holder.gsyVideoPlayer.setThumbImageView(holder.imageView);
 
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
@@ -154,6 +162,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
     class ViewHolder {
         StandardGSYVideoPlayer gsyVideoPlayer;
+        ImageView imageView;
     }
 
     //小窗口关闭被点击的时候回调处理回复页面

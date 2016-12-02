@@ -114,7 +114,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mThumbImageViewLayout.setVisibility(GONE);
         mThumbImageViewLayout.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
-        if (mThumbImageView != null) {
+        if (mThumbImageView != null && !mIfCurrentIsFullscreen) {
             mThumbImageViewLayout.removeAllViews();
             resolveThumbImage(mThumbImageView);
         }
