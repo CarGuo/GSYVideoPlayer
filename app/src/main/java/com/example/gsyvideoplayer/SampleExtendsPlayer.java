@@ -8,6 +8,7 @@ import android.view.View;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 /**
  * Created by shuyu on 2016/11/18.
+ * 还是建议继承StandardGSYVideoPlayer
  */
 
 public class SampleExtendsPlayer extends GSYVideoPlayer {

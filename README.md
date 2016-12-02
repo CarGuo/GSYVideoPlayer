@@ -21,13 +21,13 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.3.5</version>
+  <version>1.3.7</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.3.5'
+compile 'com.shuyu:gsyVideoPlayer:1.3.7'
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
@@ -47,7 +47,7 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.5'
 * <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
-### 1.3.7 优化了弹出框；优化了暂停的时候全屏/恢复全屏会是黑色的问题
+### 1.3.7 优化了弹出框；优化了暂停的时候(全屏/恢复全屏/退到)会是黑色的问题；解决了暂停的时候拖动进度条问题
 
 
 ### 1.3.6 区分了没有网络和没有wifi的提示；更新了Demo detailPlayer直接旋转全屏，返回正常的详情效果

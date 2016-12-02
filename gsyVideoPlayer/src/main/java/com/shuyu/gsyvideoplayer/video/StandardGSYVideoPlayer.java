@@ -412,15 +412,17 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.reset();
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
-        mCoverImageView.setVisibility(View.INVISIBLE);
+        //mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         updateStartImage();
+        updatePauseCover();
     }
 
     private void changeUiToPauseClear() {
         Debuger.printfLog("changeUiToPauseClear");
         changeUiToClear();
         mBottomProgressBar.setVisibility(View.VISIBLE);
+        updatePauseCover();
     }
 
     private void changeUiToPlayingBufferingShow() {
@@ -512,6 +514,15 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             enPlayView.pause();
             //mStartButton.setImageResource(R.drawable.video_click_play_selector);
         }
+    }
+
+
+    private void updatePauseCover() {
+        if (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) {
+            Point point = CommonUtil.getPauseBitmapSize(getWidth(), getHeight());
+            mFullPauseBitmap = mTextureView.getBitmap(point.x, point.y);
+        }
+        showPauseCover();
     }
 
     @Override

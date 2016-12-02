@@ -30,7 +30,6 @@ import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -259,6 +258,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 if (isCurrentMediaListener()) {
                     cancelProgressTimer();
                     GSYVideoManager.instance().releaseMediaPlayer();
+                    releasePauseCoverAndBitmap();
                 }
                 if (mAudioManager != null) {
                     mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
@@ -666,12 +666,31 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                     && !mFullPauseBitmap.isRecycled()) {
                 mCoverImageView.setImageResource(R.drawable.empty_drawable);
                 mCoverImageView.setVisibility(GONE);
+                //如果在这里销毁，可能会draw a recycler bitmap error
                 mFullPauseBitmap = null;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 销毁暂停切换显示的bitmap
+     */
+    protected void releasePauseCoverAndBitmap() {
+        try {
+            if (mCurrentState != CURRENT_STATE_PAUSE && mFullPauseBitmap != null
+                    && !mFullPauseBitmap.isRecycled()) {
+                mCoverImageView.setImageResource(R.drawable.empty_drawable);
+                mCoverImageView.setVisibility(GONE);
+                mFullPauseBitmap.recycle();
+                mFullPauseBitmap = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     protected void showProgressDialog(float deltaX,
                                       String seekTime, int seekTimePosition,
@@ -726,7 +745,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 mVideoAllCallBack.onClickSeekbar(mUrl, mObjects);
             }
         }
-        if (GSYVideoManager.instance().getMediaPlayer() != null && GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
+        if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay) {
             int time = seekBar.getProgress() * getDuration() / 100;
             GSYVideoManager.instance().getMediaPlayer().seekTo(time);
         }
