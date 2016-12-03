@@ -12,6 +12,7 @@ import com.example.gsyvideoplayer.ListVideo2Activity;
 import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
 import com.example.gsyvideoplayer.R;
+import com.example.gsyvideoplayer.RecyclerView2Activity;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -57,6 +58,17 @@ public class JumpUtils {
      */
     public static void goToVideoPlayer2(Activity activity) {
         Intent intent = new Intent(activity, ListVideo2Activity.class);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+        ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+    }
+
+    /**
+     * 跳转到视频列表2
+     *
+     * @param activity
+     */
+    public static void goToVideoRecyclerPlayer2(Activity activity) {
+        Intent intent = new Intent(activity, RecyclerView2Activity.class);
         ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
         ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
     }

@@ -256,7 +256,6 @@ public class ListVideoUtil {
      * 处理正常逻辑
      */
     private void resolveToNormal() {
-        CommonUtil.showSupportActionBar(context, hideActionBar, hideStatusBar);
         int delay = orientationUtils.backToProtVideo();
         handler.postDelayed(new Runnable() {
             @Override
@@ -280,6 +279,7 @@ public class ListVideoUtil {
                 if (hideKey) {
                     showNavKey(context, systemUiVisibility);
                 }
+                CommonUtil.showSupportActionBar(context, hideActionBar, hideStatusBar);
             }
         }, delay);
     }

@@ -35,9 +35,11 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
+    def androidDependencies = rootProject.ext.androidDependencies
     def dataDependencies = rootProject.ext.dataDependencies
     apt viewDependencies.apt_butterKnife
     compile viewDependencies.butterKnife
+    compile androidDependencies.recyclerView
     //debugCompile dataDependencies.leakcanary
     compile project(':gsyVideoPlayer')
 }
