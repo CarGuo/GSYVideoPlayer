@@ -339,7 +339,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
         super.setProgressAndTime(progress, secProgress, currentTime, totalTime);
         if (progress != 0) mBottomProgressBar.setProgress(progress);
-        if (secProgress != 0) mBottomProgressBar.setSecondaryProgress(secProgress);
+        if (secProgress != 0 && !mCacheFile) mBottomProgressBar.setSecondaryProgress(secProgress);
     }
 
     @Override

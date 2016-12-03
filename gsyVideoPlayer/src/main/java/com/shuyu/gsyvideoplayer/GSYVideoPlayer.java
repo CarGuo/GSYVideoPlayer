@@ -1004,7 +1004,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             if (progress != 0) mProgressBar.setProgress(progress);
         }
         if (secProgress > 95) secProgress = 100;
-        if (secProgress != 0) mProgressBar.setSecondaryProgress(secProgress);
+        if (secProgress != 0 && !mCacheFile) {
+            mProgressBar.setSecondaryProgress(secProgress);
+        }
         mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
         if (currentTime > 0)
             mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
