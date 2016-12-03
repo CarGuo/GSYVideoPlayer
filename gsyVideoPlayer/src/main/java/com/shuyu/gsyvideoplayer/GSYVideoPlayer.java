@@ -67,18 +67,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     public static boolean WIFI_TIP_DIALOG_SHOWED = false;
 
-
     protected Timer UPDATE_PROGRESS_TIMER;
 
-
-    protected View mStartButton;
-    protected SeekBar mProgressBar;
-    protected ImageView mFullscreenButton;
-    protected TextView mCurrentTimeTextView, mTotalTimeTextView;
-    protected ViewGroup mTopContainer, mBottomContainer;
     protected Surface mSurface;
-    protected ImageView mBackButton;
-
 
     protected ProgressTimerTask mProgressTimerTask;
 

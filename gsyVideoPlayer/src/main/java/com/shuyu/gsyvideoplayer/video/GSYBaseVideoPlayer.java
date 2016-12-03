@@ -14,6 +14,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.shuyu.gsyvideoplayer.GSYTextureView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -103,8 +105,19 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected ImageView mCoverImageView; //内部使用，请勿操作哟~
 
-    protected Bitmap mFullPauseBitmap = null;//暂停时的全屏图片；
+    protected View mStartButton;
 
+    protected SeekBar mProgressBar;
+
+    protected ImageView mFullscreenButton;
+
+    protected TextView mCurrentTimeTextView, mTotalTimeTextView;
+
+    protected ViewGroup mTopContainer, mBottomContainer;
+
+    protected ImageView mBackButton;
+
+    protected Bitmap mFullPauseBitmap = null;//暂停时的全屏图片；
 
     private OrientationUtils mOrientationUtils; //旋转工具类
 
