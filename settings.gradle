@@ -1,1 +1,1 @@
-include ':app', ':gsyVideoPlayer', ':videoCache'
+include ':app', ':gsyVideoPlayer'
