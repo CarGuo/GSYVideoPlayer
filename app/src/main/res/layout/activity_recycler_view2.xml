@@ -7,8 +7,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list_item_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false" />
+        android:layout_height="match_parent" />
 
     <FrameLayout
         android:id="@+id/video_full_container"

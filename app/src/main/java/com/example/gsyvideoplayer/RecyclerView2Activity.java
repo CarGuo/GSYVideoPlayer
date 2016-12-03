@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
+import com.example.gsyvideoplayer.holder.RecyclerItemViewHolder;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
@@ -77,8 +78,9 @@ public class RecyclerView2Activity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 firstVisibleItem   = linearLayoutManager.findFirstVisibleItemPosition();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                Debuger.printfLog("firstVisibleItem " + firstVisibleItem +" lastVisibleItem " + lastVisibleItem);
                 //大于0说明有播放,//对应的播放列表TAG
-                if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(ListVideoAdapter.TAG)) {
+                if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(RecyclerItemViewHolder.TAG)) {
                     //当前播放的位置
                     int position = listVideoUtil.getPlayPosition();
                     //不可视的是时候
@@ -87,7 +89,8 @@ public class RecyclerView2Activity extends AppCompatActivity {
                         if (!listVideoUtil.isSmall()) {
                             //小窗口
                             int size = CommonUtil.dip2px(RecyclerView2Activity.this, 150);
-                            listVideoUtil.showSmallVideo(new Point(size, size), false, true);
+                            //actionbar为true才不会掉下面去
+                            listVideoUtil.showSmallVideo(new Point(size, size), true, true);
                         }
                     } else {
                         if (listVideoUtil.isSmall()) {

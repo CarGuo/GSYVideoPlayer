@@ -217,6 +217,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         if (mHideKey) {
             showNavKey(mContext, mSystemUiVisibility);
         }
+        showSupportActionBar(mContext, mActionBar, mStatusBar);
     }
 
     /**
@@ -342,7 +343,6 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * 回到正常效果
      */
     private void backToNormal() {
-        showSupportActionBar(mContext, mActionBar, mStatusBar);
 
         final ViewGroup vp = getViewGroup();
 
