@@ -1,21 +1,20 @@
-<h4>基于IJKPlayer的播放器，重构了<a href="https://github.com/lipangit/JieCaoVideoPlayer">JieCaoVideoPlayer</a>，调整了代码和优化了动画，添加了自定义功能。持续更新。</h4>
-======================
+#### 基于IJKPlayer的播放器，重构了[JieCaoVideoPlayer](https://github.com/lipangit/JieCaoVideoPlayer)，调整了代码和优化了动画，添加了自定义功能。持续更新。
 
-* <h4>支持基本的拖动，声音、亮度调节</h4>
-* <h4>支持边播边缓存，使用了<a href="https://github.com/danikula/AndroidVideoCache">AndroidVideoCache</a>的代理模式实现</h4>
-* <h4>支持视频本身自带rotation的旋转</h4>
-* <h4>增加了重力旋转与手动旋转的同步支持</h4>
-* <h4>支持列表播放</h4>
-* <h4>直接添加控件为封面</h4>
-* <h4>兼容一些5.0的过场效果</h4>
-* <h4>列表的全屏效果优化</h4>
-* <h4>列表的小窗口播放，可拖动</h4>
-* <h4>网络视频加载速度</h4>
-* <h4>6.0以上支持快播和慢播</h4>
+
+* ### 支持基本的拖动，声音、亮度调节。
+* ### 支持边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)。
+* ### 支持视频本身自带rotation的旋转。
+* ### 增加了重力旋转与手动旋转的同步支持。
+* ### 支持列表播放。
+* ### 直接添加控件为封面。
+* ### 兼容一些5.0的过场效果。
+* ### 列表的全屏效果优化，多种配置模式。
+* ### 列表的小窗口播放，可拖动。
+* ### 网络视频加载速度。
+* ### 6.0以上支持快播和慢播。
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
-## 下方个版本说明，可以当做简单的wiki使用~。
 
 ```
 <dependency>
@@ -27,36 +26,54 @@
 ```
 
 ```
-compile 'com.shuyu:gsyVideoPlayer:1.3.7'
+dependencies {
+    compile 'com.shuyu:gsyVideoPlayer:1.3.7'
+}
+
 ```
 
 ## 效果,录屏下的屏幕旋转和实际有些出入
+
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.jpg" width="218px" height="120px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.jpg" width="120px" height="218px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/03.jpg" width="120px" height="218px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.jpg" width="120px" height="218px"/>
-<p></p>
+　
 
-* <h4>1、打开一个播放</h4>
+* ### 1、打开一个播放
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.gif" width="240px" height="426px"/>
 
-* <h4>2、列表</h4>
+* ### 2、列表/详情模式
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/05.gif" width="240px" height="426px"/>
-
-* <h4>3、详情模式</h4>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
-### 1.3.8 添加了lib封面对复用封面的支持和demo，修复了缓冲进度条；增加了recyclerView，修正了列表中隐藏虚拟键盘与actionbar的冲突
+
+## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
-### 1.3.7 优化了弹出框；优化了暂停的时候(全屏/恢复全屏/退到)会是黑色的问题；解决了暂停的时候拖动进度条问题
+### 1.3.8 
+
+* 添加了lib封面对复用封面的支持和demo。
+* 修复了缓冲进度条；增加了recyclerView。
+* 修正了列表中隐藏虚拟键盘与actionbar的冲突。
 
 
-### 1.3.6 区分了没有网络和没有wifi的提示；更新了Demo detailPlayer直接旋转全屏，返回正常的详情效果
+### 1.3.7 
+* 优化了弹出框。
+* 优化了暂停的时候(全屏/恢复全屏/退到)会是黑色的问题。
+* 解决了暂停的时候拖动进度条问题。
 
 
-### 1.3.5 增加了全屏隐藏虚拟按键；修复了缓冲过程中加载动画就停止了。
+### 1.3.6 
+* 区分了没有网络和没有wifi的提示。
+* 更新了Demo detailPlayer直接旋转全屏。
+* 返回正常的详情效果。
+
+
+### 1.3.5 
+* 增加了全屏隐藏虚拟按键。
+* 修复了缓冲过程中加载动画就停止了。
 
 ```
 /**
@@ -65,7 +82,10 @@ compile 'com.shuyu:gsyVideoPlayer:1.3.7'
 public void setHideKey(boolean hideKey)
 ```
 
-### 1.3.4 增加了清除默认缓存接口；增加了播放偏移；优化了拖动进度条或者缓存导致播放时间跳动的问题。
+### 1.3.4 
+* 增加了清除默认缓存接口。
+* 增加了播放偏移。
+* 优化了拖动进度条或者缓存导致播放时间跳动的问题。
 
 GSYVideoManager
 
@@ -98,13 +118,20 @@ public void setSeekOnStart(int seekOnStart)
 
 ```
 
-### 1.3.3 优化了一些内存泄漏问题，更新了demo
+### 1.3.3 
 
-### 1.3.2 解决了因为兼容FragmentActivity导致actionbar隐藏失败问题。
+* 优化了一些内存泄漏问题。
+* 更新了demo。
 
-### 1.3.1 更新了lastListener的判空问题，建议更新到这个版本。
+### 1.3.2 
 
-### 1.3.0 支持配置缓存路径，添加了ListVideoUtils的一些接口
+* 解决了因为兼容FragmentActivity导致actionbar隐藏失败问题。
+
+### 1.3.1 
+* 更新了lastListener的判空问题。
+
+### 1.3.0 
+* 支持配置缓存路径，添加了ListVideoUtils的一些接口。
 
 正常模式
 
@@ -160,7 +187,9 @@ public void setMapHeadData(Map<String, String> mapHeadData)
 ```
 
 
-### 1.2.9 增加了下载速度的接口
+### 1.2.9 
+
+* 增加了下载速度的接口。
 
 ```
 /**
@@ -179,7 +208,11 @@ public String getNetSpeedText()
 
 ```
 
-### 1.2.8 升级IJKPlayer到0.7.5;增加了改变播放速度(0-2左右的速度)，但只支持6.0以上。
+### 1.2.8 
+
+* 升级IJKPlayer到0.7.5。
+* 增加了改变播放速度(0-2左右的速度)，但只支持6.0以上。
+
 ```
 /**
  * 播放速度
@@ -187,10 +220,15 @@ public String getNetSpeedText()
 public void setSpeed(float speed)
 ```
 
-### 1.2.7 修改了循环播放的时候，重新播放不弹出控制UI；修改了FragmentActivity的actionBar问题
+### 1.2.7 
+* 修改了循环播放的时候，重新播放不弹出控制UI。
+* 修改了FragmentActivity的actionBar问题。
 
 
-### 1.2.6  修正了StandardGSYVideoPlayer的接口全屏回调问题，增加了循环播放的接口
+### 1.2.6  
+
+* 修正了StandardGSYVideoPlayer的接口全屏回调问题。
+* 增加了循环播放的接口。
 
 ```
 
@@ -199,9 +237,12 @@ public void setLooping(boolean looping)
 ```
 
 
-### 1.2.5  增加了新接口，支持直接横屏锁住界面，关闭全屏动画，组合接口使用
+### 1.2.5  
 
-* GSYVideoPlayer
+* 增加了新接口，支持直接横屏锁住界面。
+* 关闭全屏动画，组合接口使用。
+
+##### GSYVideoPlayer
 
 ```
 /**
@@ -222,7 +263,7 @@ public void setRotateViewAuto(boolean rotateViewAuto)
 public void setLockLand(boolean lockLand)
 ```
 
-* ListVideoUtil
+##### ListVideoUtil
 
 ```
 /**
@@ -254,10 +295,14 @@ public void setShowFullAnimation(boolean showFullAnimation) {
 ```
 
 
-### 1.2.4 兼容API修改至16,全屏动画兼容全API
+### 1.2.4 
+
+* 兼容API修改至16,全屏动画兼容全API。
 　
 
-### 1.2.3 增加了X86类型的依赖，个人可根据爱好在APP的build里面添加自己要的支持类型
+### 1.2.3 
+
+*增加了X86类型的依赖，个人可根据爱好在APP的build里面添加自己要的支持类型。
 
 arm64和-86_64的没有加入，如果需要自己添加即可，因为编译最低需要API21
 
@@ -275,7 +320,10 @@ defaultConfig {
 ```
 
 
-### 1.2.2 开放了取时长和总时长的接口，增加了VideoAllCallBack的准备视频完成的回调onPrepared
+### 1.2.2 
+
+*开放了取时长和总时长的接口。
+*增加了VideoAllCallBack的准备视频完成的回调onPrepared。
 
 ```
 
@@ -288,7 +336,10 @@ defaultConfig {
 ```
 
 
-### 1.2.1 调整了小窗口回调拦截错误的情况，增加了SampleListener在列表小窗口点击关闭的时候更新页面
+### 1.2.1 
+
+* 调整了小窗口回调拦截错误的情况。
+* 增加了SampleListener在列表小窗口点击关闭的时候更新页面。
 
 ```
 //小窗口关闭被点击的时候回调处理回复页面
@@ -311,15 +362,22 @@ listVideoUtil.setVideoAllCallBack(new SampleListener(){
 });
 ```
 　
-### 1.2.0 去除了一些无用的依赖库，升级IJKPlayer到0.7.4
+### 1.2.0 
 
-更容易导入，减少了无用的依赖情况，去除了import的时候需要配置gradle.properties的问题
+* 去除了一些无用的依赖库，升级IJKPlayer到0.7.4。
 
-### 1.1.9 修正了回调接口VideoAllCallBack的回调结果，添加了注释，可以根据需要继承后覆写。
+更容易导入，减少了无用的依赖情况，去除了import的时候需要配置gradle.properties的问题。
+
+### 1.1.9 
+
+* 修正了回调接口VideoAllCallBack的回调结果，添加了注释，可以根据需要继承后覆写。
 
 有全屏到非全屏，有小窗口到非小窗口，结束播放错误触摸等等的接口回调，增加了Debuger，可以使能或者关闭调试输出。
 
-### 1.1.8 增加了如果Cache文件出现播放异常，就清除缓存文件的处理（预防），StandardGSYVideoPlayer增加了一些UI配置接口
+### 1.1.8 
+
+* 增加了如果Cache文件出现播放异常，就清除缓存文件的处理（预防）。
+* StandardGSYVideoPlayer增加了一些UI配置接口。
 
 ```
 /**
@@ -351,7 +409,9 @@ public void setDialogProgressColor(int highLightColor, int normalColor)
 
 ```
 
-## 1.1.7 增加了第二种列表 ListVideoUtil可拖动小窗口支持
+### 1.1.7 
+
+* 增加了第二种列表 ListVideoUtil可拖动小窗口支持。
 
 ```
 @Override
@@ -378,7 +438,8 @@ public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCoun
 }
 ```
 
-## 1.1.6 优化了第二种列表ListVideoUtil的全屏效果，和列表一的全屏效果一致，两种全屏效果增加是否打开关闭接口。
+### 1.1.6 
+* 优化了第二种列表ListVideoUtil的全屏效果，和列表一的全屏效果一致，两种全屏效果增加是否打开关闭接口。
 
 ```
 /**
@@ -389,13 +450,14 @@ public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCoun
 public void setShowFullAnimation(boolean showFullAnimation)
 ```
 
-## 1.1.5 优化了一些UI，增加了一些有趣的动画，比如播放按键。
+### 1.1.5 
 
-* 推荐这个动画效果<a href="https://github.com/codeestX/ENViews">ENViews</a>
+* 优化了一些UI，增加了一些有趣的动画，比如播放按键。
+* 推荐这个动画效果[ENViews](https://github.com/codeestX/ENViews)。
 * 增加自定义继承模板**SampleExtendsPlayer**，个人建议直接拷贝**StandardGSYVideoPlayer**修改也行。
 
-## 1.1.4
-* 优化了第一种列表的全屏动画,5.0以上展开和返回过渡顺畅，支持自动旋转的开启与关闭
+### 1.1.4
+* 优化了第一种列表的全屏动画,5.0以上展开和返回过渡顺畅，支持自动旋转的开启与关闭。
 * 修改了全屏下的滑动接口不正常问题，全屏下自动变为滑动的，非全屏可以设置。
 
 ```
@@ -407,8 +469,8 @@ public void setIsTouchWiget(boolean isTouchWiget)
 ```
 
 
-## 1.1.2
-* 增加了TAG和position来实现第一种list列表（非ListVideoUtil模式的列表实现）的滑动错位问题
+### 1.1.2
+* 增加了TAG和position来实现第一种list列表（非ListVideoUtil模式的列表实现）的滑动错位问题。
 
 ```
 
@@ -442,15 +504,15 @@ holder.gsyVideoPlayer.setPlayPosition(position);
 
 ```
 
-## 1.1.1
-* 增加了ListVideoUtil全屏是否显示横屏，全屏是否自动旋转
-* 增加了ListVideoUtils隐藏状态栏和title的接口
+### 1.1.1
+* 增加了ListVideoUtil全屏是否显示横屏，全屏是否自动旋转。
+* 增加了ListVideoUtils隐藏状态栏和title的接口。
 
 
 
-## GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考 StandardGSYVideoPlayer
+### GSYVideoPlayer 播放器控件，抽象类，继承后可以直接使用，参考 StandardGSYVideoPlayer
 
-## 记得调用销毁
+#### 记得调用销毁
 ```
 @Override
  protected void onDestroy() {
@@ -737,19 +799,13 @@ public void onBackFullscreen() {
 }
 
 ```
-
-</p>
-
-### 混淆
-</p>
+　
+## 混淆
+ 
 
 ```
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
 -keep class com.shuyu.gsyvideoplayer.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.**
--keep class com.shuyu.gsyvideoplayer.video.** { *; }
--dontwarn com.shuyu.gsyvideoplayer.video.**
 ```
-
-//TODO 增加了一些UI个性化设置的接口，调整UI的
