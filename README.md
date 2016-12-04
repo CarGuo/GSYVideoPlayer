@@ -20,14 +20,14 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.3.8</version>
+  <version>1.4.0</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
 dependencies {
-    compile 'com.shuyu:gsyVideoPlayer:1.3.8'
+    compile 'com.shuyu:gsyVideoPlayer:1.4.0'
 }
 
 ```
@@ -52,11 +52,12 @@ dependencies {
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
-### 1.3.8 
+### 1.4.0(= = 直接跳版本)
 
 * 添加了lib封面对复用封面的支持和demo。
-* 修复了缓冲进度条；增加了recyclerViewDemo。
-* update VideoCache，去除无用log输出。
+* 修复了缓冲进度条；
+* 增加了recyclerViewDemo。
+* update VideoCache，去除error out put log输出。
 * 修正了列表中隐藏虚拟键盘与actionbar的冲突。
 
 
