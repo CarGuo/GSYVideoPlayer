@@ -1,4 +1,4 @@
-#### 基于IJKPlayer的播放器，重构了[JieCaoVideoPlayer](https://github.com/lipangit/JieCaoVideoPlayer)，调整了代码和优化了动画，添加了自定义功能。持续更新。
+#### 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)的播放器，重构了[JieCaoVideoPlayer](https://github.com/lipangit/JieCaoVideoPlayer)，调整了代码和优化了动画，添加了自定义功能。持续更新。
 
 
 * **支持基本的拖动，声音、亮度调节。**
