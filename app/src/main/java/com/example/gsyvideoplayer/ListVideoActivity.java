@@ -18,6 +18,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class ListVideoActivity extends AppCompatActivity {
 
@@ -25,6 +26,9 @@ public class ListVideoActivity extends AppCompatActivity {
     ListView videoList;
     @BindView(R.id.activity_list_video)
     RelativeLayout activityListVideo;
+
+
+    private long pauseTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,33 @@ public class ListVideoActivity extends AppCompatActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (GSYVideoManager.instance().getPlayPosition() >= 0 &&
+                GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)) {
+            IjkMediaPlayer ijkMediaPlayer = GSYVideoManager.instance().getMediaPlayer();
+            if (ijkMediaPlayer != null && ijkMediaPlayer.isPlaying()) {
+                pauseTime = ijkMediaPlayer.getCurrentPosition();
+                ijkMediaPlayer.pause();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (GSYVideoManager.instance().getPlayPosition() >= 0 &&
+                GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)) {
+            IjkMediaPlayer ijkMediaPlayer = GSYVideoManager.instance().getMediaPlayer();
+            if (ijkMediaPlayer != null && !ijkMediaPlayer.isPlaying() && pauseTime > 0) {
+                ijkMediaPlayer.seekTo(pauseTime);
+                ijkMediaPlayer.start();
+                pauseTime = 0;
+            }
+        }
     }
 
     @Override
