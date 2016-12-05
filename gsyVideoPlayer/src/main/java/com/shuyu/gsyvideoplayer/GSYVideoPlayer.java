@@ -403,6 +403,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     /**
      * 暂停状态
      */
+    @Override
     public void onVideoPause() {
         if (GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
             setStateAndUi(CURRENT_STATE_PAUSE);
@@ -416,6 +417,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     /**
      * 恢复暂停状态
      */
+    @Override
     public void onVideoResume() {
         mPauseTime = 0;
         if (mCurrentState == CURRENT_STATE_PAUSE) {

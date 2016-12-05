@@ -886,6 +886,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     /**
      * 是否需要全屏锁定屏幕功能
+     * 如果单独使用请设置setIfCurrentIsFullscreen为true
      */
     public void setNeedLockFull(boolean needLoadFull) {
         this.mNeedLockFull = needLoadFull;

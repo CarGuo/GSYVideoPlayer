@@ -27,9 +27,6 @@ public class ListVideoActivity extends AppCompatActivity {
     @BindView(R.id.activity_list_video)
     RelativeLayout activityListVideo;
 
-
-    private long pauseTime;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 设置一个exit transition
@@ -81,28 +78,13 @@ public class ListVideoActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (GSYVideoManager.instance().getPlayPosition() >= 0 &&
-                GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)) {
-            IjkMediaPlayer ijkMediaPlayer = GSYVideoManager.instance().getMediaPlayer();
-            if (ijkMediaPlayer != null && ijkMediaPlayer.isPlaying()) {
-                pauseTime = ijkMediaPlayer.getCurrentPosition();
-                ijkMediaPlayer.pause();
-            }
-        }
+        GSYVideoManager.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (GSYVideoManager.instance().getPlayPosition() >= 0 &&
-                GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)) {
-            IjkMediaPlayer ijkMediaPlayer = GSYVideoManager.instance().getMediaPlayer();
-            if (ijkMediaPlayer != null && !ijkMediaPlayer.isPlaying() && pauseTime > 0) {
-                ijkMediaPlayer.seekTo(pauseTime);
-                ijkMediaPlayer.start();
-                pauseTime = 0;
-            }
-        }
+        GSYVideoManager.onResume();
     }
 
     @Override

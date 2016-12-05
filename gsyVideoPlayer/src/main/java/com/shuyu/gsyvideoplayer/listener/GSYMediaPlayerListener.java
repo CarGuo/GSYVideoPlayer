@@ -18,4 +18,8 @@ public interface GSYMediaPlayerListener {
     void onVideoSizeChanged();
 
     void onBackFullscreen();
+
+    void onVideoPause();
+
+    void onVideoResume();
 }

@@ -360,6 +360,25 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         });
     }
 
+    /**
+     * 暂停播放
+     */
+    public static void onPause() {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onVideoPause();
+        }
+    }
+
+    /**
+     * 恢复播放
+     */
+    public static void onResume() {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onVideoResume();
+        }
+    }
+
+
     public IjkMediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }

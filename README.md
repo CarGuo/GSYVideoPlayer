@@ -51,6 +51,35 @@ dependencies {
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.4.1
+
+* 增加了全屏锁开关，锁定后屏幕点击无效。
+* 增加了全局暂停和播放，支援list状态。
+
+StandardGSYVideoPlayer/ListVideoUtil
+
+```
+/**
+ * 是否需要全屏锁定屏幕功能
+ * 如果单独使用请设置setIfCurrentIsFullscreen为true
+ */
+public void setNeedLockFull(boolean needLoadFull)
+```
+
+GSYVideoManager
+
+```
+/**
+ * 暂停播放
+ */
+public static void onPause()
+
+/**
+ * 恢复播放
+ */
+public static void onResume()
+```
+
 
 ### 1.4.0 (3.8和3.9难产了)
 
