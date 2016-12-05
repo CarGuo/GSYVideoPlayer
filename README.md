@@ -7,10 +7,11 @@
 * **增加了重力旋转与手动旋转的同步支持。**
 * **支持列表播放。**
 * **直接添加控件为封面。**
-* **兼容一些5.0的过场效果。**
+* **全屏和播放等的动画效果。**
 * **列表的全屏效果优化，多种配置模式。**
 * **列表的小窗口播放，可拖动。**
 * **网络视频加载速度。**
+* **锁定/解锁全屏点击功能。**
 * **6.0以上支持快播和慢播。**
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
@@ -20,14 +21,14 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.4.0</version>
+  <version>1.4.1</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
 dependencies {
-    compile 'com.shuyu:gsyVideoPlayer:1.4.0'
+    compile 'com.shuyu:gsyVideoPlayer:1.4.1'
 }
 
 ```
