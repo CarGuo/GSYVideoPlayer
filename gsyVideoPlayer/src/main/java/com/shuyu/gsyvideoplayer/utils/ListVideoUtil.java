@@ -57,6 +57,7 @@ public class ListVideoUtil {
     private boolean hideActionBar; //是否隐藏有状态ActionBar
     private boolean isLoop;//循环
     private boolean hideKey = true;//隐藏按键
+    private boolean needLockFull = true;//隐藏按键
 
 
     private int[] listItemRect;//当前item框的屏幕位置
@@ -131,6 +132,8 @@ public class ListVideoUtil {
         gsyVideoPlayer.setLooping(isLoop);
 
         gsyVideoPlayer.setSpeed(speed);
+
+        gsyVideoPlayer.setNeedLockFull(needLockFull);
 
         gsyVideoPlayer.setUp(url, true, cachePath, mapHeadData, objects);
 
@@ -602,6 +605,17 @@ public class ListVideoUtil {
      */
     public void setHideKey(boolean hideKey) {
         this.hideKey = hideKey;
+    }
+
+    public boolean isNeedLockFull() {
+        return needLockFull;
+    }
+
+    /**
+     * 是否需要全屏锁定屏幕功能
+     */
+    public void setNeedLockFull(boolean needLoadFull) {
+        this.needLockFull = needLoadFull;
     }
 
 }

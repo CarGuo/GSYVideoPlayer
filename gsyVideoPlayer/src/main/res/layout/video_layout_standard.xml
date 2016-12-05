@@ -154,5 +154,15 @@
         android:src="@drawable/video_small_close"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/lock_screen"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="50dp"
+        android:visibility="gone"
+        android:scaleType="centerInside"
+        android:src="@drawable/unlock" />
 
 </RelativeLayout>
