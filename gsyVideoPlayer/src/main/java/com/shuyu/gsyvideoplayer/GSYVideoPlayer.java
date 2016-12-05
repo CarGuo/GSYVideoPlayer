@@ -1182,7 +1182,11 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 再打开已经缓存的本地文件，网络速度才会回0.因为是播放本地文件了
      */
     public long getNetSpeed() {
-        return GSYVideoManager.instance().getMediaPlayer().getTcpSpeed();
+        if (GSYVideoManager.instance().getMediaPlayer() != null) {
+            return GSYVideoManager.instance().getMediaPlayer().getTcpSpeed();
+        } else {
+            return -1;
+        }
 
     }
 
@@ -1192,7 +1196,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 再打开已经缓存的本地文件，网络速度才会回0.因为是播放本地文件了
      */
     public String getNetSpeedText() {
-        long speed = GSYVideoManager.instance().getMediaPlayer().getTcpSpeed();
+        long speed = getNetSpeed();
         return getTextSpeed(speed);
     }
 
