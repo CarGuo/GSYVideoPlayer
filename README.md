@@ -52,6 +52,8 @@ dependencies {
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+## [问题集锦入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTON.md)
+
 ### 1.4.1
 
 * 增加了全屏锁开关，锁定后屏幕点击无效。
