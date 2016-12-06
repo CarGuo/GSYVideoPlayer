@@ -570,7 +570,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
                         showVolumeDialog(-deltaY, volumePercent);
                     } else if (!mChangePosition && mBrightness) {
-                        float percent = (-deltaY / mScreenHeight) / 4;
+                        float percent = (-deltaY / 4 / mScreenHeight) / 10;
                         onBrightnessSlide(percent);
                     }
 
