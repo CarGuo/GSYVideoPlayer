@@ -101,8 +101,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected int mSeekOnStart = -1; //从哪个开始播放
 
-    protected int mRotate = 0; //针对某些视频的旋转信息做了旋转处理
-
     protected int mSeekTimePosition; //手动改变滑动的位置
 
     protected long mPauseTime; //保存暂停时的时间
@@ -642,6 +640,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         try {
             if (mCurrentState == CURRENT_STATE_PAUSE && mFullPauseBitmap != null
                     && !mFullPauseBitmap.isRecycled()) {
+                mCoverImageView.setRotation(mRotate);
                 mCoverImageView.setImageBitmap(mFullPauseBitmap);
                 mCoverImageView.setVisibility(VISIBLE);
             }

@@ -11,7 +11,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -68,6 +67,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     protected int[] mListItemSize;//当前item的大小
 
     protected int mCurrentState = -1; //当前的播放状态
+
+    protected int mRotate = 0; //针对某些视频的旋转信息做了旋转处理
 
     private int mSystemUiVisibility;
 
@@ -397,8 +398,12 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     private void pauseFullCoverLogic() {
         if (mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE && mTextureView != null
                 && (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled())) {
-            Point point = CommonUtil.getPauseBitmapSize(getWidth(), getHeight());
-            mFullPauseBitmap = mTextureView.getBitmap(point.x, point.y);
+            try {
+                mFullPauseBitmap = mTextureView.getBitmap(mTextureView.getSizeW(), mTextureView.getSizeH());
+            } catch (Exception e) {
+                e.printStackTrace();
+                mFullPauseBitmap = null;
+            }
         }
     }
 
@@ -414,9 +419,13 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                     && !gsyVideoPlayer.mFullPauseBitmap.isRecycled()) {
                 mFullPauseBitmap = gsyVideoPlayer.mFullPauseBitmap;
             } else {
-                Point point = CommonUtil.getPauseBitmapSize(getWidth(), getHeight());
                 //不在了说明已经播放过，还是暂停的话，我们拿回来就好
-                mFullPauseBitmap = gsyVideoPlayer.mTextureView.getBitmap(point.x, point.y);
+                try {
+                    mFullPauseBitmap = mTextureView.getBitmap(mTextureView.getSizeW(), mTextureView.getSizeH());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mFullPauseBitmap = null;
+                }
             }
         }
     }

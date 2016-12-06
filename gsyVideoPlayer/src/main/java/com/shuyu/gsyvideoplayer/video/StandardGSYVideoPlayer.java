@@ -37,6 +37,7 @@ import java.util.TimerTask;
 import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
 
+
 /**
  * 标准播放器
  * Created by shuyu on 2016/11/11.
@@ -428,7 +429,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
-        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull)  ? VISIBLE : GONE);
+        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
     }
 
@@ -448,7 +449,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         //mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
-        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull)  ? VISIBLE : GONE);
+        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
         updatePauseCover();
     }
@@ -510,7 +511,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mThumbImageViewLayout.setVisibility(View.VISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
-        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull)  ? VISIBLE : GONE);
+        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
     }
 
@@ -524,7 +525,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mThumbImageViewLayout.setVisibility(View.VISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.VISIBLE);
-        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull)  ? VISIBLE : GONE);
+        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
     }
 
@@ -538,7 +539,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.VISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
-        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull)  ? VISIBLE : GONE);
+        mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
     }
 
@@ -560,8 +561,12 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     private void updatePauseCover() {
         if (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) {
-            Point point = CommonUtil.getPauseBitmapSize(getWidth(), getHeight());
-            mFullPauseBitmap = mTextureView.getBitmap(point.x, point.y);
+            try {
+                mFullPauseBitmap = mTextureView.getBitmap(mTextureView.getSizeW(), mTextureView.getSizeH());
+            } catch (Exception e) {
+                e.printStackTrace();
+                mFullPauseBitmap = null;
+            }
         }
         showPauseCover();
     }
