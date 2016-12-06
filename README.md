@@ -55,7 +55,8 @@ dependencies {
 ### 1.4.1
 
 * 增加了全屏锁开关，锁定后屏幕点击无效。
-* 增加了全局暂停和播放，支援list状态。
+* 增加了全局暂停和播放，支援列表状态。
+* 修正了亮度调节的问题。
 
 StandardGSYVideoPlayer/ListVideoUtil
 
@@ -89,6 +90,7 @@ public static void onResume()
 * 增加了recyclerViewDemo。
 * update VideoCache，去除error out put log输出。
 * 修正了列表中隐藏虚拟键盘与actionbar的冲突。
+
 
 
 ### 1.3.7 
