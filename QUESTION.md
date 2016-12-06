@@ -46,8 +46,8 @@ compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.7.5'
 
 #### 5、目前不支持3gp或者mepg，请保证视屏格式H264,AAC音频。
 
-如果拍摄的视频播放不了，可以尝试用系统的：[VideoRecord](https://github.com/CarGuo/VideoRecord)
-或者JAVACV的：[FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder )
+如果拍摄的视频播放不了，可以尝试用使用系统录制的项目：[VideoRecord](https://github.com/CarGuo/VideoRecord)
+或者使用JAVACV录制的项目：[FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder )，测试视频是否可以播放。
 
 
 
