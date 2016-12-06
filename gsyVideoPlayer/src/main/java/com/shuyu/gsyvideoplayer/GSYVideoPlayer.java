@@ -85,6 +85,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected float mDownY; //触摸的Y
 
+    protected float mMoveY;
+
     protected float mBrightnessData = -1; //亮度
 
     protected int mDownPosition; //手指放下的位置
@@ -521,6 +523,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                     mTouchingProgressBar = true;
                     mDownX = x;
                     mDownY = y;
+                    mMoveY = 0;
                     mChangeVolume = false;
                     mChangePosition = false;
                     mBrightness = false;
@@ -570,8 +573,11 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
                         showVolumeDialog(-deltaY, volumePercent);
                     } else if (!mChangePosition && mBrightness) {
-                        float percent = (-deltaY / 4 / mScreenHeight) / 10;
-                        onBrightnessSlide(percent);
+                        if (Math.abs(deltaY) > mThreshold) {
+                            float percent = (-deltaY  / mScreenHeight);
+                            onBrightnessSlide(percent);
+                            mDownY = y;
+                        }
                     }
 
                     break;
@@ -1058,12 +1064,12 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      */
     private void onBrightnessSlide(float percent) {
         //if (mBrightnessData < 0) {
-            mBrightnessData = ((Activity) (mContext)).getWindow().getAttributes().screenBrightness;
-            if (mBrightnessData <= 0.00f) {
-                mBrightnessData = 0.50f;
-            } else if (mBrightnessData < 0.01f) {
-                mBrightnessData = 0.01f;
-            }
+        mBrightnessData = ((Activity) (mContext)).getWindow().getAttributes().screenBrightness;
+        if (mBrightnessData <= 0.00f) {
+            mBrightnessData = 0.50f;
+        } else if (mBrightnessData < 0.01f) {
+            mBrightnessData = 0.01f;
+        }
         //}
         WindowManager.LayoutParams lpa = ((Activity) (mContext)).getWindow().getAttributes();
         lpa.screenBrightness = mBrightnessData + percent;

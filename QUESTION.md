@@ -68,3 +68,14 @@ compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.7.5'
 
 
 #### 10、列表全屏返回问题，参看demo的list接口。
+
+
+### 11、播放TAG
+
+TAG是用于判断多个列表下不同播放列表的
+position也不要忘记哟
+
+```
+gsyVideoPlayer.setPlayTag(TAG);
+gsyVideoPlayer.setPlayPosition(position);
+```
