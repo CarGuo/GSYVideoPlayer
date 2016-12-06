@@ -33,6 +33,8 @@ dependencies {
 
 ```
 
+## [*********** *问题集锦入口* ***********](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
+
 ## 效果,录屏下的屏幕旋转和实际有些出入
 
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.jpg" width="218px" height="120px"/>
@@ -51,8 +53,6 @@ dependencies {
 
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
-
-## [问题集锦入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTON.md)
 
 ### 1.4.1
 
