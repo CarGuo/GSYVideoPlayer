@@ -572,7 +572,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
                         showVolumeDialog(-deltaY, volumePercent);
                     } else if (!mChangePosition && mBrightness) {
-                        float percent = -deltaY / mScreenHeight;
+                        float percent = (-deltaY / mScreenHeight) / 4;
                         onBrightnessSlide(percent);
                     }
 
@@ -1058,14 +1058,14 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * @param percent
      */
     private void onBrightnessSlide(float percent) {
-        if (mBrightnessData < 0) {
+        //if (mBrightnessData < 0) {
             mBrightnessData = ((Activity) (mContext)).getWindow().getAttributes().screenBrightness;
             if (mBrightnessData <= 0.00f) {
                 mBrightnessData = 0.50f;
             } else if (mBrightnessData < 0.01f) {
                 mBrightnessData = 0.01f;
             }
-        }
+        //}
         WindowManager.LayoutParams lpa = ((Activity) (mContext)).getWindow().getAttributes();
         lpa.screenBrightness = mBrightnessData + percent;
         if (lpa.screenBrightness > 1.0f) {
