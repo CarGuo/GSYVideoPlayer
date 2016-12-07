@@ -16,19 +16,22 @@
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
+[![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
+
+## 因为某些原因，现在使用jitpack.io，还请各位切换到jitpack，见谅见谅。
 
 ```
-<dependency>
-  <groupId>com.shuyu</groupId>
-  <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.4.2</version>
-  <type>pom</type>
-</dependency>
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+}
 ```
 
 ```
 dependencies {
-    compile 'com.shuyu:gsyVideoPlayer:1.4.2'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.4.2'
 }
 
 ```
