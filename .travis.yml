@@ -10,4 +10,4 @@ android:
 
 script:
     - cd gsyVideoPlayer
-    - gradlew assembleRelease
+    - ./gradlew assembleRelease
