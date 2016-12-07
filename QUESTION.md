@@ -97,3 +97,33 @@ Use HttpProxyCacheServer.isCached(String url) method to check was url's content 
 
 
 ### 13、缓存清除与配置 1.3.4、1.3.0
+
+
+### 14、使能和关闭界面的声音、亮度、进度触摸功能
+
+```
+/**
+ * 是否可以滑动界面改变进度，声音等
+ */
+public void setIsTouchWiget(boolean isTouchWiget)
+```
+
+### 15、设置title和播放参数
+
+多种setup效果，这是其中一类。
+
+```
+/**
+ * 设置播放URL
+ *
+ * @param url           播放url
+ * @param cacheWithPlay 是否边播边缓存
+ * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+ * @param mapHeadData   头部信息
+ * @param objects       object[0]目前为title
+ * @return
+ */
+@Override
+public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, Object... objects) {
+
+```
