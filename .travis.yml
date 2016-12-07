@@ -9,5 +9,5 @@ android:
     - extra-android-m2repository
 
 script:
-    - cd android/ijkplayer
+    - cd gsyVideoPlayer
     - gradlew assemble
