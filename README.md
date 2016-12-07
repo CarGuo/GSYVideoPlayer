@@ -41,7 +41,7 @@ dependencies {
 　
 ## [*********** *问题集锦入口* ***********](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
 　
-## [*********** *IJKPlayer问题入口* ***********](http://www.jianshu.com/p/220b00d00deb)　
+## [IJKPlayer问题入口](http://www.jianshu.com/p/220b00d00deb)　
 　
 ## 效果,录屏下的屏幕旋转和实际有些出入
 
@@ -64,11 +64,11 @@ dependencies {
 
 ### 1.4.3
 
-* 增加了设置显示比例CommonType。
-* DEMO增加SampleVideo，在PlayActivity使用，可调节显示比例。
-* 增加了开启和关闭硬解码的接口CommonType。
+* 增加了设置显示比例GSYVideoType。
+* DEMO增加SampleVideo，在PlayActivity使用，调节显示比例效果。
+* 增加了开启和关闭硬解码的接口GSYVideoType。
 
-CommonType
+GSYVideoType
 ```
 /**
  * 设置显示比例

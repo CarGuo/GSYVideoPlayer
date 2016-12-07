@@ -4,7 +4,7 @@ package com.shuyu.gsyvideoplayer.utils;
  * Created by shuyu on 2016/12/7.
  */
 
-public class CommonType {
+public class GSYVideoType {
 
     //默认显示比例
     public final static int SCREEN_TYPE_DEFAULT = 0;

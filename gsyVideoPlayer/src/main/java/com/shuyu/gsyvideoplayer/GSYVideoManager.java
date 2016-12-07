@@ -14,7 +14,7 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
-import com.shuyu.gsyvideoplayer.utils.CommonType;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
@@ -233,7 +233,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             currentVideoHeight = 0;
             mediaPlayer.release();
             mediaPlayer = new IjkMediaPlayer();
-            if (CommonType.isMediaCodec()) {
+            if (GSYVideoType.isMediaCodec()) {
                 Debuger.printfLog("enable mediaCodec");
                 mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
                 mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);

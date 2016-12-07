@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.utils.CommonType;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 /**
@@ -37,19 +37,19 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                 if (type == 0) {
                     type = 1;
                     mMoreScale.setText("16:9");
-                    CommonType.setShowType(CommonType.SCREEN_TYPE_16_9);
+                    GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9);
                     if (mTextureView != null)
                         mTextureView.requestLayout();
                 } else if (type == 1) {
                     type = 2;
                     mMoreScale.setText("4:3");
-                    CommonType.setShowType(CommonType.SCREEN_TYPE_4_3);
+                    GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3);
                     if (mTextureView != null)
                         mTextureView.requestLayout();
                 } else if (type == 2) {
                     type = 0;
                     mMoreScale.setText("默认比例");
-                    CommonType.setShowType(CommonType.SCREEN_TYPE_DEFAULT);
+                    GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
                     if (mTextureView != null)
                         mTextureView.requestLayout();
                 }
