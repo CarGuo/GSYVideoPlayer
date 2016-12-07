@@ -73,6 +73,16 @@
             android:text="00:00"
             android:textColor="#ffffff" />
 
+        <TextView
+            android:id="@+id/switchSize"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:minEms="2"
+            android:text="标准"
+            android:textColor="#ffffff" />
+
         <ImageView
             android:id="@+id/fullscreen"
             android:layout_width="wrap_content"

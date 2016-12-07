@@ -12,12 +12,16 @@ import android.widget.ImageView;
 
 
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
+import com.example.gsyvideoplayer.model.SwitchVideoModel;
+import com.example.gsyvideoplayer.video.SampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +36,7 @@ public class PlayActivity extends AppCompatActivity {
     public final static String TRANSITION = "TRANSITION";
 
     @BindView(R.id.video_player)
-    StandardGSYVideoPlayer videoPlayer;
+    SampleVideo videoPlayer;
 
     OrientationUtils orientationUtils;
 
@@ -53,7 +57,21 @@ public class PlayActivity extends AppCompatActivity {
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //需要路径的
         //videoPlayer.setUp(url, true, new File(FileUtils.getPath()), "");
-        videoPlayer.setUp(url, true, "");
+
+
+        String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        String name = "普通";
+        SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
+
+        String source2 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4";
+        String name2 = "清晰";
+        SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
+
+        List<SwitchVideoModel> list = new ArrayList<>();
+        list.add(switchVideoModel);
+        list.add(switchVideoModel2);
+
+        videoPlayer.setUp(list, true, "");
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -79,12 +97,12 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        videoPlayer.setBottomProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_progress));
-        videoPlayer.setDialogVolumeProgressBar(getResources().getDrawable(R.drawable.video_new_volume_progress_bg));
-        videoPlayer.setDialogProgressBar(getResources().getDrawable(R.drawable.video_new_progress));
-        videoPlayer.setBottomShowProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_seekbar_progress),
-                getResources().getDrawable(R.drawable.video_new_seekbar_thumb));
-        videoPlayer.setDialogProgressColor(getResources().getColor(R.color.colorAccent), -11);
+        //videoPlayer.setBottomProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_progress));
+        //videoPlayer.setDialogVolumeProgressBar(getResources().getDrawable(R.drawable.video_new_volume_progress_bg));
+        //videoPlayer.setDialogProgressBar(getResources().getDrawable(R.drawable.video_new_progress));
+        //videoPlayer.setBottomShowProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_seekbar_progress),
+                //getResources().getDrawable(R.drawable.video_new_seekbar_thumb));
+        //videoPlayer.setDialogProgressColor(getResources().getColor(R.color.colorAccent), -11);
 
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(true);

@@ -101,9 +101,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected int mSeekToInAdvance = -1; //// TODO: 2016/11/13 跳过广告
 
-    protected int mSeekOnStart = -1; //从哪个开始播放
 
     protected int mSeekTimePosition; //手动改变滑动的位置
+
+    protected long mSeekOnStart = -1; //从哪个开始播放
 
     protected long mPauseTime; //保存暂停时的时间
 
@@ -773,6 +774,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
         if (GSYVideoManager.instance().getMediaPlayer() != null && mSeekOnStart > 0) {
             GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekOnStart);
+            mSeekOnStart = 0;
         }
 
         mHadPlay = true;
@@ -1205,7 +1207,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         return getTextSpeed(speed);
     }
 
-    public int getSeekOnStart() {
+    public long getSeekOnStart() {
         return mSeekOnStart;
     }
 
@@ -1213,7 +1215,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 从哪里开始播放
      * 目前有时候前几秒有跳动问题
      */
-    public void setSeekOnStart(int seekOnStart) {
+    public void setSeekOnStart(long seekOnStart) {
         this.mSeekOnStart = seekOnStart;
     }
 }

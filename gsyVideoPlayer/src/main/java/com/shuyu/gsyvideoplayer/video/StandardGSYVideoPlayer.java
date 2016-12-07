@@ -800,7 +800,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
     }
 
-    private void hideAllWidget() {
+    protected void hideAllWidget() {
         mBottomContainer.setVisibility(View.INVISIBLE);
         mTopContainer.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.VISIBLE);
