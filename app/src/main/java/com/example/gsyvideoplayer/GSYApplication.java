@@ -2,6 +2,8 @@ package com.example.gsyvideoplayer;
 
 import android.app.Application;
 
+import com.shuyu.gsyvideoplayer.utils.CommonType;
+
 //import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -19,5 +21,6 @@ public class GSYApplication extends Application {
             //return;
         //}
         //LeakCanary.install(this);
+        //CommonType.enableMediaCodec();
     }
 }

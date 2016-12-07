@@ -66,6 +66,7 @@ dependencies {
 
 * 增加了设置显示比例CommonType。
 * DEMO增加SampleVideo，在PlayActivity使用，可调节显示比例。
+* 增加了开启和关闭硬解码的接口CommonType。
 
 CommonType
 ```
@@ -73,6 +74,18 @@ CommonType
  * 设置显示比例
  */
 public static void setShowType(int type)
+
+/**
+ * 使能硬解码，播放前设置
+ */
+public static void enableMediaCodec() {
+    MEDIA_CODEC_FLAG = true;
+}
+
+/**
+ * 关闭硬解码，播放前设置
+ */
+public static void disableMediaCodec()
 ```
 
 ### 1.4.2

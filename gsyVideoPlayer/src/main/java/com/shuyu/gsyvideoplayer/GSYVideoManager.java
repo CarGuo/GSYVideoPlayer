@@ -14,7 +14,9 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
+import com.shuyu.gsyvideoplayer.utils.CommonType;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 
@@ -203,29 +205,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDLER_PREPARE:
-                    try {
-                        currentVideoWidth = 0;
-                        currentVideoHeight = 0;
-                        mediaPlayer.release();
-                        mediaPlayer = new IjkMediaPlayer();
-                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        mediaPlayer.setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
-                        mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
-                        mediaPlayer.setOnCompletionListener(GSYVideoManager.this);
-                        mediaPlayer.setOnBufferingUpdateListener(GSYVideoManager.this);
-                        mediaPlayer.setScreenOnWhilePlaying(true);
-                        mediaPlayer.setOnPreparedListener(GSYVideoManager.this);
-                        mediaPlayer.setOnSeekCompleteListener(GSYVideoManager.this);
-                        mediaPlayer.setOnErrorListener(GSYVideoManager.this);
-                        mediaPlayer.setOnInfoListener(GSYVideoManager.this);
-                        mediaPlayer.setOnVideoSizeChangedListener(GSYVideoManager.this);
-                        if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
-                            mediaPlayer.setSpeed(((GSYModel) msg.obj).getSpeed());
-                        }
-                        mediaPlayer.prepareAsync();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    initVideo(msg);
                     break;
                 case HANDLER_SETDISPLAY:
                     if (msg.obj == null && mediaPlayer != null) {
@@ -246,6 +226,37 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
 
     }
+
+    private void initVideo(Message msg) {
+        try {
+            currentVideoWidth = 0;
+            currentVideoHeight = 0;
+            mediaPlayer.release();
+            mediaPlayer = new IjkMediaPlayer();
+            if (CommonType.isMediaCodec()) {
+                Debuger.printfLog("enable mediaCodec");
+                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
+            }
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
+            mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
+            mediaPlayer.setOnCompletionListener(GSYVideoManager.this);
+            mediaPlayer.setOnBufferingUpdateListener(GSYVideoManager.this);
+            mediaPlayer.setScreenOnWhilePlaying(true);
+            mediaPlayer.setOnPreparedListener(GSYVideoManager.this);
+            mediaPlayer.setOnSeekCompleteListener(GSYVideoManager.this);
+            mediaPlayer.setOnErrorListener(GSYVideoManager.this);
+            mediaPlayer.setOnInfoListener(GSYVideoManager.this);
+            mediaPlayer.setOnVideoSizeChangedListener(GSYVideoManager.this);
+            if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
+                mediaPlayer.setSpeed(((GSYModel) msg.obj).getSpeed());
+            }
+            mediaPlayer.prepareAsync();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }}
 
 
     public void prepare(final String url, final Map<String, String> mapHeadData, boolean loop, float speed) {
