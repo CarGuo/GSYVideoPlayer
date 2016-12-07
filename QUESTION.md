@@ -94,3 +94,6 @@ gsyVideoPlayer.setPlayPosition(position);
 Use HttpProxyCacheServer.registerCacheListener(CacheListener listener) method to set listener with callback onCacheAvailable(File cacheFile, String url, int percentsAvailable) to be aware of caching progress. Do not forget to to unsubscribe listener with help of HttpProxyCacheServer.unregisterCacheListener(CacheListener listener) method to avoid memory leaks.
 
 Use HttpProxyCacheServer.isCached(String url) method to check was url's content fully cached to file or not.
+
+
+### 13、缓存清除与配置 1.3.4、1.3.0
