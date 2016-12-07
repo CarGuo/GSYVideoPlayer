@@ -21,14 +21,14 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>gsyVideoPlayer</artifactId>
-  <version>1.4.1</version>
+  <version>1.4.2</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
 dependencies {
-    compile 'com.shuyu:gsyVideoPlayer:1.4.1'
+    compile 'com.shuyu:gsyVideoPlayer:1.4.2'
 }
 
 ```
