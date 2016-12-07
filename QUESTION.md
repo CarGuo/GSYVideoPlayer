@@ -1,5 +1,7 @@
 ## GSYVideoPlayer 问题集锦
 
+#### 0、因为某些原因，现在使用jitpack.io，如果使用依赖的朋友，还请各位切换到jitpack的依赖，详情可见github首页，还请见谅见谅。
+
 #### 1、导入项目不成功？
 
 　项目最外部有一个dependencies.gradle，所有的项目依赖都在这里面，然后参考项目根目录的build.gradle，在最顶部有apply from: 'dependencies.gradle'，这样gsyVideoPlayer就可以找到对应的依赖了。gradle方便可参考察[Android蹲坑的疑难杂症集锦（兼Gradle） 二](http://www.jianshu.com/p/86e4b336c17d)
