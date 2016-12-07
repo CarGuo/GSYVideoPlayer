@@ -177,9 +177,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     /**
      * 设置播放URL
      *
-     * @param url
+     * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param objects
+     * @param objects       object[0]目前为title
      * @return
      */
     public boolean setUp(String url, boolean cacheWithPlay, Object... objects) {
@@ -190,11 +190,11 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     /**
      * 设置播放URL
      *
-     * @param url
+     * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param cachePath     缓存路径
-     * @param mapHeadData
-     * @param objects
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param mapHeadData   头部信息
+     * @param objects       object[0]目前为title
      * @return
      */
     @Override
@@ -211,10 +211,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     /**
      * 设置播放URL
      *
-     * @param url
+     * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param cachePath     缓存路径
-     * @param objects
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param objects       object[0]目前为title
      * @return
      */
     @Override
@@ -574,7 +574,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                         showVolumeDialog(-deltaY, volumePercent);
                     } else if (!mChangePosition && mBrightness) {
                         if (Math.abs(deltaY) > mThreshold) {
-                            float percent = (-deltaY  / mScreenHeight);
+                            float percent = (-deltaY / mScreenHeight);
                             onBrightnessSlide(percent);
                             mDownY = y;
                         }

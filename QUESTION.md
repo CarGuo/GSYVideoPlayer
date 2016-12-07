@@ -51,7 +51,14 @@ compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.7.5'
 如果拍摄的视频播放不了，可以尝试用使用系统录制的项目：[VideoRecord](https://github.com/CarGuo/VideoRecord)
 或者使用JAVACV录制的项目：[FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder )，测试视频是否可以播放。
 
+#### 6、m3u8格式视频请关闭cache
 
+缓存不支持m3u8，播放m3u8格式格式需要cacheWithPlay为false
+
+```
+setUp(String url, boolean cacheWithPlay····)
+
+```
 
 #### 6、如何在列表暂停，参看主页版本说明 1.4.1
 

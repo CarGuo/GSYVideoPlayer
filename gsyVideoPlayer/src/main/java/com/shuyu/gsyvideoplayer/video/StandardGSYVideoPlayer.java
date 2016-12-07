@@ -156,11 +156,28 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     }
 
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param objects       object[0]目前为title
+     * @return
+     */
     @Override
     public boolean setUp(String url, boolean cacheWithPlay, Object... objects) {
         return setUp(url, cacheWithPlay, (File) null, objects);
     }
 
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param objects       object[0]目前为title
+     * @return
+     */
     @Override
     public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Object... objects) {
         if (super.setUp(url, cacheWithPlay, cachePath, objects)) {
