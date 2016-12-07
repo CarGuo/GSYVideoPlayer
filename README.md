@@ -61,6 +61,19 @@ dependencies {
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.4.3
+
+* 增加了设置显示比例CommonType。
+* DEMO增加SampleVideo，在PlayActivity使用，可调节显示比例。
+
+CommonType
+```
+/**
+ * 设置显示比例
+ */
+public static void setShowType(int type)
+```
+
 ### 1.4.2
 
 * 修改了暂停画面在对旋转视频/竖屏播放时变形的问题。

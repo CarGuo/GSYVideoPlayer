@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.TextureView;
 
+import com.shuyu.gsyvideoplayer.utils.CommonType;
+
 /**
  * 用于显示video的，做了横屏与竖屏的匹配，还有需要rotation需求的
  * Created by shuyu on 2016/11/11.
@@ -12,6 +14,7 @@ import android.view.TextureView;
 public class GSYTextureView extends TextureView {
 
     private int sizeW;
+
     private int sizeH;
 
     public GSYTextureView(Context context) {
@@ -98,8 +101,26 @@ public class GSYTextureView extends TextureView {
                 }
             }
         }
+
+        //如果设置了比例
+        if (CommonType.getShowType() == CommonType.SCREEN_TYPE_16_9) {
+            if (height > width) {
+                width = height * 9 / 16;
+            } else {
+                height = width * 9 / 16;
+            }
+        } else if (CommonType.getShowType() == CommonType.SCREEN_TYPE_4_3) {
+            if (height > width) {
+                width = height * 3 / 4;
+            } else {
+                height = width * 3 / 4;
+            }
+        }
+
         sizeH = height;
+
         sizeW = width;
+
         setMeasuredDimension(width, height);
     }
 
