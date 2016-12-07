@@ -36,7 +36,7 @@ dependencies {
 　
 ## [*********** *问题集锦入口* ***********](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
 　
-　
+## [*********** *IJKPlayer问题入口* ***********](http://www.jianshu.com/p/220b00d00deb)　
 　
 ## 效果,录屏下的屏幕旋转和实际有些出入
 
