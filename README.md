@@ -67,6 +67,7 @@ dependencies {
 ### 1.4.4
 
 * 调整lib，DEMO中SampleVideo增加了调整清晰度的支持。
+* 优化了Cache缓存和IJK 缓存之间的显示。
 
 
 ### 1.4.3
