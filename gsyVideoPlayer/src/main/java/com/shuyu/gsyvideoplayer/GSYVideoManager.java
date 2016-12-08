@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -22,9 +23,12 @@ import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
+import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
+import tv.danmaku.ijk.media.player.AbstractMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
@@ -46,7 +50,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     public static final int HANDLER_SETDISPLAY = 1;
     public static final int HANDLER_RELEASE = 2;
 
-    private IjkMediaPlayer mediaPlayer;
+    private AbstractMediaPlayer mediaPlayer;
     private HandlerThread mMediaHandlerThread;
     private MediaHandler mMediaHandler;
     private Handler mainThreadHandler;
@@ -60,6 +64,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private String playTag = ""; //播放的tag，防止错位置，因为普通的url也可能重复
 
+    private Context context;
+
     private int currentVideoWidth = 0; //当前播放的视频宽的高
 
     private int currentVideoHeight = 0; //当前播放的视屏的高
@@ -69,6 +75,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private int playPosition = -22; //播放的tag，防止错位置，因为普通的url也可能重复
 
     private int buffterPoint;
+
+    private int videoType = GSYVideoType.IJKPLAYER;
 
 
     public static synchronized GSYVideoManager instance() {
@@ -241,16 +249,13 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             currentVideoWidth = 0;
             currentVideoHeight = 0;
             mediaPlayer.release();
-            mediaPlayer = new IjkMediaPlayer();
-            if (GSYVideoType.isMediaCodec()) {
-                Debuger.printfLog("enable mediaCodec");
-                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
-                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
+
+            if (videoType == GSYVideoType.IJKPLAYER) {
+                initIJKPlayer(msg);
+            } else if (videoType == GSYVideoType.IJKEXOPLAYER) {
+                initEXOPlayer(msg);
             }
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
-            mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
+
             mediaPlayer.setOnCompletionListener(GSYVideoManager.this);
             mediaPlayer.setOnBufferingUpdateListener(GSYVideoManager.this);
             mediaPlayer.setScreenOnWhilePlaying(true);
@@ -259,11 +264,38 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             mediaPlayer.setOnErrorListener(GSYVideoManager.this);
             mediaPlayer.setOnInfoListener(GSYVideoManager.this);
             mediaPlayer.setOnVideoSizeChangedListener(GSYVideoManager.this);
-            if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
-                mediaPlayer.setSpeed(((GSYModel) msg.obj).getSpeed());
-            }
             mediaPlayer.prepareAsync();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initIJKPlayer(Message msg) {
+        mediaPlayer = new IjkMediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            if (GSYVideoType.isMediaCodec()) {
+                Debuger.printfLog("enable mediaCodec");
+                ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+                ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+                ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
+            }
+            ((IjkMediaPlayer) mediaPlayer).setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
+            mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
+            if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
+                ((IjkMediaPlayer) mediaPlayer).setSpeed(((GSYModel) msg.obj).getSpeed());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initEXOPlayer(Message msg) {
+        mediaPlayer = new IjkExoMediaPlayer(context);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -410,7 +442,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
 
-    public IjkMediaPlayer getMediaPlayer() {
+    public AbstractMediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
 
@@ -452,5 +484,19 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     public void setPlayPosition(int playPosition) {
         this.playPosition = playPosition;
+    }
+
+
+    public int getVideoType() {
+        return videoType;
+    }
+
+    /**
+     * 设置了视频的播放类型
+     * GSYVideoType IJKPLAYER = 0 or IJKEXOPLAYER = 1;
+     */
+    public void setVideoType(Context context, int videoType) {
+        this.context = context.getApplicationContext();
+        this.videoType = videoType;
     }
 }

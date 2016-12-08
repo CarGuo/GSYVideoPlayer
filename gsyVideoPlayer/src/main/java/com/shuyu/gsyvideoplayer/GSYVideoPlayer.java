@@ -35,6 +35,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
@@ -1195,8 +1196,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 再打开已经缓存的本地文件，网络速度才会回0.因为是播放本地文件了
      */
     public long getNetSpeed() {
-        if (GSYVideoManager.instance().getMediaPlayer() != null) {
-            return GSYVideoManager.instance().getMediaPlayer().getTcpSpeed();
+        if (GSYVideoManager.instance().getMediaPlayer() != null
+                && (GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer)) {
+            return ((IjkMediaPlayer)GSYVideoManager.instance().getMediaPlayer()).getTcpSpeed();
         } else {
             return -1;
         }

@@ -2,6 +2,9 @@ package com.example.gsyvideoplayer;
 
 import android.app.Application;
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+
 //import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -20,5 +23,6 @@ public class GSYApplication extends Application {
         //}
         //LeakCanary.install(this);
         //GSYVideoType.enableMediaCodec();
+        GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER);
     }
 }

@@ -16,6 +16,10 @@ public class GSYVideoType {
     public final static int SCREEN_TYPE_4_3 = 2;
 
 
+    public final static int IJKPLAYER = 0;
+
+    public final static int IJKEXOPLAYER = 1;
+
 
 
     //显示比例类型
