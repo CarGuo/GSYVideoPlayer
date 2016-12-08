@@ -83,7 +83,7 @@ public void setVideoType(Context context, int videoType)
 
 ### 1.4.4
 
-* 调整lib，DEMO中SampleVideo增加了调整清晰度的支持,DEMO借用了别人的URL。
+* 调整lib，DEMO中SampleVideo增加了调整清晰度的支持,DEMO借用了jjdxm_ijkplayer的URL。
 * 优化了Cache缓存和IJK 缓存之间的显示。
 
 
