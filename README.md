@@ -15,6 +15,7 @@
 * **6.0以上支持快播和慢播。**
 * **调整显示比例:默认、16:9、4:3。**
 * **调整不同清晰度的支持。**
+* **支持IJKPlayer和EXOPlayer切换。**
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
@@ -45,6 +46,8 @@ dependencies {
 ## [*********** *问题集锦入口* ***********](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
 　
 ## [IJKPlayer问题入口](http://www.jianshu.com/p/220b00d00deb)　
+
+## 效果图下方版本说明，可以当做简单的wiki使用，效果可参考DEMO。
 　
 ## 效果,录屏下的屏幕旋转和实际有些出入
 
