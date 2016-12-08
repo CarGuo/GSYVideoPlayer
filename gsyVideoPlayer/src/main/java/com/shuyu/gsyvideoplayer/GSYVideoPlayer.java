@@ -231,6 +231,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             HttpProxyCacheServer proxy = GSYVideoManager.getProxy(getContext().getApplicationContext(), cachePath);
             url = proxy.getProxyUrl(url);
             mCacheFile = (!url.startsWith("http"));
+            if (!mCacheFile) {
+                proxy.registerCacheListener(GSYVideoManager.instance(), mOriginUrl);
+            }
         }
         this.mUrl = url;
         this.mObjects = objects;
@@ -1003,7 +1006,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         if (!mTouchingProgressBar) {
             if (progress != 0) mProgressBar.setProgress(progress);
         }
-        if (secProgress > 95) secProgress = 100;
+        if (secProgress > 94) secProgress = 100;
         if (secProgress != 0 && !mCacheFile) {
             mProgressBar.setSecondaryProgress(secProgress);
         }

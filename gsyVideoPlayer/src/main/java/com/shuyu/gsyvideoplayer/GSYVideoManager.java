@@ -10,6 +10,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.Surface;
 
+import com.danikula.videocache.CacheListener;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
@@ -35,7 +36,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaPlayer.OnCompletionListener,
         IMediaPlayer.OnBufferingUpdateListener, IMediaPlayer.OnSeekCompleteListener, IMediaPlayer.OnErrorListener,
-        IMediaPlayer.OnVideoSizeChangedListener, IMediaPlayer.OnInfoListener {
+        IMediaPlayer.OnVideoSizeChangedListener, IMediaPlayer.OnInfoListener, CacheListener {
 
     public static String TAG = "GSYVideoManager";
 
@@ -60,10 +61,14 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private String playTag = ""; //播放的tag，防止错位置，因为普通的url也可能重复
 
     private int currentVideoWidth = 0; //当前播放的视频宽的高
+
     private int currentVideoHeight = 0; //当前播放的视屏的高
+
     private int lastState;//当前视频的最后状态
 
     private int playPosition = -22; //播放的tag，防止错位置，因为普通的url也可能重复
+
+    private int buffterPoint;
 
 
     public static synchronized GSYVideoManager instance() {
@@ -221,6 +226,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                     if (mediaPlayer != null) {
                         mediaPlayer.release();
                     }
+                    if (proxy != null) {
+                        proxy.unregisterCacheListener(GSYVideoManager.this);
+                    }
+                    buffterPoint = 0;
                     break;
             }
         }
@@ -256,7 +265,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             mediaPlayer.prepareAsync();
         } catch (Exception e) {
             e.printStackTrace();
-        }}
+        }
+    }
 
 
     public void prepare(final String url, final Map<String, String> mapHeadData, boolean loop, float speed) {
@@ -313,7 +323,11 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             @Override
             public void run() {
                 if (listener != null) {
-                    listener().onBufferingUpdate(percent);
+                    if (percent > buffterPoint) {
+                        listener().onBufferingUpdate(percent);
+                    } else {
+                        listener().onBufferingUpdate(buffterPoint);
+                    }
                 }
             }
         });
@@ -369,6 +383,12 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
+        buffterPoint = percentsAvailable;
     }
 
     /**
