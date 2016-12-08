@@ -18,6 +18,8 @@
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
+## 新建了QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
+
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
