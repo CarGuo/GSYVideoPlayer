@@ -65,6 +65,18 @@ dependencies {
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.4.5
+* 支持切换IJKPlayer和EXOPlayer,不过EXOPlayer后台播放回到前台黑的问题除了seekto无解啊。
+
+GSYVideoManager
+
+```
+/**
+ * 设置了视频的播放类型
+ * GSYVideoType IJKPLAYER = 0 or IJKEXOPLAYER = 1;
+ */
+public void setVideoType(Context context, int videoType)
+```
 
 ### 1.4.4
 
