@@ -221,14 +221,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                     initVideo(msg);
                     break;
                 case HANDLER_SETDISPLAY:
-                    if (msg.obj == null && mediaPlayer != null) {
-                        mediaPlayer.setSurface(null);
-                    } else {
-                        Surface holder = (Surface) msg.obj;
-                        if (mediaPlayer != null && holder.isValid()) {
-                            mediaPlayer.setSurface(holder);
-                        }
-                    }
+                    showDisplay(msg);
                     break;
                 case HANDLER_RELEASE:
                     if (mediaPlayer != null) {
@@ -297,6 +290,24 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private void showDisplay(Message msg) {
+        if (msg.obj == null && mediaPlayer != null) {
+            mediaPlayer.setSurface(null);
+        } else {
+            Surface holder = (Surface) msg.obj;
+            if (mediaPlayer != null && holder.isValid()) {
+                mediaPlayer.setSurface(holder);
+            }
+            if (mediaPlayer instanceof IjkExoMediaPlayer) {
+                if (mediaPlayer != null && mediaPlayer.getDuration() > 30
+                        && mediaPlayer.getCurrentPosition() < mediaPlayer.getDuration()) {
+                    mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 20);
+                }
+            }
         }
     }
 
