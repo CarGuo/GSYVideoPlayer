@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="post_media_height">200dp</dimen>
+
+    <dimen name="seek_bar_image">150dp</dimen>
 </resources>

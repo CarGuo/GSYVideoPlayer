@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -65,6 +66,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private String playTag = ""; //播放的tag，防止错位置，因为普通的url也可能重复
 
     private Context context;
+
+    private MediaMetadataRetriever mediaMetadataRetriever;//获取帧预览图片
 
     private int currentVideoWidth = 0; //当前播放的视频宽的高
 
@@ -230,6 +233,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                     if (proxy != null) {
                         proxy.unregisterCacheListener(GSYVideoManager.this);
                     }
+                    if (mediaMetadataRetriever != null) {
+                        mediaMetadataRetriever.release();
+                        mediaMetadataRetriever = null;
+                    }
                     buffterPoint = 0;
                     break;
             }
@@ -258,6 +265,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             mediaPlayer.setOnInfoListener(GSYVideoManager.this);
             mediaPlayer.setOnVideoSizeChangedListener(GSYVideoManager.this);
             mediaPlayer.prepareAsync();
+
+            mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -455,6 +466,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     public AbstractMediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+
+    public MediaMetadataRetriever getMediaMetadataRetriever() {
+        return mediaMetadataRetriever;
     }
 
     public int getCurrentVideoWidth() {

@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 
 import static com.example.gsyvideoplayer.utils.CommonUtil.setViewHeight;
 
-public class DetailPlayer extends FragmentActivity {
+public class DetailPlayer extends AppCompatActivity {
 
     @BindView(R.id.post_detail_nested_scroll)
     NestedScrollView postDetailNestedScroll;
@@ -78,13 +78,6 @@ public class DetailPlayer extends FragmentActivity {
 
                 //这是以前旧的方式
                 //toDo();
-            }
-        });
-
-        detailPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toNormal();
             }
         });
 
