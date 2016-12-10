@@ -38,26 +38,13 @@ public class SampleVideo extends StandardGSYVideoPlayer {
 
     private TextView mSwitchSize;
 
-    private ImageView mSeekBarImage;
-
-    private Timer mSeekBarImageTimer;
-
     private List<SwitchVideoModel> mUrlList = new ArrayList<>();
-
-    private ShowSeekBarImageTimerTask mShowSeekBarImageTimerTask;
 
     //记住切换数据源类型
     private int mType = 0;
 
     //数据源
     private int mSourcePosition = 0;
-
-    //记录上一个进度图的位置，用于判断是否取数据
-    private int mPreSeekPosition = -1;
-
-    //记录进度图变化的帧图片图的偏移时间，避免太频繁进入
-    private long mOffsetTime;
-
 
     public SampleVideo(Context context) {
         super(context);
@@ -72,7 +59,6 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     private void initView() {
         mMoreScale = (TextView) findViewById(R.id.moreScale);
         mSwitchSize = (TextView) findViewById(R.id.switchSize);
-        mSeekBarImage = (ImageView) findViewById(R.id.seek_bar_image);
 
         //切换清晰度
         mMoreScale.setOnClickListener(new OnClickListener() {
@@ -180,108 +166,6 @@ public class SampleVideo extends StandardGSYVideoPlayer {
             }
         });
         switchVideoTypeDialog.show();
-    }
-
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        super.onProgressChanged(seekBar, progress, fromUser);
-        if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
-                || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)
-                && GSYVideoManager.instance().getMediaPlayer() != null) {
-
-            int width = seekBar.getWidth();
-            int offset = (int) (width - (getResources().getDimension(R.dimen.seek_bar_image) / 2)) / 100 * progress;
-
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mSeekBarImage.getLayoutParams();
-            layoutParams.leftMargin = offset;
-            //设置帧预览图的显示位置
-            mSeekBarImage.setLayoutParams(layoutParams);
-
-            long currentTime = System.currentTimeMillis();
-
-            if (fromUser && (mPreSeekPosition == -1 || Math.abs(progress - mPreSeekPosition) > 2)
-                    && (currentTime - mOffsetTime) > 400) {
-                //开始预览帧小图
-                startSeekBarImageTimer(seekBar.getProgress());
-                mPreSeekPosition = progress;
-                mOffsetTime = currentTime;
-            }
-
-        }
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        super.onStartTrackingTouch(seekBar);
-        mSeekBarImage.setVisibility(VISIBLE);
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        super.onStopTrackingTouch(seekBar);
-        cancelSeekBarImageTimer();
-        mSeekBarImage.setVisibility(GONE);
-        mPreSeekPosition = -1;
-    }
-
-    @Override
-    public void onPrepared() {
-        super.onPrepared();
-    }
-
-    private void startSeekBarImageTimer(int progress) {
-        cancelSeekBarImageTimer();
-        mSeekBarImageTimer = new Timer();
-        mShowSeekBarImageTimerTask = new ShowSeekBarImageTimerTask(progress);
-        mSeekBarImageTimer.schedule(mShowSeekBarImageTimerTask, 10);
-    }
-
-    private void cancelSeekBarImageTimer() {
-        if (mShowSeekBarImageTimerTask != null) {
-            mShowSeekBarImageTimerTask.cancel();
-        }
-        if (mSeekBarImageTimer != null) {
-            mSeekBarImageTimer.cancel();
-        }
-
-    }
-
-    /**
-     * 获取帧预览图任务
-     **/
-    protected class ShowSeekBarImageTimerTask extends TimerTask {
-
-        int progress;
-
-        ShowSeekBarImageTimerTask(int progress) {
-            this.progress = progress;
-        }
-
-        @Override
-        public void run() {
-            if (!TextUtils.isEmpty(mUrl)) {
-                try {
-                    int time = progress * getDuration() / 100 * 1000;
-                    //获取帧图片
-                    if (GSYVideoManager.instance().getMediaMetadataRetriever() != null) {
-                        final Bitmap bitmap = GSYVideoManager.instance().getMediaMetadataRetriever()
-                                .getFrameAtTime(time, MediaMetadataRetriever.OPTION_CLOSEST);
-                        ((Activity) getContext()).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (bitmap != null) {
-                                    //显示
-                                    mSeekBarImage.setImageBitmap(bitmap);
-                                }
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
 

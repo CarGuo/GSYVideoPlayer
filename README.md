@@ -68,6 +68,11 @@ dependencies {
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+### 1.4.6
+* 修改了某些虚拟按键手机下，全屏后返回导致界面显示不正的问题。
+
+
 ### 1.4.5
 * 支持切换IJKPlayer和EXOPlayer,不过EXOPlayer后台播放回到前台黑的问题除了seekto无解啊。
 

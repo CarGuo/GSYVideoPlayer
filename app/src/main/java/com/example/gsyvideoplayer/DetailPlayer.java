@@ -2,39 +2,34 @@ package com.example.gsyvideoplayer;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
+
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.CustomGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-import com.transitionseverywhere.TransitionManager;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.gsyvideoplayer.utils.CommonUtil.setViewHeight;
 
 public class DetailPlayer extends AppCompatActivity {
 
     @BindView(R.id.post_detail_nested_scroll)
     NestedScrollView postDetailNestedScroll;
     @BindView(R.id.detail_player)
-    StandardGSYVideoPlayer detailPlayer;
+    CustomGSYVideoPlayer detailPlayer;
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
 
-    private boolean isFull;
     private boolean isPlay;
     private boolean isPause;
 
@@ -163,50 +158,12 @@ public class DetailPlayer extends AppCompatActivity {
         }
     }
 
-    private void toFull() {
-        isFull = true;
-
-        TransitionManager.beginDelayedTransition(activityDetailPlayer);
-
-        setViewHeight(detailPlayer, ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-        resolveFullVideoUI();
-        orientationUtils.setEnable(true);
-    }
-
-    private void toNormal() {
-        isFull = false;
-        orientationUtils.setEnable(false);
-        int delay = orientationUtils.backToProtVideo();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                TransitionManager.beginDelayedTransition(activityDetailPlayer);
-                setViewHeight(detailPlayer, ViewGroup.LayoutParams.MATCH_PARENT,
-                        (int) getResources().getDimension(R.dimen.post_media_height));
-            }
-        }, delay);
-    }
-
-    private void toDo() {
-        if (isFull) {
-            toNormal();
-        } else {
-            toFull();
-        }
-    }
 
     private void resolveNormalVideoUI() {
         //增加title
         detailPlayer.getTitleTextView().setVisibility(View.GONE);
         detailPlayer.getTitleTextView().setText("测试视频");
         detailPlayer.getBackButton().setVisibility(View.GONE);
-    }
-
-    private void resolveFullVideoUI() {
-        detailPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-        detailPlayer.getTitleTextView().setText("测试视频");
-        detailPlayer.getBackButton().setVisibility(View.VISIBLE);
     }
 
 }
