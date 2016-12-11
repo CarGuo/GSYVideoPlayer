@@ -13,9 +13,11 @@ import android.widget.SeekBar;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 /**
  * Created by shuyu on 2016/12/10.
@@ -35,6 +37,9 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
 
     //记录进度图变化的帧图片图的偏移时间，避免太频繁进入
     private long mOffsetTime;
+
+    //是否因为用户点击
+    private boolean mIsFromUser;
 
     public CustomGSYVideoPlayer(Context context) {
         super(context);
@@ -73,8 +78,7 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
 
             long currentTime = System.currentTimeMillis();
 
-            if (fromUser && (mPreSeekPosition == -1 || Math.abs(progress - mPreSeekPosition) > 2)
-                    && (currentTime - mOffsetTime) > 400) {
+            if (fromUser && (mPreSeekPosition == -1 || Math.abs(progress - mPreSeekPosition) > 2)) {
                 //开始预览帧小图
                 startSeekBarImageTimer(seekBar.getProgress());
                 mPreSeekPosition = progress;
@@ -87,22 +91,34 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         super.onStartTrackingTouch(seekBar);
+        mIsFromUser = true;
         mSeekBarImage.setVisibility(VISIBLE);
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        seekBar.setProgress(mPreSeekPosition);
         super.onStopTrackingTouch(seekBar);
+        mIsFromUser = false;
         cancelSeekBarImageTimer();
         mSeekBarImage.setVisibility(GONE);
+        mOffsetTime = 0;
         mPreSeekPosition = -1;
+    }
+
+    @Override
+    protected void setTextAndProgress(int secProgress) {
+        if (mIsFromUser) {
+            return;
+        }
+        super.setTextAndProgress(secProgress);
     }
 
     private void startSeekBarImageTimer(int progress) {
         cancelSeekBarImageTimer();
         mSeekBarImageTimer = new Timer();
         mShowSeekBarImageTimerTask = new ShowSeekBarImageTimerTask(progress);
-        mSeekBarImageTimer.schedule(mShowSeekBarImageTimerTask, 10);
+        mSeekBarImageTimer.schedule(mShowSeekBarImageTimerTask, 0);
     }
 
     private void cancelSeekBarImageTimer() {
@@ -120,17 +136,17 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
      **/
     protected class ShowSeekBarImageTimerTask extends TimerTask {
 
-        int progress;
+        int mProgress;
 
         ShowSeekBarImageTimerTask(int progress) {
-            this.progress = progress;
+            this.mProgress = progress;
         }
 
         @Override
         public void run() {
             if (!TextUtils.isEmpty(mUrl)) {
                 try {
-                    int time = progress * getDuration() / 100 * 1000;
+                    int time = mProgress * getDuration() / 100 * 1000;
                     //获取帧图片
                     if (GSYVideoManager.instance().getMediaMetadataRetriever() != null) {
                         final Bitmap bitmap = GSYVideoManager.instance().getMediaMetadataRetriever()
@@ -139,6 +155,7 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
                             @Override
                             public void run() {
                                 if (bitmap != null) {
+                                    Debuger.printfLog("time " + System.currentTimeMillis());
                                     //显示
                                     mSeekBarImage.setImageBitmap(bitmap);
                                 }
