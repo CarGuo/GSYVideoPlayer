@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 
 import com.shuyu.gsyvideoplayer.GSYPreViewManager;
 import com.shuyu.gsyvideoplayer.GSYTextureView;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
 
 /**
@@ -107,8 +108,10 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
             layoutParams.leftMargin = offset;
             //设置帧预览图的显示位置
             mPreviewLayout.setLayoutParams(layoutParams);
-            if (GSYPreViewManager.instance().getMediaPlayer() != null && mHadPlay
-                    && Math.abs(progress - mPreProgress) > 2 && (mCacheFile || mOpenPreView)) {
+            if (GSYPreViewManager.instance().getMediaPlayer() != null
+                    && mHadPlay  && (mCacheFile || mOpenPreView)
+                    && GSYPreViewManager.instance().isSeekToComplete()) {
+                GSYPreViewManager.instance().setSeekToComplete(false);
                 int time = progress * getDuration() / 100;
                 GSYPreViewManager.instance().getMediaPlayer().seekTo(time);
                 mPreProgress = progress;
