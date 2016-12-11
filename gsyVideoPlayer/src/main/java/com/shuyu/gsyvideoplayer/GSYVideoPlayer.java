@@ -124,8 +124,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected boolean mFirstTouch = false;//是否首次触摸
 
-    protected boolean mCacheFile = false; //是否是缓存的文件
-
 
     /**
      * 当前UI

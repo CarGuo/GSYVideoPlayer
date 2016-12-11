@@ -84,6 +84,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mHadPlay = false;//是否播放过
 
+    protected boolean mCacheFile = false; //是否是缓存的文件
+
     protected Context mContext;
 
     protected String mOriginUrl; //原来的url
@@ -305,6 +307,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 resolveFullVideoShow(context, gsyVideoPlayer);
             }
             gsyVideoPlayer.mHadPlay = mHadPlay;
+            gsyVideoPlayer.mCacheFile = mCacheFile;
             gsyVideoPlayer.mFullPauseBitmap = mFullPauseBitmap;
             gsyVideoPlayer.setUp(mUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);

@@ -43,7 +43,7 @@ public class DetailPlayer extends AppCompatActivity {
         ButterKnife.bind(this);
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        detailPlayer.setUp(url, false, null, "测试视频");
+        detailPlayer.setUp(url, true, null, "测试视频");
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -71,9 +71,6 @@ public class DetailPlayer extends AppCompatActivity {
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
                 detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
-
-                //这是以前旧的方式
-                //toDo();
             }
         });
 

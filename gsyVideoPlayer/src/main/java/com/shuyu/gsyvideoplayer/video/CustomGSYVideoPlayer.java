@@ -2,7 +2,6 @@ package com.shuyu.gsyvideoplayer.video;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.TextureView;
@@ -13,7 +12,6 @@ import android.widget.SeekBar;
 import com.shuyu.gsyvideoplayer.GSYPreViewManager;
 import com.shuyu.gsyvideoplayer.GSYTextureView;
 import com.shuyu.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 /**
  * Created by shuyu on 2016/12/10.
@@ -27,6 +25,11 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
 
     //是否因为用户点击
     private boolean mIsFromUser;
+
+    //是否打开滑动预览
+    private boolean mOpenPreView;
+
+    private int mPreProgress = -2;
 
     public CustomGSYVideoPlayer(Context context) {
         super(context);
@@ -104,10 +107,11 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
             layoutParams.leftMargin = offset;
             //设置帧预览图的显示位置
             mPreviewLayout.setLayoutParams(layoutParams);
-            if (GSYPreViewManager.instance().getMediaPlayer() != null && mHadPlay) {
+            if (GSYPreViewManager.instance().getMediaPlayer() != null && mHadPlay
+                    && Math.abs(progress - mPreProgress) > 2 && (mCacheFile || mOpenPreView)) {
                 int time = progress * getDuration() / 100;
-                Debuger.printfLog("SEEK TO " + time);
                 GSYPreViewManager.instance().getMediaPlayer().seekTo(time);
+                mPreProgress = progress;
             }
         }
     }
@@ -117,10 +121,14 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
         super.onStartTrackingTouch(seekBar);
         mIsFromUser = true;
         mPreviewLayout.setVisibility(VISIBLE);
+        mPreProgress = -2;
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        if (mPreProgress >= 0) {
+            seekBar.setProgress(mPreProgress);
+        }
         super.onStopTrackingTouch(seekBar);
         mIsFromUser = false;
         mPreviewLayout.setVisibility(GONE);
@@ -132,5 +140,25 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
             return;
         }
         super.setTextAndProgress(secProgress);
+    }
+
+    @Override
+    public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
+        GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
+        CustomGSYVideoPlayer customGSYVideoPlayer = (CustomGSYVideoPlayer) gsyBaseVideoPlayer;
+        customGSYVideoPlayer.mOpenPreView = mOpenPreView;
+        return gsyBaseVideoPlayer;
+    }
+
+    public boolean isOpenPreView() {
+        return mOpenPreView;
+    }
+
+    /**
+     * 是否打开滑动预览，对已缓存文件默认生效
+     * 如果是本地文件需要设置打开，默认关闭
+     */
+    public void setOpenPreView(boolean localFile) {
+        this.mOpenPreView = localFile;
     }
 }

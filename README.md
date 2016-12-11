@@ -16,6 +16,7 @@
 * **调整显示比例:默认、16:9、4:3。**
 * **调整不同清晰度的支持。**
 * **支持IJKPlayer和EXOPlayer切换。**
+* **进度条小窗口预览。**
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
@@ -65,13 +66,25 @@ dependencies {
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/05.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
+* ### 3、进度条小窗口预览
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" width="426px" height="240px"/>
+
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
 ### 1.4.6
 * 修改了某些虚拟按键手机下，全屏后返回导致界面显示不正的问题。
+* 增加CustomGSYVideoPlayer，实现滑动进度条预览效果。
+注：网目前对已完全缓存的视频，或者本地文件支持好一些，对纯网络视频支持较差。
 
+```
+/**
+ * 是否打开滑动预览，对已缓存文件默认生效
+ * 如果是本地文件需要设置打开，默认关闭
+ */
+public void setOpenPreView(boolean localFile)
+```
 
 ### 1.4.5
 * 支持切换IJKPlayer和EXOPlayer,不过EXOPlayer后台播放回到前台黑的问题除了seekto无解啊。
