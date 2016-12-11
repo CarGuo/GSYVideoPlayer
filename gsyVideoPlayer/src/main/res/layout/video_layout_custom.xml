@@ -166,8 +166,8 @@
     </LinearLayout>
 
 
-    <ImageView
-        android:id="@+id/seek_bar_image"
+    <RelativeLayout
+        android:id="@+id/preview_layout"
         android:layout_width="@dimen/seek_bar_image"
         android:layout_height="100dp"
         android:layout_above="@+id/layout_bottom"
