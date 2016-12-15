@@ -109,7 +109,7 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
             //设置帧预览图的显示位置
             mPreviewLayout.setLayoutParams(layoutParams);
             if (GSYPreViewManager.instance().getMediaPlayer() != null
-                    && mHadPlay  && (mCacheFile || mOpenPreView)
+                    && mHadPlay  && (mOpenPreView)
                     && GSYPreViewManager.instance().isSeekToComplete()) {
                 GSYPreViewManager.instance().setSeekToComplete(false);
                 int time = progress * getDuration() / 100;

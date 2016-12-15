@@ -628,7 +628,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
         mDialogSeekTime.setText(seekTime);
         mDialogTotalTime.setText(" / " + totalTime);
-        mDialogProgressBar.setProgress(seekTimePosition * 100 / totalTimeDuration);
+        if (totalTimeDuration > 0)
+            mDialogProgressBar.setProgress(seekTimePosition * 100 / totalTimeDuration);
         if (deltaX > 0) {
             mDialogIcon.setBackgroundResource(R.drawable.video_forward_icon);
         } else {
@@ -741,6 +742,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             StandardGSYVideoPlayer gsyVideoPlayer = (StandardGSYVideoPlayer) gsyBaseVideoPlayer;
             gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
             gsyVideoPlayer.setNeedLockFull(isNeedLockFull());
+            initFullUI(gsyVideoPlayer);
         }
         return gsyBaseVideoPlayer;
     }
@@ -761,6 +763,33 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
      */
     public void initUIState() {
         setStateAndUi(CURRENT_STATE_NORMAL);
+    }
+
+    /**
+     * 全屏的UI逻辑
+     */
+    private void initFullUI(StandardGSYVideoPlayer standardGSYVideoPlayer) {
+
+        if (mBottomProgressDrawable != null) {
+            standardGSYVideoPlayer.setBottomProgressBarDrawable(mBottomProgressDrawable);
+        }
+
+        if (mBottomShowProgressDrawable != null && mBottomShowProgressThumbDrawable != null) {
+            standardGSYVideoPlayer.setBottomShowProgressBarDrawable(mBottomShowProgressDrawable,
+                    mBottomShowProgressThumbDrawable);
+        }
+
+        if (mVolumeProgressDrawable != null) {
+            standardGSYVideoPlayer.setDialogVolumeProgressBar(mVolumeProgressDrawable);
+        }
+
+        if (mDialogProgressBarDrawable != null) {
+            standardGSYVideoPlayer.setDialogProgressBar(mDialogProgressBarDrawable);
+        }
+
+        if (mDialogProgressHighLightColor >= 0 && mDialogProgressNormalColor >= 0) {
+            standardGSYVideoPlayer.setDialogProgressColor(mDialogProgressHighLightColor, mDialogProgressNormalColor);
+        }
     }
 
     private void startDismissControlViewTimer() {
