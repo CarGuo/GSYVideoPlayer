@@ -16,7 +16,7 @@
 * **调整显示比例:默认、16:9、4:3。**
 * **调整不同清晰度的支持。**
 * **支持IJKPlayer和EXOPlayer切换。**
-* **进度条小窗口预览。**
+* **进度条小窗口预览（测试）。**
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
@@ -38,7 +38,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.4.5'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.4.6'
 }
 
 ```
@@ -75,13 +75,13 @@ dependencies {
 
 ### 1.4.6
 * 修改了某些虚拟按键手机下，全屏后返回导致界面显示不正的问题。
-* 增加CustomGSYVideoPlayer，实现滑动进度条预览效果。
-注：网目前对已完全缓存的视频，或者本地文件支持好一些，对纯网络视频支持较差。
+* 增加测试版CustomGSYVideoPlayer，实现滑动进度条预览效果（测试效果）。
+* 修改了出现除以0的的问题，全屏时候调整UI样式无效的情况
+注：CustomGSYVideoPlayer目前对已完全缓存的视频，或者本地文件支持好一些，对纯网络视频支持“较”差。
 
 ```
 /**
- * 是否打开滑动预览，对已缓存文件默认生效
- * 如果是本地文件需要设置打开，默认关闭
+ * 如果是需要进度条预览的设置打开，默认关闭
  */
 public void setOpenPreView(boolean localFile)
 ```

@@ -109,7 +109,7 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
             //设置帧预览图的显示位置
             mPreviewLayout.setLayoutParams(layoutParams);
             if (GSYPreViewManager.instance().getMediaPlayer() != null
-                    && mHadPlay  && (mOpenPreView)
+                    && mHadPlay && (mOpenPreView)
                     && GSYPreViewManager.instance().isSeekToComplete()) {
                 GSYPreViewManager.instance().setSeekToComplete(false);
                 int time = progress * getDuration() / 100;
@@ -158,8 +158,7 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
     }
 
     /**
-     * 是否打开滑动预览，对已缓存文件默认生效
-     * 如果是本地文件需要设置打开，默认关闭
+     * 如果是需要进度条预览的设置打开，默认关闭
      */
     public void setOpenPreView(boolean localFile) {
         this.mOpenPreView = localFile;
