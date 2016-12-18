@@ -42,9 +42,9 @@ public class DetailPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_detail_player);
         ButterKnife.bind(this);
 
-        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //String url = "https://s3.cn-north-1.amazonaws.com.cn/talkpal/lecture/video/472/v.mp4";
-        //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
+        String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
         detailPlayer.setUp(url, false, null, "测试视频");
 
         //增加封面

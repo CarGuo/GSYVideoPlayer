@@ -21,6 +21,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -28,9 +33,6 @@ dependencies {
     def viewDependencies = rootProject.ext.viewDependencies
     def dataDependencies = rootProject.ext.dataDependencies
     compile viewDependencies.ijkplayer_java
-    compile viewDependencies.ijkplayer_armv7a
-    compile viewDependencies.ijkplayer_armv5
-    compile viewDependencies.ijkplayer_x86
     compile viewDependencies.ijkplayer_exo
     compile viewDependencies.transitionseverywhere
     compile dataDependencies.videocache
