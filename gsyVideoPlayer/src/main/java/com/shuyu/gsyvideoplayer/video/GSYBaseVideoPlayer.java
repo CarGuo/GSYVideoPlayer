@@ -179,7 +179,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     /**
      * 全屏
      */
-    private void resolveFullVideoShow(Context context, final GSYBaseVideoPlayer gsyVideoPlayer) {
+    private void resolveFullVideoShow(Context context, final GSYBaseVideoPlayer gsyVideoPlayer, final FrameLayout frameLayout) {
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) gsyVideoPlayer.getLayoutParams();
         lp.setMargins(0, 0, 0, 0);
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -191,15 +191,24 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
         mOrientationUtils.setEnable(mRotateViewAuto);
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mLockLand) {
-                    mOrientationUtils.resolveByClick();
+        if (isShowFullAnimation()) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mLockLand) {
+                        mOrientationUtils.resolveByClick();
+                    }
+                    gsyVideoPlayer.setVisibility(VISIBLE);
+                    frameLayout.setVisibility(VISIBLE);
                 }
-                gsyVideoPlayer.setVisibility(VISIBLE);
+            }, 300);
+        } else {
+            if (mLockLand) {
+                mOrientationUtils.resolveByClick();
             }
-        }, ismShowFullAnimation() ? 300 : 0);
+            gsyVideoPlayer.setVisibility(VISIBLE);
+            frameLayout.setVisibility(VISIBLE);
+        }
 
 
         if (mVideoAllCallBack != null) {
@@ -298,7 +307,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                     @Override
                     public void run() {
                         TransitionManager.beginDelayedTransition(vp);
-                        resolveFullVideoShow(context, gsyVideoPlayer);
+                        resolveFullVideoShow(context, gsyVideoPlayer, frameLayout);
                     }
                 }, 300);
             } else {
@@ -306,7 +315,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 frameLayout.addView(gsyVideoPlayer, lp);
                 vp.addView(frameLayout, lpParent);
                 gsyVideoPlayer.setVisibility(INVISIBLE);
-                resolveFullVideoShow(context, gsyVideoPlayer);
+                frameLayout.setVisibility(INVISIBLE);
+                resolveFullVideoShow(context, gsyVideoPlayer, frameLayout);
             }
             gsyVideoPlayer.mHadPlay = mHadPlay;
             gsyVideoPlayer.mCacheFile = mCacheFile;
@@ -585,7 +595,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     }
 
 
-    public boolean ismShowFullAnimation() {
+    public boolean isShowFullAnimation() {
         return mShowFullAnimation;
     }
 
