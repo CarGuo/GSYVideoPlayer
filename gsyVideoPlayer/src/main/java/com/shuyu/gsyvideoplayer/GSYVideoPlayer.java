@@ -66,8 +66,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     public static boolean IF_RELEASE_WHEN_ON_PAUSE = true;
 
-    public static boolean WIFI_TIP_DIALOG_SHOWED = false;
-
     protected Timer UPDATE_PROGRESS_TIMER;
 
     protected Surface mSurface;
@@ -123,7 +121,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected boolean mBrightness = false;//是否改变亮度
 
     protected boolean mFirstTouch = false;//是否首次触摸
-
 
     /**
      * 当前UI
@@ -294,7 +291,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 return;
             }
             if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {
-                if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getContext()) && !WIFI_TIP_DIALOG_SHOWED) {
+                if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getContext())
+                        && mNeedShowWifiTip) {
                     showWifiDialog();
                     return;
                 }

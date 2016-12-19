@@ -58,6 +58,7 @@ public class ListVideoUtil {
     private boolean isLoop;//循环
     private boolean hideKey = true;//隐藏按键
     private boolean needLockFull = true;//隐藏按键
+    protected boolean needShowWifiTip = true; //是否需要显示流量提示
 
 
     private int[] listItemRect;//当前item框的屏幕位置
@@ -132,6 +133,8 @@ public class ListVideoUtil {
         gsyVideoPlayer.setLooping(isLoop);
 
         gsyVideoPlayer.setSpeed(speed);
+
+        gsyVideoPlayer.setNeedShowWifiTip(needShowWifiTip);
 
         gsyVideoPlayer.setNeedLockFull(needLockFull);
 
@@ -616,6 +619,17 @@ public class ListVideoUtil {
      */
     public void setNeedLockFull(boolean needLoadFull) {
         this.needLockFull = needLoadFull;
+    }
+
+    public boolean isNeedShowWifiTip() {
+        return needShowWifiTip;
+    }
+
+    /**
+     * 是否需要显示流量提示,默认true
+     */
+    public void setNeedShowWifiTip(boolean needShowWifiTip) {
+        this.needShowWifiTip = needShowWifiTip;
     }
 
 }

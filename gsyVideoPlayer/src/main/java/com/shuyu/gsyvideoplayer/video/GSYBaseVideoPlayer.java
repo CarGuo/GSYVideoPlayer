@@ -62,6 +62,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     private boolean mShowFullAnimation = true;//是否使用全屏动画效果
 
+    protected boolean mNeedShowWifiTip = true; //是否需要显示流量提示
+
     protected int[] mListItemRect;//当前item框的屏幕位置
 
     protected int[] mListItemSize;//当前item的大小
@@ -309,6 +311,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.mHadPlay = mHadPlay;
             gsyVideoPlayer.mCacheFile = mCacheFile;
             gsyVideoPlayer.mFullPauseBitmap = mFullPauseBitmap;
+            gsyVideoPlayer.mNeedShowWifiTip = mNeedShowWifiTip;
             gsyVideoPlayer.setUp(mUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
@@ -661,5 +664,16 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void setHideKey(boolean hideKey) {
         this.mHideKey = hideKey;
+    }
+
+    public boolean isNeedShowWifiTip() {
+        return mNeedShowWifiTip;
+    }
+
+    /**
+     * 是否需要显示流量提示,默认true
+     */
+    public void setNeedShowWifiTip(boolean needShowWifiTip) {
+        this.mNeedShowWifiTip = needShowWifiTip;
     }
 }

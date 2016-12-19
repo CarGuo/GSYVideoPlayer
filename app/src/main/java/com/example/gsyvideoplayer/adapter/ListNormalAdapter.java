@@ -93,6 +93,8 @@ public class ListNormalAdapter extends BaseAdapter {
         //默认缓存路径
         holder.gsyVideoPlayer.setUp(url, true , null, "这是title");
 
+        //holder.gsyVideoPlayer.setNeedShowWifiTip(false);
+
         /************************下方为其他路径************************************/
         //如果一个列表的缓存路劲都一一致
         //holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath(), ""));
