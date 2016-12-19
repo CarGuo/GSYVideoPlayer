@@ -17,6 +17,7 @@
 * **调整不同清晰度的支持。**
 * **支持IJKPlayer和EXOPlayer切换。**
 * **进度条小窗口预览（测试）。**
+* **Https支持**
 
 ## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
 
@@ -38,7 +39,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.4.6'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.4.7'
 }
 
 ```
@@ -72,6 +73,17 @@ dependencies {
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.4.7
+* 修复直接横屏有闪动的问题。
+* 修改了流量提示的接口。
+* 增加了HTTPS支持。
+
+```
+/**
+ * 是否需要显示流量提示,默认true
+ */
+public void setNeedShowWifiTip(boolean needShowWifiTip)
+```
 
 ### 1.4.6
 * 修改了某些虚拟按键手机下，全屏后返回导致界面显示不正的问题。
