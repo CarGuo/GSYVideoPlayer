@@ -18,6 +18,7 @@
 * **支持IJKPlayer和EXOPlayer切换。**
 * **进度条小窗口预览（测试）。**
 * **Https支持**
+* **连续播放一个列表的视频**
 
 ## QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
 
@@ -40,7 +41,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.4.8'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.4.9'
 }
 
 ```
@@ -68,6 +69,12 @@ dependencies {
 
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
+
+### 1.4.9
+* 增加了连续播放列表的支持 ListGSYVideoPlayer。
+* 增加了列表播放的demo  DetailListPlayer。
+* 减小了https版本的so的大小。
+
 
 ### 1.4.8
 * 锁定屏幕按键增加锁定屏幕旋转功能。

@@ -42,17 +42,19 @@ public class MainActivity extends AppCompatActivity {
                 JumpUtils.goToVideoPlayer2(this);
                 break;
             case R.id.recycler_2:
+                //recycler的demo
                 JumpUtils.goToVideoRecyclerPlayer2(this);
                 break;
             case R.id.list_detail:
-                //支持全屏重力旋转的列表播放，滑动后不会被销毁
+                //支持旋转全屏的详情模式
                 JumpUtils.goToDetailPlayer(this);
                 break;
             case R.id.list_detail_list:
-                //支持全屏重力旋转的列表播放，滑动后不会被销毁
+                //播放一个连续列表
                 JumpUtils.goToDetailListPlayer(this);
                 break;
             case R.id.clear_cache:
+                //清理缓存
                 GSYVideoManager.clearAllDefaultCache(MainActivity.this);
                 //String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
                 //GSYVideoManager.clearDefaultCache(MainActivity.this, url);
