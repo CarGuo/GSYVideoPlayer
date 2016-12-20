@@ -13,6 +13,7 @@ import com.example.gsyvideoplayer.listener.SampleListener;
 import com.shuyu.gsyvideoplayer.GSYPreViewManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 
+import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.CustomGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -54,15 +55,17 @@ public class DetailPlayer extends AppCompatActivity {
 
         resolveNormalVideoUI();
 
+        //外部辅助的旋转，帮助全屏
         orientationUtils = new OrientationUtils(this, detailPlayer);
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
         detailPlayer.setIsTouchWiget(true);
-        //打开自动旋转
-        detailPlayer.setRotateViewAuto(true);
+        //关闭自动旋转
+        detailPlayer.setRotateViewAuto(false);
         detailPlayer.setLockLand(false);
         detailPlayer.setShowFullAnimation(false);
+        detailPlayer.setNeedLockFull(true);
 
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,12 +106,14 @@ public class DetailPlayer extends AppCompatActivity {
             }
         });
 
-        detailPlayer.setBottomProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_progress));
-        detailPlayer.setDialogVolumeProgressBar(getResources().getDrawable(R.drawable.video_new_volume_progress_bg));
-        detailPlayer.setDialogProgressBar(getResources().getDrawable(R.drawable.video_new_progress));
-        detailPlayer.setBottomShowProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_seekbar_progress),
-        getResources().getDrawable(R.drawable.video_new_seekbar_thumb));
-        detailPlayer.setDialogProgressColor(getResources().getColor(R.color.colorAccent), -11);
+        detailPlayer.setLockClickListener(new LockClickListener() {
+            @Override
+            public void onClick(View view, boolean lock) {
+                if (orientationUtils != null) {
+                    orientationUtils.setEnable(!lock);
+                }
+            }
+        });
 
     }
 
@@ -160,6 +165,9 @@ public class DetailPlayer extends AppCompatActivity {
                 //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
                 if (detailPlayer.isIfCurrentIsFullscreen()) {
                     StandardGSYVideoPlayer.backFromWindowFull(this);
+                }
+                if (orientationUtils != null) {
+                    orientationUtils.setEnable(true);
                 }
             }
         }
