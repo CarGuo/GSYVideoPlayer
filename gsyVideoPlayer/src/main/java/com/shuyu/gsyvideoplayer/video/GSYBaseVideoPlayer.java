@@ -124,7 +124,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected Bitmap mFullPauseBitmap = null;//暂停时的全屏图片；
 
-    private OrientationUtils mOrientationUtils; //旋转工具类
+    protected OrientationUtils mOrientationUtils; //旋转工具类
 
     private Handler mHandler = new Handler();
 
@@ -188,14 +188,14 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         gsyVideoPlayer.setLayoutParams(lp);
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
-
         mOrientationUtils.setEnable(mRotateViewAuto);
+        gsyVideoPlayer.mOrientationUtils = mOrientationUtils;
 
         if (isShowFullAnimation()) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (mLockLand) {
+                    if (mLockLand && mOrientationUtils.getIsLand() != 1) {
                         mOrientationUtils.resolveByClick();
                     }
                     gsyVideoPlayer.setVisibility(VISIBLE);
@@ -359,8 +359,10 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         mIfCurrentIsFullscreen = false;
         int delay = mOrientationUtils.backToProtVideo();
         mOrientationUtils.setEnable(false);
-        if (mOrientationUtils != null)
+        if (mOrientationUtils != null) {
             mOrientationUtils.releaseListener();
+            mOrientationUtils = null;
+        }
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -640,6 +642,9 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void setRotateViewAuto(boolean rotateViewAuto) {
         this.mRotateViewAuto = rotateViewAuto;
+        if (mOrientationUtils != null) {
+            mOrientationUtils.setEnable(rotateViewAuto);
+        }
     }
 
     public boolean isLockLand() {

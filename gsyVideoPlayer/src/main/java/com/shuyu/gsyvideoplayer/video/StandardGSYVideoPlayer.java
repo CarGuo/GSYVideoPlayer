@@ -146,9 +146,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                 if (mLockCurScreen) {
                     mLockScreen.setImageResource(R.drawable.unlock);
                     mLockCurScreen = false;
+                    if (mOrientationUtils != null)
+                        mOrientationUtils.setEnable(mRotateViewAuto);
                 } else {
                     mLockScreen.setImageResource(R.drawable.lock);
                     mLockCurScreen = true;
+                    if (mOrientationUtils != null)
+                        mOrientationUtils.setEnable(false);
                     hideAllWidget();
                 }
             }
