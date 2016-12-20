@@ -22,11 +22,8 @@
 ## QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
 
 ### [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
-　
 ### [问题集锦入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
-　
 ### [IJKPlayer问题入口](http://www.jianshu.com/p/220b00d00deb)　
-
 ### [IJKPlayer编译自定义SO入口](http://www.jianshu.com/p/bd289e25d272)　
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
