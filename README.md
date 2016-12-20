@@ -45,9 +45,11 @@ dependencies {
 ```
 　
 　
-## [*********** *问题集锦入口* ***********](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
+## [问题集锦入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
 　
 ## [IJKPlayer问题入口](http://www.jianshu.com/p/220b00d00deb)　
+
+## [IJKPlayer编译自定义SO入口](http://www.jianshu.com/p/bd289e25d272)　
 
 ## 效果图下方版本说明，可以当做简单的wiki使用，效果可参考DEMO。
 　
