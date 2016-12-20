@@ -50,6 +50,13 @@
             android:text="Detail Video2" />
 
         <Button
+            android:id="@+id/list_detail_list"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Detail List" />
+
+        <Button
             android:id="@+id/clear_cache"
             android:layout_width="120dp"
             android:layout_height="wrap_content"

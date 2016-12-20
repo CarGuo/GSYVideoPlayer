@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler_2})
+    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler_2, R.id.list_detail_list})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.open_btn:
@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.list_detail:
                 //支持全屏重力旋转的列表播放，滑动后不会被销毁
                 JumpUtils.goToDetailPlayer(this);
+                break;
+            case R.id.list_detail_list:
+                //支持全屏重力旋转的列表播放，滑动后不会被销毁
+                JumpUtils.goToDetailListPlayer(this);
                 break;
             case R.id.clear_cache:
                 GSYVideoManager.clearAllDefaultCache(MainActivity.this);
