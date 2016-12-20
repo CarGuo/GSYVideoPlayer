@@ -19,14 +19,18 @@
 * **进度条小窗口预览（测试）。**
 * **Https支持**
 
-## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
-
 ## 新建了QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
+
+## [简书详解入口](http://www.jianshu.com/p/9fe377dd9750)
+　
+## [问题集锦入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
+　
+## [IJKPlayer问题入口](http://www.jianshu.com/p/220b00d00deb)　
+
+## [IJKPlayer编译自定义SO入口](http://www.jianshu.com/p/bd289e25d272)　
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
-
-## 因为某些原因，现在使用jitpack.io，还请使用依赖的各位切换到jitpack，见谅见谅。
 
 ```
 allprojects {
@@ -43,13 +47,6 @@ dependencies {
 }
 
 ```
-　
-　
-## [问题集锦入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
-　
-## [IJKPlayer问题入口](http://www.jianshu.com/p/220b00d00deb)　
-
-## [IJKPlayer编译自定义SO入口](http://www.jianshu.com/p/bd289e25d272)　
 
 ## 效果图下方版本说明，可以当做简单的wiki使用，效果可参考DEMO。
 　
@@ -74,6 +71,11 @@ dependencies {
 
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
+
+### 1.4.8
+* 锁定屏幕按键增加锁定屏幕旋转功能。
+* 锁定屏幕按键增加回调接口。
+* 修复了横屏的一个问题。
 
 ### 1.4.7
 * 修复直接横屏有闪动的问题。
