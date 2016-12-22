@@ -48,11 +48,15 @@ public class SampleVideo extends StandardGSYVideoPlayer {
 
     public SampleVideo(Context context) {
         super(context);
-        initView();
     }
 
     public SampleVideo(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    protected void init(Context context) {
+        super.init(context);
         initView();
     }
 

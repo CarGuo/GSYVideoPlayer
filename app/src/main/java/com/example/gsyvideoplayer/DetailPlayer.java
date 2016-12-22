@@ -27,8 +27,12 @@ public class DetailPlayer extends AppCompatActivity {
 
     @BindView(R.id.post_detail_nested_scroll)
     NestedScrollView postDetailNestedScroll;
+
+    //推荐使用StandardGSYVideoPlayer，功能一致
+    //CustomGSYVideoPlayer部分功能处于试验阶段
     @BindView(R.id.detail_player)
     CustomGSYVideoPlayer detailPlayer;
+
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
 
@@ -66,7 +70,7 @@ public class DetailPlayer extends AppCompatActivity {
         detailPlayer.setLockLand(false);
         detailPlayer.setShowFullAnimation(false);
         detailPlayer.setNeedLockFull(true);
-
+        detailPlayer.setOpenPreView(true);
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
