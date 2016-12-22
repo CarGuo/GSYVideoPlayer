@@ -102,6 +102,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setVideoAllCallBack(standardVideoAllCallBack);
     }
 
+    /**
+     * 1.5开始加入，必须重载
+     */
+    public StandardGSYVideoPlayer(Context context, Boolean fullFlag) {
+        super(context, fullFlag);
+    }
+
     public StandardGSYVideoPlayer(Context context) {
         super(context);
     }

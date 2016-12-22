@@ -132,6 +132,14 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      */
     public abstract void startPlayLogic();
 
+    /**
+     * 1.5开始加入，必须重载
+     */
+    public GSYVideoPlayer(Context context, Boolean fullFlag) {
+        super(context, fullFlag);
+        init(context);
+    }
+
     public GSYVideoPlayer(Context context) {
         super(context);
         init(context);

@@ -19,6 +19,13 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
     protected List<GSYVideoModel> mUriList = new ArrayList<>();
     protected int mPlayPosition;
 
+    /**
+     * 1.5开始加入，必须重载
+     */
+    public ListGSYVideoPlayer(Context context, Boolean fullFlag) {
+        super(context, fullFlag);
+    }
+
     public ListGSYVideoPlayer(Context context) {
         super(context);
     }

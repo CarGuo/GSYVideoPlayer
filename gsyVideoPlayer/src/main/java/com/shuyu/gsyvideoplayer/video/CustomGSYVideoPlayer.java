@@ -32,6 +32,13 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
 
     private int mPreProgress = -2;
 
+    /**
+     * 1.5开始加入，必须重载
+     */
+    public CustomGSYVideoPlayer(Context context, Boolean fullFlag) {
+        super(context, fullFlag);
+    }
+
     public CustomGSYVideoPlayer(Context context) {
         super(context);
     }

@@ -128,6 +128,13 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     private Handler mHandler = new Handler();
 
+    /**
+     * 1.5开始加入，必须重载
+     */
+    public GSYBaseVideoPlayer(Context context, Boolean fullFlag) {
+        super(context);
+        mIfCurrentIsFullscreen = fullFlag;
+    }
 
     public GSYBaseVideoPlayer(Context context) {
         super(context);
@@ -287,8 +294,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         saveLocationStatus(context, statusBar, actionBar);
 
         try {
-            Constructor<GSYBaseVideoPlayer> constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class);
-            final GSYBaseVideoPlayer gsyVideoPlayer = constructor.newInstance(getContext());
+            Constructor<GSYBaseVideoPlayer> constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class, Boolean.class);
+            final GSYBaseVideoPlayer gsyVideoPlayer = constructor.newInstance(getContext(), true);
             gsyVideoPlayer.setId(FULLSCREEN_ID);
             gsyVideoPlayer.setIfCurrentIsFullscreen(true);
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);

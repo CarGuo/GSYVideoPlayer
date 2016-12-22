@@ -46,6 +46,13 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     //数据源
     private int mSourcePosition = 0;
 
+    /**
+     * 1.5开始加入，必须重载
+     */
+    public SampleVideo(Context context, Boolean fullFlag) {
+        super(context, fullFlag);
+    }
+
     public SampleVideo(Context context) {
         super(context);
     }
