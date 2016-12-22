@@ -320,7 +320,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     public void showWifiDialog() {
         super.showWifiDialog();
-        if (!NetworkUtils.isAvailable(mContext)) {
+        if (!mUrl.contains("127.0.0.1") && !NetworkUtils.isAvailable(mContext)) {
             Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
             return;
         }
