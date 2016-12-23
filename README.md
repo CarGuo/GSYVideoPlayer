@@ -19,6 +19,7 @@
 * **进度条小窗口预览（测试）。**
 * **Https支持。**
 * **连续播放一个列表的视频。**
+* **支持全屏与非全屏两套布局切换**
 
 ## QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
 
@@ -41,7 +42,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.4.9'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.0'
 }
 
 ```
@@ -70,6 +71,33 @@ dependencies {
 
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.5.0
+* 增加了全屏和普通播放下使用两套布局的支持，增加demo：LandLayoutVideo
+* 修改了DEMO的recyclerView的一个问题
+* 修改了一些bug
+
+```
+
+/**
+ * 如果需要使用到：全屏和普通播放下使用两套布局的支持。
+ * 那么重载播放器请记得重载下方构造方法
+ */
+public XXXXXXXXXX(Context context, Boolean fullFlag) {
+    super(context, fullFlag);
+}
+
+····
+
+//这个必须配置最上面的构造才能生效
+@Override
+public int getLayoutId() {
+    if (mIfCurrentIsFullscreen) {
+        return R.layout.sample_video_land;
+    }
+    return R.layout.sample_video;
+}
+
+```
 ### 1.4.9
 * 增加了连续播放列表的支持 ListGSYVideoPlayer。
 * 增加了列表播放的demo  DetailListPlayer。
