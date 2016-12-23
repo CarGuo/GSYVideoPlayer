@@ -86,7 +86,7 @@ public class RecyclerView2Activity extends AppCompatActivity {
                     //不可视的是时候
                     if ((position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果是小窗口就不需要处理
-                        if (!listVideoUtil.isSmall()) {
+                        if (!listVideoUtil.isSmall() && !listVideoUtil.isFull()) {
                             //小窗口
                             int size = CommonUtil.dip2px(RecyclerView2Activity.this, 150);
                             //actionbar为true才不会掉下面去
