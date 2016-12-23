@@ -33,7 +33,7 @@ public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
     private int mPreProgress = -2;
 
     /**
-     * 1.5开始加入，必须重载
+     * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
      */
     public CustomGSYVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);

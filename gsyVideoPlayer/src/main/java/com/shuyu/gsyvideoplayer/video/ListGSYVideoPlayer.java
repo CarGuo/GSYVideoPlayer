@@ -20,7 +20,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
     protected int mPlayPosition;
 
     /**
-     * 1.5开始加入，必须重载
+     * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
      */
     public ListGSYVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);

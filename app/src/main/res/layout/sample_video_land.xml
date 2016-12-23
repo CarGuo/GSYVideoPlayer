@@ -35,17 +35,18 @@
     <LinearLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:background="#99000000"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="invisible">
 
-        <moe.codeest.enviews.ENPlayView
+        <ImageView
             android:id="@+id/start"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/video_click_play_selector"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"

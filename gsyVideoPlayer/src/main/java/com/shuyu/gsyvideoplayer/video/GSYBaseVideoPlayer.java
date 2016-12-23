@@ -129,7 +129,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     private Handler mHandler = new Handler();
 
     /**
-     * 1.5开始加入，必须重载
+     * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
      */
     public GSYBaseVideoPlayer(Context context, Boolean fullFlag) {
         super(context);
@@ -293,9 +293,26 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
         saveLocationStatus(context, statusBar, actionBar);
 
+        boolean hadNewConstructor = true;
+
         try {
-            Constructor<GSYBaseVideoPlayer> constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class, Boolean.class);
-            final GSYBaseVideoPlayer gsyVideoPlayer = constructor.newInstance(getContext(), true);
+            GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class, Boolean.class);
+        } catch (Exception e) {
+            hadNewConstructor = false;
+        }
+
+        try {
+            //通过被重载的不同构造器来选择
+            Constructor<GSYBaseVideoPlayer> constructor;
+            final GSYBaseVideoPlayer gsyVideoPlayer;
+            if (!hadNewConstructor) {
+                constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class);
+                gsyVideoPlayer = constructor.newInstance(getContext());
+            } else {
+                constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class, Boolean.class);
+                gsyVideoPlayer = constructor.newInstance(getContext(), true);
+            }
+
             gsyVideoPlayer.setId(FULLSCREEN_ID);
             gsyVideoPlayer.setIfCurrentIsFullscreen(true);
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
