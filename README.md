@@ -75,6 +75,7 @@ dependencies {
 * 增加了全屏和普通播放下使用两套布局的支持，增加demo：LandLayoutVideo
 * 修改了DEMO的recyclerView的一个问题
 * 修改了一些bug
+* 增加了WebView滑动demo。
 
 ```
 

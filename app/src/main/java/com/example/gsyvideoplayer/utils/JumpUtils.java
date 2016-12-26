@@ -14,6 +14,7 @@ import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.RecyclerView2Activity;
+import com.example.gsyvideoplayer.WebDetailActivity;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -91,6 +92,17 @@ public class JumpUtils {
      */
     public static void goToDetailListPlayer(Activity activity) {
         Intent intent = new Intent(activity, DetailListPlayer.class);
+        activity.startActivity(intent);
+    }
+
+
+    /**
+     * 跳转到详情播放
+     *
+     * @param activity
+     */
+    public static void gotoWebDetail(Activity activity) {
+        Intent intent = new Intent(activity, WebDetailActivity.class);
         activity.startActivity(intent);
     }
 }

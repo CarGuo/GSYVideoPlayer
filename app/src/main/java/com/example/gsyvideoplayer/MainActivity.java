@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler_2, R.id.list_detail_list})
+    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.open_btn:
@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.list_detail_list:
                 //播放一个连续列表
                 JumpUtils.goToDetailListPlayer(this);
+                break;
+            case R.id.web_detail:
+                //播放一个连续列表
+                JumpUtils.gotoWebDetail(this);
                 break;
             case R.id.clear_cache:
                 //清理缓存
