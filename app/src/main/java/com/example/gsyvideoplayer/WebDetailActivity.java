@@ -133,7 +133,6 @@ public class WebDetailActivity extends AppCompatActivity {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (!webPlayer.isIfCurrentIsFullscreen() && scrollY >= 0 && isPlay) {
-                    Debuger.printfError("ffffffffffffff " + webPlayer.getHeight());
                     if (scrollY > webPlayer.getHeight()) {
                         //如果是小窗口就不需要处理
                         if (!isSamll) {
