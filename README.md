@@ -24,7 +24,7 @@
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
 #### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
-
+　
 ### [*** 使用说明、接口文档入口 ***](https://github.com/CarGuo/GSYVideoPlayer/wiki)
 　
 ### [*** 版本更新说明入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
