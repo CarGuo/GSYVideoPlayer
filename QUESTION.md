@@ -68,3 +68,11 @@ setUp(String url, boolean cacheWithPlay····)
 ```
 
 #### 6、为什么拖动视屏会弹回来，因为ijk的FFMPEG对关键帧问题，目前无解。
+
+#### 7、视频旋转后重新开始，配置AndroidManifest.xml。
+```
+<activity
+    android:name=".PlayActivity"
+    android:configChanges="orientation|keyboardHidden|screenSize"
+    android:screenOrientation="portrait" />
+```
