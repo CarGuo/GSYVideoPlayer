@@ -25,13 +25,13 @@
 
 #### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
 　
-### [*** 使用说明、接口文档入口 ***](https://github.com/CarGuo/GSYVideoPlayer/wiki)
+### [*** 使用说明、接口文档 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/wiki)
 　
-### [*** 版本更新说明入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
-### [*** 问题集锦入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
-### [*** IJKPlayer问题入口 ***](http://www.jianshu.com/p/220b00d00deb)　
-### [*** IJKPlayer编译自定义SO入口 ***](http://www.jianshu.com/p/bd289e25d272)　
-### [*** 简书详解入口 ***](http://www.jianshu.com/p/9fe377dd9750)
+### [*** 版本更新说明 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
+### [*** 问题集锦 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
+### [*** IJKPlayer问题 - 入口 ***](http://www.jianshu.com/p/220b00d00deb)　
+### [*** IJKPlayer编译自定义SO - 入口 ***](http://www.jianshu.com/p/bd289e25d272)　
+### [*** 简书详解 - 入口 ***](http://www.jianshu.com/p/9fe377dd9750)
 
 
 在project下的build.gradle添加
