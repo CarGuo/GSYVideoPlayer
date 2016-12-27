@@ -679,6 +679,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         super.dismissProgressDialog();
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
+            mProgressDialog = null;
         }
     }
 
@@ -719,6 +720,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         super.dismissVolumeDialog();
         if (mVolumeDialog != null) {
             mVolumeDialog.dismiss();
+            mVolumeDialog = null;
         }
     }
 
@@ -755,6 +757,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         super.dismissVolumeDialog();
         if (mBrightnessDialog != null) {
             mBrightnessDialog.dismiss();
+            mBrightnessDialog = null;
         }
     }
 

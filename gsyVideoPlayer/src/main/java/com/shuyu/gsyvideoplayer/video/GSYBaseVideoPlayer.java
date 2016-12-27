@@ -381,11 +381,14 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void clearFullscreenLayout() {
         mIfCurrentIsFullscreen = false;
-        int delay = mOrientationUtils.backToProtVideo();
-        mOrientationUtils.setEnable(false);
+        int delay = 0;
         if (mOrientationUtils != null) {
-            mOrientationUtils.releaseListener();
-            mOrientationUtils = null;
+            delay = mOrientationUtils.backToProtVideo();
+            mOrientationUtils.setEnable(false);
+            if (mOrientationUtils != null) {
+                mOrientationUtils.releaseListener();
+                mOrientationUtils = null;
+            }
         }
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -393,6 +396,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 backToNormal();
             }
         }, delay);
+
     }
 
     /**
