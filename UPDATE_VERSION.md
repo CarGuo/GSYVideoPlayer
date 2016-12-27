@@ -1,9 +1,14 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.5.1
+* 全屏滑动弹出虚拟按键会影响进度问题。
+* 优化了滑动的弹出dialog。
+* 修改了一些问题。
+
 ### 1.5.0
-* 增加了全屏和普通播放下使用两套布局的支持，增加demo：LandLayoutVideo
-* 修改了DEMO的recyclerView的一个问题
-* 修改了一些bug
+* 增加了全屏和普通播放下使用两套布局的支持，增加demo：LandLayoutVideo。
+* 修改了DEMO的recyclerView的一个问题。
+* 修改了一些bug。
 * 增加了WebView滑动demo。
 
 ```
