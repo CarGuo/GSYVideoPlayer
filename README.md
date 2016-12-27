@@ -23,18 +23,9 @@
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
-#### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
-### 文档Wiki：
-#### [*** 使用说明、接口文档 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/wiki)
-### 其他：
-#### [*** 版本更新说明 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
-#### [*** 问题集锦 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
-#### [*** IJKPlayer问题 - 入口 ***](http://www.jianshu.com/p/220b00d00deb)　
-#### [*** IJKPlayer编译自定义SO - 入口 ***](http://www.jianshu.com/p/bd289e25d272)　
-#### [*** 简书详解 - 入口 ***](http://www.jianshu.com/p/9fe377dd9750)
+### 使用依赖
 
-
-在project下的build.gradle添加
+#### 在project下的build.gradle添加
 ```
 allprojects {
 	repositories {
@@ -44,15 +35,29 @@ allprojects {
 }
 ```
 
-在module下的build.gradle添加
+#### 在module下的build.gradle添加
 
 ```
 dependencies {
         compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.0'
 }
 ```
+
+
+#### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
+
+### 文档Wiki
+### [*** 使用说明、接口文档 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/wiki)
+
+### 其他
+### [*** 版本更新说明 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
+### [*** 问题集锦 - 入口 ***](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
+### [*** IJKPlayer问题 - 入口 ***](http://www.jianshu.com/p/220b00d00deb)　
+### [*** IJKPlayer编译自定义SO - 入口 ***](http://www.jianshu.com/p/bd289e25d272)　
+### [*** 简书详解 - 入口 ***](http://www.jianshu.com/p/9fe377dd9750)
+
 　
-## 效果,录屏下的屏幕旋转和实际有些出入
+### 运行效果
 
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.jpg" width="218px" height="120px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.jpg" width="120px" height="218px"/>
@@ -72,7 +77,7 @@ dependencies {
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" width="426px" height="240px"/>
 
 
-## 混淆
+### 混淆
 
 ```
 -keep class tv.danmaku.ijk.** { *; }
