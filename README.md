@@ -1,3 +1,6 @@
+
+![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/title.png)
+
 ## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)，实现了多功能的视频播放器。
 
 * **支持基本的拖动，声音、亮度调节。**
