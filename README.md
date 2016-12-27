@@ -1,5 +1,5 @@
 
-![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/title.png)
+![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/home_logo.png)
 
 ## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)，实现了多功能的视频播放器。
 
