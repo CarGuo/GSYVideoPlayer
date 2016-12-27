@@ -120,6 +120,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected boolean mChangePosition = false;//是否改变播放进度
 
+    protected boolean mShowVKey = false; //触摸显示虚拟按键
+
     protected boolean mBrightness = false;//是否改变亮度
 
     protected boolean mFirstTouch = false;//是否首次触摸
@@ -541,6 +543,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                     mMoveY = 0;
                     mChangeVolume = false;
                     mChangePosition = false;
+                    mShowVKey = false;
                     mBrightness = false;
                     mFirstTouch = true;
 
@@ -561,16 +564,21 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                                     if (Math.abs(screenWidth - mDownX) > mSeekEndOffset) {
                                         mChangePosition = true;
                                         mDownPosition = getCurrentPositionWhenPlaying();
+                                    } else {
+                                        mShowVKey = true;
                                     }
                                 } else {
+                                    int screenHeight = CommonUtil.getScreenHeight(getContext());
+                                    boolean noEnd = Math.abs(screenHeight - mDownY) > mSeekEndOffset;
                                     if (mFirstTouch) {
-                                        mBrightness = mDownX < mScreenWidth * 0.5f;
+                                        mBrightness = (mDownX < mScreenWidth * 0.5f) && noEnd;
                                         mFirstTouch = false;
                                     }
                                     if (!mBrightness) {
-                                        mChangeVolume = true;
+                                        mChangeVolume = noEnd;
                                         mGestureDownVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
                                     }
+                                    mShowVKey = !noEnd;
                                 }
                             }
                         }
@@ -627,7 +635,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                     }
                     startProgressTimer();
                     //不要和隐藏虚拟按键后，滑出虚拟按键冲突
-                    if (mHideKey && mChangePosition) {
+                    if (mHideKey && mShowVKey) {
                         return true;
                     }
                     break;
@@ -1195,6 +1203,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         View oldF = vp.findViewById(FULLSCREEN_ID);
         if (oldF != null) {
             backFrom = true;
+            hideNavKey(context);
             if (GSYVideoManager.instance().lastListener() != null) {
                 GSYVideoManager.instance().lastListener().onBackFullscreen();
             }
