@@ -15,7 +15,7 @@ allprojects {
 
 #### 2、ClassNotFoundException和混淆
 
-　确保你的拆包Application配置正常 。
+　确保你的拆包Application配置正常，若是开启混淆，确保混淆已经添加 。
 
 ```
 -keep class tv.danmaku.ijk.** { *; }
