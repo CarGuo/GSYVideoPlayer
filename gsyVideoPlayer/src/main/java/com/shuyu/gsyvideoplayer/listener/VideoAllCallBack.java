@@ -57,4 +57,7 @@ public interface VideoAllCallBack {
     //触摸调整亮度
     void onTouchScreenSeekLight(String url, Object... objects);
 
+    //播放错误
+    void onPlayError(String url, Object... objects);
+
 }

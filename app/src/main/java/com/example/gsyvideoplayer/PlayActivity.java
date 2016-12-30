@@ -137,9 +137,6 @@ public class PlayActivity extends AppCompatActivity {
         super.onDestroy();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
-        if (isTransition && transition != null) {
-            transition.removeListener(onTransitionListener);
-        }
     }
 
     @Override
@@ -176,20 +173,17 @@ public class PlayActivity extends AppCompatActivity {
     private boolean addTransitionListener() {
         transition = getWindow().getSharedElementEnterTransition();
         if (transition != null) {
-            transition.addListener(onTransitionListener);
+            transition.addListener(new OnTransitionListener(){
+                @Override
+                public void onTransitionEnd(Transition transition) {
+                    super.onTransitionEnd(transition);
+                    videoPlayer.startPlayLogic();
+                    transition.removeListener(this);
+                }
+            });
             return true;
         }
         return false;
     }
-
-    OnTransitionListener onTransitionListener = new OnTransitionListener() {
-
-        @TargetApi(Build.VERSION_CODES.KITKAT)
-        @Override
-        public void onTransitionEnd(Transition transition) {
-            videoPlayer.startPlayLogic();
-            transition.removeListener(onTransitionListener);
-        }
-    };
 
 }

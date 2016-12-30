@@ -107,4 +107,9 @@ public class SampleListener implements StandardVideoAllCallBack {
     public void onPrepared(String url, Object... objects) {
 
     }
+
+    @Override
+    public void onPlayError(String url, Object... objects) {
+
+    }
 }
