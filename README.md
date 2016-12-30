@@ -42,7 +42,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.1'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.2'
 }
 ```
 
