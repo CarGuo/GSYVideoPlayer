@@ -437,7 +437,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.VISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).start();
+            ENDownloadView enDownloadView  = (ENDownloadView) mLoadingProgressBar;
+            if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
+                ((ENDownloadView) mLoadingProgressBar).start();
+            }
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.VISIBLE);
@@ -463,7 +466,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.VISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).reset();
+           ((ENDownloadView)mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
@@ -509,7 +512,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.VISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).start();
+            ENDownloadView enDownloadView  = (ENDownloadView) mLoadingProgressBar;
+            if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
+                ((ENDownloadView) mLoadingProgressBar).start();
+            }
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
@@ -524,7 +530,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.VISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).start();
+            ENDownloadView enDownloadView  = (ENDownloadView) mLoadingProgressBar;
+            if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
+                ((ENDownloadView) mLoadingProgressBar).start();
+            }
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
