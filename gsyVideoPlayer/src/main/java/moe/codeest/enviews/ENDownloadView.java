@@ -23,13 +23,13 @@ import com.shuyu.gsyvideoplayer.R;
 
 public class ENDownloadView extends View {
 
-    private static final int STATE_PRE = 0;
+    public static final int STATE_PRE = 0;
 
-    private static final int STATE_DOWNLOADING = 1;
+    public static final int STATE_DOWNLOADING = 1;
 
-    private static final int STATE_END = 2;
+    public static final int STATE_END = 2;
 
-    private static final int STATE_RESET = 3;
+    public static final int STATE_RESET = 3;
 
     private static final int DEFAULT_LINE_COLOR = Color.WHITE;
 
@@ -243,7 +243,7 @@ public class ENDownloadView extends View {
                 mValueAnimator.cancel();
             mValueAnimator = null;
         }
-        mCurrentState = STATE_PRE;
+        mCurrentState = STATE_DOWNLOADING;
         mValueAnimator = ValueAnimator.ofFloat(1.f, 100.f);
         mValueAnimator.setDuration(1500);
         mValueAnimator.setInterpolator(new OvershootInterpolator());

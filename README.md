@@ -110,3 +110,9 @@ dependencies {
 -keep class com.shuyu.gsyvideoplayer.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.**
 ```
+
+## License
+
+```
+请参看IJKPlayer和AndroidVideoCache相关协议。
+```
