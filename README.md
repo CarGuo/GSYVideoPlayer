@@ -42,7 +42,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.2'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.3'
 }
 ```
 
@@ -84,21 +84,14 @@ dependencies {
 
 ## 近期版本
 
+### 1.5.3
+* 修改了在缓冲的时候，默认loading点击会重置的问题。
+* 虚拟按键在弹出的后，过一段时间自动隐藏。
+
 ### 1.5.2
 * 增加了Error的回调接口。
-* 修复了Demo的PlayActivity兼容问题
+* 修复了Demo的PlayActivity兼容问题。
 
-
-### 1.5.1
-* 全屏滑动弹出虚拟按键会影响进度问题。
-* 优化了滑动的弹出dialog。
-* 修改了一些问题。
-
-### 1.5.0
-* 增加了全屏和普通播放下使用两套布局的支持，增加demo：LandLayoutVideo。
-* 修改了DEMO的recyclerView的一个问题。
-* 修改了一些bug。
-* 增加了WebView滑动demo。
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 

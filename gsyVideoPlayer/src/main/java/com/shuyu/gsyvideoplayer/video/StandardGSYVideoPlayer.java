@@ -38,6 +38,8 @@ import java.util.TimerTask;
 import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
 
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
+
 
 /**
  * 标准播放器
@@ -871,6 +873,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                         public void run() {
                             hideAllWidget();
                             mLockScreen.setVisibility(GONE);
+                            if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
+                                hideNavKey(mContext);
+                            }
                         }
                     });
                 }
