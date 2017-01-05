@@ -79,6 +79,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private int videoType = GSYVideoType.IJKPLAYER;
 
+    private boolean needMute = false; //是否需要静音
 
     public static synchronized GSYVideoManager instance() {
         if (videoManager == null) {
@@ -228,6 +229,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                     if (mediaPlayer != null) {
                         mediaPlayer.release();
                     }
+                    setNeedMute(false);
                     if (proxy != null) {
                         proxy.unregisterCacheListener(GSYVideoManager.this);
                     }
@@ -249,7 +251,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             } else if (videoType == GSYVideoType.IJKEXOPLAYER) {
                 initEXOPlayer(msg);
             }
-
+            setNeedMute(needMute);
             mediaPlayer.setOnCompletionListener(GSYVideoManager.this);
             mediaPlayer.setOnBufferingUpdateListener(GSYVideoManager.this);
             mediaPlayer.setScreenOnWhilePlaying(true);
@@ -511,5 +513,23 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     public void setVideoType(Context context, int videoType) {
         this.context = context.getApplicationContext();
         this.videoType = videoType;
+    }
+
+    public boolean isNeedMute() {
+        return needMute;
+    }
+
+    /**
+     * 是否需要静音
+     */
+    public void setNeedMute(boolean needMute) {
+        this.needMute = needMute;
+        if (mediaPlayer != null) {
+            if (needMute) {
+                mediaPlayer.setVolume(0,0);
+            } else {
+                mediaPlayer.setVolume(1, 1);
+            }
+        }
     }
 }
