@@ -42,7 +42,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.3'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.4'
 }
 ```
 
@@ -83,6 +83,18 @@ dependencies {
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" width="426px" height="240px"/>
 
 ## 近期版本
+
+### 1.5.4
+* 增加了静音播放接口
+
+GSYVideoManager下
+可参考：ListNormalAdapter
+```
+/**
+ * 是否需要静音
+ */
+public void setNeedMute(boolean needMute)
+```
 
 ### 1.5.3
 * 修改了在缓冲的时候，默认loading点击会重置的问题。
