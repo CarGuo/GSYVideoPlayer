@@ -1,8 +1,13 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
+### 1.5.5
+* update ijk 0.7.6。
+* 快播与慢播接口支持M以下。
+
+
 ### 1.5.4
-* 增加了静音播放接口
+* 增加了静音播放接口。
 
 GSYVideoManager下
 可参考：ListNormalAdapter

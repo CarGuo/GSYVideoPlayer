@@ -14,7 +14,7 @@
 * **列表的小窗口播放，可拖动。**
 * **网络视频加载速度。**
 * **锁定/解锁全屏点击功能。**
-* **6.0以上支持快播和慢播。**
+* **支持快播和慢播。**
 * **调整显示比例:默认、16:9、4:3。**
 * **调整不同清晰度的支持。**
 * **支持IJKPlayer和EXOPlayer切换。**
@@ -42,7 +42,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.4'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.5'
 }
 ```
 
@@ -84,8 +84,13 @@ dependencies {
 
 ## 近期版本
 
+### 1.5.5
+* update ijk 0.7.6。
+* 快播与慢播接口支持M以下。
+
+
 ### 1.5.4
-* 增加了静音播放接口
+* 增加了静音播放接口。
 
 GSYVideoManager下
 可参考：ListNormalAdapter
