@@ -149,7 +149,7 @@ public class ListNormalAdapter extends BaseAdapter {
         //holder.gsyVideoPlayer.setLooping(true);
         holder.gsyVideoPlayer.setNeedLockFull(true);
 
-        holder.gsyVideoPlayer.setSpeed(2);
+        //holder.gsyVideoPlayer.setSpeed(2);
 
         holder.gsyVideoPlayer.setPlayPosition(position);
 
