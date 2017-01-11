@@ -42,7 +42,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.5'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.6'
 }
 ```
 
@@ -84,6 +84,17 @@ dependencies {
 
 ## 近期版本
 
+### 1.5.6
+* 修复了mUrl再error后为空的问题。
+* 增加了GSYVideoManager的option配置接口。
+
+```
+/**
+ * 设置IJK视频的option
+ */
+public void setOptionModelList(List<VideoOptionModel> optionModelList)
+```
+
 ### 1.5.5
 * update ijk 0.7.6。
 * 快播与慢播接口支持M以下。
@@ -100,14 +111,6 @@ GSYVideoManager下
  */
 public void setNeedMute(boolean needMute)
 ```
-
-### 1.5.3
-* 修改了在缓冲的时候，默认loading点击会重置的问题。
-* 虚拟按键在弹出的后，过一段时间自动隐藏。
-
-### 1.5.2
-* 增加了Error的回调接口。
-* 修复了Demo的PlayActivity兼容问题。
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)

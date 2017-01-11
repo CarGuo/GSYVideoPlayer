@@ -233,15 +233,17 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Object... objects) {
         mCache = cacheWithPlay;
         mCachePath = cachePath;
+        mOriginUrl = url;
         if (isCurrentMediaListener() &&
                 (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) < FULL_SCREEN_NORMAL_DELAY)
             return false;
         mCurrentState = CURRENT_STATE_NORMAL;
         if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1")) {
-            mOriginUrl = url;
             HttpProxyCacheServer proxy = GSYVideoManager.getProxy(getContext().getApplicationContext(), cachePath);
+            //此处转换了url，然后再赋值给mUrl。
             url = proxy.getProxyUrl(url);
             mCacheFile = (!url.startsWith("http"));
+            //注册上缓冲监听
             if (!mCacheFile && GSYVideoManager.instance() != null) {
                 proxy.registerCacheListener(GSYVideoManager.instance(), mOriginUrl);
             }

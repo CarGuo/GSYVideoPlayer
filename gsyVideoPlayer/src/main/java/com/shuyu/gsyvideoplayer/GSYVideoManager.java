@@ -17,6 +17,7 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
+import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -26,6 +27,8 @@ import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
@@ -58,6 +61,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private WeakReference<GSYMediaPlayerListener> listener;
     private WeakReference<GSYMediaPlayerListener> lastListener;
+
+    private List<VideoOptionModel> optionModelList;//配置ijk option
 
     private HttpProxyCacheServer proxy; //视频代理
 
@@ -282,6 +287,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
                 ((IjkMediaPlayer) mediaPlayer).setSpeed(((GSYModel) msg.obj).getSpeed());
             }
+            initIJKOption((IjkMediaPlayer) mediaPlayer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -294,6 +300,20 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void initIJKOption(IjkMediaPlayer ijkMediaPlayer) {
+        if (optionModelList != null && optionModelList.size() > 0) {
+            for (VideoOptionModel videoOptionModel : optionModelList) {
+                if (videoOptionModel.getValueType() == VideoOptionModel.VALUE_TYPE_INT) {
+                    ijkMediaPlayer.setOption(videoOptionModel.getCategory(),
+                            videoOptionModel.getName(), videoOptionModel.getValueInt());
+                } else {
+                    ijkMediaPlayer.setOption(videoOptionModel.getCategory(),
+                            videoOptionModel.getName(), videoOptionModel.getValueString());
+                }
+            }
         }
     }
 
@@ -504,6 +524,17 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     public int getVideoType() {
         return videoType;
+    }
+
+    public List<VideoOptionModel> getOptionModelList() {
+        return optionModelList;
+    }
+
+    /**
+     * 设置IJK视频的option
+     */
+    public void setOptionModelList(List<VideoOptionModel> optionModelList) {
+        this.optionModelList = optionModelList;
     }
 
     /**
