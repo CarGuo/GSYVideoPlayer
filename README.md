@@ -42,7 +42,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.6'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.7'
 }
 ```
 
@@ -86,6 +86,9 @@ dependencies {
 
 ## 近期版本
 
+### 1.5.7
+* change AudioManger get。
+
 ### 1.5.6
 * 修复了mUrl再error后为空的问题。
 * 增加了GSYVideoManager的option配置接口。
@@ -101,12 +104,6 @@ public void setOptionModelList(List<VideoOptionModel> optionModelList)
 * update ijk 0.7.6。
 * 快播与慢播接口支持M以下。
 
-
-### 1.5.4
-* 增加了静音播放接口。
-
-GSYVideoManager下
-可参考：ListNormalAdapter
 ```
 /**
  * 是否需要静音

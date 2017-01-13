@@ -1,5 +1,8 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.5.7
+* change AudioManger get。
+
 ### 1.5.6
 * 修复了mUrl再error后为空的问题。
 * 增加了GSYVideoManager的option配置接口。
