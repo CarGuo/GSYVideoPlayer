@@ -42,9 +42,10 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.7'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.8'
 }
 ```
+
 
 ### 请阅读下方文档以及问题集锦，你想要知道的大部分都在里面。
 
@@ -85,6 +86,9 @@ dependencies {
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" width="426px" height="240px"/>
 
 ## 近期版本
+
+### 1.5.8
+* 修改了锁定屏幕触摸功能再播放结束后的问题。
 
 ### 1.5.7
 * change AudioManger get。
