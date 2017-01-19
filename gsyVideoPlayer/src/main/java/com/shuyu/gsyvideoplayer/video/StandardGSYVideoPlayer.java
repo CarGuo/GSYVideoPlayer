@@ -155,18 +155,11 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mLockScreen.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLockCurScreen) {
-                    mLockScreen.setImageResource(R.drawable.unlock);
-                    mLockCurScreen = false;
-                    if (mOrientationUtils != null)
-                        mOrientationUtils.setEnable(mRotateViewAuto);
-                } else {
-                    mLockScreen.setImageResource(R.drawable.lock);
-                    mLockCurScreen = true;
-                    if (mOrientationUtils != null)
-                        mOrientationUtils.setEnable(false);
-                    hideAllWidget();
+                if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE ||
+                        mCurrentState == CURRENT_STATE_ERROR) {
+                    return;
                 }
+                lockTouchLogic();
                 if (mLockClickListener != null) {
                     mLockClickListener.onClick(v, mLockCurScreen);
                 }
@@ -423,7 +416,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.VISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).reset();
+            ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.VISIBLE);
         mCoverImageView.setVisibility(View.VISIBLE);
@@ -439,7 +432,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.VISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ENDownloadView enDownloadView  = (ENDownloadView) mLoadingProgressBar;
+            ENDownloadView enDownloadView = (ENDownloadView) mLoadingProgressBar;
             if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
                 ((ENDownloadView) mLoadingProgressBar).start();
             }
@@ -468,7 +461,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.VISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-           ((ENDownloadView)mLoadingProgressBar).reset();
+            ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
@@ -490,7 +483,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.VISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).reset();
+            ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         //mCoverImageView.setVisibility(View.INVISIBLE);
@@ -514,7 +507,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.VISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ENDownloadView enDownloadView  = (ENDownloadView) mLoadingProgressBar;
+            ENDownloadView enDownloadView = (ENDownloadView) mLoadingProgressBar;
             if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
                 ((ENDownloadView) mLoadingProgressBar).start();
             }
@@ -532,7 +525,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.VISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ENDownloadView enDownloadView  = (ENDownloadView) mLoadingProgressBar;
+            ENDownloadView enDownloadView = (ENDownloadView) mLoadingProgressBar;
             if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
                 ((ENDownloadView) mLoadingProgressBar).start();
             }
@@ -551,7 +544,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).reset();
+            ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
@@ -566,7 +559,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.VISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).reset();
+            ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.VISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
@@ -582,7 +575,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.VISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).reset();
+            ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.VISIBLE);
         mCoverImageView.setVisibility(View.INVISIBLE);
@@ -598,7 +591,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mStartButton.setVisibility(View.VISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView)mLoadingProgressBar).reset();
+            ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.VISIBLE);
@@ -786,6 +779,24 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
 
     @Override
+    public void onAutoCompletion() {
+        super.onAutoCompletion();
+        if (mLockCurScreen) {
+            lockTouchLogic();
+            mLockScreen.setVisibility(GONE);
+        }
+    }
+
+    @Override
+    public void onError(int what, int extra) {
+        super.onError(what, extra);
+        if (mLockCurScreen) {
+            lockTouchLogic();
+            mLockScreen.setVisibility(GONE);
+        }
+    }
+
+    @Override
     public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
         GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
         if (gsyBaseVideoPlayer != null) {
@@ -808,6 +819,24 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
         }
         return gsyBaseVideoPlayer;
+    }
+
+    /**
+     * 处理锁屏屏幕触摸逻辑
+     */
+    private void lockTouchLogic() {
+        if (mLockCurScreen) {
+            mLockScreen.setImageResource(R.drawable.unlock);
+            mLockCurScreen = false;
+            if (mOrientationUtils != null)
+                mOrientationUtils.setEnable(mRotateViewAuto);
+        } else {
+            mLockScreen.setImageResource(R.drawable.lock);
+            mLockCurScreen = true;
+            if (mOrientationUtils != null)
+                mOrientationUtils.setEnable(false);
+            hideAllWidget();
+        }
     }
 
     /**
