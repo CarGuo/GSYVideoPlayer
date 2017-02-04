@@ -76,3 +76,6 @@ setUp(String url, boolean cacheWithPlay····)
     android:configChanges="orientation|keyboardHidden|screenSize"
     android:screenOrientation="portrait" />
 ```
+
+#### 8、弱网络加载速度太慢。
+若网络环境不好，可以尝试关闭缓存来播放，因为proxy方式的边播边缓存对于网络的要求有点高。
