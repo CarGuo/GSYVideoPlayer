@@ -42,7 +42,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.8'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.9'
 }
 ```
 
@@ -87,33 +87,9 @@ dependencies {
 
 ## 近期版本
 
-### 1.5.8
-* 修改了锁定屏幕触摸功能再播放结束后的问题。
-
-### 1.5.7
-* change AudioManger get。
-
-### 1.5.6
-* 修复了mUrl再error后为空的问题。
-* 增加了GSYVideoManager的option配置接口。
-
-```
-/**
- * 设置IJK视频的option
- */
-public void setOptionModelList(List<VideoOptionModel> optionModelList)
-```
-
-### 1.5.5
-* update ijk 0.7.6。
-* 快播与慢播接口支持M以下。
-
-```
-/**
- * 是否需要静音
- */
-public void setNeedMute(boolean needMute)
-```
+### 1.5.9 (2017-02-04)
+* update ijkplayer to 0.7.7
+* update build.gradle to 2.2.3
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)

@@ -49,7 +49,7 @@ public class DetailPlayer extends AppCompatActivity {
         ButterKnife.bind(this);
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
+        //String url = "https://res.exexm.com/cw_145225549855002";
         detailPlayer.setUp(url, true, null, "测试视频");
 
         //增加封面

@@ -1,5 +1,9 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.5.9
+* update ijkplayer to 0.7.7
+* update build.gradle to 2.2.3
+
 ### 1.5.8
 * 修改了锁定屏幕触摸功能再播放结束后的问题。
 
