@@ -79,3 +79,7 @@ setUp(String url, boolean cacheWithPlay····)
 
 #### 8、弱网络加载速度太慢。
 若网络环境不好，可以尝试关闭缓存来播放，因为proxy方式的边播边缓存对于网络的要求有点高。
+
+#### 9、如何设置cookie。
+在setUp的时候，设置带有 Map<String, String> mapHeadData 参数的方法，在Ijk内部其实就是转为setOption方法。
+可参考ijkPlayer的[issues-1150](https://github.com/Bilibili/ijkplayer/issues/1150)
