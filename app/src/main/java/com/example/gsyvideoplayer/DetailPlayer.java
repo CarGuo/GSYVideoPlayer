@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
+import com.example.gsyvideoplayer.video.DanmakuVideoPlayer;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.shuyu.gsyvideoplayer.GSYPreViewManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
@@ -32,7 +33,7 @@ public class DetailPlayer extends AppCompatActivity {
     //推荐使用StandardGSYVideoPlayer，功能一致
     //CustomGSYVideoPlayer部分功能处于试验阶段
     @BindView(R.id.detail_player)
-    LandLayoutVideo detailPlayer;
+    DanmakuVideoPlayer detailPlayer;
 
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
@@ -71,7 +72,7 @@ public class DetailPlayer extends AppCompatActivity {
         detailPlayer.setLockLand(false);
         detailPlayer.setShowFullAnimation(false);
         detailPlayer.setNeedLockFull(true);
-        detailPlayer.setOpenPreView(true);
+        //detailPlayer.setOpenPreView(true);
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

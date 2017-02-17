@@ -16,7 +16,8 @@ ext {
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
 
-    ijkplayer = '0.7.7'
+    ijkplayer = '0.7.7.1'
+    DanmakuFlameMaster = '0.6.4'
 
     transitionseverywhere = '1.7.0'
 
@@ -43,6 +44,10 @@ ext {
             ijkplayer_x86        : "tv.danmaku.ijk.media:ijkplayer-x86:${ijkplayer}",
             ijkplayer_exo        : "tv.danmaku.ijk.media:ijkplayer-exo:${ijkplayer}",
             transitionseverywhere: "com.andkulikov:transitionseverywhere:${transitionseverywhere}",
+            DanmakuFlameMaster   : "com.github.ctiao:DanmakuFlameMaster:${DanmakuFlameMaster}",
+            ndkbitmap_armv7a     : "com.github.ctiao:ndkbitmap-armv7a:${DanmakuFlameMaster}",
+            ndkbitmap_armv5      : "com.github.ctiao:ndkbitmap-armv5:${DanmakuFlameMaster}",
+            ndkbitmap_x86        : "com.github.ctiao:ndkbitmap-x86:${DanmakuFlameMaster}",
     ]
 
     dataDependencies = [

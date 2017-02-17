@@ -36,6 +36,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -46,6 +52,11 @@ dependencies {
     apt viewDependencies.apt_butterKnife
     compile viewDependencies.butterKnife
     compile androidDependencies.recyclerView
+    compile viewDependencies.DanmakuFlameMaster
+    compile viewDependencies.ndkbitmap_armv7a
+    compile viewDependencies.ndkbitmap_armv5
+    compile viewDependencies.ndkbitmap_x86
     //debugCompile dataDependencies.leakcanary
+
     compile project(':gsyVideoPlayer')
 }

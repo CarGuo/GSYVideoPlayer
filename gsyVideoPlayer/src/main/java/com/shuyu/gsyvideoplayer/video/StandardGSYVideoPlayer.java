@@ -448,6 +448,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mTopContainer.setVisibility(View.INVISIBLE);
         mBottomContainer.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.INVISIBLE);
+        mLoadingProgressBar.setVisibility(View.INVISIBLE);
+        if (mLoadingProgressBar instanceof ENDownloadView) {
+            ((ENDownloadView) mLoadingProgressBar).reset();
+        }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         mCoverImageView.setVisibility(View.VISIBLE);
