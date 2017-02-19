@@ -54,7 +54,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Detail Video2" />
+            android:text="Detail Video" />
 
         <Button
             android:id="@+id/list_detail_list"
@@ -70,6 +70,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="web detail" />
+
+
+        <Button
+            android:id="@+id/danmaku_video"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Danmaku Video" />
 
         <Button
             android:id="@+id/clear_cache"

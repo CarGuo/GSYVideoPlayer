@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 
+import com.example.gsyvideoplayer.DanmkuVideoActivity;
 import com.example.gsyvideoplayer.DetailListPlayer;
 import com.example.gsyvideoplayer.DetailPlayer;
 import com.example.gsyvideoplayer.ListVideo2Activity;
@@ -116,6 +117,16 @@ public class JumpUtils {
      */
     public static void gotoWebDetail(Activity activity) {
         Intent intent = new Intent(activity, WebDetailActivity.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳转到弹幕
+     *
+     * @param activity
+     */
+    public static void gotoDanmaku(Activity activity) {
+        Intent intent = new Intent(activity, DanmkuVideoActivity.class);
         activity.startActivity(intent);
     }
 }
