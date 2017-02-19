@@ -86,7 +86,7 @@ dependencies {
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
 * ### 3、弹幕
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/09.gif" width="240px" height="360px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/09.gif" width="360px" height="240px"/>
 
 
 * ### 4、进度条小窗口预览
