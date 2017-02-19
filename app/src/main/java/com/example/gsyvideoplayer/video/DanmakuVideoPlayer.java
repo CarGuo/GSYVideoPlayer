@@ -11,9 +11,16 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SeekBar;
 
 import com.example.gsyvideoplayer.R;
+import com.example.gsyvideoplayer.adapter.DanamakuAdapter;
 import com.example.gsyvideoplayer.utils.BiliDanmukuParser;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.io.IOException;
@@ -42,6 +49,10 @@ import master.flame.danmaku.ui.widget.DanmakuView;
 
 /**
  * Created by guoshuyu on 2017/2/16.
+ *
+ * 配置弹幕使用的播放器，目前使用的是本地模拟数据。
+ *
+ * 模拟数据的弹幕时常比较短，后面的时常点是没有数据的。
  */
 
 public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
@@ -49,6 +60,8 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
     private BaseDanmakuParser mParser;//解析器对象
     private IDanmakuView mDanmakuView;//弹幕view
     private DanmakuContext mDanmakuContext;
+
+    private long mDanmakuStartSeekPosition = -1;
 
     public DanmakuVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -67,54 +80,6 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
         return R.layout.danmaku_layout;
     }
 
-    private BaseCacheStuffer.Proxy mCacheStufferAdapter = new BaseCacheStuffer.Proxy() {
-
-        private Drawable mDrawable;
-
-        @Override
-        public void prepareDrawing(final BaseDanmaku danmaku, boolean fromWorkerThread) {
-            if (danmaku.text instanceof Spanned) { // 根据你的条件检查是否需要需要更新弹幕
-                // FIXME 这里只是简单启个线程来加载远程url图片，请使用你自己的异步线程池，最好加上你的缓存池
-                new Thread() {
-
-                    @Override
-                    public void run() {
-                        String url = "http://www.bilibili.com/favicon.ico";
-                        InputStream inputStream = null;
-                        Drawable drawable = mDrawable;
-                        if(drawable == null) {
-                            try {
-                                URLConnection urlConnection = new URL(url).openConnection();
-                                inputStream = urlConnection.getInputStream();
-                                drawable = BitmapDrawable.createFromStream(inputStream, "bitmap");
-                                mDrawable = drawable;
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } finally {
-                                IOUtils.closeQuietly(inputStream);
-                            }
-                        }
-                        if (drawable != null) {
-                            drawable.setBounds(0, 0, 100, 100);
-                            SpannableStringBuilder spannable = createSpannable(drawable);
-                            danmaku.text = spannable;
-                            if(mDanmakuView != null) {
-                                mDanmakuView.invalidateDanmaku(danmaku, false);
-                            }
-                            return;
-                        }
-                    }
-                }.start();
-            }
-        }
-
-        @Override
-        public void releaseResource(BaseDanmaku danmaku) {
-            // TODO 重要:清理含有ImageSpan的text中的一些占用内存的资源 例如drawable
-        }
-    };
 
     @Override
     protected void init(Context context) {
@@ -129,13 +94,15 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
         overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
         overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
 
+        DanamakuAdapter danamakuAdapter = new DanamakuAdapter(mDanmakuView);
         mDanmakuContext = DanmakuContext.create();
         mDanmakuContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 3).setDuplicateMergingEnabled(false).setScrollSpeedFactor(1.2f).setScaleTextSize(1.2f)
-                .setCacheStuffer(new SpannedCacheStuffer(), mCacheStufferAdapter) // 图文混排使用SpannedCacheStuffer
+                .setCacheStuffer(new SpannedCacheStuffer(), danamakuAdapter) // 图文混排使用SpannedCacheStuffer
 //        .setCacheStuffer(new BackgroundCacheStuffer())  // 绘制背景使用BackgroundCacheStuffer
                 .setMaximumLines(maxLinesPair)
                 .preventOverlapping(overlappingEnablePair);
         if (mDanmakuView != null) {
+            //todo 替换成你的数据流
             mParser = createParser(this.getResources().openRawResource(R.raw.comments));
             mDanmakuView.setCallback(new master.flame.danmaku.controller.DrawHandler.Callback() {
                 @Override
@@ -149,34 +116,19 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
 
                 @Override
                 public void danmakuShown(BaseDanmaku danmaku) {
-//                    Log.d("DFM", "danmakuShown(): text=" + danmaku.text);
                 }
 
                 @Override
                 public void prepared() {
-                    mDanmakuView.start();
-                }
-            });
-            mDanmakuView.setOnDanmakuClickListener(new IDanmakuView.OnDanmakuClickListener() {
-
-                @Override
-                public boolean onDanmakuClick(IDanmakus danmakus) {
-                    Log.d("DFM", "onDanmakuClick: danmakus size:" + danmakus.size());
-                    BaseDanmaku latest = danmakus.last();
-                    if (null != latest) {
-                        Log.d("DFM", "onDanmakuClick: text of latest danmaku:" + latest.text);
-                        return true;
+                    if (getDanmakuView() != null) {
+                        getDanmakuView().start();
+                        if (getDanmakuStartSeekPosition() != -1) {
+                            resolveDanmakuSeek(DanmakuVideoPlayer.this, getDanmakuStartSeekPosition());
+                            setDanmakuStartSeekPosition(-1);
+                        }
                     }
-                    return false;
-                }
-
-                @Override
-                public boolean onViewClick(IDanmakuView view) {
-//                    mMediaController.setVisibility(View.VISIBLE);
-                    return false;
                 }
             });
-            mDanmakuView.showFPS(true);
             mDanmakuView.enableDanmakuDrawingCache(true);
         }
     }
@@ -184,15 +136,96 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
     @Override
     public void onPrepared() {
         super.onPrepared();
-        setDanmuKuUp();
+        onPrepareDanmaku(this);
     }
 
-    private void setDanmuKuUp() {
-        mDanmakuView.prepare(mParser, mDanmakuContext);
-        //mDanmakuView.showFPS(true);
-        //mDanmakuView.enableDanmakuDrawingCache(true);
+    @Override
+    public void onVideoPause() {
+        super.onVideoPause();
+        if (mDanmakuView != null && mDanmakuView.isPrepared()) {
+            mDanmakuView.pause();
+        }
     }
 
+    @Override
+    public void onVideoResume() {
+        super.onVideoResume();
+        if (mDanmakuView != null && mDanmakuView.isPrepared() && mDanmakuView.isPaused()) {
+            mDanmakuView.resume();
+        }
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        if (mDanmakuView != null) {
+            mDanmakuView.release();
+        }
+    }
+
+
+    @Override
+    public void onSeekComplete() {
+        super.onSeekComplete();
+        int time = mProgressBar.getProgress() * getDuration() / 100;
+        //如果已经初始化过的，直接seek到对于位置
+        if (mHadPlay && getDanmakuView() != null && getDanmakuView().isPrepared()) {
+            resolveDanmakuSeek(this, time);
+        } else if (mHadPlay && getDanmakuView() != null && !getDanmakuView().isPrepared()) {
+            //如果没有初始化过的，记录位置等待
+            setDanmakuStartSeekPosition(time);
+        }
+    }
+
+    /**
+     * 处理播放器在全屏切换时，弹幕显示的逻辑
+     */
+    @Override
+    public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
+        GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
+        if (gsyBaseVideoPlayer != null) {
+            DanmakuVideoPlayer gsyVideoPlayer = (DanmakuVideoPlayer) gsyBaseVideoPlayer;
+            //对弹幕设置偏移记录
+            gsyVideoPlayer.setDanmakuStartSeekPosition(getCurrentPositionWhenPlaying());
+            onPrepareDanmaku(gsyVideoPlayer);
+        }
+        return gsyBaseVideoPlayer;
+    }
+
+    /**
+     * 处理播放器在退出全屏时，弹幕显示的逻辑
+     */
+    @Override
+    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
+        super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
+        if (gsyVideoPlayer != null) {
+            DanmakuVideoPlayer gsyDanmaVideoPlayer = (DanmakuVideoPlayer) gsyVideoPlayer;
+            if (gsyDanmaVideoPlayer.getDanmakuView() != null &&
+                    gsyDanmaVideoPlayer.getDanmakuView().isPrepared()) {
+                resolveDanmakuSeek(this, gsyDanmaVideoPlayer.getCurrentPositionWhenPlaying());
+            }
+        }
+    }
+
+    /**
+     * 开始播放弹幕
+     */
+    private void onPrepareDanmaku(DanmakuVideoPlayer gsyVideoPlayer) {
+        if (gsyVideoPlayer.getDanmakuView() != null && !gsyVideoPlayer.getDanmakuView().isPrepared()) {
+            gsyVideoPlayer.getDanmakuView().prepare(gsyVideoPlayer.getParser(),
+                    gsyVideoPlayer.getDanmakuContext());
+        }
+    }
+
+    /**
+     * 弹幕偏移
+     */
+    private void resolveDanmakuSeek(DanmakuVideoPlayer gsyVideoPlayer, long time) {
+        if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay
+                && gsyVideoPlayer.getDanmakuView() != null && gsyVideoPlayer.getDanmakuView().isPrepared()) {
+            gsyVideoPlayer.getDanmakuView().seekTo(time);
+        }
+    }
 
     /**
      * 创建解析器对象，解析输入流
@@ -226,15 +259,23 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
 
     }
 
-    private SpannableStringBuilder createSpannable(Drawable drawable) {
-        String text = "bitmap";
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
-        ImageSpan span = new ImageSpan(drawable);//ImageSpan.ALIGN_BOTTOM);
-        spannableStringBuilder.setSpan(span, 0, text.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        spannableStringBuilder.append("图文混排");
-        spannableStringBuilder.setSpan(new BackgroundColorSpan(Color.parseColor("#8A2233B1")), 0, spannableStringBuilder.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        return spannableStringBuilder;
+    public BaseDanmakuParser getParser() {
+        return mParser;
     }
 
+    public DanmakuContext getDanmakuContext() {
+        return mDanmakuContext;
+    }
 
+    public IDanmakuView getDanmakuView() {
+        return mDanmakuView;
+    }
+
+    public long getDanmakuStartSeekPosition() {
+        return mDanmakuStartSeekPosition;
+    }
+
+    public void setDanmakuStartSeekPosition(long danmakuStartSeekPosition) {
+        this.mDanmakuStartSeekPosition = danmakuStartSeekPosition;
+    }
 }

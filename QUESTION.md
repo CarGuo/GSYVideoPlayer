@@ -53,10 +53,14 @@ android {
 
 　是否监听了列表滑动了，在监听里更新了列表之类的。
 
-#### 4、目前不支持3gp或者mepg，请保证视屏格式H264,AAC音频。
+#### 4、目前不支持3gp或者mepg。
 
 如果拍摄的视频播放不了，可以尝试用使用系统录制的项目：[VideoRecord](https://github.com/CarGuo/VideoRecord)
 或者使用JAVACV录制的项目：[FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder )，测试视频是否可以播放。
+
+黑屏相关issues：
+https://github.com/Bilibili/ijkplayer/issues/2541
+https://github.com/Bilibili/ijkplayer/pull/1875
 
 #### 5、m3u8\HLS的格式视频请关闭cache
 
