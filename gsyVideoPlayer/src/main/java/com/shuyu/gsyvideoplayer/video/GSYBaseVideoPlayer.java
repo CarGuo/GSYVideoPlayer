@@ -252,6 +252,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             showNavKey(mContext, mSystemUiVisibility);
         }
         showSupportActionBar(mContext, mActionBar, mStatusBar);
+        getFullscreenButton().setImageResource(R.drawable.video_enlarge);
     }
 
     /**
