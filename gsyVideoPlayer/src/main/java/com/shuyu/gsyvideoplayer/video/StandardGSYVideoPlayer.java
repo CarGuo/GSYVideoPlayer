@@ -197,9 +197,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                 mTitleTextView.setText(objects[0].toString());
             }
             if (mIfCurrentIsFullscreen) {
-                mFullscreenButton.setImageResource(R.drawable.video_shrink);
+                mFullscreenButton.setImageResource(getShrinkImageRes());
             } else {
-                mFullscreenButton.setImageResource(R.drawable.video_enlarge);
+                mFullscreenButton.setImageResource(getEnlargeImageRes());
                 mBackButton.setVisibility(View.GONE);
             }
             return true;

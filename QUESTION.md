@@ -13,9 +13,13 @@ allprojects {
 
 　项目最外部有一个dependencies.gradle，所有的项目依赖都在这里面，然后参考项目根目录的build.gradle，在最顶部有apply from: 'dependencies.gradle'，这样gsyVideoPlayer就可以找到对应的依赖了。gradle方便可参考察[Android蹲坑的疑难杂症集锦（兼Gradle） 二](http://www.jianshu.com/p/86e4b336c17d)
 
+  其次，因为so有五个平台，远程依赖库比较大，依赖的时候如果有条件，可以开启vpn，用L2TP协议，依赖下载会快一些。
+
 #### 2、ClassNotFoundException和混淆
 
 　确保你的拆包Application配置正常，若是开启混淆，确保混淆已经添加 。
+
+  而且有时候你需要的是clear一下。
 
 ```
 -keep class tv.danmaku.ijk.** { *; }
@@ -25,11 +29,15 @@ allprojects {
 
 ```
 
-#### 3、找不到对应的so
+#### 3、找不到对应的so或者链接so错误。
 
   可以配置ndk abiFilters，确保使用到的so文件夹下都有对用的so文件，用Analyze Apk查看so是否应打包到各个文件夹。
+
   参考[#issue23](https://github.com/CarGuo/GSYVideoPlayer/issues/23)
+
   参考[#issue24](https://github.com/CarGuo/GSYVideoPlayer/issues/24)
+
+  是否已经添加下方的代码到gradle
 ```
 android {
 
@@ -49,6 +57,14 @@ android {
 }
 ```
 
+```
+sourceSets {
+    main {
+        jniLibs.srcDirs = ['libs']
+    }
+}
+```
+
 #### 3、全屏的时候自动停止了
 
 　是否监听了列表滑动了，在监听里更新了列表之类的。
@@ -61,6 +77,7 @@ android {
 黑屏相关issues：
 https://github.com/Bilibili/ijkplayer/issues/2541
 https://github.com/Bilibili/ijkplayer/pull/1875
+
 
 #### 5、m3u8\HLS的格式视频请关闭cache
 
@@ -87,3 +104,12 @@ setUp(String url, boolean cacheWithPlay····)
 #### 9、如何设置cookie。
 在setUp的时候，设置带有 Map<String, String> mapHeadData 参数的方法，在Ijk内部其实就是转为setOption方法。
 可参考ijkPlayer的[issues-1150](https://github.com/Bilibili/ijkplayer/issues/1150)
+
+#### 10、多个分片播放的功能，请查阅:
+[issue64](https://github.com/CarGuo/GSYVideoPlayer/issues/64)
+[issue490](https://github.com/Bilibili/ijkplayer/issues/490)
+[分片播放资料](http://www.jianshu.com/p/ea794a357b48)
+
+#### 11、有画面没声音，有声音没画面。
+这种情况一般都是so里没有打包支持的格式，如果需要支持你想要的格式，可以自己重新编译so，在module配置文件加上需要额外支持的格式。github首页有编译教程。
+

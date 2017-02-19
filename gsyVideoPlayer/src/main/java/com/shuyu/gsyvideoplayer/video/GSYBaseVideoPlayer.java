@@ -72,6 +72,10 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected int mRotate = 0; //针对某些视频的旋转信息做了旋转处理
 
+    protected int mShrinkImageRes = -1; //退出全屏显示的案件图片
+
+    protected int mEnlargeImageRes = -1; //全屏显示的案件图片
+
     private int mSystemUiVisibility;
 
     protected float mSpeed = 1;//播放速度，只支持6.0以上
@@ -252,7 +256,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             showNavKey(mContext, mSystemUiVisibility);
         }
         showSupportActionBar(mContext, mActionBar, mStatusBar);
-        getFullscreenButton().setImageResource(R.drawable.video_enlarge);
+        getFullscreenButton().setImageResource(getEnlargeImageRes());
     }
 
     /**
@@ -347,11 +351,13 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.mCacheFile = mCacheFile;
             gsyVideoPlayer.mFullPauseBitmap = mFullPauseBitmap;
             gsyVideoPlayer.mNeedShowWifiTip = mNeedShowWifiTip;
+            gsyVideoPlayer.mShrinkImageRes = mShrinkImageRes;
+            gsyVideoPlayer.mEnlargeImageRes = mEnlargeImageRes;
             gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
 
-            gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
+            gsyVideoPlayer.getFullscreenButton().setImageResource(getShrinkImageRes());
             gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -719,5 +725,37 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void setNeedShowWifiTip(boolean needShowWifiTip) {
         this.mNeedShowWifiTip = needShowWifiTip;
+    }
+
+    public int getEnlargeImageRes() {
+        if (mShrinkImageRes == -1) {
+            return R.drawable.video_enlarge;
+        }
+        return mEnlargeImageRes;
+    }
+
+    /**
+     * 设置右下角 显示切换到全屏 的按键资源
+     * 必须在setUp之前设置
+     * 不设置使用默认
+     */
+    public void setEnlargeImageRes(int mEnlargeImageRes) {
+        this.mEnlargeImageRes = mEnlargeImageRes;
+    }
+
+    public int getShrinkImageRes() {
+        if (mShrinkImageRes == -1) {
+            return R.drawable.video_shrink;
+        }
+        return mShrinkImageRes;
+    }
+
+    /**
+     * 设置右下角 显示退出全屏 的按键资源
+     * 必须在setUp之前设置
+     * 不设置使用默认
+     */
+    public void setShrinkImageRes(int mShrinkImageRes) {
+        this.mShrinkImageRes = mShrinkImageRes;
     }
 }

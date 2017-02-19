@@ -1,5 +1,31 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.6.0 (2017-02-19)
+* update ijkplayer to 0.7.7.1。
+* 增加了弹幕demo，主要演示如何快速集成弹幕功能。
+* 修改了播放时可能出现loading不消失问题。
+* 修复了全屏和退出全屏图片显示错误问题。
+* 全屏切换按键的图片资源支持自定义。
+
+```
+/**
+ * 设置右下角 显示切换到全屏 的按键资源
+ * 必须在setUp之前设置
+ * 不设置使用默认
+ */
+public void setEnlargeImageRes(int mEnlargeImageRes)
+
+
+/**
+ * 设置右下角 显示退出全屏 的按键资源
+ * 必须在setUp之前设置
+ * 不设置使用默认
+ */
+public void setShrinkImageRes(int mShrinkImageRes)
+
+```
+
+
 ### 1.5.9
 * update ijkplayer to 0.7.7
 * update build.gradle to 2.2.3

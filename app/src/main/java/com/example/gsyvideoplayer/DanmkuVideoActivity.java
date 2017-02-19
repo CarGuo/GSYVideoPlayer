@@ -48,6 +48,12 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_danmaku_layout);
         ButterKnife.bind(this);
 
+
+        //使用自定义的全屏切换图片，!!!注意xml布局中也需要设置为一样的
+        //必须在setUp之前设置
+        danmakuVideoPlayer.setShrinkImageRes(R.drawable.custom_shrink);
+        danmakuVideoPlayer.setEnlargeImageRes(R.drawable.custom_enlarge);
+
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //String url = "https://res.exexm.com/cw_145225549855002";
         danmakuVideoPlayer.setUp(url, true, null, "测试视频");
@@ -71,6 +77,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         danmakuVideoPlayer.setLockLand(false);
         danmakuVideoPlayer.setShowFullAnimation(false);
         danmakuVideoPlayer.setNeedLockFull(true);
+
         //detailPlayer.setOpenPreView(true);
         danmakuVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,6 +22,7 @@
 * **Https支持。**
 * **连续播放一个列表的视频。**
 * **支持全屏与非全屏两套布局切换**
+* **弹幕支持**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
@@ -42,12 +43,14 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.5.9'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.0'
 }
 ```
 
 
-### 请阅读下方文档以及问题集锦，你想要知道的大部分都在里面。
+### 下方文档以及问题集锦，你想要知道的大部分都在里面。
+
+### 有问题请先下面问题集锦中查阅（如依赖不成功，播放不成功等等）。
 
 ### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
 
@@ -82,14 +85,40 @@ dependencies {
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/05.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 
-* ### 3、进度条小窗口预览
+* ### 3、弹幕
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/09.gif" width="240px" height="426px"/>
+
+
+* ### 4、进度条小窗口预览
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" width="426px" height="240px"/>
 
 ## 近期版本
 
-### 1.5.9 (2017-02-04)
-* update ijkplayer to 0.7.7
-* update build.gradle to 2.2.3
+### 1.6.0 (2017-02-19)
+* update ijkplayer to 0.7.7.1。
+* 增加了弹幕demo，主要演示如何快速集成弹幕功能。
+* 修改了播放时可能出现loading不消失问题。
+* 修复了全屏和退出全屏图片显示错误问题。
+* 全屏切换按键的图片资源支持自定义。
+
+```
+/**
+ * 设置右下角 显示切换到全屏 的按键资源
+ * 必须在setUp之前设置
+ * 不设置使用默认
+ */
+public void setEnlargeImageRes(int mEnlargeImageRes)
+
+
+/**
+ * 设置右下角 显示退出全屏 的按键资源
+ * 必须在setUp之前设置
+ * 不设置使用默认
+ */
+public void setShrinkImageRes(int mShrinkImageRes)
+
+```
+
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)

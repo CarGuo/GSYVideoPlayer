@@ -186,7 +186,7 @@ public class ListVideoUtil {
             viewGroup.removeView(gsyVideoPlayer);
         }
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
-        gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_shrink);
+        gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
         gsyVideoPlayer.getBackButton().setVisibility(View.VISIBLE);
         //设置旋转
         orientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
@@ -275,7 +275,7 @@ public class ListVideoUtil {
                 gsyVideoPlayer.setIfCurrentIsFullscreen(false);
                 fullViewContainer.setBackgroundColor(Color.TRANSPARENT);
                 listParent.addView(gsyVideoPlayer, listParams);
-                gsyVideoPlayer.getFullscreenButton().setImageResource(R.drawable.video_enlarge);
+                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
                 gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
                 gsyVideoPlayer.setIfCurrentIsFullscreen(false);
                 if (videoAllCallBack != null) {

@@ -91,7 +91,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="10dp"
                 android:scaleType="center"
-                android:src="@drawable/video_enlarge" />
+                android:src="@drawable/custom_enlarge" />
 
         </LinearLayout>
 

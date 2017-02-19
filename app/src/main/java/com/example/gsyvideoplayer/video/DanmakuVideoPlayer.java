@@ -21,6 +21,7 @@ import com.example.gsyvideoplayer.adapter.DanamakuAdapter;
 import com.example.gsyvideoplayer.utils.BiliDanmukuParser;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -127,9 +128,9 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
         }
     }
 
+
     @Override
-    public void release() {
-        super.release();
+    public void onCompletion() {
         releaseDanmaku(this);
     }
 
@@ -324,6 +325,7 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
      */
     private void releaseDanmaku(DanmakuVideoPlayer danmakuVideoPlayer) {
         if (danmakuVideoPlayer != null && danmakuVideoPlayer.getDanmakuView() != null) {
+            Debuger.printfError("release Danmaku!");
             danmakuVideoPlayer.getDanmakuView().release();
         }
     }
