@@ -113,3 +113,17 @@ setUp(String url, boolean cacheWithPlay····)
 #### 11、有画面没声音，有声音没画面。
 这种情况一般都是so里没有打包支持的格式，如果需要支持你想要的格式，可以自己重新编译so，在module配置文件加上需要额外支持的格式。github首页有编译教程。
 
+
+#### 12、视频声音画面不同步。
+模拟器的不接！
+1、是否关闭了硬解码！
+2、Activity的config是否配置了！
+3、视频的分辨率和帧数是多少，机器是否支持的了
+第3步可以通过尝试降低倍数：
+```
+VideoOptionModel videoOptionModel =
+        new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 50);
+List<VideoOptionModel> list = new ArrayList<>();
+list.add(videoOptionModel);
+GSYVideoManager.instance().setOptionModelList(list);
+```
