@@ -115,11 +115,17 @@ setUp(String url, boolean cacheWithPlay····)
 
 
 #### 12、视频声音画面不同步。
+
 模拟器的不接！
+
 1、是否关闭了硬解码！
+
 2、Activity的config是否配置了！
+
 3、视频的分辨率和帧数是多少，机器是否支持的了
+
 第3步可以通过尝试降低倍数：
+
 ```
 VideoOptionModel videoOptionModel =
         new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 50);
