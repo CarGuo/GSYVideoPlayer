@@ -894,7 +894,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             if (mLooping && mHadPlay) {
                 //循环在播放的不显示
             } else {
-                setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
+                //避免在onPrepared之前就进入了buffering，导致一只loading
+                if(mHadPlay)
+                    setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
             }
         } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
             if (BACKUP_PLAYING_BUFFERING_STATE != -1) {
