@@ -25,11 +25,25 @@
 * **弹幕支持**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
+[ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
 ## 使用依赖
 
-#### 在project下的build.gradle添加
+#### Jcenter
+```
+<dependency>
+  <groupId>com.shuyu</groupId>
+  <artifactId>GSYVideoPlayer</artifactId>
+  <version>1.6.0</version>
+  <type>pom</type>
+</dependency>
+```
+```
+compile 'com.shuyu:GSYVideoPlayer:1.6.0'
+```
+
+#### 使用JitPack 在project下的build.gradle添加
 ```
 allprojects {
 	repositories {

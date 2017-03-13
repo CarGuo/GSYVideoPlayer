@@ -83,7 +83,7 @@ bintray {
     publish = true
 
     pkg {
-        userOrg = PROJ_USER_ORG //这个是你创建时的organization,必须要有，不然没办法找到指定路径
+        //userOrg = PROJ_USER_ORG //这个是你创建时的organization,必须要有，不然没办法找到指定路径
         repo = PROJ_USER_MAVEN
         name = PROJ_NAME
         licenses = ['Apache-2.0']
