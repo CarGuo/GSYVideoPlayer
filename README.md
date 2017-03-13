@@ -39,12 +39,13 @@
   <type>pom</type>
 </dependency>
 ```
+#### 直接在module下的build.gradle添加
 ```
 compile 'com.shuyu:GSYVideoPlayer:1.6.0'
 
 ```
 
-#### JitPack引入方法 在project下的build.gradle添加
+### JitPack引入方法 在project下的build.gradle添加
 ```
 allprojects {
 	repositories {
