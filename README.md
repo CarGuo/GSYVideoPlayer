@@ -28,9 +28,9 @@
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
-## 使用依赖
+## 使用依赖(支持jcenter和jitpack)
 
-#### Jcenter
+### Jcenter 引入方法
 ```
 <dependency>
   <groupId>com.shuyu</groupId>
@@ -41,9 +41,10 @@
 ```
 ```
 compile 'com.shuyu:GSYVideoPlayer:1.6.0'
+
 ```
 
-#### 使用JitPack 在project下的build.gradle添加
+#### JitPack引入方法 在project下的build.gradle添加
 ```
 allprojects {
 	repositories {
