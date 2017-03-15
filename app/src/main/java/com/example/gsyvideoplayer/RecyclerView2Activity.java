@@ -113,7 +113,7 @@ public class RecyclerView2Activity extends AppCompatActivity {
             public void onQuitSmallWidget(String url, Object... objects) {
                 super.onQuitSmallWidget(url, objects);
                 //大于0说明有播放,//对应的播放列表TAG
-                if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(ListVideoAdapter.TAG)) {
+                if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(RecyclerItemViewHolder.TAG)) {
                     //当前播放的位置
                     int position = listVideoUtil.getPlayPosition();
                     //不可视的是时候
