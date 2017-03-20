@@ -55,6 +55,7 @@ public class DetailPlayer extends AppCompatActivity {
         ButterKnife.bind(this);
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
         detailPlayer.setUp(url, true, null, "测试视频");
 
