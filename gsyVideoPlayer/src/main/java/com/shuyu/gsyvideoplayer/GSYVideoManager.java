@@ -3,7 +3,7 @@ package com.shuyu.gsyvideoplayer;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -27,7 +27,6 @@ import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +52,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     public static final int HANDLER_PREPARE = 0;
     public static final int HANDLER_SETDISPLAY = 1;
     public static final int HANDLER_RELEASE = 2;
+
+    public static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
 
     private AbstractMediaPlayer mediaPlayer;
     private HandlerThread mMediaHandlerThread;
@@ -82,9 +83,14 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private int buffterPoint;
 
+    private int timeOut = 8 * 1000;
+
     private int videoType = GSYVideoType.IJKPLAYER;
 
     private boolean needMute = false; //是否需要静音
+
+    private boolean needTimeOutOther; //是否需要外部超时判断
+
 
     public static synchronized GSYVideoManager instance() {
         if (videoManager == null) {
@@ -239,6 +245,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                         proxy.unregisterCacheListener(GSYVideoManager.this);
                     }
                     buffterPoint = 0;
+                    cancelTimeOutBuffer();
                     break;
             }
         }
@@ -318,6 +325,38 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
 
+    /**
+     * 启动十秒的定时器进行 缓存操作
+     */
+    private void startTimeOutBuffer() {
+        // 启动定时
+        Debuger.printfError("startTimeOutBuffer");
+        mainThreadHandler.postDelayed(mTimeOutRunnable, timeOut);
+
+    }
+
+    /**
+     * 取消 十秒的定时器进行 缓存操作
+     */
+    private void cancelTimeOutBuffer() {
+        Debuger.printfError("cancelTimeOutBuffer");
+        // 取消定时
+        if (needTimeOutOther)
+            mainThreadHandler.removeCallbacks(mTimeOutRunnable);
+    }
+
+
+    private Runnable mTimeOutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (listener != null) {
+                Debuger.printfError("time out for error listener");
+                listener().onError(BUFFER_TIME_OUT_ERROR, BUFFER_TIME_OUT_ERROR);
+            }
+        }
+    };
+
+
     private void showDisplay(Message msg) {
         if (msg.obj == null && mediaPlayer != null) {
             mediaPlayer.setSurface(null);
@@ -377,6 +416,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
+                cancelTimeOutBuffer();
                 if (listener != null) {
                     listener().onAutoCompletion();
                 }
@@ -405,6 +445,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
+                cancelTimeOutBuffer();
                 if (listener != null) {
                     listener().onSeekComplete();
                 }
@@ -417,6 +458,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
+                cancelTimeOutBuffer();
                 if (listener != null) {
                     listener().onError(what, extra);
                 }
@@ -430,6 +472,13 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
+                if (needTimeOutOther) {
+                    if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                        startTimeOutBuffer();
+                    } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                        cancelTimeOutBuffer();
+                    }
+                }
                 if (listener != null) {
                     listener().onInfo(what, extra);
                 }
@@ -557,10 +606,35 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         this.needMute = needMute;
         if (mediaPlayer != null) {
             if (needMute) {
-                mediaPlayer.setVolume(0,0);
+                mediaPlayer.setVolume(0, 0);
             } else {
                 mediaPlayer.setVolume(1, 1);
             }
         }
     }
+
+    public int getTimeOut() {
+        return timeOut;
+    }
+
+    public boolean isNeedTimeOutOther() {
+        return needTimeOutOther;
+    }
+
+    /**
+     * 是否需要在buffer缓冲时，增加外部超时判断，目前对于刚开始超时还没效果
+     * <p>
+     * 超时后会走onError接口，播放器通过onPlayError回调出
+     * <p>
+     * 错误码为 ： BUFFER_TIME_OUT_ERROR = -192
+     * （因为ijk的超时有时候无效）
+     *
+     * @param timeOut          超时时间，毫秒 默认8000
+     * @param needTimeOutOther 是否开始，默认关闭
+     */
+    public void setTimeOut(int timeOut, boolean needTimeOutOther) {
+        this.timeOut = timeOut;
+        this.needTimeOutOther = needTimeOutOther;
+    }
+
 }

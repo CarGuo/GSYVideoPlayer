@@ -65,6 +65,8 @@ public class DetailPlayer extends AppCompatActivity {
         list.add(videoOptionModel);
         GSYVideoManager.instance().setOptionModelList(list);*/
 
+        //GSYVideoManager.instance().setTimeOut(4000, true);
+
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
