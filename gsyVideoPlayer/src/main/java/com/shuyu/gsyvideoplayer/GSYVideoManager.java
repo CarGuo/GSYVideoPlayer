@@ -382,6 +382,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         GSYModel fb = new GSYModel(url, mapHeadData, loop, speed);
         msg.obj = fb;
         mMediaHandler.sendMessage(msg);
+        if(needTimeOutOther) {
+            startTimeOutBuffer();
+        }
     }
 
     public void releaseMediaPlayer() {
@@ -404,6 +407,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
+                cancelTimeOutBuffer();
                 if (listener != null) {
                     listener().onPrepared();
                 }
@@ -623,14 +627,21 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     /**
      * 是否需要在buffer缓冲时，增加外部超时判断，目前对于刚开始超时还没效果
-     * <p>
+     *
      * 超时后会走onError接口，播放器通过onPlayError回调出
-     * <p>
+     *
      * 错误码为 ： BUFFER_TIME_OUT_ERROR = -192
-     * （因为ijk的超时有时候无效）
+     *
+     * 由于onError之后执行GSYVideoPlayer的OnError，如果不想触发错误，
+     * 可以重载onError，在super之前拦截处理。
+     *
+     * public void onError(int what, int extra){
+     *     do you want before super and return;
+     *     super.onError(what, extra)
+     * }
      *
      * @param timeOut          超时时间，毫秒 默认8000
-     * @param needTimeOutOther 是否开始，默认关闭
+     * @param needTimeOutOther 是否需要延时设置，默认关闭
      */
     public void setTimeOut(int timeOut, boolean needTimeOutOther) {
         this.timeOut = timeOut;

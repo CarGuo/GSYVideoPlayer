@@ -41,7 +41,7 @@
 ```
 #### 直接在module下的build.gradle添加
 ```
-compile 'com.shuyu:GSYVideoPlayer:1.6.0'
+compile 'com.shuyu:GSYVideoPlayer:1.6.1'
 
 ```
 
@@ -62,7 +62,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.0'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.1'
 }
 ```
 
