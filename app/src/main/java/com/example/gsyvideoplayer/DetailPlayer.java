@@ -57,7 +57,7 @@ public class DetailPlayer extends AppCompatActivity {
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
-        detailPlayer.setUp(url, true, null, "测试视频");
+        detailPlayer.setUp(url, false, null, "测试视频");
 
         /*VideoOptionModel videoOptionModel =
                 new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 50);
@@ -86,7 +86,7 @@ public class DetailPlayer extends AppCompatActivity {
         detailPlayer.setLockLand(false);
         detailPlayer.setShowFullAnimation(false);
         detailPlayer.setNeedLockFull(true);
-        detailPlayer.setOpenPreView(true);
+        detailPlayer.setOpenPreView(false);
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
