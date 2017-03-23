@@ -1,10 +1,35 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-### 1.6.1(2017-03-21)
+### 1.6.1(2017-03-23)
 * setSpeed接口修改为支持播放中设置
 * 内存优化
-* 增加超时接口
 * update ijk to 0.7.8.1
+* 增加超时接口 GSYVideoManager
+```
+/**
+ * 是否需要在buffer缓冲时，增加外部超时判断，目前对于刚开始超时还没效果
+ *
+ * 超时后会走onError接口，播放器通过onPlayError回调出
+ *
+ * 错误码为 ： BUFFER_TIME_OUT_ERROR = -192
+ *
+ * 由于onError之后执行GSYVideoPlayer的OnError，如果不想触发错误，
+ * 可以重载onError，在super之前拦截处理。
+ *
+ * public void onError(int what, int extra){
+ *     do you want before super and return;
+ *     super.onError(what, extra)
+ * }
+ *
+ * @param timeOut          超时时间，毫秒 默认8000
+ * @param needTimeOutOther 是否需要延时设置，默认关闭
+ */
+public void setTimeOut(int timeOut, boolean needTimeOutOther) {
+    this.timeOut = timeOut;
+    this.needTimeOutOther = needTimeOutOther;
+}
+
+```
 
 ### 1.6.0 (2017-02-19)
 * update ijkplayer to 0.7.7.1。
