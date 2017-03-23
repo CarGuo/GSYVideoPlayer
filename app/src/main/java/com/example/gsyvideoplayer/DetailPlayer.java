@@ -55,6 +55,7 @@ public class DetailPlayer extends AppCompatActivity {
         ButterKnife.bind(this);
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
         //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
         detailPlayer.setUp(url, false, null, "测试视频");
@@ -65,7 +66,7 @@ public class DetailPlayer extends AppCompatActivity {
         list.add(videoOptionModel);
         GSYVideoManager.instance().setOptionModelList(list);*/
 
-        //GSYVideoManager.instance().setTimeOut(4000, true);
+        GSYVideoManager.instance().setTimeOut(4000, true);
 
         //增加封面
         ImageView imageView = new ImageView(this);
