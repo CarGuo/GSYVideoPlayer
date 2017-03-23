@@ -626,7 +626,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
     /**
-     * 是否需要在buffer缓冲时，增加外部超时判断，目前对于刚开始超时还没效果
+     * 是否需要在buffer缓冲时，增加外部超时判断
      *
      * 超时后会走onError接口，播放器通过onPlayError回调出
      *

@@ -30,15 +30,8 @@
 
 ## 使用依赖(支持jcenter和jitpack)
 
-### Jcenter 引入方法
-```
-<dependency>
-  <groupId>com.shuyu</groupId>
-  <artifactId>GSYVideoPlayer</artifactId>
-  <version>1.6.0</version>
-  <type>pom</type>
-</dependency>
-```
+### 1、JCenter 引入方法
+
 #### 直接在module下的build.gradle添加
 ```
 compile 'com.shuyu:GSYVideoPlayer:1.6.1'
@@ -47,7 +40,7 @@ compile 'com.shuyu:GSYVideoPlayer:1.6.1'
 
 --------------------------------------------------------------------------------
 
-### JitPack引入方法
+### 2、JitPack引入方法
 #### 在project下的build.gradle添加
 ```
 allprojects {
@@ -121,7 +114,7 @@ dependencies {
 * 增加超时接口 GSYVideoManager
 ```
 /**
- * 是否需要在buffer缓冲时，增加外部超时判断，目前对于刚开始超时还没效果
+ * 是否需要在buffer缓冲时，增加外部超时判断
  *
  * 超时后会走onError接口，播放器通过onPlayError回调出
  *
