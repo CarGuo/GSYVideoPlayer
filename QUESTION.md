@@ -37,6 +37,8 @@ allprojects {
 
   参考[#issue24](https://github.com/CarGuo/GSYVideoPlayer/issues/24)
 
+  参考[ndk 过滤选择介绍](https://www.diycode.cc/topics/691)
+
   是否已经添加下方的代码到gradle
 ```
 android {
