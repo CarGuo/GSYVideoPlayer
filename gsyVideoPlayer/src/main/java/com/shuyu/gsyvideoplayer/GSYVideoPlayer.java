@@ -35,6 +35,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
+import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
@@ -184,6 +185,15 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mAudioManager = (AudioManager) getContext().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
         mSeekEndOffset = CommonUtil.dip2px(getContext(), 50);
+    }
+
+
+    /**
+     * 设置自定义so包加载类，必须在setUp之前调用
+     * 不然setUp时会第一次实例化GSYVideoManager
+     */
+    public void setIjkLibLoader(IjkLibLoader libLoader){
+        GSYVideoManager.setIjkLibLoader(libLoader);
     }
 
     /**
