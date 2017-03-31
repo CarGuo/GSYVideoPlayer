@@ -145,6 +145,15 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         init(context);
     }
 
+    /**
+     * 模仿IjkMediaPlayer的构造函数，提供自定义IjkLibLoader的入口
+     */
+    public GSYVideoPlayer(Context context, IjkLibLoader ijkLibLoader) {
+        super(context);
+        GSYVideoManager.setIjkLibLoader(ijkLibLoader);
+        init(context);
+    }
+
     public GSYVideoPlayer(Context context) {
         super(context);
         init(context);
