@@ -99,7 +99,7 @@ public class ENPlayView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w * 9 / 10;
         mHeight = h * 9 / 10;
-        mCircleRadius = mWidth / dp2px(3);
+        mCircleRadius = mWidth / dp2px(4);
         mCenterX = w / 2;
         mCenterY = h / 2;
         mRectF = new RectF(mCenterX - mCircleRadius, mCenterY + 0.6f * mCircleRadius,

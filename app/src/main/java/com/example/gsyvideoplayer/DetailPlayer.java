@@ -61,7 +61,7 @@ public class DetailPlayer extends AppCompatActivity {
         detailPlayer.setUp(url, false, null, "测试视频");
 
         /*VideoOptionModel videoOptionModel =
-                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 50);
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 5);
         List<VideoOptionModel> list = new ArrayList<>();
         list.add(videoOptionModel);
         GSYVideoManager.instance().setOptionModelList(list);*/
