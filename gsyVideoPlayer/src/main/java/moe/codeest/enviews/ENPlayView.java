@@ -10,6 +10,7 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 
@@ -30,9 +31,9 @@ public class ENPlayView extends View {
 
     public static int DEFAULT_BG_LINE_COLOR = 0xfffafafa;
 
-    public static int DEFAULT_LINE_WIDTH = 14;
+    public static int DEFAULT_LINE_WIDTH = 4;
 
-    public static int DEFAULT_BG_LINE_WIDTH = 12;
+    public static int DEFAULT_BG_LINE_WIDTH = 4;
 
     public static int DEFAULT_DURATION = 1200;
 
@@ -68,8 +69,8 @@ public class ENPlayView extends View {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.play);
         int lineColor = ta.getColor(R.styleable.play_play_line_color, DEFAULT_LINE_COLOR);
         int bgLineColor = ta.getColor(R.styleable.play_play_bg_line_color, DEFAULT_BG_LINE_COLOR);
-        int lineWidth = ta.getInteger(R.styleable.play_play_line_width, DEFAULT_LINE_WIDTH);
-        int bgLineWidth = ta.getInteger(R.styleable.play_play_bg_line_width, DEFAULT_BG_LINE_WIDTH);
+        int lineWidth = ta.getInteger(R.styleable.play_play_line_width, dp2px(DEFAULT_LINE_WIDTH));
+        int bgLineWidth = ta.getInteger(R.styleable.play_play_bg_line_width, dp2px(DEFAULT_BG_LINE_WIDTH));
         ta.recycle();
 
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -98,7 +99,7 @@ public class ENPlayView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w * 9 / 10;
         mHeight = h * 9 / 10;
-        mCircleRadius = mWidth / 10;
+        mCircleRadius = mWidth / dp2px(3);
         mCenterX = w / 2;
         mCenterY = h / 2;
         mRectF = new RectF(mCenterX - mCircleRadius, mCenterY + 0.6f * mCircleRadius,
@@ -209,5 +210,10 @@ public class ENPlayView extends View {
 
     public void setDuration(int duration) {
         mDuration = duration;
+    }
+
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getContext().getResources().getDisplayMetrics());
     }
 }
