@@ -1,5 +1,16 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.6.2()
+* 移除无用代码
+* 增加了动态加载so的方法
+```
+/**
+ * 设置自定义so包加载类
+ * 需要在instance之前设置
+ */
+public static void setIjkLibLoader(IjkLibLoader libLoader)
+```
+
 ### 1.6.1(2017-03-23)
 * setSpeed接口修改为支持播放中设置
 * 内存优化
