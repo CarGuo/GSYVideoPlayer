@@ -33,6 +33,7 @@ import java.util.Map;
 import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
 import tv.danmaku.ijk.media.player.AbstractMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
+import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
@@ -62,6 +63,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private WeakReference<GSYMediaPlayerListener> listener;
     private WeakReference<GSYMediaPlayerListener> lastListener;
+
+    // 单例模式实在不好给instance()加参数，还是直接设为静态变量吧
+    private static IjkLibLoader ijkLibLoader; //自定义so包加载类
 
     private List<VideoOptionModel> optionModelList;//配置ijk option
 
@@ -94,9 +98,16 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     public static synchronized GSYVideoManager instance() {
         if (videoManager == null) {
-            videoManager = new GSYVideoManager();
+            videoManager = new GSYVideoManager(ijkLibLoader);
         }
         return videoManager;
+    }
+
+    /**
+     * 设置自定义so包加载类
+     */
+    public static void setIjkLibLoader(IjkLibLoader libLoader) {
+        ijkLibLoader = libLoader;
     }
 
     /**
@@ -214,7 +225,12 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
     public GSYVideoManager() {
-        mediaPlayer = new IjkMediaPlayer();
+        this(null);
+    }
+
+    public GSYVideoManager(IjkLibLoader libLoader) {
+        mediaPlayer = (libLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(libLoader);
+        ijkLibLoader = libLoader;
         mMediaHandlerThread = new HandlerThread(TAG);
         mMediaHandlerThread.start();
         mMediaHandler = new MediaHandler((mMediaHandlerThread.getLooper()));
@@ -280,7 +296,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
     private void initIJKPlayer(Message msg) {
-        mediaPlayer = new IjkMediaPlayer();
+        mediaPlayer = (ijkLibLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(ijkLibLoader);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             if (GSYVideoType.isMediaCodec()) {
@@ -382,7 +398,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         GSYModel fb = new GSYModel(url, mapHeadData, loop, speed);
         msg.obj = fb;
         mMediaHandler.sendMessage(msg);
-        if(needTimeOutOther) {
+        if (needTimeOutOther) {
             startTimeOutBuffer();
         }
     }
@@ -627,17 +643,17 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     /**
      * 是否需要在buffer缓冲时，增加外部超时判断
-     *
+     * <p>
      * 超时后会走onError接口，播放器通过onPlayError回调出
-     *
+     * <p>
      * 错误码为 ： BUFFER_TIME_OUT_ERROR = -192
-     *
+     * <p>
      * 由于onError之后执行GSYVideoPlayer的OnError，如果不想触发错误，
      * 可以重载onError，在super之前拦截处理。
-     *
+     * <p>
      * public void onError(int what, int extra){
-     *     do you want before super and return;
-     *     super.onError(what, extra)
+     * do you want before super and return;
+     * super.onError(what, extra)
      * }
      *
      * @param timeOut          超时时间，毫秒 默认8000
