@@ -5,15 +5,13 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.video.CustomGSYVideoPlayer;
-
-import moe.codeest.enviews.ENPlayView;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 /**
  * Created by shuyu on 2016/12/23.
  * CustomGSYVideoPlayer是试验中，建议使用的时候使用StandardGSYVideoPlayer
  */
-public class LandLayoutVideo extends CustomGSYVideoPlayer {
+public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载

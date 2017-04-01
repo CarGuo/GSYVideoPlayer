@@ -18,7 +18,6 @@ import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.CustomGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 
@@ -88,7 +87,7 @@ public class DetailPlayer extends AppCompatActivity {
         detailPlayer.setLockLand(false);
         detailPlayer.setShowFullAnimation(false);
         detailPlayer.setNeedLockFull(true);
-        detailPlayer.setOpenPreView(false);
+        //detailPlayer.setOpenPreView(false);
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +169,7 @@ public class DetailPlayer extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         GSYVideoPlayer.releaseAllVideos();
-        GSYPreViewManager.instance().releaseMediaPlayer();
+        //GSYPreViewManager.instance().releaseMediaPlayer();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
     }

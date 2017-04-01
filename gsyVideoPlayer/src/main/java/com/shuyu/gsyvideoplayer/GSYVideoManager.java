@@ -105,9 +105,14 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     /**
      * 设置自定义so包加载类
+     * 需要在instance之前设置
      */
     public static void setIjkLibLoader(IjkLibLoader libLoader) {
         ijkLibLoader = libLoader;
+    }
+
+    public static IjkLibLoader getIjkLibLoader() {
+       return ijkLibLoader;
     }
 
     /**
@@ -224,10 +229,13 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             this.lastListener = new WeakReference<>(lastListener);
     }
 
-    public GSYVideoManager() {
-        this(null);
-    }
+    //public GSYVideoManager() {
+        //this(null);
+    //}
 
+    /***
+     * @param libLoader 是否使用外部动态加载so
+     * */
     public GSYVideoManager(IjkLibLoader libLoader) {
         mediaPlayer = (libLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(libLoader);
         ijkLibLoader = libLoader;
