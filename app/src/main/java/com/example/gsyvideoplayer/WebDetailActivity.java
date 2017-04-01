@@ -17,6 +17,7 @@ import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
@@ -31,7 +32,7 @@ public class WebDetailActivity extends AppCompatActivity {
     @BindView(R.id.scroll_webView)
     ScrollWebView webView;
     @BindView(R.id.web_player)
-    StandardGSYVideoPlayer webPlayer;
+    NormalGSYVideoPlayer webPlayer;
     @BindView(R.id.web_top_layout)
     NestedScrollView webTopLayout;
     @BindView(R.id.web_top_layout_video)
@@ -51,7 +52,7 @@ public class WebDetailActivity extends AppCompatActivity {
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
-        webPlayer.setUp(url, true, null, "测试视频");
+        webPlayer.setUp(url, false, null, "测试视频");
 
         //增加封面
         ImageView imageView = new ImageView(this);
