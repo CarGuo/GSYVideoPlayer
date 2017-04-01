@@ -72,6 +72,8 @@ public class ENPlayView extends View {
         int bgLineWidth = ta.getInteger(R.styleable.play_play_bg_line_width, DEFAULT_BG_LINE_WIDTH);
         ta.recycle();
 
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -136,7 +138,7 @@ public class ENPlayView extends View {
             canvas.drawArc(mRectF, 180f / 0.3f * (mFraction - 0.3f), 180 - 180f / 0.3f * (mFraction - 0.3f), false , mPaint);
 
             mDstPath.reset();
-            mDstPath.lineTo(0 ,0);
+            //mDstPath.lineTo(0 ,0);
             mPathMeasure.getSegment(0.02f * mPathLength, 0.38f * mPathLength + 0.42f * mPathLength / 0.3f * (mFraction - 0.3f) ,
                     mDstPath, true);
             canvas.drawPath(mDstPath, mPaint);
@@ -144,7 +146,7 @@ public class ENPlayView extends View {
             canvas.drawArc(mBgRectF, -105 + 360 * mFraction, 360 * (1 - mFraction), false, mPaint);
         } else if (mFraction <= 0.8) {  //嗷~~ 三角形
             mDstPath.reset();
-            mDstPath.lineTo(0 ,0);
+            //mDstPath.lineTo(0 ,0);
             mPathMeasure.getSegment(0.02f * mPathLength + 0.2f * mPathLength / 0.2f * (mFraction - 0.6f)
                     , 0.8f * mPathLength + 0.2f * mPathLength / 0.2f * (mFraction - 0.6f) ,
                     mDstPath, true);
@@ -153,7 +155,7 @@ public class ENPlayView extends View {
             canvas.drawArc(mBgRectF, -105 + 360 * mFraction, 360 * (1 - mFraction), false, mPaint);
         } else {    //嗷~~ 弹性部分
             mDstPath.reset();
-            mDstPath.lineTo(0 ,0);
+            //mDstPath.lineTo(0 ,0);
             mPathMeasure.getSegment(10 * mCircleRadius * (mFraction - 1)
                     , mPathLength ,
                     mDstPath, true);
