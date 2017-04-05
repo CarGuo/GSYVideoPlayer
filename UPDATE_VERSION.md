@@ -1,10 +1,11 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-### 1.6.2()
+### 1.6.2(2017-04-05)
 * 移除无用代码
 * 修复了动态播放按键的显示小白点问题
 * 增加了 NormalGSYVideoPlayer（使用正常图片做播放按键、系统loading的播放器）
 * 增加了动态加载so的方法
+* 增加了setIsTouchWigetFull方法，全屏的时候也可以禁止滑动产生的快进，声音，亮度调节逻辑
 ```
 /**
  * 设置自定义so包加载类
@@ -12,7 +13,13 @@
  */
 public static void setIjkLibLoader(IjkLibLoader libLoader)
 ```
-
+```
+/**
+ * 是否可以全屏滑动界面改变进度，声音等
+ * 默认 true
+ */
+public void setIsTouchWigetFull(boolean isTouchWigetFull)
+```
 ### 1.6.1(2017-03-23)
 * setSpeed接口修改为支持播放中设置
 * 内存优化

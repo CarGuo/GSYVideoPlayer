@@ -115,8 +115,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected boolean mTouchingProgressBar = false;
 
-    protected boolean mIsTouchWiget = false;
-
     protected boolean mChangeVolume = false;//是否改变音量
 
     protected boolean mChangePosition = false;//是否改变播放进度
@@ -201,7 +199,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 设置自定义so包加载类，必须在setUp之前调用
      * 不然setUp时会第一次实例化GSYVideoManager
      */
-    public void setIjkLibLoader(IjkLibLoader libLoader){
+    public void setIjkLibLoader(IjkLibLoader libLoader) {
         GSYVideoManager.setIjkLibLoader(libLoader);
     }
 
@@ -576,7 +574,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                     float absDeltaX = Math.abs(deltaX);
                     float absDeltaY = Math.abs(deltaY);
 
-                    if (mIfCurrentIsFullscreen || mIsTouchWiget) {
+                    if ((mIfCurrentIsFullscreen && mIsTouchWigetFull)
+                            || (mIsTouchWiget && !mIfCurrentIsFullscreen)) {
                         if (!mChangePosition && !mChangeVolume && !mBrightness) {
                             if (absDeltaX > mThreshold || absDeltaY > mThreshold) {
                                 cancelProgressTimer();
@@ -915,7 +914,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 //循环在播放的不显示loading
             } else {
                 //避免在onPrepared之前就进入了buffering，导致一只loading
-                if(mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
+                if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
                     setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
             }
         } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
@@ -923,7 +922,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 if (mLooping && mHadPlay) {
                     //循环在播放的不显示
                 } else {
-                    if(mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
+                    if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
                         setStateAndUi(mBackUpPlayingBufferState);
                 }
                 mBackUpPlayingBufferState = -1;
@@ -1137,16 +1136,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         ((Activity) (mContext)).getWindow().setAttributes(lpa);
     }
 
-    public boolean isTouchWiget() {
-        return mIsTouchWiget;
-    }
-
-    /**
-     * 是否可以滑动界面改变进度，声音等
-     */
-    public void setIsTouchWiget(boolean isTouchWiget) {
-        this.mIsTouchWiget = isTouchWiget;
-    }
 
     /**
      * 获取播放按键
@@ -1245,7 +1234,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public long getNetSpeed() {
         if (GSYVideoManager.instance().getMediaPlayer() != null
                 && (GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer)) {
-            return ((IjkMediaPlayer)GSYVideoManager.instance().getMediaPlayer()).getTcpSpeed();
+            return ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).getTcpSpeed();
         } else {
             return -1;
         }

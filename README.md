@@ -34,7 +34,7 @@
 
 #### 直接在module下的build.gradle添加
 ```
-compile 'com.shuyu:GSYVideoPlayer:1.6.1'
+compile 'com.shuyu:GSYVideoPlayer:1.6.2'
 
 ```
 
@@ -55,7 +55,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.1'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.2'
 }
 ```
 
@@ -101,35 +101,25 @@ dependencies {
 
 ## 近期版本
 
-### 1.6.1(2017-03-23)
-* setSpeed接口修改为支持播放中设置
-* 内存优化
-* update ijk to 0.7.8.1
-* 增加超时接口 GSYVideoManager
+### 1.6.2(2017-04-05)
+* 移除无用代码
+* 修复了动态播放按键的显示小白点问题
+* 增加了 NormalGSYVideoPlayer（使用正常图片做播放按键、系统loading的播放器）
+* 增加了动态加载so的方法
+* 增加了setIsTouchWigetFull方法，全屏的时候也可以禁止滑动产生的快进，声音，亮度调节逻辑
 ```
 /**
- * 是否需要在buffer缓冲时，增加外部超时判断
- *
- * 超时后会走onError接口，播放器通过onPlayError回调出
- *
- * 错误码为 ： BUFFER_TIME_OUT_ERROR = -192
- *
- * 由于onError之后执行GSYVideoPlayer的OnError，如果不想触发错误，
- * 可以重载onError，在super之前拦截处理。
- *
- * public void onError(int what, int extra){
- *     do you want before super and return;
- *     super.onError(what, extra)
- * }
- *
- * @param timeOut          超时时间，毫秒 默认8000
- * @param needTimeOutOther 是否需要延时设置，默认关闭
+ * 设置自定义so包加载类
+ * 需要在instance之前设置
  */
-public void setTimeOut(int timeOut, boolean needTimeOutOther) {
-    this.timeOut = timeOut;
-    this.needTimeOutOther = needTimeOutOther;
-}
-
+public static void setIjkLibLoader(IjkLibLoader libLoader)
+```
+```
+/**
+ * 是否可以全屏滑动界面改变进度，声音等
+ * 默认 true
+ */
+public void setIsTouchWigetFull(boolean isTouchWigetFull)
 ```
 
 

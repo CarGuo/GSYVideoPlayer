@@ -82,6 +82,7 @@ public class DetailPlayer extends AppCompatActivity {
         orientationUtils.setEnable(false);
 
         detailPlayer.setIsTouchWiget(true);
+        //detailPlayer.setIsTouchWigetFull(false);
         //关闭自动旋转
         detailPlayer.setRotateViewAuto(false);
         detailPlayer.setLockLand(false);
