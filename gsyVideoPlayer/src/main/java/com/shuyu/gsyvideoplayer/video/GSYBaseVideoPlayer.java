@@ -361,6 +361,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.mNeedShowWifiTip = mNeedShowWifiTip;
             gsyVideoPlayer.mShrinkImageRes = mShrinkImageRes;
             gsyVideoPlayer.mEnlargeImageRes = mEnlargeImageRes;
+            gsyVideoPlayer.mRotate = mRotate;
             gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
