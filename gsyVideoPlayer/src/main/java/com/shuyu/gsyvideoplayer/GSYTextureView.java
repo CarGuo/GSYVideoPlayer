@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.TextureView;
 
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
 /**
@@ -37,7 +38,8 @@ public class GSYTextureView extends TextureView {
         int widthS = getDefaultSize(videoWidth, widthMeasureSpec);
         int heightS = getDefaultSize(videoHeight, heightMeasureSpec);
 
-
+        //Debuger.printfError("******** video size " + getRotation() + " " + videoHeight + " *****1 " + videoWidth);
+        //Debuger.printfError("******** widget size " + widthS + " *****2 " + heightS);
         if (videoWidth > 0 && videoHeight > 0) {
 
             int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -82,6 +84,8 @@ public class GSYTextureView extends TextureView {
             // no size yet, just adopt the given spec sizes
         }
 
+        //Debuger.printfError("******** rotate before " + width + " *****3 " + height);
+
         if (getRotation() != 0 && getRotation() % 90 == 0) {
             if (widthS < heightS) {
                 if (width > height) {
@@ -100,8 +104,24 @@ public class GSYTextureView extends TextureView {
                     height = widthS;
                 }
             }
+
+            //如果旋转后的高度大于宽度
+            if (width > height) {
+                //如果视频的旋转后，width（高度）大于控件高度，需要压缩下高度
+                if (width > heightS) {
+                    width = heightS;
+                    height = (int) (height * (float) (width / heightS));
+                }
+            } else {
+                //如果旋转后的宽度大于高度
+                if (height > widthS) {
+                    height = widthS;
+                    width = (int) (width * (float) (height / widthS));
+                }
+            }
         }
 
+        //Debuger.printfError("******** real size " + width + " *****3 " + height);
         //如果设置了比例
         if (GSYVideoType.getShowType() == GSYVideoType.SCREEN_TYPE_16_9) {
             if (height > width) {

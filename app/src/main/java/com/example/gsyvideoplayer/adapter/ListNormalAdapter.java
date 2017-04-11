@@ -89,6 +89,7 @@ public class ListNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.setThumbImageView(holder.imageView);
 
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //final String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
 
         //默认缓存路径
         holder.gsyVideoPlayer.setUp(url, true , null, "这是title");
