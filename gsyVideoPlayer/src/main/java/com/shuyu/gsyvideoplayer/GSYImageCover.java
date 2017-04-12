@@ -99,18 +99,24 @@ public class GSYImageCover extends ImageView {
                 }
             }
 
-            //如果旋转后的高度大于宽度
             if (width > height) {
                 //如果视频的旋转后，width（高度）大于控件高度，需要压缩下高度
-                if (width > heightS) {
-                    width = heightS;
-                    height = (int) (height * (float) (width / heightS));
+                if (heightS < widthS) {
+                    if (width > heightS) {
+                        height = (int) (height * ((float) width / heightS));
+                        width = heightS;
+                    }
+                } else {
+                    if (width > heightS) {
+                        height = (int) (height / ((float) width / heightS));
+                        width = heightS;
+                    }
                 }
             } else {
                 //如果旋转后的宽度大于高度
                 if (height > widthS) {
+                    width = (int) (width * ((float) height / widthS));
                     height = widthS;
-                    width = (int) (width * (float) (height / widthS));
                 }
             }
         }
