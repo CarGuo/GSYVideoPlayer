@@ -112,19 +112,18 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mChangeRotate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if((mTextureView.getRotation() - mRotate) == 270) {
+                if ((mTextureView.getRotation() - mRotate) == 270) {
                     mTextureView.setRotation(mRotate);
-                    mCoverImageView.setRotation(mRotate);
-
                     mTextureView.requestLayout();
+                    mCoverImageView.setRotation(mRotate);
                     mCoverImageView.requestLayout();
                 } else {
                     mTextureView.setRotation(mTextureView.getRotation() + 90);
-                    mCoverImageView.setRotation(mCoverImageView.getRotation() + 90);
-
                     mTextureView.requestLayout();
+                    mCoverImageView.setRotation(mCoverImageView.getRotation() + 90);
                     mCoverImageView.requestLayout();
                 }
+
 
             }
         });

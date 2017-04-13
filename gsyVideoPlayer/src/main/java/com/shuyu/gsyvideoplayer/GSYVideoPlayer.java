@@ -694,7 +694,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         try {
             if (mCurrentState == CURRENT_STATE_PAUSE && mFullPauseBitmap != null
                     && !mFullPauseBitmap.isRecycled()) {
-                mCoverImageView.setRotation(mRotate);
+                mCoverImageView.setRotation(mTextureView.getRotation());
                 mCoverImageView.setImageBitmap(mFullPauseBitmap);
                 mCoverImageView.setVisibility(VISIBLE);
             }
