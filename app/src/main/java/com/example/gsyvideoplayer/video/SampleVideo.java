@@ -108,15 +108,22 @@ public class SampleVideo extends StandardGSYVideoPlayer {
             }
         });
 
+        //旋转播放角度
         mChangeRotate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if((mTextureView.getRotation() - mRotate) == 270) {
                     mTextureView.setRotation(mRotate);
+                    mCoverImageView.setRotation(mRotate);
+
                     mTextureView.requestLayout();
+                    mCoverImageView.requestLayout();
                 } else {
                     mTextureView.setRotation(mTextureView.getRotation() + 90);
+                    mCoverImageView.setRotation(mCoverImageView.getRotation() + 90);
+
                     mTextureView.requestLayout();
+                    mCoverImageView.requestLayout();
                 }
 
             }

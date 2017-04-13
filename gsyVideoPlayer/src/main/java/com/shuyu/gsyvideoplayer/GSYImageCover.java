@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+
 /**
  * Created by shuyu on 2016/12/6.
  */
@@ -35,7 +37,8 @@ public class GSYImageCover extends ImageView {
         int widthS = getDefaultSize(videoWidth, widthMeasureSpec);
         int heightS = getDefaultSize(videoHeight, heightMeasureSpec);
 
-
+        ///Debuger.printfError("******** video size " + getRotation() + " " + videoHeight + " *****1 " + videoWidth);
+        //Debuger.printfError("******** widget size " + widthS + " *****2 " + heightS);
         if (videoWidth > 0 && videoHeight > 0) {
 
             int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -80,7 +83,9 @@ public class GSYImageCover extends ImageView {
             // no size yet, just adopt the given spec sizes
         }
 
-        if (getRotation() != 0 && getRotation() % 90 == 0) {
+        //Debuger.printfError("******** rotate before " + width + " *****3 " + height);
+
+        if (getRotation() != 0 && getRotation() % 90 == 0 && Math.abs(getRotation()) != 180) {
             if (widthS < heightS) {
                 if (width > height) {
                     width = (int) (width * (float) widthS / height);
@@ -99,6 +104,8 @@ public class GSYImageCover extends ImageView {
                 }
             }
 
+            //Debuger.printfError("******** real size before " + width + " *****3 " + height);
+            //如果旋转后的高度大于宽度
             if (width > height) {
                 //如果视频的旋转后，width（高度）大于控件高度，需要压缩下高度
                 if (heightS < widthS) {
@@ -118,6 +125,22 @@ public class GSYImageCover extends ImageView {
                     width = (int) (width * ((float) height / widthS));
                     height = widthS;
                 }
+            }
+        }
+
+        //Debuger.printfError("******** real size " + width + " *****3 " + height);
+        //如果设置了比例
+        if (GSYVideoType.getShowType() == GSYVideoType.SCREEN_TYPE_16_9) {
+            if (height > width) {
+                width = height * 9 / 16;
+            } else {
+                height = width * 9 / 16;
+            }
+        } else if (GSYVideoType.getShowType() == GSYVideoType.SCREEN_TYPE_4_3) {
+            if (height > width) {
+                width = height * 3 / 4;
+            } else {
+                height = width * 3 / 4;
             }
         }
         setMeasuredDimension(width, height);
