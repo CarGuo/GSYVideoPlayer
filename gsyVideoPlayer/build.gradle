@@ -36,7 +36,6 @@ dependencies {
     compile viewDependencies.ijkplayer_exo
     compile viewDependencies.transitionseverywhere
     compile dataDependencies.videocache
-    compile androidDependencies.support_v4
     compile androidDependencies.appcompat_v7
 }
 
