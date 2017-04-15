@@ -36,7 +36,7 @@
 
 #### 直接在module下的build.gradle添加
 ```
-compile 'com.shuyu:GSYVideoPlayer:1.6.2'
+compile 'com.shuyu:GSYVideoPlayer:1.6.3'
 
 ```
 
@@ -57,7 +57,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.2'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.3'
 }
 ```
 
@@ -103,7 +103,7 @@ dependencies {
 
 ## 近期版本
 
-### 1.6.3(未发布)
+### 1.6.3(2017-04-15)
 * 修改了播放器全屏时的选择90度问题
 * 修改了播放器可能存在的拉伸问题
 * 增加旋转播放画面的demo和库支持
