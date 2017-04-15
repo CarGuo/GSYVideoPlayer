@@ -1258,6 +1258,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     /**
      * 从哪里开始播放
      * 目前有时候前几秒有跳动问题，毫秒
+     * 需要在startPlayLogic之前，即播放开始之前
      */
     public void setSeekOnStart(long seekOnStart) {
         this.mSeekOnStart = seekOnStart;
