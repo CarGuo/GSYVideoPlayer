@@ -135,3 +135,8 @@ List<VideoOptionModel> list = new ArrayList<>();
 list.add(videoOptionModel);
 GSYVideoManager.instance().setOptionModelList(list);
 ```
+
+#### 13、url视频文件中文名。
+
+对于如http://xxxxxxx.中文.mp4的url，如果出现 http 400 error的情况，请自行转换中文url到url编码；
+如 http://tool.oschina.net/encode?type=4 这里转化。
