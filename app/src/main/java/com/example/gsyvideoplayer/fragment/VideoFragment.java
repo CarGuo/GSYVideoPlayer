@@ -1,18 +1,21 @@
-package com.example.gsyvideoplayer;
+package com.example.gsyvideoplayer.fragment;
 
 
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Explode;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 
+import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
 import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
-
 import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -25,7 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecyclerViewActivity extends AppCompatActivity {
+public class VideoFragment extends Fragment {
 
 
     @BindView(R.id.list_item_recycler)
@@ -37,22 +40,29 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
     List<VideoModel> dataList = new ArrayList<>();
 
+    public VideoFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // 设置一个exit transition
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            getWindow().setEnterTransition(new Explode());
-            getWindow().setExitTransition(new Explode());
-        }
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recycler_view);
-        ButterKnife.bind(this);
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_video, container, false);
+
+        ButterKnife.bind(this, view);
 
         resolveData();
 
-        final RecyclerNormalAdapter recyclerNormalAdapter = new RecyclerNormalAdapter(this, dataList);
-        linearLayoutManager = new LinearLayoutManager(this);
+        final RecyclerNormalAdapter recyclerNormalAdapter = new RecyclerNormalAdapter(getActivity(), dataList);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
         videoList.setLayoutManager(linearLayoutManager);
         videoList.setAdapter(recyclerNormalAdapter);
 
@@ -68,7 +78,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                firstVisibleItem   = linearLayoutManager.findFirstVisibleItemPosition();
+                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                 //大于0说明有播放
                 if (GSYVideoManager.instance().getPlayPosition() >= 0) {
@@ -86,30 +96,30 @@ public class RecyclerViewActivity extends AppCompatActivity {
             }
         });
 
+        return view;
     }
 
-    @Override
-    public void onBackPressed() {
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
-            return;
+    public boolean onBackPressed() {
+        if (StandardGSYVideoPlayer.backFromWindowFull(getActivity())) {
+            return true;
         }
-        super.onBackPressed();
+        return false;
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         GSYVideoManager.onPause();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         GSYVideoManager.onResume();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         GSYVideoPlayer.releaseAllVideos();
     }
@@ -123,5 +133,4 @@ public class RecyclerViewActivity extends AppCompatActivity {
         if (recyclerBaseAdapter != null)
             recyclerBaseAdapter.notifyDataSetChanged();
     }
-
 }

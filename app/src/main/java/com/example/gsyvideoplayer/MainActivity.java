@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video})
+    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video, R.id.fragment_video})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.open_btn:
@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.danmaku_video:
                 //播放一个弹幕视频
                 JumpUtils.gotoDanmaku(this);
+            case R.id.fragment_video:
+                //播放一个弹幕视频
+                JumpUtils.gotoFragment(this);
             case R.id.clear_cache:
                 //清理缓存
                 GSYVideoManager.clearAllDefaultCache(MainActivity.this);
