@@ -85,7 +85,7 @@ public class PlayActivity extends AppCompatActivity {
         videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
         videoPlayer.getTitleTextView().setText("测试视频");
 
-        videoPlayer.setSpeed(2f);
+        //videoPlayer.setSpeed(2f);
 
         //设置返回键
         videoPlayer.getBackButton().setVisibility(View.VISIBLE);
