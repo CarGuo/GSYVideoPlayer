@@ -103,32 +103,14 @@ dependencies {
 
 ## 近期版本
 
+### 1.6.4(未发布)
+* update ijk to 0.7.9 (增加了soundTouch，调速后声音变调问题得到解决)
+
+
 ### 1.6.3(2017-04-15)
 * 修改了播放器全屏时的选择90度问题
 * 修改了播放器可能存在的拉伸问题
 * 增加旋转播放画面的demo和库支持
-
-### 1.6.2(2017-04-05)
-* 移除无用代码
-* 修复了动态播放按键的显示小白点问题
-* 增加了 NormalGSYVideoPlayer（使用正常图片做播放按键、系统loading的播放器）
-* 增加了动态加载so的方法
-* 增加了setIsTouchWigetFull方法，全屏的时候也可以禁止滑动产生的快进，声音，亮度调节逻辑
-```
-/**
- * 设置自定义so包加载类
- * 需要在instance之前设置
- */
-public static void setIjkLibLoader(IjkLibLoader libLoader)
-```
-```
-/**
- * 是否可以全屏滑动界面改变进度，声音等
- * 默认 true
- */
-public void setIsTouchWigetFull(boolean isTouchWigetFull)
-```
-
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
