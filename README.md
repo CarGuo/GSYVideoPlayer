@@ -36,7 +36,7 @@
 
 #### 直接在module下的build.gradle添加
 ```
-compile 'com.shuyu:GSYVideoPlayer:1.6.3'
+compile 'com.shuyu:GSYVideoPlayer:1.6.4'
 
 ```
 
@@ -57,7 +57,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.3'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.4'
 }
 ```
 
@@ -103,9 +103,10 @@ dependencies {
 
 ## 近期版本
 
-### 1.6.4(未发布)
+### 1.6.4(2017-04-20)
 * update ijk to 0.7.9 (增加了soundTouch，调速后声音变调问题得到解决)
 * 修复了可能出现的判空问题，修复了ListGSYVideoPlayer的同步问题 
+* 修复了可移动小窗口播放结束无法移动的问题
 
 
 ### 1.6.3(2017-04-15)
