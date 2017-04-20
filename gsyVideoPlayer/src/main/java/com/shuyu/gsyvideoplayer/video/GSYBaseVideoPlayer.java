@@ -95,6 +95,10 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mCacheFile = false; //是否是缓存的文件
 
+    protected boolean mIsTouchWiget = true; //是否支持非全屏滑动触摸有效
+
+    protected boolean mIsTouchWigetFull = true; //是否支持全屏滑动触摸有效
+
     protected Context mContext;
 
     protected String mOriginUrl; //原来的url
@@ -132,10 +136,6 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     protected Bitmap mFullPauseBitmap = null;//暂停时的全屏图片；
 
     protected OrientationUtils mOrientationUtils; //旋转工具类
-
-    protected boolean mIsTouchWiget = true; //是否支持非全屏滑动触摸有效
-
-    protected boolean mIsTouchWigetFull = true; //是否支持全屏滑动触摸有效
 
     private Handler mHandler = new Handler();
 

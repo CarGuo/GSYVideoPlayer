@@ -634,6 +634,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     @Override
+    @SuppressWarnings("ResourceType")
     protected void showProgressDialog(float deltaX, String seekTime, int seekTimePosition, String totalTime, int totalTimeDuration) {
         super.showProgressDialog(deltaX, seekTime, seekTimePosition, totalTime, totalTimeDuration);
         if (mProgressDialog == null) {
@@ -821,9 +822,17 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         GSYBaseVideoPlayer gsyBaseVideoPlayer = super.showSmallVideo(size, actionBar, statusBar);
         if (gsyBaseVideoPlayer != null) {
             StandardGSYVideoPlayer gsyVideoPlayer = (StandardGSYVideoPlayer) gsyBaseVideoPlayer;
+            gsyVideoPlayer.setIsTouchWiget(false);//小窗口不能点击
             gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
         }
         return gsyBaseVideoPlayer;
+    }
+
+    @Override
+    protected void setSmallVideoTextureView(View.OnTouchListener onTouchListener) {
+        super.setSmallVideoTextureView(onTouchListener);
+        //小窗口播放停止了也可以移动
+        mThumbImageViewLayout.setOnTouchListener(onTouchListener);
     }
 
     /**
