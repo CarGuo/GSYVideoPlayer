@@ -3,7 +3,10 @@ package com.shuyu.gsyvideoplayer.video;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 
 import java.io.File;
@@ -87,6 +90,20 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
             }
         }
         return gsyBaseVideoPlayer;
+    }
+
+    @Override
+    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
+        if (gsyVideoPlayer != null) {
+            ListGSYVideoPlayer listGSYVideoPlayer = (ListGSYVideoPlayer) gsyVideoPlayer;
+            mPlayPosition = listGSYVideoPlayer.mPlayPosition;
+            mUriList = listGSYVideoPlayer.mUriList;
+            GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
+            if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+                mTitleTextView.setText(gsyVideoModel.getTitle());
+            }
+        }
+        super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
     }
 
     @Override

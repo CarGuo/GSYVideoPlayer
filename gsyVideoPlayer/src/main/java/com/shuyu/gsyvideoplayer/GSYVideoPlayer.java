@@ -634,7 +634,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                     dismissProgressDialog();
                     dismissVolumeDialog();
                     dismissBrightnessDialog();
-                    if (mChangePosition) {
+                    if (mChangePosition && GSYVideoManager.instance().getMediaPlayer() != null) {
                         GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekTimePosition);
                         int duration = getDuration();
                         int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
@@ -1212,6 +1212,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      *
      * @return 返回是否全屏
      */
+    @SuppressWarnings("ResourceType")
     public static boolean backFromWindowFull(Context context) {
         boolean backFrom = false;
         ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(context)).findViewById(Window.ID_ANDROID_CONTENT);

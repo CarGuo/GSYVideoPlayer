@@ -273,6 +273,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * @param actionBar 是否有actionBar，有的话需要隐藏
      * @param statusBar 是否有状态bar，有的话需要隐藏
      */
+    @SuppressWarnings("ResourceType")
     public GSYBaseVideoPlayer startWindowFullscreen(final Context context, final boolean actionBar, final boolean statusBar) {
 
         mSystemUiVisibility = ((Activity) context).getWindow().getDecorView().getSystemUiVisibility();
@@ -418,6 +419,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     /**
      * 回到正常效果
      */
+    @SuppressWarnings("ResourceType")
     private void backToNormal() {
 
         final ViewGroup vp = getViewGroup();
@@ -496,6 +498,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     /**
      * 显示小窗口
      */
+    @SuppressWarnings("ResourceType")
     public GSYBaseVideoPlayer showSmallVideo(Point size, final boolean actionBar, final boolean statusBar) {
 
         final ViewGroup vp = getViewGroup();
@@ -559,6 +562,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     /**
      * 隐藏小窗口
      */
+    @SuppressWarnings("ResourceType")
     public void hideSmallVideo() {
         final ViewGroup vp = getViewGroup();
         GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer) vp.findViewById(SMALL_ID);
