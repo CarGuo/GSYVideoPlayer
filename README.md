@@ -105,6 +105,7 @@ dependencies {
 
 ### 1.6.4(未发布)
 * update ijk to 0.7.9 (增加了soundTouch，调速后声音变调问题得到解决)
+* 修复了可能出现的判空问题，修复了ListGSYVideoPlayer的同步问题 
 
 
 ### 1.6.3(2017-04-15)
