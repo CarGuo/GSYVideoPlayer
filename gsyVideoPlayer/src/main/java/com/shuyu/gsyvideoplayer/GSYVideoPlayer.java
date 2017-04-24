@@ -914,21 +914,16 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public void onInfo(int what, int extra) {
         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
             mBackUpPlayingBufferState = mCurrentState;
-            if (mLooping && mHadPlay) {
-                //循环在播放的不显示loading
-            } else {
-                //避免在onPrepared之前就进入了buffering，导致一只loading
-                if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
-                    setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
-            }
+            //避免在onPrepared之前就进入了buffering，导致一只loading
+            if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
+                setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
+
         } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
             if (mBackUpPlayingBufferState != -1) {
-                if (mLooping && mHadPlay) {
-                    //循环在播放的不显示
-                } else {
-                    if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
-                        setStateAndUi(mBackUpPlayingBufferState);
-                }
+
+                if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
+                    setStateAndUi(mBackUpPlayingBufferState);
+
                 mBackUpPlayingBufferState = -1;
             }
         } else if (what == IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED) {

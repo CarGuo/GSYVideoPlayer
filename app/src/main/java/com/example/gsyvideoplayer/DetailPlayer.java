@@ -60,14 +60,14 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
         detailPlayer.setUp(url, false, null, "测试视频");
-
+        detailPlayer.setLooping(true);
         /*VideoOptionModel videoOptionModel =
                 new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 5);
         List<VideoOptionModel> list = new ArrayList<>();
         list.add(videoOptionModel);
         GSYVideoManager.instance().setOptionModelList(list);*/
 
-        GSYVideoManager.instance().setTimeOut(4000, true);
+        //GSYVideoManager.instance().setTimeOut(4000, true);
 
         //增加封面
         ImageView imageView = new ImageView(this);
