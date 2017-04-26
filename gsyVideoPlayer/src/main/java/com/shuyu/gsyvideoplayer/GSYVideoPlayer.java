@@ -264,6 +264,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             if (!mCacheFile && GSYVideoManager.instance() != null) {
                 proxy.registerCacheListener(GSYVideoManager.instance(), mOriginUrl);
             }
+        } else if (!cacheWithPlay && (!url.startsWith("http") && !url.startsWith("rtmp") && !url.startsWith("rtsp"))) {
+            mCacheFile = true;
         }
         this.mUrl = url;
         this.mObjects = objects;
