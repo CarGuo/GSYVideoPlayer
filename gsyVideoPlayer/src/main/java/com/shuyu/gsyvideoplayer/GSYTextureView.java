@@ -18,6 +18,10 @@ public class GSYTextureView extends TextureView {
 
     private int sizeH;
 
+    private boolean fullView;
+
+    private int originW, originH;
+
     public GSYTextureView(Context context) {
         super(context);
     }
@@ -37,6 +41,11 @@ public class GSYTextureView extends TextureView {
 
         int widthS = getDefaultSize(videoWidth, widthMeasureSpec);
         int heightS = getDefaultSize(videoHeight, heightMeasureSpec);
+
+        if (originW == 0 || originH == 0) {
+            originW = widthS;
+            originH = heightS;
+        }
 
         ///Debuger.printfError("******** video size " + getRotation() + " " + videoHeight + " *****1 " + videoWidth);
         //Debuger.printfError("******** widget size " + widthS + " *****2 " + heightS);
@@ -85,8 +94,8 @@ public class GSYTextureView extends TextureView {
         }
 
         //Debuger.printfError("******** rotate before " + width + " *****3 " + height);
-
-        if (getRotation() != 0 && getRotation() % 90 == 0 && Math.abs(getRotation()) != 180) {
+        boolean rotate = (getRotation() != 0 && getRotation() % 90 == 0 && Math.abs(getRotation()) != 180);
+        if (rotate) {
             if (widthS < heightS) {
                 if (width > height) {
                     width = (int) (width * (float) widthS / height);
@@ -145,6 +154,47 @@ public class GSYTextureView extends TextureView {
             }
         }
 
+        //上面会调整一变全屏，这里如果要全屏裁减，就整另外一边
+        if (true) {
+            if (rotate && getRotation() != 0) {
+                if (width > height) {
+                    if (height < originW) {
+                        width = (int) (width * ((float) originW / height));
+                        height = originW;
+                    } else if (width < originH) {
+                        height = (int) (height * ((float) originH / width));
+                        width = originH;
+                    }
+                } else {
+                    if (width < originH) {
+                        height = (int) (height * ((float) originH / width));
+                        width = originH;
+                    } else if (height < originW) {
+                        width = (int) (width * ((float) originW / height));
+                        height = originW;
+                    }
+                }
+            } else {
+                if (height > width) {
+                    if (width < widthS) {
+                        height = (int) (height * ((float) widthS / width));
+                        width = widthS;
+                    } else {
+                        width = (int) (width * ((float) heightS / height));
+                        height = heightS;
+                    }
+                } else {
+                    if (height < heightS) {
+                        width = (int) (width * ((float) heightS / height));
+                        height = heightS;
+                    } else {
+                        height = (int) (height * ((float) widthS / width));
+                        width = widthS;
+                    }
+                }
+            }
+        }
+
         sizeH = height;
 
         sizeW = width;
@@ -158,5 +208,13 @@ public class GSYTextureView extends TextureView {
 
     public int getSizeW() {
         return sizeW;
+    }
+
+    public boolean isFullView() {
+        return fullView;
+    }
+
+    public void setFullView(boolean fullView) {
+        this.fullView = fullView;
     }
 }

@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -174,7 +176,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mCurrentTimeTextView = (TextView) findViewById(R.id.current);
         mTotalTimeTextView = (TextView) findViewById(R.id.total);
         mBottomContainer = (ViewGroup) findViewById(R.id.layout_bottom);
-        mTextureViewContainer = (RelativeLayout) findViewById(R.id.surface_container);
+        mTextureViewContainer = (ViewGroup) findViewById(R.id.surface_container);
         mTopContainer = (ViewGroup) findViewById(R.id.layout_top);
         if (isInEditMode())
             return;
@@ -480,9 +482,15 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mTextureView.setSurfaceTextureListener(this);
         mTextureView.setRotation(mRotate);
 
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        mTextureViewContainer.addView(mTextureView, layoutParams);
+        if(mTextureViewContainer instanceof RelativeLayout) {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            mTextureViewContainer.addView(mTextureView, layoutParams);
+        } else if(mTextureViewContainer instanceof FrameLayout) {
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.gravity = Gravity.CENTER;
+            mTextureViewContainer.addView(mTextureView, layoutParams);
+        }
     }
 
     /**
