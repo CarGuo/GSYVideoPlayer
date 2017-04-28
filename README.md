@@ -25,6 +25,7 @@
 * **连续播放一个列表的视频。**
 * **支持全屏与非全屏两套布局切换**
 * **弹幕支持**
+* **镜像旋转**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
@@ -104,6 +105,7 @@ dependencies {
 ## 近期版本
 
 ### 1.6.5(未发布)
+* 增加镜像旋转demo SampleVideo
 * 修改了循环播放的UI问题
 * 修改了本地文件或者已缓存文件，显示进度问题 
 * GSYVideoType增加SCREEN_TYPE_FULL类型，通过按照比例裁减放大视频，达到全屏

@@ -35,7 +35,7 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
         if (mIfCurrentIsFullscreen) {
             return R.layout.sample_video_land;
         }
-        return R.layout.sample_video;
+        return R.layout.sample_video_normal;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer.video;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -44,10 +45,14 @@ public class SampleVideo extends StandardGSYVideoPlayer {
 
     private TextView mChangeRotate;
 
+    private TextView mChangeTransform;
+
     private List<SwitchVideoModel> mUrlList = new ArrayList<>();
 
     //记住切换数据源类型
     private int mType = 0;
+
+    private int mTransformSize = 0;
 
     //数据源
     private int mSourcePosition = 0;
@@ -77,6 +82,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mMoreScale = (TextView) findViewById(R.id.moreScale);
         mSwitchSize = (TextView) findViewById(R.id.switchSize);
         mChangeRotate = (TextView) findViewById(R.id.change_rotate);
+        mChangeTransform = (TextView) findViewById(R.id.change_transform);
 
         //切换清晰度
         mMoreScale.setOnClickListener(new OnClickListener() {
@@ -133,8 +139,32 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                     mCoverImageView.setRotation(mCoverImageView.getRotation() + 90);
                     mCoverImageView.requestLayout();
                 }
+            }
+        });
 
-
+        //镜像旋转
+        mChangeTransform.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mTransformSize == 0) {
+                    mTransformSize = 1;
+                    Matrix transform = new Matrix();
+                    transform.setScale(-1, 1, mTextureView.getWidth() / 2, 0);
+                    mTextureView.setTransform(transform);
+                    mChangeTransform.setText("左右镜像");
+                } else if (mTransformSize == 1) {
+                    mTransformSize = 2;
+                    Matrix transform = new Matrix();
+                    transform.setScale(1, -1, 0, mTextureView.getHeight() / 2);
+                    mTextureView.setTransform(transform);
+                    mChangeTransform.setText("上下镜像");
+                } else if (mTransformSize == 2) {
+                    mTransformSize = 0;
+                    Matrix transform = new Matrix();
+                    transform.setScale(1, 1, mTextureView.getWidth() / 2, 0);
+                    mTextureView.setTransform(transform);
+                    mChangeTransform.setText("旋转镜像");
+                }
             }
         });
 
@@ -175,9 +205,10 @@ public class SampleVideo extends StandardGSYVideoPlayer {
 
     @Override
     public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
-        SampleVideo sampleVideo =  (SampleVideo) super.startWindowFullscreen(context, actionBar, statusBar);
+        SampleVideo sampleVideo = (SampleVideo) super.startWindowFullscreen(context, actionBar, statusBar);
         //这个播放器的demo配置切换到全屏播放器
         //这只是单纯的作为全屏播放显示，如果需要做大小屏幕切换，请记得在这里耶设置上视频全屏的需要的自定义配置
+        //比如已旋转角度之类的等等
         //可参考super中的实现
         return sampleVideo;
     }

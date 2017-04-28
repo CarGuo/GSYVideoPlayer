@@ -173,39 +173,6 @@
             android:paddingLeft="10dp"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/change_transform"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:minEms="5"
-            android:paddingLeft="10dp"
-            android:text="旋转镜像"
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/change_rotate"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:minEms="5"
-            android:paddingLeft="10dp"
-            android:text="旋转画面"
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/moreScale"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:minEms="5"
-            android:paddingLeft="10dp"
-            android:text="默认比例"
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
     </LinearLayout>
 
     <RelativeLayout
