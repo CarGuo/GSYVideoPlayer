@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.SurfaceTexture;
 import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -148,27 +149,56 @@ public class SampleVideo extends StandardGSYVideoPlayer {
             public void onClick(View v) {
                 if (mTransformSize == 0) {
                     mTransformSize = 1;
-                    Matrix transform = new Matrix();
-                    transform.setScale(-1, 1, mTextureView.getWidth() / 2, 0);
-                    mTextureView.setTransform(transform);
-                    mChangeTransform.setText("左右镜像");
                 } else if (mTransformSize == 1) {
                     mTransformSize = 2;
-                    Matrix transform = new Matrix();
-                    transform.setScale(1, -1, 0, mTextureView.getHeight() / 2);
-                    mTextureView.setTransform(transform);
-                    mChangeTransform.setText("上下镜像");
                 } else if (mTransformSize == 2) {
                     mTransformSize = 0;
-                    Matrix transform = new Matrix();
-                    transform.setScale(1, 1, mTextureView.getWidth() / 2, 0);
-                    mTextureView.setTransform(transform);
-                    mChangeTransform.setText("旋转镜像");
                 }
+                resolveTransform();
             }
         });
 
     }
+
+    /**
+     * 需要在尺寸发生变化的时候重新处理
+     */
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        super.onSurfaceTextureSizeChanged(surface, width, height);
+        resolveTransform();
+    }
+
+    /**
+     * 处理镜像旋转
+     */
+    protected void resolveTransform() {
+
+        switch (mTransformSize) {
+            case 1: {
+                Matrix transform = new Matrix();
+                transform.setScale(-1, 1, mTextureView.getWidth() / 2, 0);
+                mTextureView.setTransform(transform);
+                mChangeTransform.setText("左右镜像");
+            }
+            break;
+            case 2: {
+                Matrix transform = new Matrix();
+                transform.setScale(1, -1, 0, mTextureView.getHeight() / 2);
+                mTextureView.setTransform(transform);
+                mChangeTransform.setText("上下镜像");
+            }
+            break;
+            case 0: {
+                Matrix transform = new Matrix();
+                transform.setScale(1, 1, mTextureView.getWidth() / 2, 0);
+                mTextureView.setTransform(transform);
+                mChangeTransform.setText("旋转镜像");
+            }
+            break;
+        }
+    }
+
 
     /**
      * 设置播放URL
