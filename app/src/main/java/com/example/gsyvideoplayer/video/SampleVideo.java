@@ -179,6 +179,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                 Matrix transform = new Matrix();
                 transform.setScale(-1, 1, mTextureView.getWidth() / 2, 0);
                 mTextureView.setTransform(transform);
+                mCoverImageView.setScaleType(ImageView.ScaleType.MATRIX);
+                mCoverImageView.setImageMatrix(transform);
+                mTransformCover = transform;
                 mChangeTransform.setText("左右镜像");
             }
             break;
@@ -186,6 +189,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                 Matrix transform = new Matrix();
                 transform.setScale(1, -1, 0, mTextureView.getHeight() / 2);
                 mTextureView.setTransform(transform);
+                mCoverImageView.setScaleType(ImageView.ScaleType.MATRIX);
+                mCoverImageView.setImageMatrix(transform);
+                mTransformCover = transform;
                 mChangeTransform.setText("上下镜像");
             }
             break;
@@ -193,6 +199,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                 Matrix transform = new Matrix();
                 transform.setScale(1, 1, mTextureView.getWidth() / 2, 0);
                 mTextureView.setTransform(transform);
+                mCoverImageView.setScaleType(ImageView.ScaleType.MATRIX);
+                mCoverImageView.setImageMatrix(transform);
+                mTransformCover = null;
                 mChangeTransform.setText("旋转镜像");
             }
             break;

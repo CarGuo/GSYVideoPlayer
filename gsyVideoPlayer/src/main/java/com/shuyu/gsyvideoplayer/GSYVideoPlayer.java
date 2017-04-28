@@ -2,6 +2,7 @@ package com.shuyu.gsyvideoplayer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -80,6 +81,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected Handler mHandler = new Handler();
 
     protected String mPlayTag = ""; //播放的tag，防止错误，因为普通的url也可能重复
+
+    protected Matrix mTransformCover = null;
 
     protected int mPlayPosition = -22; //播放的tag，防止错误，因为普通的url也可能重复
 
@@ -711,6 +714,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                     && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
                 mCoverImageView.setRotation(mTextureView.getRotation());
                 mCoverImageView.setImageBitmap(mFullPauseBitmap);
+                if(mTransformCover != null) {
+                    mCoverImageView.setScaleType(ImageView.ScaleType.MATRIX);
+                    mCoverImageView.setImageMatrix(mTransformCover);
+                }
                 mCoverImageView.setVisibility(VISIBLE);
             }
         } catch (Exception e) {
