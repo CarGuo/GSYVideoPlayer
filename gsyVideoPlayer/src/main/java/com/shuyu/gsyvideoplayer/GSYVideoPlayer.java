@@ -127,6 +127,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected boolean mFirstTouch = false;//是否首次触摸
 
+
     /**
      * 当前UI
      */
@@ -707,7 +708,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected void showPauseCover() {
         try {
             if (mCurrentState == CURRENT_STATE_PAUSE && mFullPauseBitmap != null
-                    && !mFullPauseBitmap.isRecycled()) {
+                    && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
                 mCoverImageView.setRotation(mTextureView.getRotation());
                 mCoverImageView.setImageBitmap(mFullPauseBitmap);
                 mCoverImageView.setVisibility(VISIBLE);
@@ -723,7 +724,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected void releasePauseCover() {
         try {
             if (mCurrentState != CURRENT_STATE_PAUSE && mFullPauseBitmap != null
-                    && !mFullPauseBitmap.isRecycled()) {
+                    && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
                 mCoverImageView.setImageResource(R.drawable.empty_drawable);
                 mCoverImageView.setVisibility(GONE);
                 //如果在这里销毁，可能会draw a recycler bitmap error
@@ -740,7 +741,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected void releasePauseCoverAndBitmap() {
         try {
             if (mCurrentState != CURRENT_STATE_PAUSE && mFullPauseBitmap != null
-                    && !mFullPauseBitmap.isRecycled()) {
+                    && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
                 mCoverImageView.setImageResource(R.drawable.empty_drawable);
                 mCoverImageView.setVisibility(GONE);
                 mFullPauseBitmap.recycle();

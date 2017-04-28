@@ -622,7 +622,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
 
     private void updatePauseCover() {
-        if (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) {
+        if ((mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) && mShowPauseCover) {
             try {
                 mFullPauseBitmap = mTextureView.getBitmap(mTextureView.getSizeW(), mTextureView.getSizeH());
             } catch (Exception e) {

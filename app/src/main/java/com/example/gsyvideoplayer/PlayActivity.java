@@ -85,6 +85,7 @@ public class PlayActivity extends AppCompatActivity {
         //增加title
         videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
         videoPlayer.getTitleTextView().setText("测试视频");
+        //videoPlayer.setShowPauseCover(false);
 
         //videoPlayer.setSpeed(2f);
 

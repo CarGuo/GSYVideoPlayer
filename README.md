@@ -107,7 +107,18 @@ dependencies {
 * 修改了循环播放的UI问题
 * 修改了本地文件或者已缓存文件，显示进度问题 
 * GSYVideoType增加SCREEN_TYPE_FULL类型，通过按照比例裁减放大视频，达到全屏
+* 增加setShowPauseCover接口
 
+```
+/**
+ * 是否需要加载显示暂停的cover图片
+ * 打开状态下，暂停退到后台，再回到前台不会显示黑屏，但可以对某些机型有概率出现OOM
+ * 关闭情况下，暂停退到后台，再回到前台显示黑屏
+ *
+ * @param showPauseCover 默认true
+ */
+public void setShowPauseCover(boolean showPauseCover)
+```
 
 ### 1.6.4(2017-04-20)
 * update ijk to 0.7.9 (增加了soundTouch，调速后声音变调问题得到解决)
