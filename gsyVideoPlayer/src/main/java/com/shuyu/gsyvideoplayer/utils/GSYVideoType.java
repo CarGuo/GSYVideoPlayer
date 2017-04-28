@@ -59,7 +59,7 @@ public class GSYVideoType {
     }
 
     /**
-     * 设置显示比例
+     * 设置显示比例,注意，这是全局生效的
      */
     public static void setShowType(int type) {
         TYPE = type;

@@ -114,7 +114,7 @@ public class GSYTextureView extends TextureView {
             //如果旋转后的高度大于宽度
             if (width > height) {
                 //如果视频的旋转后，width（高度）大于控件高度，需要压缩下高度
-                if (heightS < widthS) {
+                if (originH < originW) {
                     if (width > heightS) {
                         height = (int) (height * ((float) width / heightS));
                         width = heightS;
