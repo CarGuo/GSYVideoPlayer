@@ -94,7 +94,7 @@ public class PlayActivity extends AppCompatActivity {
         //设置旋转
         orientationUtils = new OrientationUtils(this, videoPlayer);
 
-        //设置全屏按键功能
+        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
         videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

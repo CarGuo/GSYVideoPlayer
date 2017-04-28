@@ -15,6 +15,9 @@ public class GSYVideoType {
     //4:3
     public final static int SCREEN_TYPE_4_3 = 2;
 
+    //全屏裁减显示
+    public final static int SCREEN_TYPE_FULL = 4;
+
 
     public final static int IJKPLAYER = 0;
 

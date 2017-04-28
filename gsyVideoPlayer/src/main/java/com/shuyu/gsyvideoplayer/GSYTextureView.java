@@ -47,8 +47,6 @@ public class GSYTextureView extends TextureView {
             originH = heightS;
         }
 
-        ///Debuger.printfError("******** video size " + getRotation() + " " + videoHeight + " *****1 " + videoWidth);
-        //Debuger.printfError("******** widget size " + widthS + " *****2 " + heightS);
         if (videoWidth > 0 && videoHeight > 0) {
 
             int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -93,7 +91,6 @@ public class GSYTextureView extends TextureView {
             // no size yet, just adopt the given spec sizes
         }
 
-        //Debuger.printfError("******** rotate before " + width + " *****3 " + height);
         boolean rotate = (getRotation() != 0 && getRotation() % 90 == 0 && Math.abs(getRotation()) != 180);
         if (rotate) {
             if (widthS < heightS) {
@@ -114,7 +111,6 @@ public class GSYTextureView extends TextureView {
                 }
             }
 
-            //Debuger.printfError("******** real size before " + width + " *****3 " + height);
             //如果旋转后的高度大于宽度
             if (width > height) {
                 //如果视频的旋转后，width（高度）大于控件高度，需要压缩下高度
@@ -138,7 +134,6 @@ public class GSYTextureView extends TextureView {
             }
         }
 
-        //Debuger.printfError("******** real size " + width + " *****3 " + height);
         //如果设置了比例
         if (GSYVideoType.getShowType() == GSYVideoType.SCREEN_TYPE_16_9) {
             if (height > width) {
@@ -154,8 +149,10 @@ public class GSYTextureView extends TextureView {
             }
         }
 
+        fullView = (GSYVideoType.getShowType() == GSYVideoType.SCREEN_TYPE_FULL);
+
         //上面会调整一变全屏，这里如果要全屏裁减，就整另外一边
-        if (true) {
+        if (fullView) {
             if (rotate && getRotation() != 0) {
                 if (width > height) {
                     if (height < originW) {
@@ -208,13 +205,5 @@ public class GSYTextureView extends TextureView {
 
     public int getSizeW() {
         return sizeW;
-    }
-
-    public boolean isFullView() {
-        return fullView;
-    }
-
-    public void setFullView(boolean fullView) {
-        this.fullView = fullView;
     }
 }

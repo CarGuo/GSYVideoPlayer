@@ -20,6 +20,7 @@ import com.example.gsyvideoplayer.view.SwitchVideoTypeDialog;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.io.File;
@@ -30,6 +31,9 @@ import java.util.TimerTask;
 
 /**
  * Created by shuyu on 2016/12/7.
+ * 注意
+ * 这个播放器的demo配置切换到全屏播放器
+ * 这只是单纯的作为全屏播放显示，如果需要做大小屏幕切换，请记得在这里耶设置上视频全屏的需要的自定义配置
  */
 
 public class SampleVideo extends StandardGSYVideoPlayer {
@@ -91,6 +95,12 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                     if (mTextureView != null)
                         mTextureView.requestLayout();
                 } else if (mType == 2) {
+                    mType = 3;
+                    mMoreScale.setText("全屏");
+                    GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
+                    if (mTextureView != null)
+                        mTextureView.requestLayout();
+                } else if (mType == 3) {
                     mType = 0;
                     mMoreScale.setText("默认比例");
                     GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
@@ -160,6 +170,16 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     @Override
     public int getLayoutId() {
         return R.layout.sample_video;
+    }
+
+
+    @Override
+    public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
+        SampleVideo sampleVideo =  (SampleVideo) super.startWindowFullscreen(context, actionBar, statusBar);
+        //这个播放器的demo配置切换到全屏播放器
+        //这只是单纯的作为全屏播放显示，如果需要做大小屏幕切换，请记得在这里耶设置上视频全屏的需要的自定义配置
+        //可参考super中的实现
+        return sampleVideo;
     }
 
     /**
