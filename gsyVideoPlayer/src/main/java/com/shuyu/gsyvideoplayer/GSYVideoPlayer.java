@@ -814,8 +814,12 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             }
         }
         if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay) {
-            int time = seekBar.getProgress() * getDuration() / 100;
-            GSYVideoManager.instance().getMediaPlayer().seekTo(time);
+            try {
+                int time = seekBar.getProgress() * getDuration() / 100;
+                GSYVideoManager.instance().getMediaPlayer().seekTo(time);
+            } catch (Exception e) {
+                Debuger.printfWarning(e.toString());
+            }
         }
     }
 
