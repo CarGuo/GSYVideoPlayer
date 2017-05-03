@@ -102,6 +102,7 @@ dependencies {
 * ### 4、进度条小窗口预览
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" width="426px" height="240px"/>
 
+
 ## 近期版本
 
 ### 1.6.5(未发布)
