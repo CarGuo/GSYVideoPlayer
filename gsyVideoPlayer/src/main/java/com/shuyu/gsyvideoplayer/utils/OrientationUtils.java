@@ -41,9 +41,9 @@ public class OrientationUtils {
             public void onOrientationChanged(int rotation) {
                 boolean autoRotateOn = (android.provider.Settings.System.getInt(activity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
                 if (!autoRotateOn) {
-                    if (mIsLand == 0) {
+                    //if (mIsLand == 0) {
                         return;
-                    }
+                    //}
                 }
                 // 设置竖屏
                 if (((rotation >= 0) && (rotation <= 30)) || (rotation >= 330)) {
