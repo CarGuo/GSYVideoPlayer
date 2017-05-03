@@ -4,6 +4,7 @@
 * 增加镜像旋转demo SampleVideo
 * 修改了循环播放的UI问题
 * 修改了本地文件或者已缓存文件，显示进度问题 
+* 修复了横竖屏的问题
 * GSYVideoType增加SCREEN_TYPE_FULL类型，通过按照比例裁减放大视频，达到全屏
 * 增加setShowPauseCover接口
 
