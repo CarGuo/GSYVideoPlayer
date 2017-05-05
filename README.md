@@ -37,7 +37,7 @@
 
 #### 直接在module下的build.gradle添加
 ```
-compile 'com.shuyu:GSYVideoPlayer:1.6.4'
+compile 'com.shuyu:GSYVideoPlayer:1.6.5'
 
 ```
 
@@ -58,7 +58,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.4'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.5'
 }
 ```
 
@@ -105,7 +105,7 @@ dependencies {
 
 ## 近期版本
 
-### 1.6.5(未发布)
+### 1.6.5(2017-05-05)
 * 增加镜像旋转demo SampleVideo
 * 修改了循环播放的UI问题
 * 修改了本地文件或者已缓存文件，显示进度问题 
