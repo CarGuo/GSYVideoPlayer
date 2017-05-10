@@ -1,6 +1,8 @@
 package com.example.gsyvideoplayer;
 
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
@@ -36,6 +39,8 @@ public class RecyclerViewActivity extends AppCompatActivity {
     RecyclerBaseAdapter recyclerBaseAdapter;
 
     List<VideoModel> dataList = new ArrayList<>();
+
+    boolean mFull = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +84,27 @@ public class RecyclerViewActivity extends AppCompatActivity {
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
 
                         //如果滑出去了上面和下面就是否，和今日头条一样
-                        GSYVideoPlayer.releaseAllVideos();
-                        recyclerNormalAdapter.notifyDataSetChanged();
+                        //是否全屏
+                        if(!mFull) {
+                            GSYVideoPlayer.releaseAllVideos();
+                            recyclerNormalAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
         });
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (newConfig.orientation != ActivityInfo.SCREEN_ORIENTATION_USER) {
+            mFull = false;
+        } else {
+            mFull = true;
+        }
 
     }
 
