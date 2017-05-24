@@ -1,5 +1,8 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.6.6(2017-05-24)
+* update ijkplayer to 0.8.0
+* update videocache to 2.7.0
 
 ### 1.6.5(2017-05-05)
 * 增加镜像旋转demo SampleVideo

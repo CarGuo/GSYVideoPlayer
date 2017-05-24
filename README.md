@@ -37,7 +37,7 @@
 
 #### 直接在module下的build.gradle添加
 ```
-compile 'com.shuyu:GSYVideoPlayer:1.6.5'
+compile 'com.shuyu:GSYVideoPlayer:1.6.6'
 
 ```
 
@@ -58,7 +58,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.5'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.6'
 }
 ```
 
@@ -105,6 +105,10 @@ dependencies {
 
 ## 近期版本
 
+### 1.6.6(2017-05-24)
+* update ijkplayer to 0.8.0
+* update videocache to 2.7.0
+
 ### 1.6.5(2017-05-05)
 * 增加镜像旋转demo SampleVideo
 * 修改了循环播放的UI问题
@@ -123,11 +127,6 @@ dependencies {
  */
 public void setShowPauseCover(boolean showPauseCover)
 ```
-
-### 1.6.4(2017-04-20)
-* update ijk to 0.7.9 (增加了soundTouch，调速后声音变调问题得到解决)
-* 修复了可能出现的判空问题，修复了ListGSYVideoPlayer的同步问题 
-* 修复了可移动小窗口播放结束无法移动的问题
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 

@@ -16,13 +16,13 @@ ext {
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
 
-    ijkplayer = '0.7.9'
+    ijkplayer = '0.8.0'
     DanmakuFlameMaster = '0.6.4'
 
     transitionseverywhere = '1.7.0'
 
     //DataLibraries
-    videocache = '2.6.4'
+    videocache = '2.7.0'
     leakcanary = '1.5'
 
     androidDependencies = [
