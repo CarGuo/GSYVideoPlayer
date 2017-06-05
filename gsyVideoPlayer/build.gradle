@@ -2,14 +2,13 @@ apply plugin: 'com.android.library'
 
 android {
 
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-    compileSdkVersion globalConfiguration.androidCompileSdkVersion
-    buildToolsVersion globalConfiguration.androidBuildToolsVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
 
-        minSdkVersion globalConfiguration.androidMinSdkVersion
-        targetSdkVersion globalConfiguration.androidTargetSdkVersion
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
 
         versionCode 1
         versionName "1.0"

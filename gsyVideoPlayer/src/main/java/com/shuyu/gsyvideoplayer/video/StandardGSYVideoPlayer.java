@@ -216,6 +216,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected void setStateAndUi(int state) {
         super.setStateAndUi(state);
         switch (mCurrentState) {
+
+            case CURRENt_STATE_PARSEURL:
+                changeUiToParse();
+                break;
             case CURRENT_STATE_NORMAL:
                 changeUiToNormal();
                 cancelDismissControlViewTimer();
@@ -410,6 +414,21 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     //Unified management Ui
+
+    private void changeUiToParse() {
+
+        Debuger.printfLog("changeUiToParse");
+        mTopContainer.setVisibility(View.INVISIBLE);
+        mBottomContainer.setVisibility(View.INVISIBLE);
+        mStartButton.setVisibility(View.INVISIBLE);
+        mLoadingProgressBar.setVisibility(View.VISIBLE);
+        mLoadingProgressBar.start();
+        mThumbImageViewLayout.setVisibility(View.INVISIBLE);
+        mCoverImageView.setVisibility(View.INVISIBLE);
+        mBottomProgressBar.setVisibility(View.INVISIBLE);
+        mLockScreen.setVisibility(View.INVISIBLE);
+    }
+
     private void changeUiToNormal() {
         Debuger.printfLog("changeUiToNormal");
         mTopContainer.setVisibility(View.VISIBLE);
@@ -857,7 +876,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
      * 初始化为正常状态
      */
     public void initUIState() {
-        setStateAndUi(CURRENT_STATE_NORMAL);
+        setStateAndUi(CURRENt_STATE_PARSEURL);
     }
 
     /**

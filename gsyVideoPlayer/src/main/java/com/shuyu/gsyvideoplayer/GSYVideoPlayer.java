@@ -54,10 +54,11 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public static final String TAG = "GSYVideoPlayer";
 
 
-    public static final int CURRENT_STATE_NORMAL = 0; //正常
-    public static final int CURRENT_STATE_PREPAREING = 1; //准备中
-    public static final int CURRENT_STATE_PLAYING = 2; //播放中
-    public static final int CURRENT_STATE_PLAYING_BUFFERING_START = 3; //开始缓冲
+    public static final int CURRENt_STATE_PARSEURL = 0; // 解析URL
+    public static final int CURRENT_STATE_NORMAL = 1; //正常
+    public static final int CURRENT_STATE_PREPAREING = 2; //准备中
+    public static final int CURRENT_STATE_PLAYING = 3; //播放中
+    public static final int CURRENT_STATE_PLAYING_BUFFERING_START = 4; //开始缓冲
     public static final int CURRENT_STATE_PAUSE = 5; //暂停
     public static final int CURRENT_STATE_AUTO_COMPLETE = 6; //自动播放结束
     public static final int CURRENT_STATE_ERROR = 7; //错误状态
