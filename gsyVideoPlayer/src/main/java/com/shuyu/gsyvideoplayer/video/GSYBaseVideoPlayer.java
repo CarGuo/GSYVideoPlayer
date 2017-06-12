@@ -399,6 +399,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
     /**
      * 退出window层播放全屏效果
      */
+    @SuppressWarnings("ResourceType")
     public void clearFullscreenLayout() {
         mIfCurrentIsFullscreen = false;
         int delay = 0;
@@ -410,6 +411,16 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 mOrientationUtils = null;
             }
         }
+
+
+        final ViewGroup vp = getViewGroup();
+        final View oldF = vp.findViewById(FULLSCREEN_ID);
+        if (oldF != null) {
+            //此处fix bug#265，推出全屏的时候，虚拟按键问题
+            GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer) oldF;
+            gsyVideoPlayer.mIfCurrentIsFullscreen = false;
+        }
+
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
