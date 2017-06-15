@@ -139,6 +139,10 @@ public void setShowPauseCover(boolean showPauseCover)
 -dontwarn com.shuyu.gsyvideoplayer.**
 ```
 
+## 依赖大小参考
+![](https://ooo.0o0.ooo/2017/06/15/5941f343a39f5.png)
+
+
 ## License
 
 ```
