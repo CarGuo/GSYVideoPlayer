@@ -91,9 +91,12 @@ dependencies {
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.gif" width="240px" height="426px"/>
 
 * ### 2、列表/详情模式
+
+<div>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/05.gif" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
+</div>
 
 * ### 3、弹幕
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/09.gif" width="360px" height="240px"/>
