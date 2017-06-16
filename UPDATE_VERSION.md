@@ -1,6 +1,6 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-### 1.6.7(2017-06-xx)
+### 1.6.7(2017-06-16)
 * fix bug #265，全屏按返回按键之后的虚拟按键显示问题 (2017-06-12)
 * 增加设置触摸显示控制ui的消失时间接口 (2017-06-12)
 ```
@@ -11,6 +11,15 @@ StandardGSYVideoPlayer.java
  */
 public void setDismissControlTime(int dismissControlTime)
 ```
+* 调整触摸滑动快进的比例
+```
+/**
+ * 调整触摸滑动快进的比例
+ * @param seekRatio 滑动快进的比例，默认1。数值越大，滑动的产生的seek越小
+ */
+public void setSeekRatio(float seekRatio) 
+```
+
 
 ### 1.6.6(2017-05-24)
 * update ijkplayer to 0.8.0
