@@ -140,3 +140,10 @@ GSYVideoManager.instance().setOptionModelList(list);
 
 对于如http://xxxxxxx.中文.mp4的url，如果出现 http 400 error的情况，请自行转换中文url到url编码；
 如 http://tool.oschina.net/encode?type=4 这里转化。
+
+
+#### 14、rtsp播放失败问题
+
+https://github.com/CarGuo/GSYVideoPlayer/issues/232
+
+https://github.com/CarGuo/GSYVideoPlayer/issues/207
