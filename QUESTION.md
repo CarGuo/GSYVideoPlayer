@@ -148,3 +148,12 @@ GSYVideoManager.instance().setOptionModelList(list);
 https://github.com/CarGuo/GSYVideoPlayer/issues/232
 
 https://github.com/CarGuo/GSYVideoPlayer/issues/207
+
+
+#### 15、m3u8拖动seek之后，加载很长时间
+
+https://github.com/Bilibili/ijkplayer/issues/2874
+
+https://github.com/CarGuo/GSYVideoPlayer/issues/252
+seek
+
