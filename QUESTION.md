@@ -155,5 +155,5 @@ https://github.com/CarGuo/GSYVideoPlayer/issues/207
 https://github.com/Bilibili/ijkplayer/issues/2874
 
 https://github.com/CarGuo/GSYVideoPlayer/issues/252
-seek
+
 
