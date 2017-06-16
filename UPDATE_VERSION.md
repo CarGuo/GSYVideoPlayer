@@ -20,7 +20,12 @@ public void setDismissControlTime(int dismissControlTime)
  */
 public void setSeekRatio(float seekRatio) 
 ```
-
+* 增加了拉伸填充的配置
+```
+GSYVideoType.java
+//全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
+public final static int SCREEN_MATCH_FULL = -4;
+```
 
 ### 1.6.6(2017-05-24)
 * update ijkplayer to 0.8.0

@@ -44,6 +44,18 @@ public class GSYImageCover extends ImageView {
         int widthS = getDefaultSize(videoWidth, widthMeasureSpec);
         int heightS = getDefaultSize(videoHeight, heightMeasureSpec);
 
+        if (GSYVideoType.getShowType() == GSYVideoType.SCREEN_MATCH_FULL) {
+            boolean rotate = (getRotation() != 0 && getRotation() % 90 == 0 && Math.abs(getRotation()) != 180);
+            if(rotate) {
+                setMeasuredDimension(heightMeasureSpec, widthMeasureSpec);
+            } else {
+                setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+            }
+            return;
+        }
+
+
+
         if (originW == 0 || originH == 0) {
             originW = widthS;
             originH = heightS;
