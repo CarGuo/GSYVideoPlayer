@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.example.gsyvideoplayer.DanmkuVideoActivity;
 import com.example.gsyvideoplayer.DetailListPlayer;
+import com.example.gsyvideoplayer.DetailMoreTypeActivity;
 import com.example.gsyvideoplayer.DetailPlayer;
 import com.example.gsyvideoplayer.FragmentVideoActivity;
 import com.example.gsyvideoplayer.ListVideo2Activity;
@@ -131,12 +132,21 @@ public class JumpUtils {
     }
 
     /**
-     * 跳转到弹幕
+     * 跳转到Fragment
      *
      * @param activity
      */
     public static void gotoFragment(Activity activity) {
         Intent intent = new Intent(activity, FragmentVideoActivity.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳到多类型
+     * @param activity
+     */
+    public static void gotoMoreType(Activity activity) {
+        Intent intent = new Intent(activity, DetailMoreTypeActivity.class);
         activity.startActivity(intent);
     }
 }

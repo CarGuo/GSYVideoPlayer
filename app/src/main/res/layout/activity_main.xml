@@ -87,6 +87,13 @@
             android:text="Fragment" />
 
         <Button
+            android:id="@+id/more_type"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="More Type" />
+
+        <Button
             android:id="@+id/clear_cache"
             android:layout_width="120dp"
             android:layout_height="wrap_content"

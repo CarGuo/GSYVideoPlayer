@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -91,29 +92,14 @@ public class SampleVideo extends StandardGSYVideoPlayer {
             public void onClick(View v) {
                 if (mType == 0) {
                     mType = 1;
-                    mMoreScale.setText("16:9");
-                    GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9);
-                    if (mTextureView != null)
-                        mTextureView.requestLayout();
                 } else if (mType == 1) {
                     mType = 2;
-                    mMoreScale.setText("4:3");
-                    GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3);
-                    if (mTextureView != null)
-                        mTextureView.requestLayout();
                 } else if (mType == 2) {
                     mType = 3;
-                    mMoreScale.setText("全屏");
-                    GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
-                    if (mTextureView != null)
-                        mTextureView.requestLayout();
                 } else if (mType == 3) {
                     mType = 0;
-                    mMoreScale.setText("默认比例");
-                    GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
-                    if (mTextureView != null)
-                        mTextureView.requestLayout();
                 }
+                resolveTypeUI();
             }
         });
 
@@ -219,7 +205,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      */
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, Object... objects) {
         mUrlList = url;
-        return setUp(url.get(0).getUrl(), cacheWithPlay, objects);
+        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, objects);
     }
 
     /**
@@ -233,7 +219,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      */
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, File cachePath, Object... objects) {
         mUrlList = url;
-        return setUp(url.get(0).getUrl(), cacheWithPlay, cachePath, objects);
+        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, cachePath, objects);
     }
 
     @Override
@@ -242,14 +228,95 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     }
 
 
+    /**
+     * 全屏时将对应处理参数逻辑赋给全屏播放器
+     * @param context
+     * @param actionBar
+     * @param statusBar
+     * @return
+     */
     @Override
     public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
         SampleVideo sampleVideo = (SampleVideo) super.startWindowFullscreen(context, actionBar, statusBar);
+        sampleVideo.mSourcePosition = mSourcePosition;
+        sampleVideo.mType = mType;
+        sampleVideo.mTransformSize = mTransformSize;
+        sampleVideo.mUrlList = mUrlList;
+        //sampleVideo.resolveTransform();
+        sampleVideo.resolveTypeUI();
+        //sampleVideo.resolveRotateUI();
         //这个播放器的demo配置切换到全屏播放器
         //这只是单纯的作为全屏播放显示，如果需要做大小屏幕切换，请记得在这里耶设置上视频全屏的需要的自定义配置
         //比如已旋转角度之类的等等
         //可参考super中的实现
         return sampleVideo;
+    }
+
+    /**
+     *
+     * 推出全屏时将对应处理参数逻辑返回给非播放器
+     * @param oldF
+     * @param vp
+     * @param gsyVideoPlayer
+     */
+    @Override
+    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
+        super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
+        if (gsyVideoPlayer != null) {
+            SampleVideo sampleVideo = (SampleVideo) gsyVideoPlayer;
+            mSourcePosition = sampleVideo.mSourcePosition;
+            mType = sampleVideo.mType;
+            mTransformSize = sampleVideo.mTransformSize;
+            setUp(mUrlList, mCache, mCachePath, mObjects);
+            resolveTypeUI();
+        }
+    }
+
+    /**
+     * 处理显示逻辑
+     */
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        super.onSurfaceTextureAvailable(surface, width, height);
+        resolveRotateUI();
+        resolveTransform();
+    }
+
+    /**
+     * 旋转逻辑
+     */
+    private void resolveRotateUI() {
+        mTextureView.setRotation(mRotate);
+        mTextureView.requestLayout();
+        mCoverImageView.setRotation(mRotate);
+        mCoverImageView.requestLayout();
+    }
+
+    /**
+     * 显示比例
+     */
+    private void resolveTypeUI() {
+        if (mType == 1) {
+            mMoreScale.setText("16:9");
+            GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9);
+            if (mTextureView != null)
+                mTextureView.requestLayout();
+        } else if (mType == 2) {
+            mMoreScale.setText("4:3");
+            GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3);
+            if (mTextureView != null)
+                mTextureView.requestLayout();
+        } else if (mType == 3) {
+            mMoreScale.setText("全屏");
+            GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
+            if (mTextureView != null)
+                mTextureView.requestLayout();
+        } else if (mType == 0) {
+            mMoreScale.setText("默认比例");
+            GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
+            if (mTextureView != null)
+                mTextureView.requestLayout();
+        }
     }
 
     /**
