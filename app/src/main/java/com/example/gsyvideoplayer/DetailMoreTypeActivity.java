@@ -51,8 +51,8 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_detail_more_type);
         ButterKnife.bind(this);
 
-        //String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        String source1 = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        //String source1 = "http://baobab.wdjcdn.com/14564977406580.mp4";
         String name = "普通";
         SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
 

@@ -92,6 +92,8 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                 } else if (mType == 2) {
                     mType = 3;
                 } else if (mType == 3) {
+                    mType = 4;
+                } else if(mType == 4) {
                     mType = 0;
                 }
                 resolveTypeUI();
@@ -298,6 +300,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
 
     /**
      * 显示比例
+     * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
      */
     private void resolveTypeUI() {
         if(!mHadPlay) {
@@ -316,6 +319,11 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         } else if (mType == 3) {
             mMoreScale.setText("全屏");
             GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
+            if (mTextureView != null)
+                mTextureView.requestLayout();
+        } else if (mType == 4) {
+            mMoreScale.setText("拉伸全屏");
+            GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
             if (mTextureView != null)
                 mTextureView.requestLayout();
         } else if (mType == 0) {
