@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by guoshuyu on 2017/6/18.
+ * ampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
  */
 
 public class DetailMoreTypeActivity extends AppCompatActivity{
@@ -49,7 +50,7 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_more_type);
         ButterKnife.bind(this);
-        
+
         //String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         String source1 = "http://baobab.wdjcdn.com/14564977406580.mp4";
         String name = "普通";
