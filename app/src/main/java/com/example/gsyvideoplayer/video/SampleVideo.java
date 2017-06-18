@@ -1,19 +1,13 @@
 package com.example.gsyvideoplayer.video;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
-import android.media.MediaMetadataRetriever;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +23,6 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by shuyu on 2016/12/7.
@@ -90,6 +82,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mMoreScale.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!mHadPlay) {
+                    return;
+                }
                 if (mType == 0) {
                     mType = 1;
                 } else if (mType == 1) {
@@ -115,6 +110,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mChangeRotate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!mHadPlay) {
+                    return;
+                }
                 if ((mTextureView.getRotation() - mRotate) == 270) {
                     mTextureView.setRotation(mRotate);
                     mTextureView.requestLayout();
@@ -133,6 +131,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mChangeTransform.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!mHadPlay) {
+                    return;
+                }
                 if (mTransformSize == 0) {
                     mTransformSize = 1;
                 } else if (mTransformSize == 1) {
@@ -286,6 +287,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 旋转逻辑
      */
     private void resolveRotateUI() {
+        if(!mHadPlay) {
+            return;
+        }
         mTextureView.setRotation(mRotate);
         mTextureView.requestLayout();
         mCoverImageView.setRotation(mRotate);
@@ -296,6 +300,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 显示比例
      */
     private void resolveTypeUI() {
+        if(!mHadPlay) {
+            return;
+        }
         if (mType == 1) {
             mMoreScale.setText("16:9");
             GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9);
@@ -323,6 +330,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 弹出切换清晰度
      */
     private void showSwitchDialog() {
+        if(!mHadPlay) {
+            return;
+        }
         SwitchVideoTypeDialog switchVideoTypeDialog = new SwitchVideoTypeDialog(getContext());
         switchVideoTypeDialog.initList(mUrlList, new SwitchVideoTypeDialog.OnListItemClickListener() {
             @Override
