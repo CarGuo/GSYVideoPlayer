@@ -1,6 +1,6 @@
 ## GSYVideoPlayer 问题集锦
 
-#### 0、依赖不成功的，记得在project下的build.gradle文件jitpack的依赖。
+#### 0、依赖不成功的，如果是jitpach的依赖，记得在project下的build.gradle文件jitpack的依赖。
 ```
 allprojects {
 	repositories {
@@ -113,8 +113,9 @@ setUp(String url, boolean cacheWithPlay····)
 [分片播放资料](http://www.jianshu.com/p/ea794a357b48)
 
 #### 11、有画面没声音，有声音没画面。
-这种情况一般都是so里没有打包支持的格式，如果需要支持你想要的格式，可以自己重新编译so，在module配置文件加上需要额外支持的格式。github首页有编译教程。
+1、这种情况一般都是so里没有打包支持的格式，如果需要支持你想要的格式，可以自己重新编译so，在module配置文件加上需要额外支持的格式。github首页有编译教程。
 
+[2、某些时候，TextureView需要开启硬件加速](https://github.com/CarGuo/GSYVideoPlayer/issues/266)
 
 #### 12、视频声音画面不同步。
 
@@ -140,3 +141,19 @@ GSYVideoManager.instance().setOptionModelList(list);
 
 对于如http://xxxxxxx.中文.mp4的url，如果出现 http 400 error的情况，请自行转换中文url到url编码；
 如 http://tool.oschina.net/encode?type=4 这里转化。
+
+
+#### 14、rtsp播放失败问题
+
+https://github.com/CarGuo/GSYVideoPlayer/issues/232
+
+https://github.com/CarGuo/GSYVideoPlayer/issues/207
+
+
+#### 15、m3u8拖动seek之后，加载很长时间
+
+https://github.com/Bilibili/ijkplayer/issues/2874
+
+https://github.com/CarGuo/GSYVideoPlayer/issues/252
+
+
