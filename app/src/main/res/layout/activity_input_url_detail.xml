@@ -42,6 +42,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
+        android:text="切换url"
         />
 
 </RelativeLayout>
