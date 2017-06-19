@@ -75,7 +75,10 @@
             android:name=".DetailMoreTypeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".InputUrlDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

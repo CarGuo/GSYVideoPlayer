@@ -12,6 +12,7 @@ import com.example.gsyvideoplayer.DetailListPlayer;
 import com.example.gsyvideoplayer.DetailMoreTypeActivity;
 import com.example.gsyvideoplayer.DetailPlayer;
 import com.example.gsyvideoplayer.FragmentVideoActivity;
+import com.example.gsyvideoplayer.InputUrlDetailActivity;
 import com.example.gsyvideoplayer.ListVideo2Activity;
 import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
@@ -147,6 +148,15 @@ public class JumpUtils {
      */
     public static void gotoMoreType(Activity activity) {
         Intent intent = new Intent(activity, DetailMoreTypeActivity.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳到可输入
+     * @param activity
+     */
+    public static void gotoInput(Activity activity) {
+        Intent intent = new Intent(activity, InputUrlDetailActivity.class);
         activity.startActivity(intent);
     }
 }
