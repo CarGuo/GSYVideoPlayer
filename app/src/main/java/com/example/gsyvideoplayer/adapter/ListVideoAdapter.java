@@ -82,9 +82,8 @@ public class ListVideoAdapter extends BaseAdapter {
         //增加封面
         holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         holder.imageView.setImageResource(R.mipmap.xxx1);
-
+        final Object[] objects = {"title " + position};
         listVideoUtil.addVideoPlayer(position, holder.imageView, TAG, holder.videoContainer, holder.playerBtn);
-
         holder.playerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,8 +91,12 @@ public class ListVideoAdapter extends BaseAdapter {
                 //listVideoUtil.setLoop(true);
                 listVideoUtil.setPlayPositionAndTag(position, TAG);
                 final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                listVideoUtil.setObjects(objects);
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
                 listVideoUtil.startPlay(url);
+
+                //必须在startPlay之后设置才能生效
+                //listVideoUtil.getGsyVideoPlayer().getTitleTextView().setVisibility(View.VISIBLE);
             }
         });
         return convertView;

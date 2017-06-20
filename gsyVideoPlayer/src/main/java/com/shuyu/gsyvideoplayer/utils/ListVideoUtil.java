@@ -140,6 +140,10 @@ public class ListVideoUtil {
 
         gsyVideoPlayer.setUp(url, true, cachePath, mapHeadData, objects);
 
+        if(objects != null && objects.length > 0) {
+            gsyVideoPlayer.getTitleTextView().setText((String)objects[0]);
+        }
+
         //增加title
         gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
 

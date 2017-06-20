@@ -43,15 +43,20 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
 
         listVideoUtil.addVideoPlayer(position, imageView, TAG, listItemContainer, listItemBtn);
 
+        final Object[] objects = {"title " + position};
         listItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getRecyclerBaseAdapter().notifyDataSetChanged();
                 //listVideoUtil.setLoop(true);
                 listVideoUtil.setPlayPositionAndTag(position, TAG);
+                listVideoUtil.setObjects(objects);
                 final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
                 listVideoUtil.startPlay(url);
+
+                //必须在startPlay之后设置才能生效
+                //listVideoUtil.getGsyVideoPlayer().getTitleTextView().setVisibility(View.VISIBLE);
             }
         });
     }
