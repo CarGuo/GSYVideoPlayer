@@ -101,6 +101,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mShowPauseCover = true;//是否显示暂停图片
 
+    protected boolean mRotateWithSystem = true; //旋转使能后是否跟随系统设置
+
     protected Context mContext;
 
     protected String mOriginUrl; //原来的url
@@ -211,6 +213,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
         mOrientationUtils.setEnable(mRotateViewAuto);
+        mOrientationUtils.setRotateWithSystem(mRotateWithSystem);
         gsyVideoPlayer.mOrientationUtils = mOrientationUtils;
 
         if (isShowFullAnimation()) {
@@ -369,6 +372,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.mRotate = mRotate;
             gsyVideoPlayer.mShowPauseCover = mShowPauseCover;
             gsyVideoPlayer.mSeekRatio = mSeekRatio;
+            gsyVideoPlayer.mRotateWithSystem = mRotateWithSystem;
             gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
@@ -850,6 +854,19 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     public float getSeekRatio() {
         return mSeekRatio;
+    }
+
+
+    public boolean isRotateWithSystem() {
+        return mRotateWithSystem;
+    }
+
+    /**
+     * 是否更新系统旋转，false的话，系统禁止旋转也会跟着旋转
+     * @param rotateWithSystem 默认true
+     */
+    public void setRotateWithSystem(boolean rotateWithSystem) {
+        this.mRotateWithSystem = rotateWithSystem;
     }
 
 }

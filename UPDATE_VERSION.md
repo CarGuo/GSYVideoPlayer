@@ -1,5 +1,17 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.6.8(2017-06-24)
+* fix listVideoUtils title错乱问题
+* fix setSpeed无法重置的问题 
+* 增加旋转使能后是否跟随系统设置
+```
+/**
+ * 是否更新系统旋转，false的话，系统禁止旋转也会跟着旋转
+ * @param rotateWithSystem 默认true
+ */
+public void setRotateWithSystem(boolean rotateWithSystem)
+```
+
 ### 1.6.7(2017-06-16)
 * fix bug #265，全屏按返回按键之后的虚拟按键显示问题
 * so编译配置增加protocol crypto

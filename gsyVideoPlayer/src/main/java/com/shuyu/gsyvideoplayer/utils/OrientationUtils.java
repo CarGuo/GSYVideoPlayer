@@ -18,12 +18,14 @@ public class OrientationUtils {
 
     private Activity activity;
     private GSYBaseVideoPlayer gsyVideoPlayer;
+    private OrientationEventListener orientationEventListener;
 
     private int screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-    private OrientationEventListener orientationEventListener;
-    private boolean mClick, mClickLand, mClickPort;
     private int mIsLand;
+
+    private boolean mClick, mClickLand, mClickPort;
     private boolean mEnable = true;
+    private boolean mRotateWithSystem = true; //是否跟随系统
 
     /**
      * @param activity
@@ -40,7 +42,7 @@ public class OrientationUtils {
             @Override
             public void onOrientationChanged(int rotation) {
                 boolean autoRotateOn = (android.provider.Settings.System.getInt(activity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
-                if (!autoRotateOn) {
+                if (!autoRotateOn && mRotateWithSystem) {
                     //if (mIsLand == 0) {
                         return;
                     //}
@@ -212,5 +214,18 @@ public class OrientationUtils {
 
     public void setScreenType(int screenType) {
         this.screenType = screenType;
+    }
+
+
+    public boolean isRotateWithSystem() {
+        return mRotateWithSystem;
+    }
+
+    /**
+     * 是否更新系统旋转，false的话，系统禁止旋转也会跟着旋转
+     * @param rotateWithSystem 默认true
+     */
+    public void setRotateWithSystem(boolean rotateWithSystem) {
+        this.mRotateWithSystem = rotateWithSystem;
     }
 }
