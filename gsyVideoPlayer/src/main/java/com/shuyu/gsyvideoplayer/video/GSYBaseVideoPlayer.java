@@ -735,7 +735,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         this.mSpeed = speed;
         if (GSYVideoManager.instance().getMediaPlayer() != null
                 && GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer) {
-            if (speed != 1 && speed > 0) {
+            if (speed > 0) {
                 ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).setSpeed(speed);
             }
         }
