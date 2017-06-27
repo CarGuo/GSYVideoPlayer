@@ -71,7 +71,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     public static boolean IF_RELEASE_WHEN_ON_PAUSE = true;
 
-    protected Timer UPDATE_PROGRESS_TIMER;
+    protected Timer updateProcessTimer;
 
     protected Surface mSurface;
 
@@ -1076,14 +1076,14 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected void startProgressTimer() {
         cancelProgressTimer();
-        UPDATE_PROGRESS_TIMER = new Timer();
+        updateProcessTimer = new Timer();
         mProgressTimerTask = new ProgressTimerTask();
-        UPDATE_PROGRESS_TIMER.schedule(mProgressTimerTask, 0, 300);
+        updateProcessTimer.schedule(mProgressTimerTask, 0, 300);
     }
 
     protected void cancelProgressTimer() {
-        if (UPDATE_PROGRESS_TIMER != null) {
-            UPDATE_PROGRESS_TIMER.cancel();
+        if (updateProcessTimer != null) {
+            updateProcessTimer.cancel();
         }
         if (mProgressTimerTask != null) {
             mProgressTimerTask.cancel();

@@ -108,6 +108,19 @@ dependencies {
 
 ## 近期版本
 
+### 1.6.8(2017-06-27)
+* fix listVideoUtils title错乱问题
+* fix setSpeed无法重置的问题 
+* fix 切换网络无法继续播放问题
+* 增加旋转使能后是否跟随系统设置
+```
+/**
+ * 是否更新系统旋转，false的话，系统禁止旋转也会跟着旋转
+ * @param rotateWithSystem 默认true
+ */
+public void setRotateWithSystem(boolean rotateWithSystem)
+```
+
 ### 1.6.7(2017-06-16)
 * fix bug #265，全屏按返回按键之后的虚拟按键显示问题
 * so编译配置增加protocol crypto
