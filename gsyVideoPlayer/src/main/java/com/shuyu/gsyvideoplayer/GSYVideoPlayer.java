@@ -1200,12 +1200,12 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             mNetInfoModule = new NetInfoModule(getContext().getApplicationContext(), new NetInfoModule.NetChangeListener() {
                 @Override
                 public void changed(String state) {
-                    if ("WIFI".equals(state) || "MOBILE".equals(state)) {
-                        if (!mNetSate.equals(state)) {
-                            mNetChanged = true;
-                            Debuger.printfError("******* change network state *******");
-                        }
+                    Debuger.printfError("******* change network state ******* " + state);
+                    //if ("WIFI".equals(state) || "MOBILE".equals(state)) {
+                    if (!mNetSate.equals(state)) {
+                        mNetChanged = true;
                     }
+                    //}
                     mNetSate = state;
                 }
             });
