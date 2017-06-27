@@ -83,8 +83,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     protected String mPlayTag = ""; //播放的tag，防止错误，因为普通的url也可能重复
 
-    protected String mNetSate = "NORMAL";
-
     protected Matrix mTransformCover = null;
 
     protected NetInfoModule mNetInfoModule;
@@ -134,8 +132,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected boolean mBrightness = false;//是否改变亮度
 
     protected boolean mFirstTouch = false;//是否首次触摸
-
-    protected boolean mNetChanged = false; //是否发送了网络改变
 
 
     /**
@@ -883,6 +879,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             GSYVideoManager.instance().setLastListener(null);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        releaseNetWorkState();
+
     }
 
     @Override
@@ -908,6 +907,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        releaseNetWorkState();
+
     }
 
     @Override
@@ -986,6 +988,37 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     @Override
     public void onBackFullscreen() {
 
+    }
+
+    /**
+     * 重载处理全屏的网络监听
+     *
+     * @param context
+     * @param actionBar 是否有actionBar，有的话需要隐藏
+     * @param statusBar 是否有状态bar，有的话需要隐藏
+     * @return
+     */
+    @Override
+    public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
+        GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
+        GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer) gsyBaseVideoPlayer;
+        gsyVideoPlayer.createNetWorkState();
+        gsyVideoPlayer.listenerNetWorkState();
+        return gsyBaseVideoPlayer;
+    }
+
+    /**
+     * 重载释放全屏网络监听
+     *
+     * @param oldF
+     * @param vp
+     * @param gsyVideoPlayer
+     */
+    @Override
+    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
+        if (gsyVideoPlayer != null)
+            gsyVideoPlayer.releaseNetWorkState();
+        super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
     }
 
     /**
@@ -1201,11 +1234,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 @Override
                 public void changed(String state) {
                     Debuger.printfError("******* change network state ******* " + state);
-                    //if ("WIFI".equals(state) || "MOBILE".equals(state)) {
                     if (!mNetSate.equals(state)) {
                         mNetChanged = true;
                     }
-                    //}
                     mNetSate = state;
                 }
             });

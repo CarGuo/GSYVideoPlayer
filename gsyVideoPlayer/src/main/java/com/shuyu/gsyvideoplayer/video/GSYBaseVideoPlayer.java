@@ -103,6 +103,10 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mRotateWithSystem = true; //旋转使能后是否跟随系统设置
 
+    protected boolean mNetChanged = false; //是否发送了网络改变
+
+    protected String mNetSate = "NORMAL";
+
     protected Context mContext;
 
     protected String mOriginUrl; //原来的url
@@ -255,6 +259,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         mCurrentState = GSYVideoManager.instance().getLastState();
         if (gsyVideoPlayer != null) {
             mCurrentState = gsyVideoPlayer.getCurrentState();
+            mNetChanged = gsyVideoPlayer.mNetChanged;
+            mNetSate = gsyVideoPlayer.mNetSate;
         }
         GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
         GSYVideoManager.instance().setLastListener(null);
@@ -372,6 +378,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.mRotate = mRotate;
             gsyVideoPlayer.mShowPauseCover = mShowPauseCover;
             gsyVideoPlayer.mSeekRatio = mSeekRatio;
+            gsyVideoPlayer.mNetChanged = mNetChanged;
+            gsyVideoPlayer.mNetSate = mNetSate;
             gsyVideoPlayer.mRotateWithSystem = mRotateWithSystem;
             gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
@@ -555,6 +563,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
             vp.addView(frameLayout, lpParent);
             gsyVideoPlayer.mHadPlay = mHadPlay;
+            gsyVideoPlayer.mNetChanged = mNetChanged;
+            gsyVideoPlayer.mNetSate = mNetSate;
             gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mObjects);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
@@ -591,6 +601,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         mCurrentState = GSYVideoManager.instance().getLastState();
         if (gsyVideoPlayer != null) {
             mCurrentState = gsyVideoPlayer.getCurrentState();
+            mNetChanged = gsyVideoPlayer.mNetChanged;
+            mNetSate = gsyVideoPlayer.mNetSate;
         }
         GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
         GSYVideoManager.instance().setLastListener(null);
