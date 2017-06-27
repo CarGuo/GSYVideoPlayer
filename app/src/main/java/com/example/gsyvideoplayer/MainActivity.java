@@ -65,14 +65,18 @@ public class MainActivity extends AppCompatActivity {
             case R.id.danmaku_video:
                 //播放一个弹幕视频
                 JumpUtils.gotoDanmaku(this);
+                break;
             case R.id.fragment_video:
                 //播放一个弹幕视频
                 JumpUtils.gotoFragment(this);
+                break;
             case R.id.more_type:
                 //跳到多类型详情播放器，比如切换分辨率，旋转等
                 JumpUtils.gotoMoreType(this);
+                break;
             case R.id.input_type:
                 JumpUtils.gotoInput(this);
+                break;
             case R.id.clear_cache:
                 //清理缓存
                 GSYVideoManager.clearAllDefaultCache(MainActivity.this);
