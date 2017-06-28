@@ -1,8 +1,8 @@
 
 ![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/home_logo.png)
 
-## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)，实现了多功能的视频播放器(请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
-
+## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
+ 
 * **支持基本的拖动，声音、亮度调节。**
 * **支持边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)。**
 * **支持视频本身自带rotation的旋转。**
