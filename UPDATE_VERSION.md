@@ -7,7 +7,7 @@
 * 增加旋转使能后是否跟随系统设置
 ```
 /**
- * 是否更新系统旋转，false的话，系统禁止旋转也会跟着旋转
+ * 是否跟随系统旋转，false的话，系统禁止旋转也会跟着旋转
  * @param rotateWithSystem 默认true
  */
 public void setRotateWithSystem(boolean rotateWithSystem)
