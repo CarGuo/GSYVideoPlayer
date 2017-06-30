@@ -169,4 +169,5 @@ public final static int SCREEN_MATCH_FULL = -4;
 
 ```
 请参看IJKPlayer和AndroidVideoCache相关协议。
+项目最开始是从jiecao过来的，只是后来方向不同，所以慢慢的也异化了。
 ```
