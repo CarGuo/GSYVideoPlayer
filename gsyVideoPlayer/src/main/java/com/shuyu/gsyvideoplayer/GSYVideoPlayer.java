@@ -264,7 +264,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) < FULL_SCREEN_NORMAL_DELAY)
             return false;
         mCurrentState = CURRENT_STATE_NORMAL;
-        if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1")) {
+        if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1") && !url.contains(".m3u8")) {
             HttpProxyCacheServer proxy = GSYVideoManager.getProxy(getContext().getApplicationContext(), cachePath);
             //此处转换了url，然后再赋值给mUrl。
             url = proxy.getProxyUrl(url);
@@ -273,7 +273,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             if (!mCacheFile && GSYVideoManager.instance() != null) {
                 proxy.registerCacheListener(GSYVideoManager.instance(), mOriginUrl);
             }
-        } else if (!cacheWithPlay && (!url.startsWith("http") && !url.startsWith("rtmp") && !url.startsWith("rtsp"))) {
+        } else if (!cacheWithPlay && (!url.startsWith("http") && !url.startsWith("rtmp")
+                && !url.startsWith("rtsp") && !url.contains(".m3u8"))) {
             mCacheFile = true;
         }
         this.mUrl = url;
@@ -1041,7 +1042,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 清除当前缓存
      */
     public void clearCurrentCache() {
-        if (mCacheFile) {
+        //只有都为true时，才是缓存文件
+        if (mCacheFile && mCache) {
             //是否为缓存文件
             Debuger.printfError(" mCacheFile Local Error " + mUrl);
             //可能是因为缓存文件除了问题

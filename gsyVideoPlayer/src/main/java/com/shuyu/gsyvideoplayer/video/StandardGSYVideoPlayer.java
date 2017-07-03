@@ -609,17 +609,19 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     protected void updateStartImage() {
-        ENPlayView enPlayView = (ENPlayView) mStartButton;
-        enPlayView.setDuration(500);
-        if (mCurrentState == CURRENT_STATE_PLAYING) {
-            enPlayView.play();
-            //mStartButton.setImageResource(R.drawable.video_click_pause_selector);
-        } else if (mCurrentState == CURRENT_STATE_ERROR) {
-            enPlayView.pause();
-            //mStartButton.setImageResource(R.drawable.video_click_error_selector);
-        } else {
-            enPlayView.pause();
-            //mStartButton.setImageResource(R.drawable.video_click_play_selector);
+        if(mStartButton instanceof ENPlayView) {
+            ENPlayView enPlayView = (ENPlayView) mStartButton;
+            enPlayView.setDuration(500);
+            if (mCurrentState == CURRENT_STATE_PLAYING) {
+                enPlayView.play();
+                //mStartButton.setImageResource(R.drawable.video_click_pause_selector);
+            } else if (mCurrentState == CURRENT_STATE_ERROR) {
+                enPlayView.pause();
+                //mStartButton.setImageResource(R.drawable.video_click_error_selector);
+            } else {
+                enPlayView.pause();
+                //mStartButton.setImageResource(R.drawable.video_click_play_selector);
+            }
         }
     }
 

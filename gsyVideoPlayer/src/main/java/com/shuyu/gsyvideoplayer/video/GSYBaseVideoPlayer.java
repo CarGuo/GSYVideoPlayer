@@ -81,7 +81,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected float mSeekRatio = 1; //触摸滑动进度的比例系数
 
-    protected float mSpeed = 1;//播放速度，只支持6.0以上
+    protected float mSpeed = 1;//播放速度
 
     protected boolean mRotateViewAuto = true; //是否自动旋转
 

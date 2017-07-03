@@ -41,13 +41,15 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
     @Override
     protected void updateStartImage() {
         if (mIfCurrentIsFullscreen) {
-            ImageView imageView = (ImageView) mStartButton;
-            if (mCurrentState == CURRENT_STATE_PLAYING) {
-                imageView.setImageResource(R.drawable.video_click_pause_selector);
-            } else if (mCurrentState == CURRENT_STATE_ERROR) {
-                imageView.setImageResource(R.drawable.video_click_play_selector);
-            } else {
-                imageView.setImageResource(R.drawable.video_click_play_selector);
+            if(mStartButton instanceof  ImageView) {
+                ImageView imageView = (ImageView) mStartButton;
+                if (mCurrentState == CURRENT_STATE_PLAYING) {
+                    imageView.setImageResource(R.drawable.video_click_pause_selector);
+                } else if (mCurrentState == CURRENT_STATE_ERROR) {
+                    imageView.setImageResource(R.drawable.video_click_play_selector);
+                } else {
+                    imageView.setImageResource(R.drawable.video_click_play_selector);
+                }
             }
         } else {
             super.updateStartImage();
