@@ -1409,4 +1409,21 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         return mBuffterPoint;
     }
 
+
+    /**
+     * 获取全屏播放器对象
+     *
+     * @return GSYVideoPlayer 如果没有则返回空。
+     */
+    @SuppressWarnings("ResourceType")
+    public GSYVideoPlayer getFullWindowPlayer() {
+        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
+        final View full = vp.findViewById(FULLSCREEN_ID);
+        GSYVideoPlayer gsyVideoPlayer = null;
+        if (full != null) {
+            gsyVideoPlayer = (GSYVideoPlayer) full;
+        }
+        return gsyVideoPlayer;
+    }
+
 }

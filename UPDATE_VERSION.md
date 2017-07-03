@@ -1,5 +1,17 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 1.6.9()
+
+* 非全屏播放器可获取全屏播放器对象。
+```
+/**
+ * 获取全屏播放器对象
+ *
+ * @return GSYVideoPlayer 如果没有则返回空。
+ */
+public GSYVideoPlayer getFullWindowPlayer()
+```
+
 ### 1.6.8(2017-06-27)
 * fix listVideoUtils title错乱问题
 * fix setSpeed无法重置的问题 
