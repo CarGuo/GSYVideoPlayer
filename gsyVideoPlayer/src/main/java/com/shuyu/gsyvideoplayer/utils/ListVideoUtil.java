@@ -285,7 +285,7 @@ public class ListVideoUtil {
                 gsyVideoPlayer.setIfCurrentIsFullscreen(false);
                 if (videoAllCallBack != null) {
                     Debuger.printfLog("onQuitFullscreen");
-                    videoAllCallBack.onQuitFullscreen(url);
+                    videoAllCallBack.onQuitFullscreen(url, mTitle, gsyVideoPlayer);
                 }
                 if (hideKey) {
                     showNavKey(context, systemUiVisibility);
@@ -344,7 +344,7 @@ public class ListVideoUtil {
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         if (videoAllCallBack != null) {
             Debuger.printfLog("onEnterFullscreen");
-            videoAllCallBack.onEnterFullscreen(this.url);
+            videoAllCallBack.onEnterFullscreen(this.url, mTitle, gsyVideoPlayer);
         }
     }
 

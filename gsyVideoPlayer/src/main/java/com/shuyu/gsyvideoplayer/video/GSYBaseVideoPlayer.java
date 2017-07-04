@@ -242,7 +242,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
         if (mVideoAllCallBack != null) {
             Debuger.printfError("onEnterFullscreen");
-            mVideoAllCallBack.onEnterFullscreen(mUrl, mTitle);
+            mVideoAllCallBack.onEnterFullscreen(mOriginUrl, mTitle, gsyVideoPlayer);
         }
         mIfCurrentIsFullscreen = true;
     }
@@ -269,7 +269,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
         if (mVideoAllCallBack != null) {
             Debuger.printfError("onQuitFullscreen");
-            mVideoAllCallBack.onQuitFullscreen(mUrl, mTitle);
+            mVideoAllCallBack.onQuitFullscreen(mOriginUrl, mTitle, this);
         }
         mIfCurrentIsFullscreen = false;
         if (mHideKey) {
@@ -580,7 +580,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
             if (mVideoAllCallBack != null) {
                 Debuger.printfError("onEnterSmallWidget");
-                mVideoAllCallBack.onEnterSmallWidget(mUrl, mTitle);
+                mVideoAllCallBack.onEnterSmallWidget(mOriginUrl, mTitle, gsyVideoPlayer);
             }
 
             return gsyVideoPlayer;
@@ -611,7 +611,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
         if (mVideoAllCallBack != null) {
             Debuger.printfLog("onQuitSmallWidget");
-            mVideoAllCallBack.onQuitSmallWidget(mUrl, mTitle);
+            mVideoAllCallBack.onQuitSmallWidget(mOriginUrl, mTitle, this);
         }
     }
 

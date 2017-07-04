@@ -86,7 +86,6 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
-                Debuger.printfLog("onPrepared");
                 if (!gsyVideoPlayer.isIfCurrentIsFullscreen()) {
                     //静音
                     GSYVideoManager.instance().setNeedMute(true);

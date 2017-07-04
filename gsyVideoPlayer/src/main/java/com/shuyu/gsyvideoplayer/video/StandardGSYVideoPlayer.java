@@ -313,10 +313,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             if (mStandardVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
                     Debuger.printfLog("onClickBlankFullscreen");
-                    mStandardVideoAllCallBack.onClickBlankFullscreen(mUrl, mTitle);
+                    mStandardVideoAllCallBack.onClickBlankFullscreen(mOriginUrl, mTitle, StandardGSYVideoPlayer.this);
                 } else {
                     Debuger.printfLog("onClickBlank");
-                    mStandardVideoAllCallBack.onClickBlank(mUrl, mTitle);
+                    mStandardVideoAllCallBack.onClickBlank(mOriginUrl, mTitle, StandardGSYVideoPlayer.this);
                 }
             }
             startDismissControlViewTimer();
@@ -353,7 +353,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     public void startPlayLogic() {
         if (mStandardVideoAllCallBack != null) {
             Debuger.printfLog("onClickStartThumb");
-            mStandardVideoAllCallBack.onClickStartThumb(mUrl, mTitle);
+            mStandardVideoAllCallBack.onClickStartThumb(mOriginUrl, mTitle, StandardGSYVideoPlayer.this);
         }
         prepareVideo();
         startDismissControlViewTimer();
