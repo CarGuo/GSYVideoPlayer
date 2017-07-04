@@ -217,11 +217,11 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param objects       object[0]目前为title
+     * @param title        title
      * @return
      */
-    public boolean setUp(String url, boolean cacheWithPlay, Object... objects) {
-        return setUp(url, cacheWithPlay, ((File) null), objects);
+    public boolean setUp(String url, boolean cacheWithPlay, String title) {
+        return setUp(url, cacheWithPlay, ((File) null), title);
     }
 
 
@@ -232,12 +232,12 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   头部信息
-     * @param objects       object[0]目前为title
+     * @param title        title
      * @return
      */
     @Override
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, Object... objects) {
-        if (setUp(url, cacheWithPlay, cachePath, objects)) {
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title) {
+        if (setUp(url, cacheWithPlay, cachePath, title)) {
             this.mMapHeadData.clear();
             if (mapHeadData != null)
                 this.mMapHeadData.putAll(mapHeadData);
@@ -252,11 +252,11 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param objects       object[0]目前为title
+     * @param title       title
      * @return
      */
     @Override
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Object... objects) {
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title) {
         mCache = cacheWithPlay;
         mCachePath = cachePath;
         mOriginUrl = url;
@@ -278,7 +278,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             mCacheFile = true;
         }
         this.mUrl = url;
-        this.mObjects = objects;
+        this.mTitle = title;
         setStateAndUi(CURRENT_STATE_NORMAL);
         return true;
     }
@@ -349,20 +349,20 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                     if (mIfCurrentIsFullscreen) {
                         Debuger.printfLog("onClickStopFullscreen");
-                        mVideoAllCallBack.onClickStopFullscreen(mUrl, mObjects);
+                        mVideoAllCallBack.onClickStopFullscreen(mUrl, mTitle);
                     } else {
                         Debuger.printfLog("onClickStop");
-                        mVideoAllCallBack.onClickStop(mUrl, mObjects);
+                        mVideoAllCallBack.onClickStop(mUrl, mTitle);
                     }
                 }
             } else if (mCurrentState == CURRENT_STATE_PAUSE) {
                 if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                     if (mIfCurrentIsFullscreen) {
                         Debuger.printfLog("onClickResumeFullscreen");
-                        mVideoAllCallBack.onClickResumeFullscreen(mUrl, mObjects);
+                        mVideoAllCallBack.onClickResumeFullscreen(mUrl, mTitle);
                     } else {
                         Debuger.printfLog("onClickResume");
-                        mVideoAllCallBack.onClickResume(mUrl, mObjects);
+                        mVideoAllCallBack.onClickResume(mUrl, mTitle);
                     }
                 }
                 GSYVideoManager.instance().getMediaPlayer().start();
@@ -373,7 +373,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         } else if (i == R.id.surface_container && mCurrentState == CURRENT_STATE_ERROR) {
             if (mVideoAllCallBack != null) {
                 Debuger.printfLog("onClickStartError");
-                mVideoAllCallBack.onClickStartError(mUrl, mObjects);
+                mVideoAllCallBack.onClickStartError(mUrl, mTitle);
             }
             prepareVideo();
         }
@@ -388,10 +388,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     private void startButtonLogic() {
         if (mVideoAllCallBack != null && mCurrentState == CURRENT_STATE_NORMAL) {
             Debuger.printfLog("onClickStartIcon");
-            mVideoAllCallBack.onClickStartIcon(mUrl, mObjects);
+            mVideoAllCallBack.onClickStartIcon(mUrl, mTitle);
         } else if (mVideoAllCallBack != null) {
             Debuger.printfLog("onClickStartError");
-            mVideoAllCallBack.onClickStartError(mUrl, mObjects);
+            mVideoAllCallBack.onClickStartError(mUrl, mTitle);
         }
         prepareVideo();
     }
@@ -664,17 +664,17 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                         mProgressBar.setProgress(progress);
                         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                             Debuger.printfLog("onTouchScreenSeekPosition");
-                            mVideoAllCallBack.onTouchScreenSeekPosition(mUrl, mObjects);
+                            mVideoAllCallBack.onTouchScreenSeekPosition(mUrl, mTitle);
                         }
                     } else if (mBrightness) {
                         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                             Debuger.printfLog("onTouchScreenSeekLight");
-                            mVideoAllCallBack.onTouchScreenSeekLight(mUrl, mObjects);
+                            mVideoAllCallBack.onTouchScreenSeekLight(mUrl, mTitle);
                         }
                     } else if (mChangeVolume) {
                         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                             Debuger.printfLog("onTouchScreenSeekVolume");
-                            mVideoAllCallBack.onTouchScreenSeekVolume(mUrl, mObjects);
+                            mVideoAllCallBack.onTouchScreenSeekVolume(mUrl, mTitle);
                         }
                     }
                     startProgressTimer();
@@ -812,10 +812,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
             if (isIfCurrentIsFullscreen()) {
                 Debuger.printfLog("onClickSeekbarFullscreen");
-                mVideoAllCallBack.onClickSeekbarFullscreen(mUrl, mObjects);
+                mVideoAllCallBack.onClickSeekbarFullscreen(mUrl, mTitle);
             } else {
                 Debuger.printfLog("onClickSeekbar");
-                mVideoAllCallBack.onClickSeekbar(mUrl, mObjects);
+                mVideoAllCallBack.onClickSeekbar(mUrl, mTitle);
             }
         }
         if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay) {
@@ -847,7 +847,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
             Debuger.printfLog("onPrepared");
-            mVideoAllCallBack.onPrepared(mUrl, mObjects);
+            mVideoAllCallBack.onPrepared(mUrl, mTitle);
         }
 
         if (GSYVideoManager.instance().getMediaPlayer() != null && mSeekOnStart > 0) {
@@ -863,7 +863,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     public void onAutoCompletion() {
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
             Debuger.printfLog("onAutoComplete");
-            mVideoAllCallBack.onAutoComplete(mUrl, mObjects);
+            mVideoAllCallBack.onAutoComplete(mUrl, mTitle);
         }
         setStateAndUi(CURRENT_STATE_AUTO_COMPLETE);
         if (mTextureViewContainer.getChildCount() > 0) {
@@ -940,7 +940,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             mNetChanged = false;
             netWorkErrorLogic();
             if (mVideoAllCallBack != null) {
-                mVideoAllCallBack.onPlayError(mUrl, mObjects);
+                mVideoAllCallBack.onPlayError(mUrl, mTitle);
             }
             return;
         }
@@ -949,7 +949,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             setStateAndUi(CURRENT_STATE_ERROR);
             deleteCacheFileWhenError();
             if (mVideoAllCallBack != null) {
-                mVideoAllCallBack.onPlayError(mUrl, mObjects);
+                mVideoAllCallBack.onPlayError(mUrl, mTitle);
             }
         }
     }

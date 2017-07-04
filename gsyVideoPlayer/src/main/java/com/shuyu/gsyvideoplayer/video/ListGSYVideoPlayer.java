@@ -43,14 +43,13 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param objects       object[0]目前为title
      * @return
      */
-    public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, Object... objects) {
+    public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position) {
         mUriList = url;
         mPlayPosition = position;
         GSYVideoModel gsyVideoModel = url.get(position);
-        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, objects);
+        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, gsyVideoModel.getTitle());
         if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
             mTitleTextView.setText(gsyVideoModel.getTitle());
         }
@@ -63,14 +62,13 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param objects       object[0]目前为title
      * @return
      */
-    public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath, Object... objects) {
+    public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath) {
         mUriList = url;
         mPlayPosition = position;
         GSYVideoModel gsyVideoModel = url.get(position);
-        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, cachePath, objects);
+        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, cachePath, gsyVideoModel.getTitle());
         if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
             mTitleTextView.setText(gsyVideoModel.getTitle());
         }
@@ -119,7 +117,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         if (mPlayPosition < (mUriList.size() - 1)) {
             mPlayPosition++;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
-            setUp(gsyVideoModel.getUrl(), mCache, mCachePath, mObjects);
+            setUp(gsyVideoModel.getUrl(), mCache, mCachePath, gsyVideoModel.getTitle());
             if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
             }

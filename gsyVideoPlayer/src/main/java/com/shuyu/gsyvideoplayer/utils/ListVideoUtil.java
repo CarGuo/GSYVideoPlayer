@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class ListVideoUtil {
     private Context context;
     private File cachePath;
 
-    private Object[] objects;
+    private String mTitle;
 
     private Map<String, String> mapHeadData;
 
@@ -138,10 +139,10 @@ public class ListVideoUtil {
 
         gsyVideoPlayer.setNeedLockFull(needLockFull);
 
-        gsyVideoPlayer.setUp(url, true, cachePath, mapHeadData, objects);
+        gsyVideoPlayer.setUp(url, true, cachePath, mapHeadData, mTitle);
 
-        if(objects != null && objects.length > 0) {
-            gsyVideoPlayer.getTitleTextView().setText((String)objects[0]);
+        if(!TextUtils.isEmpty(mTitle)) {
+            gsyVideoPlayer.getTitleTextView().setText(mTitle);
         }
 
         //增加title
@@ -573,12 +574,12 @@ public class ListVideoUtil {
         this.cachePath = cachePath;
     }
 
-    public Object[] getObjects() {
-        return objects;
+    public String getTitle() {
+        return mTitle;
     }
 
-    public void setObjects(Object[] objects) {
-        this.objects = objects;
+    public void setTitle(String title) {
+        this.mTitle = title;
     }
 
     public Map<String, String> getMapHeadData() {

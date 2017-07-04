@@ -176,12 +176,12 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param objects       object[0]目前为title
+     * @param title         title
      * @return
      */
     @Override
-    public boolean setUp(String url, boolean cacheWithPlay, Object... objects) {
-        return setUp(url, cacheWithPlay, (File) null, objects);
+    public boolean setUp(String url, boolean cacheWithPlay, String title) {
+        return setUp(url, cacheWithPlay, (File) null, title);
     }
 
     /**
@@ -190,14 +190,14 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param objects       object[0]目前为title
+     * @param title         title
      * @return
      */
     @Override
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Object... objects) {
-        if (super.setUp(url, cacheWithPlay, cachePath, objects)) {
-            if (objects != null && objects.length > 0) {
-                mTitleTextView.setText(objects[0].toString());
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title) {
+        if (super.setUp(url, cacheWithPlay, cachePath, title)) {
+            if (title != null) {
+                mTitleTextView.setText(title);
             }
             if (mIfCurrentIsFullscreen) {
                 mFullscreenButton.setImageResource(getShrinkImageRes());
@@ -313,10 +313,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             if (mStandardVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
                     Debuger.printfLog("onClickBlankFullscreen");
-                    mStandardVideoAllCallBack.onClickBlankFullscreen(mUrl, mObjects);
+                    mStandardVideoAllCallBack.onClickBlankFullscreen(mUrl, mTitle);
                 } else {
                     Debuger.printfLog("onClickBlank");
-                    mStandardVideoAllCallBack.onClickBlank(mUrl, mObjects);
+                    mStandardVideoAllCallBack.onClickBlank(mUrl, mTitle);
                 }
             }
             startDismissControlViewTimer();
@@ -353,7 +353,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     public void startPlayLogic() {
         if (mStandardVideoAllCallBack != null) {
             Debuger.printfLog("onClickStartThumb");
-            mStandardVideoAllCallBack.onClickStartThumb(mUrl, mObjects);
+            mStandardVideoAllCallBack.onClickStartThumb(mUrl, mTitle);
         }
         prepareVideo();
         startDismissControlViewTimer();

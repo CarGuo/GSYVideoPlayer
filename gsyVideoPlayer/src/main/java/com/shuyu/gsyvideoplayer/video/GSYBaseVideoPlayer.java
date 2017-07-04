@@ -113,7 +113,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected String mUrl; //转化后的URL
 
-    protected Object[] mObjects;
+    protected String mTitle;
 
     protected File mCachePath;
 
@@ -242,7 +242,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
         if (mVideoAllCallBack != null) {
             Debuger.printfError("onEnterFullscreen");
-            mVideoAllCallBack.onEnterFullscreen(mUrl, mObjects);
+            mVideoAllCallBack.onEnterFullscreen(mUrl, mTitle);
         }
         mIfCurrentIsFullscreen = true;
     }
@@ -269,7 +269,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
         if (mVideoAllCallBack != null) {
             Debuger.printfError("onQuitFullscreen");
-            mVideoAllCallBack.onQuitFullscreen(mUrl, mObjects);
+            mVideoAllCallBack.onQuitFullscreen(mUrl, mTitle);
         }
         mIfCurrentIsFullscreen = false;
         if (mHideKey) {
@@ -381,7 +381,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.mNetChanged = mNetChanged;
             gsyVideoPlayer.mNetSate = mNetSate;
             gsyVideoPlayer.mRotateWithSystem = mRotateWithSystem;
-            gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mObjects);
+            gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mTitle);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
 
@@ -565,7 +565,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.mHadPlay = mHadPlay;
             gsyVideoPlayer.mNetChanged = mNetChanged;
             gsyVideoPlayer.mNetSate = mNetSate;
-            gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mObjects);
+            gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mTitle);
             gsyVideoPlayer.setStateAndUi(mCurrentState);
             gsyVideoPlayer.addTextureView();
             //隐藏掉所有的弹出状态哟
@@ -580,7 +580,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
             if (mVideoAllCallBack != null) {
                 Debuger.printfError("onEnterSmallWidget");
-                mVideoAllCallBack.onEnterSmallWidget(mUrl, mObjects);
+                mVideoAllCallBack.onEnterSmallWidget(mUrl, mTitle);
             }
 
             return gsyVideoPlayer;
@@ -611,7 +611,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
         if (mVideoAllCallBack != null) {
             Debuger.printfLog("onQuitSmallWidget");
-            mVideoAllCallBack.onQuitSmallWidget(mUrl, mObjects);
+            mVideoAllCallBack.onQuitSmallWidget(mUrl, mTitle);
         }
     }
 
@@ -621,10 +621,10 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      *
      * @param url
      * @param cacheWithPlay 是否边播边缓存
-     * @param objects
+     * @param title
      * @return
      */
-    public abstract boolean setUp(String url, boolean cacheWithPlay, File cachePath, Object... objects);
+    public abstract boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title);
 
     /**
      * 设置播放URL
@@ -632,11 +632,11 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * @param url
      * @param cacheWithPlay 是否边播边缓存
      * @param mapHeadData
-     * @param objects
+     * @param title
      * @return
      */
 
-    public abstract boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, Object... objects);
+    public abstract boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title);
 
     /**
      * 设置播放显示状态

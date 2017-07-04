@@ -203,12 +203,12 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param objects       object[0]目前为title
+     * @param title       title
      * @return
      */
-    public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, Object... objects) {
+    public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, String title) {
         mUrlList = url;
-        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, objects);
+        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, title);
     }
 
     /**
@@ -217,12 +217,12 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param objects       object[0]目前为title
+     * @param title         title
      * @return
      */
-    public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, File cachePath, Object... objects) {
+    public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, File cachePath, String title) {
         mUrlList = url;
-        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, cachePath, objects);
+        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, cachePath, title);
     }
 
     @Override
@@ -270,7 +270,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
             mSourcePosition = sampleVideo.mSourcePosition;
             mType = sampleVideo.mType;
             mTransformSize = sampleVideo.mTransformSize;
-            setUp(mUrlList, mCache, mCachePath, mObjects);
+            setUp(mUrlList, mCache, mCachePath, mTitle);
             resolveTypeUI();
         }
     }
@@ -359,7 +359,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                setUp(url, mCache, mCachePath, mObjects);
+                                setUp(url, mCache, mCachePath, mTitle);
                                 setSeekOnStart(currentPosition);
                                 startPlayLogic();
                                 cancelProgressTimer();
