@@ -255,4 +255,15 @@ public class CommonUtil {
             }
         }
     }
+
+    public static Activity getActivityContext(Context context) {
+        if (context == null)
+            return null;
+        else if (context instanceof Activity)
+            return (Activity) context;
+        else if (context instanceof ContextWrapper)
+            return scanForActivity(((ContextWrapper) context).getBaseContext());
+
+        return null;
+    }
 }

@@ -172,7 +172,13 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     }
 
     protected void init(Context context) {
-        this.mContext = context;
+
+        if (getActivityContext() != null) {
+            this.mContext = getActivityContext();
+        } else {
+            this.mContext = context;
+        }
+
         View.inflate(context, getLayoutId(), this);
         mStartButton = findViewById(R.id.start);
         mSmallClose = findViewById(R.id.small_close);
@@ -196,11 +202,11 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
         mTextureViewContainer.setOnTouchListener(this);
         mFullscreenButton.setOnTouchListener(this);
-        mScreenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
-        mScreenHeight = getContext().getResources().getDisplayMetrics().heightPixels;
-        mAudioManager = (AudioManager) getContext().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        mScreenWidth = getActivityContext().getResources().getDisplayMetrics().widthPixels;
+        mScreenHeight = getActivityContext().getResources().getDisplayMetrics().heightPixels;
+        mAudioManager = (AudioManager) getActivityContext().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
-        mSeekEndOffset = CommonUtil.dip2px(getContext(), 50);
+        mSeekEndOffset = CommonUtil.dip2px(getActivityContext(), 50);
     }
 
 
@@ -217,7 +223,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param title        title
+     * @param title         title
      * @return
      */
     public boolean setUp(String url, boolean cacheWithPlay, String title) {
@@ -232,7 +238,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   头部信息
-     * @param title        title
+     * @param title         title
      * @return
      */
     @Override
@@ -252,7 +258,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param title       title
+     * @param title         title
      * @return
      */
     @Override
@@ -265,7 +271,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             return false;
         mCurrentState = CURRENT_STATE_NORMAL;
         if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1") && !url.contains(".m3u8")) {
-            HttpProxyCacheServer proxy = GSYVideoManager.getProxy(getContext().getApplicationContext(), cachePath);
+            HttpProxyCacheServer proxy = GSYVideoManager.getProxy(getActivityContext().getApplicationContext(), cachePath);
             //此处转换了url，然后再赋值给mUrl。
             url = proxy.getProxyUrl(url);
             mCacheFile = (!url.startsWith("http"));
@@ -333,7 +339,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         }
         if (i == R.id.start) {
             if (TextUtils.isEmpty(mUrl)) {
-                Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {
@@ -1058,7 +1064,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 CommonUtil.deleteFile(path);
             } else {
                 String path = StorageUtils.getIndividualCacheDirectory
-                        (getContext().getApplicationContext()).getAbsolutePath()
+                        (getActivityContext().getApplicationContext()).getAbsolutePath()
                         + File.separator + name + ".download";
                 CommonUtil.deleteFile(path);
             }
@@ -1232,7 +1238,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      */
     protected void createNetWorkState() {
         if (mNetInfoModule == null) {
-            mNetInfoModule = new NetInfoModule(getContext().getApplicationContext(), new NetInfoModule.NetChangeListener() {
+            mNetInfoModule = new NetInfoModule(getActivityContext().getApplicationContext(), new NetInfoModule.NetChangeListener() {
                 @Override
                 public void changed(String state) {
                     if (!mNetSate.equals(state)) {

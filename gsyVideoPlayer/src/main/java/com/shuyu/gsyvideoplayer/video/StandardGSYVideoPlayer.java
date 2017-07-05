@@ -297,11 +297,11 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                 return;
             }
             if (TextUtils.isEmpty(mUrl)) {
-                Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (mCurrentState == CURRENT_STATE_NORMAL) {
-                if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getContext()) && mNeedShowWifiTip) {
+                if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getActivityContext()) && mNeedShowWifiTip) {
                     showWifiDialog();
                     return;
                 }
@@ -330,7 +330,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivityContext());
         builder.setMessage(getResources().getString(R.string.tips_not_wifi));
         builder.setPositiveButton(getResources().getString(R.string.tips_not_wifi_confirm), new DialogInterface.OnClickListener() {
             @Override
@@ -643,7 +643,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected void showProgressDialog(float deltaX, String seekTime, int seekTimePosition, String totalTime, int totalTimeDuration) {
         super.showProgressDialog(deltaX, seekTime, seekTimePosition, totalTime, totalTimeDuration);
         if (mProgressDialog == null) {
-            View localView = LayoutInflater.from(getContext()).inflate(R.layout.video_progress_dialog, null);
+            View localView = LayoutInflater.from(getActivityContext()).inflate(R.layout.video_progress_dialog, null);
             mDialogProgressBar = ((ProgressBar) localView.findViewById(R.id.duration_progressbar));
             if (mDialogProgressBarDrawable != null) {
                 mDialogProgressBar.setProgressDrawable(mDialogProgressBarDrawable);
@@ -651,7 +651,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             mDialogSeekTime = ((TextView) localView.findViewById(R.id.tv_current));
             mDialogTotalTime = ((TextView) localView.findViewById(R.id.tv_duration));
             mDialogIcon = ((ImageView) localView.findViewById(R.id.duration_image_tip));
-            mProgressDialog = new Dialog(getContext(), R.style.video_style_dialog_progress);
+            mProgressDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mProgressDialog.setContentView(localView);
             mProgressDialog.getWindow().addFlags(Window.FEATURE_ACTION_BAR);
             mProgressDialog.getWindow().addFlags(32);
@@ -702,12 +702,12 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected void showVolumeDialog(float deltaY, int volumePercent) {
         super.showVolumeDialog(deltaY, volumePercent);
         if (mVolumeDialog == null) {
-            View localView = LayoutInflater.from(getContext()).inflate(R.layout.video_volume_dialog, null);
+            View localView = LayoutInflater.from(getActivityContext()).inflate(R.layout.video_volume_dialog, null);
             mDialogVolumeProgressBar = ((ProgressBar) localView.findViewById(R.id.volume_progressbar));
             if (mVolumeProgressDrawable != null) {
                 mDialogVolumeProgressBar.setProgressDrawable(mVolumeProgressDrawable);
             }
-            mVolumeDialog = new Dialog(getContext(), R.style.video_style_dialog_progress);
+            mVolumeDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mVolumeDialog.setContentView(localView);
             mVolumeDialog.getWindow().addFlags(8);
             mVolumeDialog.getWindow().addFlags(32);
@@ -742,9 +742,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void showBrightnessDialog(float percent) {
         if (mBrightnessDialog == null) {
-            View localView = LayoutInflater.from(getContext()).inflate(R.layout.video_brightness, null);
+            View localView = LayoutInflater.from(getActivityContext()).inflate(R.layout.video_brightness, null);
             mBrightnessDialogTv = (TextView) localView.findViewById(R.id.app_video_brightness);
-            mBrightnessDialog = new Dialog(getContext(), R.style.video_style_dialog_progress);
+            mBrightnessDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mBrightnessDialog.setContentView(localView);
             mBrightnessDialog.getWindow().addFlags(8);
             mBrightnessDialog.getWindow().addFlags(32);
@@ -918,8 +918,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             if (mCurrentState != CURRENT_STATE_NORMAL
                     && mCurrentState != CURRENT_STATE_ERROR
                     && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
-                if (getContext() != null && getContext() instanceof Activity) {
-                    ((Activity) getContext()).runOnUiThread(new Runnable() {
+                if (getActivityContext() != null) {
+                    ((Activity) getActivityContext()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             hideAllWidget();

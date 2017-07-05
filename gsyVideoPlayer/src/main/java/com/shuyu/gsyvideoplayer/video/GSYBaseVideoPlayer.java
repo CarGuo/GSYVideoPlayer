@@ -169,6 +169,9 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         super(context, attrs, defStyleAttr);
     }
 
+    public Context getActivityContext() {
+        return CommonUtil.getActivityContext(getContext());
+    }
 
     private ViewGroup getViewGroup() {
         return (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
@@ -333,10 +336,10 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             final GSYBaseVideoPlayer gsyVideoPlayer;
             if (!hadNewConstructor) {
                 constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class);
-                gsyVideoPlayer = constructor.newInstance(getContext());
+                gsyVideoPlayer = constructor.newInstance(getActivityContext());
             } else {
                 constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class, Boolean.class);
-                gsyVideoPlayer = constructor.newInstance(getContext(), true);
+                gsyVideoPlayer = constructor.newInstance(getActivityContext(), true);
             }
 
             gsyVideoPlayer.setId(FULLSCREEN_ID);
@@ -540,7 +543,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
         try {
             Constructor<GSYBaseVideoPlayer> constructor = (Constructor<GSYBaseVideoPlayer>) GSYBaseVideoPlayer.this.getClass().getConstructor(Context.class);
-            GSYBaseVideoPlayer gsyVideoPlayer = constructor.newInstance(getContext());
+            GSYBaseVideoPlayer gsyVideoPlayer = constructor.newInstance(getActivityContext());
             gsyVideoPlayer.setId(SMALL_ID);
 
             FrameLayout.LayoutParams lpParent = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
