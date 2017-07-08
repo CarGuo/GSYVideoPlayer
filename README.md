@@ -128,6 +128,19 @@ public GSYVideoPlayer getFullWindowPlayer()
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
+### 关于Issues
+
+```
+提问题前可先查阅上方文档和说明，请在Demo中复现问题。
+
+问题说明：
+
+1、说明那个Demo中哪个页面。
+2、问题显现和重现步骤。
+3、补充问题的视频流url，截图。
+4、补充问题的机型，android版本。
+```
+
 ## 混淆
 
 ```
