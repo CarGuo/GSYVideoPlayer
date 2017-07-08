@@ -30,13 +30,12 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    def viewDependencies = rootProject.ext.viewDependencies
-    def dataDependencies = rootProject.ext.dataDependencies
-    compile viewDependencies.ijkplayer_java
-    compile viewDependencies.ijkplayer_exo
-    compile viewDependencies.transitionseverywhere
-    compile dataDependencies.videocache
-    compile androidDependencies.appcompat_v7
+    compile project(':gsyVideoPlayer-java')
+    compile project(':gsyVideoPlayer-armv5')
+    compile project(':gsyVideoPlayer-armv7a')
+    compile project(':gsyVideoPlayer-armv64')
+    compile project(':gsyVideoPlayer-x86')
+    compile project(':gsyVideoPlayer-x86_64')
 }
 
-//apply from: '../bintray.gradle'
+apply from: './bintray.gradle'

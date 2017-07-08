@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="90dp"
+        android:layout_height="160dp"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/video_dialog_progress_bg"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/volume_progressbar"
+                style="@style/video_vertical_progressBar"
+                android:layout_width="4dp"
+                android:layout_height="81dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:max="100" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/video_volume_icon" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>
