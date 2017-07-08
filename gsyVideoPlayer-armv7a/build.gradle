@@ -30,12 +30,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':gsyVideoPlayer-java')
-    compile project(':gsyVideoPlayer-armv5')
-    compile project(':gsyVideoPlayer-armv7a')
-    compile project(':gsyVideoPlayer-armv64')
-    compile project(':gsyVideoPlayer-x86')
-    compile project(':gsyVideoPlayer-x86_64')
 }
 
 apply from: './bintray.gradle'
