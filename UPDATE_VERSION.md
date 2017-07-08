@@ -1,10 +1,11 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-### 1.6.9()
+### 1.6.9(2017-07-08)
 
-* 兼容Appbar中使用，感谢[@loveRose](https://github.com/loveRose)
 * 修改setup的设置参数。
 * 升级修改所有回调接口，回调接口中返回当前播放器。
+* 修正播放本地文件错误，会错删文件问题。
+* 兼容Appbar中使用，感谢[@loveRose](https://github.com/loveRose)
 * 非全屏播放器可获取全屏播放器对象。
 ```
 /**

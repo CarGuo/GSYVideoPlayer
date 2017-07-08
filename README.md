@@ -37,7 +37,7 @@
 
 #### 直接在module下的build.gradle添加
 ```
-compile 'com.shuyu:GSYVideoPlayer:1.6.8'
+compile 'com.shuyu:GSYVideoPlayer:1.6.9'
 
 ```
 
@@ -58,7 +58,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.8'
+        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.9'
 }
 ```
 
@@ -108,45 +108,22 @@ dependencies {
 
 ## 近期版本
 
-### 1.6.8(2017-06-27)
-* fix listVideoUtils title错乱问题
-* fix setSpeed无法重置的问题 
-* fix 切换网络无法继续播放问题
-* 增加旋转使能后是否跟随系统设置
+
+### 1.6.9(2017-07-08) >>>> [片头广告功能推迟到1.7.0]
+* 修改setup的设置参数。
+* 升级修改所有回调接口，回调接口中返回当前播放器。
+* 修正播放本地文件错误，会错删文件问题。
+* 兼容Appbar中使用，感谢[@loveRose](https://github.com/loveRose)
+* 非全屏播放器可获取全屏播放器对象。
 ```
 /**
- * 是否更新系统旋转，false的话，系统禁止旋转也会跟着旋转
- * @param rotateWithSystem 默认true
+ * 获取全屏播放器对象
+ *
+ * @return GSYVideoPlayer 如果没有则返回空。
  */
-public void setRotateWithSystem(boolean rotateWithSystem)
+public GSYVideoPlayer getFullWindowPlayer()
 ```
 
-### 1.6.7(2017-06-16)
-* fix bug #265，全屏按返回按键之后的虚拟按键显示问题
-* so编译配置增加protocol crypto
-* 增加设置触摸显示控制ui的消失时间接口 
-```
-StandardGSYVideoPlayer.java
-/**
- * 设置触摸显示控制ui的消失时间
- * @param dismissControlTime 毫秒，默认2500
- */
-public void setDismissControlTime(int dismissControlTime)
-```
-* 调整触摸滑动快进的比例
-```
-/**
- * 调整触摸滑动快进的比例
- * @param seekRatio 滑动快进的比例，默认1。数值越大，滑动的产生的seek越小
- */
-public void setSeekRatio(float seekRatio) 
-```
-* 增加了拉伸填充的配置
-```
-GSYVideoType.java
-//全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
-public final static int SCREEN_MATCH_FULL = -4;
-```
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
