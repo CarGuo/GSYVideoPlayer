@@ -39,4 +39,4 @@ dependencies {
     compile androidDependencies.appcompat_v7
 }
 
-apply from: '../bintray.gradle'
+//apply from: '../bintray.gradle'
