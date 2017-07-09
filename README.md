@@ -33,13 +33,43 @@
 
 ## 使用依赖(支持jcenter和jitpack)
 
-### 1、JCenter 引入方法
+### 1、JCenter 引入方法（推荐）
 
 #### 直接在module下的build.gradle添加
 ```
-compile 'com.shuyu:GSYVideoPlayer:1.6.9'
+//完整版
+compile 'com.shuyu:GSYVideoPlayer:2.0.0'
 
 ```
+
+##### 或者
+
+```
+compile 'com.shuyu:gsyVideoPlayer-java:2.0.0'
+
+//根据你的需求
+compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.0'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.0'
+compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x64:2.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x86:2.0.0'
+
+```
+
+##### 或者 支持更多格式协议的（mpeg，concat、crypto协议）
+
+以上普通版本支持263/264/265，对于mpeg会有有声音无画面情况。
+这种方法引入的so支持mpeg编码，但是so包相对变大。
+ 
+```
+compile 'com.shuyu:gsyVideoPlayer-java:2.0.0' 
+
+compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.0' 
+
+```
+
+
+
 
 --------------------------------------------------------------------------------
 
