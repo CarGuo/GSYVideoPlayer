@@ -35,14 +35,16 @@
 
 ### 1、JCenter 引入方法（推荐）
 
-#### 直接在module下的build.gradle添加
+你可以选择下面三种的其中一种，在module下的build.gradle添加。
+
+#### 1.直接引入
 ```
 //完整版
 compile 'com.shuyu:GSYVideoPlayer:2.0.0'
 
 ```
 
-##### 或者
+#### 2.添加java和你想要的so支持：
 
 ```
 compile 'com.shuyu:gsyVideoPlayer-java:2.0.0'
@@ -56,7 +58,7 @@ compile 'com.shuyu:gsyVideoPlayer-x86:2.0.0'
 
 ```
 
-##### 或者 支持更多格式协议的（mpeg，concat、crypto协议）
+#### 3.支持其他格式协议的（mpeg，concat、crypto协议）
 
 以上普通版本支持263/264/265，对于mpeg会有有声音无画面情况。
 这种方法引入的so支持mpeg编码，但是so包相对变大。
@@ -88,7 +90,7 @@ allprojects {
 
 ```
 dependencies {
-        compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.9'
+    compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.9'
 }
 ```
 
