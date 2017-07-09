@@ -58,5 +58,6 @@ dependencies {
     compile viewDependencies.ndkbitmap_x86
     compile androidDependencies.support_v4
     //debugCompile dataDependencies.leakcanary
-    compile project(':gsyVideoPlayer')
+    //compile project(':gsyVideoPlayer')
+    compile 'com.shuyu:GSYVideoPlayer:2.0.0'
 }
