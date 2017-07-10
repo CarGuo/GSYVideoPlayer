@@ -166,7 +166,7 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
 
 
 * ### 4、进度条小窗口预览
-<img src="hhttp://osvlwlt4g.bkt.clouddn.com/17-7-10/66978517.jpg" width="426px" height="240px"/>
+<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/66978517.jpg" width="426px" height="240px"/>
 
 
 ## 近期版本
