@@ -151,22 +151,22 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
 ## 运行效果
 
 * ### 1、打开一个播放
-<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/11507597.gif" width="240px" height="426px"/>
+<img src="http://osvlwlt4g.bkt.clouddn.com/01.gif" width="240px" height="426px"/>
 
 * ### 2、列表/详情模式
 
 <div>
-<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/33308299.jpg" width="240px" height="426px"/>
-<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/80212600.jpg" width="240px" height="426px"/>
-<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/90279268.jpg" width="240px" height="426px"/>
+<img src="http://osvlwlt4g.bkt.clouddn.com/02.gif" width="240px" height="426px"/>
+<img src="http://osvlwlt4g.bkt.clouddn.com/05.gif" width="240px" height="426px"/>
+<img src="http://osvlwlt4g.bkt.clouddn.com/04.gif" width="240px" height="426px"/>
 </div>
 
 * ### 3、弹幕
-<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/10706627.gif" height="240px"/>
+<img src="hhttp://osvlwlt4g.bkt.clouddn.com/07.gif" height="240px"/>
 
 
 * ### 4、进度条小窗口预览
-<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/66978517.jpg" width="426px" height="240px"/>
+<img src="http://osvlwlt4g.bkt.clouddn.com/09.gif" width="426px" height="240px"/>
 
 
 ## 近期版本
