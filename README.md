@@ -74,6 +74,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.0'
 --------------------------------------------------------------------------------
 
 ### 2、JitPack引入方法
+
 #### 在project下的build.gradle添加
 ```
 allprojects {
@@ -86,11 +87,42 @@ allprojects {
 
 #### 在module下的build.gradle添加
 
+你可以选择下面三种的其中一种，在module下的build.gradle添加。
+
+#### 1.直接引入
 ```
-dependencies {
-    compile 'com.github.CarGuo:GSYVideoPlayer:v1.6.9'
-}
+//完整版引入
+compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.0'
+
 ```
+
+#### 2.添加java和你想要的so支持：
+
+```
+
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.0'
+
+//根据你的需求
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.0.0'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.0.0'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.0.0'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.0.0'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.0.0'
+
+```
+
+#### 3.支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
+
+1、2普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
+下面这种方法引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+ 
+```
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.0'
+
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
+
+```
+    
 
 --------------------------------------------------------------------------------
 
