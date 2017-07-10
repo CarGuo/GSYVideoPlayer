@@ -192,7 +192,9 @@ public GSYVideoPlayer getFullWindowPlayer()
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
-### 关于Issues
+-------------------
+
+## 关于Issues
 
 ```
 提问题前可先查阅上方文档和说明，请在Demo中复现问题。
