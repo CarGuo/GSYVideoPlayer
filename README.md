@@ -26,12 +26,13 @@
 * **支持全屏与非全屏两套布局切换**
 * **弹幕支持**
 * **镜像旋转**
+* **concat、rtsp、crypto、mpeg**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
-## 使用依赖(支持jcenter和jitpack)
+## 使用依赖(支持jcenter或jitpack)
 
 ### 1、JCenter 引入方法（推荐）
 
@@ -87,7 +88,7 @@ allprojects {
 
 #### Sencond.在module下的build.gradle添加
 
-你可以选择下面三种的其中一种，在module下的build.gradle添加。
+**你可以选择下面三种的其中一种，在module下的build.gradle添加。**
 
 #### A.直接引入
 ```
@@ -122,8 +123,7 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.0'
 compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
 
 ```
-    
-
+   
 --------------------------------------------------------------------------------
 
 * ### 下方文档以及问题集锦，你想要知道的大部分都在里面。
@@ -140,12 +140,12 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
 
 ## 其他
 
-### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 ### [--- 问题集锦 - 入口 ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
+### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/DECODERS.md)
 ### [--- IJKPlayer问题 - 入口](http://www.jianshu.com/p/220b00d00deb)　
 ### [--- IJKPlayer编译自定义SO - 入口](http://www.jianshu.com/p/bd289e25d272)　
 ### [--- 简书详解 （项目的基础）- 入口](http://www.jianshu.com/p/9fe377dd9750)
-### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/DECODERS.md)
+### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
 　
 ## 运行效果
