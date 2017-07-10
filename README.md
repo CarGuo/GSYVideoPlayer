@@ -151,7 +151,7 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
 ## 运行效果
 
 * ### 1、打开一个播放
-<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/33678447.jpg" width="240px" height="426px"/>
+<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/11507597.jpg" width="240px" height="426px"/>
 
 * ### 2、列表/详情模式
 
