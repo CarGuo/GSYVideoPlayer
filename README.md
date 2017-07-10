@@ -151,22 +151,22 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
 ## 运行效果
 
 * ### 1、打开一个播放
-<img src="http://osvlwlt4g.bkt.clouddn.com/01.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/01.gif" width="240px" height="426px"/>
 
 * ### 2、列表/详情模式
 
 <div>
-<img src="http://osvlwlt4g.bkt.clouddn.com/02.gif" width="240px" height="426px"/>
-<img src="http://osvlwlt4g.bkt.clouddn.com/05.gif" width="240px" height="426px"/>
-<img src="http://osvlwlt4g.bkt.clouddn.com/04.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/02.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/05.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/04.gif" width="240px" height="426px"/>
 </div>
 
 * ### 3、弹幕
-<img src="hhttp://osvlwlt4g.bkt.clouddn.com/07.gif" height="240px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
 
 * ### 4、进度条小窗口预览
-<img src="http://osvlwlt4g.bkt.clouddn.com/09.gif" width="426px" height="240px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/09.gif" width="426px" height="240px"/>
 
 
 ## 近期版本
