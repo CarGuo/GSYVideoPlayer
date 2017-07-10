@@ -162,7 +162,7 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
 </div>
 
 * ### 3、弹幕
-<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/10706627.jpg" height="240px"/>
+<img src="http://osvlwlt4g.bkt.clouddn.com/17-7-10/48184452.jpg" height="240px"/>
 
 
 * ### 4、进度条小窗口预览
