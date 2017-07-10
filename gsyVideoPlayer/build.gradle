@@ -38,7 +38,7 @@ dependencies {
     //compile project(':gsyVideoPlayer-x86')
     //compile project(':gsyVideoPlayer-x86_64')
 
-    //更多配置版so，增加了concat，mpeg，crypto，
+    //更多配置版so，增加了concat,rtsp,mpeg，crypto
     //compile project(':gsyVideoPlayer-ex_so')
 
     compile 'com.shuyu:gsyVideoPlayer-java:2.0.0'
@@ -48,6 +48,9 @@ dependencies {
     compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.0'
     compile 'com.shuyu:gsyVideoPlayer-x64:2.0.0'
     compile 'com.shuyu:gsyVideoPlayer-x86:2.0.0'
+
+    //更多配置版so，增加了concat,rtsp,mpeg，crypto
+    //compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.0'
 }
 
 apply from: './bintray.gradle'
