@@ -46,10 +46,10 @@ public class GSYTextureView extends TextureView {
     }
 
     public int getSizeH() {
-        return measureHelper.getMeasuredWidth();
+        return measureHelper.getMeasuredHeight();
     }
 
     public int getSizeW() {
-        return measureHelper.getMeasuredHeight();
+        return measureHelper.getMeasuredWidth();
     }
 }
