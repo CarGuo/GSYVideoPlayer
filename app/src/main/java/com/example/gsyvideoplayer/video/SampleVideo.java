@@ -155,11 +155,31 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
         super.onSurfaceTextureSizeChanged(surface, width, height);
+        releasePauseCoverWhenSizeChangeAndBitmap();
         resolveTransform();
     }
 
     /**
+     * 销毁暂停切换显示的bitmap
+     * 因为onSurfaceTextureSizeChanged的时候，bitmap大小不符合当前size的了
+     */
+    protected void releasePauseCoverWhenSizeChangeAndBitmap() {
+        try {
+            if (mFullPauseBitmap != null
+                    && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
+                mCoverImageView.setImageResource(com.shuyu.gsyvideoplayer.R.drawable.empty_drawable);
+                mCoverImageView.setVisibility(GONE);
+                mFullPauseBitmap.recycle();
+                mFullPauseBitmap = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 处理镜像旋转
+     * 注意，暂停时
      */
     protected void resolveTransform() {
 
