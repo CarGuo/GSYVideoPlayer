@@ -58,10 +58,10 @@ dependencies {
     compile viewDependencies.ndkbitmap_x86
     compile androidDependencies.support_v4
     //debugCompile dataDependencies.leakcanary
-    //compile project(':gsyVideoPlayer')
+    compile project(':gsyVideoPlayer')
     //compile 'com.shuyu:GSYVideoPlayer:2.0.0'
     //compile 'com.github.CarGuo:GSYVideoPlayer:v2.0.0'
-    compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.0'
+    //compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.0'
     //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.0'
     //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.0'
     //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.0.0'
