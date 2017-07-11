@@ -71,7 +71,7 @@ sourceSets {
 
 　是否监听了列表滑动了，在监听里更新了列表之类的。
 
-#### 4、目前不支持3gp或者mepg。
+#### 4、普通模式不支持3gp或者mepg，mepg可使用ex-so依赖。
 
 如果拍摄的视频播放不了，可以尝试用使用系统录制的项目：[VideoRecord](https://github.com/CarGuo/VideoRecord)
 或者使用JAVACV录制的项目：[FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder )，测试视频是否可以播放。
