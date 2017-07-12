@@ -155,7 +155,6 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
         super.onSurfaceTextureSizeChanged(surface, width, height);
-        releasePauseCoverWhenSizeChangeAndBitmap();
         resolveTransform();
     }
 
@@ -182,7 +181,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 注意，暂停时
      */
     protected void resolveTransform() {
-
+        setShowPauseCover(false);
         switch (mTransformSize) {
             case 1: {
                 Matrix transform = new Matrix();
