@@ -82,7 +82,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mMoreScale.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mHadPlay) {
+                if (!mHadPlay) {
                     return;
                 }
                 if (mType == 0) {
@@ -93,7 +93,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                     mType = 3;
                 } else if (mType == 3) {
                     mType = 4;
-                } else if(mType == 4) {
+                } else if (mType == 4) {
                     mType = 0;
                 }
                 resolveTypeUI();
@@ -112,7 +112,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mChangeRotate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mHadPlay) {
+                if (!mHadPlay) {
                     return;
                 }
                 if ((mTextureView.getRotation() - mRotate) == 270) {
@@ -133,7 +133,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mChangeTransform.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mHadPlay) {
+                if (!mHadPlay) {
                     return;
                 }
                 if (mTransformSize == 0) {
@@ -223,7 +223,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param title       title
+     * @param title         title
      * @return
      */
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, String title) {
@@ -253,6 +253,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
 
     /**
      * 全屏时将对应处理参数逻辑赋给全屏播放器
+     *
      * @param context
      * @param actionBar
      * @param statusBar
@@ -276,8 +277,8 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     }
 
     /**
-     *
      * 推出全屏时将对应处理参数逻辑返回给非播放器
+     *
      * @param oldF
      * @param vp
      * @param gsyVideoPlayer
@@ -309,7 +310,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 旋转逻辑
      */
     private void resolveRotateUI() {
-        if(!mHadPlay) {
+        if (!mHadPlay) {
             return;
         }
         mTextureView.setRotation(mRotate);
@@ -323,42 +324,35 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
      */
     private void resolveTypeUI() {
-        if(!mHadPlay) {
+        if (!mHadPlay) {
             return;
         }
         if (mType == 1) {
             mMoreScale.setText("16:9");
             GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9);
-            if (mTextureView != null)
-                mTextureView.requestLayout();
         } else if (mType == 2) {
             mMoreScale.setText("4:3");
             GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3);
-            if (mTextureView != null)
-                mTextureView.requestLayout();
         } else if (mType == 3) {
             mMoreScale.setText("全屏");
             GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
-            if (mTextureView != null)
-                mTextureView.requestLayout();
         } else if (mType == 4) {
             mMoreScale.setText("拉伸全屏");
             GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
-            if (mTextureView != null)
-                mTextureView.requestLayout();
         } else if (mType == 0) {
             mMoreScale.setText("默认比例");
             GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
-            if (mTextureView != null)
-                mTextureView.requestLayout();
         }
+        changeTextureViewShowType();
+        if (mTextureView != null)
+            mTextureView.requestLayout();
     }
 
     /**
      * 弹出切换清晰度
      */
     private void showSwitchDialog() {
-        if(!mHadPlay) {
+        if (!mHadPlay) {
             return;
         }
         SwitchVideoTypeDialog switchVideoTypeDialog = new SwitchVideoTypeDialog(getContext());

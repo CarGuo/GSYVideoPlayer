@@ -29,6 +29,7 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.NetInfoModule;
 import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
@@ -497,15 +498,33 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mTextureView.setSurfaceTextureListener(this);
         mTextureView.setRotation(mRotate);
 
+        int params = getTextureParams();
+
         if (mTextureViewContainer instanceof RelativeLayout) {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(params, params);
             layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
             mTextureViewContainer.addView(mTextureView, layoutParams);
         } else if (mTextureViewContainer instanceof FrameLayout) {
-            LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            LayoutParams layoutParams = new LayoutParams(params, params);
             layoutParams.gravity = Gravity.CENTER;
             mTextureViewContainer.addView(mTextureView, layoutParams);
         }
+    }
+
+    protected int getTextureParams() {
+        boolean typeChanged = (GSYVideoType.getShowType() != GSYVideoType.SCREEN_TYPE_DEFAULT);
+        return (typeChanged) ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT;
+    }
+
+    /**
+     * 调整TextureView去适应比例变化
+     */
+    protected void changeTextureViewShowType() {
+        int params = getTextureParams();
+        ViewGroup.LayoutParams layoutParams = mTextureView.getLayoutParams();
+        layoutParams.width = params;
+        layoutParams.height = params;
+        mTextureView.setLayoutParams(layoutParams);
     }
 
     /**
@@ -720,6 +739,9 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 显示暂停切换显示的bitmap
      */
     protected void showPauseCover() {
+
+        boolean mayShowError = false;
+
         try {
             if (mCurrentState == CURRENT_STATE_PAUSE && mFullPauseBitmap != null
                     && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
@@ -729,10 +751,36 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                     mCoverImageView.setScaleType(ImageView.ScaleType.MATRIX);
                     mCoverImageView.setImageMatrix(mTransformCover);
                 }
+
                 mCoverImageView.setVisibility(VISIBLE);
+                ViewGroup.LayoutParams coverLayoutParams = mCoverImageView.getLayoutParams();
+                coverLayoutParams.width = mTextureView.getWidth();
+                coverLayoutParams.height = mTextureView.getHeight();
+
+                if (GSYVideoType.getShowType() == GSYVideoType.SCREEN_TYPE_FULL
+                        && mShowPauseCover && !(mCoverImageView.getParent() instanceof FrameLayout)) {
+                    mayShowError = true;
+                }
+
+                if (mCoverImageView.getParent() instanceof RelativeLayout) {
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) coverLayoutParams;
+                    layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                } else if (mCoverImageView.getParent() instanceof FrameLayout) {
+                    LayoutParams layoutParams = (FrameLayout.LayoutParams) coverLayoutParams;
+                    layoutParams.gravity = Gravity.CENTER;
+                }
+
+                mCoverImageView.setLayoutParams(coverLayoutParams);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (mayShowError) {
+            throw new IllegalStateException("use GSYVideoType.SCREEN_TYPE_FULL " +
+                    "you must put CoverImageView in FrameLayout or setShowPauseCover false" +
+                    "");
         }
     }
 

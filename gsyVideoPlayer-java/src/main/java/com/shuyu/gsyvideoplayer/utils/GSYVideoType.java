@@ -15,7 +15,7 @@ public class GSYVideoType {
     //4:3
     public final static int SCREEN_TYPE_4_3 = 2;
 
-    //全屏裁减显示
+    //全屏裁减显示，为了显示正常 CoverImageView 建议使用FrameLayout作为父布局
     public final static int SCREEN_TYPE_FULL = 4;
 
     //全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout

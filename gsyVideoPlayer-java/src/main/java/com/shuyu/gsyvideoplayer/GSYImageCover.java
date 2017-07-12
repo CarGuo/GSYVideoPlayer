@@ -37,18 +37,22 @@ public class GSYImageCover extends ImageView {
     }
 
 
-    @Override
+    /*@Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
         int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
+        int videoSarNum = GSYVideoManager.instance().getMediaPlayer().getVideoSarNum();
+        int videoSarDen = GSYVideoManager.instance().getMediaPlayer().getVideoSarDen();
+
         if (videoWidth > 0 && videoHeight > 0) {
+            measureHelper.setVideoSampleAspectRatio(videoSarNum, videoSarDen);
             measureHelper.setVideoSize(videoWidth, videoHeight);
         }
         measureHelper.setVideoRotation((int) getRotation());
         measureHelper.doMeasure(widthMeasureSpec, heightMeasureSpec);
 
         setMeasuredDimension(measureHelper.getMeasuredWidth(), measureHelper.getMeasuredHeight());
-    }
+    }*/
 
 }
