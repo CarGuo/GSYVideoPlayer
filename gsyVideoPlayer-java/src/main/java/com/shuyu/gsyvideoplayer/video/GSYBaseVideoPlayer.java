@@ -24,6 +24,7 @@ import com.shuyu.gsyvideoplayer.SmallVideoTouch;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
+import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -31,7 +32,9 @@ import com.transitionseverywhere.TransitionManager;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -751,11 +754,34 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      * 播放速度
      */
     public void setSpeed(float speed) {
+        setSpeed(speed, false);
+    }
+
+    /**
+     * 播放速度
+     *
+     * @param speed      速度
+     * @param soundTouch 是否对6.0下开启变速不变调
+     */
+    public void setSpeed(float speed, boolean soundTouch) {
         this.mSpeed = speed;
         if (GSYVideoManager.instance().getMediaPlayer() != null
                 && GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer) {
             if (speed > 0) {
                 ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).setSpeed(speed);
+
+                if (soundTouch) {
+                    VideoOptionModel videoOptionModel =
+                            new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", 1);
+                    List<VideoOptionModel> list = GSYVideoManager.instance().getOptionModelList();
+                    if (list != null) {
+                        list.add(videoOptionModel);
+                    } else {
+                        list = new ArrayList<>();
+                        list.add(videoOptionModel);
+                    }
+                    GSYVideoManager.instance().setOptionModelList(list);
+                }
             }
         }
     }
@@ -858,10 +884,11 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     /**
      * 调整触摸滑动快进的比例
+     *
      * @param seekRatio 滑动快进的比例，默认1。数值越大，滑动的产生的seek越小
      */
     public void setSeekRatio(float seekRatio) {
-        if(seekRatio < 0) {
+        if (seekRatio < 0) {
             return;
         }
         this.mSeekRatio = seekRatio;
@@ -878,6 +905,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     /**
      * 是否更新系统旋转，false的话，系统禁止旋转也会跟着旋转
+     *
      * @param rotateWithSystem 默认true
      */
     public void setRotateWithSystem(boolean rotateWithSystem) {
