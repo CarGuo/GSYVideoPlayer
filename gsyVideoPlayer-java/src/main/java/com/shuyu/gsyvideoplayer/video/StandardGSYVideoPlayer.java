@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -609,7 +610,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     protected void updateStartImage() {
-        if(mStartButton instanceof ENPlayView) {
+        if (mStartButton instanceof ENPlayView) {
             ENPlayView enPlayView = (ENPlayView) mStartButton;
             enPlayView.setDuration(500);
             if (mCurrentState == CURRENT_STATE_PLAYING) {
@@ -629,7 +630,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     private void updatePauseCover() {
         if ((mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) && mShowPauseCover) {
             try {
-                mFullPauseBitmap = mTextureView.getBitmap(mTextureView.getSizeW(), mTextureView.getSizeH());
+                initCover();
             } catch (Exception e) {
                 e.printStackTrace();
                 mFullPauseBitmap = null;
@@ -1057,6 +1058,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     /**
      * 设置触摸显示控制ui的消失时间
+     *
      * @param dismissControlTime 毫秒，默认2500
      */
     public void setDismissControlTime(int dismissControlTime) {
