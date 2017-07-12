@@ -36,7 +36,12 @@ public class GSYTextureView extends TextureView {
 
         int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
         int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
+
+        int videoSarNum = GSYVideoManager.instance().getMediaPlayer().getVideoSarNum();
+        int videoSarDen = GSYVideoManager.instance().getMediaPlayer().getVideoSarDen();
+
         if (videoWidth > 0 && videoHeight > 0) {
+            measureHelper.setVideoSampleAspectRatio(videoSarNum, videoSarDen);
             measureHelper.setVideoSize(videoWidth, videoHeight);
         }
         measureHelper.setVideoRotation((int)getRotation());
