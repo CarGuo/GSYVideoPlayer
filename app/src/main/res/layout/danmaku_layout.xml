@@ -12,14 +12,6 @@
 
     </RelativeLayout>
 
-    <com.shuyu.gsyvideoplayer.GSYImageCover
-        android:id="@+id/cover"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:scaleType="fitXY" />
-
-
     <master.flame.danmaku.ui.widget.DanmakuView
         android:id="@+id/danmaku_view"
         android:layout_width="match_parent"

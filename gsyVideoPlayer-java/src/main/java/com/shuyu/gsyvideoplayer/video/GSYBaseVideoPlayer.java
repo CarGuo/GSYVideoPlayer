@@ -130,8 +130,6 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected GSYTextureView mTextureView;
 
-    protected ImageView mCoverImageView; //内部使用，请勿操作哟~
-
     protected View mStartButton;
 
     protected SeekBar mProgressBar;
