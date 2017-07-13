@@ -424,7 +424,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.VISIBLE);
-        mCoverImageView.setVisibility(View.VISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
@@ -443,7 +442,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             }
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
-        mCoverImageView.setVisibility(View.VISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         mLockScreen.setVisibility(GONE);
     }
@@ -459,7 +457,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
-        mCoverImageView.setVisibility(View.VISIBLE);
         mLockScreen.setVisibility(GONE);
     }
 
@@ -473,7 +470,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
-        mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
@@ -522,7 +518,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             }
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
-        mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         mLockScreen.setVisibility(GONE);
     }
@@ -540,7 +535,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             }
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
-        mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.VISIBLE);
         mLockScreen.setVisibility(GONE);
         updateStartImage();
@@ -556,7 +550,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
-        mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         mLockScreen.setVisibility(GONE);
     }
@@ -571,7 +564,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.VISIBLE);
-        mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
@@ -587,7 +579,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.VISIBLE);
-        mCoverImageView.setVisibility(View.INVISIBLE);
         mBottomProgressBar.setVisibility(View.VISIBLE);
         mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
@@ -603,7 +594,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             ((ENDownloadView) mLoadingProgressBar).reset();
         }
         mThumbImageViewLayout.setVisibility(View.INVISIBLE);
-        mCoverImageView.setVisibility(View.VISIBLE);
         mBottomProgressBar.setVisibility(View.INVISIBLE);
         mLockScreen.setVisibility((mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
         updateStartImage();
@@ -636,7 +626,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                 mFullPauseBitmap = null;
             }
         }
-        showPauseCover();
+        //showPauseCover();
     }
 
     @Override

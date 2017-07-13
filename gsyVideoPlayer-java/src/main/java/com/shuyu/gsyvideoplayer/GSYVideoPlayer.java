@@ -2,7 +2,10 @@ package com.shuyu.gsyvideoplayer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -10,6 +13,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.InflateException;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
@@ -27,6 +31,7 @@ import android.widget.Toast;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
+import com.google.android.exoplayer.C;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -83,8 +88,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     protected Handler mHandler = new Handler();
 
     protected String mPlayTag = ""; //播放的tag，防止错误，因为普通的url也可能重复
-
-    protected Matrix mTransformCover = null;
 
     protected NetInfoModule mNetInfoModule;
 
@@ -180,11 +183,11 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             this.mContext = context;
         }
 
-        View.inflate(context, getLayoutId(), this);
+        initInflate(mContext);
+
         mStartButton = findViewById(R.id.start);
         mSmallClose = findViewById(R.id.small_close);
         mBackButton = (ImageView) findViewById(R.id.back);
-        mCoverImageView = (ImageView) findViewById(R.id.cover);
         mFullscreenButton = (ImageView) findViewById(R.id.fullscreen);
         mProgressBar = (SeekBar) findViewById(R.id.progress);
         mCurrentTimeTextView = (TextView) findViewById(R.id.current);
@@ -210,6 +213,25 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mSeekEndOffset = CommonUtil.dip2px(getActivityContext(), 50);
     }
 
+    private void initInflate(Context context) {
+        try {
+            View.inflate(context, getLayoutId(), this);
+        } catch (InflateException e) {
+            if (e.toString().contains("GSYImageCover")) {
+                Debuger.printfError("********************\n" +
+                        "*****   注意   *****" +
+                        "********************\n" +
+                        "*该版本需要清除布局文件中的GSYImageCover\n" +
+                        "****  Attention  ***\n" +
+                        "*Please remove GSYImageCover from Layout in this Version\n" +
+                        "********************\n");
+                e.printStackTrace();
+                throw new InflateException("该版本需要清除布局文件中的GSYImageCover，please remove GSYImageCover from your layout");
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 设置自定义so包加载类，必须在setUp之前调用
@@ -302,7 +324,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 if (isCurrentMediaListener()) {
                     cancelProgressTimer();
                     GSYVideoManager.instance().releaseMediaPlayer();
-                    releasePauseCoverAndBitmap();
+                    releasePauseCover();
                     mBuffterPoint = 0;
                 }
                 if (mAudioManager != null) {
@@ -566,10 +588,14 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+
         mSurface = new Surface(surface);
-        GSYVideoManager.instance().setDisplay(mSurface);
+
+
         //显示暂停切换显示的图片
         showPauseCover();
+
+        GSYVideoManager.instance().setDisplay(mSurface);
     }
 
     @Override
@@ -739,49 +765,17 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 显示暂停切换显示的bitmap
      */
     protected void showPauseCover() {
-
-        boolean mayShowError = false;
-
-        try {
-            if (mCurrentState == CURRENT_STATE_PAUSE && mFullPauseBitmap != null
-                    && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
-                mCoverImageView.setRotation(mTextureView.getRotation());
-                mCoverImageView.setImageBitmap(mFullPauseBitmap);
-                if (mTransformCover != null) {
-                    mCoverImageView.setScaleType(ImageView.ScaleType.MATRIX);
-                    mCoverImageView.setImageMatrix(mTransformCover);
-                }
-
-                mCoverImageView.setVisibility(VISIBLE);
-                ViewGroup.LayoutParams coverLayoutParams = mCoverImageView.getLayoutParams();
-                coverLayoutParams.width = mTextureView.getWidth();
-                coverLayoutParams.height = mTextureView.getHeight();
-
-                if (GSYVideoType.getShowType() == GSYVideoType.SCREEN_TYPE_FULL
-                        && mShowPauseCover && !(mCoverImageView.getParent() instanceof FrameLayout)) {
-                    mayShowError = true;
-                }
-
-                if (mCoverImageView.getParent() instanceof RelativeLayout) {
-                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) coverLayoutParams;
-                    layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-                } else if (mCoverImageView.getParent() instanceof FrameLayout) {
-                    LayoutParams layoutParams = (FrameLayout.LayoutParams) coverLayoutParams;
-                    layoutParams.gravity = Gravity.CENTER;
-                }
-
-                mCoverImageView.setLayoutParams(coverLayoutParams);
-
+        if (mCurrentState == CURRENT_STATE_PAUSE && mFullPauseBitmap != null
+                && !mFullPauseBitmap.isRecycled() && mShowPauseCover
+                && mSurface != null && mSurface.isValid()) {
+            RectF rectF = new RectF(0, 0, mTextureView.getWidth(), mTextureView.getHeight());
+            Canvas canvas = mSurface.lockCanvas(new Rect(0, 0, mTextureView.getWidth(), mTextureView.getHeight()));
+            if (canvas != null) {
+                canvas.drawBitmap(mFullPauseBitmap, null, rectF, null);
+                mSurface.unlockCanvasAndPost(canvas);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        if (mayShowError) {
-            throw new IllegalStateException("use GSYVideoType.SCREEN_TYPE_FULL " +
-                    "you must put CoverImageView in FrameLayout or setShowPauseCover false" +
-                    "");
-        }
     }
 
     /**
@@ -791,25 +785,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         try {
             if (mCurrentState != CURRENT_STATE_PAUSE && mFullPauseBitmap != null
                     && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
-                mCoverImageView.setImageResource(R.drawable.empty_drawable);
-                mCoverImageView.setVisibility(GONE);
-                //如果在这里销毁，可能会draw a recycler bitmap error
-                mFullPauseBitmap = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 销毁暂停切换显示的bitmap
-     */
-    protected void releasePauseCoverAndBitmap() {
-        try {
-            if (mCurrentState != CURRENT_STATE_PAUSE && mFullPauseBitmap != null
-                    && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
-                mCoverImageView.setImageResource(R.drawable.empty_drawable);
-                mCoverImageView.setVisibility(GONE);
                 mFullPauseBitmap.recycle();
                 mFullPauseBitmap = null;
             }
