@@ -16,7 +16,7 @@ ext {
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
 
-    ijkplayer = '0.8.0'
+    ijkplayer = '0.8.1'
     DanmakuFlameMaster = '0.6.4'
 
     transitionseverywhere = '1.7.0'
