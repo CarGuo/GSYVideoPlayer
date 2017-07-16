@@ -55,10 +55,10 @@ public class DetailPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_detail_player);
         ButterKnife.bind(this);
 
-        //String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
         //String url = "http://hcjs2ra2rytd8v8np1q.exp.bcevod.com/mda-hegtjx8n5e8jt9zv/mda-hegtjx8n5e8jt9zv.m3u8";
-        String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
+        //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
         //String url = "http://ocgk7i2aj.bkt.clouddn.com/17651ac2-693c-47e9-b2d2-b731571bad37";
         //String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
         //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
@@ -99,7 +99,7 @@ public class DetailPlayer extends AppCompatActivity {
                 .setNeedLockFull(true)
                 .setSeekRatio(1)
                 .setUrl(url)
-                .setCacheWithPlay(true)
+                .setCacheWithPlay(false)
                 .setVideoTitle("测试视频")
                 .setStandardVideoAllCallBack(new SampleListener() {
                     @Override
