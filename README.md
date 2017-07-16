@@ -181,29 +181,14 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.2'
 
 ## 近期版本
 
-### 2.0.1(2017-07-11) >>>> [片头广告功能推迟到2.0.2]
+### 2.0.2(2017-07-16) >>>> [片头广告功能推迟到2.0.3]
+* 完美实现播放、暂停、前后台切换、画面调整等情况不黑屏不突变，删除coverImageView类。
+* 增加了6.0下变调不变速接口
+* update ijkPlayer to 0.8.1
+
+### 2.0.1(2017-07-11)
 * 优化了TextureView显示
 * 修复SampleView的暂停问题
-
-
-### 2.0.0(2017-07-10)
-* 项目结构调整，增加了新的so支持。
-
-### 1.6.9(2017-07-08) 
-* 修改setup的设置参数。
-* 升级修改所有回调接口，回调接口中返回当前播放器。
-* 修正播放本地文件错误，会错删文件问题。
-* 兼容Appbar中使用，感谢[@loveRose](https://github.com/loveRose)
-* 非全屏播放器可获取全屏播放器对象。
-```
-/**
- * 获取全屏播放器对象
- *
- * @return GSYVideoPlayer 如果没有则返回空。
- */
-public GSYVideoPlayer getFullWindowPlayer()
-```
-
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
