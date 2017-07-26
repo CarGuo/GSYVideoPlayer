@@ -50,7 +50,12 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
                 //listVideoUtil.setLoop(true);
                 listVideoUtil.setPlayPositionAndTag(position, TAG);
                 listVideoUtil.setTitle("title " + position);
-                final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                String url;
+                if (position % 2 == 0) {
+                    url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                } else {
+                    url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
+                }
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
                 listVideoUtil.startPlay(url);
 
