@@ -1205,6 +1205,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * 页面销毁了记得调用是否所有的video
      */
     public static void releaseAllVideos() {
+        CLICK_QUIT_FULLSCREEN_TIME = 0;
         if (IF_RELEASE_WHEN_ON_PAUSE) {
             if (GSYVideoManager.instance().listener() != null) {
                 GSYVideoManager.instance().listener().onCompletion();
@@ -1219,6 +1220,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
      * if I am playing release me
      */
     public void release() {
+        CLICK_QUIT_FULLSCREEN_TIME = 0;
         if (isCurrentMediaListener() &&
                 (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) > FULL_SCREEN_NORMAL_DELAY) {
             releaseAllVideos();
