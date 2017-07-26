@@ -108,6 +108,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
 
     protected boolean mNetChanged = false; //是否发送了网络改变
 
+    protected boolean mSoundTouch = false; //是否不变调
+
     protected String mNetSate = "NORMAL";
 
     protected Context mContext;
@@ -262,9 +264,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         }
         mCurrentState = GSYVideoManager.instance().getLastState();
         if (gsyVideoPlayer != null) {
-            mCurrentState = gsyVideoPlayer.getCurrentState();
-            mNetChanged = gsyVideoPlayer.mNetChanged;
-            mNetSate = gsyVideoPlayer.mNetSate;
+            cloneParams(gsyVideoPlayer, this);
         }
         GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
         GSYVideoManager.instance().setLastListener(null);
@@ -346,9 +346,9 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             gsyVideoPlayer.setId(FULLSCREEN_ID);
             gsyVideoPlayer.setIfCurrentIsFullscreen(true);
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
-            gsyVideoPlayer.setLooping(isLooping());
-            gsyVideoPlayer.setSpeed(getSpeed());
-            gsyVideoPlayer.setIsTouchWigetFull(mIsTouchWigetFull);
+
+            cloneParams(this, gsyVideoPlayer);
+
             final LayoutParams lpParent = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             final FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Color.BLACK);
@@ -373,20 +373,8 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
                 frameLayout.setVisibility(INVISIBLE);
                 resolveFullVideoShow(context, gsyVideoPlayer, frameLayout);
             }
-            gsyVideoPlayer.mHadPlay = mHadPlay;
-            gsyVideoPlayer.mCacheFile = mCacheFile;
-            gsyVideoPlayer.mFullPauseBitmap = mFullPauseBitmap;
-            gsyVideoPlayer.mNeedShowWifiTip = mNeedShowWifiTip;
-            gsyVideoPlayer.mShrinkImageRes = mShrinkImageRes;
-            gsyVideoPlayer.mEnlargeImageRes = mEnlargeImageRes;
-            gsyVideoPlayer.mRotate = mRotate;
-            gsyVideoPlayer.mShowPauseCover = mShowPauseCover;
-            gsyVideoPlayer.mSeekRatio = mSeekRatio;
-            gsyVideoPlayer.mNetChanged = mNetChanged;
-            gsyVideoPlayer.mNetSate = mNetSate;
-            gsyVideoPlayer.mRotateWithSystem = mRotateWithSystem;
-            gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mTitle);
-            gsyVideoPlayer.setStateAndUi(mCurrentState);
+
+
             gsyVideoPlayer.addTextureView();
 
             gsyVideoPlayer.getFullscreenButton().setImageResource(getShrinkImageRes());
@@ -527,6 +515,32 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         }
     }
 
+    /**
+     * 克隆切换参数
+     *
+     * @param from
+     * @param to
+     */
+    private static void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
+        to.setLooping(from.isLooping());
+        to.setSpeed(from.getSpeed(), from.mSoundTouch);
+        to.setIsTouchWigetFull(from.mIsTouchWigetFull);
+        to.mHadPlay = from.mHadPlay;
+        to.mCacheFile = from.mCacheFile;
+        to.mFullPauseBitmap = from.mFullPauseBitmap;
+        to.mNeedShowWifiTip = from.mNeedShowWifiTip;
+        to.mShrinkImageRes = from.mShrinkImageRes;
+        to.mEnlargeImageRes = from.mEnlargeImageRes;
+        to.mRotate = from.mRotate;
+        to.mShowPauseCover = from.mShowPauseCover;
+        to.mSeekRatio = from.mSeekRatio;
+        to.mNetChanged = from.mNetChanged;
+        to.mNetSate = from.mNetSate;
+        to.mRotateWithSystem = from.mRotateWithSystem;
+        to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
+        to.setStateAndUi(from.mCurrentState);
+    }
+
     protected void initCover() {
         Bitmap bitmap = Bitmap.createBitmap(
                 mTextureView.getSizeW(), mTextureView.getSizeH(), Bitmap.Config.RGB_565);
@@ -573,17 +587,13 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
             frameLayout.addView(gsyVideoPlayer, lp);
 
             vp.addView(frameLayout, lpParent);
-            gsyVideoPlayer.mHadPlay = mHadPlay;
-            gsyVideoPlayer.mNetChanged = mNetChanged;
-            gsyVideoPlayer.mNetSate = mNetSate;
-            gsyVideoPlayer.setUp(mOriginUrl, mCache, mCachePath, mMapHeadData, mTitle);
-            gsyVideoPlayer.setStateAndUi(mCurrentState);
+
+            cloneParams(this, gsyVideoPlayer);
+
             gsyVideoPlayer.addTextureView();
             //隐藏掉所有的弹出状态哟
             gsyVideoPlayer.onClickUiToggle();
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
-            gsyVideoPlayer.setLooping(isLooping());
-            gsyVideoPlayer.setSpeed(getSpeed());
             gsyVideoPlayer.setSmallVideoTextureView(new SmallVideoTouch(gsyVideoPlayer, marginLeft, marginTop));
 
             GSYVideoManager.instance().setLastListener(this);
@@ -611,9 +621,7 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
         removeVideo(vp, SMALL_ID);
         mCurrentState = GSYVideoManager.instance().getLastState();
         if (gsyVideoPlayer != null) {
-            mCurrentState = gsyVideoPlayer.getCurrentState();
-            mNetChanged = gsyVideoPlayer.mNetChanged;
-            mNetSate = gsyVideoPlayer.mNetSate;
+            cloneParams(gsyVideoPlayer, this);
         }
         GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
         GSYVideoManager.instance().setLastListener(null);
@@ -770,12 +778,13 @@ public abstract class GSYBaseVideoPlayer extends FrameLayout implements GSYMedia
      */
     public void setSpeed(float speed, boolean soundTouch) {
         this.mSpeed = speed;
+        this.mSoundTouch = soundTouch;
         if (GSYVideoManager.instance().getMediaPlayer() != null
                 && GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer) {
             if (speed > 0) {
                 ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).setSpeed(speed);
 
-                if (soundTouch) {
+                if (mSoundTouch) {
                     VideoOptionModel videoOptionModel =
                             new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", 1);
                     List<VideoOptionModel> list = GSYVideoManager.instance().getOptionModelList();
