@@ -213,7 +213,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         mSeekEndOffset = CommonUtil.dip2px(getActivityContext(), 50);
     }
 
-    private void initInflate(Context context) {
+    protected void initInflate(Context context) {
         try {
             View.inflate(context, getLayoutId(), this);
         } catch (InflateException e) {
@@ -234,12 +234,176 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     }
 
     /**
-     * 设置自定义so包加载类，必须在setUp之前调用
-     * 不然setUp时会第一次实例化GSYVideoManager
+     * 设置播放显示状态
+     *
+     * @param state
      */
-    public void setIjkLibLoader(IjkLibLoader libLoader) {
-        GSYVideoManager.setIjkLibLoader(libLoader);
+    protected void setStateAndUi(int state) {
+        mCurrentState = state;
+        switch (mCurrentState) {
+            case CURRENT_STATE_NORMAL:
+                if (isCurrentMediaListener()) {
+                    cancelProgressTimer();
+                    GSYVideoManager.instance().releaseMediaPlayer();
+                    releasePauseCover();
+                    mBuffterPoint = 0;
+                }
+                if (mAudioManager != null) {
+                    mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+                }
+                releaseNetWorkState();
+                break;
+            case CURRENT_STATE_PREPAREING:
+                resetProgressAndTime();
+                break;
+            case CURRENT_STATE_PLAYING:
+                startProgressTimer();
+                break;
+            case CURRENT_STATE_PAUSE:
+                startProgressTimer();
+                break;
+            case CURRENT_STATE_ERROR:
+                if (isCurrentMediaListener()) {
+                    GSYVideoManager.instance().releaseMediaPlayer();
+                }
+                break;
+            case CURRENT_STATE_AUTO_COMPLETE:
+                cancelProgressTimer();
+                mProgressBar.setProgress(100);
+                mCurrentTimeTextView.setText(mTotalTimeTextView.getText());
+                break;
+        }
     }
+
+    protected void showWifiDialog() {
+
+    }
+
+    /**
+     * 播放按键的逻辑
+     */
+    private void startButtonLogic() {
+        if (mVideoAllCallBack != null && mCurrentState == CURRENT_STATE_NORMAL) {
+            Debuger.printfLog("onClickStartIcon");
+            mVideoAllCallBack.onClickStartIcon(mOriginUrl, mTitle, GSYVideoPlayer.this);
+        } else if (mVideoAllCallBack != null) {
+            Debuger.printfLog("onClickStartError");
+            mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, GSYVideoPlayer.this);
+        }
+        prepareVideo();
+    }
+
+    /**
+     * 开始状态视频播放
+     */
+    protected void prepareVideo() {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onCompletion();
+        }
+        GSYVideoManager.instance().setListener(this);
+        GSYVideoManager.instance().setPlayTag(mPlayTag);
+        GSYVideoManager.instance().setPlayPosition(mPlayPosition);
+        addTextureView();
+        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mBackUpPlayingBufferState = -1;
+        GSYVideoManager.instance().prepare(mUrl, mMapHeadData, mLooping, mSpeed);
+        setStateAndUi(CURRENT_STATE_PREPAREING);
+    }
+
+    /**
+     * 监听是否有外部其他多媒体开始播放
+     */
+    private AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            releaseAllVideos();
+                        }
+                    });
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    if (GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
+                        GSYVideoManager.instance().getMediaPlayer().pause();
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    break;
+            }
+        }
+    };
+
+
+    /**
+     * 添加播放的view
+     */
+    protected void addTextureView() {
+        if (mTextureViewContainer.getChildCount() > 0) {
+            mTextureViewContainer.removeAllViews();
+        }
+        mTextureView = null;
+        mTextureView = new GSYTextureView(getContext());
+        mTextureView.setSurfaceTextureListener(this);
+        mTextureView.setRotation(mRotate);
+
+        int params = getTextureParams();
+
+        if (mTextureViewContainer instanceof RelativeLayout) {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(params, params);
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            mTextureViewContainer.addView(mTextureView, layoutParams);
+        } else if (mTextureViewContainer instanceof FrameLayout) {
+            LayoutParams layoutParams = new LayoutParams(params, params);
+            layoutParams.gravity = Gravity.CENTER;
+            mTextureViewContainer.addView(mTextureView, layoutParams);
+        }
+    }
+
+    protected int getTextureParams() {
+        boolean typeChanged = (GSYVideoType.getShowType() != GSYVideoType.SCREEN_TYPE_DEFAULT);
+        return (typeChanged) ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT;
+    }
+
+    /**
+     * 调整TextureView去适应比例变化
+     */
+    protected void changeTextureViewShowType() {
+        int params = getTextureParams();
+        ViewGroup.LayoutParams layoutParams = mTextureView.getLayoutParams();
+        layoutParams.width = params;
+        layoutParams.height = params;
+        mTextureView.setLayoutParams(layoutParams);
+    }
+
+    /**
+     * 小窗口
+     **/
+    @Override
+    protected void setSmallVideoTextureView(OnTouchListener onTouchListener) {
+        mTextureViewContainer.setOnTouchListener(onTouchListener);
+        mProgressBar.setOnTouchListener(null);
+        mFullscreenButton.setOnTouchListener(null);
+        mFullscreenButton.setVisibility(INVISIBLE);
+        mProgressBar.setVisibility(INVISIBLE);
+        mCurrentTimeTextView.setVisibility(INVISIBLE);
+        mTotalTimeTextView.setVisibility(INVISIBLE);
+        mTextureViewContainer.setOnClickListener(null);
+        mSmallClose.setVisibility(VISIBLE);
+        mSmallClose.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSmallVideo();
+                releaseAllVideos();
+            }
+        });
+    }
+
 
     /**
      * 设置播放URL
@@ -312,48 +476,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         return true;
     }
 
-    /**
-     * 设置播放显示状态
-     *
-     * @param state
-     */
-    protected void setStateAndUi(int state) {
-        mCurrentState = state;
-        switch (mCurrentState) {
-            case CURRENT_STATE_NORMAL:
-                if (isCurrentMediaListener()) {
-                    cancelProgressTimer();
-                    GSYVideoManager.instance().releaseMediaPlayer();
-                    releasePauseCover();
-                    mBuffterPoint = 0;
-                }
-                if (mAudioManager != null) {
-                    mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
-                }
-                releaseNetWorkState();
-                break;
-            case CURRENT_STATE_PREPAREING:
-                resetProgressAndTime();
-                break;
-            case CURRENT_STATE_PLAYING:
-                startProgressTimer();
-                break;
-            case CURRENT_STATE_PAUSE:
-                startProgressTimer();
-                break;
-            case CURRENT_STATE_ERROR:
-                if (isCurrentMediaListener()) {
-                    GSYVideoManager.instance().releaseMediaPlayer();
-                }
-                break;
-            case CURRENT_STATE_AUTO_COMPLETE:
-                cancelProgressTimer();
-                mProgressBar.setProgress(100);
-                mCurrentTimeTextView.setText(mTotalTimeTextView.getText());
-                break;
-        }
-    }
-
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -408,68 +530,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
         }
     }
 
-    protected void showWifiDialog() {
-    }
 
-    /**
-     * 播放按键的逻辑
-     */
-    private void startButtonLogic() {
-        if (mVideoAllCallBack != null && mCurrentState == CURRENT_STATE_NORMAL) {
-            Debuger.printfLog("onClickStartIcon");
-            mVideoAllCallBack.onClickStartIcon(mOriginUrl, mTitle, GSYVideoPlayer.this);
-        } else if (mVideoAllCallBack != null) {
-            Debuger.printfLog("onClickStartError");
-            mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, GSYVideoPlayer.this);
-        }
-        prepareVideo();
-    }
-
-    /**
-     * 开始状态视频播放
-     */
-    protected void prepareVideo() {
-        if (GSYVideoManager.instance().listener() != null) {
-            GSYVideoManager.instance().listener().onCompletion();
-        }
-        GSYVideoManager.instance().setListener(this);
-        GSYVideoManager.instance().setPlayTag(mPlayTag);
-        GSYVideoManager.instance().setPlayPosition(mPlayPosition);
-        addTextureView();
-        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-        ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mBackUpPlayingBufferState = -1;
-        GSYVideoManager.instance().prepare(mUrl, mMapHeadData, mLooping, mSpeed);
-        setStateAndUi(CURRENT_STATE_PREPAREING);
-    }
-
-    /**
-     * 监听是否有外部其他多媒体开始播放
-     */
-    private AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-        @Override
-        public void onAudioFocusChange(int focusChange) {
-            switch (focusChange) {
-                case AudioManager.AUDIOFOCUS_GAIN:
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS:
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            releaseAllVideos();
-                        }
-                    });
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    if (GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
-                        GSYVideoManager.instance().getMediaPlayer().pause();
-                    }
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                    break;
-            }
-        }
-    };
 
 
     /**
@@ -506,70 +567,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
                 GSYVideoManager.instance().getMediaPlayer().start();
             }
         }
-    }
-
-    /**
-     * 添加播放的view
-     */
-    protected void addTextureView() {
-        if (mTextureViewContainer.getChildCount() > 0) {
-            mTextureViewContainer.removeAllViews();
-        }
-        mTextureView = null;
-        mTextureView = new GSYTextureView(getContext());
-        mTextureView.setSurfaceTextureListener(this);
-        mTextureView.setRotation(mRotate);
-
-        int params = getTextureParams();
-
-        if (mTextureViewContainer instanceof RelativeLayout) {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(params, params);
-            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            mTextureViewContainer.addView(mTextureView, layoutParams);
-        } else if (mTextureViewContainer instanceof FrameLayout) {
-            LayoutParams layoutParams = new LayoutParams(params, params);
-            layoutParams.gravity = Gravity.CENTER;
-            mTextureViewContainer.addView(mTextureView, layoutParams);
-        }
-    }
-
-    protected int getTextureParams() {
-        boolean typeChanged = (GSYVideoType.getShowType() != GSYVideoType.SCREEN_TYPE_DEFAULT);
-        return (typeChanged) ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT;
-    }
-
-    /**
-     * 调整TextureView去适应比例变化
-     */
-    protected void changeTextureViewShowType() {
-        int params = getTextureParams();
-        ViewGroup.LayoutParams layoutParams = mTextureView.getLayoutParams();
-        layoutParams.width = params;
-        layoutParams.height = params;
-        mTextureView.setLayoutParams(layoutParams);
-    }
-
-    /**
-     * 小窗口
-     **/
-    @Override
-    protected void setSmallVideoTextureView(OnTouchListener onTouchListener) {
-        mTextureViewContainer.setOnTouchListener(onTouchListener);
-        mProgressBar.setOnTouchListener(null);
-        mFullscreenButton.setOnTouchListener(null);
-        mFullscreenButton.setVisibility(INVISIBLE);
-        mProgressBar.setVisibility(INVISIBLE);
-        mCurrentTimeTextView.setVisibility(INVISIBLE);
-        mTotalTimeTextView.setVisibility(INVISIBLE);
-        mTextureViewContainer.setOnClickListener(null);
-        mSmallClose.setVisibility(VISIBLE);
-        mSmallClose.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideSmallVideo();
-                releaseAllVideos();
-            }
-        });
     }
 
     /**
@@ -824,6 +821,113 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     }
 
 
+
+    /**
+     * 重载释放全屏网络监听
+     *
+     * @param oldF
+     * @param vp
+     * @param gsyVideoPlayer
+     */
+    @Override
+    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
+        if (gsyVideoPlayer != null)
+            gsyVideoPlayer.releaseNetWorkState();
+        super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
+    }
+
+    /**
+     * 处理因切换网络而导致的问题
+     */
+    protected void netWorkErrorLogic() {
+        final long currentPosition = getCurrentPositionWhenPlaying();
+        Debuger.printfError("******* Net State Changed. renew player to connect *******" + currentPosition);
+        GSYVideoManager.instance().releaseMediaPlayer();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setSeekOnStart(currentPosition);
+                startPlayLogic();
+            }
+        }, 500);
+    }
+
+
+    /**
+     * 播放错误的时候，删除缓存文件
+     */
+    protected void deleteCacheFileWhenError() {
+        clearCurrentCache();
+        Debuger.printfError("Link Or mCache Error, Please Try Again" + mUrl);
+        mUrl = mOriginUrl;
+    }
+
+    protected void startProgressTimer() {
+        cancelProgressTimer();
+        updateProcessTimer = new Timer();
+        mProgressTimerTask = new ProgressTimerTask();
+        updateProcessTimer.schedule(mProgressTimerTask, 0, 300);
+    }
+
+    protected void cancelProgressTimer() {
+        if (updateProcessTimer != null) {
+            updateProcessTimer.cancel();
+        }
+        if (mProgressTimerTask != null) {
+            mProgressTimerTask.cancel();
+        }
+
+    }
+
+    protected class ProgressTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setTextAndProgress(0);
+                    }
+                });
+            }
+        }
+    }
+
+    protected void setTextAndProgress(int secProgress) {
+        int position = getCurrentPositionWhenPlaying();
+        int duration = getDuration();
+        int progress = position * 100 / (duration == 0 ? 1 : duration);
+        setProgressAndTime(progress, secProgress, position, duration);
+    }
+
+    protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
+        if (!mTouchingProgressBar) {
+            if (progress != 0) mProgressBar.setProgress(progress);
+        }
+        if (secProgress > 94) secProgress = 100;
+        if (secProgress != 0 && !mCacheFile) {
+            mProgressBar.setSecondaryProgress(secProgress);
+        }
+        mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
+        if (currentTime > 0)
+            mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
+    }
+
+
+    protected void resetProgressAndTime() {
+        mProgressBar.setProgress(0);
+        mProgressBar.setSecondaryProgress(0);
+        mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
+        mTotalTimeTextView.setText(CommonUtil.stringForTime(0));
+    }
+
+
+    protected void loopSetProgressAndTime() {
+        mProgressBar.setProgress(0);
+        mProgressBar.setSecondaryProgress(0);
+        mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
+    }
+
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
     }
@@ -890,10 +994,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
     @Override
     public void onAutoCompletion() {
-        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-            Debuger.printfLog("onAutoComplete");
-            mVideoAllCallBack.onAutoComplete(mOriginUrl, mTitle, GSYVideoPlayer.this);
-        }
         setStateAndUi(CURRENT_STATE_AUTO_COMPLETE);
         if (mTextureViewContainer.getChildCount() > 0) {
             mTextureViewContainer.removeAllViews();
@@ -912,6 +1012,10 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
 
         releaseNetWorkState();
 
+        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+            Debuger.printfLog("onAutoComplete");
+            mVideoAllCallBack.onAutoComplete(mOriginUrl, mTitle, GSYVideoPlayer.this);
+        }
     }
 
     @Override
@@ -1038,36 +1142,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
     }
 
     /**
-     * 重载释放全屏网络监听
-     *
-     * @param oldF
-     * @param vp
-     * @param gsyVideoPlayer
-     */
-    @Override
-    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
-        if (gsyVideoPlayer != null)
-            gsyVideoPlayer.releaseNetWorkState();
-        super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
-    }
-
-    /**
-     * 处理因切换网络而导致的问题
-     */
-    protected void netWorkErrorLogic() {
-        final long currentPosition = getCurrentPositionWhenPlaying();
-        Debuger.printfError("******* Net State Changed. renew player to connect *******" + currentPosition);
-        GSYVideoManager.instance().releaseMediaPlayer();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setSeekOnStart(currentPosition);
-                startPlayLogic();
-            }
-        }, 500);
-    }
-
-    /**
      * 清除当前缓存
      */
     public void clearCurrentCache() {
@@ -1093,47 +1167,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             }
         }
 
-    }
-
-
-    /**
-     * 播放错误的时候，删除缓存文件
-     */
-    private void deleteCacheFileWhenError() {
-        clearCurrentCache();
-        Debuger.printfError("Link Or mCache Error, Please Try Again" + mUrl);
-        mUrl = mOriginUrl;
-    }
-
-    protected void startProgressTimer() {
-        cancelProgressTimer();
-        updateProcessTimer = new Timer();
-        mProgressTimerTask = new ProgressTimerTask();
-        updateProcessTimer.schedule(mProgressTimerTask, 0, 300);
-    }
-
-    protected void cancelProgressTimer() {
-        if (updateProcessTimer != null) {
-            updateProcessTimer.cancel();
-        }
-        if (mProgressTimerTask != null) {
-            mProgressTimerTask.cancel();
-        }
-
-    }
-
-    protected class ProgressTimerTask extends TimerTask {
-        @Override
-        public void run() {
-            if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setTextAndProgress(0);
-                    }
-                });
-            }
-        }
     }
 
     /**
@@ -1164,41 +1197,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             return duration;
         }
         return duration;
-    }
-
-    protected void setTextAndProgress(int secProgress) {
-        int position = getCurrentPositionWhenPlaying();
-        int duration = getDuration();
-        int progress = position * 100 / (duration == 0 ? 1 : duration);
-        setProgressAndTime(progress, secProgress, position, duration);
-    }
-
-    protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
-        if (!mTouchingProgressBar) {
-            if (progress != 0) mProgressBar.setProgress(progress);
-        }
-        if (secProgress > 94) secProgress = 100;
-        if (secProgress != 0 && !mCacheFile) {
-            mProgressBar.setSecondaryProgress(secProgress);
-        }
-        mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
-        if (currentTime > 0)
-            mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
-    }
-
-
-    protected void resetProgressAndTime() {
-        mProgressBar.setProgress(0);
-        mProgressBar.setSecondaryProgress(0);
-        mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
-        mTotalTimeTextView.setText(CommonUtil.stringForTime(0));
-    }
-
-
-    protected void loopSetProgressAndTime() {
-        mProgressBar.setProgress(0);
-        mProgressBar.setSecondaryProgress(0);
-        mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
     }
 
     /**
@@ -1303,6 +1301,14 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer implements View.
             mNetInfoModule.onHostPause();
             mNetInfoModule = null;
         }
+    }
+
+    /**
+     * 设置自定义so包加载类，必须在setUp之前调用
+     * 不然setUp时会第一次实例化GSYVideoManager
+     */
+    public void setIjkLibLoader(IjkLibLoader libLoader) {
+        GSYVideoManager.setIjkLibLoader(libLoader);
     }
 
 
