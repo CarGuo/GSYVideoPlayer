@@ -14,12 +14,15 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
@@ -103,6 +106,15 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //是否支持全屏滑动触摸有效
     protected boolean mIsTouchWigetFull = true;
 
+    //是否点击封面播放
+    protected boolean mThumbPlay;
+
+    //锁定屏幕点击
+    protected boolean mLockCurScreen;
+
+    //是否需要锁定屏幕
+    protected boolean mNeedLockFull;
+
     //进度定时器
     protected Timer updateProcessTimer;
 
@@ -127,6 +139,28 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //返回按键
     protected ImageView mBackButton;
 
+    //锁定图标
+    protected ImageView mLockScreen;
+
+    //title
+    protected TextView mTitleTextView;
+
+    //封面父布局
+    protected RelativeLayout mThumbImageViewLayout;
+
+    //封面
+    protected View mThumbImageView;
+
+    //loading view
+    protected View mLoadingProgressBar;
+
+    //底部进度调
+    protected ProgressBar mBottomProgressBar;
+
+    //点击锁屏的回调
+    protected LockClickListener mLockClickListener;
+
+
     public GSYVideoControlView(@NonNull Context context) {
         super(context);
     }
@@ -147,6 +181,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         super.init(context);
 
         mStartButton = findViewById(R.id.start);
+        mTitleTextView = (TextView) findViewById(R.id.title);
         mBackButton = (ImageView) findViewById(R.id.back);
         mFullscreenButton = (ImageView) findViewById(R.id.fullscreen);
         mProgressBar = (SeekBar) findViewById(R.id.progress);
@@ -154,6 +189,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mTotalTimeTextView = (TextView) findViewById(R.id.total);
         mBottomContainer = (ViewGroup) findViewById(R.id.layout_bottom);
         mTopContainer = (ViewGroup) findViewById(R.id.layout_top);
+        mBottomProgressBar = (ProgressBar) findViewById(R.id.bottom_progressbar);
+        mThumbImageViewLayout = (RelativeLayout) findViewById(R.id.thumb);
+        mLockScreen = (ImageView) findViewById(R.id.lock_screen);
+
+        mLoadingProgressBar = findViewById(R.id.loading);
+
 
         if (isInEditMode())
             return;
@@ -184,7 +225,55 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             mProgressBar.setOnTouchListener(this);
         }
 
+        if (mThumbImageViewLayout != null) {
+            mThumbImageViewLayout.setVisibility(GONE);
+            mThumbImageViewLayout.setOnClickListener(this);
+        }
+        if (mThumbImageView != null && !mIfCurrentIsFullscreen && mThumbImageViewLayout != null) {
+            mThumbImageViewLayout.removeAllViews();
+            resolveThumbImage(mThumbImageView);
+        }
+
+        if (mBackButton != null)
+            mBackButton.setOnClickListener(this);
+
+        if(mLockScreen != null) {
+            mLockScreen.setVisibility(GONE);
+            mLockScreen.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE ||
+                            mCurrentState == CURRENT_STATE_ERROR) {
+                        return;
+                    }
+                    lockTouchLogic();
+                    if (mLockClickListener != null) {
+                        mLockClickListener.onClick(v, mLockCurScreen);
+                    }
+                }
+            });
+        }
+
+
         mSeekEndOffset = CommonUtil.dip2px(getActivityContext(), 50);
+    }
+
+    @Override
+    public void onAutoCompletion() {
+        super.onAutoCompletion();
+        if (mLockCurScreen) {
+            lockTouchLogic();
+            mLockScreen.setVisibility(GONE);
+        }
+    }
+
+    @Override
+    public void onError(int what, int extra) {
+        super.onError(what, extra);
+        if (mLockCurScreen) {
+            lockTouchLogic();
+            mLockScreen.setVisibility(GONE);
+        }
     }
 
     /**
@@ -229,6 +318,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 if (mCurrentTimeTextView != null && mTotalTimeTextView != null) {
                     mCurrentTimeTextView.setText(mTotalTimeTextView.getText());
                 }
+                if (mBottomProgressBar != null) {
+                    mBottomProgressBar.setProgress(100);
+                }
                 break;
         }
     }
@@ -240,50 +332,41 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             hideNavKey(mContext);
         }
         if (i == R.id.start) {
-            if (TextUtils.isEmpty(mUrl)) {
-                Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {
-                if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getContext())
-                        && mNeedShowWifiTip) {
-                    showWifiDialog();
-                    return;
-                }
-                startButtonLogic();
-            } else if (mCurrentState == CURRENT_STATE_PLAYING) {
-                GSYVideoManager.instance().getMediaPlayer().pause();
-                setStateAndUi(CURRENT_STATE_PAUSE);
-                if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-                    if (mIfCurrentIsFullscreen) {
-                        Debuger.printfLog("onClickStopFullscreen");
-                        mVideoAllCallBack.onClickStopFullscreen(mOriginUrl, mTitle, this);
-                    } else {
-                        Debuger.printfLog("onClickStop");
-                        mVideoAllCallBack.onClickStop(mOriginUrl, mTitle, this);
-                    }
-                }
-            } else if (mCurrentState == CURRENT_STATE_PAUSE) {
-                if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-                    if (mIfCurrentIsFullscreen) {
-                        Debuger.printfLog("onClickResumeFullscreen");
-                        mVideoAllCallBack.onClickResumeFullscreen(mOriginUrl, mTitle, this);
-                    } else {
-                        Debuger.printfLog("onClickResume");
-                        mVideoAllCallBack.onClickResume(mOriginUrl, mTitle, this);
-                    }
-                }
-                GSYVideoManager.instance().getMediaPlayer().start();
-                setStateAndUi(CURRENT_STATE_PLAYING);
-            } else if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE) {
-                startButtonLogic();
-            }
+            clickStartIcon();
         } else if (i == R.id.surface_container && mCurrentState == CURRENT_STATE_ERROR) {
             if (mVideoAllCallBack != null) {
                 Debuger.printfLog("onClickStartError");
                 mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, this);
             }
             prepareVideo();
+        } else if (i == R.id.thumb) {
+            if (!mThumbPlay) {
+                return;
+            }
+            if (TextUtils.isEmpty(mUrl)) {
+                Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (mCurrentState == CURRENT_STATE_NORMAL) {
+                if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getActivityContext()) && mNeedShowWifiTip) {
+                    showWifiDialog();
+                    return;
+                }
+                startPlayLogic();
+            } else if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE) {
+                onClickUiToggle();
+            }
+        } else if (i == R.id.surface_container) {
+            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+                if (mIfCurrentIsFullscreen) {
+                    Debuger.printfLog("onClickBlankFullscreen");
+                    mVideoAllCallBack.onClickBlankFullscreen(mOriginUrl, mTitle, GSYVideoControlView.this);
+                } else {
+                    Debuger.printfLog("onClickBlank");
+                    mVideoAllCallBack.onClickBlank(mOriginUrl, mTitle, GSYVideoControlView.this);
+                }
+            }
+            startDismissControlViewTimer();
         }
     }
 
@@ -292,12 +375,47 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+
+        int id = v.getId();
         float x = event.getX();
         float y = event.getY();
-        int id = v.getId();
+        if (id == R.id.surface_container) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    break;
+                case MotionEvent.ACTION_UP:
+                    startDismissControlViewTimer();
+                    if (mChangePosition) {
+                        int duration = getDuration();
+                        int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
+                        mBottomProgressBar.setProgress(progress);
+                    }
+                    if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                        onClickUiToggle();
+                    }
+                    break;
+            }
+        } else if (id == R.id.progress) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    cancelDismissControlViewTimer();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    startDismissControlViewTimer();
+                    break;
+            }
+        }
+
+        if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
+            return true;
+        }
+
         if (id == R.id.fullscreen) {
             return false;
         }
+
         if (id == R.id.surface_container) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -433,6 +551,72 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return false;
     }
 
+
+    @Override
+    protected void setSmallVideoTextureView(View.OnTouchListener onTouchListener) {
+        super.setSmallVideoTextureView(onTouchListener);
+        //小窗口播放停止了也可以移动
+        mThumbImageViewLayout.setOnTouchListener(onTouchListener);
+    }
+
+    /**
+     * 播放按键点击
+     */
+    protected void clickStartIcon() {
+        if (TextUtils.isEmpty(mUrl)) {
+            Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {
+            if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getContext())
+                    && mNeedShowWifiTip) {
+                showWifiDialog();
+                return;
+            }
+            startButtonLogic();
+        } else if (mCurrentState == CURRENT_STATE_PLAYING) {
+            GSYVideoManager.instance().getMediaPlayer().pause();
+            setStateAndUi(CURRENT_STATE_PAUSE);
+            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+                if (mIfCurrentIsFullscreen) {
+                    Debuger.printfLog("onClickStopFullscreen");
+                    mVideoAllCallBack.onClickStopFullscreen(mOriginUrl, mTitle, this);
+                } else {
+                    Debuger.printfLog("onClickStop");
+                    mVideoAllCallBack.onClickStop(mOriginUrl, mTitle, this);
+                }
+            }
+        } else if (mCurrentState == CURRENT_STATE_PAUSE) {
+            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+                if (mIfCurrentIsFullscreen) {
+                    Debuger.printfLog("onClickResumeFullscreen");
+                    mVideoAllCallBack.onClickResumeFullscreen(mOriginUrl, mTitle, this);
+                } else {
+                    Debuger.printfLog("onClickResume");
+                    mVideoAllCallBack.onClickResume(mOriginUrl, mTitle, this);
+                }
+            }
+            GSYVideoManager.instance().getMediaPlayer().start();
+            setStateAndUi(CURRENT_STATE_PLAYING);
+        } else if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE) {
+            startButtonLogic();
+        }
+    }
+
+    /**
+     * 处理锁屏屏幕触摸逻辑
+     */
+    protected void lockTouchLogic() {
+        if (mLockCurScreen) {
+            mLockScreen.setImageResource(R.drawable.unlock);
+            mLockCurScreen = false;
+        } else {
+            mLockScreen.setImageResource(R.drawable.lock);
+            mLockCurScreen = true;
+            hideAllWidget();
+        }
+    }
+
     protected void startProgressTimer() {
         cancelProgressTimer();
         updateProcessTimer = new Timer();
@@ -450,7 +634,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     }
 
-    private class ProgressTimerTask extends TimerTask {
+    protected class ProgressTimerTask extends TimerTask {
         @Override
         public void run() {
             if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
@@ -487,6 +671,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
         if (currentTime > 0)
             mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
+
+        if (mBottomProgressBar != null) {
+            if (progress != 0) mBottomProgressBar.setProgress(progress);
+            if (secProgress != 0 && !mCacheFile)
+                mBottomProgressBar.setSecondaryProgress(secProgress);
+        }
     }
 
 
@@ -498,6 +688,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mProgressBar.setSecondaryProgress(0);
         mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
         mTotalTimeTextView.setText(CommonUtil.stringForTime(0));
+
+        if (mBottomProgressBar != null) {
+            mBottomProgressBar.setProgress(0);
+            mBottomProgressBar.setSecondaryProgress(0);
+        }
     }
 
 
@@ -508,6 +703,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mProgressBar.setProgress(0);
         mProgressBar.setSecondaryProgress(0);
         mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
+        if (mBottomProgressBar != null)
+            mBottomProgressBar.setProgress(0);
     }
 
     @Override
@@ -558,7 +755,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 mBuffterPoint = percent;
                 Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
             }
-            if(mProgressBar == null) {
+            if (mProgressBar == null) {
                 return;
             }
             //循环清除进度
@@ -592,6 +789,15 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
 
+    private void resolveThumbImage(View thumb) {
+        mThumbImageViewLayout.addView(thumb);
+        ViewGroup.LayoutParams layoutParams = thumb.getLayoutParams();
+        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        thumb.setLayoutParams(layoutParams);
+    }
+
+
     protected abstract void showWifiDialog();
 
     protected abstract void showProgressDialog(float deltaX,
@@ -607,6 +813,48 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected abstract void showBrightnessDialog(float percent);
 
     protected abstract void dismissBrightnessDialog();
+
+    protected abstract void onClickUiToggle();
+
+    protected abstract void startDismissControlViewTimer();
+
+    protected abstract void cancelDismissControlViewTimer();
+
+    protected abstract void hideAllWidget();
+
+    /**
+     * 封面布局
+     */
+    public RelativeLayout getThumbImageViewLayout() {
+        return mThumbImageViewLayout;
+    }
+
+    /***
+     * 设置封面
+     */
+    public void setThumbImageView(View view) {
+        if (mThumbImageViewLayout != null) {
+            mThumbImageView = view;
+            resolveThumbImage(view);
+        }
+    }
+
+    /***
+     * 清除封面
+     */
+    public void clearThumbImageView() {
+        if (mThumbImageViewLayout != null) {
+            mThumbImageViewLayout.removeAllViews();
+        }
+    }
+
+
+    /**
+     * title
+     */
+    public TextView getTitleTextView() {
+        return mTitleTextView;
+    }
 
 
     /**
@@ -671,6 +919,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         this.mIsTouchWigetFull = isTouchWigetFull;
     }
 
+    /**
+     * 是否点击封面可以播放
+     */
+    public void setThumbPlay(boolean thumbPlay) {
+        this.mThumbPlay = thumbPlay;
+    }
+
 
     public boolean isHideKey() {
         return mHideKey;
@@ -725,6 +980,26 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     public float getSeekRatio() {
         return mSeekRatio;
+    }
+
+
+    public boolean isNeedLockFull() {
+        return mNeedLockFull;
+    }
+
+    /**
+     * 是否需要全屏锁定屏幕功能
+     * 如果单独使用请设置setIfCurrentIsFullscreen为true
+     */
+    public void setNeedLockFull(boolean needLoadFull) {
+        this.mNeedLockFull = needLoadFull;
+    }
+
+    /**
+     * 锁屏点击
+     */
+    public void setLockClickListener(LockClickListener lockClickListener) {
+        this.mLockClickListener = lockClickListener;
     }
 
 }
