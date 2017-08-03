@@ -2,9 +2,6 @@ package com.shuyu.gsyvideoplayer.video.base;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.media.AudioManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
@@ -20,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -38,11 +36,6 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 public abstract class GSYVideoControlView extends GSYVideoView implements View.OnClickListener, View.OnTouchListener, SeekBar.OnSeekBarChangeListener {
 
-    //进度定时器
-    protected Timer updateProcessTimer;
-
-    //定时器任务
-    protected ProgressTimerTask mProgressTimerTask;
 
     //触摸的X
     protected float mDownX;
@@ -110,6 +103,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //是否支持全屏滑动触摸有效
     protected boolean mIsTouchWigetFull = true;
 
+    //进度定时器
+    protected Timer updateProcessTimer;
+
+    //定时器任务
+    protected ProgressTimerTask mProgressTimerTask;
+
     //播放按键
     protected View mStartButton;
 
@@ -172,16 +171,16 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             mProgressBar.setOnSeekBarChangeListener(this);
         }
 
-        if(mBottomContainer != null) {
+        if (mBottomContainer != null) {
             mBottomContainer.setOnClickListener(this);
         }
 
-        if(mTextureViewContainer != null) {
+        if (mTextureViewContainer != null) {
             mTextureViewContainer.setOnClickListener(this);
             mTextureViewContainer.setOnTouchListener(this);
         }
 
-        if(mProgressBar != null) {
+        if (mProgressBar != null) {
             mProgressBar.setOnTouchListener(this);
         }
 
@@ -224,8 +223,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 break;
             case CURRENT_STATE_AUTO_COMPLETE:
                 cancelProgressTimer();
-                mProgressBar.setProgress(100);
-                mCurrentTimeTextView.setText(mTotalTimeTextView.getText());
+                if (mProgressBar != null) {
+                    mProgressBar.setProgress(100);
+                }
+                if (mCurrentTimeTextView != null && mTotalTimeTextView != null) {
+                    mCurrentTimeTextView.setText(mTotalTimeTextView.getText());
+                }
                 break;
         }
     }
@@ -379,7 +382,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                         GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekTimePosition);
                         int duration = getDuration();
                         int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
-                        mProgressBar.setProgress(progress);
+                        if (mProgressBar != null) {
+                            mProgressBar.setProgress(progress);
+                        }
                         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                             Debuger.printfLog("onTouchScreenSeekPosition");
                             mVideoAllCallBack.onTouchScreenSeekPosition(mOriginUrl, mTitle, this);
@@ -428,39 +433,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return false;
     }
 
-    /**
-     * 显示暂停切换显示的bitmap
-     */
-    protected void showPauseCover() {
-        if (mCurrentState == CURRENT_STATE_PAUSE && mFullPauseBitmap != null
-                && !mFullPauseBitmap.isRecycled() && mShowPauseCover
-                && mSurface != null && mSurface.isValid()) {
-            RectF rectF = new RectF(0, 0, mTextureView.getWidth(), mTextureView.getHeight());
-            Canvas canvas = mSurface.lockCanvas(new Rect(0, 0, mTextureView.getWidth(), mTextureView.getHeight()));
-            if (canvas != null) {
-                canvas.drawBitmap(mFullPauseBitmap, null, rectF, null);
-                mSurface.unlockCanvasAndPost(canvas);
-            }
-        }
-
-    }
-
-    /**
-     * 销毁暂停切换显示的bitmap
-     */
-    protected void releasePauseCover() {
-        try {
-            if (mCurrentState != CURRENT_STATE_PAUSE && mFullPauseBitmap != null
-                    && !mFullPauseBitmap.isRecycled() && mShowPauseCover) {
-                mFullPauseBitmap.recycle();
-                mFullPauseBitmap = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-
     protected void startProgressTimer() {
         cancelProgressTimer();
         updateProcessTimer = new Timer();
@@ -500,6 +472,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
     protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
+
+        if (mProgressBar == null || mTotalTimeTextView == null || mCurrentTimeTextView == null) {
+            return;
+        }
+
         if (!mTouchingProgressBar) {
             if (progress != 0) mProgressBar.setProgress(progress);
         }
@@ -514,6 +491,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     protected void resetProgressAndTime() {
+        if (mProgressBar == null || mTotalTimeTextView == null || mCurrentTimeTextView == null) {
+            return;
+        }
         mProgressBar.setProgress(0);
         mProgressBar.setSecondaryProgress(0);
         mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
@@ -522,6 +502,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     protected void loopSetProgressAndTime() {
+        if (mProgressBar == null || mTotalTimeTextView == null || mCurrentTimeTextView == null) {
+            return;
+        }
         mProgressBar.setProgress(0);
         mProgressBar.setSecondaryProgress(0);
         mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));
@@ -565,8 +548,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mCurrentState != CURRENT_STATE_PREPAREING) return;
         startProgressTimer();
     }
-    
-    
+
+
     @Override
     public void onBufferingUpdate(int percent) {
         if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
@@ -574,6 +557,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 setTextAndProgress(percent);
                 mBuffterPoint = percent;
                 Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
+            }
+            if(mProgressBar == null) {
+                return;
             }
             //循环清除进度
             if (mLooping && mHadPlay && percent == 0 && mProgressBar.getProgress() >= (mProgressBar.getMax() - 1)) {
@@ -605,12 +591,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         ((Activity) (mContext)).getWindow().setAttributes(lpa);
     }
 
-    
+
     protected abstract void showWifiDialog();
-    
+
     protected abstract void showProgressDialog(float deltaX,
                                                String seekTime, int seekTimePosition,
                                                String totalTime, int totalTimeDuration);
+
     protected abstract void dismissProgressDialog();
 
     protected abstract void showVolumeDialog(float deltaY, int volumePercent);
@@ -620,8 +607,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected abstract void showBrightnessDialog(float percent);
 
     protected abstract void dismissBrightnessDialog();
-    
-    
+
+
     /**
      * 获取播放按键
      */
@@ -675,6 +662,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     public void setShrinkImageRes(int mShrinkImageRes) {
         this.mShrinkImageRes = mShrinkImageRes;
     }
+
     /**
      * 是否可以全屏滑动界面改变进度，声音等
      * 默认 true
@@ -683,14 +671,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         this.mIsTouchWigetFull = isTouchWigetFull;
     }
 
-
-    public boolean isIfCurrentIsFullscreen() {
-        return mIfCurrentIsFullscreen;
-    }
-
-    public void setIfCurrentIsFullscreen(boolean ifCurrentIsFullscreen) {
-        this.mIfCurrentIsFullscreen = ifCurrentIsFullscreen;
-    }
 
     public boolean isHideKey() {
         return mHideKey;

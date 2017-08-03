@@ -100,9 +100,6 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
     //播放速度
     protected float mSpeed = 1;
 
-    //针对某些视频的旋转信息做了旋转处理
-    protected int mRotate = 0;
-
     //当前的播放状态
     protected int mCurrentState = -1;
 
@@ -117,9 +114,6 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
 
     //缓存进度
     protected int mBuffterPoint;
-
-    //手动滑动的起始偏移位置
-    protected int mSeekEndOffset;
 
     //从哪个开始播放
     protected long mSeekOnStart = -1;
@@ -234,7 +228,6 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
         mScreenHeight = getActivityContext().getResources().getDisplayMetrics().heightPixels;
         mAudioManager = (AudioManager) getActivityContext().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
-        mSeekEndOffset = CommonUtil.dip2px(getActivityContext(), 50);
     }
 
     protected void initInflate(Context context) {
@@ -589,11 +582,6 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
         }
     }
 
-    @Override
-    public void onBackFullscreen() {
-
-    }
-
     /**
      * 清除当前缓存
      */
@@ -840,6 +828,10 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
 
     public boolean isIfCurrentIsFullscreen() {
         return mIfCurrentIsFullscreen;
+    }
+
+    public void setIfCurrentIsFullscreen(boolean ifCurrentIsFullscreen) {
+        this.mIfCurrentIsFullscreen = ifCurrentIsFullscreen;
     }
 
     public boolean isLooping() {

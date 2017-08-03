@@ -767,12 +767,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
 
     @Override
-    public void onBackFullscreen() {
-        clearFullscreenLayout();
-    }
-
-
-    @Override
     public void onAutoCompletion() {
         super.onAutoCompletion();
         if (mLockCurScreen) {
