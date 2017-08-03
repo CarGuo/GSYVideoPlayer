@@ -70,6 +70,7 @@ public abstract class GSYTextureGroup extends FrameLayout implements TextureView
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        //清空释放
         GSYVideoManager.instance().setDisplay(null);
         surface.release();
         return true;
@@ -142,6 +143,7 @@ public abstract class GSYTextureGroup extends FrameLayout implements TextureView
     protected void setSmallVideoTextureView(OnTouchListener onTouchListener) {
         mTextureViewContainer.setOnTouchListener(onTouchListener);
         mTextureViewContainer.setOnClickListener(null);
+        setSmallVideoTextureView();
 
     }
 

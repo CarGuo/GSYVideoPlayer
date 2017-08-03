@@ -92,6 +92,12 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         mSmallClose = findViewById(R.id.small_close);
     }
 
+
+    @Override
+    public void onBackFullscreen() {
+        clearFullscreenLayout();
+    }
+
     /**
      * 小窗口
      **/
