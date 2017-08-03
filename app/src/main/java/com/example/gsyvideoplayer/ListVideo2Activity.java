@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
 import com.example.gsyvideoplayer.listener.SampleListener;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;

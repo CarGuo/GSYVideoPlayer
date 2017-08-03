@@ -15,12 +15,9 @@ import android.widget.ImageView;
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.video.SampleVideo;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
+import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

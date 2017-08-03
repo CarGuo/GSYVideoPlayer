@@ -3,7 +3,6 @@ package com.example.gsyvideoplayer;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,8 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
-import com.shuyu.gsyvideoplayer.GSYPreViewManager;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;

@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
@@ -325,8 +323,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     @Override
-    public void showWifiDialog() {
-        super.showWifiDialog();
+    protected void showWifiDialog() {
         if (!NetworkUtils.isAvailable(mContext)) {
             Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
             return;
@@ -632,7 +629,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     @SuppressWarnings("ResourceType")
     protected void showProgressDialog(float deltaX, String seekTime, int seekTimePosition, String totalTime, int totalTimeDuration) {
-        super.showProgressDialog(deltaX, seekTime, seekTimePosition, totalTime, totalTimeDuration);
         if (mProgressDialog == null) {
             View localView = LayoutInflater.from(getActivityContext()).inflate(R.layout.video_progress_dialog, null);
             mDialogProgressBar = ((ProgressBar) localView.findViewById(R.id.duration_progressbar));
@@ -682,7 +678,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     @Override
     protected void dismissProgressDialog() {
-        super.dismissProgressDialog();
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
             mProgressDialog = null;
@@ -691,7 +686,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     @Override
     protected void showVolumeDialog(float deltaY, int volumePercent) {
-        super.showVolumeDialog(deltaY, volumePercent);
         if (mVolumeDialog == null) {
             View localView = LayoutInflater.from(getActivityContext()).inflate(R.layout.video_volume_dialog, null);
             mDialogVolumeProgressBar = ((ProgressBar) localView.findViewById(R.id.volume_progressbar));
@@ -723,7 +717,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     @Override
     protected void dismissVolumeDialog() {
-        super.dismissVolumeDialog();
         if (mVolumeDialog != null) {
             mVolumeDialog.dismiss();
             mVolumeDialog = null;
@@ -760,7 +753,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     @Override
     protected void dismissBrightnessDialog() {
-        super.dismissVolumeDialog();
         if (mBrightnessDialog != null) {
             mBrightnessDialog.dismiss();
             mBrightnessDialog = null;

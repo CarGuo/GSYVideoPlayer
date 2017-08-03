@@ -2,10 +2,8 @@ package com.example.gsyvideoplayer;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
-import android.util.Log;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -13,12 +11,11 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class ListVideoActivity extends AppCompatActivity {
 

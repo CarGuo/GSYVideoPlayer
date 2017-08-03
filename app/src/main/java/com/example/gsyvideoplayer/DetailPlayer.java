@@ -11,24 +11,17 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
-import com.shuyu.gsyvideoplayer.GSYPreViewManager;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
 
 import com.shuyu.gsyvideoplayer.builder.GSYVideoBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
-import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 
 public class DetailPlayer extends AppCompatActivity {

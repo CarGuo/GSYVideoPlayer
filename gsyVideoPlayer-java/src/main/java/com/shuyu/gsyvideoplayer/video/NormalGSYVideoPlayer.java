@@ -13,9 +13,6 @@ import com.shuyu.gsyvideoplayer.R;
 
 public class NormalGSYVideoPlayer extends StandardGSYVideoPlayer {
 
-    /**
-     * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
-     */
     public NormalGSYVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
     }
