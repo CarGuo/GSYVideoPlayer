@@ -128,6 +128,23 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             });
         }
     }
+
+    /**
+     * 处理锁屏屏幕触摸逻辑
+     */
+    @Override
+    protected void lockTouchLogic() {
+        super.lockTouchLogic();
+        if (mLockCurScreen) {
+            if (mOrientationUtils != null)
+                mOrientationUtils.setEnable(mRotateViewAuto);
+        } else {
+            if (mOrientationUtils != null)
+                mOrientationUtils.setEnable(false);
+        }
+    }
+
+
     /**
      * 利用window层播放全屏效果
      *
@@ -582,9 +599,6 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
         to.setStateAndUi(from.mCurrentState);
     }
-
-
-    protected abstract void onClickUiToggle();
 
 
     public boolean isShowFullAnimation() {
