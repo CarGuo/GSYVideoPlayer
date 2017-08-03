@@ -1,6 +1,5 @@
 package com.example.gsyvideoplayer;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -13,17 +12,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
-import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
-import com.example.gsyvideoplayer.video.SampleVideo;
 import com.example.gsyvideoplayer.view.CustomInputDialog;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

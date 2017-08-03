@@ -11,8 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.DanmakuVideoPlayer;
-import com.shuyu.gsyvideoplayer.GSYPreViewManager;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;

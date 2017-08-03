@@ -11,17 +11,11 @@ import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.shuyu.gsyvideoplayer.GSYVideoPlayer.CURRENT_STATE_NORMAL;
 
 /**
  * Created by shuyu on 2016/11/12.

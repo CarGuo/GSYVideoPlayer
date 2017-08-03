@@ -5,8 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.provider.Settings;
 import android.view.OrientationEventListener;
 
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
 
 /**
