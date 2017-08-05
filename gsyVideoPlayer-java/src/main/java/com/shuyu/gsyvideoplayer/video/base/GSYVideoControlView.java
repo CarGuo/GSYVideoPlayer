@@ -392,6 +392,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         float y = event.getY();
 
         if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
+            onClickUiToggle();
+            startDismissControlViewTimer();
             return true;
         }
 
@@ -402,15 +404,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (id == R.id.surface_container) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    mTouchingProgressBar = true;
-                    mDownX = x;
-                    mDownY = y;
-                    mMoveY = 0;
-                    mChangeVolume = false;
-                    mChangePosition = false;
-                    mShowVKey = false;
-                    mBrightness = false;
-                    mFirstTouch = true;
+
+                    touchSurfaceDown(x, y);
 
                     break;
                 case MotionEvent.ACTION_MOVE:
@@ -422,97 +417,18 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     if ((mIfCurrentIsFullscreen && mIsTouchWigetFull)
                             || (mIsTouchWiget && !mIfCurrentIsFullscreen)) {
                         if (!mChangePosition && !mChangeVolume && !mBrightness) {
-                            if (absDeltaX > mThreshold || absDeltaY > mThreshold) {
-                                cancelProgressTimer();
-                                if (absDeltaX >= mThreshold) {
-                                    //防止全屏虚拟按键
-                                    int screenWidth = CommonUtil.getScreenWidth(getContext());
-                                    if (Math.abs(screenWidth - mDownX) > mSeekEndOffset) {
-                                        mChangePosition = true;
-                                        mDownPosition = getCurrentPositionWhenPlaying();
-                                    } else {
-                                        mShowVKey = true;
-                                    }
-                                } else {
-                                    int screenHeight = CommonUtil.getScreenHeight(getContext());
-                                    boolean noEnd = Math.abs(screenHeight - mDownY) > mSeekEndOffset;
-                                    if (mFirstTouch) {
-                                        mBrightness = (mDownX < mScreenWidth * 0.5f) && noEnd;
-                                        mFirstTouch = false;
-                                    }
-                                    if (!mBrightness) {
-                                        mChangeVolume = noEnd;
-                                        mGestureDownVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                                    }
-                                    mShowVKey = !noEnd;
-                                }
-                            }
+                            touchSurfaceMoveFullLogic(absDeltaX, absDeltaY);
                         }
                     }
-                    if (mChangePosition) {
-                        int totalTimeDuration = getDuration();
-                        mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / mScreenWidth) / mSeekRatio);
-                        if (mSeekTimePosition > totalTimeDuration)
-                            mSeekTimePosition = totalTimeDuration;
-                        String seekTime = CommonUtil.stringForTime(mSeekTimePosition);
-                        String totalTime = CommonUtil.stringForTime(totalTimeDuration);
-                        showProgressDialog(deltaX, seekTime, mSeekTimePosition, totalTime, totalTimeDuration);
-                    } else if (mChangeVolume) {
-                        deltaY = -deltaY;
-                        int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                        int deltaV = (int) (max * deltaY * 3 / mScreenHeight);
-                        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mGestureDownVolume + deltaV, 0);
-                        int volumePercent = (int) (mGestureDownVolume * 100 / max + deltaY * 3 * 100 / mScreenHeight);
-
-                        showVolumeDialog(-deltaY, volumePercent);
-                    } else if (!mChangePosition && mBrightness) {
-                        if (Math.abs(deltaY) > mThreshold) {
-                            float percent = (-deltaY / mScreenHeight);
-                            onBrightnessSlide(percent);
-                            mDownY = y;
-                        }
-                    }
+                    touchSurfaceMove(deltaX, deltaY, y);
 
                     break;
                 case MotionEvent.ACTION_UP:
 
                     startDismissControlViewTimer();
-                    if (mChangePosition) {
-                        int duration = getDuration();
-                        int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
-                        mBottomProgressBar.setProgress(progress);
-                    }
-                    if (!mChangePosition && !mChangeVolume && !mBrightness) {
-                        onClickUiToggle();
-                    }
 
+                    touchSurfaceUp();
 
-                    mTouchingProgressBar = false;
-                    dismissProgressDialog();
-                    dismissVolumeDialog();
-                    dismissBrightnessDialog();
-                    if (mChangePosition && GSYVideoManager.instance().getMediaPlayer() != null && (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE)) {
-                        GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekTimePosition);
-                        int duration = getDuration();
-                        int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
-                        if (mProgressBar != null) {
-                            mProgressBar.setProgress(progress);
-                        }
-                        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-                            Debuger.printfLog("onTouchScreenSeekPosition");
-                            mVideoAllCallBack.onTouchScreenSeekPosition(mOriginUrl, mTitle, this);
-                        }
-                    } else if (mBrightness) {
-                        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-                            Debuger.printfLog("onTouchScreenSeekLight");
-                            mVideoAllCallBack.onTouchScreenSeekLight(mOriginUrl, mTitle, this);
-                        }
-                    } else if (mChangeVolume) {
-                        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-                            Debuger.printfLog("onTouchScreenSeekVolume");
-                            mVideoAllCallBack.onTouchScreenSeekVolume(mOriginUrl, mTitle, this);
-                        }
-                    }
                     startProgressTimer();
                     //不要和隐藏虚拟按键后，滑出虚拟按键冲突
                     if (mHideKey && mShowVKey) {
@@ -548,6 +464,110 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return false;
     }
 
+    protected void touchSurfaceDown(float x, float y) {
+        mTouchingProgressBar = true;
+        mDownX = x;
+        mDownY = y;
+        mMoveY = 0;
+        mChangeVolume = false;
+        mChangePosition = false;
+        mShowVKey = false;
+        mBrightness = false;
+        mFirstTouch = true;
+    }
+
+    protected void touchSurfaceMove(float deltaX, float deltaY, float y) {
+        if (mChangePosition) {
+            int totalTimeDuration = getDuration();
+            mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / mScreenWidth) / mSeekRatio);
+            if (mSeekTimePosition > totalTimeDuration)
+                mSeekTimePosition = totalTimeDuration;
+            String seekTime = CommonUtil.stringForTime(mSeekTimePosition);
+            String totalTime = CommonUtil.stringForTime(totalTimeDuration);
+            showProgressDialog(deltaX, seekTime, mSeekTimePosition, totalTime, totalTimeDuration);
+        } else if (mChangeVolume) {
+            deltaY = -deltaY;
+            int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+            int deltaV = (int) (max * deltaY * 3 / mScreenHeight);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mGestureDownVolume + deltaV, 0);
+            int volumePercent = (int) (mGestureDownVolume * 100 / max + deltaY * 3 * 100 / mScreenHeight);
+
+            showVolumeDialog(-deltaY, volumePercent);
+        } else if (!mChangePosition && mBrightness) {
+            if (Math.abs(deltaY) > mThreshold) {
+                float percent = (-deltaY / mScreenHeight);
+                onBrightnessSlide(percent);
+                mDownY = y;
+            }
+        }
+    }
+
+    protected void touchSurfaceMoveFullLogic(float absDeltaX, float absDeltaY) {
+        if (absDeltaX > mThreshold || absDeltaY > mThreshold) {
+            cancelProgressTimer();
+            if (absDeltaX >= mThreshold) {
+                //防止全屏虚拟按键
+                int screenWidth = CommonUtil.getScreenWidth(getContext());
+                if (Math.abs(screenWidth - mDownX) > mSeekEndOffset) {
+                    mChangePosition = true;
+                    mDownPosition = getCurrentPositionWhenPlaying();
+                } else {
+                    mShowVKey = true;
+                }
+            } else {
+                int screenHeight = CommonUtil.getScreenHeight(getContext());
+                boolean noEnd = Math.abs(screenHeight - mDownY) > mSeekEndOffset;
+                if (mFirstTouch) {
+                    mBrightness = (mDownX < mScreenWidth * 0.5f) && noEnd;
+                    mFirstTouch = false;
+                }
+                if (!mBrightness) {
+                    mChangeVolume = noEnd;
+                    mGestureDownVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                }
+                mShowVKey = !noEnd;
+            }
+        }
+    }
+
+
+    protected void touchSurfaceUp() {
+        if (mChangePosition) {
+            int duration = getDuration();
+            int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
+            mBottomProgressBar.setProgress(progress);
+        }
+        if (!mChangePosition && !mChangeVolume && !mBrightness) {
+            onClickUiToggle();
+        }
+
+        mTouchingProgressBar = false;
+        dismissProgressDialog();
+        dismissVolumeDialog();
+        dismissBrightnessDialog();
+        if (mChangePosition && GSYVideoManager.instance().getMediaPlayer() != null && (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE)) {
+            GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekTimePosition);
+            int duration = getDuration();
+            int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
+            if (mProgressBar != null) {
+                mProgressBar.setProgress(progress);
+            }
+            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+                Debuger.printfLog("onTouchScreenSeekPosition");
+                mVideoAllCallBack.onTouchScreenSeekPosition(mOriginUrl, mTitle, this);
+            }
+        } else if (mBrightness) {
+            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+                Debuger.printfLog("onTouchScreenSeekLight");
+                mVideoAllCallBack.onTouchScreenSeekLight(mOriginUrl, mTitle, this);
+            }
+        } else if (mChangeVolume) {
+            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+                Debuger.printfLog("onTouchScreenSeekVolume");
+                mVideoAllCallBack.onTouchScreenSeekVolume(mOriginUrl, mTitle, this);
+            }
+        }
+    }
 
     @Override
     protected void setSmallVideoTextureView(View.OnTouchListener onTouchListener) {
