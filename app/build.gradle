@@ -58,10 +58,10 @@ dependencies {
     compile viewDependencies.ndkbitmap_x86
     compile androidDependencies.support_v4
     //debugCompile dataDependencies.leakcanary
-    compile project(':gsyVideoPlayer')
+    //compile project(':gsyVideoPlayer')
 
     //jcenter
-    //compile 'com.shuyu:GSYVideoPlayer:2.0.3'
+    compile 'com.shuyu:GSYVideoPlayer:2.0.3'
 
     //jitpack
     //compile 'com.github.CarGuo:GSYVideoPlayer:v2.0.3'
