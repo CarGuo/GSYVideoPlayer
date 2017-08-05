@@ -494,6 +494,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             cloneParams(this, gsyVideoPlayer);
 
+            gsyVideoPlayer.setIsTouchWiget(false);//小窗口不能点击
+
             gsyVideoPlayer.addTextureView();
             //隐藏掉所有的弹出状态哟
             gsyVideoPlayer.onClickUiToggle();
@@ -502,7 +504,6 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             GSYVideoManager.instance().setLastListener(this);
             GSYVideoManager.instance().setListener(gsyVideoPlayer);
-
             if (mVideoAllCallBack != null) {
                 Debuger.printfError("onEnterSmallWidget");
                 mVideoAllCallBack.onEnterSmallWidget(mOriginUrl, mTitle, gsyVideoPlayer);

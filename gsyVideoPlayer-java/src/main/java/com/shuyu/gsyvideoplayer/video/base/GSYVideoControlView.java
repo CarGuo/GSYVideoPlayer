@@ -25,7 +25,9 @@ import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -160,6 +162,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //点击锁屏的回调
     protected LockClickListener mLockClickListener;
 
+    //触摸显示后隐藏的时间
+    protected int mDismissControlTime = 2500;
+
+
+    protected Timer mDismissControlViewTimer;
+
+    protected DismissControlViewTimerTask mDismissControlViewTimerTask;
+
 
     public GSYVideoControlView(@NonNull Context context) {
         super(context);
@@ -237,7 +247,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mBackButton != null)
             mBackButton.setOnClickListener(this);
 
-        if(mLockScreen != null) {
+        if (mLockScreen != null) {
             mLockScreen.setVisibility(GONE);
             mLockScreen.setOnClickListener(new OnClickListener() {
                 @Override
@@ -323,6 +333,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 }
                 break;
         }
+        resolveUIState(state);
     }
 
     @Override
@@ -379,34 +390,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         int id = v.getId();
         float x = event.getX();
         float y = event.getY();
-        if (id == R.id.surface_container) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    break;
-                case MotionEvent.ACTION_UP:
-                    startDismissControlViewTimer();
-                    if (mChangePosition) {
-                        int duration = getDuration();
-                        int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
-                        mBottomProgressBar.setProgress(progress);
-                    }
-                    if (!mChangePosition && !mChangeVolume && !mBrightness) {
-                        onClickUiToggle();
-                    }
-                    break;
-            }
-        } else if (id == R.id.progress) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    cancelDismissControlViewTimer();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    startDismissControlViewTimer();
-                    break;
-            }
-        }
 
         if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
             return true;
@@ -492,6 +475,18 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
                     break;
                 case MotionEvent.ACTION_UP:
+
+                    startDismissControlViewTimer();
+                    if (mChangePosition) {
+                        int duration = getDuration();
+                        int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
+                        mBottomProgressBar.setProgress(progress);
+                    }
+                    if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                        onClickUiToggle();
+                    }
+
+
                     mTouchingProgressBar = false;
                     dismissProgressDialog();
                     dismissVolumeDialog();
@@ -528,6 +523,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         } else if (id == R.id.progress) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    cancelDismissControlViewTimer();
                 case MotionEvent.ACTION_MOVE:
                     cancelProgressTimer();
                     ViewParent vpdown = getParent();
@@ -537,6 +533,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     }
                     break;
                 case MotionEvent.ACTION_UP:
+                    startDismissControlViewTimer();
                     startProgressTimer();
                     ViewParent vpup = getParent();
                     while (vpup != null) {
@@ -558,6 +555,42 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         //小窗口播放停止了也可以移动
         mThumbImageViewLayout.setOnTouchListener(onTouchListener);
     }
+
+    /**
+     * 处理控制显示
+     * @param state
+     */
+    protected void resolveUIState(int state) {
+        switch (mCurrentState) {
+            case CURRENT_STATE_NORMAL:
+                changeUiToNormal();
+                cancelDismissControlViewTimer();
+                break;
+            case CURRENT_STATE_PREPAREING:
+                changeUiToPrepareingShow();
+                startDismissControlViewTimer();
+                break;
+            case CURRENT_STATE_PLAYING:
+                changeUiToPlayingShow();
+                startDismissControlViewTimer();
+                break;
+            case CURRENT_STATE_PAUSE:
+                changeUiToPauseShow();
+                cancelDismissControlViewTimer();
+                break;
+            case CURRENT_STATE_ERROR:
+                changeUiToError();
+                break;
+            case CURRENT_STATE_AUTO_COMPLETE:
+                changeUiToCompleteShow();
+                cancelDismissControlViewTimer();
+                break;
+            case CURRENT_STATE_PLAYING_BUFFERING_START:
+                changeUiToPlayingBufferingShow();
+                break;
+        }
+    }
+
 
     /**
      * 播放按键点击
@@ -648,6 +681,30 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         }
     }
 
+
+    private class DismissControlViewTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            if (mCurrentState != CURRENT_STATE_NORMAL
+                    && mCurrentState != CURRENT_STATE_ERROR
+                    && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
+                if (getActivityContext() != null) {
+                    ((Activity) getActivityContext()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideAllWidget();
+                            mLockScreen.setVisibility(GONE);
+                            if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
+                                hideNavKey(mContext);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
     protected void setTextAndProgress(int secProgress) {
         int position = getCurrentPositionWhenPlaying();
         int duration = getDuration();
@@ -706,6 +763,83 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mBottomProgressBar != null)
             mBottomProgressBar.setProgress(0);
     }
+
+
+    protected void startDismissControlViewTimer() {
+        cancelDismissControlViewTimer();
+        mDismissControlViewTimer = new Timer();
+        mDismissControlViewTimerTask = new DismissControlViewTimerTask();
+        mDismissControlViewTimer.schedule(mDismissControlViewTimerTask, mDismissControlTime);
+    }
+
+    protected void cancelDismissControlViewTimer() {
+        if (mDismissControlViewTimer != null) {
+            mDismissControlViewTimer.cancel();
+            mDismissControlViewTimer = null;
+        }
+        if (mDismissControlViewTimerTask != null) {
+            mDismissControlViewTimerTask.cancel();
+            mDismissControlViewTimerTask = null;
+        }
+
+    }
+
+
+    protected void resolveThumbImage(View thumb) {
+        mThumbImageViewLayout.addView(thumb);
+        ViewGroup.LayoutParams layoutParams = thumb.getLayoutParams();
+        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        thumb.setLayoutParams(layoutParams);
+    }
+
+
+    protected void setViewShowState(View view, int visibility) {
+        if (view != null) {
+            view.setVisibility(visibility);
+        }
+    }
+
+
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param title         title
+     * @return
+     */
+    @Override
+    public boolean setUp(String url, boolean cacheWithPlay, String title) {
+        return setUp(url, cacheWithPlay, (File) null, title);
+    }
+
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param title         title
+     * @return
+     */
+    @Override
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title) {
+        if (super.setUp(url, cacheWithPlay, cachePath, title)) {
+            if (title != null && mTitleTextView != null) {
+                mTitleTextView.setText(title);
+            }
+            if (mIfCurrentIsFullscreen) {
+                mFullscreenButton.setImageResource(getShrinkImageRes());
+            } else {
+                mFullscreenButton.setImageResource(getEnlargeImageRes());
+                mBackButton.setVisibility(View.GONE);
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -770,7 +904,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      *
      * @param percent
      */
-    private void onBrightnessSlide(float percent) {
+    protected void onBrightnessSlide(float percent) {
         mBrightnessData = ((Activity) (mContext)).getWindow().getAttributes().screenBrightness;
         if (mBrightnessData <= 0.00f) {
             mBrightnessData = 0.50f;
@@ -787,16 +921,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         showBrightnessDialog(lpa.screenBrightness);
         ((Activity) (mContext)).getWindow().setAttributes(lpa);
     }
-
-
-    private void resolveThumbImage(View thumb) {
-        mThumbImageViewLayout.addView(thumb);
-        ViewGroup.LayoutParams layoutParams = thumb.getLayoutParams();
-        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        thumb.setLayoutParams(layoutParams);
-    }
-
 
     protected abstract void showWifiDialog();
 
@@ -816,11 +940,30 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected abstract void onClickUiToggle();
 
-    protected abstract void startDismissControlViewTimer();
-
-    protected abstract void cancelDismissControlViewTimer();
-
     protected abstract void hideAllWidget();
+
+
+    protected abstract void changeUiToNormal();
+
+    protected abstract void changeUiToPrepareingShow();
+
+    protected abstract void changeUiToPlayingShow();
+
+    protected abstract void changeUiToPauseShow();
+
+    protected abstract void changeUiToError();
+
+    protected abstract void changeUiToCompleteShow();
+
+    protected abstract void changeUiToPlayingBufferingShow();
+
+
+    /**
+     * 初始化为正常状态
+     */
+    public void initUIState() {
+        setStateAndUi(CURRENT_STATE_NORMAL);
+    }
 
     /**
      * 封面布局
@@ -1000,6 +1143,20 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     public void setLockClickListener(LockClickListener lockClickListener) {
         this.mLockClickListener = lockClickListener;
+    }
+
+
+    /**
+     * 设置触摸显示控制ui的消失时间
+     *
+     * @param dismissControlTime 毫秒，默认2500
+     */
+    public void setDismissControlTime(int dismissControlTime) {
+        this.mDismissControlTime = dismissControlTime;
+    }
+
+    public int getDismissControlTime() {
+        return mDismissControlTime;
     }
 
 }

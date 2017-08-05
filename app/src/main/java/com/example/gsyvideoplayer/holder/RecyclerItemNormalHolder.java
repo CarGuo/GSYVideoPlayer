@@ -50,6 +50,9 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
             ViewGroup viewGroup = (ViewGroup)imageView.getParent();
             viewGroup.removeView(imageView);
         }
+
+        gsyVideoPlayer.setIsTouchWiget(false);
+
         gsyVideoPlayer.setThumbImageView(imageView);
 
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
