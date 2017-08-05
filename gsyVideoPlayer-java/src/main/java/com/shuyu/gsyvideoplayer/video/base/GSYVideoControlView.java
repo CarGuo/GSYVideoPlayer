@@ -25,7 +25,6 @@ import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.io.File;
 import java.util.Timer;
@@ -35,7 +34,7 @@ import java.util.TimerTask;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 /**
- * ui显示和控制层
+ * 播放UI的显示、控制层、手势处理等
  * Created by guoshuyu on 2017/8/2.
  */
 
@@ -291,6 +290,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      *
      * @param state
      */
+    @Override
     protected void setStateAndUi(int state) {
         mCurrentState = state;
         switch (mCurrentState) {
@@ -300,6 +300,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     GSYVideoManager.instance().releaseMediaPlayer();
                     releasePauseCover();
                     mBuffterPoint = 0;
+                    mSaveChangeViewTIme = 0;
                 }
                 if (mAudioManager != null) {
                     mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
@@ -334,6 +335,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 break;
         }
         resolveUIState(state);
+    }
+
+
+    @Override
+    protected void setSmallVideoTextureView(View.OnTouchListener onTouchListener) {
+        super.setSmallVideoTextureView(onTouchListener);
+        //小窗口播放停止了也可以移动
+        mThumbImageViewLayout.setOnTouchListener(onTouchListener);
     }
 
     @Override
@@ -464,6 +473,106 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return false;
     }
 
+
+
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param title         title
+     * @return
+     */
+    @Override
+    public boolean setUp(String url, boolean cacheWithPlay, String title) {
+        return setUp(url, cacheWithPlay, (File) null, title);
+    }
+
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param title         title
+     * @return
+     */
+    @Override
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title) {
+        if (super.setUp(url, cacheWithPlay, cachePath, title)) {
+            if (title != null && mTitleTextView != null) {
+                mTitleTextView.setText(title);
+            }
+            if (mIfCurrentIsFullscreen) {
+                mFullscreenButton.setImageResource(getShrinkImageRes());
+            } else {
+                mFullscreenButton.setImageResource(getEnlargeImageRes());
+                mBackButton.setVisibility(View.GONE);
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
+    /***
+     * 拖动进度条
+     */
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+            if (isIfCurrentIsFullscreen()) {
+                Debuger.printfLog("onClickSeekbarFullscreen");
+                mVideoAllCallBack.onClickSeekbarFullscreen(mOriginUrl, mTitle, this);
+            } else {
+                Debuger.printfLog("onClickSeekbar");
+                mVideoAllCallBack.onClickSeekbar(mOriginUrl, mTitle, this);
+            }
+        }
+        if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay) {
+            try {
+                int time = seekBar.getProgress() * getDuration() / 100;
+                GSYVideoManager.instance().getMediaPlayer().seekTo(time);
+            } catch (Exception e) {
+                Debuger.printfWarning(e.toString());
+            }
+        }
+    }
+
+    @Override
+    public void onPrepared() {
+        super.onPrepared();
+        if (mCurrentState != CURRENT_STATE_PREPAREING) return;
+        startProgressTimer();
+    }
+
+
+    @Override
+    public void onBufferingUpdate(int percent) {
+        if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
+            if (percent != 0) {
+                setTextAndProgress(percent);
+                mBuffterPoint = percent;
+                Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
+            }
+            if (mProgressBar == null) {
+                return;
+            }
+            //循环清除进度
+            if (mLooping && mHadPlay && percent == 0 && mProgressBar.getProgress() >= (mProgressBar.getMax() - 1)) {
+                loopSetProgressAndTime();
+            }
+        }
+    }
+
     protected void touchSurfaceDown(float x, float y) {
         mTouchingProgressBar = true;
         mDownX = x;
@@ -569,25 +678,18 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         }
     }
 
-    @Override
-    protected void setSmallVideoTextureView(View.OnTouchListener onTouchListener) {
-        super.setSmallVideoTextureView(onTouchListener);
-        //小窗口播放停止了也可以移动
-        mThumbImageViewLayout.setOnTouchListener(onTouchListener);
-    }
-
     /**
      * 处理控制显示
      * @param state
      */
     protected void resolveUIState(int state) {
-        switch (mCurrentState) {
+        switch (state) {
             case CURRENT_STATE_NORMAL:
                 changeUiToNormal();
                 cancelDismissControlViewTimer();
                 break;
             case CURRENT_STATE_PREPAREING:
-                changeUiToPrepareingShow();
+                changeUiToPreparingShow();
                 startDismissControlViewTimer();
                 break;
             case CURRENT_STATE_PLAYING:
@@ -687,44 +789,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     }
 
-    protected class ProgressTimerTask extends TimerTask {
-        @Override
-        public void run() {
-            if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setTextAndProgress(0);
-                    }
-                });
-            }
-        }
-    }
-
-
-    private class DismissControlViewTimerTask extends TimerTask {
-
-        @Override
-        public void run() {
-            if (mCurrentState != CURRENT_STATE_NORMAL
-                    && mCurrentState != CURRENT_STATE_ERROR
-                    && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
-                if (getActivityContext() != null) {
-                    ((Activity) getActivityContext()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideAllWidget();
-                            mLockScreen.setVisibility(GONE);
-                            if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
-                                hideNavKey(mContext);
-                            }
-                        }
-                    });
-                }
-            }
-        }
-    }
-
     protected void setTextAndProgress(int secProgress) {
         int position = getCurrentPositionWhenPlaying();
         int duration = getDuration();
@@ -820,105 +884,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         }
     }
 
-
-    /**
-     * 设置播放URL
-     *
-     * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
-     * @param title         title
-     * @return
-     */
-    @Override
-    public boolean setUp(String url, boolean cacheWithPlay, String title) {
-        return setUp(url, cacheWithPlay, (File) null, title);
-    }
-
-    /**
-     * 设置播放URL
-     *
-     * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
-     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param title         title
-     * @return
-     */
-    @Override
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title) {
-        if (super.setUp(url, cacheWithPlay, cachePath, title)) {
-            if (title != null && mTitleTextView != null) {
-                mTitleTextView.setText(title);
-            }
-            if (mIfCurrentIsFullscreen) {
-                mFullscreenButton.setImageResource(getShrinkImageRes());
-            } else {
-                mFullscreenButton.setImageResource(getEnlargeImageRes());
-                mBackButton.setVisibility(View.GONE);
-            }
-            return true;
-        }
-        return false;
-    }
-
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-    }
-
-    /***
-     * 拖动进度条
-     */
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-            if (isIfCurrentIsFullscreen()) {
-                Debuger.printfLog("onClickSeekbarFullscreen");
-                mVideoAllCallBack.onClickSeekbarFullscreen(mOriginUrl, mTitle, this);
-            } else {
-                Debuger.printfLog("onClickSeekbar");
-                mVideoAllCallBack.onClickSeekbar(mOriginUrl, mTitle, this);
-            }
-        }
-        if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay) {
-            try {
-                int time = seekBar.getProgress() * getDuration() / 100;
-                GSYVideoManager.instance().getMediaPlayer().seekTo(time);
-            } catch (Exception e) {
-                Debuger.printfWarning(e.toString());
-            }
-        }
-    }
-
-    @Override
-    public void onPrepared() {
-        super.onPrepared();
-        if (mCurrentState != CURRENT_STATE_PREPAREING) return;
-        startProgressTimer();
-    }
-
-
-    @Override
-    public void onBufferingUpdate(int percent) {
-        if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
-            if (percent != 0) {
-                setTextAndProgress(percent);
-                mBuffterPoint = percent;
-                Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
-            }
-            if (mProgressBar == null) {
-                return;
-            }
-            //循环清除进度
-            if (mLooping && mHadPlay && percent == 0 && mProgressBar.getProgress() >= (mProgressBar.getMax() - 1)) {
-                loopSetProgressAndTime();
-            }
-        }
-    }
-
     /**
      * 滑动改变亮度
      *
@@ -942,6 +907,46 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         ((Activity) (mContext)).getWindow().setAttributes(lpa);
     }
 
+
+    private class ProgressTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setTextAndProgress(0);
+                    }
+                });
+            }
+        }
+    }
+
+    private class DismissControlViewTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            if (mCurrentState != CURRENT_STATE_NORMAL
+                    && mCurrentState != CURRENT_STATE_ERROR
+                    && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
+                if (getActivityContext() != null) {
+                    ((Activity) getActivityContext()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideAllWidget();
+                            mLockScreen.setVisibility(GONE);
+                            if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
+                                hideNavKey(mContext);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    /************************* 继承之后可自定义ui与显示隐藏 *************************/
+
     protected abstract void showWifiDialog();
 
     protected abstract void showProgressDialog(float deltaX,
@@ -962,10 +967,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected abstract void hideAllWidget();
 
-
     protected abstract void changeUiToNormal();
 
-    protected abstract void changeUiToPrepareingShow();
+    protected abstract void changeUiToPreparingShow();
 
     protected abstract void changeUiToPlayingShow();
 
@@ -977,6 +981,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected abstract void changeUiToPlayingBufferingShow();
 
+
+    /************************* 开放接口 *************************/
 
     /**
      * 初始化为正常状态

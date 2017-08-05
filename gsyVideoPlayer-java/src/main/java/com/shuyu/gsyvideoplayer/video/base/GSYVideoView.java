@@ -41,11 +41,11 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
 
 /**
- * 视频相关层
+ * 视频回调与状态处理等相关层
  * Created by guoshuyu on 2017/8/2.
  */
 
-public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPlayerListener {
+public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMediaPlayerListener {
 
     //正常
     public static final int CURRENT_STATE_NORMAL = 0;
@@ -63,15 +63,41 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
     public static final int CURRENT_STATE_ERROR = 7;
 
     //避免切换时频繁setup
-    protected static final int FULL_SCREEN_NORMAL_DELAY = 2000;
+    public static final int CHANGE_DELAY_TIME = 2000;
 
-    protected static boolean IF_FULLSCREEN_FROM_NORMAL = false;
 
-    protected static boolean IF_RELEASE_WHEN_ON_PAUSE = true;
+    //当前的播放状态
+    protected int mCurrentState = -1;
 
-    protected static int mBackUpPlayingBufferState = -1;
+    //播放的tag，防止错误，因为普通的url也可能重复
+    protected int mPlayPosition = -22;
 
-    protected static long CLICK_QUIT_FULLSCREEN_TIME = 0;
+    //屏幕宽度
+    protected int mScreenWidth;
+
+    //屏幕高度
+    protected int mScreenHeight;
+
+    //缓存进度
+    protected int mBuffterPoint;
+
+    //备份缓存前的播放状态
+    protected int mBackUpPlayingBufferState = -1;
+
+    //从哪个开始播放
+    protected long mSeekOnStart = -1;
+
+    //保存暂停时的时间
+    protected long mPauseTime;
+
+    //当前的播放位置
+    protected long mCurrentPosition;
+
+    //保存切换时的时间，避免频繁契合
+    protected long mSaveChangeViewTIme = 0;
+
+    //播放速度
+    protected float mSpeed = 1;
 
     //是否播边边缓冲
     protected boolean mCache = false;
@@ -96,33 +122,6 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
 
     //是否需要显示暂停锁定效果
     protected boolean mShowPauseCover = true;
-
-    //播放速度
-    protected float mSpeed = 1;
-
-    //当前的播放状态
-    protected int mCurrentState = -1;
-
-    //播放的tag，防止错误，因为普通的url也可能重复
-    protected int mPlayPosition = -22;
-
-    //屏幕宽度
-    protected int mScreenWidth;
-
-    //屏幕高度
-    protected int mScreenHeight;
-
-    //缓存进度
-    protected int mBuffterPoint;
-
-    //从哪个开始播放
-    protected long mSeekOnStart = -1;
-
-    //保存暂停时的时间
-    protected long mPauseTime;
-
-    //当前的播放位置
-    protected long mCurrentPosition;
 
     //音频焦点的监听
     protected AudioManager mAudioManager;
@@ -369,7 +368,7 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
         mCachePath = cachePath;
         mOriginUrl = url;
         if (isCurrentMediaListener() &&
-                (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) < FULL_SCREEN_NORMAL_DELAY)
+                (System.currentTimeMillis() - mSaveChangeViewTIme) < CHANGE_DELAY_TIME)
             return false;
         mCurrentState = CURRENT_STATE_NORMAL;
         if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1") && !url.contains(".m3u8")) {
@@ -484,16 +483,13 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
     @Override
     public void onAutoCompletion() {
         setStateAndUi(CURRENT_STATE_AUTO_COMPLETE);
+
+        mSaveChangeViewTIme = 0;
+
         if (mTextureViewContainer.getChildCount() > 0) {
             mTextureViewContainer.removeAllViews();
         }
 
-        if (IF_FULLSCREEN_FROM_NORMAL) {
-            IF_FULLSCREEN_FROM_NORMAL = false;
-            if (GSYVideoManager.instance().lastListener() != null) {
-                GSYVideoManager.instance().lastListener().onAutoCompletion();
-            }
-        }
         if (!mIfCurrentIsFullscreen)
             GSYVideoManager.instance().setLastListener(null);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
@@ -511,16 +507,13 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
     public void onCompletion() {
         //make me normal first
         setStateAndUi(CURRENT_STATE_NORMAL);
+
+        mSaveChangeViewTIme = 0;
+
         if (mTextureViewContainer.getChildCount() > 0) {
             mTextureViewContainer.removeAllViews();
         }
 
-        if (IF_FULLSCREEN_FROM_NORMAL) {//如果在进入全屏后播放完就初始化自己非全屏的控件
-            IF_FULLSCREEN_FROM_NORMAL = false;
-            if (GSYVideoManager.instance().lastListener() != null) {
-                GSYVideoManager.instance().lastListener().onCompletion();//回到上面的onAutoCompletion
-            }
-        }
         if (!mIfCurrentIsFullscreen) {
             GSYVideoManager.instance().setListener(null);
             GSYVideoManager.instance().setLastListener(null);
@@ -655,24 +648,19 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
      * 页面销毁了记得调用是否所有的video
      */
     public static void releaseAllVideos() {
-        CLICK_QUIT_FULLSCREEN_TIME = 0;
-        if (IF_RELEASE_WHEN_ON_PAUSE) {
-            if (GSYVideoManager.instance().listener() != null) {
-                GSYVideoManager.instance().listener().onCompletion();
-            }
-            GSYVideoManager.instance().releaseMediaPlayer();
-        } else {
-            IF_RELEASE_WHEN_ON_PAUSE = true;
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onCompletion();
         }
+        GSYVideoManager.instance().releaseMediaPlayer();
     }
 
     /**
      * 释放吧
      */
     public void release() {
-        CLICK_QUIT_FULLSCREEN_TIME = 0;
+        mSaveChangeViewTIme = 0;
         if (isCurrentMediaListener() &&
-                (System.currentTimeMillis() - CLICK_QUIT_FULLSCREEN_TIME) > FULL_SCREEN_NORMAL_DELAY) {
+                (System.currentTimeMillis() - mSaveChangeViewTIme) > CHANGE_DELAY_TIME) {
             releaseAllVideos();
         }
     }
@@ -730,6 +718,8 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
         }
     }
 
+    /************************* 需要继承处理部分 *************************/
+
     /**
      * 设置播放显示状态
      *
@@ -748,6 +738,7 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
      */
     public abstract void startPlayLogic();
 
+    /************************* 公开接口 *************************/
 
     /**
      * 设置自定义so包加载类，必须在setUp之前调用
@@ -837,6 +828,9 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
         return mBuffterPoint;
     }
 
+    /**
+     * 是否全屏
+     */
     public boolean isIfCurrentIsFullscreen() {
         return mIfCurrentIsFullscreen;
     }

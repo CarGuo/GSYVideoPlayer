@@ -343,7 +343,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                 if (mBottomContainer.getVisibility() == View.VISIBLE) {
                     changeUiToPrepareingClear();
                 } else {
-                    changeUiToPrepareingShow();
+                    changeUiToPreparingShow();
                 }
             }
         } else if (mCurrentState == CURRENT_STATE_PLAYING) {
@@ -409,8 +409,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     @Override
-    protected void changeUiToPrepareingShow() {
-        Debuger.printfLog("changeUiToPrepareingShow");
+    protected void changeUiToPreparingShow() {
+        Debuger.printfLog("changeUiToPreparingShow");
 
         setViewShowState(mTopContainer, VISIBLE);
         setViewShowState(mBottomContainer, VISIBLE);
