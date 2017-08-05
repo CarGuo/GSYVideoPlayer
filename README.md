@@ -180,6 +180,11 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.3'
 
 ## 近期版本
 
+### 2.0.3(2017-08-06)
+* update ijk to 0.8.2
+* fix rtsp 播放问题
+* fix 小窗口播放问题
+* 调整了部分代码逻辑与结构。
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
