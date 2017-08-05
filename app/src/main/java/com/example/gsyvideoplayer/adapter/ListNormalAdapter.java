@@ -87,7 +87,7 @@ public class ListNormalAdapter extends BaseAdapter {
         //final String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
 
         //默认缓存路径
-        holder.gsyVideoPlayer.setUp(url, true , null, "这是title");
+        holder.gsyVideoPlayer.setUp(url, true, null, "这是title");
 
         //holder.gsyVideoPlayer.setNeedShowWifiTip(false);
 
@@ -141,6 +141,7 @@ public class ListNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.setLockLand(true);
         holder.gsyVideoPlayer.setPlayTag(TAG);
         holder.gsyVideoPlayer.setShowFullAnimation(true);
+        holder.gsyVideoPlayer.setIsTouchWiget(false);
         //循环
         //holder.gsyVideoPlayer.setLooping(true);
         holder.gsyVideoPlayer.setNeedLockFull(true);
@@ -149,7 +150,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
         holder.gsyVideoPlayer.setPlayPosition(position);
 
-        holder.gsyVideoPlayer.setStandardVideoAllCallBack(new SampleListener(){
+        holder.gsyVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);

@@ -15,7 +15,6 @@ import android.view.InflateException;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
@@ -208,7 +207,18 @@ public abstract class GSYVideoView extends GSYTextureGroup implements GSYMediaPl
     }
 
 
-    public Context getActivityContext() {
+    protected void updatePauseCover() {
+        if ((mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) && mShowPauseCover) {
+            try {
+                initCover();
+            } catch (Exception e) {
+                e.printStackTrace();
+                mFullPauseBitmap = null;
+            }
+        }
+    }
+
+    protected Context getActivityContext() {
         return CommonUtil.getActivityContext(getContext());
     }
 
