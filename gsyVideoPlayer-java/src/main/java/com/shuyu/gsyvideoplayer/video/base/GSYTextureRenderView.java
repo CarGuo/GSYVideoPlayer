@@ -19,11 +19,11 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
 /**
- * 绘制层
+ * 绘制View
  * Created by guoshuyu on 2017/8/2.
  */
 
-public abstract class GSYTextureGroup extends FrameLayout implements TextureView.SurfaceTextureListener {
+public abstract class GSYTextureRenderView extends FrameLayout implements TextureView.SurfaceTextureListener {
 
     //native绘制
     protected Surface mSurface;
@@ -40,15 +40,15 @@ public abstract class GSYTextureGroup extends FrameLayout implements TextureView
     //画面选择角度
     protected int mRotate;
 
-    public GSYTextureGroup(@NonNull Context context) {
+    public GSYTextureRenderView(@NonNull Context context) {
         super(context);
     }
 
-    public GSYTextureGroup(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public GSYTextureRenderView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public GSYTextureGroup(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+    public GSYTextureRenderView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

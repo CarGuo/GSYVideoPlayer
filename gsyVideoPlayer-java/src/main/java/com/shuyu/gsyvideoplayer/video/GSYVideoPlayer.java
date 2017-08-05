@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 /**
+ * 兼容的空View
  * Created by shuyu on 2016/11/11.
  */
 

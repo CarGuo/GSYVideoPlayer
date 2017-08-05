@@ -28,6 +28,7 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showNavKey;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showSupportActionBar;
 
 /**
+ * 处理全屏和小屏幕逻辑
  * Created by shuyu on 2016/11/17.
  */
 
@@ -144,6 +145,256 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         }
     }
 
+
+    private ViewGroup getViewGroup() {
+        return (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
+    }
+
+    /**
+     * 移除没用的
+     */
+    private void removeVideo(ViewGroup vp, int id) {
+        View old = vp.findViewById(id);
+        if (old != null) {
+            if (old.getParent() != null) {
+                ViewGroup viewGroup = (ViewGroup) old.getParent();
+                vp.removeView(viewGroup);
+            }
+        }
+    }
+
+    /**
+     * 保存大小和状态
+     */
+    private void saveLocationStatus(Context context, boolean statusBar, boolean actionBar) {
+        getLocationOnScreen(mListItemRect);
+        int statusBarH = getStatusBarHeight(context);
+        int actionBerH = getActionBarHeight((Activity) context);
+        if (statusBar) {
+            mListItemRect[1] = mListItemRect[1] - statusBarH;
+        }
+        if (actionBar) {
+            mListItemRect[1] = mListItemRect[1] - actionBerH;
+        }
+        mListItemSize[0] = getWidth();
+        mListItemSize[1] = getHeight();
+    }
+
+    /**
+     * 克隆切换参数
+     *
+     * @param from
+     * @param to
+     */
+    private void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
+        to.setLooping(from.isLooping());
+        to.setSpeed(from.getSpeed(), from.mSoundTouch);
+        to.setIsTouchWigetFull(from.mIsTouchWigetFull);
+        to.mHadPlay = from.mHadPlay;
+        to.mCacheFile = from.mCacheFile;
+        to.mFullPauseBitmap = from.mFullPauseBitmap;
+        to.mNeedShowWifiTip = from.mNeedShowWifiTip;
+        to.mShrinkImageRes = from.mShrinkImageRes;
+        to.mEnlargeImageRes = from.mEnlargeImageRes;
+        to.mRotate = from.mRotate;
+        to.mShowPauseCover = from.mShowPauseCover;
+        to.mSeekRatio = from.mSeekRatio;
+        to.mNetChanged = from.mNetChanged;
+        to.mNetSate = from.mNetSate;
+        to.mRotateWithSystem = from.mRotateWithSystem;
+        to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
+        to.setStateAndUi(from.mCurrentState);
+    }
+
+    /**
+     * 全屏的暂停的时候返回页面不黑色
+     */
+    private void pauseFullCoverLogic() {
+        if (mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE && mTextureView != null
+                && (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) && mShowPauseCover) {
+            try {
+                initCover();
+            } catch (Exception e) {
+                e.printStackTrace();
+                mFullPauseBitmap = null;
+            }
+        }
+    }
+
+    /**
+     * 全屏的暂停返回的时候返回页面不黑色
+     */
+    private void pauseFullBackCoverLogic(GSYBaseVideoPlayer gsyVideoPlayer) {
+        //如果是暂停状态
+        if (gsyVideoPlayer.mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE
+                && gsyVideoPlayer.mTextureView != null && mShowPauseCover) {
+            //全屏的位图还在，说明没播放，直接用原来的
+            if (gsyVideoPlayer.mFullPauseBitmap != null
+                    && !gsyVideoPlayer.mFullPauseBitmap.isRecycled() && mShowPauseCover) {
+                mFullPauseBitmap = gsyVideoPlayer.mFullPauseBitmap;
+            } else if (mShowPauseCover) {
+                //不在了说明已经播放过，还是暂停的话，我们拿回来就好
+                try {
+                    initCover();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mFullPauseBitmap = null;
+                }
+            }
+        }
+    }
+
+    /**
+     * 全屏
+     */
+    protected void resolveFullVideoShow(Context context, final GSYBaseVideoPlayer gsyVideoPlayer, final FrameLayout frameLayout) {
+        LayoutParams lp = (LayoutParams) gsyVideoPlayer.getLayoutParams();
+        lp.setMargins(0, 0, 0, 0);
+        lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        lp.gravity = Gravity.CENTER;
+        gsyVideoPlayer.setLayoutParams(lp);
+        gsyVideoPlayer.setIfCurrentIsFullscreen(true);
+        mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
+        mOrientationUtils.setEnable(mRotateViewAuto);
+        mOrientationUtils.setRotateWithSystem(mRotateWithSystem);
+        gsyVideoPlayer.mOrientationUtils = mOrientationUtils;
+
+        if (isShowFullAnimation()) {
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mLockLand && mOrientationUtils.getIsLand() != 1) {
+                        mOrientationUtils.resolveByClick();
+                    }
+                    gsyVideoPlayer.setVisibility(VISIBLE);
+                    frameLayout.setVisibility(VISIBLE);
+                }
+            }, 300);
+        } else {
+            if (mLockLand) {
+                mOrientationUtils.resolveByClick();
+            }
+            gsyVideoPlayer.setVisibility(VISIBLE);
+            frameLayout.setVisibility(VISIBLE);
+        }
+
+
+        if (mVideoAllCallBack != null) {
+            Debuger.printfError("onEnterFullscreen");
+            mVideoAllCallBack.onEnterFullscreen(mOriginUrl, mTitle, gsyVideoPlayer);
+        }
+        mIfCurrentIsFullscreen = true;
+    }
+
+    /**
+     * 恢复
+     */
+    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
+
+        if (oldF != null && oldF.getParent() != null) {
+            ViewGroup viewGroup = (ViewGroup) oldF.getParent();
+            vp.removeView(viewGroup);
+        }
+        mCurrentState = GSYVideoManager.instance().getLastState();
+        if (gsyVideoPlayer != null) {
+            cloneParams(gsyVideoPlayer, this);
+        }
+        GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
+        GSYVideoManager.instance().setLastListener(null);
+        setStateAndUi(mCurrentState);
+        addTextureView();
+        mSaveChangeViewTIme = System.currentTimeMillis();
+        if (mVideoAllCallBack != null) {
+            Debuger.printfError("onQuitFullscreen");
+            mVideoAllCallBack.onQuitFullscreen(mOriginUrl, mTitle, this);
+        }
+        mIfCurrentIsFullscreen = false;
+        if (mHideKey) {
+            showNavKey(mContext, mSystemUiVisibility);
+        }
+        showSupportActionBar(mContext, mActionBar, mStatusBar);
+        getFullscreenButton().setImageResource(getEnlargeImageRes());
+    }
+
+
+
+
+    /**
+     * 退出window层播放全屏效果
+     */
+    @SuppressWarnings("ResourceType")
+    protected void clearFullscreenLayout() {
+        mIfCurrentIsFullscreen = false;
+        int delay = 0;
+        if (mOrientationUtils != null) {
+            delay = mOrientationUtils.backToProtVideo();
+            mOrientationUtils.setEnable(false);
+            if (mOrientationUtils != null) {
+                mOrientationUtils.releaseListener();
+                mOrientationUtils = null;
+            }
+        }
+
+
+        final ViewGroup vp = getViewGroup();
+        final View oldF = vp.findViewById(FULLSCREEN_ID);
+        if (oldF != null) {
+            //此处fix bug#265，推出全屏的时候，虚拟按键问题
+            GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer) oldF;
+            gsyVideoPlayer.mIfCurrentIsFullscreen = false;
+        }
+
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                backToNormal();
+            }
+        }, delay);
+
+    }
+
+    /**
+     * 回到正常效果
+     */
+    @SuppressWarnings("ResourceType")
+    protected void backToNormal() {
+
+        final ViewGroup vp = getViewGroup();
+
+        final View oldF = vp.findViewById(FULLSCREEN_ID);
+        final GSYVideoPlayer gsyVideoPlayer;
+        if (oldF != null) {
+            gsyVideoPlayer = (GSYVideoPlayer) oldF;
+            //如果暂停了
+            pauseFullBackCoverLogic(gsyVideoPlayer);
+            if (mShowFullAnimation) {
+                TransitionManager.beginDelayedTransition(vp);
+
+                LayoutParams lp = (LayoutParams) gsyVideoPlayer.getLayoutParams();
+                lp.setMargins(mListItemRect[0], mListItemRect[1], 0, 0);
+                lp.width = mListItemSize[0];
+                lp.height = mListItemSize[1];
+                //注意配置回来，不然动画效果会不对
+                lp.gravity = Gravity.NO_GRAVITY;
+                gsyVideoPlayer.setLayoutParams(lp);
+
+                postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
+                    }
+                }, 400);
+            } else {
+                resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
+            }
+
+        } else {
+            resolveNormalVideoShow(null, vp, null);
+        }
+    }
+
+    /************************* 开放接口 *************************/
 
     /**
      * 利用window层播放全屏效果
@@ -266,194 +517,6 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
 
     /**
-     * 全屏
-     */
-    protected void resolveFullVideoShow(Context context, final GSYBaseVideoPlayer gsyVideoPlayer, final FrameLayout frameLayout) {
-        LayoutParams lp = (LayoutParams) gsyVideoPlayer.getLayoutParams();
-        lp.setMargins(0, 0, 0, 0);
-        lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        lp.gravity = Gravity.CENTER;
-        gsyVideoPlayer.setLayoutParams(lp);
-        gsyVideoPlayer.setIfCurrentIsFullscreen(true);
-        mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
-        mOrientationUtils.setEnable(mRotateViewAuto);
-        mOrientationUtils.setRotateWithSystem(mRotateWithSystem);
-        gsyVideoPlayer.mOrientationUtils = mOrientationUtils;
-
-        if (isShowFullAnimation()) {
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mLockLand && mOrientationUtils.getIsLand() != 1) {
-                        mOrientationUtils.resolveByClick();
-                    }
-                    gsyVideoPlayer.setVisibility(VISIBLE);
-                    frameLayout.setVisibility(VISIBLE);
-                }
-            }, 300);
-        } else {
-            if (mLockLand) {
-                mOrientationUtils.resolveByClick();
-            }
-            gsyVideoPlayer.setVisibility(VISIBLE);
-            frameLayout.setVisibility(VISIBLE);
-        }
-
-
-        if (mVideoAllCallBack != null) {
-            Debuger.printfError("onEnterFullscreen");
-            mVideoAllCallBack.onEnterFullscreen(mOriginUrl, mTitle, gsyVideoPlayer);
-        }
-        mIfCurrentIsFullscreen = true;
-    }
-
-    /**
-     * 恢复
-     */
-    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
-
-        if (oldF != null && oldF.getParent() != null) {
-            ViewGroup viewGroup = (ViewGroup) oldF.getParent();
-            vp.removeView(viewGroup);
-        }
-        mCurrentState = GSYVideoManager.instance().getLastState();
-        if (gsyVideoPlayer != null) {
-            cloneParams(gsyVideoPlayer, this);
-        }
-        GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
-        GSYVideoManager.instance().setLastListener(null);
-        setStateAndUi(mCurrentState);
-        addTextureView();
-        CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
-        if (mVideoAllCallBack != null) {
-            Debuger.printfError("onQuitFullscreen");
-            mVideoAllCallBack.onQuitFullscreen(mOriginUrl, mTitle, this);
-        }
-        mIfCurrentIsFullscreen = false;
-        if (mHideKey) {
-            showNavKey(mContext, mSystemUiVisibility);
-        }
-        showSupportActionBar(mContext, mActionBar, mStatusBar);
-        getFullscreenButton().setImageResource(getEnlargeImageRes());
-    }
-
-
-
-
-    /**
-     * 退出window层播放全屏效果
-     */
-    @SuppressWarnings("ResourceType")
-    protected void clearFullscreenLayout() {
-        mIfCurrentIsFullscreen = false;
-        int delay = 0;
-        if (mOrientationUtils != null) {
-            delay = mOrientationUtils.backToProtVideo();
-            mOrientationUtils.setEnable(false);
-            if (mOrientationUtils != null) {
-                mOrientationUtils.releaseListener();
-                mOrientationUtils = null;
-            }
-        }
-
-
-        final ViewGroup vp = getViewGroup();
-        final View oldF = vp.findViewById(FULLSCREEN_ID);
-        if (oldF != null) {
-            //此处fix bug#265，推出全屏的时候，虚拟按键问题
-            GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer) oldF;
-            gsyVideoPlayer.mIfCurrentIsFullscreen = false;
-        }
-
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                backToNormal();
-            }
-        }, delay);
-
-    }
-
-    /**
-     * 回到正常效果
-     */
-    @SuppressWarnings("ResourceType")
-    protected void backToNormal() {
-
-        final ViewGroup vp = getViewGroup();
-
-        final View oldF = vp.findViewById(FULLSCREEN_ID);
-        final GSYVideoPlayer gsyVideoPlayer;
-        if (oldF != null) {
-            gsyVideoPlayer = (GSYVideoPlayer) oldF;
-            //如果暂停了
-            pauseFullBackCoverLogic(gsyVideoPlayer);
-            if (mShowFullAnimation) {
-                TransitionManager.beginDelayedTransition(vp);
-
-                LayoutParams lp = (LayoutParams) gsyVideoPlayer.getLayoutParams();
-                lp.setMargins(mListItemRect[0], mListItemRect[1], 0, 0);
-                lp.width = mListItemSize[0];
-                lp.height = mListItemSize[1];
-                //注意配置回来，不然动画效果会不对
-                lp.gravity = Gravity.NO_GRAVITY;
-                gsyVideoPlayer.setLayoutParams(lp);
-
-                postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
-                    }
-                }, 400);
-            } else {
-                resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
-            }
-
-        } else {
-            resolveNormalVideoShow(null, vp, null);
-        }
-    }
-
-    /**
-     * 全屏的暂停的时候返回页面不黑色
-     */
-    private void pauseFullCoverLogic() {
-        if (mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE && mTextureView != null
-                && (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) && mShowPauseCover) {
-            try {
-                initCover();
-            } catch (Exception e) {
-                e.printStackTrace();
-                mFullPauseBitmap = null;
-            }
-        }
-    }
-
-    /**
-     * 全屏的暂停返回的时候返回页面不黑色
-     */
-    private void pauseFullBackCoverLogic(GSYBaseVideoPlayer gsyVideoPlayer) {
-        //如果是暂停状态
-        if (gsyVideoPlayer.mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE
-                && gsyVideoPlayer.mTextureView != null && mShowPauseCover) {
-            //全屏的位图还在，说明没播放，直接用原来的
-            if (gsyVideoPlayer.mFullPauseBitmap != null
-                    && !gsyVideoPlayer.mFullPauseBitmap.isRecycled() && mShowPauseCover) {
-                mFullPauseBitmap = gsyVideoPlayer.mFullPauseBitmap;
-            } else if (mShowPauseCover) {
-                //不在了说明已经播放过，还是暂停的话，我们拿回来就好
-                try {
-                    initCover();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    mFullPauseBitmap = null;
-                }
-            }
-        }
-    }
-
-    /**
      * 显示小窗口
      */
     @SuppressWarnings("ResourceType")
@@ -532,75 +595,12 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         GSYVideoManager.instance().setLastListener(null);
         setStateAndUi(mCurrentState);
         addTextureView();
-        CLICK_QUIT_FULLSCREEN_TIME = System.currentTimeMillis();
+        mSaveChangeViewTIme = System.currentTimeMillis();
         if (mVideoAllCallBack != null) {
             Debuger.printfLog("onQuitSmallWidget");
             mVideoAllCallBack.onQuitSmallWidget(mOriginUrl, mTitle, this);
         }
     }
-
-
-
-    private ViewGroup getViewGroup() {
-        return (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
-    }
-
-    /**
-     * 移除没用的
-     */
-    private void removeVideo(ViewGroup vp, int id) {
-        View old = vp.findViewById(id);
-        if (old != null) {
-            if (old.getParent() != null) {
-                ViewGroup viewGroup = (ViewGroup) old.getParent();
-                vp.removeView(viewGroup);
-            }
-        }
-    }
-
-    /**
-     * 保存大小和状态
-     */
-    private void saveLocationStatus(Context context, boolean statusBar, boolean actionBar) {
-        getLocationOnScreen(mListItemRect);
-        int statusBarH = getStatusBarHeight(context);
-        int actionBerH = getActionBarHeight((Activity) context);
-        if (statusBar) {
-            mListItemRect[1] = mListItemRect[1] - statusBarH;
-        }
-        if (actionBar) {
-            mListItemRect[1] = mListItemRect[1] - actionBerH;
-        }
-        mListItemSize[0] = getWidth();
-        mListItemSize[1] = getHeight();
-    }
-
-    /**
-     * 克隆切换参数
-     *
-     * @param from
-     * @param to
-     */
-    private void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
-        to.setLooping(from.isLooping());
-        to.setSpeed(from.getSpeed(), from.mSoundTouch);
-        to.setIsTouchWigetFull(from.mIsTouchWigetFull);
-        to.mHadPlay = from.mHadPlay;
-        to.mCacheFile = from.mCacheFile;
-        to.mFullPauseBitmap = from.mFullPauseBitmap;
-        to.mNeedShowWifiTip = from.mNeedShowWifiTip;
-        to.mShrinkImageRes = from.mShrinkImageRes;
-        to.mEnlargeImageRes = from.mEnlargeImageRes;
-        to.mRotate = from.mRotate;
-        to.mShowPauseCover = from.mShowPauseCover;
-        to.mSeekRatio = from.mSeekRatio;
-        to.mNetChanged = from.mNetChanged;
-        to.mNetSate = from.mNetSate;
-        to.mRotateWithSystem = from.mRotateWithSystem;
-        to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
-        to.setStateAndUi(from.mCurrentState);
-    }
-
 
     public boolean isShowFullAnimation() {
         return mShowFullAnimation;

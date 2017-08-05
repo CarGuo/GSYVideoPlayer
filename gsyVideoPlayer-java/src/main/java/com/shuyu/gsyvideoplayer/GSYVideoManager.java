@@ -51,39 +51,53 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private static GSYVideoManager videoManager;
 
     public static final int HANDLER_PREPARE = 0;
+
     public static final int HANDLER_SETDISPLAY = 1;
+
     public static final int HANDLER_RELEASE = 2;
 
     public static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
 
     private AbstractMediaPlayer mediaPlayer;
+
     private HandlerThread mMediaHandlerThread;
+
     private MediaHandler mMediaHandler;
+
     private Handler mainThreadHandler;
 
     private WeakReference<GSYMediaPlayerListener> listener;
+
     private WeakReference<GSYMediaPlayerListener> lastListener;
 
-    // 单例模式实在不好给instance()加参数，还是直接设为静态变量吧
-    private static IjkLibLoader ijkLibLoader; //自定义so包加载类
+    //单例模式实在不好给instance()加参数，还是直接设为静态变量吧
+    //自定义so包加载类
+    private static IjkLibLoader ijkLibLoader;
 
-    private List<VideoOptionModel> optionModelList;//配置ijk option
+    //配置ijk option
+    private List<VideoOptionModel> optionModelList;
 
-    private HttpProxyCacheServer proxy; //视频代理
+    //视频代理
+    private HttpProxyCacheServer proxy;
 
     private File cacheFile;
 
-    private String playTag = ""; //播放的tag，防止错位置，因为普通的url也可能重复
+    //播放的tag，防止错位置，因为普通的url也可能重复
+    private String playTag = "";
 
     private Context context;
 
-    private int currentVideoWidth = 0; //当前播放的视频宽的高
+    //当前播放的视频宽的高
+    private int currentVideoWidth = 0;
 
-    private int currentVideoHeight = 0; //当前播放的视屏的高
+    //当前播放的视屏的高
+    private int currentVideoHeight = 0;
 
-    private int lastState;//当前视频的最后状态
+    //当前视频的最后状态
+    private int lastState;
 
-    private int playPosition = -22; //播放的tag，防止错位置，因为普通的url也可能重复
+    //播放的tag，防止错位置，因为普通的url也可能重复
+    private int playPosition = -22;
 
     private int buffterPoint;
 
@@ -91,9 +105,11 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private int videoType = GSYVideoType.IJKPLAYER;
 
-    private boolean needMute = false; //是否需要静音
+    //是否需要静音
+    private boolean needMute = false;
 
-    private boolean needTimeOutOther; //是否需要外部超时判断
+    //是否需要外部超时判断
+    private boolean needTimeOutOther;
 
 
     public static synchronized GSYVideoManager instance() {
@@ -112,7 +128,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
     public static IjkLibLoader getIjkLibLoader() {
-       return ijkLibLoader;
+        return ijkLibLoader;
     }
 
     /**
@@ -229,14 +245,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             this.lastListener = new WeakReference<>(lastListener);
     }
 
-    //public GSYVideoManager() {
-        //this(null);
-    //}
-
     /***
      * @param libLoader 是否使用外部动态加载so
      * */
-    public GSYVideoManager(IjkLibLoader libLoader) {
+    private GSYVideoManager(IjkLibLoader libLoader) {
         mediaPlayer = (libLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(libLoader);
         ijkLibLoader = libLoader;
         mMediaHandlerThread = new HandlerThread(TAG);
@@ -245,8 +257,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         mainThreadHandler = new Handler();
     }
 
-    public class MediaHandler extends Handler {
-        public MediaHandler(Looper looper) {
+    private class MediaHandler extends Handler {
+
+        MediaHandler(Looper looper) {
             super(looper);
         }
 
@@ -651,17 +664,17 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     /**
      * 是否需要在buffer缓冲时，增加外部超时判断
-     *
+     * <p>
      * 超时后会走onError接口，播放器通过onPlayError回调出
-     *
+     * <p>
      * 错误码为 ： BUFFER_TIME_OUT_ERROR = -192
-     *
+     * <p>
      * 由于onError之后执行GSYVideoPlayer的OnError，如果不想触发错误，
      * 可以重载onError，在super之前拦截处理。
-     *
+     * <p>
      * public void onError(int what, int extra){
-     *      do you want before super and return;
-     *      super.onError(what, extra)
+     * do you want before super and return;
+     * super.onError(what, extra)
      * }
      *
      * @param timeOut          超时时间，毫秒 默认8000
