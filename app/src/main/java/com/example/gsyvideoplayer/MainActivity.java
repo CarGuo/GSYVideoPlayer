@@ -1,6 +1,5 @@
 package com.example.gsyvideoplayer;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.open_btn)
     Button openBtn;
 
+    @BindView(R.id.open_btn_empty)
+    Button openBtn2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video, R.id.fragment_video, R.id.more_type, R.id.input_type})
+    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video, R.id.fragment_video, R.id.more_type, R.id.input_type, R.id.open_btn_empty})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.open_btn:
@@ -76,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.input_type:
                 JumpUtils.gotoInput(this);
+                break;
+            case R.id.open_btn_empty:
+                JumpUtils.goToPlayEmptyControlActivity(this, openBtn2);
                 break;
             case R.id.clear_cache:
                 //清理缓存

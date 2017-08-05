@@ -41,21 +41,6 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 public abstract class GSYVideoControlView extends GSYVideoView implements View.OnClickListener, View.OnTouchListener, SeekBar.OnSeekBarChangeListener {
 
 
-    //触摸的X
-    protected float mDownX;
-
-    //触摸的Y
-    protected float mDownY;
-
-    //移动的Y
-    protected float mMoveY;
-
-    //亮度
-    protected float mBrightnessData = -1;
-
-    //触摸滑动进度的比例系数
-    protected float mSeekRatio = 1;
-
     //手指放下的位置
     protected int mDownPosition;
 
@@ -76,6 +61,24 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     //全屏显示的案件图片
     protected int mEnlargeImageRes = -1;
+
+    //触摸显示后隐藏的时间
+    protected int mDismissControlTime = 2500;
+
+    //触摸的X
+    protected float mDownX;
+
+    //触摸的Y
+    protected float mDownY;
+
+    //移动的Y
+    protected float mMoveY;
+
+    //亮度
+    protected float mBrightnessData = -1;
+
+    //触摸滑动进度的比例系数
+    protected float mSeekRatio = 1;
 
     //触摸的是否进度条
     protected boolean mTouchingProgressBar = false;
@@ -116,38 +119,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //是否需要锁定屏幕
     protected boolean mNeedLockFull;
 
-    //进度定时器
-    protected Timer updateProcessTimer;
-
-    //定时器任务
-    protected ProgressTimerTask mProgressTimerTask;
-
     //播放按键
     protected View mStartButton;
-
-    //进度条
-    protected SeekBar mProgressBar;
-
-    //全屏按键
-    protected ImageView mFullscreenButton;
-
-    //时间显示
-    protected TextView mCurrentTimeTextView, mTotalTimeTextView;
-
-    //顶部和底部区域
-    protected ViewGroup mTopContainer, mBottomContainer;
-
-    //返回按键
-    protected ImageView mBackButton;
-
-    //锁定图标
-    protected ImageView mLockScreen;
-
-    //title
-    protected TextView mTitleTextView;
-
-    //封面父布局
-    protected RelativeLayout mThumbImageViewLayout;
 
     //封面
     protected View mThumbImageView;
@@ -155,18 +128,46 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //loading view
     protected View mLoadingProgressBar;
 
+    //进度条
+    protected SeekBar mProgressBar;
+
+    //全屏按键
+    protected ImageView mFullscreenButton;
+
+    //返回按键
+    protected ImageView mBackButton;
+
+    //锁定图标
+    protected ImageView mLockScreen;
+
+    //时间显示
+    protected TextView mCurrentTimeTextView, mTotalTimeTextView;
+
+    //title
+    protected TextView mTitleTextView;
+
+    //顶部和底部区域
+    protected ViewGroup mTopContainer, mBottomContainer;
+
+    //封面父布局
+    protected RelativeLayout mThumbImageViewLayout;
+
     //底部进度调
     protected ProgressBar mBottomProgressBar;
+
+    //进度定时器
+    protected Timer updateProcessTimer;
+
+    //触摸显示消失定时
+    protected Timer mDismissControlViewTimer;
+
+    //定时器任务
+    protected ProgressTimerTask mProgressTimerTask;
 
     //点击锁屏的回调
     protected LockClickListener mLockClickListener;
 
-    //触摸显示后隐藏的时间
-    protected int mDismissControlTime = 2500;
-
-
-    protected Timer mDismissControlViewTimer;
-
+    //触摸显示消失定时任务
     protected DismissControlViewTimerTask mDismissControlViewTimerTask;
 
 
@@ -474,7 +475,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
 
-
     /**
      * 设置播放URL
      *
@@ -504,10 +504,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 mTitleTextView.setText(title);
             }
             if (mIfCurrentIsFullscreen) {
-                mFullscreenButton.setImageResource(getShrinkImageRes());
+                if (mFullscreenButton != null)
+                    mFullscreenButton.setImageResource(getShrinkImageRes());
             } else {
-                mFullscreenButton.setImageResource(getEnlargeImageRes());
-                mBackButton.setVisibility(View.GONE);
+                if (mFullscreenButton != null)
+                    mFullscreenButton.setImageResource(getEnlargeImageRes());
+                setViewShowState(mBackButton, GONE);
             }
             return true;
         }
@@ -644,7 +646,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mChangePosition) {
             int duration = getDuration();
             int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
-            mBottomProgressBar.setProgress(progress);
+            if (mBottomProgressBar != null)
+                mBottomProgressBar.setProgress(progress);
         }
         if (!mChangePosition && !mChangeVolume && !mBrightness) {
             onClickUiToggle();
@@ -680,6 +683,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     /**
      * 处理控制显示
+     *
      * @param state
      */
     protected void resolveUIState(int state) {
@@ -870,11 +874,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     protected void resolveThumbImage(View thumb) {
-        mThumbImageViewLayout.addView(thumb);
-        ViewGroup.LayoutParams layoutParams = thumb.getLayoutParams();
-        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        thumb.setLayoutParams(layoutParams);
+        if (mThumbImageViewLayout != null) {
+            mThumbImageViewLayout.addView(thumb);
+            ViewGroup.LayoutParams layoutParams = thumb.getLayoutParams();
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            thumb.setLayoutParams(layoutParams);
+        }
     }
 
 
@@ -934,7 +940,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                         @Override
                         public void run() {
                             hideAllWidget();
-                            mLockScreen.setVisibility(GONE);
+                            setViewShowState(mLockScreen, GONE);
                             if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
                                 hideNavKey(mContext);
                             }
