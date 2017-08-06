@@ -1,25 +1,17 @@
 package com.example.gsyvideoplayer;
 
 import android.annotation.TargetApi;
-import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
-import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.video.EmptyControlVideo;
-import com.example.gsyvideoplayer.video.SampleVideo;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
