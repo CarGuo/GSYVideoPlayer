@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.video.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;

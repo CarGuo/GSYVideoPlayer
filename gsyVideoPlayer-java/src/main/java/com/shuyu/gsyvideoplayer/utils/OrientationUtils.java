@@ -5,7 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.provider.Settings;
 import android.view.OrientationEventListener;
 
-import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 /**
  * 处理屏幕旋转的的逻辑

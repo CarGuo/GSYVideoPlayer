@@ -11,8 +11,8 @@ import android.widget.SeekBar;
 
 import com.shuyu.gsyvideoplayer.GSYPreViewManager;
 import com.shuyu.gsyvideoplayer.GSYTextureView;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 /**
  * Created by shuyu on 2016/12/10.

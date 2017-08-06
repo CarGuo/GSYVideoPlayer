@@ -1,4 +1,4 @@
-package com.shuyu.gsyvideoplayer.video;
+package com.shuyu.gsyvideoplayer.video.base;
 
 import android.content.Context;
 import android.util.AttributeSet;

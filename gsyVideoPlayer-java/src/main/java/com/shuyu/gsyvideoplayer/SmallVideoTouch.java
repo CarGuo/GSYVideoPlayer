@@ -4,7 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.shuyu.gsyvideoplayer.video.GSYBaseVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 public class SmallVideoTouch implements View.OnTouchListener {
 
