@@ -160,10 +160,10 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.3'
 　
 ## 运行效果
 
-* ### 1、打开一个播放
+* ### 1、打开一个播放(旋转、镜像、填充)
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/11.gif" width="240px" height="426px"/>
 
-* ### 2、列表/详情模式
+* ### 2、列表/详情模式(动画、旋转、小窗体)
 
 <div>
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/22.gif" width="240px" height="426px"/>
