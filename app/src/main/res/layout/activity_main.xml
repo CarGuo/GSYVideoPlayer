@@ -22,11 +22,18 @@
             android:text="Open Video" />
 
         <Button
+            android:id="@+id/open_control"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Control" />
+
+        <Button
             android:id="@+id/open_btn_empty"
             android:layout_width="120dp"
-            android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:text="No UI Video" />
+            android:layout_marginTop="20dp"
+            android:text="NO UI" />
 
         <Button
             android:id="@+id/list_btn"

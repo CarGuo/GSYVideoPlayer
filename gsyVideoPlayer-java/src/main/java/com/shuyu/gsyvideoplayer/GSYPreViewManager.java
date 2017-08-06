@@ -18,6 +18,7 @@ import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
+ * 小窗口预览管理
  * Created by shuyu on 2016/12/11.
  */
 
@@ -27,9 +28,9 @@ public class GSYPreViewManager implements IMediaPlayer.OnPreparedListener, IjkMe
 
     private static GSYPreViewManager videoManager;
 
-    public static final int HANDLER_PREPARE = 0;
-    public static final int HANDLER_SETDISPLAY = 1;
-    public static final int HANDLER_RELEASE = 2;
+    private static final int HANDLER_PREPARE = 0;
+    private static final int HANDLER_SETDISPLAY = 1;
+    private static final int HANDLER_RELEASE = 2;
 
     private IjkMediaPlayer mediaPlayer;
     private HandlerThread mMediaHandlerThread;
@@ -45,7 +46,7 @@ public class GSYPreViewManager implements IMediaPlayer.OnPreparedListener, IjkMe
         return videoManager;
     }
 
-    public GSYPreViewManager() {
+    private GSYPreViewManager() {
         IjkLibLoader libLoader = GSYVideoManager.getIjkLibLoader();
         mediaPlayer = (libLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(libLoader);
         ijkLibLoader = libLoader;
@@ -55,8 +56,8 @@ public class GSYPreViewManager implements IMediaPlayer.OnPreparedListener, IjkMe
         mMediaHandler = new MediaHandler((mMediaHandlerThread.getLooper()));
     }
 
-    public class MediaHandler extends Handler {
-        public MediaHandler(Looper looper) {
+    private class MediaHandler extends Handler {
+        MediaHandler(Looper looper) {
             super(looper);
         }
 

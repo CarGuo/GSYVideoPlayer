@@ -901,6 +901,20 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         }
     }
 
+    /**
+     * 播放中生效的播放数据
+     * @param speed
+     * @param soundTouch
+     */
+    public void setSpeedPlaying(float speed, boolean soundTouch) {
+        setSpeed(speed, soundTouch);
+        if (GSYVideoManager.instance().getMediaPlayer() != null ) {
+            IjkMediaPlayer ijkMediaPlayer = (IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer();
+            ijkMediaPlayer.setSpeed(speed);
+            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", (soundTouch) ? 1 : 0);
+        }
+    }
+
     public boolean isShowPauseCover() {
         return mShowPauseCover;
     }
