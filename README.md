@@ -2,28 +2,32 @@
 ![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/home_logo.png)
 
 ## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
- 
-* **支持边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)。**
-* **支持视频本身rotation旋转属性。**
-* **支持重力旋转与手动旋转。**
-* **支持列表播放。**
-* **支持全屏切换动画效果。**
-* **支持小窗口播放，可拖动。**
-* **支持网络视频加载速度。**
-* **支持锁定/解锁全屏点击功能。**
-* **支持快播和慢播。**
-* **支持调整显示比例:默认、16:9、4:3、填充。**
-* **支持播放时旋转画面角度（0,90,180,270）。**
-* **支持镜像旋转**
-* **支持暂停前后台切换不黑屏**
-* **支持调整不同清晰度的支持。**
-* **支持IJKPlayer和EXOPlayer切换。**
-* **支持进度条小窗口预览（测试）。**
-* **支持Https**
-* **支持列表连续播放**
-* **支持全屏与非全屏两套布局切换**
-* **支持弹幕功能**
-* **支持concat、rtsp、crypto、mpeg等**
+
+类 | 说明
+-------- | ---
+**支持**|**边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)。**
+**支持**|**视频本身rotation旋转属性。**
+**支持**|**重力旋转与手动旋转。**
+**支持**|**列表播放。**
+**支持**|**全屏切换动画效果。**
+**支持**|**小窗口播放，可拖动。**
+**支持**|**网络视频加载速度。**
+**支持**|**锁定/解锁全屏点击功能。**
+**支持**|**快播和慢播。**
+**支持**|**调整显示比例:默认、16:9、4:3、填充。**
+**支持**|**播放时旋转画面角度（0,90,180,270）。**
+**支持**|**镜像旋转。**
+**支持**|**暂停前后台切换不黑屏。**
+**支持**|**调整不同清晰度的支持。**
+**支持**|**IJKPlayer和EXOPlayer切换。**
+**支持**|**进度条小窗口预览（测试）。**
+**支持**|**Https。**
+**支持**|**列表连续播放。**
+**支持**|**全屏与非全屏两套布局切换。**
+**支持**|**弹幕功能。**
+**支持**|**concat、rtsp、crypto、mpeg等。**
+待支持|**自带广告功能（目前需要自己实现）。**
+待支持|**没有任何操作控件的纯播放支持。**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
