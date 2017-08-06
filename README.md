@@ -172,7 +172,7 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.3'
 </div>
 
 * ### 3、弹幕
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/55.gif" width="426px" height="240px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/55.gif" width="240px" height="426px"/>
 
 * ### 4、进度条小窗口预览
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
