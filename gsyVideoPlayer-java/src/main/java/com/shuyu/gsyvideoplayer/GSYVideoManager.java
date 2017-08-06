@@ -50,13 +50,13 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private static GSYVideoManager videoManager;
 
-    public static final int HANDLER_PREPARE = 0;
+    private static final int HANDLER_PREPARE = 0;
 
-    public static final int HANDLER_SETDISPLAY = 1;
+    private static final int HANDLER_SETDISPLAY = 1;
 
-    public static final int HANDLER_RELEASE = 2;
+    private static final int HANDLER_RELEASE = 2;
 
-    public static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
+    private static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
 
     private AbstractMediaPlayer mediaPlayer;
 

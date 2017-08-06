@@ -8,6 +8,7 @@ import android.support.v4.util.Pair;
 import android.view.View;
 
 import com.example.gsyvideoplayer.DanmkuVideoActivity;
+import com.example.gsyvideoplayer.DetailControlActivity;
 import com.example.gsyvideoplayer.DetailListPlayer;
 import com.example.gsyvideoplayer.DetailMoreTypeActivity;
 import com.example.gsyvideoplayer.DetailPlayer;
@@ -165,6 +166,7 @@ public class JumpUtils {
 
     /**
      * 跳到多类型
+     *
      * @param activity
      */
     public static void gotoMoreType(Activity activity) {
@@ -174,10 +176,21 @@ public class JumpUtils {
 
     /**
      * 跳到可输入
+     *
      * @param activity
      */
     public static void gotoInput(Activity activity) {
         Intent intent = new Intent(activity, InputUrlDetailActivity.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳到可控制
+     *
+     * @param activity
+     */
+    public static void gotoControl(Activity activity) {
+        Intent intent = new Intent(activity, DetailControlActivity.class);
         activity.startActivity(intent);
     }
 }

@@ -6,16 +6,19 @@ import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
+import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.example.gsyvideoplayer.video.SampleVideo;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,43 +31,38 @@ import butterknife.ButterKnife;
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
  */
 
-public class DetailMoreTypeActivity extends AppCompatActivity{
+public class DetailControlActivity extends AppCompatActivity {
     @BindView(R.id.post_detail_nested_scroll)
     NestedScrollView postDetailNestedScroll;
 
     //推荐使用StandardGSYVideoPlayer，功能一致
     //CustomGSYVideoPlayer部分功能处于试验阶段
     @BindView(R.id.detail_player)
-    SampleVideo detailPlayer;
+    SampleControlVideo detailPlayer;
 
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
+
+    @BindView(R.id.change_speed)
+    Button changeSpeed;
+
 
     private boolean isPlay;
     private boolean isPause;
 
     private OrientationUtils orientationUtils;
 
+    private float speed = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_more_type);
+        setContentView(R.layout.activity_detail_control);
         ButterKnife.bind(this);
 
-        String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        //String source1 = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        String name = "普通";
-        SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
+        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
-        String source2 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4";
-        String name2 = "清晰";
-        SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
-
-        List<SwitchVideoModel> list = new ArrayList<>();
-        list.add(switchVideoModel);
-        list.add(switchVideoModel2);
-
-        detailPlayer.setUp(list, true, "");
+        detailPlayer.setUp(url, true, "");
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -95,7 +93,7 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
                 orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(DetailMoreTypeActivity.this, true, true);
+                detailPlayer.startWindowFullscreen(DetailControlActivity.this, true, true);
             }
         });
 
@@ -134,6 +132,13 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
                     //配合下方的onConfigurationChanged
                     orientationUtils.setEnable(!lock);
                 }
+            }
+        });
+
+        changeSpeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resolveTypeUI();
             }
         });
 
@@ -181,7 +186,7 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
         if (isPlay && !isPause) {
             if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
                 if (!detailPlayer.isIfCurrentIsFullscreen()) {
-                    detailPlayer.startWindowFullscreen(DetailMoreTypeActivity.this, true, true);
+                    detailPlayer.startWindowFullscreen(DetailControlActivity.this, true, true);
                 }
             } else {
                 //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
@@ -202,4 +207,27 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
         detailPlayer.getTitleTextView().setText("测试视频");
         detailPlayer.getBackButton().setVisibility(View.GONE);
     }
+
+
+    /**
+     * 显示比例
+     * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
+     */
+    private void resolveTypeUI() {
+        if (speed == 1) {
+            speed = 1.5f;
+        } else if (speed == 1.5f) {
+            speed = 2f;
+        } else if (speed == 2) {
+            speed = 0.5f;
+        } else if (speed == 0.5f) {
+            speed = 0.25f;
+        } else if (speed == 0.25f) {
+            speed = 1;
+        }
+        changeSpeed.setText("播放速度：" + speed);
+        detailPlayer.setSpeedPlaying(speed, true);
+    }
+
+
 }
