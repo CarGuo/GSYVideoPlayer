@@ -1055,7 +1055,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     public int getEnlargeImageRes() {
-        if (mShrinkImageRes == -1) {
+        if (mEnlargeImageRes == -1) {
             return R.drawable.video_enlarge;
         }
         return mEnlargeImageRes;
