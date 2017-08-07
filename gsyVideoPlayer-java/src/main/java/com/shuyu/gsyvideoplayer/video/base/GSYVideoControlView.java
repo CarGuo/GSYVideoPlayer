@@ -365,7 +365,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 return;
             }
             if (TextUtils.isEmpty(mUrl)) {
-                Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+                Debuger.printfError("********" + getResources().getString(R.string.no_url));
+                //Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (mCurrentState == CURRENT_STATE_NORMAL) {
@@ -723,7 +724,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     protected void clickStartIcon() {
         if (TextUtils.isEmpty(mUrl)) {
-            Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+            Debuger.printfError("********" + getResources().getString(R.string.no_url));
+            //Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
             return;
         }
         if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {
