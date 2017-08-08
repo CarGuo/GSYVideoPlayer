@@ -1,8 +1,14 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
-### 2.0.4(2017-08-xx)
+### 2.0.4(2017-08-08)
 * 增加了空播放ui支持。
+* 调整了GSYVideoOptionBuilder。
+* 修改了已知问题。
+* 增加了播放中调整播放速度接口。
+```
+public void setSpeedPlaying(float speed, boolean soundTouch) 
+```
 
 ### 2.0.3(2017-08-06)
 * update ijk to 0.8.2

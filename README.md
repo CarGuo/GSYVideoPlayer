@@ -16,8 +16,8 @@
 **支持**|**锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **支持**|**全屏与非全屏两套布局切换；弹幕功能。**
 **支持**|**其他协议和编码concat、rtsp、crypto、mpeg等。**
+**支持**|**没有任何操作控件的纯播放支持。**
 待支持|**自带广告功能（目前需要自己实现）。**
-待支持|**没有任何操作控件的纯播放支持。**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
@@ -25,7 +25,7 @@
 
 ## 使用依赖(支持jcenter或jitpack)
 
-##### 新版本调整了代码结构，如更新好冲突，参考demo调整包路径即可。
+##### 新版本调整了代码结构，如更新后显示类路径错误，参考demo调整包路径即可。
 
 ### 1、JCenter 引入方法（推荐）
 
@@ -34,21 +34,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:2.0.3'
+compile 'com.shuyu:GSYVideoPlayer:2.0.4'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.0.3'
+compile 'com.shuyu:gsyVideoPlayer-java:2.0.4'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.3'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.3'
-compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.3'
-compile 'com.shuyu:gsyVideoPlayer-x64:2.0.3'
-compile 'com.shuyu:gsyVideoPlayer-x86:2.0.3'
+compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.4'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.4'
+compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.4'
+compile 'com.shuyu:gsyVideoPlayer-x64:2.0.4'
+compile 'com.shuyu:gsyVideoPlayer-x86:2.0.4'
 
 ```
 
@@ -58,9 +58,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.0.3' 
+compile 'com.shuyu:gsyVideoPlayer-java:2.0.4' 
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.3' 
+compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.4' 
 
 ```
 
@@ -95,7 +95,7 @@ allprojects {
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.3'
+compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.4'
 
 ```
 
@@ -103,14 +103,14 @@ compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.3'
 
 ```
 
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.3'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.4'
 
 //根据你的需求
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.0.3'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.0.3'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.0.3'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.0.3'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.0.3'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.0.4'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.0.4'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.0.4'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.0.4'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.0.4'
 
 ```
 
@@ -120,9 +120,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 方法引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.3'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.4'
 
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.3'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.4'
 
 ```
    
@@ -172,6 +172,15 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.3'
 
 ## 近期版本
 
+### 2.0.4(2017-08-08)
+* 增加了空播放ui支持。
+* 调整了GSYVideoOptionBuilder。
+* 修改了已知问题。
+* 增加了播放中调整播放速度接口。
+```
+public void setSpeedPlaying(float speed, boolean soundTouch) 
+```
+
 ### 2.0.3(2017-08-06)
 * update ijk to 0.8.2
 * fix rtsp 播放问题
@@ -194,6 +203,8 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.3'
 3、补充问题的视频流url，截图。
 4、补充问题的机型，android版本。
 ```
+
+-------------------
 
 ## 混淆
 
