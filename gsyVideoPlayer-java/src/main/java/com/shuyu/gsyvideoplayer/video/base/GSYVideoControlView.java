@@ -1179,7 +1179,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         this.mLockClickListener = lockClickListener;
     }
 
-
     /**
      * 设置触摸显示控制ui的消失时间
      *
