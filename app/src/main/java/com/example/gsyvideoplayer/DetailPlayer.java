@@ -13,7 +13,7 @@ import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-import com.shuyu.gsyvideoplayer.builder.GSYVideoBuilder;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -86,8 +86,8 @@ public class DetailPlayer extends AppCompatActivity {
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
-        GSYVideoBuilder gsyVideoBuilder = new GSYVideoBuilder();
-        gsyVideoBuilder.setThumbImageView(imageView)
+        GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
+        gsyVideoOption.setThumbImageView(imageView)
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)

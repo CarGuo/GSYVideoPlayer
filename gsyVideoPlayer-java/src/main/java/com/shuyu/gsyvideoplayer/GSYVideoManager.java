@@ -1,6 +1,7 @@
 package com.shuyu.gsyvideoplayer;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -48,6 +49,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     public static String TAG = "GSYVideoManager";
 
+    @SuppressLint("StaticFieldLeak")
     private static GSYVideoManager videoManager;
 
     private static final int HANDLER_PREPARE = 0;
@@ -59,8 +61,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
 
     private AbstractMediaPlayer mediaPlayer;
-
-    private HandlerThread mMediaHandlerThread;
 
     private MediaHandler mMediaHandler;
 
@@ -80,6 +80,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     //视频代理
     private HttpProxyCacheServer proxy;
 
+    //是否需要的自定义缓冲路径
     private File cacheFile;
 
     //播放的tag，防止错位置，因为普通的url也可能重复
@@ -99,10 +100,13 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     //播放的tag，防止错位置，因为普通的url也可能重复
     private int playPosition = -22;
 
+    //缓冲比例
     private int buffterPoint;
 
+    //播放超时
     private int timeOut = 8 * 1000;
 
+    //播放类型，默认IJK
     private int videoType = GSYVideoType.IJKPLAYER;
 
     //是否需要静音
@@ -131,14 +135,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         return ijkLibLoader;
     }
 
-    /**
-     * 获取缓存代理服务
-     */
-    public static HttpProxyCacheServer getProxy(Context context) {
-        HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
-        return proxy == null ? (GSYVideoManager.instance().proxy =
-                GSYVideoManager.instance().newProxy(context)) : proxy;
-    }
 
     /**
      * 删除默认所有缓存文件
@@ -165,6 +161,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         CommonUtil.deleteFile(path);
 
     }
+
 
     /**
      * 获取缓存代理服务,带文件目录的
@@ -195,6 +192,16 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             return proxy == null ? (GSYVideoManager.instance().proxy =
                     GSYVideoManager.instance().newProxy(context, file)) : proxy;
         }
+    }
+
+
+    /**
+     * 获取缓存代理服务
+     */
+    private static HttpProxyCacheServer getProxy(Context context) {
+        HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
+        return proxy == null ? (GSYVideoManager.instance().proxy =
+                GSYVideoManager.instance().newProxy(context)) : proxy;
     }
 
     /**
@@ -251,9 +258,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private GSYVideoManager(IjkLibLoader libLoader) {
         mediaPlayer = (libLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(libLoader);
         ijkLibLoader = libLoader;
-        mMediaHandlerThread = new HandlerThread(TAG);
-        mMediaHandlerThread.start();
-        mMediaHandler = new MediaHandler((mMediaHandlerThread.getLooper()));
+        HandlerThread mediaHandlerThread = new HandlerThread(TAG);
+        mediaHandlerThread.start();
+        mMediaHandler = new MediaHandler((mediaHandlerThread.getLooper()));
         mainThreadHandler = new Handler();
     }
 
