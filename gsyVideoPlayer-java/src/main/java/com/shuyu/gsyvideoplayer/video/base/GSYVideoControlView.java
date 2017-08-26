@@ -713,6 +713,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      * 如果不需要，重载为空方法即可
      */
     protected void touchDoubleUp() {
+        if (!mHadPlay) {
+            return;
+        }
         mTapCount++;
         if (mTapCount == 1) {
             mFirstTapTime = System.currentTimeMillis();
