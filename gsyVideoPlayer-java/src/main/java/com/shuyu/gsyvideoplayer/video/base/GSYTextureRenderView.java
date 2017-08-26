@@ -9,11 +9,16 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.TextureView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.shuyu.gsyvideoplayer.GSYRenderView;
+import com.shuyu.gsyvideoplayer.GSYSurfaceView;
 import com.shuyu.gsyvideoplayer.GSYTextureView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -23,13 +28,13 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
  * Created by guoshuyu on 2017/8/2.
  */
 
-public abstract class GSYTextureRenderView extends FrameLayout implements TextureView.SurfaceTextureListener {
+public abstract class GSYTextureRenderView extends FrameLayout implements TextureView.SurfaceTextureListener, SurfaceHolder.Callback2 {
 
     //native绘制
     protected Surface mSurface;
 
     //渲染控件
-    protected GSYTextureView mTextureView;
+    protected GSYRenderView mTextureView;
 
     //渲染控件父类
     protected ViewGroup mTextureViewContainer;
@@ -52,15 +57,12 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
         super(context, attrs, defStyleAttr);
     }
 
+    /******************** TextureView  ****************************/
+
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-
-        mSurface = new Surface(surface);
-
-        //显示暂停切换显示的图片
-        showPauseCover();
-
-        GSYVideoManager.instance().setDisplay(mSurface);
+        Surface newSurface = new Surface(surface);
+        pauseLogic(newSurface, true);
     }
 
     @Override
@@ -82,33 +84,58 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
         releasePauseCover();
     }
 
+    /******************** SurfaceView ****************************/
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        pauseLogic(holder.getSurface(), false);
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        //清空释放
+        GSYVideoManager.instance().setDisplay(null);
+        holder.getSurface().release();
+    }
+
+    @Override
+    public void surfaceRedrawNeeded(SurfaceHolder holder) {
+    }
+
+
+    /**
+     * 暂停逻辑
+     */
+    protected void pauseLogic(Surface surface, boolean pauseLogic) {
+        mSurface = surface;
+        if (pauseLogic)
+            //显示暂停切换显示的图片
+            showPauseCover();
+        GSYVideoManager.instance().setDisplay(mSurface);
+    }
+
     /**
      * 添加播放的view
      */
     protected void addTextureView() {
-        if (mTextureViewContainer.getChildCount() > 0) {
-            mTextureViewContainer.removeAllViews();
-        }
-        mTextureView = null;
-        mTextureView = new GSYTextureView(getContext());
-        mTextureView.setSurfaceTextureListener(this);
-        mTextureView.setRotation(mRotate);
 
-        int params = getTextureParams();
+        mTextureView = new GSYRenderView();
 
-        if (mTextureViewContainer instanceof RelativeLayout) {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(params, params);
-            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            mTextureViewContainer.addView(mTextureView, layoutParams);
-        } else if (mTextureViewContainer instanceof FrameLayout) {
-            LayoutParams layoutParams = new LayoutParams(params, params);
-            layoutParams.gravity = Gravity.CENTER;
-            mTextureViewContainer.addView(mTextureView, layoutParams);
+        if (GSYVideoType.getRenderType() == GSYVideoType.SUFRACE) {
+            mTextureView.addSurfaceView(getContext(), mTextureViewContainer, mRotate, this);
+            return;
         }
+        mTextureView.addTextureView(getContext(), mTextureViewContainer, mRotate, this);
+
     }
 
     /**
      * 获取布局参数
+     *
      * @return
      */
     protected int getTextureParams() {
@@ -131,10 +158,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
      * 暂停时初始化位图
      */
     protected void initCover() {
-        Bitmap bitmap = Bitmap.createBitmap(
-                mTextureView.getSizeW(), mTextureView.getSizeH(), Bitmap.Config.RGB_565);
-        mFullPauseBitmap = mTextureView.getBitmap(bitmap);
-        //bitmap.recycle();
+        mFullPauseBitmap = mTextureView.initCover();
     }
 
     /**
