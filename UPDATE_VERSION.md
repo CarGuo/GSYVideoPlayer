@@ -1,5 +1,9 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 2.0.5(2017-08-26)
+* 增加双击暂停开始。
+* 增加了SurfaceView的支持:GSYVideoType.setRenderType(GSYVideoType.SUFRACE)。
+* 优化了触摸问题、内存问题、dismisstime问题。
 
 ### 2.0.4(2017-08-08)
 * 增加了空播放ui支持。
