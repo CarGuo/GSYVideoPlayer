@@ -65,6 +65,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //触摸显示后隐藏的时间
     protected int mDismissControlTime = 2500;
 
+    //已点击次数
+    protected int mTapCount;
+
     //触摸的X
     protected float mDownX;
 
@@ -79,6 +82,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     //触摸滑动进度的比例系数
     protected float mSeekRatio = 1;
+
+    //第一次点击时间
+    protected long mFirstTapTime;
+
+    //第二次点击时间
+    protected long mSecondTapTime;
 
     //触摸的是否进度条
     protected boolean mTouchingProgressBar = false;
@@ -448,6 +457,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     touchSurfaceUp();
 
                     startProgressTimer();
+
+                    touchDoubleUp();
                     //不要和隐藏虚拟按键后，滑出虚拟按键冲突
                     if (mHideKey && mShowVKey) {
                         return true;
@@ -694,6 +705,25 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 Debuger.printfLog("onTouchScreenSeekVolume");
                 mVideoAllCallBack.onTouchScreenSeekVolume(mOriginUrl, mTitle, this);
             }
+        }
+    }
+
+    /**
+     * 双击暂停/播放
+     * 如果不需要，重载为空方法即可
+     */
+    protected void touchDoubleUp() {
+        mTapCount++;
+        if (mTapCount == 1) {
+            mFirstTapTime = System.currentTimeMillis();
+        } else if (mTapCount == 2) {
+            mSecondTapTime = System.currentTimeMillis();
+            if (mSecondTapTime - mFirstTapTime < 600) {
+                clickStartIcon();
+            }
+            mTapCount = 0;
+            mFirstTapTime = 0;
+            mSecondTapTime = 0;
         }
     }
 
