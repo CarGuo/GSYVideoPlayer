@@ -918,6 +918,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected void resolveThumbImage(View thumb) {
         if (mThumbImageViewLayout != null) {
+            mThumbImageViewLayout.removeAllViews();
             mThumbImageViewLayout.addView(thumb);
             ViewGroup.LayoutParams layoutParams = thumb.getLayoutParams();
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
