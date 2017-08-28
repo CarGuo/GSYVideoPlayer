@@ -42,4 +42,10 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
         //不给触摸亮度，如果需要，屏蔽下方代码即可
         mBrightness = false;
     }
+
+    @Override
+    protected void touchDoubleUp() {
+        //super.touchDoubleUp();
+        //不需要双击暂停
+    }
 }
