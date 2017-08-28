@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
+
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.SmallVideoTouch;
@@ -19,6 +20,7 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.transitionseverywhere.TransitionManager;
 
 import java.lang.reflect.Constructor;
+
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getActionBarHeight;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getStatusBarHeight;
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
@@ -103,21 +105,21 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      **/
     @Override
     protected void setSmallVideoTextureView() {
-        if(mProgressBar != null) {
+        if (mProgressBar != null) {
             mProgressBar.setOnTouchListener(null);
             mProgressBar.setVisibility(INVISIBLE);
         }
-        if(mFullscreenButton != null) {
+        if (mFullscreenButton != null) {
             mFullscreenButton.setOnTouchListener(null);
             mFullscreenButton.setVisibility(INVISIBLE);
         }
-        if(mCurrentTimeTextView != null) {
+        if (mCurrentTimeTextView != null) {
             mCurrentTimeTextView.setVisibility(INVISIBLE);
         }
-        if(mTextureViewContainer != null) {
+        if (mTextureViewContainer != null) {
             mTextureViewContainer.setOnClickListener(null);
         }
-        if(mSmallClose != null) {
+        if (mSmallClose != null) {
             mSmallClose.setVisibility(VISIBLE);
             mSmallClose.setOnClickListener(new OnClickListener() {
                 @Override
@@ -318,8 +320,6 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     }
 
 
-
-
     /**
      * 退出window层播放全屏效果
      */
@@ -462,22 +462,25 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             cloneParams(this, gsyVideoPlayer);
 
+            if (gsyVideoPlayer.getFullscreenButton() != null) {
+                gsyVideoPlayer.getFullscreenButton().setImageResource(getShrinkImageRes());
+                gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clearFullscreenLayout();
+                    }
+                });
+            }
 
-            gsyVideoPlayer.getFullscreenButton().setImageResource(getShrinkImageRes());
-            gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clearFullscreenLayout();
-                }
-            });
-
-            gsyVideoPlayer.getBackButton().setVisibility(VISIBLE);
-            gsyVideoPlayer.getBackButton().setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clearFullscreenLayout();
-                }
-            });
+            if (gsyVideoPlayer.getBackButton() != null) {
+                gsyVideoPlayer.getBackButton().setVisibility(VISIBLE);
+                gsyVideoPlayer.getBackButton().setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clearFullscreenLayout();
+                    }
+                });
+            }
 
             final LayoutParams lpParent = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             final FrameLayout frameLayout = new FrameLayout(context);
