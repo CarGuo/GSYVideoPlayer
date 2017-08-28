@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 JumpUtils.gotoInput(this);
                 break;
             case R.id.open_btn_empty:
-                JumpUtils.gotoControl(this);
+                JumpUtils.goToPlayEmptyControlActivity(this, openBtn2);
                 break;
             case R.id.open_control:
                 JumpUtils.gotoControl(this);
