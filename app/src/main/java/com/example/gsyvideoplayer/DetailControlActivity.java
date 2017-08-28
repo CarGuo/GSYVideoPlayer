@@ -204,7 +204,6 @@ public class DetailControlActivity extends AppCompatActivity {
     private void resolveNormalVideoUI() {
         //增加title
         detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getTitleTextView().setText("测试视频");
         detailPlayer.getBackButton().setVisibility(View.GONE);
     }
 

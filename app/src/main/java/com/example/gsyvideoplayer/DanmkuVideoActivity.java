@@ -188,7 +188,6 @@ public class DanmkuVideoActivity extends AppCompatActivity {
     private void resolveNormalVideoUI() {
         //增加title
         danmakuVideoPlayer.getTitleTextView().setVisibility(View.GONE);
-        danmakuVideoPlayer.getTitleTextView().setText("测试视频");
         danmakuVideoPlayer.getBackButton().setVisibility(View.GONE);
     }
 
