@@ -462,6 +462,23 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             cloneParams(this, gsyVideoPlayer);
 
+
+            gsyVideoPlayer.getFullscreenButton().setImageResource(getShrinkImageRes());
+            gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clearFullscreenLayout();
+                }
+            });
+
+            gsyVideoPlayer.getBackButton().setVisibility(VISIBLE);
+            gsyVideoPlayer.getBackButton().setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clearFullscreenLayout();
+                }
+            });
+
             final LayoutParams lpParent = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             final FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Color.BLACK);
@@ -489,22 +506,6 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
 
             gsyVideoPlayer.addTextureView();
-
-            gsyVideoPlayer.getFullscreenButton().setImageResource(getShrinkImageRes());
-            gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clearFullscreenLayout();
-                }
-            });
-
-            gsyVideoPlayer.getBackButton().setVisibility(VISIBLE);
-            gsyVideoPlayer.getBackButton().setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clearFullscreenLayout();
-                }
-            });
 
             GSYVideoManager.instance().setLastListener(this);
             GSYVideoManager.instance().setListener(gsyVideoPlayer);

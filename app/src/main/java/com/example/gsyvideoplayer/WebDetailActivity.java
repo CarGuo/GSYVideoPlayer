@@ -219,7 +219,6 @@ public class WebDetailActivity extends AppCompatActivity {
     private void resolveNormalVideoUI() {
         //增加title
         webPlayer.getTitleTextView().setVisibility(View.GONE);
-        webPlayer.getTitleTextView().setText("测试视频");
         webPlayer.getBackButton().setVisibility(View.GONE);
     }
 }
