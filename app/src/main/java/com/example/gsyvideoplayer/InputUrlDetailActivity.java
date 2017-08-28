@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.example.gsyvideoplayer.view.CustomInputDialog;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -46,6 +47,8 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
     private OrientationUtils orientationUtils;
 
+    private GSYVideoOptionBuilder gsyVideoOptionBuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,14 +56,11 @@ public class InputUrlDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        detailPlayer.setUp(url, cache, null, "测试视频");
-
 
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.mipmap.xxx1);
-        detailPlayer.setThumbImageView(imageView);
 
         resolveNormalVideoUI();
 
@@ -69,15 +69,36 @@ public class InputUrlDetailActivity extends AppCompatActivity {
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
-        detailPlayer.setIsTouchWiget(true);
-        //detailPlayer.setIsTouchWigetFull(false);
-        //关闭自动旋转
-        detailPlayer.setRotateViewAuto(false);
-        detailPlayer.setLockLand(false);
-        detailPlayer.setShowFullAnimation(false);
-        detailPlayer.setNeedLockFull(true);
-        detailPlayer.setSeekRatio(1);
-        //detailPlayer.setOpenPreView(false);
+        gsyVideoOptionBuilder = new GSYVideoOptionBuilder()
+                .setThumbImageView(imageView)
+                .setIsTouchWiget(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setShowFullAnimation(false)
+                .setNeedLockFull(true)
+                .setSeekRatio(1)
+                .setUrl(url)
+                .setCacheWithPlay(cache)
+                .setVideoTitle("测试视频")
+                .setStandardVideoAllCallBack(new SampleListener() {
+                    @Override
+                    public void onPrepared(String url, Object... objects) {
+                        super.onPrepared(url, objects);
+                        //开始播放了才能旋转和全屏
+                        orientationUtils.setEnable(true);
+                        isPlay = true;
+                    }
+
+                    @Override
+                    public void onQuitFullscreen(String url, Object... objects) {
+                        super.onQuitFullscreen(url, objects);
+                        if (orientationUtils != null) {
+                            orientationUtils.backToProtVideo();
+                        }
+                    }
+                });
+        gsyVideoOptionBuilder.build(detailPlayer);
+
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,34 +107,6 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
                 detailPlayer.startWindowFullscreen(InputUrlDetailActivity.this, true, true);
-            }
-        });
-
-        detailPlayer.setStandardVideoAllCallBack(new SampleListener() {
-            @Override
-            public void onPrepared(String url, Object... objects) {
-                super.onPrepared(url, objects);
-                //开始播放了才能旋转和全屏
-                orientationUtils.setEnable(true);
-                isPlay = true;
-            }
-
-            @Override
-            public void onAutoComplete(String url, Object... objects) {
-                super.onAutoComplete(url, objects);
-            }
-
-            @Override
-            public void onClickStartError(String url, Object... objects) {
-                super.onClickStartError(url, objects);
-            }
-
-            @Override
-            public void onQuitFullscreen(String url, Object... objects) {
-                super.onQuitFullscreen(url, objects);
-                if (orientationUtils != null) {
-                    orientationUtils.backToProtVideo();
-                }
             }
         });
 
@@ -182,7 +175,11 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
     private void playVideo() {
         detailPlayer.release();
-        detailPlayer.setUp(url, cache, null, "测试视频");
+        gsyVideoOptionBuilder.setUrl(url)
+                .setCacheWithPlay(cache)
+                .setVideoTitle("测试视频")
+                .build(detailPlayer);
+        gsyVideoOptionBuilder.build(detailPlayer);
         detailPlayer.postDelayed(new Runnable() {
             @Override
             public void run() {
