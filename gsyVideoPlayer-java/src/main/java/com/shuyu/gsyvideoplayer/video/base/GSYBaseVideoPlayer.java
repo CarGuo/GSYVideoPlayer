@@ -2,6 +2,8 @@ package com.shuyu.gsyvideoplayer.video.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.AttributeSet;
@@ -17,6 +19,7 @@ import com.shuyu.gsyvideoplayer.SmallVideoTouch;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.transitionseverywhere.TransitionManager;
 
 import java.lang.reflect.Constructor;
@@ -395,6 +398,32 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     }
 
     /************************* 开放接口 *************************/
+
+    /**
+     * 旋转处理
+     *
+     * @param activity         页面
+     * @param newConfig        配置
+     * @param orientationUtils 旋转工具类
+     */
+    public void onConfigurationChanged(Activity activity, Configuration newConfig, OrientationUtils orientationUtils) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
+            if (!isIfCurrentIsFullscreen()) {
+                startWindowFullscreen(activity, true, true);
+            }
+        } else {
+            //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
+            if (isIfCurrentIsFullscreen()) {
+                StandardGSYVideoPlayer.backFromWindowFull(activity);
+            }
+            if (orientationUtils != null) {
+                orientationUtils.setEnable(true);
+            }
+        }
+
+    }
 
     /**
      * 利用window层播放全屏效果
