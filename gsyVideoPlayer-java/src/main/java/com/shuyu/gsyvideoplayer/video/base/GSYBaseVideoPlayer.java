@@ -207,6 +207,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mNetChanged = from.mNetChanged;
         to.mNetSate = from.mNetSate;
         to.mRotateWithSystem = from.mRotateWithSystem;
+        to.mBackUpPlayingBufferState = from.mBackUpPlayingBufferState;
         to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
         to.setStateAndUi(from.mCurrentState);
     }
@@ -290,6 +291,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             mVideoAllCallBack.onEnterFullscreen(mOriginUrl, mTitle, gsyVideoPlayer);
         }
         mIfCurrentIsFullscreen = true;
+
+        checkoutState();
     }
 
     /**
@@ -395,6 +398,28 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         } else {
             resolveNormalVideoShow(null, vp, null);
         }
+    }
+
+    protected Runnable mCheckoutTask = new Runnable() {
+        @Override
+        public void run() {
+            GSYVideoPlayer gsyVideoPlayer = getFullWindowPlayer();
+            if (gsyVideoPlayer != null
+                    && gsyVideoPlayer.mCurrentState != mCurrentState) {
+                if (gsyVideoPlayer.mCurrentState == CURRENT_STATE_PLAYING_BUFFERING_START
+                        && mCurrentState != CURRENT_STATE_PREPAREING) {
+                    gsyVideoPlayer.setStateAndUi(mCurrentState);
+                }
+            }
+        }
+    };
+
+    /**
+     * 检查状态
+     */
+    protected void checkoutState() {
+        removeCallbacks(mCheckoutTask);
+        postDelayed(mCheckoutTask, 500);
     }
 
     /************************* 开放接口 *************************/
@@ -541,6 +566,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             GSYVideoManager.instance().setLastListener(this);
             GSYVideoManager.instance().setListener(gsyVideoPlayer);
+
+            checkoutState();
             return gsyVideoPlayer;
         } catch (Exception e) {
             e.printStackTrace();
