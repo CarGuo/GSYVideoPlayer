@@ -184,7 +184,11 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.6'
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
--------------------
+
+## 其他推荐
+
+* [RickText](https://github.com/CarGuo/RickText)
+* [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
 
 ## 关于Issues
 
@@ -198,12 +202,6 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.6'
 3、补充问题的视频流url，截图。
 4、补充问题的机型，android版本。
 ```
-
-## 其他推荐
-
-* [RickText](https://github.com/CarGuo/RickText)
-
--------------------
 
 ## 混淆
 
