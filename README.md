@@ -125,16 +125,19 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.6'
 compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.6'
 
 ```
-   
---------------------------------------------------------------------------------
-
-* ### 下方文档以及问题集锦，你想要知道的大部分都在里面。
-
-* ### <a href="https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md">有问题请先下面问题集锦中查阅（如依赖不成功，播放不成功等等）。</a>
-
-* ### QQ群，有兴趣的可以进来（群里平时可能比较吵）：174815284 。
 
 --------------------------------------------------------------------------------
+
+
+## 其他推荐
+
+### * QQ群，有兴趣的可以进来（群里平时可能比较吵）：174815284 。
+### * [RickText](https://github.com/CarGuo/RickText)
+### * [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
+
+
+--------------------------------------------------------------------------------
+
 
 ## 文档Wiki
 
@@ -183,12 +186,6 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.6'
 * 优化了触摸问题、内存问题、dismisstime问题。
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
-
-
-## 其他推荐
-
-* [RickText](https://github.com/CarGuo/RickText)
-* [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
 
 ## 关于Issues
 
