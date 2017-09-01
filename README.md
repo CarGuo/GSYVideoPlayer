@@ -64,7 +64,9 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 
 ```
 
-### [更多依赖请点击](https://github.com/CarGuo/GSYVideoPlayer/blob/master/dependencies.md)
+### [--- 更多依赖方式请点击 - ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/dependencies.md)
+
+##  
 
 ## 其他推荐
 
@@ -73,7 +75,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 ### * [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
 
 
---------------------------------------------------------------------------------
+##  
 
 
 ## 文档Wiki
@@ -89,7 +91,8 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 ### [--- 简书详解 （项目的基础）- 入口](http://www.jianshu.com/p/9fe377dd9750)
 ### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
-　
+##  
+
 ## 运行效果
 
 * ### 1、打开一个播放(旋转、镜像、填充)
@@ -109,6 +112,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 * ### 4、进度条小窗口预览
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
+##  
 
 ## 近期版本
 
@@ -124,6 +128,8 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
+##  
+
 ## 关于Issues
 
 ```
@@ -137,6 +143,8 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 4、补充问题的机型，android版本。
 ```
 
+##  
+
 ## 混淆
 
 ```
@@ -145,6 +153,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 -keep class com.shuyu.gsyvideoplayer.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.**
 ```
+##  
 
 ## 依赖大小参考
 建议使用ndk过滤，详细参考 [参考第四条 ： 4、NDK的so支持](http://www.jianshu.com/p/86e4b336c17d)
