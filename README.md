@@ -199,6 +199,10 @@ compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.6'
 4、补充问题的机型，android版本。
 ```
 
+## 其他推荐
+
+* [RickText](https://github.com/CarGuo/RickText)
+
 -------------------
 
 ## 混淆
