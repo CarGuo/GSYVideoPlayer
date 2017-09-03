@@ -23,7 +23,7 @@
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
-## 使用依赖
+## 一、使用依赖
 
 ##### 新版本调整了代码结构，如更新后显示类路径错误，参考demo调整包路径即可。
 
@@ -64,24 +64,17 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 
 ```
 
-### [更多依赖请点击](https://github.com/CarGuo/GSYVideoPlayer/blob/master/dependencies.md)
+### [--- 更多依赖方式请点击 - ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/dependencies.md)
 
-## 其他推荐
+## 二、其他推荐
 
 ### * QQ群，有兴趣的可以进来（群里平时可能比较吵）：174815284 。
 ### * [RickText](https://github.com/CarGuo/RickText)
 ### * [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
 
-
---------------------------------------------------------------------------------
-
-
-## 文档Wiki
+## 三、文档Wiki
 
 ### [--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)
-
-## 其他
-
 ### [--- 问题集锦 - 入口 ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
 ### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/DECODERS.md)
 ### [--- IJKPlayer问题 - 入口](http://www.jianshu.com/p/220b00d00deb)　
@@ -89,8 +82,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 ### [--- 简书详解 （项目的基础）- 入口](http://www.jianshu.com/p/9fe377dd9750)
 ### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
-　
-## 运行效果
+## 四、运行效果
 
 * ### 1、打开一个播放(旋转、镜像、填充)
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/11.gif" width="240px" height="426px"/>
@@ -109,8 +101,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 * ### 4、进度条小窗口预览
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
-
-## 近期版本
+## 五、近期版本
 
 ### 2.0.6(2017-08-31)
 * 调整了返回按键显示的问题。
@@ -124,7 +115,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
-## 关于Issues
+## 六、关于Issues
 
 ```
 提问题前可先查阅上方文档和说明，请在Demo中复现问题。
@@ -137,7 +128,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.6'
 4、补充问题的机型，android版本。
 ```
 
-## 混淆
+## 七、混淆
 
 ```
 -keep class tv.danmaku.ijk.** { *; }
