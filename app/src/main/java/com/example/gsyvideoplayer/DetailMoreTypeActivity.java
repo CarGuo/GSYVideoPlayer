@@ -2,6 +2,8 @@ package com.example.gsyvideoplayer;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -12,12 +14,14 @@ import android.widget.RelativeLayout;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.video.SampleVideo;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,7 +32,7 @@ import butterknife.ButterKnife;
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
  */
 
-public class DetailMoreTypeActivity extends AppCompatActivity{
+public class DetailMoreTypeActivity extends AppCompatActivity {
     @BindView(R.id.post_detail_nested_scroll)
     NestedScrollView postDetailNestedScroll;
 
@@ -42,8 +46,13 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
 
     private boolean isPlay;
     private boolean isPause;
+    private boolean isRelease;
 
     private OrientationUtils orientationUtils;
+
+    private MediaMetadataRetriever mCoverMedia;
+
+    private ImageView coverImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +76,10 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
         detailPlayer.setUp(list, true, "");
 
         //增加封面
-        ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.xxx1);
-        detailPlayer.setThumbImageView(imageView);
+        coverImageView = new ImageView(this);
+        coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //coverImageView.setImageResource(R.mipmap.xxx1);
+        detailPlayer.setThumbImageView(coverImageView);
 
         resolveNormalVideoUI();
 
@@ -137,6 +146,7 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
             }
         });
 
+        loadFirstFrameCover(source1);
     }
 
     @Override
@@ -168,10 +178,15 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isRelease = true;
         GSYVideoPlayer.releaseAllVideos();
         //GSYPreViewManager.instance().releaseMediaPlayer();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
+        if (mCoverMedia != null) {
+            mCoverMedia.release();
+            mCoverMedia = null;
+        }
     }
 
     @Override
@@ -188,5 +203,46 @@ public class DetailMoreTypeActivity extends AppCompatActivity{
         //增加title
         detailPlayer.getTitleTextView().setVisibility(View.GONE);
         detailPlayer.getBackButton().setVisibility(View.GONE);
+    }
+
+
+    /**
+     * 这里只是演示，并不建议直接这么做
+     * MediaMetadataRetriever最好做一个独立的管理器
+     * 使用缓存
+     * 注意资源的开销和异步等
+     *
+     * @param url
+     */
+    public void loadFirstFrameCover(String url) {
+        final MediaMetadataRetriever mediaMetadataRetriever = getMediaMetadataRetriever(url);
+        //获取帧图片
+        if (getMediaMetadataRetriever(url) != null) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final Bitmap bitmap = mediaMetadataRetriever
+                            .getFrameAtTime(1000, MediaMetadataRetriever.OPTION_CLOSEST);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (bitmap != null && !isRelease) {
+                                Debuger.printfLog("time " + System.currentTimeMillis());
+                                //显示
+                                coverImageView.setImageBitmap(bitmap);
+                            }
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
+
+    public MediaMetadataRetriever getMediaMetadataRetriever(String url) {
+        if (mCoverMedia == null) {
+            mCoverMedia = new MediaMetadataRetriever();
+        }
+        mCoverMedia.setDataSource(url, new HashMap<String, String>());
+        return mCoverMedia;
     }
 }
