@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -62,25 +63,19 @@ public class ListNormalAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.list_video_item_normal, null);
-            holder.gsyVideoPlayer = (StandardGSYVideoPlayer) convertView.findViewById(R.id.video_item_player);
-            holder.imageView = new ImageView(context);
+            holder.gsyVideoPlayer = (SampleCoverVideo) convertView.findViewById(R.id.video_item_player);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        //增加封面
-        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         if (position % 2 == 0) {
-            holder.imageView.setImageResource(R.mipmap.xxx1);
+            holder.gsyVideoPlayer.loadCoverImage("",R.mipmap.xxx1);
         } else {
-            holder.imageView.setImageResource(R.mipmap.xxx2);
+            holder.gsyVideoPlayer.loadCoverImage("",R.mipmap.xxx2);
         }
-        if (holder.imageView.getParent() != null) {
-            ViewGroup viewGroup = (ViewGroup) holder.imageView.getParent();
-            viewGroup.removeView(holder.imageView);
-        }
-        holder.gsyVideoPlayer.setThumbImageView(holder.imageView);
+
 
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //final String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
@@ -187,8 +182,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
 
     class ViewHolder {
-        StandardGSYVideoPlayer gsyVideoPlayer;
-        ImageView imageView;
+        SampleCoverVideo gsyVideoPlayer;
     }
 
 }
