@@ -25,6 +25,8 @@ ext {
     videocache = '2.7.0'
     leakcanary = '1.5'
 
+    imageLoader = '4.0.0'
+
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
             appcompat_v7: "com.android.support:appcompat-v7:${otherLibraryVersion}",
@@ -48,6 +50,9 @@ ext {
             ndkbitmap_armv7a     : "com.github.ctiao:ndkbitmap-armv7a:${DanmakuFlameMaster}",
             ndkbitmap_armv5      : "com.github.ctiao:ndkbitmap-armv5:${DanmakuFlameMaster}",
             ndkbitmap_x86        : "com.github.ctiao:ndkbitmap-x86:${DanmakuFlameMaster}",
+            glide                : "com.github.bumptech.glide:glide:${imageLoader}",
+            glideProcessor       : "com.github.bumptech.glide:compiler:${imageLoader}"
+
     ]
 
     dataDependencies = [
