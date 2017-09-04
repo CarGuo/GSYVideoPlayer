@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
+import com.example.gsyvideoplayer.video.PreViewGSYVideoPlayer;
 import com.example.gsyvideoplayer.view.ScrollWebView;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -33,7 +34,7 @@ public class WebDetailActivity extends AppCompatActivity {
     @BindView(R.id.scroll_webView)
     ScrollWebView webView;
     @BindView(R.id.web_player)
-    NormalGSYVideoPlayer webPlayer;
+    PreViewGSYVideoPlayer webPlayer;
     @BindView(R.id.web_top_layout)
     NestedScrollView webTopLayout;
     @BindView(R.id.web_top_layout_video)
