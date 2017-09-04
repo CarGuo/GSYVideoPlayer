@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer
+        <com.example.gsyvideoplayer.video.PreViewGSYVideoPlayer
             android:id="@+id/web_player"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
