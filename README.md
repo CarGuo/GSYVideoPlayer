@@ -17,6 +17,7 @@
 **支持**|**全屏与非全屏两套布局切换；弹幕功能。**
 **支持**|**其他协议和编码concat、rtsp、crypto、mpeg等。**
 **支持**|**没有任何操作控件的纯播放支持。**
+**支持**|**DEMO演示获取视频第一帧等实现。**
 待支持|**自带广告功能（目前需要自己实现）。**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
