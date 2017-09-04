@@ -70,16 +70,16 @@ public class ListNormalAdapter extends BaseAdapter {
         }
 
 
-        if (position % 2 == 0) {
-            holder.gsyVideoPlayer.loadCoverImage("",R.mipmap.xxx1);
-        } else {
-            holder.gsyVideoPlayer.loadCoverImage("",R.mipmap.xxx2);
-        }
-
-
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //final String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
         //final String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
+
+
+        if (position % 2 == 0) {
+            holder.gsyVideoPlayer.loadCoverImage(url, R.mipmap.xxx1);
+        } else {
+            holder.gsyVideoPlayer.loadCoverImage(url, R.mipmap.xxx2);
+        }
 
         //默认缓存路径
         holder.gsyVideoPlayer.setUp(url, true, null, "这是title");
