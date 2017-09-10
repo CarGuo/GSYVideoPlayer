@@ -46,6 +46,15 @@
             android:layout_margin="10dp"
             android:text="播放速度：1" />
 
+
+        <Button
+            android:id="@+id/jump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/change_speed"
+            android:text="跳转" />
+
     </RelativeLayout>
 
 </RelativeLayout>

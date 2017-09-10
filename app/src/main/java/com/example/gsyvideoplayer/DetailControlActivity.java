@@ -1,6 +1,5 @@
 package com.example.gsyvideoplayer;
 
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -11,18 +10,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
-import com.example.gsyvideoplayer.model.SwitchVideoModel;
+import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
-import com.example.gsyvideoplayer.video.SampleVideo;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
-import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +40,10 @@ public class DetailControlActivity extends AppCompatActivity {
 
     @BindView(R.id.change_speed)
     Button changeSpeed;
+
+
+    @BindView(R.id.jump)
+    Button jump;
 
 
     private boolean isPlay;
@@ -102,6 +100,8 @@ public class DetailControlActivity extends AppCompatActivity {
                             orientationUtils.backToProtVideo();
                         }
                     }
+
+
                 })
                 .build(detailPlayer);
 
@@ -133,6 +133,14 @@ public class DetailControlActivity extends AppCompatActivity {
             }
         });
 
+
+        jump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JumpUtils.gotoControl(DetailControlActivity.this);
+                //startActivity(new Intent(DetailControlActivity.this, MainActivity.class));
+            }
+        });
     }
 
     @Override
@@ -151,12 +159,14 @@ public class DetailControlActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        getCurPlay().onVideoPause();
         super.onPause();
         isPause = true;
     }
 
     @Override
     protected void onResume() {
+        getCurPlay().onVideoResume();
         super.onResume();
         isPause = false;
     }
@@ -164,7 +174,9 @@ public class DetailControlActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GSYVideoPlayer.releaseAllVideos();
+        if (isPlay) {
+            getCurPlay().release();
+        }
         //GSYPreViewManager.instance().releaseMediaPlayer();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
@@ -179,13 +191,18 @@ public class DetailControlActivity extends AppCompatActivity {
         }
     }
 
-
     private void resolveNormalVideoUI() {
         //增加title
         detailPlayer.getTitleTextView().setVisibility(View.GONE);
         detailPlayer.getBackButton().setVisibility(View.GONE);
     }
 
+    private SampleControlVideo getCurPlay() {
+        if (detailPlayer.getFullWindowPlayer() != null) {
+            return (SampleControlVideo) detailPlayer.getFullWindowPlayer();
+        }
+        return detailPlayer;
+    }
 
     /**
      * 显示比例
