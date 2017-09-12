@@ -90,7 +90,14 @@ setUp(String url, boolean cacheWithPlay····)
 
 ```
 
-#### 6、为什么拖动视屏会弹回来，因为ijk的FFMPEG对关键帧问题，目前无解。
+#### 6、为什么拖动视屏会弹回来，因为ijk的FFMPEG对关键帧问题。
+可以尝试以下设置
+```
+VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
+List<VideoOptionModel> list = new ArrayList<>();
+list.add(videoOptionModel);
+GSYVideoManager.instance().setOptionModelList(list);
+```
 
 #### 7、视频旋转后重新开始，配置AndroidManifest.xml。
 ```
@@ -155,5 +162,15 @@ https://github.com/CarGuo/GSYVideoPlayer/issues/207
 https://github.com/Bilibili/ijkplayer/issues/2874
 
 https://github.com/CarGuo/GSYVideoPlayer/issues/252
+
+#### 16、播放本地m3u8有问题
+
+```
+VideoOptionModel videoOptionModel =
+        new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "protocol_whitelist", crypto,file,http,https,tcp,tls,udp);
+List<VideoOptionModel> list = new ArrayList<>();
+list.add(videoOptionModel);
+GSYVideoManager.instance().setOptionModelList(list);
+```
 
 
