@@ -6,6 +6,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -326,6 +327,12 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private void initIJKPlayer(Message msg) {
         mediaPlayer = (ijkLibLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(ijkLibLoader);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        ((IjkMediaPlayer)mediaPlayer).setOnNativeInvokeListener(new IjkMediaPlayer.OnNativeInvokeListener() {
+            @Override
+            public boolean onNativeInvoke(int i, Bundle bundle) {
+                return true;
+            }
+        });
         try {
             if (GSYVideoType.isMediaCodec()) {
                 Debuger.printfLog("enable mediaCodec");
