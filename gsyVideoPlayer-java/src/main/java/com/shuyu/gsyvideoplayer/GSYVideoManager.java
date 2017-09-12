@@ -33,10 +33,10 @@ import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
-import tv.danmaku.ijk.media.player.AbstractMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import tv.danmaku.ijk.media.player.TextureMediaPlayer;
 
 /**
  * 视频管理，单例
@@ -61,7 +61,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
 
-    private AbstractMediaPlayer mediaPlayer;
+    private IMediaPlayer mediaPlayer;
 
     private MediaHandler mMediaHandler;
 
@@ -327,13 +327,14 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private void initIJKPlayer(Message msg) {
         mediaPlayer = (ijkLibLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(ijkLibLoader);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        ((IjkMediaPlayer)mediaPlayer).setOnNativeInvokeListener(new IjkMediaPlayer.OnNativeInvokeListener() {
+        ((IjkMediaPlayer) mediaPlayer).setOnNativeInvokeListener(new IjkMediaPlayer.OnNativeInvokeListener() {
             @Override
             public boolean onNativeInvoke(int i, Bundle bundle) {
                 return true;
             }
         });
         try {
+            //开启硬解码
             if (GSYVideoType.isMediaCodec()) {
                 Debuger.printfLog("enable mediaCodec");
                 ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
@@ -346,6 +347,11 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                 ((IjkMediaPlayer) mediaPlayer).setSpeed(((GSYModel) msg.obj).getSpeed());
             }
             initIJKOption((IjkMediaPlayer) mediaPlayer);
+            //开启硬解码渲染优化
+            if (GSYVideoType.isMediaCodecTexture()) {
+                IMediaPlayer iMediaPlayer = new TextureMediaPlayer(mediaPlayer);
+                mediaPlayer = iMediaPlayer;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -581,7 +587,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
 
-    public AbstractMediaPlayer getMediaPlayer() {
+    public IMediaPlayer getMediaPlayer() {
+        if (mediaPlayer instanceof TextureMediaPlayer) {
+            return ((TextureMediaPlayer) mediaPlayer).getInternalMediaPlayer();
+        }
         return mediaPlayer;
     }
 
