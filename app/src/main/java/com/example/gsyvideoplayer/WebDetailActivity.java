@@ -178,12 +178,14 @@ public class WebDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        getCurPlay().onVideoPause();
         super.onPause();
         isPause = true;
     }
 
     @Override
     protected void onResume() {
+        getCurPlay().onVideoResume();
         super.onResume();
         isPause = false;
     }
@@ -191,7 +193,10 @@ public class WebDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GSYVideoPlayer.releaseAllVideos();
+        if (isPlay) {
+            getCurPlay().release();
+        }
+        //GSYPreViewManager.instance().releaseMediaPlayer();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
     }
@@ -203,6 +208,15 @@ public class WebDetailActivity extends AppCompatActivity {
         if (isPlay && !isPause && !isSamll) {
             webPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
         }
+    }
+
+
+
+    private GSYVideoPlayer getCurPlay() {
+        if (webPlayer.getFullWindowPlayer() != null) {
+            return  webPlayer.getFullWindowPlayer();
+        }
+        return webPlayer;
     }
 
 
