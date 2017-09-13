@@ -57,7 +57,7 @@ public class DetailPlayer extends AppCompatActivity {
         //断网自动重新链接，url前接上ijkhttphook:
         //String url = "ijkhttphook:http://baobab.wdjcdn.com/14564977406580.mp4";
 
-        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
         //String url = "http://hcjs2ra2rytd8v8np1q.exp.bcevod.com/mda-hegtjx8n5e8jt9zv/mda-hegtjx8n5e8jt9zv.m3u8";
         //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
@@ -67,7 +67,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
         //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
-        //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
+        String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
 
         //detailPlayer.setUp(url, false, null, "测试视频");
         //detailPlayer.setLooping(true);
