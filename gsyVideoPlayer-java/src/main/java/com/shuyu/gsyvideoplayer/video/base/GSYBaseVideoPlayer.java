@@ -731,6 +731,17 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     }
 
     /**
+     * 获取当前长在播放的播放控件
+     */
+    public GSYBaseVideoPlayer getCurrentPlayer() {
+        if (getFullWindowPlayer() != null) {
+            return  getFullWindowPlayer();
+        }
+        return this;
+    }
+
+
+    /**
      * 退出全屏，主要用于返回键
      *
      * @return 返回是否全屏

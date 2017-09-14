@@ -1,21 +1,20 @@
 package com.example.gsyvideoplayer;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.example.gsyvideoplayer.listener.SampleListener;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
+import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 
 import butterknife.BindView;
@@ -26,12 +25,11 @@ import butterknife.ButterKnife;
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
  */
 
-public class DetailControlActivity extends AppCompatActivity {
+public class DetailControlActivity extends GSYBaseActivityDetail {
+
     @BindView(R.id.post_detail_nested_scroll)
     NestedScrollView postDetailNestedScroll;
 
-    //推荐使用StandardGSYVideoPlayer，功能一致
-    //CustomGSYVideoPlayer部分功能处于试验阶段
     @BindView(R.id.detail_player)
     SampleControlVideo detailPlayer;
 
@@ -45,12 +43,6 @@ public class DetailControlActivity extends AppCompatActivity {
     @BindView(R.id.jump)
     Button jump;
 
-
-    private boolean isPlay;
-    private boolean isPause;
-
-    private OrientationUtils orientationUtils;
-
     private float speed = 1;
 
     @Override
@@ -59,62 +51,9 @@ public class DetailControlActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_control);
         ButterKnife.bind(this);
 
-        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-
-        //增加封面
-        ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.xxx1);
-
         resolveNormalVideoUI();
 
-        //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
-        //初始化不打开外部的旋转
-        orientationUtils.setEnable(false);
-
-        new GSYVideoOptionBuilder()
-                .setThumbImageView(imageView)
-                .setUrl(url)
-                .setCacheWithPlay(true)
-                .setVideoTitle(" ")
-                .setIsTouchWiget(true)
-                .setRotateViewAuto(false)
-                .setLockLand(false)
-                .setShowFullAnimation(false)
-                .setNeedLockFull(true)
-                .setSeekRatio(1)
-                .setStandardVideoAllCallBack(new SampleListener() {
-                    @Override
-                    public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
-                        //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(true);
-                        isPlay = true;
-                    }
-
-                    @Override
-                    public void onQuitFullscreen(String url, Object... objects) {
-                        super.onQuitFullscreen(url, objects);
-                        if (orientationUtils != null) {
-                            orientationUtils.backToProtVideo();
-                        }
-                    }
-
-
-                })
-                .build(detailPlayer);
-
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //直接横屏
-                orientationUtils.resolveByClick();
-
-                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(DetailControlActivity.this, true, true);
-            }
-        });
+        initVideoBuilderMode();
 
         detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
@@ -144,64 +83,57 @@ public class DetailControlActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-
-    @Override
-    protected void onPause() {
-        getCurPlay().onVideoPause();
-        super.onPause();
-        isPause = true;
+    public GSYBaseVideoPlayer getGSYVideoPlayer() {
+        return detailPlayer;
     }
 
     @Override
-    protected void onResume() {
-        getCurPlay().onVideoResume();
-        super.onResume();
-        isPause = false;
+    public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
+
+        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //增加封面
+        ImageView imageView = new ImageView(this);
+
+        loadCover(imageView, url);
+
+        return new GSYVideoOptionBuilder()
+                .setThumbImageView(imageView)
+                .setUrl(url)
+                .setCacheWithPlay(true)
+                .setVideoTitle(" ")
+                .setIsTouchWiget(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setShowFullAnimation(false)
+                .setNeedLockFull(true)
+                .setSeekRatio(1);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isPlay) {
-            getCurPlay().release();
-        }
-        //GSYPreViewManager.instance().releaseMediaPlayer();
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
+    public void clickForFullScreen() {
+
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
-        }
+    private void loadCover(ImageView imageView, String url) {
+
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageResource(R.mipmap.xxx1);
+
+        Glide.with(this.getApplicationContext())
+                .setDefaultRequestOptions(
+                        new RequestOptions()
+                                .frame(1000000)
+                                .centerCrop()
+                                .error(R.mipmap.xxx2)
+                                .placeholder(R.mipmap.xxx1))
+                .load(url)
+                .into(imageView);
     }
 
     private void resolveNormalVideoUI() {
         //增加title
         detailPlayer.getTitleTextView().setVisibility(View.GONE);
         detailPlayer.getBackButton().setVisibility(View.GONE);
-    }
-
-    private SampleControlVideo getCurPlay() {
-        if (detailPlayer.getFullWindowPlayer() != null) {
-            return (SampleControlVideo) detailPlayer.getFullWindowPlayer();
-        }
-        return detailPlayer;
     }
 
     /**
