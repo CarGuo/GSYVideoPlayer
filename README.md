@@ -104,16 +104,16 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.7'
 
 ## 五、近期版本
 
+### 2.0.8（2017-xx-xx）
+* 增加GSYBaseActivityDetail抽象类，方便detail模式集成。
+
+
 ### 2.0.7(2017-09-13）
 
 * 优化增加了断网自动续连，需要为http前加上 "ijkhttphook:http://ssss"
 * update ijk to 0.8.3
 * 增加了demo中seekto精准定位，解决某些视频seek之后从头播放
 
-### 2.0.6(2017-08-31)
-* 调整了返回按键显示的问题。
-* 修改了全屏可能出现缓冲不消失问题。
-* 优化了双击问题。
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
