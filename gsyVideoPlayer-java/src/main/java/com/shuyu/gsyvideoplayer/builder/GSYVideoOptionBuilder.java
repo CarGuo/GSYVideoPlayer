@@ -465,10 +465,6 @@ public class GSYVideoOptionBuilder {
             gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
         }
 
-        if (mThumbImageView != null) {
-            gsyVideoPlayer.setThumbImageView(mThumbImageView);
-        }
-
         if (mBottomShowProgressDrawable != null && mBottomShowProgressThumbDrawable != null) {
             gsyVideoPlayer.setBottomShowProgressBarDrawable(mBottomShowProgressDrawable, mBottomShowProgressThumbDrawable);
         }
@@ -487,7 +483,6 @@ public class GSYVideoOptionBuilder {
             gsyVideoPlayer.setDialogProgressColor(mDialogProgressHighLightColor, mDialogProgressNormalColor);
         }
 
-
         build((GSYBaseVideoPlayer) gsyVideoPlayer);
     }
 
@@ -496,6 +491,10 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setPlayPosition(mPlayPosition);
 
         gsyVideoPlayer.setThumbPlay(mThumbPlay);
+
+        if (mThumbImageView != null) {
+            gsyVideoPlayer.setThumbImageView(mThumbImageView);
+        }
 
         gsyVideoPlayer.setNeedLockFull(mNeedLockFull);
 
