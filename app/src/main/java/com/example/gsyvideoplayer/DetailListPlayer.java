@@ -1,21 +1,18 @@
 package com.example.gsyvideoplayer;
 
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.example.gsyvideoplayer.listener.SampleListener;
+import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.ListGSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by shuyu on 2016/12/20.
  */
 
-public class DetailListPlayer extends AppCompatActivity {
+public class DetailListPlayer extends GSYBaseActivityDetail {
 
 
     @BindView(R.id.post_detail_nested_scroll)
@@ -37,16 +34,15 @@ public class DetailListPlayer extends AppCompatActivity {
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
 
-    private boolean isPlay;
-    private boolean isPause;
-
-    private OrientationUtils orientationUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deatil_list_player);
         ButterKnife.bind(this);
+
+        //普通模式
+        initVideo();
 
         //String url = "http://baobab.wd jcdn.com/14564977406580.mp4";
         List<GSYVideoModel> urls = new ArrayList<>();
@@ -64,11 +60,6 @@ public class DetailListPlayer extends AppCompatActivity {
 
         resolveNormalVideoUI();
 
-        //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
-        //初始化不打开外部的旋转
-        orientationUtils.setEnable(false);
-
         detailPlayer.setIsTouchWiget(true);
         //关闭自动旋转
         detailPlayer.setRotateViewAuto(false);
@@ -76,52 +67,7 @@ public class DetailListPlayer extends AppCompatActivity {
         detailPlayer.setShowFullAnimation(false);
         detailPlayer.setNeedLockFull(true);
 
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //直接横屏
-                orientationUtils.resolveByClick();
-
-                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(DetailListPlayer.this, true, true);
-            }
-        });
-
-        detailPlayer.setStandardVideoAllCallBack(new SampleListener() {
-            @Override
-            public void onPrepared(String url, Object... objects) {
-                super.onPrepared(url, objects);
-                //开始播放了才能旋转和全屏
-                orientationUtils.setEnable(true);
-                isPlay = true;
-            }
-
-            @Override
-            public void onAutoComplete(String url, Object... objects) {
-                super.onAutoComplete(url, objects);
-            }
-
-            @Override
-            public void onClickStartError(String url, Object... objects) {
-                super.onClickStartError(url, objects);
-            }
-
-            @Override
-            public void onQuitFullscreen(String url, Object... objects) {
-                super.onQuitFullscreen(url, objects);
-                if (orientationUtils != null) {
-                    orientationUtils.backToProtVideo();
-                }
-            }
-
-            @Override
-            public void onEnterFullscreen(String url, Object... objects) {
-                super.onEnterFullscreen(url, objects);
-                //隐藏调全屏对象的返回按键
-                GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer)objects[1];
-                gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
-            }
-        });
+        detailPlayer.setStandardVideoAllCallBack(this);
 
         detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
@@ -136,53 +82,29 @@ public class DetailListPlayer extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-
-    @Override
-    protected void onPause() {
-        getCurPlay().onVideoPause();
-        super.onPause();
-        isPause = true;
+    public GSYBaseVideoPlayer getGSYVideoPlayer() {
+        return detailPlayer;
     }
 
     @Override
-    protected void onResume() {
-        getCurPlay().onVideoResume();
-        super.onResume();
-        isPause = false;
+    public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
+        //不需要builder的
+        return null;
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isPlay) {
-            getCurPlay().release();
-        }
-        //GSYPreViewManager.instance().releaseMediaPlayer();
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
-    }
+    public void clickForFullScreen() {
 
+    }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
-        }
+    public void onEnterFullscreen(String url, Object... objects) {
+        super.onEnterFullscreen(url, objects);
+        //隐藏调全屏对象的返回按键
+        GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer)objects[1];
+        gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
     }
+
 
 
     private void resolveNormalVideoUI() {
