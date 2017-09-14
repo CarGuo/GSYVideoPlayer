@@ -1,6 +1,5 @@
 package com.example.gsyvideoplayer;
 
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -11,15 +10,18 @@ import android.webkit.WebSettings;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.PreViewGSYVideoPlayer;
 import com.example.gsyvideoplayer.view.ScrollWebView;
+import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
@@ -29,7 +31,7 @@ import butterknife.ButterKnife;
  * Created by shuyu on 2016/12/26.
  */
 
-public class WebDetailActivity extends AppCompatActivity {
+public class WebDetailActivity extends GSYBaseActivityDetail {
 
     @BindView(R.id.scroll_webView)
     ScrollWebView webView;
@@ -40,11 +42,7 @@ public class WebDetailActivity extends AppCompatActivity {
     @BindView(R.id.web_top_layout_video)
     RelativeLayout webTopLayoutVideo;
 
-    private boolean isPlay;
-    private boolean isPause;
     private boolean isSamll;
-
-    private OrientationUtils orientationUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,68 +50,11 @@ public class WebDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_detail);
         ButterKnife.bind(this);
 
-        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
 
-        //增加封面
-        ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.xxx1);
         resolveNormalVideoUI();
 
-        //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, webPlayer);
-        //初始化不打开外部的旋转
-        orientationUtils.setEnable(false);
+        initVideoBuilderMode();
 
-        new GSYVideoOptionBuilder()
-                .setThumbImageView(imageView)
-                .setUrl(url)
-                .setCacheWithPlay(false)
-                .setVideoTitle("测试视频")
-                .setIsTouchWiget(true)
-                .setRotateViewAuto(false)
-                .setLockLand(false)
-                .setShowFullAnimation(false)
-                .setNeedLockFull(true)
-                .setStandardVideoAllCallBack(new SampleListener() {
-                    @Override
-                    public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
-                        //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(true);
-                        isPlay = true;
-                    }
-
-                    @Override
-                    public void onAutoComplete(String url, Object... objects) {
-                        super.onAutoComplete(url, objects);
-                    }
-
-                    @Override
-                    public void onClickStartError(String url, Object... objects) {
-                        super.onClickStartError(url, objects);
-                    }
-
-                    @Override
-                    public void onQuitFullscreen(String url, Object... objects) {
-                        super.onQuitFullscreen(url, objects);
-                        if (orientationUtils != null) {
-                            orientationUtils.backToProtVideo();
-                        }
-                    }
-                }).build(webPlayer);
-
-        webPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //直接横屏
-                orientationUtils.resolveByClick();
-
-                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                webPlayer.startWindowFullscreen(WebDetailActivity.this, true, true);
-            }
-        });
 
         webPlayer.setLockClickListener(new LockClickListener() {
             @Override
@@ -163,60 +104,49 @@ public class WebDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-
-    @Override
-    protected void onPause() {
-        getCurPlay().onVideoPause();
-        super.onPause();
-        isPause = true;
-    }
-
-    @Override
-    protected void onResume() {
-        getCurPlay().onVideoResume();
-        super.onResume();
-        isPause = false;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isPlay) {
-            getCurPlay().release();
-        }
-        //GSYPreViewManager.instance().releaseMediaPlayer();
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (isPlay && !isPause && !isSamll) {
-            webPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
-        }
-    }
-
-
-
-    private GSYVideoPlayer getCurPlay() {
-        if (webPlayer.getFullWindowPlayer() != null) {
-            return  webPlayer.getFullWindowPlayer();
-        }
+    public GSYBaseVideoPlayer getGSYVideoPlayer() {
         return webPlayer;
+    }
+
+    @Override
+    public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
+        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
+        //增加封面
+        ImageView imageView = new ImageView(this);
+        loadCover(imageView, url);
+        return new GSYVideoOptionBuilder()
+                .setThumbImageView(imageView)
+                .setUrl(url)
+                .setCacheWithPlay(false)
+                .setVideoTitle("测试视频")
+                .setIsTouchWiget(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setShowFullAnimation(false)
+                .setNeedLockFull(true);
+    }
+
+    @Override
+    public void clickForFullScreen() {
+
+    }
+
+
+    private void loadCover(ImageView imageView, String url) {
+
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageResource(R.mipmap.xxx1);
+
+        Glide.with(this.getApplicationContext())
+                .setDefaultRequestOptions(
+                        new RequestOptions()
+                                .frame(3000000)
+                                .centerCrop()
+                                .error(R.mipmap.xxx2)
+                                .placeholder(R.mipmap.xxx1))
+                .load(url)
+                .into(imageView);
     }
 
 
