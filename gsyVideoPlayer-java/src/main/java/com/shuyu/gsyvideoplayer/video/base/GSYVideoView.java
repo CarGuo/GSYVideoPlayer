@@ -310,8 +310,12 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     });
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    if (GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
-                        GSYVideoManager.instance().getMediaPlayer().pause();
+                    try {
+                        if (GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
+                            GSYVideoManager.instance().getMediaPlayer().pause();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
@@ -403,12 +407,17 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     @Override
     public void onVideoPause() {
-        if (GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
-            setStateAndUi(CURRENT_STATE_PAUSE);
-            mPauseTime = System.currentTimeMillis();
-            mCurrentPosition = GSYVideoManager.instance().getMediaPlayer().getCurrentPosition();
-            if (GSYVideoManager.instance().getMediaPlayer() != null)
-                GSYVideoManager.instance().getMediaPlayer().pause();
+        try {
+            if (GSYVideoManager.instance().getMediaPlayer()!= null &&
+                    GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
+                setStateAndUi(CURRENT_STATE_PAUSE);
+                mPauseTime = System.currentTimeMillis();
+                mCurrentPosition = GSYVideoManager.instance().getMediaPlayer().getCurrentPosition();
+                if (GSYVideoManager.instance().getMediaPlayer() != null)
+                    GSYVideoManager.instance().getMediaPlayer().pause();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -419,10 +428,14 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public void onVideoResume() {
         mPauseTime = 0;
         if (mCurrentState == CURRENT_STATE_PAUSE) {
-            if (mCurrentPosition > 0 && GSYVideoManager.instance().getMediaPlayer() != null) {
-                setStateAndUi(CURRENT_STATE_PLAYING);
-                GSYVideoManager.instance().getMediaPlayer().seekTo(mCurrentPosition);
-                GSYVideoManager.instance().getMediaPlayer().start();
+            try {
+                if (mCurrentPosition > 0 && GSYVideoManager.instance().getMediaPlayer() != null) {
+                    setStateAndUi(CURRENT_STATE_PLAYING);
+                    GSYVideoManager.instance().getMediaPlayer().seekTo(mCurrentPosition);
+                    GSYVideoManager.instance().getMediaPlayer().start();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -457,20 +470,24 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public void onPrepared() {
         if (mCurrentState != CURRENT_STATE_PREPAREING) return;
 
-        if (GSYVideoManager.instance().getMediaPlayer() != null) {
-            GSYVideoManager.instance().getMediaPlayer().start();
-        }
+        try {
+            if (GSYVideoManager.instance().getMediaPlayer() != null) {
+                GSYVideoManager.instance().getMediaPlayer().start();
+            }
 
-        setStateAndUi(CURRENT_STATE_PLAYING);
+            setStateAndUi(CURRENT_STATE_PLAYING);
 
-        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-            Debuger.printfLog("onPrepared");
-            mVideoAllCallBack.onPrepared(mOriginUrl, mTitle, this);
-        }
+            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+                Debuger.printfLog("onPrepared");
+                mVideoAllCallBack.onPrepared(mOriginUrl, mTitle, this);
+            }
 
-        if (GSYVideoManager.instance().getMediaPlayer() != null && mSeekOnStart > 0) {
-            GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekOnStart);
-            mSeekOnStart = 0;
+            if (GSYVideoManager.instance().getMediaPlayer() != null && mSeekOnStart > 0) {
+                GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekOnStart);
+                mSeekOnStart = 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         createNetWorkState();
@@ -791,7 +808,12 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public long getNetSpeed() {
         if (GSYVideoManager.instance().getMediaPlayer() != null
                 && (GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer)) {
-            return ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).getTcpSpeed();
+            try {
+                return ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).getTcpSpeed();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return -1;
         } else {
             return -1;
         }
@@ -883,7 +905,11 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         if (GSYVideoManager.instance().getMediaPlayer() != null
                 && GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer) {
             if (speed > 0) {
-                ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).setSpeed(speed);
+                try {
+                    ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).setSpeed(speed);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 if (mSoundTouch) {
                     VideoOptionModel videoOptionModel =
@@ -903,15 +929,20 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     /**
      * 播放中生效的播放数据
+     *
      * @param speed
      * @param soundTouch
      */
     public void setSpeedPlaying(float speed, boolean soundTouch) {
         setSpeed(speed, soundTouch);
-        if (GSYVideoManager.instance().getMediaPlayer() != null ) {
+        if (GSYVideoManager.instance().getMediaPlayer() != null) {
             IjkMediaPlayer ijkMediaPlayer = (IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer();
-            ijkMediaPlayer.setSpeed(speed);
-            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", (soundTouch) ? 1 : 0);
+            try {
+                ijkMediaPlayer.setSpeed(speed);
+                ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", (soundTouch) ? 1 : 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

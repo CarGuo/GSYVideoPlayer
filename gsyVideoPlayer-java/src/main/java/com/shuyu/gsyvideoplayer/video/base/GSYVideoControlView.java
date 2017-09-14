@@ -403,7 +403,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     /**
      * 双击
      */
-    protected GestureDetector gestureDetector = new GestureDetector(getContext(),new GestureDetector.SimpleOnGestureListener(){
+    protected GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             touchDoubleUp();
@@ -687,7 +687,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         dismissVolumeDialog();
         dismissBrightnessDialog();
         if (mChangePosition && GSYVideoManager.instance().getMediaPlayer() != null && (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE)) {
-            GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekTimePosition);
+            try {
+                GSYVideoManager.instance().getMediaPlayer().seekTo(mSeekTimePosition);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             int duration = getDuration();
             int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
             if (mProgressBar != null) {
@@ -775,7 +779,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             }
             startButtonLogic();
         } else if (mCurrentState == CURRENT_STATE_PLAYING) {
-            GSYVideoManager.instance().getMediaPlayer().pause();
+            try {
+                GSYVideoManager.instance().getMediaPlayer().pause();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             setStateAndUi(CURRENT_STATE_PAUSE);
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
@@ -796,7 +804,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     mVideoAllCallBack.onClickResume(mOriginUrl, mTitle, this);
                 }
             }
-            GSYVideoManager.instance().getMediaPlayer().start();
+            try {
+                GSYVideoManager.instance().getMediaPlayer().start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             setStateAndUi(CURRENT_STATE_PLAYING);
         } else if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE) {
             startButtonLogic();
