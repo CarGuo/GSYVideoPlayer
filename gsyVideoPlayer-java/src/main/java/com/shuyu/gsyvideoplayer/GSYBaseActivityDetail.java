@@ -109,6 +109,10 @@ public abstract class GSYBaseActivityDetail extends AppCompatActivity implements
 
     @Override
     public void onPrepared(String url, Object... objects) {
+
+        if (orientationUtils == null) {
+            throw new NullPointerException("initVideo() or initVideoBuilderMode() first");
+        }
         //开始播放了才能旋转和全屏
         orientationUtils.setEnable(true);
         isPlay = true;
