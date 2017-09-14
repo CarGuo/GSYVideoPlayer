@@ -45,6 +45,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
 
     private float speed = 1;
 
+    private String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,13 +91,9 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
 
     @Override
     public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
-
-        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        //增加封面
+        //内置封面可参考SampleCoverVideo
         ImageView imageView = new ImageView(this);
-
         loadCover(imageView, url);
-
         return new GSYVideoOptionBuilder()
                 .setThumbImageView(imageView)
                 .setUrl(url)
@@ -122,7 +120,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
         Glide.with(this.getApplicationContext())
                 .setDefaultRequestOptions(
                         new RequestOptions()
-                                .frame(1000000)
+                                .frame(3000000)
                                 .centerCrop()
                                 .error(R.mipmap.xxx2)
                                 .placeholder(R.mipmap.xxx1))
