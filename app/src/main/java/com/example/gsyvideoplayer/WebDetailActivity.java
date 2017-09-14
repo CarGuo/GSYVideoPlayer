@@ -112,7 +112,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
     public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
-        //增加封面
+        //增加封面。内置封面可参考SampleCoverVideo
         ImageView imageView = new ImageView(this);
         loadCover(imageView, url);
         return new GSYVideoOptionBuilder()
