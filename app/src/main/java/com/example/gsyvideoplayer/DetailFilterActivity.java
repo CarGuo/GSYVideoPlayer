@@ -16,6 +16,7 @@ import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.effect.AutoFixEffect;
+import com.shuyu.gsyvideoplayer.effect.BarrelBlurEffect;
 import com.shuyu.gsyvideoplayer.effect.BlackAndWhiteEffect;
 import com.shuyu.gsyvideoplayer.effect.BrightnessEffect;
 import com.shuyu.gsyvideoplayer.effect.ContrastEffect;
@@ -224,7 +225,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                 effect = new PosterizeEffect();
                 break;
             case 15:
-                effect = new PosterizeEffect();
+                effect = new BarrelBlurEffect();
                 break;
             case 16:
                 effect = new SaturationEffect(deep);
