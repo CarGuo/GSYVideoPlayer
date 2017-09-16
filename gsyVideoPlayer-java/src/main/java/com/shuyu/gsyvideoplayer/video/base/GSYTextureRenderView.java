@@ -7,20 +7,16 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.TextureView;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import com.shuyu.gsyvideoplayer.GSYRenderView;
-import com.shuyu.gsyvideoplayer.GSYSurfaceView;
-import com.shuyu.gsyvideoplayer.GSYTextureView;
+import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.effect.NoEffect;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
 /**
@@ -28,7 +24,7 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
  * Created by guoshuyu on 2017/8/2.
  */
 
-public abstract class GSYTextureRenderView extends FrameLayout implements TextureView.SurfaceTextureListener, SurfaceHolder.Callback2 {
+public abstract class GSYTextureRenderView extends FrameLayout implements TextureView.SurfaceTextureListener, SurfaceHolder.Callback2, GSYVideoGLView.onGSYSurfaceListener {
 
     //native绘制
     protected Surface mSurface;
@@ -41,6 +37,9 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
     //满屏填充暂停为徒
     protected Bitmap mFullPauseBitmap;
+
+    //滤镜
+    protected GSYVideoGLView.ShaderInterface mEffectFilter = new NoEffect();
 
     //画面选择角度
     protected int mRotate;
@@ -106,6 +105,11 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     public void surfaceRedrawNeeded(SurfaceHolder holder) {
     }
 
+    /******************** GLSurfaceView ****************************/
+    @Override
+    public void onSurfaceAvailable(Surface surface) {
+        pauseLogic(surface, false);
+    }
 
     /**
      * 暂停逻辑
@@ -127,6 +131,9 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
         if (GSYVideoType.getRenderType() == GSYVideoType.SUFRACE) {
             mTextureView.addSurfaceView(getContext(), mTextureViewContainer, mRotate, this);
+            return;
+        } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
+            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter);
             return;
         }
         mTextureView.addTextureView(getContext(), mTextureViewContainer, mRotate, this);
@@ -171,6 +178,13 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
     }
 
+    protected GSYVideoGLView getGSYVideoGLSView() {
+        if (mTextureView.getShowView() instanceof GSYVideoGLView) {
+            return (GSYVideoGLView)mTextureView.getShowView();
+        }
+        return null;
+    }
+
     //暂停时使用绘制画面显示暂停、避免黑屏
     protected abstract void showPauseCover();
 
@@ -180,4 +194,15 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     //小屏幕绘制层
     protected abstract void setSmallVideoTextureView();
 
+
+    public GSYVideoGLView.ShaderInterface getEffectFilter() {
+        return mEffectFilter;
+    }
+
+    /**
+     * 设置滤镜效果
+     */
+    public void setEffectFilter(GSYVideoGLView.ShaderInterface effectFilter) {
+        this.mEffectFilter = effectFilter;
+    }
 }
