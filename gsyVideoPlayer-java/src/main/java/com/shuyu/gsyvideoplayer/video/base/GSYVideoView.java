@@ -495,6 +495,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         listenerNetWorkState();
 
         mHadPlay = true;
+
+        if (mTextureView != null) {
+            mTextureView.onResume();
+        }
     }
 
     @Override
