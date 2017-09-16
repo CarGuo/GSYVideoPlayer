@@ -22,6 +22,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 
 /**
+ * 在videffects的基础上调整的
+ *
  * 原 @author sheraz.khilji
  */
 @SuppressLint("ViewConstructor")
