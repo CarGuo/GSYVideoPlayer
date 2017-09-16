@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video, R.id.fragment_video, R.id.more_type, R.id.input_type, R.id.open_btn_empty, R.id.open_control})
+    @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video, R.id.fragment_video, R.id.more_type, R.id.input_type, R.id.open_btn_empty, R.id.open_control, R.id.open_filter})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.open_btn:
@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.open_control:
                 JumpUtils.gotoControl(this);
+                break;
+            case R.id.open_filter:
+                JumpUtils.gotoFilter(this);
                 break;
 
             case R.id.clear_cache:

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.example.gsyvideoplayer.DanmkuVideoActivity;
 import com.example.gsyvideoplayer.DetailControlActivity;
+import com.example.gsyvideoplayer.DetailFilterActivity;
 import com.example.gsyvideoplayer.DetailListPlayer;
 import com.example.gsyvideoplayer.DetailMoreTypeActivity;
 import com.example.gsyvideoplayer.DetailPlayer;
@@ -193,4 +194,15 @@ public class JumpUtils {
         Intent intent = new Intent(activity, DetailControlActivity.class);
         activity.startActivity(intent);
     }
+
+    /**
+     * 跳到滤镜
+     *
+     * @param activity
+     */
+    public static void gotoFilter(Activity activity) {
+        Intent intent = new Intent(activity, DetailFilterActivity.class);
+        activity.startActivity(intent);
+    }
+
 }
