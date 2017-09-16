@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 
 /**
+ * Barrel类型模糊
  * Created by guoshuyu on 2017/9/16.
  */
 

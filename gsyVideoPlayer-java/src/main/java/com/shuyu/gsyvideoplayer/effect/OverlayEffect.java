@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 
 /**
+ * 重叠
  * Created by guoshuyu on 2017/9/17.
  */
 
