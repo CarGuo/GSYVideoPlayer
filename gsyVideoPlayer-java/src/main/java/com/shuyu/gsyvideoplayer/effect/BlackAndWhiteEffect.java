@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import  com.shuyu.gsyvideoplayer.GSYVideoGLView.ShaderInterface;
 
 /**
+ * 黑白滤镜，
  * Converts the video into black and white colors
  *
  * @author sheraz.khilji

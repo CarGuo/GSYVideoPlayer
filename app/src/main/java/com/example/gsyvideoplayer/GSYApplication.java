@@ -28,6 +28,6 @@ public class GSYApplication extends Application {
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
         //GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
-        GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+        //GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
     }
 }

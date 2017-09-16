@@ -16,7 +16,6 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

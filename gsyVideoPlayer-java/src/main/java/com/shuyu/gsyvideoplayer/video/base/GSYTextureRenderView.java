@@ -180,7 +180,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
     protected GSYVideoGLView getGSYVideoGLSView() {
         if (mTextureView.getShowView() instanceof GSYVideoGLView) {
-            return (GSYVideoGLView)mTextureView.getShowView();
+            return (GSYVideoGLView) mTextureView.getShowView();
         }
         return null;
     }
@@ -204,5 +204,10 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
      */
     public void setEffectFilter(GSYVideoGLView.ShaderInterface effectFilter) {
         this.mEffectFilter = effectFilter;
+        if (mTextureView != null && mTextureView.getShowView() instanceof GSYVideoGLView) {
+            GSYVideoGLView gsyVideoGLView =
+                    (GSYVideoGLView) mTextureView.getShowView();
+            gsyVideoGLView.setEffect(effectFilter);
+        }
     }
 }
