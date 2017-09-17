@@ -18,6 +18,7 @@
 **支持**|**其他协议和编码concat、rtsp、crypto、mpeg等。**
 **支持**|**没有任何操作控件的纯播放支持。**
 **支持**|**DEMO演示获取视频第一帧等实现。**
+**支持**|**简单滤镜（内置黑白、色彩过滤、高斯、模糊、模糊等等20多种）。**
 待支持|**自带广告功能（目前需要自己实现）。**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
@@ -35,21 +36,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:2.0.7'
+compile 'com.shuyu:GSYVideoPlayer:2.0.8'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.0.7'
+compile 'com.shuyu:gsyVideoPlayer-java:2.0.8'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.7'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.7'
-compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.7'
-compile 'com.shuyu:gsyVideoPlayer-x64:2.0.7'
-compile 'com.shuyu:gsyVideoPlayer-x86:2.0.7'
+compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.8'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.8'
+compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.8'
+compile 'com.shuyu:gsyVideoPlayer-x64:2.0.8'
+compile 'com.shuyu:gsyVideoPlayer-x86:2.0.8'
 
 ```
 
@@ -59,9 +60,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.0.7' 
+compile 'com.shuyu:gsyVideoPlayer-java:2.0.8' 
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.7' 
+compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.8' 
 
 ```
 
@@ -69,7 +70,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.7'
 
 ## 二、其他推荐
 
-### * QQ群，有兴趣的可以进来（群里平时可能比较吵）：174815284 。
+### * QQ群，有兴趣的可以进来（群里平时吹水吐槽多）：174815284 。
 ### * [RickText](https://github.com/CarGuo/RickText)
 ### * [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
 
@@ -104,11 +105,18 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.7'
 
 ## 五、近期版本
 
-### 2.0.8（2017-xx-xx）
+### 2.0.8（2017-09-17）
 * 增加GSYBaseActivityDetail抽象类，方便detail模式集成。
+* 内部增加一些优化。
+* 增加简单滤镜功能支持。
+```
+1、全局设置
+GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+2、设置滤镜
+player.setEffectFilter(new BarrelBlurEffect());
+```
 
-
-### 2.0.7(2017-09-13）
+### 2.0.8(2017-09-13）
 
 * 优化增加了断网自动续连，需要为http前加上 "ijkhttphook:http://ssss"
 * update ijk to 0.8.3

@@ -1,5 +1,17 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 2.0.8（2017-09-17）
+* 增加GSYBaseActivityDetail抽象类，方便detail模式集成。
+* 内部增加一些优化。
+* 增加简单滤镜功能支持。
+```
+1、全局设置
+GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+2、设置滤镜
+player.setEffectFilter(new BarrelBlurEffect());
+```
+
+
 ### 2.0.7(2017-09-13）
 
 * 优化增加了断网自动续连，需要为http前加上 "ijkhttphook:http://ssss"
