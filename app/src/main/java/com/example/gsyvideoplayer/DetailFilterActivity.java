@@ -25,12 +25,15 @@ import com.shuyu.gsyvideoplayer.effect.DocumentaryEffect;
 import com.shuyu.gsyvideoplayer.effect.DuotoneEffect;
 import com.shuyu.gsyvideoplayer.effect.FillLightEffect;
 import com.shuyu.gsyvideoplayer.effect.GammaEffect;
+import com.shuyu.gsyvideoplayer.effect.GaussianBlurEffect;
 import com.shuyu.gsyvideoplayer.effect.GrainEffect;
 import com.shuyu.gsyvideoplayer.effect.HueEffect;
 import com.shuyu.gsyvideoplayer.effect.InvertColorsEffect;
 import com.shuyu.gsyvideoplayer.effect.LamoishEffect;
 import com.shuyu.gsyvideoplayer.effect.NoEffect;
+import com.shuyu.gsyvideoplayer.effect.OverlayEffect;
 import com.shuyu.gsyvideoplayer.effect.PosterizeEffect;
+import com.shuyu.gsyvideoplayer.effect.SampleBlurEffect;
 import com.shuyu.gsyvideoplayer.effect.SaturationEffect;
 import com.shuyu.gsyvideoplayer.effect.SepiaEffect;
 import com.shuyu.gsyvideoplayer.effect.SharpnessEffect;
@@ -248,10 +251,19 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
             case 22:
                 effect = new NoEffect();
                 break;
+            case 23:
+                effect = new OverlayEffect();
+                break;
+            case 24:
+                effect = new SampleBlurEffect(4.0f);
+                break;
+            case 25:
+                effect = new GaussianBlurEffect(6.0f, GaussianBlurEffect.TYPEXY);
+                break;
         }
         detailPlayer.setEffectFilter(effect);
         type++;
-        if (type > 22) {
+        if (type > 25) {
             type = 0;
         }
     }
