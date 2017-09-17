@@ -68,7 +68,7 @@ allprojects {
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.7'
+compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.8'
 
 ```
 
@@ -76,14 +76,14 @@ compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.7'
 
 ```
 
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.7'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.8'
 
 //根据你的需求
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.0.7'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.0.7'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.0.7'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.0.7'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.0.7'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.0.8'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.0.8'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.0.8'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.0.8'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.0.8'
 
 ```
 
@@ -93,8 +93,8 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 方法引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.7'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.8'
 
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.7'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.8'
 
 ```
