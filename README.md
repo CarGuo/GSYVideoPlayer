@@ -148,6 +148,22 @@ player.setEffectFilter(new BarrelBlurEffect());
 -dontwarn com.shuyu.gsyvideoplayer.**
 ```
 
+## 温馨提示
+
+```
+关于自定义和出现问题的请先看问题集锦、demo、issue。
+
+多了解一些音视频的基础常识，对容器，音视频编码，ffmpeg先做一些了解，以及mediacodec等的不同。
+尽量少出现为什么别的能播的问题哟。
+
+播放器的可自定义还是挺高的，定制请参考demo，多看源码。现在的功能有些多，demo也在不断的更新。
+
+一些新功能和项目结构也在不断的调整。
+
+欢迎提出问题，谢谢。
+
+```
+
 ## 依赖大小参考
 建议使用ndk过滤，详细参考 [参考第四条 ： 4、NDK的so支持](http://www.jianshu.com/p/86e4b336c17d)
 ![](https://ooo.0o0.ooo/2017/06/15/5941f343a39f5.png)
