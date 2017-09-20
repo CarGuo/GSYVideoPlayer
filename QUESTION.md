@@ -172,5 +172,11 @@ List<VideoOptionModel> list = new ArrayList<>();
 list.add(videoOptionModel);
 GSYVideoManager.instance().setOptionModelList(list);
 ```
+#### 17、rtsp连接有问题
 
-
+```
+VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tcp");
+List<VideoOptionModel> list = new ArrayList<>();
+list.add(videoOphtionModel);
+GSYVideoManager.instance().setOptionModelList(list);
+```
