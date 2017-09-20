@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.gsyvideoplayer.effect.PixelationEffect;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
@@ -186,10 +187,10 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                 effect = new AutoFixEffect(deep);
                 break;
             case 1:
-                effect = new BlackAndWhiteEffect();
+                effect = new PixelationEffect();
                 break;
             case 2:
-                effect = new BrightnessEffect(deep);
+                effect = new BlackAndWhiteEffect();
                 break;
             case 3:
                 effect = new ContrastEffect(deep);
@@ -259,6 +260,9 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                 break;
             case 25:
                 effect = new GaussianBlurEffect(6.0f, GaussianBlurEffect.TYPEXY);
+                break;
+            case 26:
+                effect = new BrightnessEffect(deep);
                 break;
         }
         detailPlayer.setEffectFilter(effect);
