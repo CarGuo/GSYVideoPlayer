@@ -48,11 +48,19 @@
 
 
         <Button
-            android:id="@+id/jump"
+            android:id="@+id/shot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_toRightOf="@+id/change_speed"
+            android:text="截图" />
+
+        <Button
+            android:id="@+id/jump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/shot"
             android:text="跳转" />
 
     </RelativeLayout>

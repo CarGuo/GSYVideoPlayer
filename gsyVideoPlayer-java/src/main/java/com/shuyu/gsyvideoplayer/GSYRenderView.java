@@ -71,6 +71,37 @@ public class GSYRenderView {
         return null;
     }
 
+    /**
+     * 暂停时初始化位图
+     */
+    public Bitmap initCoverHigh() {
+        if (mShowView != null && mShowView instanceof GSYTextureView) {
+            GSYTextureView textureView = (GSYTextureView) mShowView;
+            Bitmap bitmap = Bitmap.createBitmap(
+                    textureView.getSizeW(), textureView.getSizeH(), Bitmap.Config.ARGB_8888);
+            return textureView.getBitmap(bitmap);
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前画面
+     */
+    public Bitmap getCurrentFrameBitmap() {
+        return getCurrentFrameBitmap(false);
+    }
+
+    /**
+     * 获取当前画面
+     */
+    public Bitmap getCurrentFrameBitmap(boolean high) {
+        if (high) {
+            return initCoverHigh();
+        }
+        return initCover();
+    }
+
+
     public ViewGroup.LayoutParams getLayoutParams() {
         return mShowView.getLayoutParams();
     }

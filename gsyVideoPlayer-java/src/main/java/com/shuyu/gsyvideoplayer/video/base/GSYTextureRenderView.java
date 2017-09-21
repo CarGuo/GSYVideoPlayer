@@ -13,6 +13,7 @@ import android.view.TextureView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.google.android.exoplayer.text.TextRenderer;
 import com.shuyu.gsyvideoplayer.GSYRenderView;
 import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -57,6 +58,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     public GSYTextureRenderView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
+    /******************** start render  listener****************************/
 
     /******************** TextureView  ****************************/
 
@@ -112,6 +115,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     public void onSurfaceAvailable(Surface surface) {
         pauseLogic(surface, false);
     }
+
+    /******************** end render listener****************************/
 
     /**
      * 暂停逻辑
@@ -199,6 +204,13 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
     public GSYVideoGLView.ShaderInterface getEffectFilter() {
         return mEffectFilter;
+    }
+
+    /**
+     *
+     */
+    public GSYRenderView getRenderProxy() {
+        return mTextureView;
     }
 
     /**

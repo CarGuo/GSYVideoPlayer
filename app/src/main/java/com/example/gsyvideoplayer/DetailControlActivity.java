@@ -1,11 +1,13 @@
 package com.example.gsyvideoplayer;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -14,7 +16,13 @@ import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +49,9 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
 
     @BindView(R.id.jump)
     Button jump;
+
+    @BindView(R.id.shot)
+    Button shot;
 
     private float speed = 1;
 
@@ -81,6 +92,13 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
                 //startActivity(new Intent(DetailControlActivity.this, MainActivity.class));
             }
         });
+
+        shot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shotImage(v);
+            }
+        });
     }
 
     @Override
@@ -109,6 +127,29 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
     @Override
     public void clickForFullScreen() {
 
+    }
+
+    /**
+     * 视频截图
+     */
+    private void shotImage(View v) {
+        if (detailPlayer.getCurrentPlayer().getRenderProxy() != null) {
+            Bitmap bitmap = detailPlayer.getCurrentPlayer().getRenderProxy().getCurrentFrameBitmap();
+            if (bitmap != null) {
+                File file = new File(FileUtils.getPath(), "GSY-" + System.currentTimeMillis() + ".jpg");
+                OutputStream outputStream;
+                try {
+                    outputStream = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                    bitmap.recycle();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Toast.makeText(v.getContext(), "save fail " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Toast.makeText(v.getContext(), "save success " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void loadCover(ImageView imageView, String url) {
