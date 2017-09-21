@@ -93,6 +93,8 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
     private int percentage = 1;
 
+    private int percentageType = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +141,10 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                 cancelTask();
                 mTimerTask = new TaskLocal();
                 timer.schedule(mTimerTask, 0, 50);
+                percentageType++;
+                if (percentageType > 4) {
+                    percentageType = 1;
+                }
             }
         });
     }
@@ -189,7 +195,20 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         @Override
         public void run() {
             float[] transform = new float[16];
-            Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0, 0, 1.0f);
+            switch (percentageType) {
+                case 1:
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 1.0f, 0, 0.0f);
+                    break;
+                case 2:
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0.0f, 1.0f, 0.0f);
+                    break;
+                case 3:
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0.0f, 0, 1.0f);
+                    break;
+                case 4:
+                    Matrix.setRotateM(transform, 0, 360, 0.0f, 0, 1.0f);
+                    break;
+            }
             detailPlayer.setMatrixGL(transform);
             percentage++;
             if (percentage > 100) {
