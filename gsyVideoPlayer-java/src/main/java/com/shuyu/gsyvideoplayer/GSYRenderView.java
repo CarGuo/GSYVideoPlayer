@@ -152,7 +152,7 @@ public class GSYRenderView {
     /**
      * 添加播放的view
      */
-    public void addGLView(Context context, ViewGroup textureViewContainer, int rotate, GSYVideoGLView.onGSYSurfaceListener gsySurfaceListener, GSYVideoGLView.ShaderInterface effect) {
+    public void addGLView(Context context, ViewGroup textureViewContainer, int rotate, GSYVideoGLView.onGSYSurfaceListener gsySurfaceListener, GSYVideoGLView.ShaderInterface effect, float[] transform) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
@@ -162,6 +162,10 @@ public class GSYRenderView {
         gsyVideoGLView.setRotation(rotate);
 
         mShowView = gsyVideoGLView;
+
+        if (transform != null && transform.length == 16) {
+            gsyVideoGLView.setMVPMatrix(transform);
+        }
 
         int params = getTextureParams();
 

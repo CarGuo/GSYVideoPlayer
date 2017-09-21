@@ -41,6 +41,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     //滤镜
     protected GSYVideoGLView.ShaderInterface mEffectFilter = new NoEffect();
 
+    protected float[] mMatrixGL = null;
+
     //画面选择角度
     protected int mRotate;
 
@@ -133,7 +135,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             mTextureView.addSurfaceView(getContext(), mTextureViewContainer, mRotate, this);
             return;
         } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
-            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter);
+            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL);
             return;
         }
         mTextureView.addTextureView(getContext(), mTextureViewContainer, mRotate, this);
@@ -208,6 +210,16 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             GSYVideoGLView gsyVideoGLView =
                     (GSYVideoGLView) mTextureView.getShowView();
             gsyVideoGLView.setEffect(effectFilter);
+        }
+    }
+
+    public void setMatrixGL(float[] matrixGL) {
+        this.mMatrixGL = matrixGL;
+        if (mTextureView != null && mTextureView.getShowView() instanceof GSYVideoGLView
+                && mMatrixGL != null && mMatrixGL.length == 16) {
+            GSYVideoGLView gsyVideoGLView =
+                    (GSYVideoGLView) mTextureView.getShowView();
+            gsyVideoGLView.setMVPMatrix(mMatrixGL);
         }
     }
 }
