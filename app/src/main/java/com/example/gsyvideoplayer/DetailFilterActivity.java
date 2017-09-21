@@ -53,8 +53,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by guoshuyu on 2017/6/18.
  * 滤镜
+ * Created by guoshuyu on 2017/6/18.
  */
 
 public class DetailFilterActivity extends GSYBaseActivityDetail {
@@ -184,39 +184,9 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         cancelTask();
     }
 
-    private void cancelTask() {
-        if (mTimerTask != null) {
-            mTimerTask.cancel();
-            mTimerTask = null;
-        }
-    }
-
-    private class TaskLocal extends TimerTask {
-        @Override
-        public void run() {
-            float[] transform = new float[16];
-            switch (percentageType) {
-                case 1:
-                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 1.0f, 0, 0.0f);
-                    break;
-                case 2:
-                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0.0f, 1.0f, 0.0f);
-                    break;
-                case 3:
-                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0.0f, 0, 1.0f);
-                    break;
-                case 4:
-                    Matrix.setRotateM(transform, 0, 360, 0.0f, 0, 1.0f);
-                    break;
-            }
-            detailPlayer.setMatrixGL(transform);
-            percentage++;
-            if (percentage > 100) {
-                percentage = 1;
-            }
-        }
-    }
-
+    /**
+     * 加载第三秒的帧数作为封面
+     */
     private void loadCover(ImageView imageView, String url) {
 
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -240,8 +210,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     }
 
     /**
-     * 显示比例
-     * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
+     * 切换滤镜
      */
     private void resolveTypeUI() {
         GSYVideoGLView.ShaderInterface effect = new NoEffect();
@@ -336,4 +305,44 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     }
 
 
+    private void cancelTask() {
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+            mTimerTask = null;
+        }
+    }
+
+    /**
+     * 设置GLRender的VertexShader的transformMatrix
+     * 注意，这是android.opengl.Matrix
+     */
+    private class TaskLocal extends TimerTask {
+        @Override
+        public void run() {
+            float[] transform = new float[16];
+            switch (percentageType) {
+                case 1:
+                    //给予x变化
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 1.0f, 0, 0.0f);
+                    break;
+                case 2:
+                    //给予y变化
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0.0f, 1.0f, 0.0f);
+                    break;
+                case 3:
+                    //给予z变化
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0.0f, 0, 1.0f);
+                    break;
+                case 4:
+                    Matrix.setRotateM(transform, 0, 360, 0.0f, 0, 1.0f);
+                    break;
+            }
+            //设置渲染transform
+            detailPlayer.setMatrixGL(transform);
+            percentage++;
+            if (percentage > 100) {
+                percentage = 1;
+            }
+        }
+    }
 }

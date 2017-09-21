@@ -23,7 +23,12 @@ public class FileUtils {
     }
 
     public static String getPath() {
-        return getAppPath(NAME);
+        String path = getAppPath(NAME);
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return path;
     }
 
     public static String getTestPath() {
