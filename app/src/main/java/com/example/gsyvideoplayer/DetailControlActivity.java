@@ -11,10 +11,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -129,26 +131,32 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
 
     }
 
+
     /**
      * 视频截图
      */
-    private void shotImage(View v) {
+    private void shotImage(final View v) {
         if (detailPlayer.getCurrentPlayer().getRenderProxy() != null) {
-            Bitmap bitmap = detailPlayer.getCurrentPlayer().getRenderProxy().getCurrentFrameBitmap();
-            if (bitmap != null) {
-                File file = new File(FileUtils.getPath(), "GSY-" + System.currentTimeMillis() + ".jpg");
-                OutputStream outputStream;
-                try {
-                    outputStream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                    bitmap.recycle();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    Toast.makeText(v.getContext(), "save fail " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
-                    return;
+            //每次设置一个监听
+            detailPlayer.getCurrentPlayer().getRenderProxy().setCurrentFrameBitmapListener(new GSYVideoShotListener() {
+                @Override
+                public void getBitmap(Bitmap bitmap) {
+                    if (bitmap != null) {
+                        try {
+                            CommonUtil.saveBitmap(bitmap);
+                        } catch (FileNotFoundException e) {
+                            showToast("save fail ");
+                            e.printStackTrace();
+                            return;
+                        }
+                        showToast("save success ");
+                    } else {
+                        showToast("get bitmap fail ");
+                    }
                 }
-                Toast.makeText(v.getContext(), "save success " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
-            }
+            });
+            //获取截图
+            detailPlayer.getCurrentPlayer().getRenderProxy().taskShotPic();
         }
     }
 
@@ -194,5 +202,14 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
         detailPlayer.setSpeedPlaying(speed, true);
     }
 
+
+    private void showToast(final String tip) {
+        detailPlayer.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(DetailControlActivity.this, tip, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 }

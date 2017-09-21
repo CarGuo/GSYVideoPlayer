@@ -11,7 +11,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+
+import java.io.File;
 
 /**
  * render绘制中间控件
@@ -21,6 +26,10 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 public class GSYRenderView {
 
     private View mShowView;
+
+    private GSYVideoShotListener mGSYVideoShotListener;
+
+    private boolean mShotHigh;
 
     public void setTransform(Matrix transform) {
         if (mShowView instanceof TextureView) {
@@ -87,20 +96,71 @@ public class GSYRenderView {
     /**
      * 获取当前画面
      */
-    public Bitmap getCurrentFrameBitmap() {
-        return getCurrentFrameBitmap(false);
+    public void setCurrentFrameBitmapListener(GSYVideoShotListener gsyVideoShotListener) {
+        setCurrentFrameBitmapListener(gsyVideoShotListener, false);
     }
 
     /**
-     * 获取当前画面
+     * 获取获取截图监听
      */
-    public Bitmap getCurrentFrameBitmap(boolean high) {
-        if (high) {
-            return initCoverHigh();
-        }
-        return initCover();
+    public void setCurrentFrameBitmapListener(GSYVideoShotListener gsyVideoShotListener, boolean high) {
+        mGSYVideoShotListener = gsyVideoShotListener;
+        mShotHigh = high;
     }
 
+    /**
+     * 获取截图
+     */
+    public void taskShotPic() {
+        if (mGSYVideoShotListener != null) {
+            if (mShowView instanceof GSYVideoGLView) {
+                GSYVideoGLView gsyVideoGLView = (GSYVideoGLView) mShowView;
+                gsyVideoGLView.setGSYVideoShotListener(mGSYVideoShotListener, mShotHigh);
+                gsyVideoGLView.takeShotPic();
+            } else if (mShowView instanceof GSYTextureView) {
+                if (mShotHigh) {
+                    mGSYVideoShotListener.getBitmap(initCoverHigh());
+                } else {
+                    mGSYVideoShotListener.getBitmap(initCover());
+                }
+            }
+        }
+    }
+
+    /**
+     * 保存截图
+     */
+    public void saveFrame(final File file, GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+        saveFrame(file, false, gsyVideoShotSaveListener);
+    }
+
+    /**
+     * 保存截图
+     */
+    private void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+        GSYVideoShotListener gsyVideoShotListener = new GSYVideoShotListener() {
+            @Override
+            public void getBitmap(Bitmap bitmap) {
+                if (bitmap == null) {
+                    gsyVideoShotSaveListener.result(false, file);
+                } else {
+                    FileUtils.saveBitmap(bitmap, file);
+                    gsyVideoShotSaveListener.result(true, file);
+                }
+            }
+        };
+        if (mShowView instanceof GSYVideoGLView) {
+            GSYVideoGLView gsyVideoGLView = (GSYVideoGLView) mShowView;
+            gsyVideoGLView.setGSYVideoShotListener(gsyVideoShotListener, high);
+            gsyVideoGLView.takeShotPic();
+        } else if (mShowView instanceof GSYTextureView) {
+            if (high) {
+                gsyVideoShotListener.getBitmap(initCoverHigh());
+            } else {
+                gsyVideoShotListener.getBitmap(initCover());
+            }
+        }
+    }
 
     public ViewGroup.LayoutParams getLayoutParams() {
         return mShowView.getLayoutParams();

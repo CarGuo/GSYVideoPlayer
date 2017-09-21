@@ -1,5 +1,6 @@
 package com.example.gsyvideoplayer;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -8,10 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.effect.PixelationEffect;
+import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
@@ -42,10 +45,16 @@ import com.shuyu.gsyvideoplayer.effect.SharpnessEffect;
 import com.shuyu.gsyvideoplayer.effect.TemperatureEffect;
 import com.shuyu.gsyvideoplayer.effect.TintEffect;
 import com.shuyu.gsyvideoplayer.effect.VignetteEffect;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -130,7 +139,8 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         jump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JumpUtils.gotoControl(DetailFilterActivity.this);
+                shotImage(v);
+                //JumpUtils.gotoControl(DetailFilterActivity.this);
                 //startActivity(new Intent(DetailControlActivity.this, MainActivity.class));
             }
         });
@@ -182,6 +192,34 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         super.onDestroy();
         GSYVideoType.setRenderType(backupRendType);
         cancelTask();
+    }
+
+    /**
+     * 视频截图
+     */
+    private void shotImage(final View v) {
+        if (detailPlayer.getCurrentPlayer().getRenderProxy() != null) {
+            //每次设置一个监听
+            detailPlayer.getCurrentPlayer().getRenderProxy().setCurrentFrameBitmapListener(new GSYVideoShotListener() {
+                @Override
+                public void getBitmap(Bitmap bitmap) {
+                    if (bitmap != null) {
+                        try {
+                            CommonUtil.saveBitmap(bitmap);
+                        } catch (FileNotFoundException e) {
+                            showToast("save fail ");
+                            e.printStackTrace();
+                            return;
+                        }
+                        showToast("save success ");
+                    } else {
+                        showToast("get bitmap fail ");
+                    }
+                }
+            });
+            //获取截图
+            detailPlayer.getCurrentPlayer().getRenderProxy().taskShotPic();
+        }
     }
 
     /**
@@ -344,5 +382,15 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                 percentage = 1;
             }
         }
+    }
+
+
+    private void showToast(final String tip) {
+        detailPlayer.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(DetailFilterActivity.this, tip, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

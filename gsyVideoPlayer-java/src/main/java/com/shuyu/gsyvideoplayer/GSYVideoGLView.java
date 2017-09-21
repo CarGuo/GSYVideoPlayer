@@ -6,8 +6,11 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.Surface;
 
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 import com.shuyu.gsyvideoplayer.effect.NoEffect;
+
+import java.io.File;
 
 
 /**
@@ -73,6 +76,14 @@ public class GSYVideoGLView extends GLSurfaceView {
         if (MVPMatrix != null) {
             mRenderer.setMVPMatrix(MVPMatrix);
         }
+    }
+
+    public void takeShotPic() {
+        mRenderer.takeShotPic();
+    }
+
+    public void setGSYVideoShotListener(GSYVideoShotListener listener, boolean high) {
+        this.mRenderer.setGSYVideoShotListener(listener, high);
     }
 
     @Override
