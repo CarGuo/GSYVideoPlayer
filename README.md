@@ -107,6 +107,19 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.8'
 
 ## 五、近期版本
 
+### 2.0.9 (2017-xx-xx)
+
+* 视频帧截图.
+* GL效果动画，（xyz轴旋转，放大）
+```
+/**
+ * GL模式下的画面matrix效果
+ * @param matrixGL 16位长度
+ */
+public void setMatrixGL(float[] matrixGL)
+```
+
+
 ### 2.0.8（2017-09-17）
 * 增加GSYBaseActivityDetail抽象类，方便detail模式集成。
 * 内部增加一些优化。
@@ -117,12 +130,6 @@ GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 2、设置滤镜
 player.setEffectFilter(new BarrelBlurEffect());
 ```
-
-### 2.0.8(2017-09-13）
-
-* 优化增加了断网自动续连，需要为http前加上 "ijkhttphook:http://ssss"
-* update ijk to 0.8.3
-* 增加了demo中seekto精准定位，解决某些视频seek之后从头播放
 
 
 

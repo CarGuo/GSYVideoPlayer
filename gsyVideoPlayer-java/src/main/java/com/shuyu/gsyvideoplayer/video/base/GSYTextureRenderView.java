@@ -225,6 +225,10 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
         }
     }
 
+    /**
+     * GL模式下的画面matrix效果
+     * @param matrixGL 16位长度
+     */
     public void setMatrixGL(float[] matrixGL) {
         this.mMatrixGL = matrixGL;
         if (mTextureView != null && mTextureView.getShowView() instanceof GSYVideoGLView
