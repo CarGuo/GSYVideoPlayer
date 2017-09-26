@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
+import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
@@ -187,6 +188,14 @@ public class GSYRenderView {
         }
     }
 
+    public void releaseAll() {
+        if (mShowView instanceof GSYVideoGLView) {
+            GSYVideoGLView gsyVideoGLView = (GSYVideoGLView) mShowView;
+            gsyVideoGLView.requestLayout();
+            gsyVideoGLView.releaseAll();
+        }
+    }
+
     /**
      * 添加播放的view
      */
@@ -243,15 +252,21 @@ public class GSYRenderView {
     /**
      * 添加播放的view
      */
-    public void addGLView(Context context, ViewGroup textureViewContainer, int rotate, GSYVideoGLView.onGSYSurfaceListener gsySurfaceListener, GSYVideoGLView.ShaderInterface effect, float[] transform) {
+    public void addGLView(Context context, ViewGroup textureViewContainer, int rotate,
+                          GSYVideoGLView.onGSYSurfaceListener gsySurfaceListener,
+                          GSYVideoGLView.ShaderInterface effect, float[] transform,
+                          GSYVideoGLViewBaseRender customRender) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
         GSYVideoGLView gsyVideoGLView = new GSYVideoGLView(context);
+        if (customRender != null) {
+            gsyVideoGLView.setCustomRenderer(customRender);
+        }
         gsyVideoGLView.setEffect(effect);
         gsyVideoGLView.setGSYSurfaceListener(gsySurfaceListener);
         gsyVideoGLView.setRotation(rotate);
-
+        gsyVideoGLView.initRender();
         mShowView = gsyVideoGLView;
 
         if (transform != null && transform.length == 16) {

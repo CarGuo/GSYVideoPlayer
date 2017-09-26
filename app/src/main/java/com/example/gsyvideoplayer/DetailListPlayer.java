@@ -21,6 +21,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * Activity可以继承GSYBaseActivityDetail实现详情模式的页面
+ * 或者参考DetailPlayer、DetailListPlayer实现
  * Created by shuyu on 2016/12/20.
  */
 

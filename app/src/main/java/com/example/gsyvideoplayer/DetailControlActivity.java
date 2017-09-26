@@ -30,8 +30,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by guoshuyu on 2017/6/18.
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
+ * Activity可以继承GSYBaseActivityDetail实现详情模式的页面
+ * 或者参考DetailPlayer、DetailListPlayer实现
+ *
+ * Created by guoshuyu on 2017/6/18.
  */
 
 public class DetailControlActivity extends GSYBaseActivityDetail {

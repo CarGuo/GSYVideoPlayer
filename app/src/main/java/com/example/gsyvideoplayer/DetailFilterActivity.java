@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender;
 import com.example.gsyvideoplayer.effect.PixelationEffect;
 import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.utils.JumpUtils;
@@ -63,6 +64,8 @@ import butterknife.ButterKnife;
 
 /**
  * 滤镜
+ * Activity可以继承GSYBaseActivityDetail实现详情模式的页面
+ * 或者参考DetailPlayer、DetailListPlayer实现
  * Created by guoshuyu on 2017/6/18.
  */
 
@@ -127,6 +130,9 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                 }
             }
         });
+
+        //自定义render需要在播放器设置
+        //detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender());
 
         changeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
