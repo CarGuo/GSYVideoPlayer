@@ -50,6 +50,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 import java.io.File;
@@ -115,6 +116,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
         backupRendType = GSYVideoType.getRenderType();
 
+        //设置为GL播放模式，才能支持滤镜，注意此设置是全局的
         GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 
         resolveNormalVideoUI();
@@ -138,6 +140,14 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
             @Override
             public void onClick(View v) {
                 resolveTypeUI();
+            }
+        });
+
+        //使用GL播放的话，用这种方式可以解决退出全屏黑屏的问题
+        detailPlayer.setBackFromFullScreenListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DetailFilterActivity.this.onBackPressed();
             }
         });
 
