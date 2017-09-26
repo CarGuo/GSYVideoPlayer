@@ -18,6 +18,7 @@ import com.shuyu.gsyvideoplayer.GSYRenderView;
 import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.effect.NoEffect;
+import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
 /**
@@ -46,6 +47,9 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
     //画面选择角度
     protected int mRotate;
+
+    //自定义渲染
+    protected GSYVideoGLViewBaseRender mRenderer;
 
     public GSYTextureRenderView(@NonNull Context context) {
         super(context);
@@ -140,7 +144,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             mTextureView.addSurfaceView(getContext(), mTextureViewContainer, mRotate, this);
             return;
         } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
-            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL);
+            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer);
             return;
         }
         mTextureView.addTextureView(getContext(), mTextureViewContainer, mRotate, this);
@@ -227,6 +231,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
     /**
      * GL模式下的画面matrix效果
+     *
      * @param matrixGL 16位长度
      */
     public void setMatrixGL(float[] matrixGL) {
@@ -236,6 +241,19 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             GSYVideoGLView gsyVideoGLView =
                     (GSYVideoGLView) mTextureView.getShowView();
             gsyVideoGLView.setMVPMatrix(mMatrixGL);
+        }
+    }
+
+    /**
+     * 自定义GL的渲染render
+     */
+    public void setCustomGLRenderer(GSYVideoGLViewBaseRender renderer) {
+        this.mRenderer = renderer;
+        if (mTextureView != null && mRenderer != null &&
+                mTextureView.getShowView() instanceof GSYVideoGLView) {
+            GSYVideoGLView gsyVideoGLView =
+                    (GSYVideoGLView) mTextureView.getShowView();
+            gsyVideoGLView.setCustomRenderer(mRenderer);
         }
     }
 }

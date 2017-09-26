@@ -2,20 +2,21 @@ package com.shuyu.gsyvideoplayer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Paint;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.Surface;
 
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
+import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewBaseRender;
+import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewSimpleRender;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 import com.shuyu.gsyvideoplayer.effect.NoEffect;
-
-import java.io.File;
 
 
 /**
  * 在videffects的基础上调整的
- *
+ * <p>
  * 原 @author sheraz.khilji
  */
 @SuppressLint("ViewConstructor")
@@ -23,11 +24,13 @@ public class GSYVideoGLView extends GLSurfaceView {
 
     private static final String TAG = GSYVideoGLView.class.getName();
 
-    private GSYVideoGLViewSimpleRender mRenderer;
+    private GSYVideoGLViewBaseRender mRenderer;
 
     private Context mContext;
 
     private ShaderInterface mEffect = new NoEffect();
+
+    private float[] mMVPMatrix;
 
     private MeasureHelper measureHelper;
 
@@ -56,7 +59,21 @@ public class GSYVideoGLView extends GLSurfaceView {
         setEGLContextClientVersion(2);
         mRenderer = new GSYVideoGLViewSimpleRender();
         measureHelper = new MeasureHelper(this);
+        mRenderer.setSurfaceView(GSYVideoGLView.this);
+    }
+
+    public void initRender() {
         setRenderer(mRenderer);
+    }
+
+    /**
+     * 设置自定义的render，其他自定义设置会被取消，需要重新设置
+     * 在initRender() 前设置才会生效
+     *
+     * @param CustomRender
+     */
+    public void setCustomRenderer(GSYVideoGLViewBaseRender CustomRender) {
+        this.mRenderer = CustomRender;
         mRenderer.setSurfaceView(GSYVideoGLView.this);
     }
 
@@ -74,6 +91,7 @@ public class GSYVideoGLView extends GLSurfaceView {
 
     public void setMVPMatrix(float[] MVPMatrix) {
         if (MVPMatrix != null) {
+            mMVPMatrix = MVPMatrix;
             mRenderer.setMVPMatrix(MVPMatrix);
         }
     }
@@ -81,6 +99,7 @@ public class GSYVideoGLView extends GLSurfaceView {
     public void takeShotPic() {
         mRenderer.takeShotPic();
     }
+
 
     public void setGSYVideoShotListener(GSYVideoShotListener listener, boolean high) {
         this.mRenderer.setGSYVideoShotListener(listener, high);
@@ -117,4 +136,9 @@ public class GSYVideoGLView extends GLSurfaceView {
         return measureHelper.getMeasuredWidth();
     }
 
+    public void releaseAll() {
+        if (mRenderer != null) {
+            mRenderer.releaseAll();
+        }
+    }
 }

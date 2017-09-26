@@ -209,6 +209,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mNetSate = from.mNetSate;
         to.mRotateWithSystem = from.mRotateWithSystem;
         to.mBackUpPlayingBufferState = from.mBackUpPlayingBufferState;
+        to.mRenderer = from.mRenderer;
         to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
         to.setStateAndUi(from.mCurrentState);
     }
