@@ -134,7 +134,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         });
 
         //自定义render需要在播放器设置
-        //detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender());
+        detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender());
 
         changeFilter.setOnClickListener(new View.OnClickListener() {
             @Override

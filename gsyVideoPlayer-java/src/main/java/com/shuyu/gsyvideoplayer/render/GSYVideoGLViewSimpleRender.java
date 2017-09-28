@@ -35,12 +35,17 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
     private static final int TRIANGLE_VERTICES_DATA_UV_OFFSET = 3;
 
-    private static final int GL_TEXTURE_EXTERNAL_OES = 0x8D65;
+    protected static final int GL_TEXTURE_EXTERNAL_OES = 0x8D65;
 
     private final float[] mTriangleVerticesData = {
             // X, Y, Z, U, V
-            -1.0f, -1.0f, 0, 0.f, 0.f, 1.0f, -1.0f, 0, 1.f, 0.f, -1.0f,
-            1.0f, 0, 0.f, 1.f, 1.0f, 1.0f, 0, 1.f, 1.f,};
+            -1.0f, -1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+            -1.0f, 0.0f, 1.0f,
+            0.0f, -1.0f, 1.0f,
+            0.0f, 0.0f, 1.0f,
+            1.0f, 1.0f, 0.0f,
+            1.0f, 1.0f,};
 
     private final String mVertexShader = "uniform mat4 uMVPMatrix;\n"
             + "uniform mat4 uSTMatrix;\n"
@@ -52,15 +57,15 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
             + "  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n"
             + "}\n";
 
-    private float[] mMVPMatrix = new float[16];
+    protected float[] mMVPMatrix = new float[16];
 
     private float[] mSTMatrix = new float[16];
 
     protected int mProgram;
 
-    private int mTextureID[] = new int[2];
+    protected int mTextureID[] = new int[2];
 
-    private int muMVPMatrixHandle;
+    protected int muMVPMatrixHandle;
 
     private int muSTMatrixHandle;
 
@@ -273,6 +278,7 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
     /**
      * 设置滤镜效果
+     *
      * @param shaderEffect
      */
     public void setEffect(GSYVideoGLView.ShaderInterface shaderEffect) {
