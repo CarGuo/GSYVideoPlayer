@@ -36,9 +36,6 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         int mFilterInputTextureUniform2 = GLES20.glGetUniformLocation(mProgram, "sTexture2");
         GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexturesBitmap[0]);
-        if (mBitmap != null && !mBitmap.isRecycled()) {
-            GLUtils.texSubImage2D(GLES20.GL_TEXTURE_2D, 0, 0, 0, mBitmap);
-        }
         GLES20.glUniform1i(mFilterInputTextureUniform2, mTexturesBitmap[0]);
     }
 
@@ -61,8 +58,8 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
                 GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                 GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mBitmap, 0);
+        mBitmap.recycle();
     }
 
     @Override
@@ -78,10 +75,7 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
     @Override
     public void releaseAll() {
         super.releaseAll();
-        if (mBitmap != null && !mBitmap.isRecycled()) {
-            mBitmap.recycle();
-            mBitmap = null;
-        }
+
     }
 }
 
