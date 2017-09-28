@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewSimpleRender;
@@ -19,7 +20,7 @@ import javax.microedition.khronos.opengles.GL10;
 @SuppressLint("ViewConstructor")
 public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
 
-    private Bitmap mBitmap;
+    private Bitmap mBitmap, mBitmap2;
 
     private int mTexturesBitmap[] = new int[1];
 
@@ -45,9 +46,21 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
     }
 
     @Override
+    public void onDrawFrame(GL10 glUnused) {
+        super.onDrawFrame(glUnused);
+        float[] transform = new float[16];
+        Matrix.setRotateM(transform, 0, 360 * 60 / 100, 0.0f, 0.0f, 1.0f);
+        Matrix.scaleM(transform, 0, 50f / mSurfaceView.getWidth(), 50f / mSurfaceView.getWidth(), 1);
+        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, transform, 0);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        GLES20.glFinish();
+    }
+
+    @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         super.onSurfaceCreated(glUnused, config);
         mBitmap = BitmapFactory.decodeResource(mSurfaceView.getResources(), R.drawable.unlock);
+        mBitmap2 = BitmapFactory.decodeResource(mSurfaceView.getResources(), R.drawable.video_enlarge);
         GLES20.glGenTextures(1, mTexturesBitmap, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexturesBitmap[0]);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
