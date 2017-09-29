@@ -71,6 +71,10 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
     }
 
     public GSYVideoGLViewCustomRender(Bitmap bitmap, int width, int height) {
+        this(bitmap, width, height, 1.0f);
+    }
+
+    public GSYVideoGLViewCustomRender(Bitmap bitmap, int width, int height, float alpha) {
         super();
         mTriangleVertices = ByteBuffer
                 .allocateDirect(
@@ -81,7 +85,7 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         Matrix.setIdentityM(mSTMatrix, 0);
         Matrix.setIdentityM(mMVPMatrix, 0);
 
-        mBitmapEffect = new BitmapIconEffect(bitmap, width, height);
+        mBitmapEffect = new BitmapIconEffect(bitmap, width, height, alpha);
     }
 
     @Override
@@ -133,6 +137,8 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         super.onSurfaceChanged(glUnused, width, height);
+        //旋转到正常角度
+        Matrix.setRotateM(mMVPMatrix, 0, 180f, 0.0f, 0, 1.0f);
         //调整大小比例
         Matrix.scaleM(mMVPMatrix, 0, mBitmapEffect.getWidth() / mSurfaceView.getWidth(), mBitmapEffect.getHeight() / mSurfaceView.getWidth(), 1);
 
@@ -183,9 +189,9 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         GLES20.glGenTextures(1, mTexturesBitmap, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexturesBitmap[0]);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-                GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+                GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                 GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,

@@ -18,14 +18,21 @@ public class BitmapIconEffect implements ShaderInterface {
 
     private int mHeight = -1;
 
+    private float mAlpha = 1.0f;
+
     public BitmapIconEffect(Bitmap bitmap) {
         this(bitmap, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public BitmapIconEffect(Bitmap bitmap, int width, int height) {
+        this(bitmap, width, height, 1);
+    }
+
+    public BitmapIconEffect(Bitmap bitmap, int width, int height, float alpha) {
         this.mBitmap = bitmap;
         this.mWidth = width;
         this.mHeight = height;
+        this.mAlpha = alpha;
     }
 
     @Override
@@ -38,7 +45,7 @@ public class BitmapIconEffect implements ShaderInterface {
                         + "uniform sampler2D sTexture2;\n"
                         + "void main() {\n"
                         + "  vec4 c1 = texture2D(sTexture2, vTextureCoord);\n"
-                        + "  gl_FragColor = c1;\n"
+                        + "  gl_FragColor = vec4(c1.rgb, c1.a *" + mAlpha + ");\n"
                         + "}\n";
         return shader;
 
