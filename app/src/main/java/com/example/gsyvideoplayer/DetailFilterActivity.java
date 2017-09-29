@@ -135,12 +135,10 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
             }
         });
 
+
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unlock);
-
-
-
         //自定义render需要在播放器设置
-        detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender(bitmap, dp2px(192), dp2px(236)));
+        detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender(bitmap, dp2px(96), dp2px(128), 0.6f));
 
         changeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
