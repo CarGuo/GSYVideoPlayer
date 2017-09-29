@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.effect.BitmapIconEffect;
 import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender;
+import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender2;
 import com.example.gsyvideoplayer.effect.PixelationEffect;
 import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
@@ -140,12 +141,17 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
 
         //自定义render需要在播放器开始播放之前，播放过程中不允许切换render
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+
+        //水印图效果
+        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         mGSYVideoGLViewCustomRender = new GSYVideoGLViewCustomRender();
         mCustomBitmapIconEffect = new BitmapIconEffect(bitmap, dp2px(50), dp2px(50), 0.6f);
         mGSYVideoGLViewCustomRender.setBitmapEffect(mCustomBitmapIconEffect);
-        detailPlayer.setCustomGLRenderer(mGSYVideoGLViewCustomRender);
+        detailPlayer.setCustomGLRenderer(mGSYVideoGLViewCustomRender);*/
 
+        //多窗口播放效果
+        //detailPlayer.setEffectFilter(new GammaEffect(0.8f));
+        //detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender2());
 
         changeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,11 +190,11 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                     percentageType = 1;
                 }
                 //水印图动起来
-                cancelTask2();
+                /*cancelTask2();
                 mTimerTask2 = new TaskLocal2();
                 timer.schedule(mTimerTask2, 0, 400);
 
-                moveBitmap = !moveBitmap;
+                moveBitmap = !moveBitmap;*/
             }
         });
     }
