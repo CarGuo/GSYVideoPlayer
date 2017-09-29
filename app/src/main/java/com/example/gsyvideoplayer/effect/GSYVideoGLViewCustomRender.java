@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
@@ -35,13 +36,11 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
 
     private final float[] mTriangleVerticesData = {
             // X, Y, Z, U, V
-            -1.0f, -1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            -1.0f, 0.0f, 1.0f,
-            0.0f, -1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, 0.0f,
-            1.0f, 1.0f,};
+            -1.0f, -1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, -1.0f, 0.0f,
+            1.0f, 0.0f, -1.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, 0.0f, 1.0f, 1.0f,};
 
     private float[] mMVPMatrix = new float[16];
 
@@ -140,8 +139,9 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         //旋转到正常角度
         Matrix.setRotateM(mMVPMatrix, 0, 180f, 0.0f, 0, 1.0f);
         //调整大小比例
-        Matrix.scaleM(mMVPMatrix, 0, mBitmapEffect.getWidth() / mSurfaceView.getWidth(), mBitmapEffect.getHeight() / mSurfaceView.getWidth(), 1);
-
+        Matrix.scaleM(mMVPMatrix, 0, mBitmapEffect.getScaleW(), mBitmapEffect.getScaleH(), 1);
+        //调整位置
+        Matrix.translateM(mMVPMatrix, 0, mBitmapEffect.getPositionX(), mBitmapEffect.getPositionY(), 0f);
     }
 
     @Override

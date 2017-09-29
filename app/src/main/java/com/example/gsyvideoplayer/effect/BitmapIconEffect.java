@@ -12,6 +12,8 @@ import com.shuyu.gsyvideoplayer.GSYVideoGLView.ShaderInterface;
 public class BitmapIconEffect implements ShaderInterface {
 
 
+    private GLSurfaceView mGlSurfaceViewl;
+
     private Bitmap mBitmap;
 
     private int mWidth = -1;
@@ -19,6 +21,8 @@ public class BitmapIconEffect implements ShaderInterface {
     private int mHeight = -1;
 
     private float mAlpha = 1.0f;
+
+    private float mPositionOffset = 1.0f;
 
     public BitmapIconEffect(Bitmap bitmap) {
         this(bitmap, bitmap.getWidth(), bitmap.getHeight());
@@ -37,6 +41,7 @@ public class BitmapIconEffect implements ShaderInterface {
 
     @Override
     public String getShader(GLSurfaceView mGlSurfaceView) {
+        this.mGlSurfaceViewl = mGlSurfaceView;
         String shader =
                 "#extension GL_OES_EGL_image_external : require\n"
                         + "precision mediump float;\n"
@@ -57,6 +62,34 @@ public class BitmapIconEffect implements ShaderInterface {
 
     public float getHeight() {
         return (float) mHeight;
+    }
+
+    /**
+     * 水印图的默认比例
+     */
+    public float getScaleW() {
+        return getWidth() / mGlSurfaceViewl.getWidth();
+    }
+
+    /**
+     * 水印图的默认比例
+     */
+    public float getScaleH() {
+        return getHeight() / mGlSurfaceViewl.getHeight();
+    }
+
+    /**
+     * 水印图的起始位置，默认右边
+     */
+    public float getPositionX() {
+        return -(mGlSurfaceViewl.getWidth() / (getWidth()) - mPositionOffset);
+    }
+
+    /**
+     * 水印图的起始位置，默认上
+     */
+    public float getPositionY() {
+        return -(mGlSurfaceViewl.getHeight() / (getHeight()) - mPositionOffset);
     }
 
     public Bitmap getBitmap() {
