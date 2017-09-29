@@ -56,6 +56,15 @@ public class BitmapIconEffect implements ShaderInterface {
 
     }
 
+
+    public float getAlpha() {
+        return mAlpha;
+    }
+
+    public float getPositionOffset() {
+        return mPositionOffset;
+    }
+
     public float getWidth() {
         return (float) mWidth;
     }
@@ -91,6 +100,24 @@ public class BitmapIconEffect implements ShaderInterface {
     public float getPositionY() {
         return -(mGlSurfaceViewl.getHeight() / (getHeight()) - mPositionOffset);
     }
+
+
+    public float getMaxPositionX() {
+        return mGlSurfaceViewl.getWidth() / (getWidth()) - mPositionOffset;
+    }
+
+    public float getMaxPositionY() {
+        return mGlSurfaceViewl.getHeight() / (getHeight()) - mPositionOffset;
+    }
+
+    public float getMinPositionX() {
+        return -(mGlSurfaceViewl.getWidth() / (getWidth()) - mPositionOffset);
+    }
+
+    public float getMinPositionY() {
+        return -(mGlSurfaceViewl.getHeight() / (getHeight()) - mPositionOffset);
+    }
+
 
     public Bitmap getBitmap() {
         return mBitmap;

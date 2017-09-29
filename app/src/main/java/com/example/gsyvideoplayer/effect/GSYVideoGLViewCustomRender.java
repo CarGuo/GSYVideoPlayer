@@ -2,13 +2,10 @@ package com.example.gsyvideoplayer.effect;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
-import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
-import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewSimpleRender;
 
 import java.nio.ByteBuffer;
@@ -63,6 +60,10 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
     //水印圖
     private BitmapIconEffect mBitmapEffect;
 
+    public GSYVideoGLViewCustomRender() {
+        super();
+        init();
+    }
 
     public GSYVideoGLViewCustomRender(Bitmap bitmap) {
         this(bitmap, bitmap.getWidth(), bitmap.getHeight());
@@ -75,6 +76,12 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
 
     public GSYVideoGLViewCustomRender(Bitmap bitmap, int width, int height, float alpha) {
         super();
+        init();
+
+        mBitmapEffect = new BitmapIconEffect(bitmap, width, height, alpha);
+    }
+
+    private void init() {
         mTriangleVertices = ByteBuffer
                 .allocateDirect(
                         mTriangleVerticesData.length * FLOAT_SIZE_BYTES)
@@ -83,8 +90,6 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
 
         Matrix.setIdentityM(mSTMatrix, 0);
         Matrix.setIdentityM(mMVPMatrix, 0);
-
-        mBitmapEffect = new BitmapIconEffect(bitmap, width, height, alpha);
     }
 
     @Override
@@ -199,9 +204,6 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mBitmapEffect.getBitmap(), 0);
     }
 
-    public void setCurrentMVPMatrix(float[] mMVPMatrix) {
-        this.mMVPMatrix = mMVPMatrix;
-    }
 
     @Override
     public void releaseAll() {
@@ -210,6 +212,14 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
         }
+    }
+
+    public void setCurrentMVPMatrix(float[] mMVPMatrix) {
+        this.mMVPMatrix = mMVPMatrix;
+    }
+
+    public void setBitmapEffect(BitmapIconEffect bitmapEffect) {
+        this.mBitmapEffect = bitmapEffect;
     }
 }
 
