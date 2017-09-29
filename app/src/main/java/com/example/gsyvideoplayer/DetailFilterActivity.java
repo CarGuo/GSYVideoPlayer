@@ -1,10 +1,12 @@
 package com.example.gsyvideoplayer;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -133,8 +135,12 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
             }
         });
 
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unlock);
+
+
+
         //自定义render需要在播放器设置
-        detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender());
+        detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender(bitmap, dp2px(192), dp2px(236)));
 
         changeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -400,6 +406,10 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         }
     }
 
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
+    }
 
     private void showToast(final String tip) {
         detailPlayer.post(new Runnable() {
