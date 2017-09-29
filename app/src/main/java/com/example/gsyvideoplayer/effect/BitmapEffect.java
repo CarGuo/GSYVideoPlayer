@@ -22,9 +22,9 @@ public class BitmapEffect implements ShaderInterface {
                         + "uniform sampler2D sTexture2;\n"
                         + "void main() {\n"
                         + "  vec4 c2 = texture2D(sTexture, vTextureCoord);\n"
-                        + "  vec2 coord = vec2(0.5, 0.5);\n"
                         + "  vec4 c1 = texture2D(sTexture2, vTextureCoord);\n"
-                        + "  gl_FragColor = vec4(mix(c2.rgb, c1.rgb, c1.a * 0.5), c2.a);\n"
+                        + "  vec4 whiteColor = vec4(1.0);\n"
+                        + "  gl_FragColor = whiteColor - (whiteColor - c2) / c1;\n"
                         + "}\n";
         return shader;
 
