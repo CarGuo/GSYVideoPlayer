@@ -3,14 +3,11 @@ package com.example.gsyvideoplayer.effect;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PixelFormat;
-import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
 import com.example.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewSimpleRender;
 
 import java.nio.ByteBuffer;
@@ -22,7 +19,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 
 /**
- * 自定义渲染功能
+ * 自定义渲染功能，继承原本的提供视频渲染
+ * 自定义实现水印
  */
 @SuppressLint("ViewConstructor")
 public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
@@ -63,13 +61,16 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
 
     private FloatBuffer mTriangleVertices;
 
-    private Bitmap mBitmap;
-
     //水印圖
-    private BitmapIconEffect bitmapEffect = new BitmapIconEffect();
+    private BitmapIconEffect mBitmapEffect;
 
 
-    public GSYVideoGLViewCustomRender() {
+    public GSYVideoGLViewCustomRender(Bitmap bitmap) {
+        this(bitmap, bitmap.getWidth(), bitmap.getHeight());
+
+    }
+
+    public GSYVideoGLViewCustomRender(Bitmap bitmap, int width, int height) {
         super();
         mTriangleVertices = ByteBuffer
                 .allocateDirect(
@@ -79,17 +80,20 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
 
         Matrix.setIdentityM(mSTMatrix, 0);
         Matrix.setIdentityM(mMVPMatrix, 0);
+
+        mBitmapEffect = new BitmapIconEffect(bitmap, width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
         super.onDrawFrame(glUnused);
 
-        curProgram = createProgram(getVertexShader(), bitmapEffect.getShader(mSurfaceView));
+        curProgram = createProgram(getVertexShader(), mBitmapEffect.getShader(mSurfaceView));
 
         GLES20.glUseProgram(curProgram);
         checkGlError("glUseProgram");
 
+        //绑定注入bitmap
         int mFilterInputTextureUniform2 = GLES20.glGetUniformLocation(curProgram, "sTexture2");
         GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexturesBitmap[0]);
@@ -113,14 +117,11 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
 
         GLES20.glUniformMatrix4fv(muSTMatrixHandle, 1, false, mSTMatrix, 0);
 
-        float[] transform = new float[16];
-        Matrix.setRotateM(transform, 0, 360 * 60 / 100, 0.0f, 0.0f, 1.0f);
-        Matrix.scaleM(transform, 0, 200f / mSurfaceView.getWidth(), 200f / mSurfaceView.getWidth(), 1);
-        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, transform, 0);
+        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 
+        //水印透明
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-        //GLES20.glBlendColor(1, 1, 1, 0.5f);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         checkGlError("glDrawArrays");
@@ -130,11 +131,19 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
     }
 
     @Override
+    public void onSurfaceChanged(GL10 glUnused, int width, int height) {
+        super.onSurfaceChanged(glUnused, width, height);
+        //调整大小比例
+        Matrix.scaleM(mMVPMatrix, 0, mBitmapEffect.getWidth() / mSurfaceView.getWidth(), mBitmapEffect.getHeight() / mSurfaceView.getWidth(), 1);
+
+    }
+
+    @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         super.onSurfaceCreated(glUnused, config);
 
 
-        curProgram = createProgram(getVertexShader(), bitmapEffect.getShader(mSurfaceView));
+        curProgram = createProgram(getVertexShader(), mBitmapEffect.getShader(mSurfaceView));
 
         if (curProgram == 0) {
             return;
@@ -170,7 +179,7 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
                     "Could not get attrib location for uSTMatrix");
         }
 
-        mBitmap = BitmapFactory.decodeResource(mSurfaceView.getResources(), R.drawable.unlock);
+        //创建bitmap
         GLES20.glGenTextures(1, mTexturesBitmap, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexturesBitmap[0]);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
@@ -181,13 +190,20 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
                 GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                 GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mBitmap, 0);
-        mBitmap.recycle();
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mBitmapEffect.getBitmap(), 0);
+    }
+
+    public void setCurrentMVPMatrix(float[] mMVPMatrix) {
+        this.mMVPMatrix = mMVPMatrix;
     }
 
     @Override
     public void releaseAll() {
         super.releaseAll();
+        Bitmap bitmap = mBitmapEffect.getBitmap();
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+        }
     }
 }
 
