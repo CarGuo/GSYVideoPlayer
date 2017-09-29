@@ -19,7 +19,6 @@ import com.example.gsyvideoplayer.effect.BitmapIconEffect;
 import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender;
 import com.example.gsyvideoplayer.effect.PixelationEffect;
 import com.example.gsyvideoplayer.utils.CommonUtil;
-import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.GSYVideoGLView;
@@ -51,15 +50,10 @@ import com.shuyu.gsyvideoplayer.effect.TintEffect;
 import com.shuyu.gsyvideoplayer.effect.VignetteEffect;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -107,11 +101,17 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
     private TaskLocal mTimerTask;
 
+    private TaskLocal2 mTimerTask2;
+
+    private GSYVideoGLViewCustomRender mGSYVideoGLViewCustomRender;
+
+    private BitmapIconEffect mCustomBitmapIconEffect;
+
     private int percentage = 1;
 
     private int percentageType = 1;
 
-    private BitmapIconEffect mCustomBitmapIconEffect;
+    private boolean moveBitmap = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +141,10 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
         //自定义render需要在播放器开始播放之前，播放过程中不允许切换render
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        GSYVideoGLViewCustomRender gsyVideoGLViewCustomRender = new GSYVideoGLViewCustomRender();
+        mGSYVideoGLViewCustomRender = new GSYVideoGLViewCustomRender();
         mCustomBitmapIconEffect = new BitmapIconEffect(bitmap, dp2px(50), dp2px(50), 0.6f);
-        gsyVideoGLViewCustomRender.setBitmapEffect(mCustomBitmapIconEffect);
-        detailPlayer.setCustomGLRenderer(gsyVideoGLViewCustomRender);
+        mGSYVideoGLViewCustomRender.setBitmapEffect(mCustomBitmapIconEffect);
+        detailPlayer.setCustomGLRenderer(mGSYVideoGLViewCustomRender);
 
 
         changeFilter.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +175,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         anima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //画面旋转
                 cancelTask();
                 mTimerTask = new TaskLocal();
                 timer.schedule(mTimerTask, 0, 50);
@@ -182,6 +183,12 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                 if (percentageType > 4) {
                     percentageType = 1;
                 }
+                //水印图动起来
+                cancelTask2();
+                mTimerTask2 = new TaskLocal2();
+                timer.schedule(mTimerTask2, 0, 400);
+
+                moveBitmap = !moveBitmap;
             }
         });
     }
@@ -370,6 +377,13 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     }
 
 
+    private void cancelTask2() {
+        if (mTimerTask2 != null) {
+            mTimerTask2.cancel();
+            mTimerTask2 = null;
+        }
+    }
+
     private void cancelTask() {
         if (mTimerTask != null) {
             mTimerTask.cancel();
@@ -379,15 +393,32 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
 
     /**
-     *
+     * 水印图动起来,播放前开始会崩溃哟
      */
     private class TaskLocal2 extends TimerTask {
         @Override
         public void run() {
-
+            float[] transform = new float[16];
+            //旋转到正常角度
+            Matrix.setRotateM(transform, 0, 180f, 0.0f, 0, 1.0f);
+            //调整大小比例
+            Matrix.scaleM(transform, 0, mCustomBitmapIconEffect.getScaleW(), mCustomBitmapIconEffect.getScaleH(), 1);
+            if (moveBitmap) {
+                //调整位置
+                Matrix.translateM(transform, 0, mCustomBitmapIconEffect.getPositionX(), mCustomBitmapIconEffect.getPositionY(), 0f);
+            } else {
+                float maxX = mCustomBitmapIconEffect.getMaxPositionX();
+                float minX = mCustomBitmapIconEffect.getMinPositionX();
+                float maxY = mCustomBitmapIconEffect.getMaxPositionY();
+                float minY = mCustomBitmapIconEffect.getMinPositionY();
+                float x = (float) Math.random() * (maxX - minX) + minX;
+                float y = (float) Math.random() * (maxY - minY) + minY;
+                //调整位置
+                Matrix.translateM(transform, 0, x, y, 0f);
+                mGSYVideoGLViewCustomRender.setCurrentMVPMatrix(transform);
+            }
         }
     }
-
 
 
     /**

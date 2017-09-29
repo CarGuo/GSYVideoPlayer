@@ -125,6 +125,7 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
 
         GLES20.glUniformMatrix4fv(muSTMatrixHandle, 1, false, mSTMatrix, 0);
 
+
         GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 
         //水印透明
@@ -152,7 +153,6 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         super.onSurfaceCreated(glUnused, config);
-
 
         curProgram = createProgram(getVertexShader(), mBitmapEffect.getShader(mSurfaceView));
 
@@ -212,6 +212,10 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
         }
+    }
+
+    public float[] getMVPMatrix() {
+        return mMVPMatrix;
     }
 
     public void setCurrentMVPMatrix(float[] mMVPMatrix) {
