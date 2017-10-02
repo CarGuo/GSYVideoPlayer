@@ -75,6 +75,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     //旋转工具类
     protected OrientationUtils mOrientationUtils;
 
+    //全屏返回监听，如果设置了，默认返回无效
+    protected View.OnClickListener mBackFromFullScreenListener;
+
     public GSYBaseVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
     }
@@ -190,7 +193,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      * @param from
      * @param to
      */
-    private void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
+    protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
         to.setLooping(from.isLooping());
         to.setSpeed(from.getSpeed(), from.mSoundTouch);
         to.setIsTouchWigetFull(from.mIsTouchWigetFull);
@@ -209,6 +212,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mNetSate = from.mNetSate;
         to.mRotateWithSystem = from.mRotateWithSystem;
         to.mBackUpPlayingBufferState = from.mBackUpPlayingBufferState;
+        to.mRenderer = from.mRenderer;
+        to.mBackFromFullScreenListener = from.mBackFromFullScreenListener;
         to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
         to.setStateAndUi(from.mCurrentState);
     }
@@ -522,7 +527,11 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clearFullscreenLayout();
+                        if (mBackFromFullScreenListener == null) {
+                            clearFullscreenLayout();
+                        } else {
+                            mBackFromFullScreenListener.onClick(v);
+                        }
                     }
                 });
             }
@@ -532,7 +541,11 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 gsyVideoPlayer.getBackButton().setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clearFullscreenLayout();
+                        if (mBackFromFullScreenListener == null) {
+                            clearFullscreenLayout();
+                        } else {
+                            mBackFromFullScreenListener.onClick(v);
+                        }
                     }
                 });
             }
@@ -736,11 +749,18 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      */
     public GSYBaseVideoPlayer getCurrentPlayer() {
         if (getFullWindowPlayer() != null) {
-            return  getFullWindowPlayer();
+            return getFullWindowPlayer();
         }
         return this;
     }
 
+    /**
+     * 全屏返回监听，如果设置了，默认返回动作无效
+     * 包含返回键和全屏返回按键，前提是这两个按键存在
+     */
+    public void setBackFromFullScreenListener(OnClickListener backFromFullScreenListener) {
+        this.mBackFromFullScreenListener = backFromFullScreenListener;
+    }
 
     /**
      * 退出全屏，主要用于返回键

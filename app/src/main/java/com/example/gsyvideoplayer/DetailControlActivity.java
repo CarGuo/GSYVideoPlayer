@@ -1,27 +1,40 @@
 package com.example.gsyvideoplayer;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by guoshuyu on 2017/6/18.
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
+ * Activity可以继承GSYBaseActivityDetail实现详情模式的页面
+ * 或者参考DetailPlayer、DetailListPlayer实现
+ *
+ * Created by guoshuyu on 2017/6/18.
  */
 
 public class DetailControlActivity extends GSYBaseActivityDetail {
@@ -41,6 +54,9 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
 
     @BindView(R.id.jump)
     Button jump;
+
+    @BindView(R.id.shot)
+    Button shot;
 
     private float speed = 1;
 
@@ -81,6 +97,13 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
                 //startActivity(new Intent(DetailControlActivity.this, MainActivity.class));
             }
         });
+
+        shot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shotImage(v);
+            }
+        });
     }
 
     @Override
@@ -109,6 +132,35 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
     @Override
     public void clickForFullScreen() {
 
+    }
+
+
+    /**
+     * 视频截图
+     */
+    private void shotImage(final View v) {
+        if (detailPlayer.getCurrentPlayer().getRenderProxy() != null) {
+            //每次设置一个监听
+            detailPlayer.getCurrentPlayer().getRenderProxy().setCurrentFrameBitmapListener(new GSYVideoShotListener() {
+                @Override
+                public void getBitmap(Bitmap bitmap) {
+                    if (bitmap != null) {
+                        try {
+                            CommonUtil.saveBitmap(bitmap);
+                        } catch (FileNotFoundException e) {
+                            showToast("save fail ");
+                            e.printStackTrace();
+                            return;
+                        }
+                        showToast("save success ");
+                    } else {
+                        showToast("get bitmap fail ");
+                    }
+                }
+            });
+            //获取截图
+            detailPlayer.getCurrentPlayer().getRenderProxy().taskShotPic();
+        }
     }
 
     private void loadCover(ImageView imageView, String url) {
@@ -153,5 +205,14 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
         detailPlayer.setSpeedPlaying(speed, true);
     }
 
+
+    private void showToast(final String tip) {
+        detailPlayer.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(DetailControlActivity.this, tip, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 }

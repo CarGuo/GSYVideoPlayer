@@ -1,8 +1,13 @@
 package com.shuyu.gsyvideoplayer.utils;
 
+import android.graphics.Bitmap;
 import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 public class FileUtils {
 
@@ -23,7 +28,12 @@ public class FileUtils {
     }
 
     public static String getPath() {
-        return getAppPath(NAME);
+        String path = getAppPath(NAME);
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return path;
     }
 
     public static String getTestPath() {
@@ -41,6 +51,19 @@ public class FileUtils {
                         e.printStackTrace();
                     }
                 }
+            }
+        }
+    }
+
+    public static void saveBitmap(Bitmap bitmap, File file) {
+        if (bitmap != null) {
+            OutputStream outputStream;
+            try {
+                outputStream = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                bitmap.recycle();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         }
     }
