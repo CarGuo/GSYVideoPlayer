@@ -43,14 +43,14 @@ compile 'com.shuyu:GSYVideoPlayer:2.0.8'
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.0.8'
+compile 'com.shuyu:gsyVideoPlayer-java:2.0.9'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.8'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.8'
-compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.8'
-compile 'com.shuyu:gsyVideoPlayer-x64:2.0.8'
-compile 'com.shuyu:gsyVideoPlayer-x86:2.0.8'
+compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.9'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.9'
+compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.9'
+compile 'com.shuyu:gsyVideoPlayer-x64:2.0.9'
+compile 'com.shuyu:gsyVideoPlayer-x86:2.0.9'
 
 ```
 
@@ -60,9 +60,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.0.8' 
+compile 'com.shuyu:gsyVideoPlayer-java:2.0.9' 
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.8' 
+compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.9' 
 
 ```
 
@@ -105,6 +105,14 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.8'
 
 ## 五、近期版本
 
+
+### 2.0.9(2017-10-02)
+* 增加顶层效果渲染的动画效果。
+* 增加截图功能。
+* 增加自定义render支持。
+* 增加水印、多重播放等。
+
+
 ### 2.0.8（2017-09-17）
 * 增加GSYBaseActivityDetail抽象类，方便detail模式集成。
 * 内部增加一些优化。
@@ -115,13 +123,6 @@ GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 2、设置滤镜
 player.setEffectFilter(new BarrelBlurEffect());
 ```
-
-### 2.0.8(2017-09-13）
-
-* 优化增加了断网自动续连，需要为http前加上 "ijkhttphook:http://ssss"
-* update ijk to 0.8.3
-* 增加了demo中seekto精准定位，解决某些视频seek之后从头播放
-
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
