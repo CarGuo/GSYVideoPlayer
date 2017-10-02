@@ -1,17 +1,26 @@
 package com.example.gsyvideoplayer;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.gsyvideoplayer.effect.BitmapIconEffect;
+import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender;
+import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender2;
+import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender3;
 import com.example.gsyvideoplayer.effect.PixelationEffect;
-import com.example.gsyvideoplayer.utils.JumpUtils;
+import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.GSYVideoGLView;
@@ -41,16 +50,23 @@ import com.shuyu.gsyvideoplayer.effect.SharpnessEffect;
 import com.shuyu.gsyvideoplayer.effect.TemperatureEffect;
 import com.shuyu.gsyvideoplayer.effect.TintEffect;
 import com.shuyu.gsyvideoplayer.effect.VignetteEffect;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+
+import java.io.FileNotFoundException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by guoshuyu on 2017/6/18.
  * 滤镜
+ * Activity可以继承GSYBaseActivityDetail实现详情模式的页面
+ * 或者参考DetailPlayer、DetailListPlayer实现
+ * Created by guoshuyu on 2017/6/18.
  */
 
 public class DetailFilterActivity extends GSYBaseActivityDetail {
@@ -71,6 +87,10 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     @BindView(R.id.jump)
     Button jump;
 
+    @BindView(R.id.change_anima)
+    Button anima;
+
+
     private int type = 0;
 
     private int backupRendType;
@@ -78,6 +98,22 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     private float deep = 0.8f;
 
     private String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+
+    private Timer timer = new Timer();
+
+    private TaskLocal mTimerTask;
+
+    private TaskLocal2 mTimerTask2;
+
+    private GSYVideoGLViewCustomRender mGSYVideoGLViewCustomRender;
+
+    private BitmapIconEffect mCustomBitmapIconEffect;
+
+    private int percentage = 1;
+
+    private int percentageType = 1;
+
+    private boolean moveBitmap = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +123,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
         backupRendType = GSYVideoType.getRenderType();
 
+        //设置为GL播放模式，才能支持滤镜，注意此设置是全局的
         GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 
         resolveNormalVideoUI();
@@ -103,6 +140,23 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
             }
         });
 
+
+        //自定义render需要在播放器开始播放之前，播放过程中不允许切换render
+
+        //水印图效果
+        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        mGSYVideoGLViewCustomRender = new GSYVideoGLViewCustomRender();
+        mCustomBitmapIconEffect = new BitmapIconEffect(bitmap, dp2px(50), dp2px(50), 0.6f);
+        mGSYVideoGLViewCustomRender.setBitmapEffect(mCustomBitmapIconEffect);
+        detailPlayer.setCustomGLRenderer(mGSYVideoGLViewCustomRender);*/
+
+        //多窗口播放效果
+        //detailPlayer.setEffectFilter(new GammaEffect(0.8f));
+        //detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender2());
+
+        //图片穿孔透视播放
+        //detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender3());
+
         changeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,12 +164,41 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
             }
         });
 
+        //使用GL播放的话，用这种方式可以解决退出全屏黑屏的问题
+        detailPlayer.setBackFromFullScreenListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DetailFilterActivity.this.onBackPressed();
+            }
+        });
+
 
         jump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JumpUtils.gotoControl(DetailFilterActivity.this);
+                shotImage(v);
+                //JumpUtils.gotoControl(DetailFilterActivity.this);
                 //startActivity(new Intent(DetailControlActivity.this, MainActivity.class));
+            }
+        });
+
+        anima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //画面旋转
+                cancelTask();
+                mTimerTask = new TaskLocal();
+                timer.schedule(mTimerTask, 0, 50);
+                percentageType++;
+                if (percentageType > 4) {
+                    percentageType = 1;
+                }
+                //水印图动起来
+                /*cancelTask2();
+                mTimerTask2 = new TaskLocal2();
+                timer.schedule(mTimerTask2, 0, 400);
+
+                moveBitmap = !moveBitmap;*/
             }
         });
     }
@@ -152,8 +235,40 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     protected void onDestroy() {
         super.onDestroy();
         GSYVideoType.setRenderType(backupRendType);
+        cancelTask();
     }
 
+    /**
+     * 视频截图
+     */
+    private void shotImage(final View v) {
+        if (detailPlayer.getCurrentPlayer().getRenderProxy() != null) {
+            //每次设置一个监听
+            detailPlayer.getCurrentPlayer().getRenderProxy().setCurrentFrameBitmapListener(new GSYVideoShotListener() {
+                @Override
+                public void getBitmap(Bitmap bitmap) {
+                    if (bitmap != null) {
+                        try {
+                            CommonUtil.saveBitmap(bitmap);
+                        } catch (FileNotFoundException e) {
+                            showToast("save fail ");
+                            e.printStackTrace();
+                            return;
+                        }
+                        showToast("save success ");
+                    } else {
+                        showToast("get bitmap fail ");
+                    }
+                }
+            });
+            //获取截图
+            detailPlayer.getCurrentPlayer().getRenderProxy().taskShotPic();
+        }
+    }
+
+    /**
+     * 加载第三秒的帧数作为封面
+     */
     private void loadCover(ImageView imageView, String url) {
 
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -177,8 +292,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     }
 
     /**
-     * 显示比例
-     * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
+     * 切换滤镜
      */
     private void resolveTypeUI() {
         GSYVideoGLView.ShaderInterface effect = new NoEffect();
@@ -273,4 +387,95 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     }
 
 
+    private void cancelTask2() {
+        if (mTimerTask2 != null) {
+            mTimerTask2.cancel();
+            mTimerTask2 = null;
+        }
+    }
+
+    private void cancelTask() {
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+            mTimerTask = null;
+        }
+    }
+
+
+    /**
+     * 水印图动起来,播放前开始会崩溃哟
+     */
+    private class TaskLocal2 extends TimerTask {
+        @Override
+        public void run() {
+            float[] transform = new float[16];
+            //旋转到正常角度
+            Matrix.setRotateM(transform, 0, 180f, 0.0f, 0, 1.0f);
+            //调整大小比例
+            Matrix.scaleM(transform, 0, mCustomBitmapIconEffect.getScaleW(), mCustomBitmapIconEffect.getScaleH(), 1);
+            if (moveBitmap) {
+                //调整位置
+                Matrix.translateM(transform, 0, mCustomBitmapIconEffect.getPositionX(), mCustomBitmapIconEffect.getPositionY(), 0f);
+            } else {
+                float maxX = mCustomBitmapIconEffect.getMaxPositionX();
+                float minX = mCustomBitmapIconEffect.getMinPositionX();
+                float maxY = mCustomBitmapIconEffect.getMaxPositionY();
+                float minY = mCustomBitmapIconEffect.getMinPositionY();
+                float x = (float) Math.random() * (maxX - minX) + minX;
+                float y = (float) Math.random() * (maxY - minY) + minY;
+                //调整位置
+                Matrix.translateM(transform, 0, x, y, 0f);
+                mGSYVideoGLViewCustomRender.setCurrentMVPMatrix(transform);
+            }
+        }
+    }
+
+
+    /**
+     * 设置GLRender的VertexShader的transformMatrix
+     * 注意，这是android.opengl.Matrix
+     */
+    private class TaskLocal extends TimerTask {
+        @Override
+        public void run() {
+            float[] transform = new float[16];
+            switch (percentageType) {
+                case 1:
+                    //给予x变化
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 1.0f, 0, 0.0f);
+                    break;
+                case 2:
+                    //给予y变化
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0.0f, 1.0f, 0.0f);
+                    break;
+                case 3:
+                    //给予z变化
+                    Matrix.setRotateM(transform, 0, 360 * percentage / 100, 0.0f, 0, 1.0f);
+                    break;
+                case 4:
+                    Matrix.setRotateM(transform, 0, 360, 0.0f, 0, 1.0f);
+                    break;
+            }
+            //设置渲染transform
+            detailPlayer.setMatrixGL(transform);
+            percentage++;
+            if (percentage > 100) {
+                percentage = 1;
+            }
+        }
+    }
+
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
+    }
+
+    private void showToast(final String tip) {
+        detailPlayer.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(DetailFilterActivity.this, tip, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

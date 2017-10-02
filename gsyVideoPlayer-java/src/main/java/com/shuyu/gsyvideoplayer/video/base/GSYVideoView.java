@@ -408,7 +408,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     @Override
     public void onVideoPause() {
         try {
-            if (GSYVideoManager.instance().getMediaPlayer()!= null &&
+            if (GSYVideoManager.instance().getMediaPlayer() != null &&
                     GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
                 setStateAndUi(CURRENT_STATE_PAUSE);
                 mPauseTime = System.currentTimeMillis();
@@ -963,6 +963,19 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     public void setShowPauseCover(boolean showPauseCover) {
         this.mShowPauseCover = showPauseCover;
+    }
+
+    /**
+     * seekto what you want
+     */
+    public void seekTo(long position) {
+        try {
+            if (GSYVideoManager.instance().getMediaPlayer() != null && position > 0) {
+                GSYVideoManager.instance().getMediaPlayer().seekTo(position);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

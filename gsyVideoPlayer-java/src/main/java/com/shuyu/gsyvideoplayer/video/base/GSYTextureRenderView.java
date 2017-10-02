@@ -13,10 +13,12 @@ import android.view.TextureView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.google.android.exoplayer.text.TextRenderer;
 import com.shuyu.gsyvideoplayer.GSYRenderView;
 import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.effect.NoEffect;
+import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
 /**
@@ -41,8 +43,13 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     //滤镜
     protected GSYVideoGLView.ShaderInterface mEffectFilter = new NoEffect();
 
+    protected float[] mMatrixGL = null;
+
     //画面选择角度
     protected int mRotate;
+
+    //自定义渲染
+    protected GSYVideoGLViewBaseRender mRenderer;
 
     public GSYTextureRenderView(@NonNull Context context) {
         super(context);
@@ -55,6 +62,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     public GSYTextureRenderView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
+    /******************** start render  listener****************************/
 
     /******************** TextureView  ****************************/
 
@@ -111,6 +120,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
         pauseLogic(surface, false);
     }
 
+    /******************** end render listener****************************/
+
     /**
      * 暂停逻辑
      */
@@ -133,7 +144,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             mTextureView.addSurfaceView(getContext(), mTextureViewContainer, mRotate, this);
             return;
         } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
-            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter);
+            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer);
             return;
         }
         mTextureView.addTextureView(getContext(), mTextureViewContainer, mRotate, this);
@@ -200,6 +211,13 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     }
 
     /**
+     *
+     */
+    public GSYRenderView getRenderProxy() {
+        return mTextureView;
+    }
+
+    /**
      * 设置滤镜效果
      */
     public void setEffectFilter(GSYVideoGLView.ShaderInterface effectFilter) {
@@ -208,6 +226,34 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             GSYVideoGLView gsyVideoGLView =
                     (GSYVideoGLView) mTextureView.getShowView();
             gsyVideoGLView.setEffect(effectFilter);
+        }
+    }
+
+    /**
+     * GL模式下的画面matrix效果
+     *
+     * @param matrixGL 16位长度
+     */
+    public void setMatrixGL(float[] matrixGL) {
+        this.mMatrixGL = matrixGL;
+        if (mTextureView != null && mTextureView.getShowView() instanceof GSYVideoGLView
+                && mMatrixGL != null && mMatrixGL.length == 16) {
+            GSYVideoGLView gsyVideoGLView =
+                    (GSYVideoGLView) mTextureView.getShowView();
+            gsyVideoGLView.setMVPMatrix(mMatrixGL);
+        }
+    }
+
+    /**
+     * 自定义GL的渲染render
+     */
+    public void setCustomGLRenderer(GSYVideoGLViewBaseRender renderer) {
+        this.mRenderer = renderer;
+        if (mTextureView != null && mRenderer != null &&
+                mTextureView.getShowView() instanceof GSYVideoGLView) {
+            GSYVideoGLView gsyVideoGLView =
+                    (GSYVideoGLView) mTextureView.getShowView();
+            gsyVideoGLView.setCustomRenderer(mRenderer);
         }
     }
 }
