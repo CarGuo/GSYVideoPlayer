@@ -35,8 +35,9 @@
         android:layout_height="@dimen/post_media_height" />
 
     <RelativeLayout
+        android:id="@+id/detail_player_control_1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/detail_player">
 
         <Button
@@ -65,4 +66,54 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/detail_player_control_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_player_control_1">
+
+        <Button
+            android:id="@+id/start_gif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="开始gif" />
+
+
+        <Button
+            android:id="@+id/stop_gif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/start_gif"
+            android:text="停止gif" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#A0000000">
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loading"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:text="处理中，请稍后"
+            android:textColor="#FFFFFF" />
+
+
+    </RelativeLayout>
 </RelativeLayout>
