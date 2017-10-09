@@ -2,7 +2,9 @@ package com.shuyu.gsyvideoplayer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ThumbnailUtils;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.TextureView;
@@ -14,10 +16,15 @@ import android.widget.RelativeLayout;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewBaseRender;
+import com.shuyu.gsyvideoplayer.utils.AnimatedGifEncoder;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * render绘制中间控件
@@ -126,6 +133,54 @@ public class GSYRenderView {
                 }
             }
         }
+    }
+
+
+    /**
+     * 生成gif图
+     *
+     * @param file                     保存的文件路径，请确保文件夹目录已经创建
+     * @param pics                     需要转化的bitmap本地路径集合
+     * @param delay                    每一帧之间的延时
+     * @param inSampleSize             采样率，越大图片越小，越大图片越模糊，需要处理的时长越短
+     * @param scaleSize                缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
+     * @param gsyVideoShotSaveListener 结果回调
+     */
+    public void createGif(File file, List<String> pics, int delay, int inSampleSize, int scaleSize,
+                          final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
+        localAnimatedGifEncoder.start(baos);//start
+        localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
+        localAnimatedGifEncoder.setDelay(delay);
+        for (int i = 0; i < pics.size(); i++) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = inSampleSize;
+            options.inJustDecodeBounds = true; // 先获取原大小
+            BitmapFactory.decodeFile(pics.get(i), options);
+            double w = (double) options.outWidth / scaleSize;
+            double h = (double) options.outHeight / scaleSize;
+            options.inJustDecodeBounds = false; // 获取新的大小
+            Bitmap bitmap = BitmapFactory.decodeFile(pics.get(i), options);
+            Bitmap pic = ThumbnailUtils.extractThumbnail(bitmap, (int) w, (int) h);
+            localAnimatedGifEncoder.addFrame(pic);
+            bitmap.recycle();
+            pic.recycle();
+        }
+        localAnimatedGifEncoder.finish();//finish
+        try {
+            FileOutputStream fos = new FileOutputStream(file.getPath());
+            baos.writeTo(fos);
+            baos.flush();
+            fos.flush();
+            baos.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            gsyVideoShotSaveListener.result(false, file);
+            return;
+        }
+        gsyVideoShotSaveListener.result(true, file);
     }
 
     /**
