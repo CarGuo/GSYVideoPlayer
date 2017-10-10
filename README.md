@@ -10,7 +10,7 @@
 **支持**|**DEMO演示获取视频第一帧等实现。**
 **支持**|**简单滤镜（马赛克、黑白、色彩过滤、高斯、模糊、模糊等等20多种）。**
 **支持**|**GL效果动画，（xyz轴旋转，放大）。**
-**支持**|**视频帧截图功能**
+**支持**|**视频帧截图功能，视频生成gif功能**
 **支持**|**视频播放效果（水印、画面多重播放等）**
 **支持**|**列表播放；列表连续播放；重力旋转与手动旋转；视频本身rotation旋转属性。**
 **支持**|**全屏切换动画效果；小窗口播放，可拖动。**
@@ -39,21 +39,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:2.0.8'
+compile 'com.shuyu:GSYVideoPlayer:2.1.0'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.0.9'
+compile 'com.shuyu:gsyVideoPlayer-java:2.1.0'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.9'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.9'
-compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.9'
-compile 'com.shuyu:gsyVideoPlayer-x64:2.0.9'
-compile 'com.shuyu:gsyVideoPlayer-x86:2.0.9'
+compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.0'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.0'
+compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.0'
+compile 'com.shuyu:gsyVideoPlayer-x64:2.1.0'
+compile 'com.shuyu:gsyVideoPlayer-x86:2.1.0'
 
 ```
 
@@ -63,9 +63,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.0.9' 
+compile 'com.shuyu:gsyVideoPlayer-java:2.1.0' 
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.9' 
+compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.0' 
 
 ```
 
@@ -108,6 +108,9 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.9'
 
 ## 五、近期版本
 
+### 2.1.0(2017-10-10)
+* 增加了视频帧合成gif功能（DEMO DetailControlActivity中）。
+* update ijkplayer 0.84
 
 ### 2.0.9(2017-10-02)
 * 增加顶层效果渲染的动画效果。
