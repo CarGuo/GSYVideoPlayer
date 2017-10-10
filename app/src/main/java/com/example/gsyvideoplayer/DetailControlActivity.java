@@ -217,7 +217,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
      */
     private void stopGif() {
         loadingView.setVisibility(View.VISIBLE);
-        mGifCreateHelper.stopGif(new File(FileUtils.getPath(), "GSY-A-" + System.currentTimeMillis() + ".gif"));
+        mGifCreateHelper.stopGif(new File(FileUtils.getPath(), "GSY-Z-" + System.currentTimeMillis() + ".gif"));
     }
 
 
