@@ -729,45 +729,20 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     /************************************* 关于截图的 ****************************************/
 
     /**
-     * 获取当前画面
+     * 获取截图
      */
-    public void setCurrentFrameBitmapListener(GSYVideoShotListener gsyVideoShotListener) {
-        setCurrentFrameBitmapListener(gsyVideoShotListener, false);
-    }
-
-    /**
-     * 获取获取截图监听
-     */
-    public void setCurrentFrameBitmapListener(GSYVideoShotListener gsyVideoShotListener, boolean high) {
-        if (getCurrentPlayer().getRenderProxy() != null) {
-            getCurrentPlayer().getRenderProxy().setCurrentFrameBitmapListener(gsyVideoShotListener, high);
-        }
+    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener) {
+        this.taskShotPic(gsyVideoShotListener, false);
     }
 
     /**
      * 获取截图
-     */
-    public void taskShotPic() {
-        if (getCurrentPlayer().getRenderProxy() != null) {
-            getCurrentPlayer().getRenderProxy().taskShotPic();
-        }
-    }
-
-
-    /**
-     * 生成gif图
      *
-     * @param file                     保存的文件路径，请确保文件夹目录已经创建
-     * @param pics                     需要转化的bitmap本地路径集合
-     * @param delay                    每一帧之间的延时
-     * @param inSampleSize             采样率，越大图片越小，越大图片越模糊，需要处理的时长越短
-     * @param scaleSize                缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
-     * @param gsyVideoGifSaveListener 结果回调
+     * @param high 是否需要高清的
      */
-    public void createGif(File file, List<String> pics, int delay, int inSampleSize, int scaleSize,
-                          final GSYVideoGifSaveListener gsyVideoGifSaveListener) {
+    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean high) {
         if (getCurrentPlayer().getRenderProxy() != null) {
-            getCurrentPlayer().getRenderProxy().createGif(file, pics, delay, inSampleSize, scaleSize, gsyVideoGifSaveListener);
+            getCurrentPlayer().getRenderProxy().taskShotPic(gsyVideoShotListener, high);
         }
     }
 
@@ -780,6 +755,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     /**
      * 保存截图
+     *
+     * @param high 是否需要高清的
      */
     public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
         if (getCurrentPlayer().getRenderProxy() != null) {
