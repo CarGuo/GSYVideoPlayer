@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,12 +20,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.shuyu.gsyvideoplayer.GSYTextureView;
+import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
+import com.shuyu.gsyvideoplayer.utils.AnimatedGifEncoder;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
@@ -709,5 +725,67 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         this.mStandardVideoAllCallBack = standardVideoAllCallBack;
         setVideoAllCallBack(standardVideoAllCallBack);
     }
+
+    /************************************* 关于截图的 ****************************************/
+
+    /**
+     * 获取当前画面
+     */
+    public void setCurrentFrameBitmapListener(GSYVideoShotListener gsyVideoShotListener) {
+        setCurrentFrameBitmapListener(gsyVideoShotListener, false);
+    }
+
+    /**
+     * 获取获取截图监听
+     */
+    public void setCurrentFrameBitmapListener(GSYVideoShotListener gsyVideoShotListener, boolean high) {
+        if (getCurrentPlayer().getRenderProxy() != null) {
+            getCurrentPlayer().getRenderProxy().setCurrentFrameBitmapListener(gsyVideoShotListener, high);
+        }
+    }
+
+    /**
+     * 获取截图
+     */
+    public void taskShotPic() {
+        if (getCurrentPlayer().getRenderProxy() != null) {
+            getCurrentPlayer().getRenderProxy().taskShotPic();
+        }
+    }
+
+
+    /**
+     * 生成gif图
+     *
+     * @param file                     保存的文件路径，请确保文件夹目录已经创建
+     * @param pics                     需要转化的bitmap本地路径集合
+     * @param delay                    每一帧之间的延时
+     * @param inSampleSize             采样率，越大图片越小，越大图片越模糊，需要处理的时长越短
+     * @param scaleSize                缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
+     * @param gsyVideoGifSaveListener 结果回调
+     */
+    public void createGif(File file, List<String> pics, int delay, int inSampleSize, int scaleSize,
+                          final GSYVideoGifSaveListener gsyVideoGifSaveListener) {
+        if (getCurrentPlayer().getRenderProxy() != null) {
+            getCurrentPlayer().getRenderProxy().createGif(file, pics, delay, inSampleSize, scaleSize, gsyVideoGifSaveListener);
+        }
+    }
+
+    /**
+     * 保存截图
+     */
+    public void saveFrame(final File file, GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+        saveFrame(file, false, gsyVideoShotSaveListener);
+    }
+
+    /**
+     * 保存截图
+     */
+    public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+        if (getCurrentPlayer().getRenderProxy() != null) {
+            getCurrentPlayer().getRenderProxy().saveFrame(file, high, gsyVideoShotSaveListener);
+        }
+    }
+
 
 }
