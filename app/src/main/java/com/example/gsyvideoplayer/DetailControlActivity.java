@@ -23,6 +23,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
+import com.shuyu.gsyvideoplayer.utils.GifCreateHelper;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 import java.io.File;
@@ -73,17 +74,11 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
     @BindView(R.id.loadingView)
     View loadingView;
 
-    private Timer timer = new Timer();
-
-    private TaskLocal mTimerTask;
-
     private String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
-    private List<String> picList = new ArrayList<>();
+    private GifCreateHelper mGifCreateHelper;
 
     private float speed = 1;
-
-    private boolean saveShotBitmapSuccess = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +89,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
         resolveNormalVideoUI();
 
         initVideoBuilderMode();
+
+        initGifHelper();
 
         detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
@@ -179,99 +176,48 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mGifCreateHelper.cancelTask();
+    }
+
+    private void initGifHelper() {
+        mGifCreateHelper = new GifCreateHelper(detailPlayer, new GSYVideoGifSaveListener() {
+            @Override
+            public void result(boolean success, File file) {
+                detailPlayer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadingView.setVisibility(View.GONE);
+                        Toast.makeText(detailPlayer.getContext(), "创建成功", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void process(int curPosition, int total) {
+                Debuger.printfError(" current " + curPosition + " total " + total);
+            }
+        });
+    }
+
+
     /**
      * 开始gif截图
      */
     private void startGif() {
-        cancelTask();
-        mTimerTask = new TaskLocal();
-        timer.schedule(mTimerTask, 0, 50);
+        //开始缓存各个帧
+        mGifCreateHelper.startGif(new File(FileUtils.getPath()));
+
     }
 
     /**
      * 生成gif
      */
     private void stopGif() {
-        saveShotBitmapSuccess = false;
-        cancelTask();
         loadingView.setVisibility(View.VISIBLE);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (picList.size() > 2) {
-                    // 保存的文件路径，请确保文件夹目录已经创建
-                    File file = new File(FileUtils.getPath(), "GSY-" + System.currentTimeMillis() + ".gif");
-                    // inSampleSize  采样率，越大图片越小，越大图片越模糊，需要处理的时长越短
-                    // scaleSize 缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
-                    detailPlayer.createGif(file, picList, 0, 1, 5, new GSYVideoGifSaveListener() {
-                        @Override
-                        public void result(boolean success, File file) {
-                            detailPlayer.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    loadingView.setVisibility(View.GONE);
-                                    Toast.makeText(detailPlayer.getContext(), "创建成功", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void process(int curPosition, int total) {
-                            Debuger.printfError(" current " + curPosition + " total " + total);
-                        }
-                    });
-                } else {
-                    detailPlayer.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadingView.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            }
-        }).start();
-    }
-
-    /**
-     * 开始保存帧图片
-     */
-    private void startSaveBitmap() {
-        // 保存的文件路径，请确保文件夹目录已经创建
-        File file = new File(FileUtils.getPath(), "GSY-" + System.currentTimeMillis() + ".tmp");
-        detailPlayer.saveFrame(file, new GSYVideoShotSaveListener() {
-            @Override
-            public void result(boolean success, final File file) {
-                saveShotBitmapSuccess = true;
-                if (success) {
-                    Debuger.printfError(" SUCCESS CREATE FILE " + file.getAbsolutePath());
-                    picList.add(file.getAbsolutePath());
-                }
-            }
-        });
-
-    }
-
-    /**
-     * 保存帧图片定时任务
-     */
-    private class TaskLocal extends TimerTask {
-        @Override
-        public void run() {
-            if (saveShotBitmapSuccess) {
-                saveShotBitmapSuccess = false;
-                startSaveBitmap();
-            }
-        }
-    }
-
-    /**
-     * 取消帧图片定时任务
-     */
-    private void cancelTask() {
-        if (mTimerTask != null) {
-            mTimerTask.cancel();
-            mTimerTask = null;
-        }
+        mGifCreateHelper.stopGif(new File(FileUtils.getPath(), "GSY-A-" + System.currentTimeMillis() + ".gif"));
     }
 
 
@@ -279,8 +225,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
      * 视频截图
      */
     private void shotImage(final View v) {
-        //每次设置一个监听
-        detailPlayer.setCurrentFrameBitmapListener(new GSYVideoShotListener() {
+        //获取截图
+        detailPlayer.taskShotPic(new GSYVideoShotListener() {
             @Override
             public void getBitmap(Bitmap bitmap) {
                 if (bitmap != null) {
@@ -297,8 +243,6 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
                 }
             }
         });
-        //获取截图
-        detailPlayer.taskShotPic();
 
     }
 

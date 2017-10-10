@@ -36,10 +36,6 @@ public class GSYRenderView {
 
     private View mShowView;
 
-    private GSYVideoShotListener mGSYVideoShotListener;
-
-    private boolean mShotHigh;
-
     public void setTransform(Matrix transform) {
         if (mShowView instanceof TextureView) {
             ((TextureView) mShowView).setTransform(transform);
@@ -103,86 +99,32 @@ public class GSYRenderView {
     }
 
     /**
-     * 获取当前画面
+     * 获取截图
      */
-    public void setCurrentFrameBitmapListener(GSYVideoShotListener gsyVideoShotListener) {
-        setCurrentFrameBitmapListener(gsyVideoShotListener, false);
+    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener) {
+        this.taskShotPic(gsyVideoShotListener, false);
     }
 
-    /**
-     * 获取获取截图监听
-     */
-    public void setCurrentFrameBitmapListener(GSYVideoShotListener gsyVideoShotListener, boolean high) {
-        mGSYVideoShotListener = gsyVideoShotListener;
-        mShotHigh = high;
-    }
 
     /**
      * 获取截图
+     *
+     * @param shotHigh 是否需要高清的
      */
-    public void taskShotPic() {
-        if (mGSYVideoShotListener != null) {
+    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh) {
+        if (gsyVideoShotListener != null) {
             if (mShowView instanceof GSYVideoGLView) {
                 GSYVideoGLView gsyVideoGLView = (GSYVideoGLView) mShowView;
-                gsyVideoGLView.setGSYVideoShotListener(mGSYVideoShotListener, mShotHigh);
+                gsyVideoGLView.setGSYVideoShotListener(gsyVideoShotListener, shotHigh);
                 gsyVideoGLView.takeShotPic();
             } else if (mShowView instanceof GSYTextureView) {
-                if (mShotHigh) {
-                    mGSYVideoShotListener.getBitmap(initCoverHigh());
+                if (shotHigh) {
+                    gsyVideoShotListener.getBitmap(initCoverHigh());
                 } else {
-                    mGSYVideoShotListener.getBitmap(initCover());
+                    gsyVideoShotListener.getBitmap(initCover());
                 }
             }
         }
-    }
-
-
-    /**
-     * 生成gif图
-     *
-     * @param file                    保存的文件路径，请确保文件夹目录已经创建
-     * @param pics                    需要转化的bitmap本地路径集合
-     * @param delay                   每一帧之间的延时
-     * @param inSampleSize            采样率，越大图片越小，越大图片越模糊，需要处理的时长越短
-     * @param scaleSize               缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
-     * @param gsyVideoGifSaveListener 结果回调
-     */
-    public void createGif(File file, List<String> pics, int delay, int inSampleSize, int scaleSize,
-                          final GSYVideoGifSaveListener gsyVideoGifSaveListener) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
-        localAnimatedGifEncoder.start(baos);//start
-        localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
-        localAnimatedGifEncoder.setDelay(delay);
-        for (int i = 0; i < pics.size(); i++) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = inSampleSize;
-            options.inJustDecodeBounds = true; // 先获取原大小
-            BitmapFactory.decodeFile(pics.get(i), options);
-            double w = (double) options.outWidth / scaleSize;
-            double h = (double) options.outHeight / scaleSize;
-            options.inJustDecodeBounds = false; // 获取新的大小
-            Bitmap bitmap = BitmapFactory.decodeFile(pics.get(i), options);
-            Bitmap pic = ThumbnailUtils.extractThumbnail(bitmap, (int) w, (int) h);
-            localAnimatedGifEncoder.addFrame(pic);
-            bitmap.recycle();
-            pic.recycle();
-            gsyVideoGifSaveListener.process(i + 1, pics.size());
-        }
-        localAnimatedGifEncoder.finish();//finish
-        try {
-            FileOutputStream fos = new FileOutputStream(file.getPath());
-            baos.writeTo(fos);
-            baos.flush();
-            fos.flush();
-            baos.close();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            gsyVideoGifSaveListener.result(false, file);
-            return;
-        }
-        gsyVideoGifSaveListener.result(true, file);
     }
 
     /**
@@ -194,6 +136,8 @@ public class GSYRenderView {
 
     /**
      * 保存截图
+     *
+     * @param high 是否需要高清的
      */
     public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
         GSYVideoShotListener gsyVideoShotListener = new GSYVideoShotListener() {
