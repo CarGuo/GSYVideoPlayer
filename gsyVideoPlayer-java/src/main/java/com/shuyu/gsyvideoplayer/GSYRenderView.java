@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewBaseRender;
@@ -139,15 +140,15 @@ public class GSYRenderView {
     /**
      * 生成gif图
      *
-     * @param file                     保存的文件路径，请确保文件夹目录已经创建
-     * @param pics                     需要转化的bitmap本地路径集合
-     * @param delay                    每一帧之间的延时
-     * @param inSampleSize             采样率，越大图片越小，越大图片越模糊，需要处理的时长越短
-     * @param scaleSize                缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
-     * @param gsyVideoShotSaveListener 结果回调
+     * @param file                    保存的文件路径，请确保文件夹目录已经创建
+     * @param pics                    需要转化的bitmap本地路径集合
+     * @param delay                   每一帧之间的延时
+     * @param inSampleSize            采样率，越大图片越小，越大图片越模糊，需要处理的时长越短
+     * @param scaleSize               缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
+     * @param gsyVideoGifSaveListener 结果回调
      */
     public void createGif(File file, List<String> pics, int delay, int inSampleSize, int scaleSize,
-                          final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+                          final GSYVideoGifSaveListener gsyVideoGifSaveListener) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
         localAnimatedGifEncoder.start(baos);//start
@@ -166,6 +167,7 @@ public class GSYRenderView {
             localAnimatedGifEncoder.addFrame(pic);
             bitmap.recycle();
             pic.recycle();
+            gsyVideoGifSaveListener.process(i + 1, pics.size());
         }
         localAnimatedGifEncoder.finish();//finish
         try {
@@ -177,10 +179,10 @@ public class GSYRenderView {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
-            gsyVideoShotSaveListener.result(false, file);
+            gsyVideoGifSaveListener.result(false, file);
             return;
         }
-        gsyVideoShotSaveListener.result(true, file);
+        gsyVideoGifSaveListener.result(true, file);
     }
 
     /**
@@ -193,7 +195,7 @@ public class GSYRenderView {
     /**
      * 保存截图
      */
-    private void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+    public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
         GSYVideoShotListener gsyVideoShotListener = new GSYVideoShotListener() {
             @Override
             public void getBitmap(Bitmap bitmap) {
