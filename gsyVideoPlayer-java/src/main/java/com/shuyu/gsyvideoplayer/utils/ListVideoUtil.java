@@ -29,10 +29,15 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showNavKey;
  * Created by shuyu on 2016/11/12.
  * 列表工具类
  * 其中记得设置进来的fullViewContainer必须是在Activity布局下的最外层布局
+ *
+ * 这个类开始不再维护了
  */
-
+@Deprecated
 public class ListVideoUtil {
 
+    /**
+     * 该类从该版本开始不再维护，望悉知
+     */
     private String TAG = "NULL"; //播放的标志
     private StandardGSYVideoPlayer gsyVideoPlayer;
     private ViewGroup fullViewContainer;
