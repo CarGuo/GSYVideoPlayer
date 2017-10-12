@@ -83,7 +83,7 @@ public class AnimatedGifEncoder {
      * added.
      *
      * @param iter int number of iterations.
-     * @return
+     * 
      */
     public void setRepeat(int iter) {
         if (iter >= 0) {
@@ -112,7 +112,7 @@ public class AnimatedGifEncoder {
      * for all subsequent frames.
      *
      * @param im BufferedImage containing frame to write.
-     * @return true if successful.
+     *  true if successful.
      */
     public boolean addFrame(Bitmap im) {
         if ((im == null) || !started) {
@@ -201,7 +201,7 @@ public class AnimatedGifEncoder {
      * greater than 20 do not yield significant improvements in speed.
      *
      * @param quality int greater than 0.
-     * @return
+     * 
      */
     public void setQuality(int quality) {
         if (quality < 1)
@@ -243,7 +243,7 @@ public class AnimatedGifEncoder {
      * automatically.
      *
      * @param os OutputStream on which GIF images are written.
-     * @return false if initial write failed.
+     *  false if initial write failed.
      */
     public boolean start(OutputStream os) {
         if (os == null)
