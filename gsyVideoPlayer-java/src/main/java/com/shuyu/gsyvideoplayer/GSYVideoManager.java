@@ -17,6 +17,7 @@ import android.view.Surface;
 import com.danikula.videocache.CacheListener;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
+import com.danikula.videocache.headers.HeaderInjector;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
@@ -86,6 +87,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     //播放的tag，防止错位置，因为普通的url也可能重复
     private String playTag = "";
+
+    //header for cache
+    private Map<String, String> mMapHeadData;
 
     private Context context;
 
@@ -214,6 +218,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
         HttpProxyCacheServer.Builder builder = new HttpProxyCacheServer.Builder(context);
         builder.cacheDirectory(file);
+        builder.headerInjector(new UserAgentHeadersInjector());
         cacheFile = file;
         return builder.build();
     }
@@ -223,7 +228,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
      * 创建缓存代理服务
      */
     private HttpProxyCacheServer newProxy(Context context) {
-        return new HttpProxyCacheServer(context.getApplicationContext());
+        return new HttpProxyCacheServer.Builder(context.getApplicationContext())
+                .headerInjector(new UserAgentHeadersInjector()).build();
     }
 
 
@@ -341,6 +347,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                 ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
                 ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
             }
+            mMapHeadData = ((GSYModel) msg.obj).getMapHeadData();
             ((IjkMediaPlayer) mediaPlayer).setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
             mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
             if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
@@ -360,6 +367,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private void initEXOPlayer(Message msg) {
         mediaPlayer = new IjkExoMediaPlayer(context);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMapHeadData = null;
         try {
             mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
         } catch (IOException e) {
@@ -431,6 +439,16 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
     }
 
+    /**
+     * for android video cache header
+     */
+    private class UserAgentHeadersInjector implements HeaderInjector {
+
+        @Override
+        public Map<String, String> addHeaders(String url) {
+            return mMapHeadData;
+        }
+    }
 
     public void prepare(final String url, final Map<String, String> mapHeadData, boolean loop, float speed) {
         if (TextUtils.isEmpty(url)) return;

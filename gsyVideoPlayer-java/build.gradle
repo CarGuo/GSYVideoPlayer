@@ -35,7 +35,8 @@ dependencies {
     compile viewDependencies.ijkplayer_java
     compile viewDependencies.ijkplayer_exo
     compile viewDependencies.transitionseverywhere
-    compile dataDependencies.videocache
+    //compile dataDependencies.videocache
+    compile project(':gsyvideoplayer-androidvideocache')
     compile androidDependencies.appcompat_v7
 }
 
