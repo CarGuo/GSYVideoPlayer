@@ -11,8 +11,8 @@ android {
         minSdkVersion globalConfiguration.androidMinSdkVersion
         targetSdkVersion globalConfiguration.androidTargetSdkVersion
 
-        versionCode 1
-        versionName "1.0"
+        versionCode 21
+        versionName PROJ_VERSION
 
     }
     buildTypes {

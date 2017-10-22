@@ -1,5 +1,7 @@
 package com.danikula.videocache;
 
+import shuyu.com.androidvideocache.BuildConfig;
+
 /**
  * Indicates any error in work of {@link ProxyCache}.
  *
