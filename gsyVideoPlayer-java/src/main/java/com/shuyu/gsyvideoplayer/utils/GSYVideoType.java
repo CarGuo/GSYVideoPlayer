@@ -1,6 +1,7 @@
 package com.shuyu.gsyvideoplayer.utils;
 
 /**
+ * video的一些默认配置
  * Created by shuyu on 2016/12/7.
  */
 

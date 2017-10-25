@@ -13,8 +13,10 @@ import com.example.gsyvideoplayer.model.VideoModel;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class ListNormalAdapter extends BaseAdapter {
     private Context context;
 
     private boolean isFullVideo;
+
+    private StandardGSYVideoPlayer curPlayer;
 
     public ListNormalAdapter(Context context) {
         super();
@@ -88,7 +92,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
         /************************下方为其他路径************************************/
         //如果一个列表的缓存路劲都一一致
-        //holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath(), ""));
+        //holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath()), "");
 
         /************************下方为其他路径************************************/
         //如果一个列表里的缓存路劲不一致
@@ -154,6 +158,8 @@ public class ListNormalAdapter extends BaseAdapter {
                     GSYVideoManager.instance().setNeedMute(true);
                 }
 
+                curPlayer = (StandardGSYVideoPlayer) objects[1];
+
             }
 
             @Override
@@ -166,6 +172,12 @@ public class ListNormalAdapter extends BaseAdapter {
             public void onEnterFullscreen(String url, Object... objects) {
                 super.onEnterFullscreen(url, objects);
                 GSYVideoManager.instance().setNeedMute(false);
+            }
+
+            @Override
+            public void onAutoComplete(String url, Object... objects) {
+                super.onAutoComplete(url, objects);
+                curPlayer = null;
             }
         });
 
@@ -180,6 +192,11 @@ public class ListNormalAdapter extends BaseAdapter {
         isFullVideo = true;
     }
 
+    public void clearCache() {
+        if (curPlayer != null) {
+            curPlayer.getCurrentPlayer().clearCurrentCache();
+        }
+    }
 
     class ViewHolder {
         SampleCoverVideo gsyVideoPlayer;

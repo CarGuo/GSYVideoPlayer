@@ -37,7 +37,12 @@ public class FileUtils {
     }
 
     public static String getTestPath() {
-        return getAppPath(NAME_TEST);
+        String path = getAppPath(NAME_TEST);
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return path;
     }
 
     public static void deleteFiles(File root) {
