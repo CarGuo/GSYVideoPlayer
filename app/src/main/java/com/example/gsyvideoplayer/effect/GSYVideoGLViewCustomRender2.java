@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
-import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewSimpleRender;
+import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
 
 import javax.microedition.khronos.opengles.GL10;
 

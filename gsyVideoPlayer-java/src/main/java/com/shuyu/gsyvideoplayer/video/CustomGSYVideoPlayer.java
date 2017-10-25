@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.shuyu.gsyvideoplayer.GSYPreViewManager;
-import com.shuyu.gsyvideoplayer.GSYTextureView;
+import com.shuyu.gsyvideoplayer.render.view.GSYTextureView;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 

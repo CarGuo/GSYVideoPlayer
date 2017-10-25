@@ -3,8 +3,8 @@ package com.shuyu.gsyvideoplayer.builder;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.shuyu.gsyvideoplayer.GSYVideoGLView;
-import com.shuyu.gsyvideoplayer.effect.NoEffect;
+import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
+import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;

@@ -6,7 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
-import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewSimpleRender;
+import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
