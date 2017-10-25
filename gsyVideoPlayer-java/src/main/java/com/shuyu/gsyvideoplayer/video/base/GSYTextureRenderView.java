@@ -164,18 +164,22 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
      * 调整TextureView去适应比例变化
      */
     protected void changeTextureViewShowType() {
-        int params = getTextureParams();
-        ViewGroup.LayoutParams layoutParams = mTextureView.getLayoutParams();
-        layoutParams.width = params;
-        layoutParams.height = params;
-        mTextureView.setLayoutParams(layoutParams);
+        if (mTextureView != null) {
+            int params = getTextureParams();
+            ViewGroup.LayoutParams layoutParams = mTextureView.getLayoutParams();
+            layoutParams.width = params;
+            layoutParams.height = params;
+            mTextureView.setLayoutParams(layoutParams);
+        }
     }
 
     /**
      * 暂停时初始化位图
      */
     protected void initCover() {
-        mFullPauseBitmap = mTextureView.initCover();
+        if (mTextureView != null) {
+            mFullPauseBitmap = mTextureView.initCover();
+        }
     }
 
     /**
@@ -189,7 +193,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     }
 
     protected GSYVideoGLView getGSYVideoGLSView() {
-        if (mTextureView.getShowView() instanceof GSYVideoGLView) {
+        if (mTextureView != null && mTextureView.getShowView() instanceof GSYVideoGLView) {
             return (GSYVideoGLView) mTextureView.getShowView();
         }
         return null;
