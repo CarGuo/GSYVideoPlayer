@@ -210,7 +210,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     }
 
     /**
-     *
+     * 获取渲染的代理层
      */
     public GSYRenderView getRenderProxy() {
         return mTextureView;

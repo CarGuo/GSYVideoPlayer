@@ -463,7 +463,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      * @param actionBar 是否有actionBar，有的话需要隐藏
      * @param statusBar 是否有状态bar，有的话需要隐藏
      */
-    @SuppressWarnings("ResourceType")
+    @SuppressWarnings("ResourceType, unchecked")
     public GSYBaseVideoPlayer startWindowFullscreen(final Context context, final boolean actionBar, final boolean statusBar) {
 
         mSystemUiVisibility = ((Activity) context).getWindow().getDecorView().getSystemUiVisibility();
@@ -593,7 +593,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     /**
      * 显示小窗口
      */
-    @SuppressWarnings("ResourceType")
+    @SuppressWarnings("ResourceType, unchecked")
     public GSYBaseVideoPlayer showSmallVideo(Point size, final boolean actionBar, final boolean statusBar) {
 
         final ViewGroup vp = getViewGroup();

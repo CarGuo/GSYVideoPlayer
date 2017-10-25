@@ -24,6 +24,8 @@ public class ListVideoActivity extends AppCompatActivity {
     @BindView(R.id.activity_list_video)
     RelativeLayout activityListVideo;
 
+    ListNormalAdapter listNormalAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 设置一个exit transition
@@ -36,7 +38,7 @@ public class ListVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_video);
         ButterKnife.bind(this);
 
-        final ListNormalAdapter listNormalAdapter = new ListNormalAdapter(this);
+        listNormalAdapter = new ListNormalAdapter(this);
         videoList.setAdapter(listNormalAdapter);
 
         videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
