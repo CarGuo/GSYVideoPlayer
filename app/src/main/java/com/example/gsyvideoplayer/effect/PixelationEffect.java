@@ -18,7 +18,7 @@ package com.example.gsyvideoplayer.effect;
 
 import android.opengl.GLSurfaceView;
 
-import com.shuyu.gsyvideoplayer.GSYVideoGLView;
+import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 
 /**
  * 马赛克效果

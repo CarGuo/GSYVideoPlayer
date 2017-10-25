@@ -2,7 +2,7 @@ package com.example.gsyvideoplayer.effect;
 
 import android.opengl.GLSurfaceView;
 
-import com.shuyu.gsyvideoplayer.GSYVideoGLView.ShaderInterface;
+import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView.ShaderInterface;
 
 
 /**

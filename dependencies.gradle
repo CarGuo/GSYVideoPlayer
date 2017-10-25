@@ -22,7 +22,7 @@ ext {
     transitionseverywhere = '1.7.0'
 
     //DataLibraries
-    videocache = '2.7.0'
+    videocache = '2.1.1'
     leakcanary = '1.5'
 
     imageLoader = '4.0.0'
@@ -56,7 +56,7 @@ ext {
     ]
 
     dataDependencies = [
-            videocache: "com.danikula:videocache:${videocache}",
+            videocache: "com.shuyu:gsyvideoplayer-androidvideocache:${videocache}",
             leakcanary: "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
     ]
 }

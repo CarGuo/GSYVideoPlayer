@@ -2,9 +2,8 @@ package com.example.gsyvideoplayer.effect;
 
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 
-import com.shuyu.gsyvideoplayer.GSYVideoGLView.ShaderInterface;
+import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView.ShaderInterface;
 
 
 /**

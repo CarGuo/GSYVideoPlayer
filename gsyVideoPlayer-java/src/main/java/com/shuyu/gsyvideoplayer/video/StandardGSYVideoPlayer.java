@@ -4,10 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.ThumbnailUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,25 +17,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.shuyu.gsyvideoplayer.GSYTextureView;
-import com.shuyu.gsyvideoplayer.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
-import com.shuyu.gsyvideoplayer.utils.AnimatedGifEncoder;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
 
 import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;

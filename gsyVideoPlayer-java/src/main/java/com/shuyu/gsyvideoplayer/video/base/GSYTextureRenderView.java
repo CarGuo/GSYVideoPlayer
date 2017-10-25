@@ -13,12 +13,11 @@ import android.view.TextureView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.google.android.exoplayer.text.TextRenderer;
-import com.shuyu.gsyvideoplayer.GSYRenderView;
-import com.shuyu.gsyvideoplayer.GSYVideoGLView;
+import com.shuyu.gsyvideoplayer.render.GSYRenderView;
+import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.effect.NoEffect;
-import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewBaseRender;
+import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
+import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
 /**

@@ -5,14 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.opengl.Matrix;
 
 import com.example.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.render.GSYVideoGLViewSimpleRender;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;

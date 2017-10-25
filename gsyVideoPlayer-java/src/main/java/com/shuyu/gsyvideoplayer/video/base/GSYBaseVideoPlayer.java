@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.SmallVideoTouch;
+import com.shuyu.gsyvideoplayer.view.SmallVideoTouch;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;

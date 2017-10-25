@@ -108,27 +108,13 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.0'
 
 ## 五、近期版本
 
+### 2.1.1(2017-10-xx)
+* videoCache模式支持增加header
+* 调整部分代码路径，优化代码
+
 ### 2.1.0(2017-10-10)
 * 增加了视频帧合成gif功能（DEMO DetailControlActivity中）。
 * update ijkplayer 0.84
-
-### 2.0.9(2017-10-02)
-* 增加顶层效果渲染的动画效果。
-* 增加截图功能。
-* 增加自定义render支持。
-* 增加水印、多重播放等。
-
-
-### 2.0.8（2017-09-17）
-* 增加GSYBaseActivityDetail抽象类，方便detail模式集成。
-* 内部增加一些优化。
-* 增加简单滤镜功能支持。
-```
-1、全局设置
-GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
-2、设置滤镜
-player.setEffectFilter(new BarrelBlurEffect());
-```
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
