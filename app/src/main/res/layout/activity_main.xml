@@ -43,6 +43,13 @@
             android:text="Filter" />
 
         <Button
+            android:id="@+id/open_btn_pick"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Switch" />
+
+        <Button
             android:id="@+id/list_btn"
             android:layout_width="120dp"
             android:layout_height="wrap_content"

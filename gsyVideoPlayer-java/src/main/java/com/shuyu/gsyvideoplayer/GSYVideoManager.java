@@ -128,6 +128,31 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         return videoManager;
     }
 
+    public static synchronized GSYVideoManager tmpInstance(GSYMediaPlayerListener listener) {
+        GSYVideoManager gsyVideoManager = new GSYVideoManager(ijkLibLoader);
+        gsyVideoManager.buffterPoint = videoManager.buffterPoint;
+        gsyVideoManager.optionModelList = videoManager.optionModelList;
+        gsyVideoManager.cacheFile = videoManager.cacheFile;
+        gsyVideoManager.playTag = videoManager.playTag;
+        gsyVideoManager.mMapHeadData = videoManager.mMapHeadData;
+        gsyVideoManager.currentVideoWidth = videoManager.currentVideoWidth;
+        gsyVideoManager.currentVideoHeight = videoManager.currentVideoHeight;
+        gsyVideoManager.context = videoManager.context;
+        gsyVideoManager.lastState = videoManager.lastState;
+        gsyVideoManager.playPosition = videoManager.playPosition;
+        gsyVideoManager.timeOut = videoManager.timeOut;
+        gsyVideoManager.videoType = videoManager.videoType;
+        gsyVideoManager.needMute = videoManager.needMute;
+        gsyVideoManager.needTimeOutOther = videoManager.needTimeOutOther;
+        gsyVideoManager.setListener(listener);
+        return gsyVideoManager;
+    }
+
+    public static synchronized void changeManager(GSYVideoManager gsyVideoManager) {
+        videoManager = gsyVideoManager;
+    }
+
+
     /**
      * 设置自定义so包加载类
      * 需要在instance之前设置
@@ -212,7 +237,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     /**
      * 创建缓存代理服务,带文件目录的.
      */
-    private HttpProxyCacheServer newProxy(Context context, File file) {
+    public HttpProxyCacheServer newProxy(Context context, File file) {
         if (!file.exists()) {
             file.mkdirs();
         }
@@ -223,11 +248,14 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         return builder.build();
     }
 
+    public void setProxy(HttpProxyCacheServer proxy) {
+        this.proxy = proxy;
+    }
 
     /**
      * 创建缓存代理服务
      */
-    private HttpProxyCacheServer newProxy(Context context) {
+    public HttpProxyCacheServer newProxy(Context context) {
         return new HttpProxyCacheServer.Builder(context.getApplicationContext())
                 .headerInjector(new UserAgentHeadersInjector()).build();
     }
