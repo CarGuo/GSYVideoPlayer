@@ -1,12 +1,17 @@
 package com.shuyu.gsyvideoplayer.video;
 
+import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
@@ -14,7 +19,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import moe.codeest.enviews.ENDownloadView;
+
 /**
+ * 列表播放支持
  * Created by shuyu on 2016/12/20.
  */
 
@@ -122,10 +130,57 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
             if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
             }
-            startPlayLogic();
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startPlayLogic();
+                }
+            }, 2000);
             return;
         }
         super.onAutoCompletion();
     }
 
+
+    /**
+     * 开始状态视频播放
+     */
+    @Override
+    protected void prepareVideo() {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onCompletion();
+        }
+        GSYVideoManager.instance().setListener(this);
+        GSYVideoManager.instance().setPlayTag(mPlayTag);
+        GSYVideoManager.instance().setPlayPosition(mPlayPosition);
+        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mBackUpPlayingBufferState = -1;
+        GSYVideoManager.instance().prepare(mUrl, mMapHeadData, mLooping, mSpeed);
+        setStateAndUi(CURRENT_STATE_PREPAREING);
+    }
+
+
+    @Override
+    public void onPrepared() {
+        super.onPrepared();
+        addTextureView();
+    }
+
+    @Override
+    protected void changeUiToNormal() {
+        super.changeUiToNormal();
+        if (mHadPlay && mPlayPosition < (mUriList.size() - 1)) {
+            setViewShowState(mThumbImageViewLayout, GONE);
+            setViewShowState(mTopContainer, INVISIBLE);
+            setViewShowState(mBottomContainer, INVISIBLE);
+            setViewShowState(mStartButton, GONE);
+            setViewShowState(mLoadingProgressBar, VISIBLE);
+            setViewShowState(mBottomProgressBar, INVISIBLE);
+            setViewShowState(mLockScreen, GONE);
+            if (mLoadingProgressBar instanceof ENDownloadView) {
+                ((ENDownloadView) mLoadingProgressBar).start();
+            }
+        }
+    }
 }
