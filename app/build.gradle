@@ -63,32 +63,16 @@ dependencies {
     compile project(':gsyVideoPlayer')
 
     //jcenter
-    //compile 'com.shuyu:GSYVideoPlayer:2.1.0'
+    //compile "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
-    //compile 'com.shuyu:gsyVideoPlayer-java:2.1.0'
+    //compile "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion'
 
-    //compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.0'
-    //compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.0'
-    //compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.0'
-    //compile 'com.shuyu:gsyVideoPlayer-x64:2.1.0'
-    //compile 'com.shuyu:gsyVideoPlayer-x86:2.1.0'
+    //compile "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
 
-    //compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.0'
-
-    //jitpack
-
-    //compile 'com.github.CarGuo:GSYVideoPlayer:v2.1.0'
-
-    //compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.1.0'
-
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.1.0'
-
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.1.0'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.1.0'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.1.0'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.1.0'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.1.0'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.1.0'
-
+    //compile "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
 
 }

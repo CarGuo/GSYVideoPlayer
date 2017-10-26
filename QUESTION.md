@@ -180,3 +180,48 @@ List<VideoOptionModel> list = new ArrayList<>();
 list.add(videoOphtionModel);
 GSYVideoManager.instance().setOptionModelList(list);
 ```
+
+#### 18、全屏与非全屏的同步问题
+
+有一些自定义操作，需要全屏与非全屏切换之间做同步处理，具体操作是重载下面两个方法，实现自己的自定义操作，详细可参考demo。
+外部获取当前播放器，推荐使用`play.getCurPlay().xxxxxx`
+```
+/**
+ * 全屏时将对应处理参数逻辑赋给全屏播放器
+ *
+ * @param context
+ * @param actionBar
+ * @param statusBar
+ * @return
+ */
+@Override
+public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
+    SmartPickVideo sampleVideo = (SmartPickVideo) super.startWindowFullscreen(context, actionBar, statusBar);
+    sampleVideo.mSourcePosition = mSourcePosition;
+    sampleVideo.mType = mType;
+    sampleVideo.mUrlList = mUrlList;
+    sampleVideo.mTypeText = mTypeText;
+    sampleVideo.mSwitchSize.setText(mTypeText);
+    return sampleVideo;
+}
+
+/**
+ * 推出全屏时将对应处理参数逻辑返回给非播放器
+ *
+ * @param oldF
+ * @param vp
+ * @param gsyVideoPlayer
+ */
+@Override
+protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
+    super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
+    if (gsyVideoPlayer != null) {
+        SmartPickVideo sampleVideo = (SmartPickVideo) gsyVideoPlayer;
+        mSourcePosition = sampleVideo.mSourcePosition;
+        mType = sampleVideo.mType;
+        mTypeText = sampleVideo.mTypeText;
+        mSwitchSize.setText(mTypeText);
+        setUp(mUrlList, mCache, mCachePath, mTitle);
+    }
+}
+```

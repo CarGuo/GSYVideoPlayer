@@ -41,16 +41,16 @@ dependencies {
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
     //compile project(':gsyVideoPlayer-ex_so')
 
-    //compile 'com.shuyu:gsyVideoPlayer-java:2.1.0'
+    //compile "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
 
-    compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.0'
-    compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.0'
-    compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.0'
-    compile 'com.shuyu:gsyVideoPlayer-x64:2.1.0'
-    compile 'com.shuyu:gsyVideoPlayer-x86:2.1.0'
+    compile "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
-    //compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.0'
+    //compile "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
 }
 
 apply from: './bintray.gradle'
