@@ -228,6 +228,15 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
     }
 
+    /**
+     * 是否启动旋转横屏，true表示启动
+     * @return true
+     */
+    @Override
+    public boolean getDetailOrientationRotateAuto() {
+        return true;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
