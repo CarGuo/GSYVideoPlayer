@@ -27,6 +27,8 @@ ext {
 
     imageLoader = '4.0.0'
 
+    gsyVideoVersion = '2.1.0'
+
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
             appcompat_v7: "com.android.support:appcompat-v7:${otherLibraryVersion}",

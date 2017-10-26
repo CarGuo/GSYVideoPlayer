@@ -17,7 +17,7 @@
 **支持**|**快播和慢播；网络视频加载速度。**
 **支持**|**调整显示比例:默认、16:9、4:3、填充。**
 **支持**|**播放时旋转画面角度（0,90,180,270）；镜像旋转。**
-**支持**|**暂停前后台切换不黑屏；调整不同清晰度的支持。**
+**支持**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持。**
 **支持**|**Https；IJKPlayer和EXOPlayer切换。**
 **支持**|**锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **支持**|**全屏与非全屏两套布局切换；弹幕功能。**
@@ -39,21 +39,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:2.1.0'
+compile 'com.shuyu:GSYVideoPlayer:2.1.1'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.1.0'
+compile 'com.shuyu:gsyVideoPlayer-java:2.1.1'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.0'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.0'
-compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.0'
-compile 'com.shuyu:gsyVideoPlayer-x64:2.1.0'
-compile 'com.shuyu:gsyVideoPlayer-x86:2.1.0'
+compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.1'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.1'
+compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.1'
+compile 'com.shuyu:gsyVideoPlayer-x64:2.1.1'
+compile 'com.shuyu:gsyVideoPlayer-x86:2.1.1'
 
 ```
 
@@ -63,9 +63,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.1.0' 
+compile 'com.shuyu:gsyVideoPlayer-java:2.1.1'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.0' 
+compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.1'
 
 ```
 
@@ -110,6 +110,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.0'
 
 ### 2.1.1(2017-10-xx)
 * videoCache模式支持增加header
+* 增加无缝切换视频DEMO SmartPickVideo
 * 调整部分代码路径，优化代码
 
 ### 2.1.0(2017-10-10)
