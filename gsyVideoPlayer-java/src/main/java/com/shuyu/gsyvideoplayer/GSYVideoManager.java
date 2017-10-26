@@ -114,6 +114,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     //播放类型，默认IJK
     private int videoType = GSYVideoType.IJKPLAYER;
 
+    //log level
+    private int logLevel = IjkMediaPlayer.IJK_LOG_DEFAULT;
+
     //是否需要静音
     private boolean needMute = false;
 
@@ -389,6 +392,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
                 ((IjkMediaPlayer) mediaPlayer).setSpeed(((GSYModel) msg.obj).getSpeed());
             }
+            ((IjkMediaPlayer) mediaPlayer).native_setLogLevel(logLevel);
             initIJKOption((IjkMediaPlayer) mediaPlayer);
             //开启硬解码渲染优化
             if (GSYVideoType.isMediaCodecTexture()) {
@@ -760,6 +764,25 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     public void setTimeOut(int timeOut, boolean needTimeOutOther) {
         this.timeOut = timeOut;
         this.needTimeOutOther = needTimeOutOther;
+    }
+
+    /**
+     * 设置log输入等级
+     *
+     * @param logLevel {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_DEFAULT}
+     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_VERBOSE}
+     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_DEBUG}
+     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_INFO}
+     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_WARN}
+     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_ERROR}
+     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_FATAL}
+     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_SILENT}
+     */
+    public void setLogLevel(int logLevel) {
+        if (mediaPlayer != null && mediaPlayer instanceof IjkMediaPlayer) {
+            this.logLevel = logLevel;
+            ((IjkMediaPlayer) mediaPlayer).native_setLogLevel(logLevel);
+        }
     }
 
 }

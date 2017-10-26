@@ -112,6 +112,10 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.1'
 * videoCache模式支持增加header
 * 增加无缝切换视频DEMO SmartPickVideo
 * 调整部分代码路径，优化代码
+* log输入等级接口
+```
+GSYVideoManager.instance().setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
+```
 
 ### 2.1.0(2017-10-10)
 * 增加了视频帧合成gif功能（DEMO DetailControlActivity中）。
