@@ -19,77 +19,77 @@
             android:id="@+id/open_btn"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="Open Video" />
+            android:text="打开Video" />
 
         <Button
             android:id="@+id/open_control"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Control" />
+            android:text="带控制DEMO" />
 
         <Button
             android:id="@+id/open_btn_empty"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="NO UI" />
+            android:text="无UI界面" />
 
         <Button
             android:id="@+id/open_filter"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Filter" />
+            android:text="滤镜" />
 
         <Button
             android:id="@+id/open_btn_pick"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Switch" />
+            android:text="无缝切换" />
 
         <Button
             android:id="@+id/list_btn"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="List Video" />
+            android:text="List列表" />
 
         <Button
             android:id="@+id/list_btn_2"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="List Video2" />
+            android:text="List列表2(弃)" />
 
         <Button
             android:id="@+id/recycler"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="recycler" />
+            android:text="recycler列表" />
 
         <Button
             android:id="@+id/recycler_2"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="recycler 2" />
+            android:text="recycler列表2(弃)" />
 
         <Button
             android:id="@+id/list_detail"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Detail Video" />
+            android:text="Detail模式" />
 
         <Button
             android:id="@+id/list_detail_list"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Detail List" />
+            android:text="Detail列表模式" />
 
 
         <Button
@@ -97,7 +97,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="web detail" />
+            android:text="Web detail模式" />
 
 
         <Button
@@ -105,28 +105,28 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Danmaku Video" />
+            android:text="弹幕demo" />
 
         <Button
             android:id="@+id/fragment_video"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Fragment" />
+            android:text="Fragment下使用" />
 
         <Button
             android:id="@+id/more_type"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="More Type" />
+            android:text="多类型模式" />
 
         <Button
             android:id="@+id/input_type"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Input Type" />
+            android:text="输入url" />
 
         <Button
             android:id="@+id/clear_cache"
