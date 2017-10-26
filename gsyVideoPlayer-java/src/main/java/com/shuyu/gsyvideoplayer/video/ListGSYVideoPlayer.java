@@ -130,12 +130,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
             if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
             }
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startPlayLogic();
-                }
-            }, 2000);
+            startPlayLogic();
             return;
         }
         super.onAutoCompletion();
