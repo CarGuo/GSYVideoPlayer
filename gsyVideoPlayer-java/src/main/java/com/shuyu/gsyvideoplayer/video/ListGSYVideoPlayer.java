@@ -143,21 +143,11 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
 
 
     /**
-     * 开始状态视频播放
+     * 开始状态视频播放，prepare时不执行  addTextureView();
      */
     @Override
     protected void prepareVideo() {
-        if (GSYVideoManager.instance().listener() != null) {
-            GSYVideoManager.instance().listener().onCompletion();
-        }
-        GSYVideoManager.instance().setListener(this);
-        GSYVideoManager.instance().setPlayTag(mPlayTag);
-        GSYVideoManager.instance().setPlayPosition(mPlayPosition);
-        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-        ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mBackUpPlayingBufferState = -1;
-        GSYVideoManager.instance().prepare(mUrl, mMapHeadData, mLooping, mSpeed);
-        setStateAndUi(CURRENT_STATE_PREPAREING);
+        startPrepare();
     }
 
 

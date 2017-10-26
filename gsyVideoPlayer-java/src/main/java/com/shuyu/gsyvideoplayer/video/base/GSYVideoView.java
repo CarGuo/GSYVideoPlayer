@@ -278,13 +278,17 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 开始状态视频播放
      */
     protected void prepareVideo() {
+        startPrepare();
+        addTextureView();
+    }
+
+    protected void startPrepare() {
         if (GSYVideoManager.instance().listener() != null) {
             GSYVideoManager.instance().listener().onCompletion();
         }
         GSYVideoManager.instance().setListener(this);
         GSYVideoManager.instance().setPlayTag(mPlayTag);
         GSYVideoManager.instance().setPlayPosition(mPlayPosition);
-        addTextureView();
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBackUpPlayingBufferState = -1;

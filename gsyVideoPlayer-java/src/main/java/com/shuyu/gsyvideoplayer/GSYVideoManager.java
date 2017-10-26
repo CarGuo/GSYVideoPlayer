@@ -120,7 +120,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     //是否需要外部超时判断
     private boolean needTimeOutOther;
 
-
+    /**
+     * 单例管理器
+     */
     public static synchronized GSYVideoManager instance() {
         if (videoManager == null) {
             videoManager = new GSYVideoManager(ijkLibLoader);
@@ -128,6 +130,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         return videoManager;
     }
 
+    /**
+     * 同步创建一个临时管理器
+     */
     public static synchronized GSYVideoManager tmpInstance(GSYMediaPlayerListener listener) {
         GSYVideoManager gsyVideoManager = new GSYVideoManager(ijkLibLoader);
         gsyVideoManager.buffterPoint = videoManager.buffterPoint;
@@ -148,6 +153,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         return gsyVideoManager;
     }
 
+    /**
+     * 替换管理器
+     */
     public static synchronized void changeManager(GSYVideoManager gsyVideoManager) {
         videoManager = gsyVideoManager;
     }

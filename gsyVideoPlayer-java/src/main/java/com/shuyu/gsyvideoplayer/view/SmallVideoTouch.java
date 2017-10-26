@@ -6,6 +6,9 @@ import android.widget.FrameLayout;
 
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
+/**
+ * 小窗口触摸移动
+ */
 public class SmallVideoTouch implements View.OnTouchListener {
 
     private int mDownX, mDownY;
