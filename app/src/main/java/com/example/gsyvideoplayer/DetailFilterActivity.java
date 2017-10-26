@@ -20,6 +20,7 @@ import com.example.gsyvideoplayer.effect.PixelationEffect;
 import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.render.effect.AutoFixEffect;
@@ -49,9 +50,13 @@ import com.shuyu.gsyvideoplayer.render.effect.TintEffect;
 import com.shuyu.gsyvideoplayer.render.effect.VignetteEffect;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.utils.GifCreateHelper;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -87,6 +92,14 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     @BindView(R.id.change_anima)
     Button anima;
 
+    @BindView(R.id.start_gif)
+    Button startGif;
+
+    @BindView(R.id.stop_gif)
+    Button stopGif;
+
+    @BindView(R.id.loadingView)
+    View loadingView;
 
     private int type = 0;
 
@@ -112,6 +125,8 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
     private boolean moveBitmap = false;
 
+    private GifCreateHelper mGifCreateHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +141,8 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         resolveNormalVideoUI();
 
         initVideoBuilderMode();
+
+        initGifHelper();
 
         detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
@@ -198,6 +215,28 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
                 moveBitmap = !moveBitmap;*/
             }
         });
+
+
+        startGif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startGif();
+            }
+        });
+
+        stopGif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopGif();
+            }
+        });
+
+        loadingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //do nothing
+            }
+        });
     }
 
     @Override
@@ -267,6 +306,46 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
             }
         });
 
+    }
+
+
+
+    private void initGifHelper() {
+        mGifCreateHelper = new GifCreateHelper(detailPlayer, new GSYVideoGifSaveListener() {
+            @Override
+            public void result(boolean success, File file) {
+                detailPlayer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadingView.setVisibility(View.GONE);
+                        Toast.makeText(detailPlayer.getContext(), "创建成功", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void process(int curPosition, int total) {
+                Debuger.printfError(" current " + curPosition + " total " + total);
+            }
+        });
+    }
+
+
+    /**
+     * 开始gif截图
+     */
+    private void startGif() {
+        //开始缓存各个帧
+        mGifCreateHelper.startGif(new File(FileUtils.getPath()));
+
+    }
+
+    /**
+     * 生成gif
+     */
+    private void stopGif() {
+        loadingView.setVisibility(View.VISIBLE);
+        mGifCreateHelper.stopGif(new File(FileUtils.getPath(), "GSY-Z-" + System.currentTimeMillis() + ".gif"));
     }
 
     /**
