@@ -99,6 +99,15 @@ public class DetailListPlayer extends GSYBaseActivityDetail {
 
     }
 
+    /**
+     * 是否启动旋转横屏，true表示启动
+     * @return true
+     */
+    @Override
+    public boolean getDetailOrientationRotateAuto() {
+        return true;
+    }
+
     @Override
     public void onEnterFullscreen(String url, Object... objects) {
         super.onEnterFullscreen(url, objects);

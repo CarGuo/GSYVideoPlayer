@@ -176,6 +176,15 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
         mGifCreateHelper.cancelTask();
     }
 
+    /**
+     * 是否启动旋转横屏，true表示启动
+     * @return true
+     */
+    @Override
+    public boolean getDetailOrientationRotateAuto() {
+        return true;
+    }
+
     private void initGifHelper() {
         mGifCreateHelper = new GifCreateHelper(detailPlayer, new GSYVideoGifSaveListener() {
             @Override

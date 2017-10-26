@@ -132,6 +132,14 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
 
     }
 
+    /**
+     * 是否启动旋转横屏，true表示启动
+     * @return true
+     */
+    @Override
+    public boolean getDetailOrientationRotateAuto() {
+        return true;
+    }
 
     private void loadCover(ImageView imageView, String url) {
 
