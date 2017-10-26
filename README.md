@@ -103,7 +103,10 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.1'
 * ### 3、弹幕
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/55.gif" width="240px" height="426px"/>
 
-* ### 4、进度条小窗口预览
+* ### 4、滤镜和GL动画
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/09.gif"/>
+
+* ### 5、进度条小窗口预览
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
 ## 五、近期版本
