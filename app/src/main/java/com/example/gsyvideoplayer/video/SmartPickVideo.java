@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * 无缝切换视频的DEMO
+ * 这里是切换清晰度，稍微修改下也可以作为切换下一集等
  */
 
 public class SmartPickVideo extends StandardGSYVideoPlayer {
@@ -46,6 +47,7 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
 
     private GSYVideoManager mTmpManager;
 
+    //切换过程中最好弹出loading，不给其他任何操作
     private LoadingDialog mLoadingDialog;
 
     private boolean isChanging;

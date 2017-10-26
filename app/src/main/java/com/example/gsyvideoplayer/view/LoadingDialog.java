@@ -37,11 +37,6 @@ public class LoadingDialog extends Dialog {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.layout_loading_dialog, null);
         setContentView(view);
-        Window dialogWindow = getWindow();
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        DisplayMetrics d = context.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-        lp.width = d.widthPixels; // 宽度设置为屏幕的0.8
-        dialogWindow.setAttributes(lp);
 
         setCanceledOnTouchOutside(false);
         setCancelable(false);
