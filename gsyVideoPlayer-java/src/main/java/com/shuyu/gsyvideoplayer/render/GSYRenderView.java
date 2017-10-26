@@ -52,15 +52,16 @@ public class GSYRenderView {
     }
 
     public void invalidate() {
-        mShowView.invalidate();
+        if (mShowView != null)
+            mShowView.invalidate();
     }
 
     public int getWidth() {
-        return mShowView.getWidth();
+        return (mShowView != null) ? mShowView.getWidth() : 0;
     }
 
     public int getHeight() {
-        return mShowView.getHeight();
+        return (mShowView != null) ? mShowView.getHeight() : 0;
     }
 
     public View getShowView() {
@@ -206,17 +207,7 @@ public class GSYRenderView {
 
         mShowView = gsyTextureView;
 
-        int params = getTextureParams();
-
-        if (textureViewContainer instanceof RelativeLayout) {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(params, params);
-            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            textureViewContainer.addView(gsyTextureView, layoutParams);
-        } else if (textureViewContainer instanceof FrameLayout) {
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(params, params);
-            layoutParams.gravity = Gravity.CENTER;
-            textureViewContainer.addView(gsyTextureView, layoutParams);
-        }
+        addToParent(textureViewContainer, gsyTextureView);
     }
 
     /**
@@ -232,17 +223,7 @@ public class GSYRenderView {
 
         mShowView = showSurfaceView;
 
-        int params = getTextureParams();
-
-        if (textureViewContainer instanceof RelativeLayout) {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(params, params);
-            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            textureViewContainer.addView(showSurfaceView, layoutParams);
-        } else if (textureViewContainer instanceof FrameLayout) {
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(params, params);
-            layoutParams.gravity = Gravity.CENTER;
-            textureViewContainer.addView(showSurfaceView, layoutParams);
-        }
+        addToParent(textureViewContainer, showSurfaceView);
     }
 
     /**
@@ -269,16 +250,20 @@ public class GSYRenderView {
             gsyVideoGLView.setMVPMatrix(transform);
         }
 
+        addToParent(textureViewContainer, gsyVideoGLView);
+    }
+
+    private void addToParent(ViewGroup textureViewContainer, View render) {
         int params = getTextureParams();
 
         if (textureViewContainer instanceof RelativeLayout) {
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(params, params);
             layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            textureViewContainer.addView(gsyVideoGLView, layoutParams);
+            textureViewContainer.addView(render, layoutParams);
         } else if (textureViewContainer instanceof FrameLayout) {
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(params, params);
             layoutParams.gravity = Gravity.CENTER;
-            textureViewContainer.addView(gsyVideoGLView, layoutParams);
+            textureViewContainer.addView(render, layoutParams);
         }
     }
 

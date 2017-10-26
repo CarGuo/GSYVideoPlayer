@@ -8,7 +8,6 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 
 /**
- *
  * Created by guoshuyu on 2017/8/26.
  */
 
@@ -31,25 +30,7 @@ public class GSYSurfaceView extends SurfaceView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (GSYVideoManager.instance().getMediaPlayer() != null) {
-            try {
-                int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
-                int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
-
-                int videoSarNum = GSYVideoManager.instance().getMediaPlayer().getVideoSarNum();
-                int videoSarDen = GSYVideoManager.instance().getMediaPlayer().getVideoSarDen();
-
-                if (videoWidth > 0 && videoHeight > 0) {
-                    measureHelper.setVideoSampleAspectRatio(videoSarNum, videoSarDen);
-                    measureHelper.setVideoSize(videoWidth, videoHeight);
-                }
-                measureHelper.setVideoRotation((int) getRotation());
-                measureHelper.doMeasure(widthMeasureSpec, heightMeasureSpec);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
+        measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
         setMeasuredDimension(measureHelper.getMeasuredWidth(), measureHelper.getMeasuredHeight());
     }
 

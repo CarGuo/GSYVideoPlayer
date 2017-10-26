@@ -19,6 +19,8 @@ package com.shuyu.gsyvideoplayer.utils;
 
 import android.view.View;
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+
 import java.lang.ref.WeakReference;
 
 public final class MeasureHelper {
@@ -72,7 +74,7 @@ public final class MeasureHelper {
 
         if (mVideoRotationDegree == 90 || mVideoRotationDegree == 270) {
             int tempSpec = widthMeasureSpec;
-            widthMeasureSpec  = heightMeasureSpec;
+            widthMeasureSpec = heightMeasureSpec;
             heightMeasureSpec = tempSpec;
         }
 
@@ -103,7 +105,7 @@ public final class MeasureHelper {
                         break;
                     case GSYVideoType.SCREEN_TYPE_DEFAULT:
                     case GSYVideoType.SCREEN_TYPE_FULL:
-                    //case GSYVideoType.AR_ASPECT_WRAP_CONTENT:
+                        //case GSYVideoType.AR_ASPECT_WRAP_CONTENT:
                     default:
                         displayAspectRatio = (float) mVideoWidth / (float) mVideoHeight;
                         if (mVideoSarNum > 0 && mVideoSarDen > 0)
@@ -201,6 +203,29 @@ public final class MeasureHelper {
         mMeasuredWidth = width;
         mMeasuredHeight = height;
     }
+
+
+    public void prepareMeasure(int widthMeasureSpec, int heightMeasureSpec, int rotate) {
+        if (GSYVideoManager.instance().getMediaPlayer() != null) {
+            try {
+                int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
+                int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
+
+                int videoSarNum = GSYVideoManager.instance().getMediaPlayer().getVideoSarNum();
+                int videoSarDen = GSYVideoManager.instance().getMediaPlayer().getVideoSarDen();
+
+                if (videoWidth > 0 && videoHeight > 0) {
+                    setVideoSampleAspectRatio(videoSarNum, videoSarDen);
+                    setVideoSize(videoWidth, videoHeight);
+                }
+                setVideoRotation(rotate);
+                doMeasure(widthMeasureSpec, heightMeasureSpec);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public int getMeasuredWidth() {
         return mMeasuredWidth;
