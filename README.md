@@ -111,7 +111,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.1'
 
 ## 五、近期版本
 
-### 2.1.1(2017-10-xx)
+### 2.1.1(2017-10-29)
 * videoCache模式支持增加header
 * 增加无缝切换视频DEMO SmartPickVideo
 * 调整部分代码路径，优化代码
