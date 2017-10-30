@@ -769,14 +769,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     /**
      * 设置log输入等级
      *
-     * @param logLevel {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_DEFAULT}
-     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_VERBOSE}
-     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_DEBUG}
-     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_INFO}
-     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_WARN}
-     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_ERROR}
-     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_FATAL}
-     *                 {@link tv.danmaku.ijk.media.player.IjkMediaPlayer#IJK_LOG_SILENT}
      */
     public void setLogLevel(int logLevel) {
         if (mediaPlayer != null && mediaPlayer instanceof IjkMediaPlayer) {
