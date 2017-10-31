@@ -95,15 +95,18 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         //关闭自动旋转
         detailPlayer.setRotateViewAuto(false);
         detailPlayer.setLockLand(false);
-        detailPlayer.setShowFullAnimation(false);
+
+        //打开  实现竖屏全屏动画
+        detailPlayer.setShowFullAnimation(true);
+
         detailPlayer.setNeedLockFull(true);
         detailPlayer.setSeekRatio(1);
         //detailPlayer.setOpenPreView(false);
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //直接横屏
-                orientationUtils.resolveByClick();
+                //屏蔽，实现竖屏全屏
+                //orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
                 detailPlayer.startWindowFullscreen(DetailMoreTypeActivity.this, true, true);
@@ -115,7 +118,8 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
-                orientationUtils.setEnable(true);
+                //orientationUtils.setEnable(true);
+                orientationUtils.setEnable(false);
                 isPlay = true;
             }
 
@@ -132,19 +136,21 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
             @Override
             public void onQuitFullscreen(String url, Object... objects) {
                 super.onQuitFullscreen(url, objects);
-                if (orientationUtils != null) {
-                    orientationUtils.backToProtVideo();
-                }
+                //屏蔽，实现竖屏全屏
+                //if (orientationUtils != null) {
+                    //orientationUtils.backToProtVideo();
+                //}
             }
         });
 
         detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
             public void onClick(View view, boolean lock) {
-                if (orientationUtils != null) {
+                //屏蔽，实现竖屏全屏
+                //if (orientationUtils != null) {
                     //配合下方的onConfigurationChanged
-                    orientationUtils.setEnable(!lock);
-                }
+                    //orientationUtils.setEnable(!lock);
+                //}
             }
         });
 
@@ -202,6 +208,8 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         if (isPlay && !isPause) {
             detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
         }
+        //竖屏全屏
+        orientationUtils.setEnable(false);
     }
 
 
