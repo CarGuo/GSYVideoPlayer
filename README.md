@@ -22,6 +22,7 @@
 **支持**|**锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **支持**|**全屏与非全屏两套布局切换；弹幕功能。**
 **支持**|**没有任何操作控件的纯播放支持。**
+**支持**|**Demo带有RecyclerView列表滑动自动播放。**
 待支持|**自带广告功能（目前需要自己实现）。**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
