@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.view.View;
 
+import com.example.gsyvideoplayer.AutoPlayRecyclerViewActivity;
 import com.example.gsyvideoplayer.DanmkuVideoActivity;
 import com.example.gsyvideoplayer.DetailControlActivity;
 import com.example.gsyvideoplayer.DetailFilterActivity;
@@ -98,6 +99,17 @@ public class JumpUtils {
      */
     public static void goToVideoPlayer(Activity activity) {
         Intent intent = new Intent(activity, ListVideoActivity.class);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+        ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+    }
+
+    /**
+     * 跳转到视频列表
+     *
+     * @param activity
+     */
+    public static void goToAutoVideoPlayer(Activity activity) {
+        Intent intent = new Intent(activity, AutoPlayRecyclerViewActivity.class);
         ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
         ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
     }

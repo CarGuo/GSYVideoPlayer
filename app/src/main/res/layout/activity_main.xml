@@ -71,6 +71,14 @@
             android:text="recycler列表" />
 
         <Button
+            android:id="@+id/open_btn_auto"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="自动recycler列表" />
+
+
+        <Button
             android:id="@+id/recycler_2"
             android:layout_width="120dp"
             android:layout_height="wrap_content"

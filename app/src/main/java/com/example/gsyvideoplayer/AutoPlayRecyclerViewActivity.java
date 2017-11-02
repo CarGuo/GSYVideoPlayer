@@ -4,8 +4,8 @@ package com.example.gsyvideoplayer;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Explode;
@@ -13,14 +13,12 @@ import android.view.Window;
 
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
 import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
-
-import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.example.gsyvideoplayer.utils.ScrollCalculatorHelper;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecyclerViewActivity extends AppCompatActivity {
+/**
+ * 类似微博视频，滑动到具体位置自动播放
+ */
+public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
 
 
     @BindView(R.id.list_item_recycler)
@@ -59,9 +60,9 @@ public class RecyclerViewActivity extends AppCompatActivity {
         resolveData();
 
 
-        //限定范围为屏幕一半的上下偏移100
-        int playTop = CommonUtil.getScreenHeight(this) / 2 - CommonUtil.dip2px(this, 100);
-        int playBottom = CommonUtil.getScreenHeight(this) / 2 + CommonUtil.dip2px(this, 100);
+        //限定范围为屏幕一半的上下偏移180
+        int playTop = CommonUtil.getScreenHeight(this) / 2 - CommonUtil.dip2px(this, 180);
+        int playBottom = CommonUtil.getScreenHeight(this) / 2 + CommonUtil.dip2px(this, 180);
         //自定播放帮助类
         scrollCalculatorHelper = new ScrollCalculatorHelper(R.id.video_item_player, playTop, playBottom);
 
@@ -90,24 +91,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 if (!mFull) {
                     scrollCalculatorHelper.onScroll(recyclerView, firstVisibleItem, lastVisibleItem, lastVisibleItem - firstVisibleItem);
                 }
-
-
-                //这是划出屏幕释放的代码
-                /*if (GSYVideoManager.instance().getPlayPosition() >= 0) {
-                    //当前播放的位置
-                    int position = GSYVideoManager.instance().getPlayPosition();
-                    //对应的播放列表TAG
-                    if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
-                            && (position < firstVisibleItem || position > lastVisibleItem)) {
-
-                        //如果滑出去了上面和下面就是否，和今日头条一样
-                        //是否全屏
-                        if(!mFull) {
-                            GSYVideoPlayer.releaseAllVideos();
-                            recyclerNormalAdapter.notifyDataSetChanged();
-                        }
-                    }
-                }*/
             }
         });
 
