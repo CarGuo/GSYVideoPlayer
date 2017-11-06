@@ -1,5 +1,6 @@
 package com.example.gsyvideoplayer;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ public class ListVideoActivity extends AppCompatActivity {
     RelativeLayout activityListVideo;
 
     ListNormalAdapter listNormalAdapter;
+
+    private boolean isPause;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,9 @@ public class ListVideoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //为了支持重力旋转
+        onBackPressAdapter();
+
         if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
             return;
         }
@@ -78,17 +84,38 @@ public class ListVideoActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         GSYVideoManager.onPause();
+        isPause = true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         GSYVideoManager.onResume();
+        isPause = false;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         GSYVideoPlayer.releaseAllVideos();
+        if (listNormalAdapter != null) {
+            listNormalAdapter.onDestroy();
+        }
+    }
+
+    /********************************为了支持重力旋转********************************/
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (listNormalAdapter != null && listNormalAdapter.getListNeedAutoLand() && !isPause) {
+            listNormalAdapter.onConfigurationChanged(this, newConfig);
+        }
+    }
+
+    private void onBackPressAdapter() {
+        //为了支持重力旋转
+        if (listNormalAdapter != null && listNormalAdapter.getListNeedAutoLand()) {
+            listNormalAdapter.onBackPressed();
+        }
     }
 }
