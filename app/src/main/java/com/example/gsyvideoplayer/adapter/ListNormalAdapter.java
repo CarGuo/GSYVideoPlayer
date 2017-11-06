@@ -1,6 +1,8 @@
 package com.example.gsyvideoplayer.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,9 @@ import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,9 +36,11 @@ public class ListNormalAdapter extends BaseAdapter {
     private LayoutInflater inflater = null;
     private Context context;
 
-    private boolean isFullVideo;
-
     private StandardGSYVideoPlayer curPlayer;
+
+    protected OrientationUtils orientationUtils;
+
+    protected boolean isPlay;
 
     public ListNormalAdapter(Context context) {
         super();
@@ -136,10 +142,10 @@ public class ListNormalAdapter extends BaseAdapter {
                 resolveFullBtn(holder.gsyVideoPlayer);
             }
         });
-        holder.gsyVideoPlayer.setRotateViewAuto(true);
-        holder.gsyVideoPlayer.setLockLand(true);
+        holder.gsyVideoPlayer.setRotateViewAuto(!getListNeedAutoLand());
+        holder.gsyVideoPlayer.setLockLand(!getListNeedAutoLand());
         holder.gsyVideoPlayer.setPlayTag(TAG);
-        holder.gsyVideoPlayer.setShowFullAnimation(true);
+        holder.gsyVideoPlayer.setShowFullAnimation(!getListNeedAutoLand());
         holder.gsyVideoPlayer.setIsTouchWiget(false);
         //循环
         //holder.gsyVideoPlayer.setLooping(true);
@@ -151,21 +157,33 @@ public class ListNormalAdapter extends BaseAdapter {
 
         holder.gsyVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
+            public void onClickStartIcon(String url, Object... objects) {
+                super.onClickStartIcon(url, objects);
+            }
+
+            @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
                 Debuger.printfLog("onPrepared");
                 if (!holder.gsyVideoPlayer.isIfCurrentIsFullscreen()) {
                     GSYVideoManager.instance().setNeedMute(true);
                 }
-
                 curPlayer = (StandardGSYVideoPlayer) objects[1];
-
+                isPlay = true;
+                if (getListNeedAutoLand()) {
+                    //重力全屏工具类
+                    initOrientationUtils(holder.gsyVideoPlayer);
+                    ListNormalAdapter.this.onPrepared();
+                }
             }
 
             @Override
             public void onQuitFullscreen(String url, Object... objects) {
                 super.onQuitFullscreen(url, objects);
                 GSYVideoManager.instance().setNeedMute(true);
+                if (getListNeedAutoLand()) {
+                    ListNormalAdapter.this.onQuitFullscreen();
+                }
             }
 
             @Override
@@ -178,6 +196,10 @@ public class ListNormalAdapter extends BaseAdapter {
             public void onAutoComplete(String url, Object... objects) {
                 super.onAutoComplete(url, objects);
                 curPlayer = null;
+                isPlay = false;
+                if (getListNeedAutoLand()) {
+                    ListNormalAdapter.this.onAutoComplete();
+                }
             }
         });
 
@@ -188,8 +210,14 @@ public class ListNormalAdapter extends BaseAdapter {
      * 全屏幕按键处理
      */
     private void resolveFullBtn(final StandardGSYVideoPlayer standardGSYVideoPlayer) {
+        if (getListNeedAutoLand() && orientationUtils != null) {
+            resolveFull();
+        }
         standardGSYVideoPlayer.startWindowFullscreen(context, false, true);
-        isFullVideo = true;
+    }
+
+    class ViewHolder {
+        SampleCoverVideo gsyVideoPlayer;
     }
 
     public void clearCache() {
@@ -198,8 +226,81 @@ public class ListNormalAdapter extends BaseAdapter {
         }
     }
 
-    class ViewHolder {
-        SampleCoverVideo gsyVideoPlayer;
+
+    /**************************支持全屏重力全屏的部分**************************/
+
+    /**
+     * 列表时是否需要支持重力旋转
+     *
+     * @return 返回true为支持列表重力全屏
+     */
+    public boolean getListNeedAutoLand() {
+        return true;
+    }
+
+    private void initOrientationUtils(StandardGSYVideoPlayer standardGSYVideoPlayer) {
+        orientationUtils = new OrientationUtils((Activity) context, standardGSYVideoPlayer);
+        //是否需要跟随系统旋转设置
+        //orientationUtils.setRotateWithSystem(false);
+        orientationUtils.setEnable(false);
+    }
+
+    private void resolveFull() {
+        if (getListNeedAutoLand() && orientationUtils != null) {
+            //直接横屏
+            orientationUtils.resolveByClick();
+        }
+    }
+
+    private void onQuitFullscreen() {
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+    }
+
+    public void onAutoComplete() {
+        if (orientationUtils != null) {
+            orientationUtils.setEnable(false);
+            orientationUtils.releaseListener();
+            orientationUtils = null;
+        }
+        isPlay = false;
+    }
+
+    public void onPrepared() {
+        if (orientationUtils == null) {
+            return;
+        }
+        //开始播放了才能旋转和全屏
+        orientationUtils.setEnable(true);
+    }
+
+    public void onConfigurationChanged(Activity activity, Configuration newConfig) {
+        //如果旋转了就全屏
+        if (isPlay && curPlayer != null && orientationUtils != null) {
+            curPlayer.onConfigurationChanged(activity, newConfig, orientationUtils);
+        }
+    }
+
+    public OrientationUtils getOrientationUtils() {
+        return orientationUtils;
+    }
+
+
+    public void onBackPressed() {
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+    }
+
+    public void onDestroy() {
+        if (isPlay && curPlayer != null) {
+            curPlayer.getCurrentPlayer().release();
+        }
+        if (orientationUtils != null) {
+            orientationUtils.releaseListener();
+            orientationUtils = null;
+        }
     }
 
 }
