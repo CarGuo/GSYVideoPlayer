@@ -284,7 +284,7 @@ public class HttpProxyCacheServer {
             // So just to prevent log flooding don't log stacktrace
             LOG.debug("Releasing input stream… Socket is closed by client.");
         } catch (IOException e) {
-            onError(new ProxyCacheException("Error closing socket input stream", e));
+           // onError(new ProxyCacheException("Error closing socket input stream", e));
         }
     }
 
@@ -304,7 +304,7 @@ public class HttpProxyCacheServer {
                 socket.close();
             }
         } catch (IOException e) {
-            onError(new ProxyCacheException("Error closing socket", e));
+            //onError(new ProxyCacheException("Error closing socket", e));
         }
     }
 
