@@ -310,6 +310,22 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
     }
 
+    @Override
+    protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
+        super.cloneParams(from, to);
+        StandardGSYVideoPlayer sf = (StandardGSYVideoPlayer) from;
+        StandardGSYVideoPlayer st = (StandardGSYVideoPlayer) to;
+        if (st.mProgressBar != null && sf.mProgressBar != null) {
+            st.mProgressBar.setProgress(sf.mProgressBar.getProgress());
+            st.mProgressBar.setSecondaryProgress(sf.mProgressBar.getSecondaryProgress());
+        }
+        if (st.mTotalTimeTextView != null && sf.mTotalTimeTextView != null) {
+            st.mTotalTimeTextView.setText(sf.mTotalTimeTextView.getText());
+        }
+        if (st.mCurrentTimeTextView != null && sf.mCurrentTimeTextView != null) {
+            st.mCurrentTimeTextView.setText(sf.mCurrentTimeTextView.getText());
+        }
+    }
 
     /**
      * 将自定义的效果也设置到全屏
