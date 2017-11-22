@@ -62,6 +62,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
                 if (orientationUtils != null) {
                     //配合下方的onConfigurationChanged
                     orientationUtils.setEnable(!lock);
+                    webPlayer.getCurrentPlayer().setRotateViewAuto(!lock);
                 }
             }
         });
@@ -70,6 +71,9 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         webView.loadUrl("https://www.baidu.com");
+
+
+        orientationUtils.setRotateWithSystem(false);
 
         webTopLayout.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -119,6 +123,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
                 .setThumbImageView(imageView)
                 .setUrl(url)
                 .setCacheWithPlay(false)
+                .setRotateWithSystem(false)
                 .setVideoTitle("测试视频")
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
