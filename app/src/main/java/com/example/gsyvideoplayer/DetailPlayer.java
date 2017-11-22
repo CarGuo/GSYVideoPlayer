@@ -58,6 +58,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "ijkhttphook:http://baobab.wdjcdn.com/14564977406580.mp4";
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        //String url = "http://103.233.191.21/riak/riak-bucket/6469ac502e813a4c1df7c99f364e70c1.mp4";
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
         //String url = "https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8";
         //String url = "http://cdn.tiaobatiaoba.com/Upload/square/2017-11-02/1509585140_1279.mp4";
@@ -109,7 +110,7 @@ public class DetailPlayer extends AppCompatActivity {
                 .setNeedLockFull(true)
                 .setSeekRatio(1)
                 .setUrl(url)
-                .setCacheWithPlay(false)
+                .setCacheWithPlay(true)
                 .setVideoTitle("测试视频")
                 .setStandardVideoAllCallBack(new SampleListener() {
                     @Override
