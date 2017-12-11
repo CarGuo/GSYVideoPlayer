@@ -6,6 +6,7 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.GLException;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.view.Surface;
 
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
@@ -29,6 +30,18 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
     protected GSYVideoGLView.onGSYSurfaceListener mGSYSurfaceListener;
 
     protected GLSurfaceView mSurfaceView;
+
+    protected float[] mMVPMatrix = new float[16];
+
+    protected float[] mSTMatrix = new float[16];
+
+    protected int mCurrentViewWidth = 0;
+
+    protected int mCurrentViewHeight = 0;
+
+    protected int mCurrentVideoWidth = 0;
+
+    protected int mCurrentVideoHeight = 0;
 
 
     public abstract void releaseAll();
@@ -139,10 +152,15 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
         this.mGSYSurfaceListener = onSurfaceListener;
     }
 
+    public float[] getMVPMatrix() {
+        return mMVPMatrix;
+    }
+
     /**
      * 形变动画
      */
     public void setMVPMatrix(float[] MVPMatrix) {
+        this.mMVPMatrix = MVPMatrix;
     }
 
     /**
@@ -159,11 +177,50 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
 
     /**
      * 设置滤镜效果
+     *
      * @param shaderEffect
      */
     public void setEffect(GSYVideoGLView.ShaderInterface shaderEffect) {
     }
 
+    public int getCurrentViewWidth() {
+        return mCurrentViewWidth;
+    }
+
+    public void setCurrentViewWidth(int currentViewWidth) {
+        this.mCurrentViewWidth = currentViewWidth;
+    }
+
+    public int getCurrentViewHeight() {
+        return mCurrentViewHeight;
+    }
+
+    public void setCurrentViewHeight(int currentViewHeight) {
+        this.mCurrentViewHeight = currentViewHeight;
+    }
+
+    public int getCurrentVideoWidth() {
+        return mCurrentVideoWidth;
+    }
+
+    public void setCurrentVideoWidth(int currentVideoWidth) {
+        this.mCurrentVideoWidth = currentVideoWidth;
+    }
+
+    public int getCurrentVideoHeight() {
+        return mCurrentVideoHeight;
+    }
+
+    public void setCurrentVideoHeight(int currentVideoHeight) {
+        this.mCurrentVideoHeight = currentVideoHeight;
+    }
+
+    public void initRenderSize() {
+        if (mCurrentViewWidth != 0 && mCurrentViewHeight != 0) {
+            Matrix.scaleM(mMVPMatrix, 0, (float) mCurrentViewWidth / mSurfaceView.getWidth(),
+                    (float) mCurrentViewHeight / mSurfaceView.getHeight(), 1);
+        }
+    }
 }
 
 
