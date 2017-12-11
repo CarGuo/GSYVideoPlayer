@@ -191,7 +191,7 @@ GSYVideoManager.instance().setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
 #### 撸码不易，如果对你有所帮助，欢迎您的赞赏
 
-![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
+![微信赞赏码](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
 
 
 ## License
