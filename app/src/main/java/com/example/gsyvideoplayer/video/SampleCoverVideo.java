@@ -22,7 +22,7 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
 
     ImageView mCoverImage;
 
-    String mUrl;
+    String mCoverOriginUrl;
 
     int mDefaultRes;
 
@@ -50,7 +50,7 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
     }
 
     public void loadCoverImage(String url, int res) {
-        mUrl = url;
+        mCoverOriginUrl = url;
         mDefaultRes = res;
         Glide.with(getContext().getApplicationContext())
                 .setDefaultRequestOptions(
@@ -67,7 +67,7 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
     public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
         GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
         SampleCoverVideo sampleCoverVideo = (SampleCoverVideo) gsyBaseVideoPlayer;
-        sampleCoverVideo.loadCoverImage(mUrl, mDefaultRes);
+        sampleCoverVideo.loadCoverImage(mCoverOriginUrl, mDefaultRes);
         return gsyBaseVideoPlayer;
     }
 }
