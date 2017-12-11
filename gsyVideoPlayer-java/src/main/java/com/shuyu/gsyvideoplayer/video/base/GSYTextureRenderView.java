@@ -50,7 +50,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     //自定义渲染
     protected GSYVideoGLViewBaseRender mRenderer;
 
-    private int mMode = GSYVideoGLView.MODE_LAYOUT_SIZE;
+    protected int mMode = GSYVideoGLView.MODE_LAYOUT_SIZE;
 
     public GSYTextureRenderView(@NonNull Context context) {
         super(context);
