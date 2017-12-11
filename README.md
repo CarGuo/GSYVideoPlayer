@@ -29,7 +29,7 @@
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
-#### [赞赏链接](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
+### [微信赞赏链接](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
 
 ## 一、使用依赖
 
@@ -191,7 +191,9 @@ GSYVideoManager.instance().setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
 #### 撸码不易，如果对你有所帮助，欢迎您的赞赏
 
-![微信赞赏码](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
+##### 微信赞赏码
+
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg" height="240px" width="240px"/>
 
 
 ## License
