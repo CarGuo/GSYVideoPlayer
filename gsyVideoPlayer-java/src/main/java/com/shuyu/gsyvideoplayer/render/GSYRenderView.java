@@ -193,6 +193,13 @@ public class GSYRenderView {
         }
     }
 
+    public void setGLRenderMode(int mode) {
+        if (mShowView instanceof GSYVideoGLView) {
+            GSYVideoGLView gsyVideoGLView = (GSYVideoGLView) mShowView;
+            gsyVideoGLView.setMode(mode);
+        }
+    }
+
     /**
      * 添加播放的view
      */

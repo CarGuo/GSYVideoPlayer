@@ -166,6 +166,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         mCustomBitmapIconEffect = new BitmapIconEffect(bitmap, dp2px(50), dp2px(50), 0.6f);
         mGSYVideoGLViewCustomRender.setBitmapEffect(mCustomBitmapIconEffect);
         detailPlayer.setCustomGLRenderer(mGSYVideoGLViewCustomRender);
+        detailPlayer.setGLRenderMode(GSYVideoGLView.MODE_RENDER_SIZE);
 
         //多窗口播放效果
         //detailPlayer.setEffectFilter(new GammaEffect(0.8f));
@@ -282,6 +283,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //恢复到原本的绘制模式
         GSYVideoType.setRenderType(backupRendType);
         cancelTask();
     }

@@ -50,6 +50,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     //自定义渲染
     protected GSYVideoGLViewBaseRender mRenderer;
 
+    private int mMode = GSYVideoGLView.MODE_LAYOUT_SIZE;
+
     public GSYTextureRenderView(@NonNull Context context) {
         super(context);
     }
@@ -144,6 +146,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             return;
         } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
             mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer);
+            setGLRenderMode(mMode);
             return;
         }
         mTextureView.addTextureView(getContext(), mTextureViewContainer, mRotate, this);
@@ -259,4 +262,18 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             gsyVideoGLView.setCustomRenderer(mRenderer);
         }
     }
+
+    /**
+     * GL布局的绘制模式，利用布局计算大小还是使用render计算大小
+     * @param mode MODE_LAYOUT_SIZE = 0,  MODE_RENDER_SIZE = 1
+     */
+    public void setGLRenderMode(int mode) {
+        mMode = mode;
+        if (mTextureView != null && mRenderer != null &&
+                mTextureView.getShowView() instanceof GSYVideoGLView) {
+            GSYVideoGLView gsyVideoGLView = (GSYVideoGLView) mTextureView.getShowView();
+            gsyVideoGLView.setMode(mode);
+        }
+    }
+
 }
