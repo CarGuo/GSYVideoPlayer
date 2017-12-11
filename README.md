@@ -193,7 +193,7 @@ GSYVideoManager.instance().setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
 ##### 微信赞赏码
 
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg" height="240px" width="240px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg" height="400px" width="400px"/>
 
 
 ## License
