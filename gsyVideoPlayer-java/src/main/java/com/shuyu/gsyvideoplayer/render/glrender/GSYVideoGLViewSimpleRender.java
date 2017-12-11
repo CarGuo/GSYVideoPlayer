@@ -57,10 +57,6 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
             + "  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n"
             + "}\n";
 
-    private float[] mMVPMatrix = new float[16];
-
-    private float[] mSTMatrix = new float[16];
-
     private int mProgram;
 
     private int mTextureID[] = new int[2];
@@ -266,10 +262,6 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
         return maTextureHandle;
     }
 
-    public float[] getMVPMatrix() {
-        return mMVPMatrix;
-    }
-
     public float[] getSTMatrix() {
         return mSTMatrix;
     }
@@ -284,13 +276,6 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
     protected String getFragmentShader() {
         return mEffect.getShader(mSurfaceView);
-    }
-
-    /**
-     * 形变动画
-     */
-    public void setMVPMatrix(float[] MVPMatrix) {
-        this.mMVPMatrix = MVPMatrix;
     }
 
     /**

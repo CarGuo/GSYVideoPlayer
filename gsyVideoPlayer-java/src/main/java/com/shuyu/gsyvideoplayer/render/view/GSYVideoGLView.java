@@ -75,6 +75,7 @@ public class GSYVideoGLView extends GLSurfaceView {
     public void setCustomRenderer(GSYVideoGLViewBaseRender CustomRender) {
         this.mRenderer = CustomRender;
         mRenderer.setSurfaceView(GSYVideoGLView.this);
+        initRenderMeasure();
     }
 
     public void setGSYSurfaceListener(onGSYSurfaceListener mGSYSurfaceListener) {
@@ -106,9 +107,35 @@ public class GSYVideoGLView extends GLSurfaceView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(mRenderer != null) {
+            mRenderer.initRenderSize();
+        }
+    }
+
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
-        setMeasuredDimension(measureHelper.getMeasuredWidth(), measureHelper.getMeasuredHeight());
+        initRenderMeasure();
+    }
+
+    protected void initRenderMeasure() {
+        if (GSYVideoManager.instance().getMediaPlayer() != null) {
+            try {
+                int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
+                int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
+                if (this.mRenderer != null) {
+                    this.mRenderer.setCurrentViewWidth(measureHelper.getMeasuredWidth());
+                    this.mRenderer.setCurrentViewHeight(measureHelper.getMeasuredHeight());
+                    this.mRenderer.setCurrentVideoWidth(videoWidth);
+                    this.mRenderer.setCurrentVideoHeight(videoHeight);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public int getSizeH() {

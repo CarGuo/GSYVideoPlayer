@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -109,6 +110,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
     private float deep = 0.8f;
 
     private String url = "https://res.exexm.com/cw_145225549855002";
+    //private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
 
     private Timer timer = new Timer();
 
@@ -159,11 +161,11 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         //自定义render需要在播放器开始播放之前，播放过程中不允许切换render
 
         //水印图效果
-        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         mGSYVideoGLViewCustomRender = new GSYVideoGLViewCustomRender();
         mCustomBitmapIconEffect = new BitmapIconEffect(bitmap, dp2px(50), dp2px(50), 0.6f);
         mGSYVideoGLViewCustomRender.setBitmapEffect(mCustomBitmapIconEffect);
-        detailPlayer.setCustomGLRenderer(mGSYVideoGLViewCustomRender);*/
+        detailPlayer.setCustomGLRenderer(mGSYVideoGLViewCustomRender);
 
         //多窗口播放效果
         //detailPlayer.setEffectFilter(new GammaEffect(0.8f));
