@@ -10,6 +10,7 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 
@@ -23,6 +24,14 @@ import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 public class GSYVideoGLView extends GLSurfaceView {
 
     private static final String TAG = GSYVideoGLView.class.getName();
+    /**
+     * 利用布局计算大小
+     */
+    public static final int MODE_LAYOUT_SIZE = 0;
+    /**
+     * 利用Render计算大小
+     */
+    public static final int MODE_RENDER_SIZE = 1;
 
     private GSYVideoGLViewBaseRender mRenderer;
 
@@ -35,6 +44,8 @@ public class GSYVideoGLView extends GLSurfaceView {
     private MeasureHelper measureHelper;
 
     private onGSYSurfaceListener mGSYSurfaceListener;
+
+    private int mMode = MODE_LAYOUT_SIZE;
 
     public interface onGSYSurfaceListener {
         void onSurfaceAvailable(Surface surface);
@@ -109,20 +120,26 @@ public class GSYVideoGLView extends GLSurfaceView {
     @Override
     public void onResume() {
         super.onResume();
-        if(mRenderer != null) {
+        if (mRenderer != null) {
             mRenderer.initRenderSize();
         }
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
-        initRenderMeasure();
+        Debuger.printfError("ffff", "fFF " + mMode);
+        if (mMode == MODE_RENDER_SIZE) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
+            initRenderMeasure();
+        } else {
+            measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
+            setMeasuredDimension(measureHelper.getMeasuredWidth(), measureHelper.getMeasuredHeight());
+        }
     }
 
     protected void initRenderMeasure() {
-        if (GSYVideoManager.instance().getMediaPlayer() != null) {
+        if (GSYVideoManager.instance().getMediaPlayer() != null && mMode == MODE_RENDER_SIZE) {
             try {
                 int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
                 int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
@@ -144,6 +161,18 @@ public class GSYVideoGLView extends GLSurfaceView {
 
     public int getSizeW() {
         return measureHelper.getMeasuredWidth();
+    }
+
+
+    public int getMode() {
+        return mMode;
+    }
+
+    /**
+     * @param mode MODE_LAYOUT_SIZE = 0,  MODE_RENDER_SIZE = 1
+     */
+    public void setMode(int mode) {
+        this.mMode = mode;
     }
 
     public void releaseAll() {
