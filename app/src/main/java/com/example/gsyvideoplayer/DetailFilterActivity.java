@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.effect.BitmapIconEffect;
 import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender;
 import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender2;
+import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender4;
 import com.example.gsyvideoplayer.effect.PixelationEffect;
 import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
@@ -161,12 +162,12 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         //自定义render需要在播放器开始播放之前，播放过程中不允许切换render
 
         //水印图效果
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         mGSYVideoGLViewCustomRender = new GSYVideoGLViewCustomRender();
         mCustomBitmapIconEffect = new BitmapIconEffect(bitmap, dp2px(50), dp2px(50), 0.6f);
         mGSYVideoGLViewCustomRender.setBitmapEffect(mCustomBitmapIconEffect);
         detailPlayer.setCustomGLRenderer(mGSYVideoGLViewCustomRender);
-        detailPlayer.setGLRenderMode(GSYVideoGLView.MODE_RENDER_SIZE);
+        detailPlayer.setGLRenderMode(GSYVideoGLView.MODE_RENDER_SIZE);*/
 
         //多窗口播放效果
         //detailPlayer.setEffectFilter(new GammaEffect(0.8f));
@@ -174,6 +175,10 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
         //图片穿孔透视播放
         //detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender3());
+
+
+        detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender4());
+        detailPlayer.setGLRenderMode(GSYVideoGLView.MODE_RENDER_SIZE);
 
         changeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
