@@ -52,7 +52,7 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
                 listVideoUtil.setTitle("title " + position);
                 String url;
                 if (position % 2 == 0) {
-                    url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                    url = "https://res.exexm.com/cw_145225549855002";
                 } else {
                     url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
                 }

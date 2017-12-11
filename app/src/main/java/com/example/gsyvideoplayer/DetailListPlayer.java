@@ -50,7 +50,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail {
         List<GSYVideoModel> urls = new ArrayList<>();
         urls.add(new GSYVideoModel("http://7xse1z.com1.z0.glb.clouddn.com/1491813192", "标题1"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题2"));
-        urls.add(new GSYVideoModel("http://baobab.wdjcdn.com/14564977406580.mp4", "标题3"));
+        urls.add(new GSYVideoModel("https://res.exexm.com/cw_145225549855002", "标题3"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题4"));
         detailPlayer.setUp(urls, true, 0);
 

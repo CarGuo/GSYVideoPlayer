@@ -55,7 +55,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_input_url_detail);
         ButterKnife.bind(this);
 
-        url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        url = "https://res.exexm.com/cw_145225549855002";
 
         //增加封面
         ImageView imageView = new ImageView(this);

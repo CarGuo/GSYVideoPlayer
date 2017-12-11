@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.clear_cache:
                 //清理缓存
                 GSYVideoManager.clearAllDefaultCache(MainActivity.this);
-                //String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                //String url = "https://res.exexm.com/cw_145225549855002";
                 //GSYVideoManager.clearDefaultCache(MainActivity.this, url);
                 break;
         }

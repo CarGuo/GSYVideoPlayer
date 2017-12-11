@@ -54,7 +54,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         danmakuVideoPlayer.setShrinkImageRes(R.drawable.custom_shrink);
         danmakuVideoPlayer.setEnlargeImageRes(R.drawable.custom_enlarge);
 
-        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "https://res.exexm.com/cw_145225549855002";
         danmakuVideoPlayer.setUp(url, true, null, "测试视频");
 

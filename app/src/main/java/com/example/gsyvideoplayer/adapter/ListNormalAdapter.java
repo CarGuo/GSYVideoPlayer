@@ -80,7 +80,7 @@ public class ListNormalAdapter extends BaseAdapter {
         }
 
 
-        final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        final String url = "https://res.exexm.com/cw_145225549855002";
         //final String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
         //final String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
 
