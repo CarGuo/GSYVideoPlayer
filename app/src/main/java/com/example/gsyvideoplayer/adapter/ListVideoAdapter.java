@@ -89,7 +89,7 @@ public class ListVideoAdapter extends BaseAdapter {
                 notifyDataSetChanged();
                 //listVideoUtil.setLoop(true);
                 listVideoUtil.setPlayPositionAndTag(position, TAG);
-                final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+                final String url = "https://res.exexm.com/cw_145225549855002";
                 listVideoUtil.setTitle("title " + position);
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
                 listVideoUtil.startPlay(url);

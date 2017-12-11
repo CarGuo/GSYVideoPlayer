@@ -107,7 +107,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
 
     private float deep = 0.8f;
 
-    private String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+    private String url = "https://res.exexm.com/cw_145225549855002";
 
     private Timer timer = new Timer();
 

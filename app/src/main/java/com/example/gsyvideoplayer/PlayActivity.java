@@ -52,7 +52,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void init() {
-        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        String url = "https://res.exexm.com/cw_145225549855002";
 
         //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
         //需要路径的
