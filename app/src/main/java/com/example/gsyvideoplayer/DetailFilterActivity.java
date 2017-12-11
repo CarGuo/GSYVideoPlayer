@@ -176,9 +176,10 @@ public class DetailFilterActivity extends GSYBaseActivityDetail {
         //图片穿孔透视播放
         //detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender3());
 
-
-        detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender4());
-        detailPlayer.setGLRenderMode(GSYVideoGLView.MODE_RENDER_SIZE);
+        //高斯拉伸视频铺满背景，替换黑色，前台正常比例播放
+        //detailPlayer.setEffectFilter(new GaussianBlurEffect(6.0f, GaussianBlurEffect.TYPEXY));
+        //detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender4());
+        //detailPlayer.setGLRenderMode(GSYVideoGLView.MODE_RENDER_SIZE);
 
         changeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
