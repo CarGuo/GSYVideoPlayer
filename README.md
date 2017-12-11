@@ -29,6 +29,8 @@
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
+#### [赞赏链接](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
+
 ## 一、使用依赖
 
 ##### 新版本调整了代码结构，如更新后显示类路径错误，参考demo调整包路径即可。
@@ -107,10 +109,24 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.1'
 * ### 4、滤镜和GL动画
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/09.gif"/>
 
-* ### 5、进度条小窗口预览
+* ### 6、背景铺满模糊播放
+
+（已添加代码，未发布）
+
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/99.png" width="426px" height="240px"/>
+
+* ### 7、进度条小窗口预览
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
 ## 五、近期版本
+
+### 2.1.2(2017-xx-xx)
+
+* 背景视频模糊铺满，前方视频正常播放
+```
+DetailFilterActivity中注释的
+//高斯拉伸视频铺满背景，替换黑色，前台正常比例播放
+```
 
 ### 2.1.1(2017-10-29)
 * videoCache模式支持增加header
@@ -169,6 +185,13 @@ GSYVideoManager.instance().setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 ## 依赖大小参考
 建议使用ndk过滤，详细参考 [参考第四条 ： 4、NDK的so支持](http://www.jianshu.com/p/86e4b336c17d)
 ![](https://ooo.0o0.ooo/2017/06/15/5941f343a39f5.png)
+
+
+## 非常感谢您的支持
+
+#### 撸码不易，如果对你有所帮助，欢迎您的赞赏
+
+![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
 
 
 ## License
