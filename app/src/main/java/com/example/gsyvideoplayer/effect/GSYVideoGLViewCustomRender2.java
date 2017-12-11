@@ -24,7 +24,7 @@ public class GSYVideoGLViewCustomRender2 extends GSYVideoGLViewSimpleRender {
         super.onDrawFrame(glUnused);
         float[] transform = new float[16];
         Matrix.setIdentityM(transform, 0);
-        Matrix.scaleM(transform, 0, 0.8f, 1, 1);
+        Matrix.scaleM(transform, 0, 0.8f, 0.8f, 1);
         GLES20.glUniformMatrix4fv(getMuMVPMatrixHandle(), 1, false, transform, 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         GLES20.glFinish();
