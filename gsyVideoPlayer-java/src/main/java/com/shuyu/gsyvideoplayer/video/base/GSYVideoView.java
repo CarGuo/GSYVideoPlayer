@@ -434,9 +434,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         if (mCurrentState == CURRENT_STATE_PAUSE) {
             try {
                 if (mCurrentPosition > 0 && GSYVideoManager.instance().getMediaPlayer() != null) {
-                    setStateAndUi(CURRENT_STATE_PLAYING);
                     GSYVideoManager.instance().getMediaPlayer().seekTo(mCurrentPosition);
                     GSYVideoManager.instance().getMediaPlayer().start();
+                    setStateAndUi(CURRENT_STATE_PLAYING);
+                    mCurrentPosition = 0;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -654,6 +655,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                 e.printStackTrace();
                 return position;
             }
+        }
+        if (position == 0 && mCurrentPosition > 0) {
+            return (int)mCurrentPosition;
         }
         return position;
     }
