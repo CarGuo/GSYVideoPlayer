@@ -121,7 +121,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.1'
 ## 五、近期版本
 
 ### 2.1.2(2017-xx-xx 未发布)
-
+* 增加针对Prepared之前调用OnVideoPause的处理
 * 背景视频模糊铺满，前方视频正常播放
 ```
 DetailFilterActivity中注释的
