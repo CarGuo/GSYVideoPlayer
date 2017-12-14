@@ -608,6 +608,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             }
         } else if (what == IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED) {
             mRotate = extra;
+            Debuger.printfLog("Video Rotate Info " + extra);
             if (mTextureView != null)
                 mTextureView.setRotation(mRotate);
         }

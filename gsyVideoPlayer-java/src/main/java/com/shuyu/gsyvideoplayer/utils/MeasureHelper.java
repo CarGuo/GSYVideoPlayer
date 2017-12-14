@@ -210,7 +210,7 @@ public final class MeasureHelper {
             try {
                 int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
                 int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
-
+                Debuger.printfLog("videoWidth: " + videoWidth + " videoHeight: " + videoHeight);
                 int videoSarNum = GSYVideoManager.instance().getMediaPlayer().getVideoSarNum();
                 int videoSarDen = GSYVideoManager.instance().getMediaPlayer().getVideoSarDen();
 

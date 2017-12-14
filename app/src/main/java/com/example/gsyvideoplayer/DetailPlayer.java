@@ -57,7 +57,10 @@ public class DetailPlayer extends AppCompatActivity {
         //断网自动重新链接，url前接上ijkhttphook:
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
 
-        String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+
+        //String url =  "http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4";
+        String url = "http://video.7k.cn/app_video/20171213/276d8195/v.m3u8.mp4";
         //String url = "http://103.233.191.21/riak/riak-bucket/6469ac502e813a4c1df7c99f364e70c1.mp4";
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
         //String url = "https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8";
