@@ -7,21 +7,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:2.1.1'
+compile 'com.shuyu:GSYVideoPlayer:2.1.2'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.1.1'
+compile 'com.shuyu:gsyVideoPlayer-java:2.1.2'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.1'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.1'
-compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.1'
-compile 'com.shuyu:gsyVideoPlayer-x64:2.1.1'
-compile 'com.shuyu:gsyVideoPlayer-x86:2.1.1'
+compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.2'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.2'
+compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.2'
+compile 'com.shuyu:gsyVideoPlayer-x64:2.1.2'
+compile 'com.shuyu:gsyVideoPlayer-x86:2.1.2'
 
 ```
 
@@ -31,9 +31,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.1.1' 
+compile 'com.shuyu:gsyVideoPlayer-java:2.1.2'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.1' 
+compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.2'
 
 ```
 
@@ -68,7 +68,7 @@ allprojects {
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.1.1'
+compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.1.2'
 
 ```
 
@@ -76,14 +76,14 @@ compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.1.1'
 
 ```
 
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.1.1'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.1.2'
 
 //根据你的需求
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.1.1'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.1.1'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.1.1'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.1.1'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.1.1'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.1.2'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.1.2'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.1.2'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.1.2'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.1.2'
 
 ```
 
@@ -93,8 +93,8 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 方法引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.1.1'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.1.2'
 
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.1.1'
+compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.1.2'
 
 ```
