@@ -215,6 +215,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mRenderer = from.mRenderer;
         to.mMode = from.mMode;
         to.mBackFromFullScreenListener = from.mBackFromFullScreenListener;
+        to.mGSYVideoProgressListener = from.mGSYVideoProgressListener;
         to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
         to.setStateAndUi(from.mCurrentState);
     }
