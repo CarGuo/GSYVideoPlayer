@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+
 
 android {
 
@@ -16,7 +16,9 @@ android {
         versionCode 3
         versionName "1.4.9"
 
-
+        javaCompileOptions {
+            annotationProcessorOptions.includeCompileClasspath = true
+        }
         ndk {
             //设置支持的SO库架构
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
@@ -49,7 +51,7 @@ dependencies {
     def viewDependencies = rootProject.ext.viewDependencies
     def androidDependencies = rootProject.ext.androidDependencies
     def dataDependencies = rootProject.ext.dataDependencies
-    apt viewDependencies.apt_butterKnife
+    annotationProcessor  viewDependencies.apt_butterKnife
     compile viewDependencies.butterKnife
     compile androidDependencies.recyclerView
     compile viewDependencies.DanmakuFlameMaster
