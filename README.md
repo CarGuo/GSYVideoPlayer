@@ -76,7 +76,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.2'
 
 ## 二、其他推荐
 
-### * QQ群，有兴趣的可以进来（群里平时吹水吐槽多）：174815284 。
+### * QQ群，有兴趣的可以进来（群里平时吹水吐槽多，因为人数饱和，目前开启付费入群）：174815284 。
 ### * [GSYGithubAPP 跨平台github客户端](https://github.com/CarGuo/GSYGithubAPP)
 ### * [RickText](https://github.com/CarGuo/RickText)
 ### * [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
