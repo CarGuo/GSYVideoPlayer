@@ -51,7 +51,7 @@ dependencies {
     def viewDependencies = rootProject.ext.viewDependencies
     def androidDependencies = rootProject.ext.androidDependencies
     def dataDependencies = rootProject.ext.dataDependencies
-    annotationProcessor  viewDependencies.apt_butterKnife
+    annotationProcessor viewDependencies.apt_butterKnife
     compile viewDependencies.butterKnife
     compile androidDependencies.recyclerView
     compile viewDependencies.DanmakuFlameMaster
@@ -61,6 +61,7 @@ dependencies {
     compile viewDependencies.glide
     compile viewDependencies.glideProcessor
     compile androidDependencies.support_v4
+    compile androidDependencies.design
     //debugCompile dataDependencies.leakcanary
     compile project(':gsyVideoPlayer')
 
