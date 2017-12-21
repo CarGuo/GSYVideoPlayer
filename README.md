@@ -121,6 +121,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.2'
 
 ### 2.1.3（2017-xx-xx 未发布）
 * update demo gradle to 4.1
+* 增加对CollapsingToolbarLayout的支持与demo
 * 增加播放进度回调
 ```
 /**
