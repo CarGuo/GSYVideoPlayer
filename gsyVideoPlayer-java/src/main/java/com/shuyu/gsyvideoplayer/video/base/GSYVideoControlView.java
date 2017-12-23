@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -171,6 +172,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //触摸显示消失定时任务
     protected DismissControlViewTimerTask mDismissControlViewTimerTask;
 
+    protected GSYVideoProgressListener mGSYVideoProgressListener;
 
     public GSYVideoControlView(@NonNull Context context) {
         super(context);
@@ -857,6 +859,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
 
+        if (mGSYVideoProgressListener != null) {
+            mGSYVideoProgressListener.onProgress(progress, secProgress, currentTime, totalTime);
+        }
+
         if (mProgressBar == null || mTotalTimeTextView == null || mCurrentTimeTextView == null) {
             return;
         }
@@ -1250,4 +1256,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return mDismissControlTime;
     }
 
+    /**
+     * 进度回调
+     */
+    public void setGSYVideoProgressListener(GSYVideoProgressListener videoProgressListener) {
+        this.mGSYVideoProgressListener = videoProgressListener;
+    }
 }

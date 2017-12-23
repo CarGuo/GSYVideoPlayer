@@ -1,95 +1,61 @@
 package com.example.gsyvideoplayer;
 
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
+import com.example.gsyvideoplayer.listener.AppBarStateChangeListener;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
-import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-
-public class DetailPlayer extends AppCompatActivity {
-
-    @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
-
-    //推荐使用StandardGSYVideoPlayer，功能一致
-    //CustomGSYVideoPlayer部分功能处于试验阶段
-    @BindView(R.id.detail_player)
-    LandLayoutVideo detailPlayer;
-
-    @BindView(R.id.activity_detail_player)
-    RelativeLayout activityDetailPlayer;
+/**
+ * CollapsingToolbarLayout的播放页面
+ * 额，有点懒，细节上没处理
+ */
+public class ScrollingActivity extends AppCompatActivity {
 
     private boolean isPlay;
     private boolean isPause;
+    private boolean isSamll;
 
     private OrientationUtils orientationUtils;
+    private LandLayoutVideo detailPlayer;
+    private AppBarLayout appBar;
+    private FloatingActionButton fab;
+    private CoordinatorLayout root;
+    private CollapsingToolbarLayout toolBarLayout;
+
+    private AppBarStateChangeListener.State curState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_player);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_scrolling);
 
-        //断网自动重新链接，url前接上ijkhttphook:
-        //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
+        initView();
 
-        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
-
-        String url =  "http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4";
-        //String url = "http://video.7k.cn/app_video/20171213/276d8195/v.m3u8.mp4";
-        //String url = "http://103.233.191.21/riak/riak-bucket/6469ac502e813a4c1df7c99f364e70c1.mp4";
-        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
-        //String url = "https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8";
-        //String url = "http://cdn.tiaobatiaoba.com/Upload/square/2017-11-02/1509585140_1279.mp4";
-
-        //String url = "http://hcjs2ra2rytd8v8np1q.exp.bcevod.com/mda-hegtjx8n5e8jt9zv/mda-hegtjx8n5e8jt9zv.m3u8";
-        //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
-        //String url = "http://ocgk7i2aj.bkt.clouddn.com/17651ac2-693c-47e9-b2d2-b731571bad37";
-        //String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
-        //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
-        //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
-        //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
-        //String url = "https://res.exexm.com/cw_145225549855002";
-        //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
-
-        //detailPlayer.setUp(url, false, null, "测试视频");
-        //detailPlayer.setLooping(true);
-        //detailPlayer.setShowPauseCover(false);
-
-        //如果视频帧数太高导致卡画面不同步
-        //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 5);
-        //如果视频seek之后从头播放
-        //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
-        //List<VideoOptionModel> list = new ArrayList<>();
-        //list.add(videoOptionModel);
-        //GSYVideoManager.instance().setOptionModelList(list);
-
-        //GSYVideoManager.instance().setTimeOut(4000, true);
+        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
 
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.mipmap.xxx1);
-
-        //detailPlayer.setThumbImageView(imageView);
 
         resolveNormalVideoUI();
 
@@ -110,6 +76,7 @@ public class DetailPlayer extends AppCompatActivity {
                 .setCacheWithPlay(false)
                 .setVideoTitle("测试视频")
                 .setStandardVideoAllCallBack(new SampleListener() {
+
                     @Override
                     public void onPrepared(String url, Object... objects) {
                         Debuger.printfError("***** onPrepared **** " + objects[0]);
@@ -118,6 +85,7 @@ public class DetailPlayer extends AppCompatActivity {
                         //开始播放了才能旋转和全屏
                         orientationUtils.setEnable(true);
                         isPlay = true;
+                        root.removeView(fab);
                     }
 
                     @Override
@@ -171,7 +139,7 @@ public class DetailPlayer extends AppCompatActivity {
                 orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
+                detailPlayer.startWindowFullscreen(ScrollingActivity.this, true, true);
             }
         });
 
@@ -201,6 +169,7 @@ public class DetailPlayer extends AppCompatActivity {
     @Override
     protected void onResume() {
         getCurPlay().onVideoResume();
+        appBar.addOnOffsetChangedListener(appBarStateChangeListener);
         super.onResume();
         isPause = false;
     }
@@ -211,11 +180,9 @@ public class DetailPlayer extends AppCompatActivity {
         if (isPlay) {
             getCurPlay().release();
         }
-        //GSYPreViewManager.instance().releaseMediaPlayer();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
     }
-
 
 
     @Override
@@ -227,6 +194,27 @@ public class DetailPlayer extends AppCompatActivity {
         }
     }
 
+    private void initView() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        detailPlayer = (LandLayoutVideo) findViewById(R.id.detail_player);
+        root = (CoordinatorLayout) findViewById(R.id.root_layout);
+
+        setSupportActionBar(toolbar);
+        toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolBarLayout.setTitle(getTitle());
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                detailPlayer.startPlayLogic();
+                root.removeView(fab);
+            }
+        });
+
+        appBar = (AppBarLayout) findViewById(R.id.app_bar);
+        appBar.addOnOffsetChangedListener(appBarStateChangeListener);
+    }
 
     private void resolveNormalVideoUI() {
         //增加title
@@ -236,8 +224,50 @@ public class DetailPlayer extends AppCompatActivity {
 
     private GSYVideoPlayer getCurPlay() {
         if (detailPlayer.getFullWindowPlayer() != null) {
-            return  detailPlayer.getFullWindowPlayer();
+            return detailPlayer.getFullWindowPlayer();
         }
         return detailPlayer;
     }
+
+    AppBarStateChangeListener appBarStateChangeListener = new AppBarStateChangeListener() {
+        @Override
+        public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State
+        state) {
+            if (state == AppBarStateChangeListener.State.EXPANDED) {
+                //展开状态
+                curState = state;
+                toolBarLayout.setTitle("");
+            } else if (state == AppBarStateChangeListener.State.COLLAPSED) {
+                //折叠状态
+                //如果是小窗口就不需要处理
+                toolBarLayout.setTitle("Title");
+                if (!isSamll && isPlay) {
+                    isSamll = true;
+                    int size = CommonUtil.dip2px(ScrollingActivity.this, 150);
+                    detailPlayer.showSmallVideo(new Point(size, size), true, true);
+                    orientationUtils.setEnable(false);
+                }
+                curState = state;
+            } else {
+                if (curState == AppBarStateChangeListener.State.COLLAPSED) {
+                    //由折叠变为中间状态
+                    toolBarLayout.setTitle("");
+                    if (isSamll) {
+                        isSamll = false;
+                        orientationUtils.setEnable(true);
+                        //必须
+                        detailPlayer.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                detailPlayer.hideSmallVideo();
+                            }
+                        }, 50);
+                    }
+                }
+                curState = state;
+                //中间状态
+            }
+        }
+    };
+
 }
