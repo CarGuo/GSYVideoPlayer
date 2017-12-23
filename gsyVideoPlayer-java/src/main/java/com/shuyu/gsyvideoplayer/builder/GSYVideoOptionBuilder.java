@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer.builder;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -139,6 +140,10 @@ public class GSYVideoOptionBuilder {
 
     //滤镜
     protected GSYVideoGLView.ShaderInterface mEffectFilter = new NoEffect();
+
+    //进度回调
+    protected GSYVideoProgressListener mGSYVideoProgressListener;
+
 
     /**
      * 全屏动画
@@ -378,6 +383,15 @@ public class GSYVideoOptionBuilder {
         return this;
     }
 
+    /**
+     * 进度回调
+     */
+    public GSYVideoOptionBuilder setGSYVideoProgressListener(GSYVideoProgressListener videoProgressListener) {
+        this.mGSYVideoProgressListener = videoProgressListener;
+        return this;
+    }
+
+
     /***
      * 设置封面
      */
@@ -526,6 +540,9 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setLooping(mLooping);
         if (mStandardVideoAllCallBack == null) {
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
+        }
+        if (mGSYVideoProgressListener != null) {
+            gsyVideoPlayer.setGSYVideoProgressListener(mGSYVideoProgressListener);
         }
         gsyVideoPlayer.setRotateViewAuto(mRotateViewAuto);
         gsyVideoPlayer.setLockLand(mLockLand);

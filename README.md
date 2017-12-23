@@ -119,6 +119,17 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.2'
 
 ## 五、近期版本
 
+### 2.1.3（2017-xx-xx 未发布）
+* update demo gradle to 4.1
+* 增加对CollapsingToolbarLayout的支持与demo
+* 增加播放进度回调
+```
+/**
+ * 进度回调
+ */
+public void setGSYVideoProgressListener(GSYVideoProgressListener videoProgressListener)
+```
+
 ### 2.1.2(2017-12-08)
 * 增加针对Prepared之前调用OnVideoPause的处理
 * 背景视频模糊铺满，前方视频正常播放

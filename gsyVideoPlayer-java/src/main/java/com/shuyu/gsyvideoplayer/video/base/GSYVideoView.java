@@ -290,7 +290,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         GSYVideoManager.instance().setPlayTag(mPlayTag);
         GSYVideoManager.instance().setPlayPosition(mPlayPosition);
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-        ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        ((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBackUpPlayingBufferState = -1;
         GSYVideoManager.instance().prepare(mUrl, mMapHeadData, mLooping, mSpeed);
         setStateAndUi(CURRENT_STATE_PREPAREING);
@@ -529,7 +529,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         if (!mIfCurrentIsFullscreen)
             GSYVideoManager.instance().setLastListener(null);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
-        ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        ((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         releaseNetWorkState();
 
@@ -558,7 +558,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         GSYVideoManager.instance().setCurrentVideoWidth(0);
 
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
-        ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        ((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         releaseNetWorkState();
 

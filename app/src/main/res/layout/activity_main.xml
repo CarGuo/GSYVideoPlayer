@@ -137,6 +137,13 @@
             android:text="输入url" />
 
         <Button
+            android:id="@+id/open_scroll"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="联动detail" />
+
+        <Button
             android:id="@+id/clear_cache"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
