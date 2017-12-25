@@ -144,6 +144,13 @@
             android:text="联动detail" />
 
         <Button
+            android:id="@+id/open_window"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="悬浮窗口" />
+
+        <Button
             android:id="@+id/clear_cache"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
