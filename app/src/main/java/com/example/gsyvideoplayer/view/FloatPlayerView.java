@@ -11,6 +11,7 @@ import com.example.gsyvideoplayer.video.FloatingVideo;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 /**
+ * 适配了悬浮窗的view
  * Created by guoshuyu on 2017/12/25.
  */
 
