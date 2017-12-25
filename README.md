@@ -23,6 +23,7 @@
 **支持**|**全屏与非全屏两套布局切换；弹幕功能。**
 **支持**|**没有任何操作控件的纯播放支持。**
 **支持**|**Demo带有RecyclerView列表滑动自动播放。**
+**支持**|**多窗体下（包括桌面）的小窗口播放。**
 待支持|**自带广告功能（目前需要自己实现）。**
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
@@ -122,6 +123,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
 ### 2.1.3（2017-12-24）
 * update demo gradle to 4.1
 * 增加对CollapsingToolbarLayout的支持与demo
+* 多窗体下（包括桌面）的小窗口播放（WindowActivity）。
 * 增加播放进度回调
 ```
 /**
@@ -137,20 +139,6 @@ public void setGSYVideoProgressListener(GSYVideoProgressListener videoProgressLi
 DetailFilterActivity中注释的
 //高斯拉伸视频铺满背景，替换黑色，前台正常比例播放
 ```
-
-### 2.1.1(2017-10-29)
-* videoCache模式支持增加header
-* 增加无缝切换视频DEMO SmartPickVideo
-* 调整部分代码路径，优化代码
-* log输入等级接口
-```
-GSYVideoManager.instance().setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
-```
-
-### 2.1.0(2017-10-10)
-* 增加了视频帧合成gif功能（DEMO DetailControlActivity中）。
-* update ijkplayer 0.84
-
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 

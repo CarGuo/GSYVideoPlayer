@@ -4,6 +4,7 @@
 ### 2.1.3（2017-12-24）
 * update demo gradle to 4.1
 * 增加对CollapsingToolbarLayout的支持与demo
+* 多窗体下（包括桌面）的小窗口播放（WindowActivity）。
 * 增加播放进度回调
 ```
 /**
