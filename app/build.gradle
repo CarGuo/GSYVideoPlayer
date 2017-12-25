@@ -52,6 +52,7 @@ dependencies {
     def androidDependencies = rootProject.ext.androidDependencies
     def dataDependencies = rootProject.ext.dataDependencies
     annotationProcessor viewDependencies.apt_butterKnife
+    //debugCompile dataDependencies.leakcanary
     compile viewDependencies.butterKnife
     compile androidDependencies.recyclerView
     compile viewDependencies.DanmakuFlameMaster
@@ -62,9 +63,8 @@ dependencies {
     compile viewDependencies.glideProcessor
     compile androidDependencies.support_v4
     compile androidDependencies.design
-    //debugCompile dataDependencies.leakcanary
-    compile project(':gsyVideoPlayer')
 
+    compile project(':gsyVideoPlayer')
     //jcenter
     //compile "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
