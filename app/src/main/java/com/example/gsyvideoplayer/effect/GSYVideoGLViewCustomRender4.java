@@ -8,6 +8,7 @@ import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
+import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
@@ -18,6 +19,8 @@ import javax.microedition.khronos.opengles.GL10;
 @SuppressLint("ViewConstructor")
 public class GSYVideoGLViewCustomRender4 extends GSYVideoGLViewSimpleRender {
 
+    private int mProgram;
+
     public GSYVideoGLViewCustomRender4() {
         super();
     }
@@ -26,7 +29,6 @@ public class GSYVideoGLViewCustomRender4 extends GSYVideoGLViewSimpleRender {
     public void onDrawFrame(GL10 glUnused) {
         super.onDrawFrame(glUnused);
 
-        int mProgram = createProgram(getVertexShader(), new NoEffect().getShader(mSurfaceView));
         GLES20.glUseProgram(mProgram);
 
         float[] transform = new float[16];
@@ -39,6 +41,13 @@ public class GSYVideoGLViewCustomRender4 extends GSYVideoGLViewSimpleRender {
         GLES20.glUniformMatrix4fv(getMuMVPMatrixHandle(), 1, false, transform, 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         GLES20.glFinish();
+    }
+
+
+    @Override
+    public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+        super.onSurfaceCreated(glUnused, config);
+        mProgram = createProgram(getVertexShader(), new NoEffect().getShader(mSurfaceView));
     }
 
     @Override
