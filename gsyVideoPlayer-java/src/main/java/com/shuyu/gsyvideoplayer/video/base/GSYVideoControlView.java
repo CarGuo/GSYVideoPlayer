@@ -29,6 +29,7 @@ import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -120,6 +121,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     //是否需要锁定屏幕
     protected boolean mNeedLockFull;
+
+    //lazy的setup
+    protected boolean mSetUpLazy = false;
 
     //播放按键
     protected View mStartButton;
@@ -539,7 +543,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return false;
     }
 
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
     }
@@ -596,6 +599,21 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 loopSetProgressAndTime();
             }
         }
+    }
+
+    /**
+     * 增对列表优化，在播放前的时候才进行setup
+     */
+    @Override
+    protected void prepareVideo() {
+        if (mSetUpLazy) {
+            super.setUp(mOriginUrl,
+                    mCache,
+                    mCachePath,
+                    mMapHeadData,
+                    mTitle);
+        }
+        super.prepareVideo();
     }
 
     protected void touchSurfaceDown(float x, float y) {
@@ -1051,6 +1069,22 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     /************************* 开放接口 *************************/
+
+
+    /**
+     * 在点击播放的时候才进行真正setup
+     */
+    public boolean setUpLazy(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title) {
+        mOriginUrl = url;
+        mUrl = "waiting";
+        mCurrentState = CURRENT_STATE_NORMAL;
+        mCache = cacheWithPlay;
+        mCachePath = cachePath;
+        mMapHeadData = mapHeadData;
+        mTitle = title;
+        mSetUpLazy = true;
+        return true;
+    }
 
     /**
      * 初始化为正常状态
