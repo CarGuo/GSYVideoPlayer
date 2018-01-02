@@ -354,9 +354,14 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title) {
         if (setUp(url, cacheWithPlay, cachePath, title)) {
-            this.mMapHeadData.clear();
-            if (mapHeadData != null)
+            if (this.mMapHeadData != null) {
+                this.mMapHeadData.clear();
+            } else {
+                this.mMapHeadData = new HashMap<>();
+            }
+            if (mapHeadData != null) {
                 this.mMapHeadData.putAll(mapHeadData);
+            }
             return true;
         }
         return false;

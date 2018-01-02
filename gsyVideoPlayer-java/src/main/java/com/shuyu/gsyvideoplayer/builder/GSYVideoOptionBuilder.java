@@ -96,6 +96,9 @@ public class GSYVideoOptionBuilder {
     //是否需要变速不变调
     protected boolean mSounchTouch;
 
+    //是否需要lazy的setup
+    protected boolean mSetUpLazy = false;
+
     //播放的tag，防止错误，因为普通的url也可能重复
     protected String mPlayTag = "";
 
@@ -487,6 +490,14 @@ public class GSYVideoOptionBuilder {
         return this;
     }
 
+    /**
+     * 在播放前才真正执行setup
+     */
+    public GSYVideoOptionBuilder setSetUpLazy(boolean setUpLazy) {
+        this.mSetUpLazy = setUpLazy;
+        return this;
+    }
+
     public void build(StandardGSYVideoPlayer gsyVideoPlayer) {
         if (mStandardVideoAllCallBack != null) {
             gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
@@ -561,7 +572,11 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setShowPauseCover(mShowPauseCover);
         gsyVideoPlayer.setSeekRatio(mSeekRatio);
         gsyVideoPlayer.setRotateWithSystem(mRotateWithSystem);
-        gsyVideoPlayer.setUp(mUrl, mCacheWithPlay, mCachePath, mMapHeadData, mVideoTitle);
+        if(mSetUpLazy) {
+            gsyVideoPlayer.setUpLazy(mUrl, mCacheWithPlay, mCachePath, mMapHeadData, mVideoTitle);
+        } else {
+            gsyVideoPlayer.setUp(mUrl, mCacheWithPlay, mCachePath, mMapHeadData, mVideoTitle);
+        }
     }
 
 }
