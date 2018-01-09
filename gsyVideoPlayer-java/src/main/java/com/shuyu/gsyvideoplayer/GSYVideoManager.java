@@ -30,10 +30,12 @@ import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
+import tv.danmaku.ijk.media.exo.demo.player.DemoPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -463,21 +465,63 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
 
     private void showDisplay(Message msg) {
-        if (msg.obj == null && mediaPlayer != null) {
+        if (mediaPlayer instanceof IjkMediaPlayer) {
+            if (msg.obj == null && mediaPlayer != null) {
+                mediaPlayer.setSurface(null);
+            } else {
+                Surface holder = (Surface) msg.obj;
+                if (mediaPlayer != null && holder.isValid()) {
+                    mediaPlayer.setSurface(holder);
+                }
+                if (mediaPlayer instanceof IjkExoMediaPlayer) {
+                    if (mediaPlayer != null && mediaPlayer.getDuration() > 30
+                            && mediaPlayer.getCurrentPosition() < mediaPlayer.getDuration()) {
+                        mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 20);
+                    }
+                }
+            }
+        } else if (mediaPlayer instanceof IjkExoMediaPlayer) {
+            showDisplayExo(msg);
+        }
+    }
+
+    private void showDisplayExo(Message msg) {
+        if (mediaPlayer == null) {
+            return;
+        }
+        IjkExoMediaPlayer ijkExoMediaPlayer = (IjkExoMediaPlayer) mediaPlayer;
+        Class<?> classType = ijkExoMediaPlayer.getClass();
+        DemoPlayer demoPlayer = null;
+        try {
+            Field field = classType.getDeclaredField("mInternalPlayer");
+            field.setAccessible(true); // 抑制Java对修饰符的检查
+            demoPlayer = (DemoPlayer) field.get(ijkExoMediaPlayer);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        if (msg.obj == null) {
+            /*if (demoPlayer != null && demoPlayer.getPlayWhenReady()) {
+                demoPlayer.setSelectedTrack(0, -1);
+            }*/
             mediaPlayer.setSurface(null);
         } else {
             Surface holder = (Surface) msg.obj;
-            if (mediaPlayer != null && holder.isValid()) {
-                mediaPlayer.setSurface(holder);
+            mediaPlayer.setSurface(holder);
+            if (mediaPlayer != null && mediaPlayer.getDuration() > 30
+                    && mediaPlayer.getCurrentPosition() < mediaPlayer.getDuration()) {
+                mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 20);
             }
-            if (mediaPlayer instanceof IjkExoMediaPlayer) {
-                if (mediaPlayer != null && mediaPlayer.getDuration() > 30
-                        && mediaPlayer.getCurrentPosition() < mediaPlayer.getDuration()) {
-                    mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 20);
+            /*if (mediaPlayer != null && holder.isValid()) {
+                if (demoPlayer != null && demoPlayer.getPlayWhenReady()) {
+                    demoPlayer.setSelectedTrack(0, 0);
                 }
-            }
+
+            }*/
         }
     }
+
 
     /**
      * for android video cache header
@@ -768,7 +812,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     /**
      * 设置log输入等级
-     *
      */
     public void setLogLevel(int logLevel) {
         if (mediaPlayer != null && mediaPlayer instanceof IjkMediaPlayer) {
