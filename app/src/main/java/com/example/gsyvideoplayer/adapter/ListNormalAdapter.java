@@ -93,7 +93,7 @@ public class ListNormalAdapter extends BaseAdapter {
         }
 
         //防止错位，离开释放
-        holder.gsyVideoPlayer.initUIState();
+        //holder.gsyVideoPlayer.initUIState();
 
         //默认缓存路径
         //使用lazy的set可以避免滑动卡的情况存在
