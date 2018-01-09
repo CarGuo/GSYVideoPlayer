@@ -1076,13 +1076,16 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     public boolean setUpLazy(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title) {
         mOriginUrl = url;
-        mUrl = "waiting";
-        mCurrentState = CURRENT_STATE_NORMAL;
         mCache = cacheWithPlay;
         mCachePath = cachePath;
-        mMapHeadData = mapHeadData;
-        mTitle = title;
         mSetUpLazy = true;
+        mTitle = title;
+        if (isCurrentMediaListener() &&
+                (System.currentTimeMillis() - mSaveChangeViewTIme) < CHANGE_DELAY_TIME)
+            return false;
+        mUrl = "waiting";
+        mMapHeadData = mapHeadData;
+        mCurrentState = CURRENT_STATE_NORMAL;
         return true;
     }
 
