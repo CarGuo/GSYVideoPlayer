@@ -54,10 +54,8 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-/**
- * Logs player events using {@link Log}.
- */
-/* package */ public final class EventLogger implements Player.EventListener, MetadataOutput,
+
+public final class EventLogger implements Player.EventListener, MetadataOutput,
         AudioRendererEventListener, VideoRendererEventListener, AdaptiveMediaSourceEventListener,
         ExtractorMediaSource.EventListener, DefaultDrmSessionManager.EventListener {
 
