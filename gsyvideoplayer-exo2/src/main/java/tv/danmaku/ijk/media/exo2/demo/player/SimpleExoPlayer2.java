@@ -54,34 +54,14 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-/**
- * An {@link ExoPlayer} implementation that uses default {@link Renderer} components. Instances can
- * be obtained from {@link ExoPlayerFactory}.
- */
+
 @TargetApi(16)
 public class SimpleExoPlayer2 implements ExoPlayer {
 
-  /**
-   * A listener for video rendering information from a {@link com.google.android.exoplayer2.SimpleExoPlayer}.
-   */
+
   public interface VideoListener {
 
-    /**
-     * Called each time there's a change in the size of the video being rendered.
-     *
-     * @param width The video width in pixels.
-     * @param height The video height in pixels.
-     * @param unappliedRotationDegrees For videos that require a rotation, this is the clockwise
-     *     rotation in degrees that the application should apply for the video for it to be rendered
-     *     in the correct orientation. This value will always be zero on API levels 21 and above,
-     *     since the renderer will apply all necessary rotations internally. On earlier API levels
-     *     this is not possible. Applications that use {@link TextureView} can apply
-     *     the rotation by calling {@link TextureView#setTransform}. Applications that
-     *     do not expect to encounter rotated videos can safely ignore this parameter.
-     * @param pixelWidthHeightRatio The width to height ratio of each pixel. For the normal case
-     *     of square pixels this will be equal to 1.0. Different values are indicative of anamorphic
-     *     content.
-     */
+
     void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
                             float pixelWidthHeightRatio);
 
@@ -159,14 +139,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     player = createExoPlayerImpl(renderers, trackSelector, loadControl);
   }
 
-  /**
-   * Sets the video scaling mode.
-   * <p>
-   * Note that the scaling mode only applies if a {@link MediaCodec}-based video {@link Renderer} is
-   * enabled and if the output surface is owned by a {@link SurfaceView}.
-   *
-   * @param videoScalingMode The video scaling mode.
-   */
+
   public void setVideoScalingMode(@C.VideoScalingMode int videoScalingMode) {
     this.videoScalingMode = videoScalingMode;
     ExoPlayerMessage[] messages = new ExoPlayerMessage[videoRendererCount];
@@ -187,50 +160,24 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     return videoScalingMode;
   }
 
-  /**
-   * Clears any {@link Surface}, {@link SurfaceHolder}, {@link SurfaceView} or {@link TextureView}
-   * currently set on the player.
-   */
+
   public void clearVideoSurface() {
     setVideoSurface(null);
   }
 
-  /**
-   * Sets the {@link Surface} onto which video will be rendered. The caller is responsible for
-   * tracking the lifecycle of the surface, and must clear the surface by calling
-   * {@code setVideoSurface(null)} if the surface is destroyed.
-   * <p>
-   * If the surface is held by a {@link SurfaceView}, {@link TextureView} or {@link SurfaceHolder}
-   * then it's recommended to use {@link #setVideoSurfaceView(SurfaceView)},
-   * {@link #setVideoTextureView(TextureView)} or {@link #setVideoSurfaceHolder(SurfaceHolder)}
-   * rather than this method, since passing the holder allows the player to track the lifecycle of
-   * the surface automatically.
-   *
-   * @param surface The {@link Surface}.
-   */
+
   public void setVideoSurface(Surface surface) {
     removeSurfaceCallbacks();
     setVideoSurfaceInternal(surface, false);
   }
 
-  /**
-   * Clears the {@link Surface} onto which video is being rendered if it matches the one passed.
-   * Else does nothing.
-   *
-   * @param surface The surface to clear.
-   */
   public void clearVideoSurface(Surface surface) {
     if (surface != null && surface == this.surface) {
       setVideoSurface(null);
     }
   }
 
-  /**
-   * Sets the {@link SurfaceHolder} that holds the {@link Surface} onto which video will be
-   * rendered. The player will track the lifecycle of the surface automatically.
-   *
-   * @param surfaceHolder The surface holder.
-   */
+
   public void setVideoSurfaceHolder(SurfaceHolder surfaceHolder) {
     removeSurfaceCallbacks();
     this.surfaceHolder = surfaceHolder;
@@ -243,44 +190,24 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     }
   }
 
-  /**
-   * Clears the {@link SurfaceHolder} that holds the {@link Surface} onto which video is being
-   * rendered if it matches the one passed. Else does nothing.
-   *
-   * @param surfaceHolder The surface holder to clear.
-   */
+
   public void clearVideoSurfaceHolder(SurfaceHolder surfaceHolder) {
     if (surfaceHolder != null && surfaceHolder == this.surfaceHolder) {
       setVideoSurfaceHolder(null);
     }
   }
 
-  /**
-   * Sets the {@link SurfaceView} onto which video will be rendered. The player will track the
-   * lifecycle of the surface automatically.
-   *
-   * @param surfaceView The surface view.
-   */
+
   public void setVideoSurfaceView(SurfaceView surfaceView) {
     setVideoSurfaceHolder(surfaceView == null ? null : surfaceView.getHolder());
   }
 
-  /**
-   * Clears the {@link SurfaceView} onto which video is being rendered if it matches the one passed.
-   * Else does nothing.
-   *
-   * @param surfaceView The texture view to clear.
-   */
+
   public void clearVideoSurfaceView(SurfaceView surfaceView) {
     clearVideoSurfaceHolder(surfaceView == null ? null : surfaceView.getHolder());
   }
 
-  /**
-   * Sets the {@link TextureView} onto which video will be rendered. The player will track the
-   * lifecycle of the surface automatically.
-   *
-   * @param textureView The texture view.
-   */
+
   public void setVideoTextureView(TextureView textureView) {
     removeSurfaceCallbacks();
     this.textureView = textureView;
@@ -297,30 +224,14 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     }
   }
 
-  /**
-   * Clears the {@link TextureView} onto which video is being rendered if it matches the one passed.
-   * Else does nothing.
-   *
-   * @param textureView The texture view to clear.
-   */
+
   public void clearVideoTextureView(TextureView textureView) {
     if (textureView != null && textureView == this.textureView) {
       setVideoTextureView(null);
     }
   }
 
-  /**
-   * Sets the stream type for audio playback, used by the underlying audio track.
-   * <p>
-   * Setting the stream type during playback may introduce a short gap in audio output as the audio
-   * track is recreated. A new audio session id will also be generated.
-   * <p>
-   * Calling this method overwrites any attributes set previously by calling
-   * {@link #setAudioAttributes(AudioAttributes)}.
-   *
-   * @deprecated Use {@link #setAudioAttributes(AudioAttributes)}.
-   * @param streamType The stream type for audio playback.
-   */
+
   @Deprecated
   public void setAudioStreamType(@C.StreamType int streamType) {
     @C.AudioUsage int usage = Util.getAudioUsageForStreamType(streamType);
@@ -330,32 +241,13 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     setAudioAttributes(audioAttributes);
   }
 
-  /**
-   * Returns the stream type for audio playback.
-   *
-   * @deprecated Use {@link #getAudioAttributes()}.
-   */
+
   @Deprecated
   public @C.StreamType int getAudioStreamType() {
     return Util.getStreamTypeForAudioUsage(audioAttributes.usage);
   }
 
-  /**
-   * Sets the attributes for audio playback, used by the underlying audio track. If not set, the
-   * default audio attributes will be used. They are suitable for general media playback.
-   * <p>
-   * Setting the audio attributes during playback may introduce a short gap in audio output as the
-   * audio track is recreated. A new audio session id will also be generated.
-   * <p>
-   * If tunneling is enabled by the track selector, the specified audio attributes will be ignored,
-   * but they will take effect if audio is later played without tunneling.
-   * <p>
-   * If the device is running a build before platform API version 21, audio attributes cannot be set
-   * directly on the underlying audio track. In this case, the usage will be mapped onto an
-   * equivalent stream type using {@link Util#getStreamTypeForAudioUsage(int)}.
-   *
-   * @param audioAttributes The attributes to use for audio playback.
-   */
+
   public void setAudioAttributes(AudioAttributes audioAttributes) {
     this.audioAttributes = audioAttributes;
     ExoPlayerMessage[] messages = new ExoPlayerMessage[audioRendererCount];
@@ -400,24 +292,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     return audioVolume;
   }
 
-  /**
-   * Sets the {@link PlaybackParams} governing audio playback.
-   *
-   * @deprecated Use {@link #setPlaybackParameters(PlaybackParameters)}.
-   * @param params The {@link PlaybackParams}, or null to clear any previously set parameters.
-   */
-  /*@Deprecated
-  @TargetApi(23)
-  public void setPlaybackParams(@Nullable PlaybackParams params) {
-    PlaybackParameters playbackParameters;
-    if (params != null) {
-      params.allowDefaults();
-      playbackParameters = new PlaybackParameters(params.getSpeed(), params.getPitch());
-    } else {
-      playbackParameters = null;
-    }
-    setPlaybackParameters(playbackParameters);
-  }*/
+
 
   /**
    * Returns the video format currently being played, or null if no video is being played.
@@ -433,23 +308,16 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     return audioFormat;
   }
 
-  /**
-   * Returns the audio session identifier, or {@link C#AUDIO_SESSION_ID_UNSET} if not set.
-   */
+
   public int getAudioSessionId() {
     return audioSessionId;
   }
 
-  /**
-   * Returns {@link DecoderCounters} for video, or null if no video is being played.
-   */
   public DecoderCounters getVideoDecoderCounters() {
     return videoDecoderCounters;
   }
 
-  /**
-   * Returns {@link DecoderCounters} for audio, or null if no audio is being played.
-   */
+
   public DecoderCounters getAudioDecoderCounters() {
     return audioDecoderCounters;
   }
@@ -472,12 +340,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     videoListeners.remove(listener);
   }
 
-  /**
-   * Sets a listener to receive video events, removing all existing listeners.
-   *
-   * @param listener The listener.
-   * @deprecated Use {@link #addVideoListener(VideoListener)}.
-   */
+
   @Deprecated
   public void setVideoListener(VideoListener listener) {
     videoListeners.clear();
@@ -486,12 +349,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     }
   }
 
-  /**
-   * Equivalent to {@link #removeVideoListener(VideoListener)}.
-   *
-   * @param listener The listener to clear.
-   * @deprecated Use {@link #removeVideoListener(VideoListener)}.
-   */
+
   @Deprecated
   public void clearVideoListener(VideoListener listener) {
     removeVideoListener(listener);
@@ -515,12 +373,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     textOutputs.remove(listener);
   }
 
-  /**
-   * Sets an output to receive text events, removing all existing outputs.
-   *
-   * @param output The output.
-   * @deprecated Use {@link #addTextOutput(TextOutput)}.
-   */
+
   @Deprecated
   public void setTextOutput(TextOutput output) {
     textOutputs.clear();
@@ -529,12 +382,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     }
   }
 
-  /**
-   * Equivalent to {@link #removeTextOutput(TextOutput)}.
-   *
-   * @param output The output to clear.
-   * @deprecated Use {@link #removeTextOutput(TextOutput)}.
-   */
+
   @Deprecated
   public void clearTextOutput(TextOutput output) {
     removeTextOutput(output);
@@ -558,12 +406,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     metadataOutputs.remove(listener);
   }
 
-  /**
-   * Sets an output to receive metadata events, removing all existing outputs.
-   *
-   * @param output The output.
-   * @deprecated Use {@link #addMetadataOutput(MetadataOutput)}.
-   */
+
   @Deprecated
   public void setMetadataOutput(MetadataOutput output) {
     metadataOutputs.clear();
@@ -572,12 +415,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
     }
   }
 
-  /**
-   * Equivalent to {@link #removeMetadataOutput(MetadataOutput)}.
-   *
-   * @param output The output to clear.
-   * @deprecated Use {@link #removeMetadataOutput(MetadataOutput)}.
-   */
+
   @Deprecated
   public void clearMetadataOutput(MetadataOutput output) {
     removeMetadataOutput(output);
@@ -828,14 +666,7 @@ public class SimpleExoPlayer2 implements ExoPlayer {
 
   // Internal methods.
 
-  /**
-   * Creates the ExoPlayer implementation used by this {@link com.google.android.exoplayer2.SimpleExoPlayer}.
-   *
-   * @param renderers The {@link Renderer}s that will be used by the instance.
-   * @param trackSelector The {@link TrackSelector} that will be used by the instance.
-   * @param loadControl The {@link LoadControl} that will be used by the instance.
-   * @return A new {@link ExoPlayer} instance.
-   */
+
   protected ExoPlayer createExoPlayerImpl(Renderer[] renderers, TrackSelector trackSelector,
                                           LoadControl loadControl) {
     return ExoPlayerFactory.newInstance(renderers, trackSelector, loadControl);
