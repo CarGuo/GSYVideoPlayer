@@ -22,11 +22,11 @@ public class GSYVideoType {
     //全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
     public final static int SCREEN_MATCH_FULL = -4;
 
-
+    //默认播放内核IJK
     public final static int IJKPLAYER = 0;
-
+    //EXO 1 播放内核
     public final static int IJKEXOPLAYER = 1;
-
+    //EXO 2 播放内核
     public final static int IJKEXOPLAYER2 = 2;
 
 
