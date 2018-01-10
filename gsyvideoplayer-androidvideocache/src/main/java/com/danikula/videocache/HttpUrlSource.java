@@ -184,6 +184,9 @@ public class HttpUrlSource implements Source {
 
     private void injectCustomHeaders(HttpURLConnection connection, String url) {
         Map<String, String> extraHeaders = headerInjector.addHeaders(url);
+        if (extraHeaders == null) {
+            return;
+        }
         for (Map.Entry<String, String> header : extraHeaders.entrySet()) {
             connection.setRequestProperty(header.getKey(), header.getValue());
         }

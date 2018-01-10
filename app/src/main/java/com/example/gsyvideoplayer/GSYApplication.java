@@ -27,6 +27,7 @@ public class GSYApplication extends Application {
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();
         //GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER);
+        GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER2);
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
         //GSYVideoType.setRenderType(GSYVideoType.SUFRACE);

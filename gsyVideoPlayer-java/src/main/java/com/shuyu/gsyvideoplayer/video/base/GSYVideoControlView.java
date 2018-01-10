@@ -29,6 +29,7 @@ import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -1080,11 +1081,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mCachePath = cachePath;
         mSetUpLazy = true;
         mTitle = title;
+        mMapHeadData = mapHeadData;
         if (isCurrentMediaListener() &&
                 (System.currentTimeMillis() - mSaveChangeViewTIme) < CHANGE_DELAY_TIME)
             return false;
         mUrl = "waiting";
-        mMapHeadData = mapHeadData;
         mCurrentState = CURRENT_STATE_NORMAL;
         return true;
     }

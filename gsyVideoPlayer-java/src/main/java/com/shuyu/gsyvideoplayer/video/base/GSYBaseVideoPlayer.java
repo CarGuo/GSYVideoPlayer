@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.view.SmallVideoTouch;
@@ -218,6 +219,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mGSYVideoProgressListener = from.mGSYVideoProgressListener;
         if(from.mSetUpLazy) {
             to.setUpLazy(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
+            to.mUrl = from.mUrl;
         } else {
             to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
         }

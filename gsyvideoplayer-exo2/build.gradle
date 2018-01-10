@@ -31,16 +31,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
-    def dataDependencies = rootProject.ext.dataDependencies
+    compile viewDependencies.exo_player2
+    compile viewDependencies.exo_player2_rtmp
     compile viewDependencies.ijkplayer_java
-    compile viewDependencies.ijkplayer_exo
-    compile viewDependencies.transitionseverywhere
-    //compile dataDependencies.videocache
-    //compile "com.shuyu:gsyVideoPlayer-exo2:$gsyVideoVersion"
-
-    compile project(':gsyvideoplayer-androidvideocache')
-    compile project(':gsyvideoplayer-exo2')
-
     compile androidDependencies.appcompat_v7
 }
 
