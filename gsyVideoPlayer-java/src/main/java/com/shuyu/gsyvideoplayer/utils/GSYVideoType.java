@@ -27,6 +27,8 @@ public class GSYVideoType {
 
     public final static int IJKEXOPLAYER = 1;
 
+    public final static int IJKEXOPLAYER2 = 2;
+
 
     //gl
     public final static int GLSURFACE = 2;

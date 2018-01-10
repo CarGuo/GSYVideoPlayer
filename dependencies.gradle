@@ -30,6 +30,8 @@ ext {
 
     gsyVideoVersion = '2.1.3'
 
+    exo_player2 = '2.6.1'
+
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
             appcompat_v7: "com.android.support:appcompat-v7:${otherLibraryVersion}",
@@ -55,7 +57,9 @@ ext {
             ndkbitmap_x86        : "com.github.ctiao:ndkbitmap-x86:${DanmakuFlameMaster}",
             glide                : "com.github.bumptech.glide:glide:${imageLoader}",
             glideProcessor       : "com.github.bumptech.glide:compiler:${imageLoader}",
-            floatWindow       : "com.github.yhaolpz:FloatWindow:${floatWindow}",
+            floatWindow          : "com.github.yhaolpz:FloatWindow:${floatWindow}",
+            exo_player2          : "com.google.android.exoplayer:exoplayer:${exo_player2}",
+            exo_player2_rtmp     : "com.google.android.exoplayer:extension-rtmp:${exo_player2}",
 
     ]
 
