@@ -58,6 +58,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
 import java.io.FileDescriptor;
+import java.util.HashMap;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.demo.EventLogger;
@@ -86,6 +87,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private String mDataSource;
     private Surface mSurface;
     private Handler mainHandler;
+    private Map<String, String> mHeaders = new HashMap<>();
     private int mVideoWidth;
     private int mVideoHeight;
     private int lastReportedPlaybackState;
@@ -103,6 +105,18 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         lastReportedPlaybackState = Player.STATE_IDLE;
     }
 
+
+    private int getVideoRendererIndex() {
+        if (mInternalPlayer != null) {
+            for (int i = 0; i < mInternalPlayer.getRendererCount(); i++) {
+                if (mInternalPlayer.getRendererType(i) == C.TRACK_TYPE_VIDEO) {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
     @Override
     public void setDisplay(SurfaceHolder sh) {
         if (sh == null)
@@ -114,8 +128,14 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     @Override
     public void setSurface(Surface surface) {
         mSurface = surface;
-        if (mInternalPlayer != null)
+        if (mInternalPlayer != null) {
             mInternalPlayer.setVideoSurface(surface);
+            /*if (mSurface == null) {
+                mTrackSelector.setRendererDisabled(getVideoRendererIndex(), true);
+            } else {
+                mTrackSelector.setRendererDisabled(getVideoRendererIndex(), false);
+            }*/
+        }
     }
 
     @Override
@@ -127,6 +147,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     @Override
     public void setDataSource(Context context, Uri uri, Map<String, String> headers) {
         // TODO: handle headers
+        mHeaders = headers;
         setDataSource(context, uri);
     }
 
@@ -428,8 +449,14 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     private DataSource.Factory getHttpDataSourceFactory(boolean preview) {
-        return new DefaultHttpDataSourceFactory(Util.getUserAgent(mAppContext,
+        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(mAppContext,
                 TAG), preview ? null : new DefaultBandwidthMeter());
+        if (mHeaders != null && mHeaders.size() > 0) {
+            for (Map.Entry<String, String> header : mHeaders.entrySet()) {
+                dataSourceFactory.getDefaultRequestProperties().set(header.getKey(), header.getValue());
+            }
+        }
+        return dataSourceFactory;
     }
 
     @Override
