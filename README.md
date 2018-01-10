@@ -120,25 +120,18 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
 
 ## 五、近期版本
 
-### 2.1.3（2017-12-24）
-* update demo gradle to 4.1
-* 增加对CollapsingToolbarLayout的支持与demo
-* 多窗体下（包括桌面）的小窗口播放（WindowActivity）。
-* 增加播放进度回调
+### 3.0.0（2018-01-xx）
+1、增加ExoPlayer2，优化对ExoPlayer2的支持。
+2、增对列表增加setUpLazy方法
 ```
 /**
- * 进度回调
+ * 在点击播放的时候才进行真正setup
  */
-public void setGSYVideoProgressListener(GSYVideoProgressListener videoProgressListener)
-```
+public boolean setUpLazy(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title)
 
-### 2.1.2(2017-12-08)
-* 增加针对Prepared之前调用OnVideoPause的处理
-* 背景视频模糊铺满，前方视频正常播放
 ```
-DetailFilterActivity中注释的
-//高斯拉伸视频铺满背景，替换黑色，前台正常比例播放
-```
+3、优化GL渲染
+
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
