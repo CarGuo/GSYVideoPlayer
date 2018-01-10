@@ -71,6 +71,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         Surface newSurface = new Surface(surface);
+        //同一消息队列中去release
         pauseLogic(newSurface, true);
     }
 
@@ -83,7 +84,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         //清空释放
         GSYVideoManager.instance().setDisplay(null);
-        surface.release();
+        //同一消息队列中去release
+        GSYVideoManager.instance().releaseSurface(mSurface);
         return true;
     }
 
@@ -108,7 +110,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     public void surfaceDestroyed(SurfaceHolder holder) {
         //清空释放
         GSYVideoManager.instance().setDisplay(null);
-        holder.getSurface().release();
+        GSYVideoManager.instance().releaseSurface(holder.getSurface());
     }
 
     @Override

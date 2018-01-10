@@ -63,6 +63,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private static final int HANDLER_RELEASE = 2;
 
+    private static final int HANDLER_RELEASE_SURFACE = 3;
+
     private static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
 
     private IMediaPlayer mediaPlayer;
@@ -340,6 +342,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                     buffterPoint = 0;
                     cancelTimeOutBuffer();
                     break;
+                case HANDLER_RELEASE_SURFACE:
+                    releaseSurface(msg);
+                    break;
             }
         }
 
@@ -486,6 +491,13 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
     };
 
+    private void releaseSurface(Message msg) {
+        if (msg.obj != null) {
+            Surface holder = (Surface) msg.obj;
+            holder.release();
+        }
+    }
+
     /**
      * 后面再修改设计模式吧，现在先用着
      */
@@ -603,6 +615,13 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     public void setDisplay(Surface holder) {
         Message msg = new Message();
         msg.what = HANDLER_SETDISPLAY;
+        msg.obj = holder;
+        mMediaHandler.sendMessage(msg);
+    }
+
+    public void releaseSurface(Surface holder) {
+        Message msg = new Message();
+        msg.what = HANDLER_RELEASE_SURFACE;
         msg.obj = holder;
         mMediaHandler.sendMessage(msg);
     }

@@ -24,14 +24,20 @@ public class GSYApplication extends Application {
             //return;
         //}
         //LeakCanary.install(this);
+
+
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();
-        //GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER);
-        GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER2);
+
+        //GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER); //EXO 1 播放内核
+        //GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER2); //EXO 2 播放内核
+
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
+
         //GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
         //GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+
         //GSYVideoManager.instance().setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
     }
 }
