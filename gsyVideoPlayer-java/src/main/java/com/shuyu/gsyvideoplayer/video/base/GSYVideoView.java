@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -930,28 +931,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public void setSpeed(float speed, boolean soundTouch) {
         this.mSpeed = speed;
         this.mSoundTouch = soundTouch;
-        if (GSYVideoManager.instance().getMediaPlayer() != null
-                && GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer) {
-            if (speed > 0) {
-                try {
-                    ((IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer()).setSpeed(speed);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                if (mSoundTouch) {
-                    VideoOptionModel videoOptionModel =
-                            new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", 1);
-                    List<VideoOptionModel> list = GSYVideoManager.instance().getOptionModelList();
-                    if (list != null) {
-                        list.add(videoOptionModel);
-                    } else {
-                        list = new ArrayList<>();
-                        list.add(videoOptionModel);
-                    }
-                    GSYVideoManager.instance().setOptionModelList(list);
-                }
-            }
+        if (GSYVideoManager.instance().getMediaPlayer() != null) {
+            GSYVideoManager.instance().setSpeed(speed, soundTouch);
         }
     }
 
@@ -964,12 +945,14 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public void setSpeedPlaying(float speed, boolean soundTouch) {
         setSpeed(speed, soundTouch);
         if (GSYVideoManager.instance().getMediaPlayer() != null) {
-            IjkMediaPlayer ijkMediaPlayer = (IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer();
-            try {
-                ijkMediaPlayer.setSpeed(speed);
-                ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", (soundTouch) ? 1 : 0);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (GSYVideoManager.instance().getMediaPlayer() instanceof IjkMediaPlayer) {
+                IjkMediaPlayer ijkMediaPlayer = (IjkMediaPlayer) GSYVideoManager.instance().getMediaPlayer();
+                try {
+                    ijkMediaPlayer.setSpeed(speed);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", (soundTouch) ? 1 : 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

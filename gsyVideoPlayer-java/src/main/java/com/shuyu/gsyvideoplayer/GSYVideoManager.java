@@ -12,6 +12,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Surface;
 
 import com.danikula.videocache.CacheListener;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -435,11 +437,16 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
      * 后面再修改设计模式吧，现在先用着
      */
     private void initEXOPlayer2(Message msg) {
+        //目前EXO2在频繁的切换Surface时会可能出现 (queueBuffer: BufferQueue has been abandoned)
         mediaPlayer = new IjkExo2MediaPlayer(context);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMapHeadData = null;
         try {
             mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
+            //很遗憾，EXO2的setSpeed只能在播放前生效
+            if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
+                ((IjkExo2MediaPlayer) mediaPlayer).setSpeed(((GSYModel) msg.obj).getSpeed(), 1);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -589,6 +596,38 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         @Override
         public Map<String, String> addHeaders(String url) {
             return mMapHeadData;
+        }
+    }
+
+    public void setSpeed(float speed, boolean soundTouch) {
+        if (speed > 0) {
+            if (mediaPlayer instanceof IjkMediaPlayer) {
+                try {
+                    ((IjkMediaPlayer) mediaPlayer).setSpeed(speed);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (soundTouch) {
+                    VideoOptionModel videoOptionModel =
+                            new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", 1);
+                    List<VideoOptionModel> list = getOptionModelList();
+                    if (list != null) {
+                        list.add(videoOptionModel);
+                    } else {
+                        list = new ArrayList<>();
+                        list.add(videoOptionModel);
+                    }
+                    setOptionModelList(list);
+                }
+            }
+        } else if (mediaPlayer instanceof IjkExo2MediaPlayer) {
+            //很遗憾，EXO2的setSpeed只能在播放前生效
+            Debuger.printfError("很遗憾，目前EXO2的setSpeed只能在播放前设置生效");
+            try {
+                ((IjkExo2MediaPlayer) mediaPlayer).setSpeed(speed, 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

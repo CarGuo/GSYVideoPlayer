@@ -88,6 +88,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private Surface mSurface;
     private Handler mainHandler;
     private Map<String, String> mHeaders = new HashMap<>();
+    private PlaybackParameters mSpeedPlaybackParameters;
     private int mVideoWidth;
     private int mVideoHeight;
     private int lastReportedPlaybackState;
@@ -191,7 +192,9 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         mInternalPlayer.setVideoDebugListener(this);
         mInternalPlayer.setAudioDebugListener(this);
         mInternalPlayer.addListener(mEventLogger);
-
+        if (mSpeedPlaybackParameters != null) {
+            mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
+        }
         if (mSurface != null)
             mInternalPlayer.setVideoSurface(mSurface);
 
@@ -376,7 +379,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
      */
     public void setSpeed(@Size(min = 0) float speed, @Size(min = 0) float pitch) {
         PlaybackParameters playbackParameters = new PlaybackParameters(speed, pitch);
-        mInternalPlayer.setPlaybackParameters(playbackParameters);
+        mSpeedPlaybackParameters = playbackParameters;
+        if (mInternalPlayer != null) {
+            mInternalPlayer.setPlaybackParameters(playbackParameters);
+        }
     }
 
     public float getSpeed() {
