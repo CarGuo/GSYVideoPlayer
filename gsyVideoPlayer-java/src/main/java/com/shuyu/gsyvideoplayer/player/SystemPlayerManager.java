@@ -12,19 +12,21 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.util.List;
 
-import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
+import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
- * EXOPlayer2
+ * 系统播放器
  * Created by guoshuyu on 2018/1/11.
  */
 
-public class EXO2PlayerManager implements IPlayerManager {
+public class SystemPlayerManager implements IPlayerManager {
 
-    private IjkExo2MediaPlayer mediaPlayer;
+    private AndroidMediaPlayer mediaPlayer;
 
     private Surface surface;
+
+    private boolean release;
 
     @Override
     public IMediaPlayer getMediaPlayer() {
@@ -33,14 +35,14 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     @Override
     public void initVideoPlayer(Context context, Message msg, List<VideoOptionModel> optionModelList) {
-        //目前EXO2在频繁的切换Surface时会可能出现 (queueBuffer: BufferQueue has been abandoned)
-        mediaPlayer = new IjkExo2MediaPlayer(context);
+        mediaPlayer = new AndroidMediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        release = false;
         try {
             mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
-            //很遗憾，EXO2的setSpeed只能在播放前生效
+            mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
             if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
-                 mediaPlayer.setSpeed(((GSYModel) msg.obj).getSpeed(), 1);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,44 +51,40 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     @Override
     public void showDisplay(Message msg) {
-        if (mediaPlayer == null) {
-            return;
-        }
-        if (msg.obj == null) {
+        if (msg.obj == null && mediaPlayer != null && !release) {
             mediaPlayer.setSurface(null);
             if (surface != null) {
                 surface.release();
                 surface = null;
             }
-        } else {
+        } else if (msg.obj != null) {
             Surface holder = (Surface) msg.obj;
             surface = holder;
-            mediaPlayer.setSurface(holder);
+            if (mediaPlayer != null && holder.isValid() && !release) {
+                mediaPlayer.setSurface(holder);
+            }
         }
     }
 
     @Override
     public void setSpeed(float speed, boolean soundTouch) {
-        //很遗憾，EXO2的setSpeed只能在播放前生效
-        //Debuger.printfError("很遗憾，目前EXO2的setSpeed只能在播放前设置生效");
-        try {
-            mediaPlayer.setSpeed(speed, 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Debuger.printfError(" not support setSpeed");
     }
 
     @Override
     public void setNeedMute(boolean needMute) {
-        if(mediaPlayer != null) {
-            if (needMute) {
-                mediaPlayer.setVolume(0, 0);
-            } else {
-                mediaPlayer.setVolume(1, 1);
+        try {
+            if (mediaPlayer != null && !release) {
+                if (needMute) {
+                    mediaPlayer.setVolume(0, 0);
+                } else {
+                    mediaPlayer.setVolume(1, 1);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
 
     @Override
     public void releaseSurface() {
@@ -95,7 +93,8 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     @Override
     public void release() {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
+            release = true;
             mediaPlayer.release();
         }
     }

@@ -35,6 +35,9 @@ public class IJKPlayerManager implements IPlayerManager {
 
     private List<VideoOptionModel> optionModelList;
 
+    private Surface surface;
+
+
     @Override
     public IMediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -76,6 +79,7 @@ public class IJKPlayerManager implements IPlayerManager {
             mediaPlayer.setSurface(null);
         } else {
             Surface holder = (Surface) msg.obj;
+            surface = holder;
             if (mediaPlayer != null && holder.isValid()) {
                 mediaPlayer.setSurface(holder);
             }
@@ -116,6 +120,15 @@ public class IJKPlayerManager implements IPlayerManager {
             } else {
                 mediaPlayer.setVolume(1, 1);
             }
+        }
+    }
+
+
+    @Override
+    public void releaseSurface() {
+        if (surface != null) {
+            surface.release();
+            surface = null;
         }
     }
 
