@@ -16,7 +16,7 @@ import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
- * 系统播放器
+ * 系统播放器，总觉得不好用
  * Created by guoshuyu on 2018/1/11.
  */
 

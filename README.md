@@ -18,7 +18,7 @@
 **支持**|**调整显示比例:默认、16:9、4:3、填充。**
 **支持**|**播放时旋转画面角度（0,90,180,270）；镜像旋转。**
 **支持**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持。**
-**支持**|**Https；IJKPlayer和EXOPlayer切换。**
+**支持**|**Https；IJKPlayer、EXOPlayer、系统播放器切换。**
 **支持**|**锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **支持**|**全屏与非全屏两套布局切换；弹幕功能。**
 **支持**|**没有任何操作控件的纯播放支持。**
@@ -121,8 +121,9 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
 ## 五、近期版本
 
 ### 3.0.0（2018-01-xx）
-1、增加ExoPlayer2，优化对ExoPlayer2的支持。
-2、增对列表增加setUpLazy方法
+1、更新为ExoPlayer2，优化对ExoPlayer2的支持。
+2、增加系统播放器AndroidMediaPlayer支持
+3、增对列表增加setUpLazy方法
 ```
 /**
  * 在点击播放的时候才进行真正setup
@@ -130,7 +131,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
 public boolean setUpLazy(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title)
 
 ```
-3、优化GL渲染
+4、优化GL渲染
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
