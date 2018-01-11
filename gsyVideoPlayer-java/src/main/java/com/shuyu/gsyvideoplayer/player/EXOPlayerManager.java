@@ -27,6 +27,8 @@ public class EXOPlayerManager implements IPlayerManager {
 
     private IjkExoMediaPlayer mediaPlayer;
 
+    private Surface surface;
+
     @Override
     public IMediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -66,6 +68,7 @@ public class EXOPlayerManager implements IPlayerManager {
             mediaPlayer.setSurface(null);
         } else {
             Surface holder = (Surface) msg.obj;
+            surface = holder;
             mediaPlayer.setSurface(holder);
             if (mediaPlayer != null && mediaPlayer.getDuration() > 30
                     && mediaPlayer.getCurrentPosition() < mediaPlayer.getDuration()) {
@@ -96,6 +99,13 @@ public class EXOPlayerManager implements IPlayerManager {
         }
     }
 
+    @Override
+    public void releaseSurface() {
+        if (surface != null) {
+            surface.release();
+            surface = null;
+        }
+    }
 
     @Override
     public void release() {

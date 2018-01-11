@@ -31,6 +31,7 @@ public class GSYApplication extends Application {
 
         //GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER); //EXO 1 播放内核，弃用
         //GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER2); //EXO 2 播放内核
+        //GSYVideoManager.instance().setVideoType(this, GSYVideoType.SYSTEMPLAYER); //系统播放器
 
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);

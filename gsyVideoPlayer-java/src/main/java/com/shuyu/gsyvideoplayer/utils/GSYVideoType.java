@@ -33,6 +33,10 @@ public class GSYVideoType {
     //EXO 1 播放内核，弃用，现在使用的是IJKEXOPLAYER2
     @Deprecated
     public final static int IJKEXOPLAYER = IJKEXOPLAYER2;
+    //系统播放器
+    public final static int SYSTEMPLAYER = 4;
+
+
 
 
     //gl

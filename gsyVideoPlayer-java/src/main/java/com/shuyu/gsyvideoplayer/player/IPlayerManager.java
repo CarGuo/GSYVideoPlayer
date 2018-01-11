@@ -26,6 +26,8 @@ public interface IPlayerManager {
 
     void setNeedMute(boolean needMute);
 
+    void releaseSurface();
+
     void release();
 
 }
