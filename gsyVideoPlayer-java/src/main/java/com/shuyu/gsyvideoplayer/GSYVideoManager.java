@@ -3,16 +3,12 @@ package com.shuyu.gsyvideoplayer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Surface;
 
 import com.danikula.videocache.CacheListener;
@@ -22,6 +18,9 @@ import com.danikula.videocache.headers.HeaderInjector;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
+import com.shuyu.gsyvideoplayer.player.EXO2PlayerManager;
+import com.shuyu.gsyvideoplayer.player.IJKPlayerManager;
+import com.shuyu.gsyvideoplayer.player.IPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -29,20 +28,12 @@ import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.StorageUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
-import tv.danmaku.ijk.media.exo.demo.player.DemoPlayer;
-import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-import tv.danmaku.ijk.media.player.TextureMediaPlayer;
 
 /**
  * 视频管理，单例
@@ -68,8 +59,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private static final int HANDLER_RELEASE_SURFACE = 3;
 
     private static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
-
-    private IMediaPlayer mediaPlayer;
 
     private MediaHandler mMediaHandler;
 
@@ -100,6 +89,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     private Context context;
 
+    private IPlayerManager playerManager;
+
     //当前播放的视频宽的高
     private int currentVideoWidth = 0;
 
@@ -120,9 +111,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
     //播放类型，默认IJK
     private int videoType = GSYVideoType.IJKPLAYER;
-
-    //log level
-    private int logLevel = IjkMediaPlayer.IJK_LOG_DEFAULT;
 
     //是否需要静音
     private boolean needMute = false;
@@ -176,8 +164,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
      * 需要在instance之前设置
      */
     public static void setIjkLibLoader(IjkLibLoader libLoader) {
+        IJKPlayerManager.setIjkLibLoader(libLoader);
         ijkLibLoader = libLoader;
     }
+
 
     public static IjkLibLoader getIjkLibLoader() {
         return ijkLibLoader;
@@ -309,8 +299,9 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
      * @param libLoader 是否使用外部动态加载so
      * */
     private GSYVideoManager(IjkLibLoader libLoader) {
-        mediaPlayer = (libLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(libLoader);
+        playerManager = getPlayManager(GSYVideoType.IJKPLAYER);
         ijkLibLoader = libLoader;
+        IJKPlayerManager.setIjkLibLoader(ijkLibLoader);
         HandlerThread mediaHandlerThread = new HandlerThread(TAG);
         mediaHandlerThread.start();
         mMediaHandler = new MediaHandler((mediaHandlerThread.getLooper()));
@@ -334,8 +325,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                     showDisplay(msg);
                     break;
                 case HANDLER_RELEASE:
-                    if (mediaPlayer != null) {
-                        mediaPlayer.release();
+                    if (playerManager != null) {
+                        playerManager.release();
                     }
                     setNeedMute(false);
                     if (proxy != null) {
@@ -356,16 +347,16 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         try {
             currentVideoWidth = 0;
             currentVideoHeight = 0;
-            mediaPlayer.release();
 
-            if (videoType == GSYVideoType.IJKPLAYER) {
-                initIJKPlayer(msg);
-            } else if (videoType == GSYVideoType.IJKEXOPLAYER) {
-                initEXOPlayer(msg);
-            } else if (videoType == GSYVideoType.IJKEXOPLAYER2) {
-                initEXOPlayer2(msg);
+            if (playerManager != null) {
+                playerManager.release();
             }
+
+            playerManager = getPlayManager(videoType);
+
+            playerManager.initVideoPlayer(context, msg, optionModelList);
             setNeedMute(needMute);
+            IMediaPlayer mediaPlayer = playerManager.getMediaPlayer();
             mediaPlayer.setOnCompletionListener(GSYVideoManager.this);
             mediaPlayer.setOnBufferingUpdateListener(GSYVideoManager.this);
             mediaPlayer.setScreenOnWhilePlaying(true);
@@ -378,91 +369,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * 后面再修改设计模式吧，现在先用着
-     */
-    private void initIJKPlayer(Message msg) {
-        mediaPlayer = (ijkLibLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(ijkLibLoader);
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        ((IjkMediaPlayer) mediaPlayer).setOnNativeInvokeListener(new IjkMediaPlayer.OnNativeInvokeListener() {
-            @Override
-            public boolean onNativeInvoke(int i, Bundle bundle) {
-                return true;
-            }
-        });
-        try {
-            //开启硬解码
-            if (GSYVideoType.isMediaCodec()) {
-                Debuger.printfLog("enable mediaCodec");
-                ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-                ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
-                ((IjkMediaPlayer) mediaPlayer).setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
-            }
-            mMapHeadData = ((GSYModel) msg.obj).getMapHeadData();
-            ((IjkMediaPlayer) mediaPlayer).setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
-            mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
-            if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
-                ((IjkMediaPlayer) mediaPlayer).setSpeed(((GSYModel) msg.obj).getSpeed());
-            }
-            ((IjkMediaPlayer) mediaPlayer).native_setLogLevel(logLevel);
-            initIJKOption((IjkMediaPlayer) mediaPlayer);
-            //开启硬解码渲染优化
-            if (GSYVideoType.isMediaCodecTexture()) {
-                IMediaPlayer iMediaPlayer = new TextureMediaPlayer(mediaPlayer);
-                mediaPlayer = iMediaPlayer;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 后面再修改设计模式吧，现在先用着
-     */
-    private void initEXOPlayer(Message msg) {
-        mediaPlayer = new IjkExoMediaPlayer(context);
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mMapHeadData = null;
-        try {
-            mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 后面再修改设计模式吧，现在先用着
-     */
-    private void initEXOPlayer2(Message msg) {
-        //目前EXO2在频繁的切换Surface时会可能出现 (queueBuffer: BufferQueue has been abandoned)
-        mediaPlayer = new IjkExo2MediaPlayer(context);
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mMapHeadData = null;
-        try {
-            mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
-            //很遗憾，EXO2的setSpeed只能在播放前生效
-            if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
-                ((IjkExo2MediaPlayer) mediaPlayer).setSpeed(((GSYModel) msg.obj).getSpeed(), 1);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initIJKOption(IjkMediaPlayer ijkMediaPlayer) {
-        if (optionModelList != null && optionModelList.size() > 0) {
-            for (VideoOptionModel videoOptionModel : optionModelList) {
-                if (videoOptionModel.getValueType() == VideoOptionModel.VALUE_TYPE_INT) {
-                    ijkMediaPlayer.setOption(videoOptionModel.getCategory(),
-                            videoOptionModel.getName(), videoOptionModel.getValueInt());
-                } else {
-                    ijkMediaPlayer.setOption(videoOptionModel.getCategory(),
-                            videoOptionModel.getName(), videoOptionModel.getValueString());
-                }
-            }
         }
     }
 
@@ -509,84 +415,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
      * 后面再修改设计模式吧，现在先用着
      */
     private void showDisplay(Message msg) {
-        if (mediaPlayer instanceof IjkMediaPlayer) {
-            showDisplayIJK(msg);
-        } else if (mediaPlayer instanceof IjkExoMediaPlayer) {
-            showDisplayExo(msg);
-        } else if (mediaPlayer instanceof IjkExo2MediaPlayer) {
-            showDisplayExo2(msg);
+        if (playerManager != null) {
+            playerManager.showDisplay(msg);
         }
     }
-
-    /**
-     * 后面再修改设计模式吧，现在先用着
-     */
-    private void showDisplayIJK(Message msg) {
-        if (msg.obj == null && mediaPlayer != null) {
-            mediaPlayer.setSurface(null);
-        } else {
-            Surface holder = (Surface) msg.obj;
-            if (mediaPlayer != null && holder.isValid()) {
-                mediaPlayer.setSurface(holder);
-            }
-        }
-    }
-
-    /**
-     * 后面再修改设计模式吧，现在先用着
-     */
-    private void showDisplayExo(Message msg) {
-        if (mediaPlayer == null) {
-            return;
-        }
-        IjkExoMediaPlayer ijkExoMediaPlayer = (IjkExoMediaPlayer) mediaPlayer;
-        Class<?> classType = ijkExoMediaPlayer.getClass();
-        DemoPlayer demoPlayer = null;
-        try {
-            Field field = classType.getDeclaredField("mInternalPlayer");
-            field.setAccessible(true); // 抑制Java对修饰符的检查
-            demoPlayer = (DemoPlayer) field.get(ijkExoMediaPlayer);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        if (msg.obj == null) {
-            /*if (demoPlayer != null && demoPlayer.getPlayWhenReady()) {
-                demoPlayer.setSelectedTrack(0, -1);
-            }*/
-            mediaPlayer.setSurface(null);
-        } else {
-            Surface holder = (Surface) msg.obj;
-            mediaPlayer.setSurface(holder);
-            if (mediaPlayer != null && mediaPlayer.getDuration() > 30
-                    && mediaPlayer.getCurrentPosition() < mediaPlayer.getDuration()) {
-                mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 20);
-            }
-            /*if (mediaPlayer != null && holder.isValid()) {
-                if (demoPlayer != null && demoPlayer.getPlayWhenReady()) {
-                    demoPlayer.setSelectedTrack(0, 0);
-                }
-
-            }*/
-        }
-    }
-
-    /**
-     * 后面再修改设计模式吧，现在先用着
-     */
-    private void showDisplayExo2(Message msg) {
-        if (mediaPlayer == null) {
-            return;
-        }
-        if (msg.obj == null) {
-            mediaPlayer.setSurface(null);
-        } else {
-            Surface holder = (Surface) msg.obj;
-            mediaPlayer.setSurface(holder);
-        }
-    }
-
 
     /**
      * for android video cache header
@@ -600,34 +432,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     }
 
     public void setSpeed(float speed, boolean soundTouch) {
-        if (speed > 0) {
-            if (mediaPlayer instanceof IjkMediaPlayer) {
-                try {
-                    ((IjkMediaPlayer) mediaPlayer).setSpeed(speed);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (soundTouch) {
-                    VideoOptionModel videoOptionModel =
-                            new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", 1);
-                    List<VideoOptionModel> list = getOptionModelList();
-                    if (list != null) {
-                        list.add(videoOptionModel);
-                    } else {
-                        list = new ArrayList<>();
-                        list.add(videoOptionModel);
-                    }
-                    setOptionModelList(list);
-                }
-            }
-        } else if (mediaPlayer instanceof IjkExo2MediaPlayer) {
-            //很遗憾，EXO2的setSpeed只能在播放前生效
-            Debuger.printfError("很遗憾，目前EXO2的setSpeed只能在播放前设置生效");
-            try {
-                ((IjkExo2MediaPlayer) mediaPlayer).setSpeed(speed, 1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (playerManager != null) {
+            playerManager.setSpeed(speed, soundTouch);
         }
     }
 
@@ -635,6 +441,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         if (TextUtils.isEmpty(url)) return;
         Message msg = new Message();
         msg.what = HANDLER_PREPARE;
+        mMapHeadData = mapHeadData;
         GSYModel fb = new GSYModel(url, mapHeadData, loop, speed);
         msg.obj = fb;
         mMediaHandler.sendMessage(msg);
@@ -792,13 +599,38 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
     }
 
-
     public IMediaPlayer getMediaPlayer() {
-        if (mediaPlayer instanceof TextureMediaPlayer) {
-            return ((TextureMediaPlayer) mediaPlayer).getInternalMediaPlayer();
+        if (playerManager != null) {
+            return playerManager.getMediaPlayer();
         }
-        return mediaPlayer;
+        return null;
     }
+
+
+    public int getVideoType() {
+        return videoType;
+    }
+
+    /**
+     * 设置了视频的播放类型,IJKEXOPLAYER和IJKEXOPLAYER2是互斥的
+     * GSYVideoType IJKPLAYER = 0 or IJKEXOPLAYER = 1 or IJKEXOPLAYER2 = 2;
+     * IJKEXOPLAYER2 must be compile com.shuyu:gsyVideoPlayer-exo2:$gsyVideoVersion
+     */
+    public void setVideoType(Context context, int videoType) {
+        this.context = context.getApplicationContext();
+        this.videoType = videoType;
+    }
+
+    private static IPlayerManager getPlayManager(int videoType) {
+        switch (videoType) {
+            case GSYVideoType.IJKEXOPLAYER2:
+                return new EXO2PlayerManager();
+            case GSYVideoType.IJKPLAYER:
+            default:
+                return new IJKPlayerManager();
+        }
+    }
+
 
     public int getCurrentVideoWidth() {
         return currentVideoWidth;
@@ -840,11 +672,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         this.playPosition = playPosition;
     }
 
-
-    public int getVideoType() {
-        return videoType;
-    }
-
     public List<VideoOptionModel> getOptionModelList() {
         return optionModelList;
     }
@@ -856,15 +683,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         this.optionModelList = optionModelList;
     }
 
-    /**
-     * 设置了视频的播放类型
-     * GSYVideoType IJKPLAYER = 0 or IJKEXOPLAYER = 1;
-     */
-    public void setVideoType(Context context, int videoType) {
-        this.context = context.getApplicationContext();
-        this.videoType = videoType;
-    }
-
     public boolean isNeedMute() {
         return needMute;
     }
@@ -874,12 +692,8 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
      */
     public void setNeedMute(boolean needMute) {
         this.needMute = needMute;
-        if (mediaPlayer != null) {
-            if (needMute) {
-                mediaPlayer.setVolume(0, 0);
-            } else {
-                mediaPlayer.setVolume(1, 1);
-            }
+        if (playerManager != null) {
+            playerManager.setNeedMute(needMute);
         }
     }
 
@@ -918,10 +732,7 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
      * 设置log输入等级
      */
     public void setLogLevel(int logLevel) {
-        if (mediaPlayer != null && mediaPlayer instanceof IjkMediaPlayer) {
-            this.logLevel = logLevel;
-            ((IjkMediaPlayer) mediaPlayer).native_setLogLevel(logLevel);
-        }
+        IJKPlayerManager.setLogLevel(logLevel);
     }
 
 }

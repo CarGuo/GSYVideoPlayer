@@ -316,7 +316,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     try {
-                        if (GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
+                        if (GSYVideoManager.instance().getMediaPlayer() != null && GSYVideoManager.instance().getMediaPlayer().isPlaying()) {
                             GSYVideoManager.instance().getMediaPlayer().pause();
                         }
                     } catch (Exception e) {
