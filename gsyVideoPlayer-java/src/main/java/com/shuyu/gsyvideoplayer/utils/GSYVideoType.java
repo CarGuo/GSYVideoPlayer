@@ -24,10 +24,15 @@ public class GSYVideoType {
 
     //默认播放内核IJK
     public final static int IJKPLAYER = 0;
-    //EXO 1 播放内核
-    public final static int IJKEXOPLAYER = 1;
+    /**
+     * IJKEXOPLAYER 和 IJKEXOPLAYER2 是互斥的
+     * IJKEXOPLAYER2 must be compile com.shuyu:gsyVideoPlayer-exo2:$gsyVideoVersion
+     */
     //EXO 2 播放内核
     public final static int IJKEXOPLAYER2 = 2;
+    //EXO 1 播放内核，弃用，现在使用的是IJKEXOPLAYER2
+    @Deprecated
+    public final static int IJKEXOPLAYER = IJKEXOPLAYER2;
 
 
     //gl
