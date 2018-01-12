@@ -121,17 +121,81 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
 ## 五、近期版本
 
 ### 3.0.0（2018-01-xx）
-1、更新为ExoPlayer2，优化对ExoPlayer2的支持。
+1、增肌PlayerManager，更新为ExoPlayer2，优化对ExoPlayer2的支持。
 2、增加系统播放器AndroidMediaPlayer支持
-3、增对列表增加setUpLazy方法
+3、增对列表增加setUpLazy方法，优化列表中可能的滑动卡顿
 ```
-/**
- * 在点击播放的时候才进行真正setup
- */
-public boolean setUpLazy(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title)
+    /**
+     * 在点击播放的时候才进行真正setup
+     */
+    public boolean setUpLazy(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title)
 
 ```
 4、优化GL渲染
+5、优化触摸的音量、亮度、进度的弹出框，优化可自定义程度
+```
+    /**
+     * 触摸进度dialog的layoutId
+     * 继承后重写可返回自定义
+     * 有自定义的实现逻辑可重载showProgressDialog方法
+     */
+    protected int getProgressDialogLayoutId()
+    /**
+     * 触摸进度dialog的进度条id
+     * 继承后重写可返回自定义，如果没有可返回空
+     * 有自定义的实现逻辑可重载showProgressDialog方法
+     */
+    protected int getProgressDialogProgressId()
+
+    /**
+     * 触摸进度dialog的当前时间文本
+     * 继承后重写可返回自定义，如果没有可返回空
+     * 有自定义的实现逻辑可重载showProgressDialog方法
+     */
+    protected int getProgressDialogCurrentDurationTextId()
+
+    /**
+     * 触摸进度dialog全部时间文本
+     * 继承后重写可返回自定义，如果没有可返回空
+     * 有自定义的实现逻辑可重载showProgressDialog方法
+     */
+    protected int getProgressDialogAllDurationTextId()
+
+    /**
+     * 触摸进度dialog的图片id
+     * 继承后重写可返回自定义，如果没有可返回空
+     * 有自定义的实现逻辑可重载showProgressDialog方法
+     */
+    protected int getProgressDialogImageId()
+
+    /**
+     * 音量dialog的layoutId
+     * 继承后重写可返回自定义
+     * 有自定义的实现逻辑可重载showVolumeDialog方法
+     */
+    protected int getVolumeLayoutId()
+    /**
+     * 音量dialog的百分比进度条 id
+     * 继承后重写可返回自定义，如果没有可返回空
+     * 有自定义的实现逻辑可重载showVolumeDialog方法
+     */
+    protected int getVolumeProgressId()
+
+    /**
+     * 亮度dialog的layoutId
+     * 继承后重写可返回自定义
+     * 有自定义的实现逻辑可重载showBrightnessDialog方法
+     */
+    protected int getBrightnessLayoutId()
+
+    /**
+     * 亮度dialog的百分比text id
+     * 继承后重写可返回自定义，如果没有可返回空
+     * 有自定义的实现逻辑可重载showBrightnessDialog方法
+     */
+    protected int getBrightnessTextId()
+
+```
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
