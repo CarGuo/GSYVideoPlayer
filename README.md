@@ -121,8 +121,11 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
 ## 五、近期版本
 
 ### 3.0.0（2018-01-xx）
+
 1、增肌PlayerManager，更新为ExoPlayer2，优化对ExoPlayer2的支持。
+
 2、增加系统播放器AndroidMediaPlayer支持
+
 3、增对列表增加setUpLazy方法，优化列表中可能的滑动卡顿
 ```
     /**
@@ -131,7 +134,8 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
     public boolean setUpLazy(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title)
 
 ```
-4、优化GL渲染
+4、优化GL渲染和处理切换渲染效果崩溃。
+
 5、优化触摸的音量、亮度、进度的弹出框，优化可自定义程度
 ```
     /**
