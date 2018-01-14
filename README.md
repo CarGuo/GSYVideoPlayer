@@ -43,21 +43,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:2.1.3'
+compile 'com.shuyu:GSYVideoPlayer:3.0.0'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.1.3'
+compile 'com.shuyu:gsyVideoPlayer-java:3.0.0'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.3'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.3'
-compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.3'
-compile 'com.shuyu:gsyVideoPlayer-x64:2.1.3'
-compile 'com.shuyu:gsyVideoPlayer-x86:2.1.3'
+compile 'com.shuyu:gsyVideoPlayer-armv5:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-arm64:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x64:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x86:3.0.0'
 
 ```
 
@@ -67,9 +67,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.1.3'
+compile 'com.shuyu:gsyVideoPlayer-java:3.0.0'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 
 ```
 
@@ -120,7 +120,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
 
 ## 五、近期版本
 
-### 3.0.0（2018-01-xx）
+### 3.0.0（2018-01-14）
 
 1、增肌PlayerManager，更新为ExoPlayer2，优化对ExoPlayer2的支持。
 
