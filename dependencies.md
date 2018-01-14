@@ -49,7 +49,7 @@ compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.4'
 
 --------------------------------------------------------------------------------
 
-### 2、JitPack引入方法
+### 2、JitPack引入方法 (3.0.0开始目前不支持)
 
 #### First、在project下的build.gradle添加
 ```
