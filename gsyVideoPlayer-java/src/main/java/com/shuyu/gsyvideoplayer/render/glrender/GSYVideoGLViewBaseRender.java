@@ -109,7 +109,7 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
         int error;
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
             Debuger.printfError(op + ": glError " + error);
-            throw new RuntimeException(op + ": glError " + error);
+            //throw new RuntimeException(op + ": glError " + error);
         }
     }
 
