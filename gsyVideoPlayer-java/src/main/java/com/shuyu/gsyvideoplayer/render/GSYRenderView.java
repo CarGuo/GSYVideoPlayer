@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer.render;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.TextureView;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.shuyu.gsyvideoplayer.listener.GSYVideoGLRenderErrorListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
@@ -30,6 +32,8 @@ import java.io.File;
 public class GSYRenderView {
 
     private View mShowView;
+
+    private Handler mHandler = new Handler();
 
     public void setTransform(Matrix transform) {
         if (mShowView instanceof TextureView) {
@@ -236,10 +240,10 @@ public class GSYRenderView {
     /**
      * 添加播放的view
      */
-    public void addGLView(Context context, ViewGroup textureViewContainer, int rotate,
-                          GSYVideoGLView.onGSYSurfaceListener gsySurfaceListener,
-                          GSYVideoGLView.ShaderInterface effect, float[] transform,
-                          GSYVideoGLViewBaseRender customRender) {
+    public void addGLView(final Context context, final ViewGroup textureViewContainer, final int rotate,
+                          final GSYVideoGLView.onGSYSurfaceListener gsySurfaceListener,
+                          final GSYVideoGLView.ShaderInterface effect, final float[] transform,
+                          final GSYVideoGLViewBaseRender customRender, final GSYVideoGLRenderErrorListener videoGLRenderErrorListener) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
@@ -251,6 +255,7 @@ public class GSYRenderView {
         gsyVideoGLView.setGSYSurfaceListener(gsySurfaceListener);
         gsyVideoGLView.setRotation(rotate);
         gsyVideoGLView.initRender();
+        gsyVideoGLView.setGSYVideoGLRenderErrorListener(videoGLRenderErrorListener);
         mShowView = gsyVideoGLView;
 
         if (transform != null && transform.length == 16) {

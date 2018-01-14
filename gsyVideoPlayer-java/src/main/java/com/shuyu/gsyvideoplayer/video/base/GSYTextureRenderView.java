@@ -13,6 +13,7 @@ import android.view.TextureView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.shuyu.gsyvideoplayer.listener.GSYVideoGLRenderErrorListener;
 import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -147,13 +148,30 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
             mTextureView.addSurfaceView(getContext(), mTextureViewContainer, mRotate, this);
             return;
         } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
-            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer);
+            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer, mGLRenderError);
             setGLRenderMode(mMode);
             return;
         }
         mTextureView.addTextureView(getContext(), mTextureViewContainer, mRotate, this);
 
     }
+
+    /**
+     * GL因为切换render效果错误时，重置渲染
+     */
+    protected GSYVideoGLRenderErrorListener mGLRenderError = new GSYVideoGLRenderErrorListener() {
+        @Override
+        public void onError(String Error, int code, final boolean byChangedRenderError) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    if (byChangedRenderError)
+                        mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, GSYTextureRenderView.this, mEffectFilter, mMatrixGL, mRenderer, mGLRenderError);
+                }
+            });
+
+        }
+    };
 
     /**
      * 获取布局参数
@@ -267,6 +285,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
     /**
      * GL布局的绘制模式，利用布局计算大小还是使用render计算大小
+     *
      * @param mode MODE_LAYOUT_SIZE = 0,  MODE_RENDER_SIZE = 1
      */
     public void setGLRenderMode(int mode) {

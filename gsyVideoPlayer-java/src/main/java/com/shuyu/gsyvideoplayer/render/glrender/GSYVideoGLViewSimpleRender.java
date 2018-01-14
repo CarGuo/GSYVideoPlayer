@@ -73,8 +73,6 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
     private boolean mTakeShotPic = false;
 
-    private boolean mChangeProgram = false;
-
     private FloatBuffer mTriangleVertices;
 
     private SurfaceTexture mSurface;
@@ -191,8 +189,10 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
     }
 
     protected void initDrawFrame() {
-        if (mChangeProgram)
+        if (mChangeProgram) {
             mProgram = createProgram(getVertexShader(), getFragmentShader());
+            mChangeProgram = false;
+        }
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
                 | GLES20.GL_COLOR_BUFFER_BIT);
@@ -306,6 +306,7 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
             mEffect = shaderEffect;
         }
         mChangeProgram = true;
+        mChangeProgramSupportError = true;
     }
 
 }

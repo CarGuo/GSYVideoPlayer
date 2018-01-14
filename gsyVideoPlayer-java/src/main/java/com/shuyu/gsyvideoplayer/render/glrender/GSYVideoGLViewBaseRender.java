@@ -9,6 +9,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.view.Surface;
 
+import com.shuyu.gsyvideoplayer.listener.GSYVideoGLRenderErrorListener;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -43,6 +44,11 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
 
     protected int mCurrentVideoHeight = 0;
 
+    protected boolean mChangeProgram = false;
+
+    protected boolean mChangeProgramSupportError = false;
+
+    protected GSYVideoGLRenderErrorListener mGSYVideoGLRenderErrorListener;
 
     public abstract void releaseAll();
 
@@ -107,8 +113,12 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
 
     protected void checkGlError(String op) {
         int error;
-        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+        if ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
             Debuger.printfError(op + ": glError " + error);
+            if (mGSYVideoGLRenderErrorListener != null) {
+                mGSYVideoGLRenderErrorListener.onError(op + ": glError " + error, error, mChangeProgramSupportError);
+            }
+            mChangeProgramSupportError = false;
             //throw new RuntimeException(op + ": glError " + error);
         }
     }
@@ -220,6 +230,10 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
             Matrix.scaleM(mMVPMatrix, 0, (float) mCurrentViewWidth / mSurfaceView.getWidth(),
                     (float) mCurrentViewHeight / mSurfaceView.getHeight(), 1);
         }
+    }
+
+    public void setGSYVideoGLRenderErrorListener(GSYVideoGLRenderErrorListener videoGLRenderErrorListener) {
+        this.mGSYVideoGLRenderErrorListener = videoGLRenderErrorListener;
     }
 }
 
