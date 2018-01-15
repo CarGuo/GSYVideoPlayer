@@ -14,8 +14,6 @@ public class RecyclerItemBaseHolder extends RecyclerView.ViewHolder {
 
     RecyclerView.Adapter recyclerBaseAdapter;
 
-    ListVideoUtil listVideoUtil;
-
     public RecyclerItemBaseHolder(View itemView) {
         super(itemView);
     }
@@ -26,13 +24,5 @@ public class RecyclerItemBaseHolder extends RecyclerView.ViewHolder {
 
     public void setRecyclerBaseAdapter(RecyclerView.Adapter recyclerBaseAdapter) {
         this.recyclerBaseAdapter = recyclerBaseAdapter;
-    }
-
-    public ListVideoUtil getListVideoUtil() {
-        return listVideoUtil;
-    }
-
-    public void setListVideoUtil(ListVideoUtil listVideoUtil) {
-        this.listVideoUtil = listVideoUtil;
     }
 }
