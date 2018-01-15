@@ -30,6 +30,12 @@
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
 [![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
 
+[]()
+[![GitHub stars](https://img.shields.io/github/stars/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/network)
+[![GitHub issues](https://img.shields.io/github/issues/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/issues)
+[![GitHub license](https://img.shields.io/github/license/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/blob/master/LICENSE)
+
 ### [微信赞赏链接](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
 
 ## 一、使用依赖
@@ -43,21 +49,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:2.1.3'
+compile 'com.shuyu:GSYVideoPlayer:3.0.0'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.1.3'
+compile 'com.shuyu:gsyVideoPlayer-java:3.0.0'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:2.1.3'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:2.1.3'
-compile 'com.shuyu:gsyVideoPlayer-arm64:2.1.3'
-compile 'com.shuyu:gsyVideoPlayer-x64:2.1.3'
-compile 'com.shuyu:gsyVideoPlayer-x86:2.1.3'
+compile 'com.shuyu:gsyVideoPlayer-armv5:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-arm64:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x64:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x86:3.0.0'
 
 ```
 
@@ -67,9 +73,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:2.1.3'
+compile 'com.shuyu:gsyVideoPlayer-java:3.0.0'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 
 ```
 
@@ -120,9 +126,12 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
 
 ## 五、近期版本
 
-### 3.0.0（2018-01-xx）
+### 3.0.0（2018-01-14）
+
 1、增肌PlayerManager，更新为ExoPlayer2，优化对ExoPlayer2的支持。
+
 2、增加系统播放器AndroidMediaPlayer支持
+
 3、增对列表增加setUpLazy方法，优化列表中可能的滑动卡顿
 ```
     /**
@@ -131,7 +140,8 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:2.1.3'
     public boolean setUpLazy(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title)
 
 ```
-4、优化GL渲染
+4、优化GL渲染和处理切换渲染效果崩溃。
+
 5、优化触摸的音量、亮度、进度的弹出框，优化可自定义程度
 ```
     /**
