@@ -147,7 +147,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 5、DEMO增加SamllVideoHelper实现小窗口逻辑，更新demo
 
 
- 
+
 6、优化触摸的音量、亮度、进度的弹出框，优化可自定义程度
 ```
     /**
