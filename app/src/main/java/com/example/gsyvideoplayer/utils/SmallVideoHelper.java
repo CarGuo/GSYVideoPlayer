@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -51,6 +52,10 @@ public class SmallVideoHelper {
      * 全屏承载布局
      */
     private ViewGroup fullViewContainer;
+    /**
+     * 全屏承载布局
+     */
+    private ViewGroup windowViewContainer;
     /**
      * 记录列表中item的父布局
      */
@@ -102,13 +107,14 @@ public class SmallVideoHelper {
 
 
     public SmallVideoHelper(Context context) {
-        gsyVideoPlayer = new StandardGSYVideoPlayer(context);
-        this.context = context;
+        this(context, new StandardGSYVideoPlayer(context));
     }
 
     public SmallVideoHelper(Context context, StandardGSYVideoPlayer player) {
         gsyVideoPlayer = player;
         this.context = context;
+        this.windowViewContainer = (ViewGroup) (CommonUtil.scanForActivity(context)).findViewById(Window.ID_ANDROID_CONTENT);
+
     }
 
     /**
@@ -156,11 +162,17 @@ public class SmallVideoHelper {
      * 添加到全屏父布局里
      */
     private void resolveFullAdd() {
-        if(gsyVideoOptionBuilder.isShowFullAnimation()) {
-            fullViewContainer.setBackgroundColor(Color.BLACK);
+        if (gsyVideoOptionBuilder.isShowFullAnimation()) {
+            if (fullViewContainer != null) {
+                fullViewContainer.setBackgroundColor(Color.BLACK);
+            }
         }
         resolveChangeFirstLogic(0);
-        fullViewContainer.addView(gsyVideoPlayer);
+        if (fullViewContainer != null) {
+            fullViewContainer.addView(gsyVideoPlayer);
+        } else {
+            windowViewContainer.addView(gsyVideoPlayer);
+        }
     }
 
     /**
@@ -176,12 +188,20 @@ public class SmallVideoHelper {
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(listItemSize[0], listItemSize[1]);
         lp.setMargins(listItemRect[0], listItemRect[1], 0, 0);
         frameLayout.addView(gsyVideoPlayer, lp);
-        fullViewContainer.addView(frameLayout, lpParent);
+        if (fullViewContainer != null) {
+            fullViewContainer.addView(frameLayout, lpParent);
+        } else {
+            windowViewContainer.addView(frameLayout, lpParent);
+        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //开始动画
-                TransitionManager.beginDelayedTransition(fullViewContainer);
+                if (fullViewContainer != null) {
+                    TransitionManager.beginDelayedTransition(fullViewContainer);
+                } else {
+                    TransitionManager.beginDelayedTransition(windowViewContainer);
+                }
                 resolveMaterialFullVideoShow(gsyVideoPlayer);
                 resolveChangeFirstLogic(600);
             }
@@ -207,20 +227,25 @@ public class SmallVideoHelper {
      */
     private void resolveToNormal() {
         int delay = orientationUtils.backToProtVideo();
-        if(!gsyVideoOptionBuilder.isShowFullAnimation()) {
+        if (!gsyVideoOptionBuilder.isShowFullAnimation()) {
             delay = 0;
         }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 isFull = false;
-                fullViewContainer.removeAllViews();
+                removeWindowContainer();
+                if (fullViewContainer != null) {
+                    fullViewContainer.removeAllViews();
+                }
                 if (gsyVideoPlayer.getParent() != null) {
                     ((ViewGroup) gsyVideoPlayer.getParent()).removeView(gsyVideoPlayer);
                 }
                 orientationUtils.setEnable(false);
                 gsyVideoPlayer.setIfCurrentIsFullscreen(false);
-                fullViewContainer.setBackgroundColor(Color.TRANSPARENT);
+                if (fullViewContainer != null) {
+                    fullViewContainer.setBackgroundColor(Color.TRANSPARENT);
+                }
                 listParent.addView(gsyVideoPlayer, listParams);
                 gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
                 gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
@@ -274,15 +299,26 @@ public class SmallVideoHelper {
      */
     private void resolveChangeFirstLogic(int time) {
         if (gsyVideoOptionBuilder.isLockLand()) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (orientationUtils.getIsLand() != 1) {
-                        fullViewContainer.setBackgroundColor(Color.BLACK);
-                        orientationUtils.resolveByClick();
+            if (time > 0) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (orientationUtils.getIsLand() != 1) {
+                            if (fullViewContainer != null) {
+                                fullViewContainer.setBackgroundColor(Color.BLACK);
+                            }
+                            orientationUtils.resolveByClick();
+                        }
                     }
+                }, time);
+            } else {
+                if (orientationUtils.getIsLand() != 1) {
+                    if (fullViewContainer != null) {
+                        fullViewContainer.setBackgroundColor(Color.BLACK);
+                    }
+                    orientationUtils.resolveByClick();
                 }
-            }, time);
+            }
         }
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         if (gsyVideoOptionBuilder.getVideoAllCallBack() != null) {
@@ -318,6 +354,14 @@ public class SmallVideoHelper {
 
     private boolean isCurrentViewPlaying(int position, String tag) {
         return isPlayView(position, tag);
+    }
+
+    private boolean removeWindowContainer() {
+        if (windowViewContainer != null && windowViewContainer.indexOfChild(gsyVideoPlayer) != -1) {
+            windowViewContainer.removeView(gsyVideoPlayer);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -402,9 +446,6 @@ public class SmallVideoHelper {
      * 全屏按键逻辑
      */
     public void doFullBtnLogic() {
-        if (fullViewContainer == null) {
-            return;
-        }
         if (!isFull) {
             resolveToFull();
         } else {
@@ -421,6 +462,9 @@ public class SmallVideoHelper {
         if (fullViewContainer != null && fullViewContainer.getChildCount() > 0) {
             isFull = true;
             resolveMaterialToNormal(gsyVideoPlayer);
+        } else if (windowViewContainer != null && windowViewContainer.indexOfChild(gsyVideoPlayer) != -1) {
+            isFull = true;
+            resolveMaterialToNormal(gsyVideoPlayer);
         }
         return isFull;
     }
@@ -429,6 +473,7 @@ public class SmallVideoHelper {
      * 释放持有的视频
      */
     public void releaseVideoPlayer() {
+        removeWindowContainer();
         ViewGroup viewGroup = (ViewGroup) gsyVideoPlayer.getParent();
         if (viewGroup != null)
             viewGroup.removeAllViews();
@@ -465,6 +510,7 @@ public class SmallVideoHelper {
 
     /**
      * 设置全屏显示的viewGroup
+     * 如果不设置即使用默认的 windowViewContainer
      *
      * @param fullViewContainer viewGroup
      */

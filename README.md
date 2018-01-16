@@ -144,7 +144,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 
 
 
-5、DEMO增加SamllVideoHelper实现小窗口逻辑，更新demo
+5、DEMO增加SmallVideoHelper实现小窗口,全屏逻辑，更新demo
 
 
 
