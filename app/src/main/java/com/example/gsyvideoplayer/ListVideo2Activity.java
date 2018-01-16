@@ -59,7 +59,9 @@ public class ListVideo2Activity extends AppCompatActivity {
 
         //创建小窗口帮助类
         smallVideoHelper = new SmallVideoHelper(this);
-        smallVideoHelper.setFullViewContainer(videoFullContainer);
+
+        //如果不设置即使用默认的 windowViewContainer
+        //smallVideoHelper.setFullViewContainer(videoFullContainer);
 
         //配置
         gsySmallVideoHelperBuilder = new SmallVideoHelper.GSYSmallVideoHelperBuilder();
