@@ -37,15 +37,19 @@ public class GSYVideoType {
     public final static int SYSTEMPLAYER = 4;
 
 
-
-
-    //gl
+    /**
+     * GLSurfaceView 主要用于OpenGL渲染的
+     */
     public final static int GLSURFACE = 2;
 
-    //surface
+    /**
+     * SurfaceView，与动画全屏的效果不是很兼容，但是与IJKEXOPLAYER2模式兼容性比较好
+     */
     public final static int SUFRACE = 1;
 
-    //texture
+    /**
+     * TextureView，与IJKPLAYER兼容号，但是与IJKEXOPLAYER2在切换时兼容比较差
+     */
     public final static int TEXTURE = 0;
 
 
