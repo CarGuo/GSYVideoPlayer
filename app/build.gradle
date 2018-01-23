@@ -47,35 +47,35 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
     def androidDependencies = rootProject.ext.androidDependencies
     def dataDependencies = rootProject.ext.dataDependencies
     annotationProcessor viewDependencies.apt_butterKnife
     //debugCompile dataDependencies.leakcanary
-    compile viewDependencies.butterKnife
-    compile androidDependencies.recyclerView
-    compile viewDependencies.DanmakuFlameMaster
-    compile viewDependencies.ndkbitmap_armv7a
-    compile viewDependencies.ndkbitmap_armv5
-    compile viewDependencies.ndkbitmap_x86
-    compile viewDependencies.glide
-    compile viewDependencies.glideProcessor
-    compile androidDependencies.support_v4
-    compile androidDependencies.design
+    implementation viewDependencies.butterKnife
+    implementation androidDependencies.recyclerView
+    implementation viewDependencies.DanmakuFlameMaster
+    implementation viewDependencies.ndkbitmap_armv7a
+    implementation viewDependencies.ndkbitmap_armv5
+    implementation viewDependencies.ndkbitmap_x86
+    implementation viewDependencies.glide
+    implementation viewDependencies.glideProcessor
+    implementation androidDependencies.support_v4
+    implementation androidDependencies.design
 
-    compile project(':gsyVideoPlayer')
+    implementation project(':gsyVideoPlayer')
     //jcenter
-    //compile "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
+    //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
-    //compile "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion'
+    //implementation "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion'
 
-    //compile "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
 
-    //compile "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
 
 }
