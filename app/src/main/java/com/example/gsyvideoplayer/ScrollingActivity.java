@@ -13,9 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.listener.AppBarStateChangeListener;
-import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -75,7 +75,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 .setUrl(url)
                 .setCacheWithPlay(false)
                 .setVideoTitle("测试视频")
-                .setStandardVideoAllCallBack(new SampleListener() {
+                .setStandardVideoAllCallBack(new GSYSampleCallBack() {
 
                     @Override
                     public void onPrepared(String url, Object... objects) {

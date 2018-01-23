@@ -9,9 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.DanmakuVideoPlayer;
-import com.example.gsyvideoplayer.video.SampleControlVideo;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -90,7 +89,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
             }
         });
 
-        danmakuVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
+        danmakuVideoPlayer.setStandardVideoAllCallBack(new GSYSampleCallBack() {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);

@@ -11,10 +11,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.example.gsyvideoplayer.view.CustomInputDialog;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -80,7 +80,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
                 .setUrl(url)
                 .setCacheWithPlay(cache)
                 .setVideoTitle("测试视频")
-                .setStandardVideoAllCallBack(new SampleListener() {
+                .setStandardVideoAllCallBack(new GSYSampleCallBack() {
                     @Override
                     public void onPrepared(String url, Object... objects) {
                         super.onPrepared(url, objects);
