@@ -12,8 +12,8 @@ import android.widget.FrameLayout;
 
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
 import com.example.gsyvideoplayer.holder.RecyclerItemViewHolder;
-import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -138,7 +138,7 @@ public class RecyclerView2Activity extends AppCompatActivity {
                 .setNeedLockFull(true)
                 .setCacheWithPlay(true)
                 .setShowFullAnimation(true)
-                .setLockLand(true).setVideoAllCallBack(new SampleListener() {
+                .setLockLand(true).setVideoAllCallBack(new GSYSampleCallBack() {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);

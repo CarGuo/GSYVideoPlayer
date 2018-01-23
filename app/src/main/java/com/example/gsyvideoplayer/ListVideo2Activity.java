@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
-import com.example.gsyvideoplayer.listener.SampleListener;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -72,7 +72,7 @@ public class ListVideo2Activity extends AppCompatActivity {
                 .setShowFullAnimation(false)
                 .setRotateViewAuto(false)
                 .setLockLand(true)
-                .setVideoAllCallBack(new SampleListener(){
+                .setVideoAllCallBack(new GSYSampleCallBack(){
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
