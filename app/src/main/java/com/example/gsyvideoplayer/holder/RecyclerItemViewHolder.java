@@ -1,15 +1,13 @@
 package com.example.gsyvideoplayer.holder;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
-import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
 import com.example.gsyvideoplayer.model.VideoModel;
-import com.example.gsyvideoplayer.utils.SmallVideoHelper;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,9 +29,9 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
 
     ImageView imageView;
 
-    private SmallVideoHelper smallVideoHelper;
+    private GSYVideoHelper smallVideoHelper;
 
-    private SmallVideoHelper.GSYSmallVideoHelperBuilder gsySmallVideoHelperBuilder;
+    private GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
 
     public RecyclerItemViewHolder(Context context, View v) {
         super(v);
@@ -75,7 +73,7 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
     }
 
 
-    public void setVideoHelper(SmallVideoHelper smallVideoHelper, SmallVideoHelper.GSYSmallVideoHelperBuilder gsySmallVideoHelperBuilder) {
+    public void setVideoHelper(GSYVideoHelper smallVideoHelper, GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder) {
         this.smallVideoHelper = smallVideoHelper;
         this.gsySmallVideoHelperBuilder = gsySmallVideoHelperBuilder;
     }

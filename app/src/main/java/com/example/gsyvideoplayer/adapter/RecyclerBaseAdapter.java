@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.holder.RecyclerItemViewHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
-import com.example.gsyvideoplayer.utils.SmallVideoHelper;
-import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 
 import java.util.List;
 
@@ -29,9 +28,9 @@ public class RecyclerBaseAdapter extends RecyclerView.Adapter {
 
     private Context context = null;
 
-    private SmallVideoHelper smallVideoHelper;
+    private GSYVideoHelper smallVideoHelper;
 
-    private SmallVideoHelper.GSYSmallVideoHelperBuilder gsySmallVideoHelperBuilder;
+    private GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
 
     public RecyclerBaseAdapter(Context context, List<VideoModel> itemDataList) {
         this.itemDataList = itemDataList;
@@ -71,11 +70,11 @@ public class RecyclerBaseAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public SmallVideoHelper getVideoHelper() {
+    public GSYVideoHelper getVideoHelper() {
         return smallVideoHelper;
     }
 
-    public void setVideoHelper(SmallVideoHelper smallVideoHelper, SmallVideoHelper.GSYSmallVideoHelperBuilder gsySmallVideoHelperBuilder) {
+    public void setVideoHelper(GSYVideoHelper smallVideoHelper, GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder) {
         this.smallVideoHelper = smallVideoHelper;
         this.gsySmallVideoHelperBuilder = gsySmallVideoHelperBuilder;
     }

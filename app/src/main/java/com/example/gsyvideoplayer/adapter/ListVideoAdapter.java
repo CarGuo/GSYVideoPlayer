@@ -10,10 +10,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
-import com.example.gsyvideoplayer.utils.SmallVideoHelper;
-import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
-import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
 import java.io.File;
@@ -38,11 +35,11 @@ public class ListVideoAdapter extends BaseAdapter {
 
     private boolean isFullVideo;
 
-    private SmallVideoHelper smallVideoHelper;
+    private GSYVideoHelper smallVideoHelper;
 
-    private SmallVideoHelper.GSYSmallVideoHelperBuilder gsySmallVideoHelperBuilder;
+    private GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
 
-    public ListVideoAdapter(Context context, SmallVideoHelper smallVideoHelper, SmallVideoHelper.GSYSmallVideoHelperBuilder gsySmallVideoHelperBuilder) {
+    public ListVideoAdapter(Context context, GSYVideoHelper smallVideoHelper, GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder) {
         super();
         this.context = context;
         this.smallVideoHelper = smallVideoHelper;
