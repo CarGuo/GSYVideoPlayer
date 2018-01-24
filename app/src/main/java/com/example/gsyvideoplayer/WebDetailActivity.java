@@ -14,6 +14,7 @@ import com.example.gsyvideoplayer.video.PreViewGSYVideoPlayer;
 import com.example.gsyvideoplayer.view.ScrollWebView;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  * Created by shuyu on 2016/12/26.
  */
 
-public class WebDetailActivity extends GSYBaseActivityDetail {
+public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
     @BindView(R.id.scroll_webView)
     ScrollWebView webView;
@@ -102,7 +103,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
     }
 
     @Override
-    public GSYBaseVideoPlayer getGSYVideoPlayer() {
+    public StandardGSYVideoPlayer getGSYVideoPlayer() {
         return webPlayer;
     }
 

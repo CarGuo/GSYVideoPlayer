@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by shuyu on 2016/12/20.
  */
 
-public class DetailListPlayer extends GSYBaseActivityDetail {
+public class DetailListPlayer extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
 
     @BindView(R.id.post_detail_nested_scroll)
@@ -84,7 +85,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail {
     }
 
     @Override
-    public GSYBaseVideoPlayer getGSYVideoPlayer() {
+    public StandardGSYVideoPlayer getGSYVideoPlayer() {
         return detailPlayer;
     }
 

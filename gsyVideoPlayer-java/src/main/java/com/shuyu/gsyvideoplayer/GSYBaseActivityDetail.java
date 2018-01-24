@@ -15,7 +15,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
  * 详情模式播放页面基础类
  * Created by guoshuyu on 2017/9/14.
  */
-public abstract class GSYBaseActivityDetail extends AppCompatActivity implements StandardVideoAllCallBack {
+public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extends AppCompatActivity implements StandardVideoAllCallBack {
 
     protected boolean isPlay;
 
@@ -223,7 +223,7 @@ public abstract class GSYBaseActivityDetail extends AppCompatActivity implements
     /**
      * 播放控件
      */
-    public abstract GSYBaseVideoPlayer getGSYVideoPlayer();
+    public abstract T getGSYVideoPlayer();
 
     /**
      * 配置播放器
