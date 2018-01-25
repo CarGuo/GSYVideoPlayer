@@ -58,6 +58,10 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     @SuppressLint("StaticFieldLeak")
     private static GSYVideoManager videoManager;
 
+    //单例模式实在不好给instance()加参数，还是直接设为静态变量吧
+    //自定义so包加载类
+    private static IjkLibLoader ijkLibLoader;
+
     private static final int HANDLER_PREPARE = 0;
 
     private static final int HANDLER_SETDISPLAY = 1;
@@ -75,10 +79,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     private WeakReference<GSYMediaPlayerListener> listener;
 
     private WeakReference<GSYMediaPlayerListener> lastListener;
-
-    //单例模式实在不好给instance()加参数，还是直接设为静态变量吧
-    //自定义so包加载类
-    private static IjkLibLoader ijkLibLoader;
 
     //配置ijk option
     private List<VideoOptionModel> optionModelList;
@@ -240,17 +240,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
     }
 
-
-    /**
-     * 获取缓存代理服务
-     */
-    private static HttpProxyCacheServer getProxy(Context context) {
-        HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
-        return proxy == null ? (GSYVideoManager.instance().proxy =
-                GSYVideoManager.instance().newProxy(context)) : proxy;
-    }
-
-
     /**
      * 退出全屏，主要用于返回键
      *
@@ -281,6 +270,23 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         GSYVideoManager.instance().releaseMediaPlayer();
     }
 
+    /**
+     * 暂停播放
+     */
+    public static void onPause() {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onVideoPause();
+        }
+    }
+
+    /**
+     * 恢复播放
+     */
+    public static void onResume() {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onVideoResume();
+        }
+    }
 
     private static IPlayerManager getPlayManager(int videoType) {
         switch (videoType) {
@@ -294,6 +300,14 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
     }
 
+    /**
+     * 获取缓存代理服务
+     */
+    private static HttpProxyCacheServer getProxy(Context context) {
+        HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
+        return proxy == null ? (GSYVideoManager.instance().proxy =
+                GSYVideoManager.instance().newProxy(context)) : proxy;
+    }
 
     /**
      * 创建缓存代理服务,带文件目录的.
@@ -702,24 +716,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         @Override
         public Map<String, String> addHeaders(String url) {
             return mMapHeadData;
-        }
-    }
-
-    /**
-     * 暂停播放
-     */
-    public static void onPause() {
-        if (GSYVideoManager.instance().listener() != null) {
-            GSYVideoManager.instance().listener().onVideoPause();
-        }
-    }
-
-    /**
-     * 恢复播放
-     */
-    public static void onResume() {
-        if (GSYVideoManager.instance().listener() != null) {
-            GSYVideoManager.instance().listener().onVideoResume();
         }
     }
 
