@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoGLRenderErrorListener;
 import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -84,9 +83,9 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         //清空释放
-        GSYVideoManager.instance().setDisplay(null);
+        setDisplay(null);
         //同一消息队列中去release
-        GSYVideoManager.instance().releaseSurface(mSurface);
+        releaseSurface(mSurface);
         return true;
     }
 
@@ -110,8 +109,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         //清空释放
-        GSYVideoManager.instance().setDisplay(null);
-        GSYVideoManager.instance().releaseSurface(holder.getSurface());
+        setDisplay(null);
+        releaseSurface(holder.getSurface());
     }
 
     @Override
@@ -134,7 +133,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
         if (pauseLogic)
             //显示暂停切换显示的图片
             showPauseCover();
-        GSYVideoManager.instance().setDisplay(mSurface);
+        setDisplay(mSurface);
     }
 
     /**
@@ -230,6 +229,12 @@ public abstract class GSYTextureRenderView extends FrameLayout implements Textur
 
     //小屏幕绘制层
     protected abstract void setSmallVideoTextureView();
+
+    //设置播放
+    protected abstract void setDisplay(Surface surface);
+
+    //释放
+    protected abstract void releaseSurface(Surface surface);
 
 
     public GSYVideoGLView.ShaderInterface getEffectFilter() {

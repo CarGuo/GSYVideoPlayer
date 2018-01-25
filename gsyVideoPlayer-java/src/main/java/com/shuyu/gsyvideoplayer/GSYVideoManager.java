@@ -30,6 +30,7 @@ import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.StorageUtils;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoViewBridge;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -50,7 +51,7 @@ import static com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer.FULLSCREEN_
 
 public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaPlayer.OnCompletionListener,
         IMediaPlayer.OnBufferingUpdateListener, IMediaPlayer.OnSeekCompleteListener, IMediaPlayer.OnErrorListener,
-        IMediaPlayer.OnVideoSizeChangedListener, IMediaPlayer.OnInfoListener, CacheListener {
+        IMediaPlayer.OnVideoSizeChangedListener, IMediaPlayer.OnInfoListener, CacheListener, GSYVideoViewBridge {
 
     public static String TAG = "GSYVideoManager";
 
@@ -280,6 +281,20 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         GSYVideoManager.instance().releaseMediaPlayer();
     }
 
+
+    private static IPlayerManager getPlayManager(int videoType) {
+        switch (videoType) {
+            case GSYVideoType.IJKEXOPLAYER2:
+                return new EXO2PlayerManager();
+            case GSYVideoType.SYSTEMPLAYER:
+                return new SystemPlayerManager();
+            case GSYVideoType.IJKPLAYER:
+            default:
+                return new IJKPlayerManager();
+        }
+    }
+
+
     /**
      * 创建缓存代理服务,带文件目录的.
      */
@@ -306,19 +321,21 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
                 .headerInjector(new UserAgentHeadersInjector()).build();
     }
 
-
+    @Override
     public GSYMediaPlayerListener listener() {
         if (listener == null)
             return null;
         return listener.get();
     }
 
+    @Override
     public GSYMediaPlayerListener lastListener() {
         if (lastListener == null)
             return null;
         return lastListener.get();
     }
 
+    @Override
     public void setListener(GSYMediaPlayerListener listener) {
         if (listener == null)
             this.listener = null;
@@ -326,11 +343,229 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
             this.listener = new WeakReference<>(listener);
     }
 
+    @Override
     public void setLastListener(GSYMediaPlayerListener lastListener) {
         if (lastListener == null)
             this.lastListener = null;
         else
             this.lastListener = new WeakReference<>(lastListener);
+    }
+
+    @Override
+    public void setSpeed(float speed, boolean soundTouch) {
+        if (playerManager != null) {
+            playerManager.setSpeed(speed, soundTouch);
+        }
+    }
+
+    @Override
+    public void prepare(final String url, final Map<String, String> mapHeadData, boolean loop, float speed) {
+        if (TextUtils.isEmpty(url)) return;
+        Message msg = new Message();
+        msg.what = HANDLER_PREPARE;
+        mMapHeadData = mapHeadData;
+        GSYModel fb = new GSYModel(url, mapHeadData, loop, speed);
+        msg.obj = fb;
+        mMediaHandler.sendMessage(msg);
+        if (needTimeOutOther) {
+            startTimeOutBuffer();
+        }
+    }
+
+    @Override
+    public void releaseMediaPlayer() {
+        Message msg = new Message();
+        msg.what = HANDLER_RELEASE;
+        mMediaHandler.sendMessage(msg);
+        playTag = "";
+        playPosition = -22;
+    }
+
+    @Override
+    public void setDisplay(Surface holder) {
+        Message msg = new Message();
+        msg.what = HANDLER_SETDISPLAY;
+        msg.obj = holder;
+        mMediaHandler.sendMessage(msg);
+    }
+
+    @Override
+    public void releaseSurface(Surface holder) {
+        Message msg = new Message();
+        msg.what = HANDLER_RELEASE_SURFACE;
+        msg.obj = holder;
+        mMediaHandler.sendMessage(msg);
+    }
+
+    @Override
+    public void onPrepared(IMediaPlayer mp) {
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                cancelTimeOutBuffer();
+                if (listener != null) {
+                    listener().onPrepared();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCompletion(IMediaPlayer mp) {
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                cancelTimeOutBuffer();
+                if (listener != null) {
+                    listener().onAutoCompletion();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onBufferingUpdate(IMediaPlayer mp, final int percent) {
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (listener != null) {
+                    if (percent > buffterPoint) {
+                        listener().onBufferingUpdate(percent);
+                    } else {
+                        listener().onBufferingUpdate(buffterPoint);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onSeekComplete(IMediaPlayer mp) {
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                cancelTimeOutBuffer();
+                if (listener != null) {
+                    listener().onSeekComplete();
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onError(IMediaPlayer mp, final int what, final int extra) {
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                cancelTimeOutBuffer();
+                if (listener != null) {
+                    listener().onError(what, extra);
+                }
+            }
+        });
+        return true;
+    }
+
+    @Override
+    public boolean onInfo(IMediaPlayer mp, final int what, final int extra) {
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (needTimeOutOther) {
+                    if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                        startTimeOutBuffer();
+                    } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                        cancelTimeOutBuffer();
+                    }
+                }
+                if (listener != null) {
+                    listener().onInfo(what, extra);
+                }
+            }
+        });
+        return false;
+    }
+
+    @Override
+    public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
+        currentVideoWidth = mp.getVideoWidth();
+        currentVideoHeight = mp.getVideoHeight();
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (listener != null) {
+                    listener().onVideoSizeChanged();
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
+        buffterPoint = percentsAvailable;
+    }
+
+    @Override
+    public IMediaPlayer getMediaPlayer() {
+        if (playerManager != null) {
+            return playerManager.getMediaPlayer();
+        }
+        return null;
+    }
+
+    @Override
+    public CacheListener getCacheListener() {
+        return this;
+    }
+
+    @Override
+    public int getLastState() {
+        return lastState;
+    }
+    @Override
+    public void setLastState(int lastState) {
+        this.lastState = lastState;
+    }
+
+    @Override
+    public int getCurrentVideoWidth() {
+        return currentVideoWidth;
+    }
+
+    @Override
+    public int getCurrentVideoHeight() {
+        return currentVideoHeight;
+    }
+
+    @Override
+    public void setCurrentVideoHeight(int currentVideoHeight) {
+        this.currentVideoHeight = currentVideoHeight;
+    }
+
+    @Override
+    public void setCurrentVideoWidth(int currentVideoWidth) {
+        this.currentVideoWidth = currentVideoWidth;
+    }
+
+    @Override
+    public String getPlayTag() {
+        return playTag;
+    }
+
+    @Override
+    public void setPlayTag(String playTag) {
+        this.playTag = playTag;
+    }
+
+    @Override
+    public int getPlayPosition() {
+        return playPosition;
+    }
+
+    @Override
+    public void setPlayPosition(int playPosition) {
+        this.playPosition = playPosition;
     }
 
     /***
@@ -470,156 +705,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
     }
 
-    public void setSpeed(float speed, boolean soundTouch) {
-        if (playerManager != null) {
-            playerManager.setSpeed(speed, soundTouch);
-        }
-    }
-
-    public void prepare(final String url, final Map<String, String> mapHeadData, boolean loop, float speed) {
-        if (TextUtils.isEmpty(url)) return;
-        Message msg = new Message();
-        msg.what = HANDLER_PREPARE;
-        mMapHeadData = mapHeadData;
-        GSYModel fb = new GSYModel(url, mapHeadData, loop, speed);
-        msg.obj = fb;
-        mMediaHandler.sendMessage(msg);
-        if (needTimeOutOther) {
-            startTimeOutBuffer();
-        }
-    }
-
-    public void releaseMediaPlayer() {
-        Message msg = new Message();
-        msg.what = HANDLER_RELEASE;
-        mMediaHandler.sendMessage(msg);
-        playTag = "";
-        playPosition = -22;
-    }
-
-    public void setDisplay(Surface holder) {
-        Message msg = new Message();
-        msg.what = HANDLER_SETDISPLAY;
-        msg.obj = holder;
-        mMediaHandler.sendMessage(msg);
-    }
-
-    public void releaseSurface(Surface holder) {
-        Message msg = new Message();
-        msg.what = HANDLER_RELEASE_SURFACE;
-        msg.obj = holder;
-        mMediaHandler.sendMessage(msg);
-    }
-
-    @Override
-    public void onPrepared(IMediaPlayer mp) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                cancelTimeOutBuffer();
-                if (listener != null) {
-                    listener().onPrepared();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onCompletion(IMediaPlayer mp) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                cancelTimeOutBuffer();
-                if (listener != null) {
-                    listener().onAutoCompletion();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onBufferingUpdate(IMediaPlayer mp, final int percent) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (listener != null) {
-                    if (percent > buffterPoint) {
-                        listener().onBufferingUpdate(percent);
-                    } else {
-                        listener().onBufferingUpdate(buffterPoint);
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onSeekComplete(IMediaPlayer mp) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                cancelTimeOutBuffer();
-                if (listener != null) {
-                    listener().onSeekComplete();
-                }
-            }
-        });
-    }
-
-    @Override
-    public boolean onError(IMediaPlayer mp, final int what, final int extra) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                cancelTimeOutBuffer();
-                if (listener != null) {
-                    listener().onError(what, extra);
-                }
-            }
-        });
-        return true;
-    }
-
-    @Override
-    public boolean onInfo(IMediaPlayer mp, final int what, final int extra) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (needTimeOutOther) {
-                    if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
-                        startTimeOutBuffer();
-                    } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
-                        cancelTimeOutBuffer();
-                    }
-                }
-                if (listener != null) {
-                    listener().onInfo(what, extra);
-                }
-            }
-        });
-        return false;
-    }
-
-    @Override
-    public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
-        currentVideoWidth = mp.getVideoWidth();
-        currentVideoHeight = mp.getVideoHeight();
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (listener != null) {
-                    listener().onVideoSizeChanged();
-                }
-            }
-        });
-    }
-
-
-    @Override
-    public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
-        buffterPoint = percentsAvailable;
-    }
-
     /**
      * 暂停播放
      */
@@ -638,14 +723,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         }
     }
 
-    public IMediaPlayer getMediaPlayer() {
-        if (playerManager != null) {
-            return playerManager.getMediaPlayer();
-        }
-        return null;
-    }
-
-
     public int getVideoType() {
         return videoType;
     }
@@ -658,59 +735,6 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     public void setVideoType(Context context, int videoType) {
         this.context = context.getApplicationContext();
         this.videoType = videoType;
-    }
-
-    private static IPlayerManager getPlayManager(int videoType) {
-        switch (videoType) {
-            case GSYVideoType.IJKEXOPLAYER2:
-                return new EXO2PlayerManager();
-            case GSYVideoType.SYSTEMPLAYER:
-                return new SystemPlayerManager();
-            case GSYVideoType.IJKPLAYER:
-            default:
-                return new IJKPlayerManager();
-        }
-    }
-
-
-    public int getCurrentVideoWidth() {
-        return currentVideoWidth;
-    }
-
-    public int getCurrentVideoHeight() {
-        return currentVideoHeight;
-    }
-
-    public int getLastState() {
-        return lastState;
-    }
-
-    public void setLastState(int lastState) {
-        this.lastState = lastState;
-    }
-
-    public void setCurrentVideoHeight(int currentVideoHeight) {
-        this.currentVideoHeight = currentVideoHeight;
-    }
-
-    public void setCurrentVideoWidth(int currentVideoWidth) {
-        this.currentVideoWidth = currentVideoWidth;
-    }
-
-    public String getPlayTag() {
-        return playTag;
-    }
-
-    public void setPlayTag(String playTag) {
-        this.playTag = playTag;
-    }
-
-    public int getPlayPosition() {
-        return playPosition;
-    }
-
-    public void setPlayPosition(int playPosition) {
-        this.playPosition = playPosition;
     }
 
     public List<VideoOptionModel> getOptionModelList() {
