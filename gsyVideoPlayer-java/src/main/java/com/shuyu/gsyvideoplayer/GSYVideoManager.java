@@ -38,6 +38,15 @@ public class GSYVideoManager extends GSYVideoBaseManager {
     //自定义so包加载类
     private static IjkLibLoader ijkLibLoader;
 
+    /***
+     * @param libLoader 是否使用外部动态加载so
+     * */
+    private GSYVideoManager(IjkLibLoader libLoader) {
+        ijkLibLoader = libLoader;
+        init(libLoader);
+    }
+
+
     /**
      * 单例管理器
      */
@@ -207,13 +216,5 @@ public class GSYVideoManager extends GSYVideoBaseManager {
         HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
         return proxy == null ? (GSYVideoManager.instance().proxy =
                 GSYVideoManager.instance().newProxy(context)) : proxy;
-    }
-
-    /***
-     * @param libLoader 是否使用外部动态加载so
-     * */
-    private GSYVideoManager(IjkLibLoader libLoader) {
-        ijkLibLoader = libLoader;
-        init(libLoader);
     }
 }
