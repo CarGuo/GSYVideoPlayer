@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by shuyu on 2016/12/20.
  */
 
-public class DetailListPlayer extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
+public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
 
     @BindView(R.id.post_detail_nested_scroll)
@@ -36,7 +36,8 @@ public class DetailListPlayer extends GSYBaseActivityDetail<StandardGSYVideoPlay
     ListGSYVideoPlayer detailPlayer;
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
-
+    @BindView(R.id.next)
+    View next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +83,17 @@ public class DetailListPlayer extends GSYBaseActivityDetail<StandardGSYVideoPlay
             }
         });
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListGSYVideoPlayer)detailPlayer.getCurrentPlayer()).playNext();
+            }
+        });
+
     }
 
     @Override
-    public StandardGSYVideoPlayer getGSYVideoPlayer() {
+    public ListGSYVideoPlayer getGSYVideoPlayer() {
         return detailPlayer;
     }
 

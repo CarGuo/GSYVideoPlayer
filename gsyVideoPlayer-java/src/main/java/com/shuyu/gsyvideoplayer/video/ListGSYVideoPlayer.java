@@ -123,14 +123,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
 
     @Override
     public void onAutoCompletion() {
-        if (mPlayPosition < (mUriList.size() - 1)) {
-            mPlayPosition++;
-            GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
-            setUp(gsyVideoModel.getUrl(), mCache, mCachePath, gsyVideoModel.getTitle());
-            if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
-                mTitleTextView.setText(gsyVideoModel.getTitle());
-            }
-            startPlayLogic();
+        if (playNext()) {
             return;
         }
         super.onAutoCompletion();
@@ -167,5 +160,23 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
                 ((ENDownloadView) mLoadingProgressBar).start();
             }
         }
+    }
+
+    /**
+     * 播放下一集
+     * @return true表示还有下一集
+     */
+    public boolean playNext() {
+        if (mPlayPosition < (mUriList.size() - 1)) {
+            mPlayPosition++;
+            GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
+            setUp(gsyVideoModel.getUrl(), mCache, mCachePath, gsyVideoModel.getTitle());
+            if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+                mTitleTextView.setText(gsyVideoModel.getTitle());
+            }
+            startPlayLogic();
+            return true;
+        }
+        return false;
     }
 }
