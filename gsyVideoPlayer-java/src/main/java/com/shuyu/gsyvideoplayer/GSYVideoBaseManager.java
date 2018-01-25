@@ -106,20 +106,6 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     //是否需要外部超时判断
     protected boolean needTimeOutOther;
 
-
-    private static IPlayerManager getPlayManager(int videoType) {
-        switch (videoType) {
-            case GSYVideoType.IJKEXOPLAYER2:
-                return new EXO2PlayerManager();
-            case GSYVideoType.SYSTEMPLAYER:
-                return new SystemPlayerManager();
-            case GSYVideoType.IJKPLAYER:
-            default:
-                return new IJKPlayerManager();
-        }
-    }
-
-
     /***
      * @param libLoader 是否使用外部动态加载so
      * */
@@ -132,6 +118,17 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         mainThreadHandler = new Handler();
     }
 
+    protected IPlayerManager getPlayManager(int videoType) {
+        switch (videoType) {
+            case GSYVideoType.IJKEXOPLAYER2:
+                return new EXO2PlayerManager();
+            case GSYVideoType.SYSTEMPLAYER:
+                return new SystemPlayerManager();
+            case GSYVideoType.IJKPLAYER:
+            default:
+                return new IJKPlayerManager();
+        }
+    }
 
     /**
      * 创建缓存代理服务,带文件目录的.
