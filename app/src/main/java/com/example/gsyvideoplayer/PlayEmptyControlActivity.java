@@ -10,8 +10,8 @@ import android.transition.Transition;
 
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.video.EmptyControlVideo;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +76,7 @@ public class PlayEmptyControlActivity extends AppCompatActivity {
     public void onBackPressed() {
         //释放所有
         videoPlayer.setStandardVideoAllCallBack(null);
-        GSYVideoPlayer.releaseAllVideos();
+        GSYVideoManager.releaseAllVideos();
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onBackPressed();
         } else {

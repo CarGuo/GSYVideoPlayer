@@ -12,9 +12,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
@@ -149,7 +149,7 @@ public class ListVideo2Activity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         smallVideoHelper.releaseVideoPlayer();
-        GSYVideoPlayer.releaseAllVideos();
+        GSYVideoManager.releaseAllVideos();
     }
 
 }

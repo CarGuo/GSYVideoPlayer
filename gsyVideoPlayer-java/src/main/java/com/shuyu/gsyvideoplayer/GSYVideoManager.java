@@ -10,6 +10,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.Surface;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import com.danikula.videocache.CacheListener;
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -35,6 +38,9 @@ import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
+
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
+import static com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer.FULLSCREEN_ID;
 
 /**
  * 视频管理，单例
@@ -241,6 +247,37 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
         HttpProxyCacheServer proxy = GSYVideoManager.instance().proxy;
         return proxy == null ? (GSYVideoManager.instance().proxy =
                 GSYVideoManager.instance().newProxy(context)) : proxy;
+    }
+
+
+    /**
+     * 退出全屏，主要用于返回键
+     *
+     * @return 返回是否全屏
+     */
+    @SuppressWarnings("ResourceType")
+    public static boolean backFromWindowFull(Context context) {
+        boolean backFrom = false;
+        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(context)).findViewById(Window.ID_ANDROID_CONTENT);
+        View oldF = vp.findViewById(FULLSCREEN_ID);
+        if (oldF != null) {
+            backFrom = true;
+            hideNavKey(context);
+            if (GSYVideoManager.instance().lastListener() != null) {
+                GSYVideoManager.instance().lastListener().onBackFullscreen();
+            }
+        }
+        return backFrom;
+    }
+
+    /**
+     * 页面销毁了记得调用是否所有的video
+     */
+    public static void releaseAllVideos() {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onCompletion();
+        }
+        GSYVideoManager.instance().releaseMediaPlayer();
     }
 
     /**

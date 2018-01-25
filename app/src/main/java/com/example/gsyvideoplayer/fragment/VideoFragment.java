@@ -17,8 +17,6 @@ import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
 import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +87,7 @@ public class VideoFragment extends Fragment {
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果滑出去了上面和下面就是否，和今日头条一样
                         if(!mFull) {
-                            GSYVideoPlayer.releaseAllVideos();
+                            GSYVideoManager.releaseAllVideos();
                             recyclerNormalAdapter.notifyDataSetChanged();
                         }
                     }
@@ -101,7 +99,7 @@ public class VideoFragment extends Fragment {
     }
 
     public boolean onBackPressed() {
-        if (StandardGSYVideoPlayer.backFromWindowFull(getActivity())) {
+        if (GSYVideoManager.backFromWindowFull(getActivity())) {
             return true;
         }
         return false;
@@ -134,7 +132,7 @@ public class VideoFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        GSYVideoPlayer.releaseAllVideos();
+        GSYVideoManager.releaseAllVideos();
     }
 
 

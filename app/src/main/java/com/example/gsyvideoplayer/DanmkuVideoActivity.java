@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.video.DanmakuVideoPlayer;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -136,7 +137,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
             orientationUtils.backToProtVideo();
         }
 
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
+        if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
         super.onBackPressed();

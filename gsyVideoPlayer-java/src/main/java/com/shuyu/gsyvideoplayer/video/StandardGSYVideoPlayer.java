@@ -21,7 +21,6 @@ import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
-import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;

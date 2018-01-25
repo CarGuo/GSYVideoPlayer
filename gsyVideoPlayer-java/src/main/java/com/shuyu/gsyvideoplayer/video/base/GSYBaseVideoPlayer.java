@@ -13,14 +13,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.view.SmallVideoTouch;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.transitionseverywhere.TransitionManager;
 
 import java.lang.reflect.Constructor;
@@ -132,7 +130,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 @Override
                 public void onClick(View v) {
                     hideSmallVideo();
-                    releaseAllVideos();
+                    GSYVideoManager.releaseAllVideos();
                 }
             });
         }
@@ -455,7 +453,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         } else {
             //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
             if (isIfCurrentIsFullscreen()) {
-                StandardGSYVideoPlayer.backFromWindowFull(activity);
+                GSYVideoManager.backFromWindowFull(activity);
             }
             if (orientationUtils != null) {
                 orientationUtils.setEnable(true);
@@ -770,23 +768,5 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         this.mBackFromFullScreenListener = backFromFullScreenListener;
     }
 
-    /**
-     * 退出全屏，主要用于返回键
-     *
-     * @return 返回是否全屏
-     */
-    @SuppressWarnings("ResourceType")
-    public static boolean backFromWindowFull(Context context) {
-        boolean backFrom = false;
-        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(context)).findViewById(Window.ID_ANDROID_CONTENT);
-        View oldF = vp.findViewById(FULLSCREEN_ID);
-        if (oldF != null) {
-            backFrom = true;
-            hideNavKey(context);
-            if (GSYVideoManager.instance().lastListener() != null) {
-                GSYVideoManager.instance().lastListener().onBackFullscreen();
-            }
-        }
-        return backFrom;
-    }
+
 }
