@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.view.SmallVideoTouch;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -130,7 +129,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 @Override
                 public void onClick(View v) {
                     hideSmallVideo();
-                    GSYVideoManager.releaseAllVideos();
+                   releaseVideos();
                 }
             });
         }
@@ -316,12 +315,12 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             ViewGroup viewGroup = (ViewGroup) oldF.getParent();
             vp.removeView(viewGroup);
         }
-        mCurrentState = GSYVideoManager.instance().getLastState();
+        mCurrentState = getGSYVideoManager().getLastState();
         if (gsyVideoPlayer != null) {
             cloneParams(gsyVideoPlayer, this);
         }
-        GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
-        GSYVideoManager.instance().setLastListener(null);
+        getGSYVideoManager().setListener(getGSYVideoManager().lastListener());
+        getGSYVideoManager().setLastListener(null);
         setStateAndUi(mCurrentState);
         addTextureView();
         mSaveChangeViewTIme = System.currentTimeMillis();
@@ -453,7 +452,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         } else {
             //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
             if (isIfCurrentIsFullscreen()) {
-                GSYVideoManager.backFromWindowFull(activity);
+                backFromFull(activity);
             }
             if (orientationUtils != null) {
                 orientationUtils.setEnable(true);
@@ -584,8 +583,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             gsyVideoPlayer.addTextureView();
 
-            GSYVideoManager.instance().setLastListener(this);
-            GSYVideoManager.instance().setListener(gsyVideoPlayer);
+            getGSYVideoManager().setLastListener(this);
+            getGSYVideoManager().setListener(gsyVideoPlayer);
 
             checkoutState();
             return gsyVideoPlayer;
@@ -645,8 +644,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
             gsyVideoPlayer.setSmallVideoTextureView(new SmallVideoTouch(gsyVideoPlayer, marginLeft, marginTop));
 
-            GSYVideoManager.instance().setLastListener(this);
-            GSYVideoManager.instance().setListener(gsyVideoPlayer);
+            getGSYVideoManager().setLastListener(this);
+            getGSYVideoManager().setListener(gsyVideoPlayer);
             if (mVideoAllCallBack != null) {
                 Debuger.printfError("onEnterSmallWidget");
                 mVideoAllCallBack.onEnterSmallWidget(mOriginUrl, mTitle, gsyVideoPlayer);
@@ -667,12 +666,12 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         final ViewGroup vp = getViewGroup();
         GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer) vp.findViewById(SMALL_ID);
         removeVideo(vp, SMALL_ID);
-        mCurrentState = GSYVideoManager.instance().getLastState();
+        mCurrentState = getGSYVideoManager().getLastState();
         if (gsyVideoPlayer != null) {
             cloneParams(gsyVideoPlayer, this);
         }
-        GSYVideoManager.instance().setListener(GSYVideoManager.instance().lastListener());
-        GSYVideoManager.instance().setLastListener(null);
+        getGSYVideoManager().setListener(getGSYVideoManager().lastListener());
+        getGSYVideoManager().setLastListener(null);
         setStateAndUi(mCurrentState);
         addTextureView();
         mSaveChangeViewTIme = System.currentTimeMillis();
@@ -767,6 +766,4 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     public void setBackFromFullScreenListener(OnClickListener backFromFullScreenListener) {
         this.mBackFromFullScreenListener = backFromFullScreenListener;
     }
-
-
 }
