@@ -310,7 +310,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     post(new Runnable() {
                         @Override
                         public void run() {
-                            releaseAllVideos();
+                            GSYVideoManager.releaseAllVideos();
                         }
                     });
                     break;
@@ -691,23 +691,13 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     }
 
     /**
-     * 页面销毁了记得调用是否所有的video
-     */
-    public static void releaseAllVideos() {
-        if (GSYVideoManager.instance().listener() != null) {
-            GSYVideoManager.instance().listener().onCompletion();
-        }
-        GSYVideoManager.instance().releaseMediaPlayer();
-    }
-
-    /**
      * 释放吧
      */
     public void release() {
         mSaveChangeViewTIme = 0;
         if (isCurrentMediaListener() &&
                 (System.currentTimeMillis() - mSaveChangeViewTIme) > CHANGE_DELAY_TIME) {
-            releaseAllVideos();
+            GSYVideoManager.releaseAllVideos();
         }
     }
 

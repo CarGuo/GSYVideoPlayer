@@ -12,8 +12,6 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +58,7 @@ public class ListVideoActivity extends AppCompatActivity {
                     if (GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果滑出去了上面和下面就是否，和今日头条一样
-                        GSYVideoPlayer.releaseAllVideos();
+                        GSYVideoManager.releaseAllVideos();
                         listNormalAdapter.notifyDataSetChanged();
                     }
                 }
@@ -74,7 +72,7 @@ public class ListVideoActivity extends AppCompatActivity {
         //为了支持重力旋转
         onBackPressAdapter();
 
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
+        if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
         super.onBackPressed();
@@ -97,7 +95,7 @@ public class ListVideoActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GSYVideoPlayer.releaseAllVideos();
+        GSYVideoManager.releaseAllVideos();
         if (listNormalAdapter != null) {
             listNormalAdapter.onDestroy();
         }
