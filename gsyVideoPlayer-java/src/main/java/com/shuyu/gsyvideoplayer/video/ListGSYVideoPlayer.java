@@ -48,6 +48,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      * 设置播放URL
      *
      * @param url           播放url
+     * @param position      需要播放的位置
      * @param cacheWithPlay 是否边播边缓存
      * @return
      */
@@ -60,6 +61,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
+     * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @return
      */
@@ -72,6 +74,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
+     * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   http header
      * @return
@@ -85,9 +88,10 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
+     * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   http header
-     * @param changeState
+     * @param changeState   切换的时候释放surface
      * @return
      */
     protected boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath, Map<String, String> mapHeadData, boolean changeState) {
@@ -198,7 +202,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      */
     public boolean playNext() {
         if (mPlayPosition < (mUriList.size() - 1)) {
-            mPlayPosition+=1;
+            mPlayPosition += 1;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
             mSaveChangeViewTIme = 0;
             setUp(mUriList, mCache, mPlayPosition, null, mMapHeadData, false);
