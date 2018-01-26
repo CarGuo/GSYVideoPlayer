@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
@@ -29,6 +30,8 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
 
     protected ViewGroup mWidgetContainer;
 
+    protected TextView mADTime;
+
     protected boolean isAdModel = false;
 
     protected boolean isFirstPrepared = false;
@@ -49,13 +52,16 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
     protected void init(Context context) {
         super.init(context);
         mJumpAd = findViewById(R.id.jump_ad);
+        mADTime = (TextView) findViewById(R.id.ad_time);
         mWidgetContainer = (ViewGroup) findViewById(R.id.widget_container);
-        mJumpAd.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playNext();
-            }
-        });
+        if (mJumpAd != null) {
+            mJumpAd.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    playNext();
+                }
+            });
+        }
 
     }
 
@@ -140,14 +146,16 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
 
     @Override
     protected void updateStartImage() {
-        if (mStartButton instanceof ImageView) {
-            ImageView imageView = (ImageView) mStartButton;
-            if (mCurrentState == CURRENT_STATE_PLAYING) {
-                imageView.setImageResource(R.drawable.video_click_pause_selector);
-            } else if (mCurrentState == CURRENT_STATE_ERROR) {
-                imageView.setImageResource(R.drawable.video_click_play_selector);
-            } else {
-                imageView.setImageResource(R.drawable.video_click_play_selector);
+        if (mStartButton != null) {
+            if (mStartButton instanceof ImageView) {
+                ImageView imageView = (ImageView) mStartButton;
+                if (mCurrentState == CURRENT_STATE_PLAYING) {
+                    imageView.setImageResource(R.drawable.video_click_pause_selector);
+                } else if (mCurrentState == CURRENT_STATE_ERROR) {
+                    imageView.setImageResource(R.drawable.video_click_play_selector);
+                } else {
+                    imageView.setImageResource(R.drawable.video_click_play_selector);
+                }
             }
         }
     }
@@ -206,6 +214,24 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
 
 
     @Override
+    protected void hideAllWidget() {
+        if (isFirstPrepared && isAdModel) {
+            return;
+        }
+        super.hideAllWidget();
+    }
+
+    @Override
+    protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
+        super.setProgressAndTime(progress, secProgress, currentTime, totalTime);
+        if (mADTime != null && currentTime > 0) {
+            int totalSeconds = totalTime / 1000;
+            int currentSeconds = currentTime / 1000;
+            mADTime.setText("" + (totalSeconds - currentSeconds));
+        }
+    }
+
+    @Override
     protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
         super.cloneParams(from, to);
         GSYSampleADVideoPlayer sf = (GSYSampleADVideoPlayer) from;
@@ -220,14 +246,29 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
      * 根据是否广告url修改ui显示状态
      */
     protected void changeAdUIState() {
-        mJumpAd.setVisibility((isFirstPrepared && isAdModel) ? VISIBLE : GONE);
-        mWidgetContainer.setVisibility((isFirstPrepared && isAdModel) ? GONE : VISIBLE);
-        int color = (isFirstPrepared && isAdModel) ? Color.TRANSPARENT : getContext().getResources().getColor(R.color.bottom_container_bg);
-        mBottomContainer.setBackgroundColor(color);
-        mCurrentTimeTextView.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
-        mTotalTimeTextView.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
-        mProgressBar.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
-        mProgressBar.setEnabled(!(isFirstPrepared && isAdModel));
+        if (mJumpAd != null) {
+            mJumpAd.setVisibility((isFirstPrepared && isAdModel) ? VISIBLE : GONE);
+        }
+        if (mADTime != null) {
+            mADTime.setVisibility((isFirstPrepared && isAdModel) ? VISIBLE : GONE);
+        }
+        if (mWidgetContainer != null) {
+            mWidgetContainer.setVisibility((isFirstPrepared && isAdModel) ? GONE : VISIBLE);
+        }
+        if (mBottomContainer != null) {
+            int color = (isFirstPrepared && isAdModel) ? Color.TRANSPARENT : getContext().getResources().getColor(R.color.bottom_container_bg);
+            mBottomContainer.setBackgroundColor(color);
+        }
+        if (mCurrentTimeTextView != null) {
+            mCurrentTimeTextView.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
+        }
+        if (mTotalTimeTextView != null) {
+            mTotalTimeTextView.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
+        }
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
+            mProgressBar.setEnabled(!(isFirstPrepared && isAdModel));
+        }
     }
 
 
