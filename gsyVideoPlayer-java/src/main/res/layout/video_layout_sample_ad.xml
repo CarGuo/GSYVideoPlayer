@@ -175,7 +175,24 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="4dp"
+        android:text="@string/jump_ad"
         android:textColor="#FFFFFF"
-        android:text="@string/jump_ad" />
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/ad_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/video_jump_btn_bg"
+        android:paddingBottom="4dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="4dp"
+        android:text="00"
+        android:textColor="#FFFFFF"
+        android:visibility="gone" />
 
 </RelativeLayout>
