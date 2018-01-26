@@ -3,7 +3,6 @@ package com.shuyu.gsyvideoplayer.video;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -70,7 +69,7 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param position
+     * @param position      需要播放的位置
      * @return
      */
     @Override
@@ -83,7 +82,7 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param position
+     * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @return
      */
@@ -97,7 +96,7 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param position
+     * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   http header
      * @return
@@ -112,15 +111,23 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param position
+     * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   http header
-     * @param changeState
+     * @param changeState   切换的时候释放surface
      * @return
      */
     @Override
     protected boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath, Map<String, String> mapHeadData, boolean changeState) {
-        initSetupModel(url.get(position));
+        GSYVideoModel gsyVideoModel = url.get(position);
+        if (gsyVideoModel instanceof GSYADVideoModel) {
+            GSYADVideoModel gsyadVideoModel = (GSYADVideoModel) gsyVideoModel;
+            if (gsyadVideoModel.isSkip() && position < (url.size() - 1)) {
+                return setUp(url, cacheWithPlay, position + 1, cachePath, mapHeadData, changeState);
+            }
+            isAdModel = (gsyadVideoModel.getType() == GSYADVideoModel.TYPE_AD);
+        }
+        changeAdUIState();
         return super.setUp(url, cacheWithPlay, position, cachePath, mapHeadData, changeState);
     }
 
@@ -208,18 +215,6 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
         st.changeAdUIState();
     }
 
-    /**
-     * 针对每个播放数据源的类型，设置状态
-     *
-     * @param gsyVideoModel
-     */
-    protected void initSetupModel(GSYVideoModel gsyVideoModel) {
-        if (gsyVideoModel instanceof GSYADVideoModel) {
-            GSYADVideoModel gsyadVideoModel = (GSYADVideoModel) gsyVideoModel;
-            isAdModel = (gsyadVideoModel.getType() == GSYADVideoModel.TYPE_AD);
-        }
-        changeAdUIState();
-    }
 
     /**
      * 根据是否广告url修改ui显示状态
@@ -278,24 +273,61 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
     }
 
     public static class GSYADVideoModel extends GSYVideoModel {
-
+        /**
+         * 正常
+         */
         public static int TYPE_NORMAL = 0;
 
+        /**
+         * 广告
+         */
         public static int TYPE_AD = 1;
 
+        /**
+         * 类型
+         */
         private int mType = TYPE_NORMAL;
 
+        /**
+         * 是否跳过
+         */
+        private boolean isSkip;
+
+        /**
+         * @param url   播放url
+         * @param title 标题
+         * @param type  类型 广告还是正常类型
+         */
         public GSYADVideoModel(String url, String title, int type) {
+            this(url, title, type, false);
+        }
+
+        /**
+         * @param url    播放url
+         * @param title  标题
+         * @param type   类型 广告还是正常类型
+         * @param isSkip 是否跳过
+         */
+        public GSYADVideoModel(String url, String title, int type, boolean isSkip) {
             super(url, title);
-            mType = type;
+            this.mType = type;
+            this.isSkip = isSkip;
         }
 
         public int getType() {
             return mType;
         }
 
-        public void setmType(int type) {
+        public void setType(int type) {
             this.mType = type;
+        }
+
+        public boolean isSkip() {
+            return isSkip;
+        }
+
+        public void setSkip(boolean skip) {
+            isSkip = skip;
         }
     }
 }
