@@ -1,12 +1,16 @@
 package com.shuyu.gsyvideoplayer.video;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
+import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 import java.io.File;
@@ -53,6 +57,7 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
                 playNext();
             }
         });
+
     }
 
     @Override
@@ -127,6 +132,73 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
     }
 
     @Override
+    protected void updateStartImage() {
+        if (mStartButton instanceof ImageView) {
+            ImageView imageView = (ImageView) mStartButton;
+            if (mCurrentState == CURRENT_STATE_PLAYING) {
+                imageView.setImageResource(R.drawable.video_click_pause_selector);
+            } else if (mCurrentState == CURRENT_STATE_ERROR) {
+                imageView.setImageResource(R.drawable.video_click_play_selector);
+            } else {
+                imageView.setImageResource(R.drawable.video_click_play_selector);
+            }
+        }
+    }
+
+    /**
+     * 广告期间不需要双击
+     */
+    @Override
+    protected void touchDoubleUp() {
+        if (isAdModel) {
+            return;
+        }
+        super.touchDoubleUp();
+    }
+
+    /**
+     * 广告期间不需要触摸
+     */
+    @Override
+    protected void touchSurfaceMove(float deltaX, float deltaY, float y) {
+        if (mChangePosition && isAdModel) {
+            return;
+        } else {
+            super.touchSurfaceMove(deltaX, deltaY, y);
+        }
+    }
+
+    /**
+     * 广告期间不需要触摸
+     */
+    @Override
+    protected void touchSurfaceMoveFullLogic(float absDeltaX, float absDeltaY) {
+        if ((absDeltaX > mThreshold || absDeltaY > mThreshold)) {
+            int screenWidth = CommonUtil.getScreenWidth(getContext());
+            if (isAdModel && absDeltaX >= mThreshold && Math.abs(screenWidth - mDownX) > mSeekEndOffset) {
+                //防止全屏虚拟按键
+                mChangePosition = true;
+                mDownPosition = getCurrentPositionWhenPlaying();
+            } else {
+                super.touchSurfaceMoveFullLogic(absDeltaX, absDeltaY);
+            }
+        }
+    }
+
+    /**
+     * 广告期间不需要触摸
+     */
+    @Override
+    protected void touchSurfaceUp() {
+        if (mChangePosition && isAdModel) {
+            return;
+        }
+        super.touchSurfaceUp();
+
+    }
+
+
+    @Override
     protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
         super.cloneParams(from, to);
         GSYSampleADVideoPlayer sf = (GSYSampleADVideoPlayer) from;
@@ -138,6 +210,7 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
 
     /**
      * 针对每个播放数据源的类型，设置状态
+     *
      * @param gsyVideoModel
      */
     protected void initSetupModel(GSYVideoModel gsyVideoModel) {
@@ -154,6 +227,12 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
     protected void changeAdUIState() {
         mJumpAd.setVisibility((isFirstPrepared && isAdModel) ? VISIBLE : GONE);
         mWidgetContainer.setVisibility((isFirstPrepared && isAdModel) ? GONE : VISIBLE);
+        int color = (isFirstPrepared && isAdModel) ? Color.TRANSPARENT : getContext().getResources().getColor(R.color.bottom_container_bg);
+        mBottomContainer.setBackgroundColor(color);
+        mCurrentTimeTextView.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
+        mTotalTimeTextView.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
+        mProgressBar.setVisibility((isFirstPrepared && isAdModel) ? INVISIBLE : VISIBLE);
+        mProgressBar.setEnabled(!(isFirstPrepared && isAdModel));
     }
 
 
