@@ -103,12 +103,19 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
     }
 
     @Override
+    protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
+        super.cloneParams(from, to);
+        ListGSYVideoPlayer sf = (ListGSYVideoPlayer) from;
+        ListGSYVideoPlayer st = (ListGSYVideoPlayer) to;
+        st.mPlayPosition = sf.mPlayPosition;
+        st.mUriList = sf.mUriList;
+    }
+
+    @Override
     public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
         GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
         if (gsyBaseVideoPlayer != null) {
             ListGSYVideoPlayer listGSYVideoPlayer = (ListGSYVideoPlayer) gsyBaseVideoPlayer;
-            listGSYVideoPlayer.mPlayPosition = mPlayPosition;
-            listGSYVideoPlayer.mUriList = mUriList;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
             if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
                 listGSYVideoPlayer.mTitleTextView.setText(gsyVideoModel.getTitle());
@@ -121,8 +128,6 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
     protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
         if (gsyVideoPlayer != null) {
             ListGSYVideoPlayer listGSYVideoPlayer = (ListGSYVideoPlayer) gsyVideoPlayer;
-            mPlayPosition = listGSYVideoPlayer.mPlayPosition;
-            mUriList = listGSYVideoPlayer.mUriList;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
             if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
@@ -193,8 +198,9 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      */
     public boolean playNext() {
         if (mPlayPosition < (mUriList.size() - 1)) {
-            mPlayPosition++;
+            mPlayPosition+=1;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
+            mSaveChangeViewTIme = 0;
             setUp(mUriList, mCache, mPlayPosition, null, mMapHeadData, false);
             if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
