@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.example.gsyvideoplayer.AutoPlayRecyclerViewActivity;
 import com.example.gsyvideoplayer.DanmkuVideoActivity;
+import com.example.gsyvideoplayer.DetailADPlayer;
 import com.example.gsyvideoplayer.DetailControlActivity;
 import com.example.gsyvideoplayer.DetailFilterActivity;
 import com.example.gsyvideoplayer.DetailListPlayer;
@@ -166,6 +167,16 @@ public class JumpUtils {
      */
     public static void goToScrollDetailPlayer(Activity activity) {
         Intent intent = new Intent(activity, ScrollingActivity.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳转到AD详情播放
+     *
+     * @param activity
+     */
+    public static void goToVideoADPlayer(Activity activity) {
+        Intent intent = new Intent(activity, DetailADPlayer.class);
         activity.startActivity(intent);
     }
 

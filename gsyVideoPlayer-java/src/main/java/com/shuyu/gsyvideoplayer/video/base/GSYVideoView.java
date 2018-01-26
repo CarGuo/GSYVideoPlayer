@@ -119,6 +119,12 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     //是否准备完成前调用了暂停
     protected boolean mPauseBeforePrepared = false;
 
+    //Prepared之后是否自动开始播放
+    protected boolean mStartAfterPrepared = true;
+
+    //Prepared
+    protected boolean mHadPrepared = false;
+
     //音频焦点的监听
     protected AudioManager mAudioManager;
 
@@ -288,7 +294,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         ((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBackUpPlayingBufferState = -1;
-        getGSYVideoManager().prepare(mUrl, mMapHeadData, mLooping, mSpeed);
+        getGSYVideoManager().prepare(mUrl, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed);
         setStateAndUi(CURRENT_STATE_PREPAREING);
     }
 
@@ -373,6 +379,20 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * @return
      */
     public boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title) {
+        return setUp(url, cacheWithPlay, cachePath, title, true);
+    }
+
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param title         title
+     * @param changeState   是否修改状态
+     * @return
+     */
+    protected boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title, boolean changeState) {
         mCache = cacheWithPlay;
         mCachePath = cachePath;
         mOriginUrl = url;
@@ -395,7 +415,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         }
         this.mUrl = url;
         this.mTitle = title;
-        setStateAndUi(CURRENT_STATE_NORMAL);
+        if (changeState)
+            setStateAndUi(CURRENT_STATE_NORMAL);
         return true;
     }
 
@@ -479,42 +500,14 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     @Override
     public void onPrepared() {
+
         if (mCurrentState != CURRENT_STATE_PREPAREING) return;
 
-        try {
-            if (getGSYVideoManager().getMediaPlayer() != null) {
-                getGSYVideoManager().getMediaPlayer().start();
-            }
+        mHadPrepared = true;
 
-            setStateAndUi(CURRENT_STATE_PLAYING);
+        if (!mStartAfterPrepared) return;
 
-            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
-                Debuger.printfLog("onPrepared");
-                mVideoAllCallBack.onPrepared(mOriginUrl, mTitle, this);
-            }
-
-            if (getGSYVideoManager().getMediaPlayer() != null && mSeekOnStart > 0) {
-                getGSYVideoManager().getMediaPlayer().seekTo(mSeekOnStart);
-                mSeekOnStart = 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        createNetWorkState();
-
-        listenerNetWorkState();
-
-        mHadPlay = true;
-
-        if (mTextureView != null) {
-            mTextureView.onResume();
-        }
-
-        if (mPauseBeforePrepared) {
-            onVideoPause();
-            mPauseBeforePrepared = false;
-        }
+        startAfterPrepared();
     }
 
     @Override
@@ -706,6 +699,50 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         }
     }
 
+    /**
+     * prepared成功之后会开始播放
+     */
+    public void startAfterPrepared() {
+
+        if (!mHadPrepared) {
+            prepareVideo();
+        }
+
+        try {
+            if (getGSYVideoManager().getMediaPlayer() != null) {
+                getGSYVideoManager().getMediaPlayer().start();
+            }
+
+            setStateAndUi(CURRENT_STATE_PLAYING);
+
+            if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+                Debuger.printfLog("onPrepared");
+                mVideoAllCallBack.onPrepared(mOriginUrl, mTitle, this);
+            }
+
+            if (getGSYVideoManager().getMediaPlayer() != null && mSeekOnStart > 0) {
+                getGSYVideoManager().getMediaPlayer().seekTo(mSeekOnStart);
+                mSeekOnStart = 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        createNetWorkState();
+
+        listenerNetWorkState();
+
+        mHadPlay = true;
+
+        if (mTextureView != null) {
+            mTextureView.onResume();
+        }
+
+        if (mPauseBeforePrepared) {
+            onVideoPause();
+            mPauseBeforePrepared = false;
+        }
+    }
 
     protected boolean isCurrentMediaListener() {
         return getGSYVideoManager().listener() != null
@@ -768,7 +805,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     protected abstract void releaseVideos();
 
     protected abstract GSYVideoViewBridge getGSYVideoManager();
-    
+
     /**
      * 设置播放显示状态
      *
@@ -786,6 +823,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 开始播放
      */
     public abstract void startPlayLogic();
+
 
     /************************* 公开接口 *************************/
 
@@ -980,4 +1018,11 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         }
     }
 
+    public boolean isStartAfterPrepared() {
+        return mStartAfterPrepared;
+    }
+
+    public void setStartAfterPrepared(boolean startAfterPrepared) {
+        this.mStartAfterPrepared = startAfterPrepared;
+    }
 }

@@ -1,18 +1,20 @@
 package com.shuyu.gsyvideoplayer.video;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import moe.codeest.enviews.ENDownloadView;
 
@@ -50,14 +52,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      * @return
      */
     public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position) {
-        mUriList = url;
-        mPlayPosition = position;
-        GSYVideoModel gsyVideoModel = url.get(position);
-        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, gsyVideoModel.getTitle());
-        if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
-            mTitleTextView.setText(gsyVideoModel.getTitle());
-        }
-        return set;
+        return setUp(url, cacheWithPlay, position, null, new HashMap<String, String>());
     }
 
     /**
@@ -69,10 +64,38 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      * @return
      */
     public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath) {
+        return setUp(url, cacheWithPlay, position, cachePath, new HashMap<String, String>());
+    }
+
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param mapHeadData   http header
+     * @return
+     */
+    public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath, Map<String, String> mapHeadData) {
+        return setUp(url, cacheWithPlay, position, cachePath, mapHeadData, true);
+    }
+
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param mapHeadData   http header
+     * @param changeState
+     * @return
+     */
+    protected boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath, Map<String, String> mapHeadData, boolean changeState) {
         mUriList = url;
         mPlayPosition = position;
+        mMapHeadData = mapHeadData;
         GSYVideoModel gsyVideoModel = url.get(position);
-        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, cachePath, gsyVideoModel.getTitle());
+        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, cachePath, gsyVideoModel.getTitle(), changeState);
         if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
             mTitleTextView.setText(gsyVideoModel.getTitle());
         }
@@ -110,7 +133,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
 
     @Override
     public void onCompletion() {
-        if (mPlayPosition < (mUriList.size() - 1)) {
+        if (mPlayPosition < (mUriList.size())) {
             return;
         }
         super.onCompletion();
@@ -131,6 +154,12 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
     @Override
     protected void prepareVideo() {
         startPrepare();
+        if (mHadPlay && mPlayPosition < (mUriList.size())) {
+            setViewShowState(mLoadingProgressBar, VISIBLE);
+            if (mLoadingProgressBar instanceof ENDownloadView) {
+                ((ENDownloadView) mLoadingProgressBar).start();
+            }
+        }
     }
 
 
@@ -143,7 +172,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
     @Override
     protected void changeUiToNormal() {
         super.changeUiToNormal();
-        if (mHadPlay && mPlayPosition < (mUriList.size() - 1)) {
+        if (mHadPlay && mPlayPosition < (mUriList.size())) {
             setViewShowState(mThumbImageViewLayout, GONE);
             setViewShowState(mTopContainer, INVISIBLE);
             setViewShowState(mBottomContainer, INVISIBLE);
@@ -159,13 +188,14 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
 
     /**
      * 播放下一集
+     *
      * @return true表示还有下一集
      */
     public boolean playNext() {
         if (mPlayPosition < (mUriList.size() - 1)) {
             mPlayPosition++;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
-            setUp(gsyVideoModel.getUrl(), mCache, mCachePath, gsyVideoModel.getTitle());
+            setUp(mUriList, mCache, mPlayPosition, null, mMapHeadData, false);
             if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
             }
