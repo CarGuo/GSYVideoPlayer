@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.GSYRenderView;
+import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 
@@ -176,27 +178,45 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
 
     @Override
     public void onRenderResume() {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support onRenderResume now");
     }
 
     @Override
     public void onRenderPause() {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support onRenderPause now");
     }
 
     @Override
     public void releaseRenderAll() {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support releaseRenderAll now");
     }
 
     @Override
     public void setRenderMode(int mode) {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support setRenderMode now");
     }
 
     @Override
     public  void setRenderTransform(Matrix transform){
         setTransform(transform);
+    }
+
+    @Override
+    public void setGLRenderer(GSYVideoGLViewBaseRender renderer) {
+        Debuger.printfLog(getClass().getSimpleName() + " not support setGLRenderer now");
+    }
+
+    @Override
+    public void setGLMVPMatrix(float[] MVPMatrix) {
+        Debuger.printfLog(getClass().getSimpleName() + " not support setGLMVPMatrix now");
+    }
+
+    /**
+     * 设置滤镜效果
+     */
+    @Override
+    public void setGLEffectFilter(GSYVideoGLView.ShaderInterface effectFilter) {
+        Debuger.printfLog(getClass().getSimpleName() + " not support setGLEffectFilter now");
     }
 
     /**
