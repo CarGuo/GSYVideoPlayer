@@ -1,12 +1,21 @@
 package com.shuyu.gsyvideoplayer.render.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
+import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
+
+import java.io.File;
 
 /**
  * SurfaceView
@@ -80,8 +89,84 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     public int getSizeH() {
         return measureHelper.getMeasuredHeight();
     }
+
     @Override
     public int getSizeW() {
         return measureHelper.getMeasuredWidth();
     }
+
+    @Override
+    public Bitmap initCover() {
+        return null;
+    }
+
+    @Override
+    public Bitmap initCoverHigh() {
+        return null;
+    }
+
+    /**
+     * 获取截图
+     *
+     * @param shotHigh 是否需要高清的
+     */
+    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh) {
+
+    }
+
+    /**
+     * 保存截图
+     *
+     * @param high 是否需要高清的
+     */
+    public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+
+    }
+
+    @Override
+    public View getRenderView() {
+        return this;
+    }
+
+    @Override
+    public void onRenderResume() {
+
+    }
+
+    @Override
+    public void onRenderPause() {
+
+    }
+
+    @Override
+    public void releaseRenderAll() {
+
+    }
+
+    @Override
+    public void setRenderMode(int mode) {
+
+    }
+
+
+    @Override
+    public  void setRenderTransform(Matrix transform){
+
+    }
+
+    /**
+     * 添加播放的view
+     */
+    public static GSYSurfaceView addSurfaceView(Context context, ViewGroup textureViewContainer, int rotate,
+                                                final IGSYSurfaceListener gsySurfaceListener) {
+        if (textureViewContainer.getChildCount() > 0) {
+            textureViewContainer.removeAllViews();
+        }
+        GSYSurfaceView showSurfaceView = new GSYSurfaceView(context);
+        showSurfaceView.setIGSYSurfaceListener(gsySurfaceListener);
+        showSurfaceView.setRotation(rotate);
+        GSYRenderView.addToParent(textureViewContainer, showSurfaceView);
+        return showSurfaceView;
+    }
+
 }

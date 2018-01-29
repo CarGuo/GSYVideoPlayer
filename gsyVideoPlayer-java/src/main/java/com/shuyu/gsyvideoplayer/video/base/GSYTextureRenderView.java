@@ -107,19 +107,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
      * 添加播放的view
      */
     protected void addTextureView() {
-
         mTextureView = new GSYRenderView();
-
-        if (GSYVideoType.getRenderType() == GSYVideoType.SUFRACE) {
-            mTextureView.addSurfaceView(getContext(), mTextureViewContainer, mRotate, this);
-            return;
-        } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
-            mTextureView.addGLView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer);
-            setGLRenderMode(mMode);
-            return;
-        }
-        mTextureView.addTextureView(getContext(), mTextureViewContainer, mRotate, this);
-
+        mTextureView.addView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer, mMode);
     }
 
     /**
@@ -170,6 +159,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
         }
         return null;
     }
+
 
     //暂停时使用绘制画面显示暂停、避免黑屏
     protected abstract void showPauseCover();

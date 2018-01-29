@@ -2,19 +2,28 @@ package com.shuyu.gsyvideoplayer.render.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.Surface;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
+import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.render.view.listener.GSYVideoGLRenderErrorListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
 import com.shuyu.gsyvideoplayer.render.view.listener.GLSurfaceListener;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
+
+import java.io.File;
 
 
 /**
@@ -219,6 +228,127 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
         return mMVPMatrix;
     }
 
+
+    @Override
+    public Bitmap initCover() {
+        return null;
+    }
+
+    @Override
+    public Bitmap initCoverHigh() {
+        return null;
+    }
+
+
+    /**
+     * 获取截图
+     *
+     * @param shotHigh 是否需要高清的
+     */
+    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh) {
+        if (gsyVideoShotListener != null) {
+            setGSYVideoShotListener(gsyVideoShotListener, shotHigh);
+            takeShotPic();
+
+        }
+    }
+
+    /**
+     * 保存截图
+     *
+     * @param high 是否需要高清的
+     */
+    public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+        GSYVideoShotListener gsyVideoShotListener = new GSYVideoShotListener() {
+            @Override
+            public void getBitmap(Bitmap bitmap) {
+                if (bitmap == null) {
+                    gsyVideoShotSaveListener.result(false, file);
+                } else {
+                    FileUtils.saveBitmap(bitmap, file);
+                    gsyVideoShotSaveListener.result(true, file);
+                }
+            }
+        };
+        setGSYVideoShotListener(gsyVideoShotListener, high);
+        takeShotPic();
+    }
+
+    @Override
+    public View getRenderView() {
+        return this;
+    }
+
+
+    @Override
+    public void onRenderResume() {
+        requestLayout();
+        onResume();
+    }
+
+    @Override
+    public void onRenderPause() {
+        requestLayout();
+        onPause();
+
+    }
+
+    @Override
+    public void releaseRenderAll() {
+        requestLayout();
+        releaseAll();
+
+    }
+
+    @Override
+    public void setRenderMode(int mode) {
+        setMode(mode);
+    }
+
+
+    @Override
+    public void setRenderTransform(Matrix transform) {
+
+    }
+
+    /**
+     * 添加播放的view
+     */
+    public static GSYVideoGLView addGLView(final Context context, final ViewGroup textureViewContainer, final int rotate,
+                                           final IGSYSurfaceListener gsySurfaceListener,
+                                           final GSYVideoGLView.ShaderInterface effect, final float[] transform,
+                                           final GSYVideoGLViewBaseRender customRender) {
+        if (textureViewContainer.getChildCount() > 0) {
+            textureViewContainer.removeAllViews();
+        }
+        final GSYVideoGLView gsyVideoGLView = new GSYVideoGLView(context);
+        if (customRender != null) {
+            gsyVideoGLView.setCustomRenderer(customRender);
+        }
+        gsyVideoGLView.setEffect(effect);
+        gsyVideoGLView.setIGSYSurfaceListener(gsySurfaceListener);
+        gsyVideoGLView.setRotation(rotate);
+        gsyVideoGLView.initRender();
+        gsyVideoGLView.setGSYVideoGLRenderErrorListener(new GSYVideoGLRenderErrorListener() {
+            @Override
+            public void onError(GSYVideoGLViewBaseRender render, String Error, int code, boolean byChangedRenderError) {
+                if (byChangedRenderError)
+                    addGLView(context,
+                            textureViewContainer,
+                            rotate,
+                            gsySurfaceListener,
+                            render.getEffect(),
+                            render.getMVPMatrix(),
+                            render);
+
+            }
+        });
+        if (transform != null && transform.length == 16) {
+            gsyVideoGLView.setMVPMatrix(transform);
+        }
+        GSYRenderView.addToParent(textureViewContainer, gsyVideoGLView);
+        return gsyVideoGLView;
+    }
 
 
 }
