@@ -188,6 +188,25 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
     }
 
+    /**
+     * 设置滤镜效果
+     *
+     * @param shaderEffect
+     */
+    @Override
+    public void setEffect(GSYVideoGLView.ShaderInterface shaderEffect) {
+        if (shaderEffect != null) {
+            mEffect = shaderEffect;
+        }
+        mChangeProgram = true;
+        mChangeProgramSupportError = true;
+    }
+
+    @Override
+    public GSYVideoGLView.ShaderInterface getEffect() {
+        return mEffect;
+    }
+
     protected void initDrawFrame() {
         if (mChangeProgram) {
             mProgram = createProgram(getVertexShader(), getFragmentShader());
@@ -295,20 +314,6 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
         this.mGSYVideoShotListener = listener;
         this.mHighShot = high;
     }
-
-    /**
-     * 设置滤镜效果
-     *
-     * @param shaderEffect
-     */
-    public void setEffect(GSYVideoGLView.ShaderInterface shaderEffect) {
-        if (shaderEffect != null) {
-            mEffect = shaderEffect;
-        }
-        mChangeProgram = true;
-        mChangeProgramSupportError = true;
-    }
-
 }
 
 

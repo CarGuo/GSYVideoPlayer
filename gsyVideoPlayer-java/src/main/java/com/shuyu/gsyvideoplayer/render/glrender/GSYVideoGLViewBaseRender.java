@@ -128,7 +128,7 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
                 @Override
                 public void run() {
                     if (mGSYVideoGLRenderErrorListener != null) {
-                        mGSYVideoGLRenderErrorListener.onError(op + ": glError " + error, error, mChangeProgramSupportError);
+                        mGSYVideoGLRenderErrorListener.onError(GSYVideoGLViewBaseRender.this, op + ": glError " + error, error, mChangeProgramSupportError);
                     }
                     mChangeProgramSupportError = false;
                 }
@@ -206,6 +206,12 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
      */
     public void setEffect(GSYVideoGLView.ShaderInterface shaderEffect) {
     }
+
+
+    public GSYVideoGLView.ShaderInterface getEffect() {
+        return null;
+    }
+
 
     public int getCurrentViewWidth() {
         return mCurrentViewWidth;

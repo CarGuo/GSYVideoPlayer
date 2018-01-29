@@ -70,8 +70,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     @BindView(R.id.loadingView)
     View loadingView;
 
-    //private String url = "https://res.exexm.com/cw_145225549855002";
-    private String url = "http://120.132.18.193:8080/vod/2017/12/22/1513910320525459.mp4";
+    private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
 
     private GifCreateHelper mGifCreateHelper;
 
