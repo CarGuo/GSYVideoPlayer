@@ -1,4 +1,4 @@
-package com.shuyu.gsyvideoplayer.listener;
+package com.shuyu.gsyvideoplayer.render.view.listener;
 
 /**
  * GL渲染错误
