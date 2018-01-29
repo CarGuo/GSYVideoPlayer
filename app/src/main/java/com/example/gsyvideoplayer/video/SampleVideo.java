@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -150,11 +151,17 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 需要在尺寸发生变化的时候重新处理
      */
     @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        super.onSurfaceTextureSizeChanged(surface, width, height);
+    public void onSurfaceSizeChanged(Surface surface, int width, int height) {
+        super.onSurfaceSizeChanged(surface, width, height);
         resolveTransform();
     }
 
+    @Override
+    public void onSurfaceAvailable(Surface surface) {
+        super.onSurfaceAvailable(surface);
+        resolveRotateUI();
+        resolveTransform();
+    }
 
     /**
      * 处理镜像旋转
@@ -268,16 +275,6 @@ public class SampleVideo extends StandardGSYVideoPlayer {
             setUp(mUrlList, mCache, mCachePath, mTitle);
             resolveTypeUI();
         }
-    }
-
-    /**
-     * 处理显示逻辑
-     */
-    @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        super.onSurfaceTextureAvailable(surface, width, height);
-        resolveRotateUI();
-        resolveTransform();
     }
 
     /**

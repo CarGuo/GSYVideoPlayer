@@ -5,20 +5,20 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Handler;
 import android.view.Gravity;
-import android.view.SurfaceHolder;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.shuyu.gsyvideoplayer.listener.GSYVideoGLRenderErrorListener;
+import com.shuyu.gsyvideoplayer.render.view.listener.GSYVideoGLRenderErrorListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.view.GSYSurfaceView;
 import com.shuyu.gsyvideoplayer.render.view.GSYTextureView;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
+import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
@@ -207,13 +207,13 @@ public class GSYRenderView {
     /**
      * 添加播放的view
      */
-    public void addTextureView(Context context, ViewGroup textureViewContainer, int rotate, TextureView.SurfaceTextureListener listener) {
+    public void addTextureView(Context context, ViewGroup textureViewContainer, int rotate, final IGSYSurfaceListener gsySurfaceListener) {
 
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
         GSYTextureView gsyTextureView = new GSYTextureView(context);
-        gsyTextureView.setSurfaceTextureListener(listener);
+        gsyTextureView.setIGSYSurfaceListener(gsySurfaceListener);
         gsyTextureView.setRotation(rotate);
 
         mShowView = gsyTextureView;
@@ -224,12 +224,13 @@ public class GSYRenderView {
     /**
      * 添加播放的view
      */
-    public void addSurfaceView(Context context, ViewGroup textureViewContainer, int rotate, SurfaceHolder.Callback2 callback2) {
+    public void addSurfaceView(Context context, ViewGroup textureViewContainer, int rotate,
+                               final IGSYSurfaceListener gsySurfaceListener) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
         GSYSurfaceView showSurfaceView = new GSYSurfaceView(context);
-        showSurfaceView.getHolder().addCallback(callback2);
+        showSurfaceView.setIGSYSurfaceListener(gsySurfaceListener);
         showSurfaceView.setRotation(rotate);
 
         mShowView = showSurfaceView;
@@ -241,9 +242,9 @@ public class GSYRenderView {
      * 添加播放的view
      */
     public void addGLView(final Context context, final ViewGroup textureViewContainer, final int rotate,
-                          final GSYVideoGLView.onGSYSurfaceListener gsySurfaceListener,
+                          final IGSYSurfaceListener gsySurfaceListener,
                           final GSYVideoGLView.ShaderInterface effect, final float[] transform,
-                          final GSYVideoGLViewBaseRender customRender, final GSYVideoGLRenderErrorListener videoGLRenderErrorListener) {
+                          final GSYVideoGLViewBaseRender customRender) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
@@ -252,16 +253,28 @@ public class GSYRenderView {
             gsyVideoGLView.setCustomRenderer(customRender);
         }
         gsyVideoGLView.setEffect(effect);
-        gsyVideoGLView.setGSYSurfaceListener(gsySurfaceListener);
+        gsyVideoGLView.setIGSYSurfaceListener(gsySurfaceListener);
         gsyVideoGLView.setRotation(rotate);
         gsyVideoGLView.initRender();
-        gsyVideoGLView.setGSYVideoGLRenderErrorListener(videoGLRenderErrorListener);
+        gsyVideoGLView.setGSYVideoGLRenderErrorListener(new GSYVideoGLRenderErrorListener() {
+            @Override
+            public void onError(String Error, int code, boolean byChangedRenderError) {
+                if(mShowView instanceof GSYVideoGLView) {
+                    GSYVideoGLView glSurfaceView = (GSYVideoGLView) mShowView;
+                    addGLView(context,
+                            textureViewContainer,
+                            rotate,
+                            gsySurfaceListener,
+                            glSurfaceView.getEffect(),
+                            glSurfaceView.getMVPMatrix(),
+                            glSurfaceView.getRenderer());
+                }
+            }
+        });
         mShowView = gsyVideoGLView;
-
         if (transform != null && transform.length == 16) {
             gsyVideoGLView.setMVPMatrix(transform);
         }
-
         addToParent(textureViewContainer, gsyVideoGLView);
     }
 
