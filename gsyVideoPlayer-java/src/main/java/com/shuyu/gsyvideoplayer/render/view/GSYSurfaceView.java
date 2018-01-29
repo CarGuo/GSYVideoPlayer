@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.GSYRenderView;
+import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 
 import java.io.File;
@@ -97,11 +99,13 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
     @Override
     public Bitmap initCover() {
+        Debuger.printfLog(getClass().getSimpleName() + " not support initCover now");
         return null;
     }
 
     @Override
     public Bitmap initCoverHigh() {
+        Debuger.printfLog(getClass().getSimpleName() + " not support initCoverHigh now");
         return null;
     }
 
@@ -111,7 +115,7 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      * @param shotHigh 是否需要高清的
      */
     public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh) {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support taskShotPic now");
     }
 
     /**
@@ -120,7 +124,7 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      * @param high 是否需要高清的
      */
     public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support saveFrame now");
     }
 
     @Override
@@ -130,29 +134,48 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
     @Override
     public void onRenderResume() {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support onRenderResume now");
     }
 
     @Override
     public void onRenderPause() {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support onRenderPause now");
     }
 
     @Override
     public void releaseRenderAll() {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support releaseRenderAll now");
     }
 
     @Override
     public void setRenderMode(int mode) {
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support setRenderMode now");
     }
 
 
     @Override
     public  void setRenderTransform(Matrix transform){
-
+        Debuger.printfLog(getClass().getSimpleName() + " not support setRenderTransform now");
     }
+
+    @Override
+    public void setGLRenderer(GSYVideoGLViewBaseRender renderer) {
+        Debuger.printfLog(getClass().getSimpleName() + " not support setGLRenderer now");
+    }
+
+    @Override
+    public void setGLMVPMatrix(float[] MVPMatrix) {
+        Debuger.printfLog(getClass().getSimpleName() + " not support setGLMVPMatrix now");
+    }
+
+    /**
+     * 设置滤镜效果
+     */
+    @Override
+    public void setGLEffectFilter(GSYVideoGLView.ShaderInterface effectFilter) {
+        Debuger.printfLog(getClass().getSimpleName() + " not support setGLEffectFilter now");
+    }
+
 
     /**
      * 添加播放的view

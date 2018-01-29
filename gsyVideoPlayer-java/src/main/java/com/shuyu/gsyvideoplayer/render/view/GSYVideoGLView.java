@@ -19,6 +19,7 @@ import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
 import com.shuyu.gsyvideoplayer.render.view.listener.GLSurfaceListener;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
@@ -130,6 +131,108 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
         return measureHelper.getMeasuredWidth();
     }
 
+    @Override
+    public Bitmap initCover() {
+        Debuger.printfLog(getClass().getSimpleName() + " not support initCover now");
+        return null;
+    }
+
+    @Override
+    public Bitmap initCoverHigh() {
+        Debuger.printfLog(getClass().getSimpleName() + " not support initCoverHigh now");
+        return null;
+    }
+
+    /**
+     * 获取截图
+     *
+     * @param shotHigh 是否需要高清的
+     */
+    @Override
+    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh) {
+        if (gsyVideoShotListener != null) {
+            setGSYVideoShotListener(gsyVideoShotListener, shotHigh);
+            takeShotPic();
+
+        }
+    }
+
+    /**
+     * 保存截图
+     *
+     * @param high 是否需要高清的
+     */
+    @Override
+    public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+        GSYVideoShotListener gsyVideoShotListener = new GSYVideoShotListener() {
+            @Override
+            public void getBitmap(Bitmap bitmap) {
+                if (bitmap == null) {
+                    gsyVideoShotSaveListener.result(false, file);
+                } else {
+                    FileUtils.saveBitmap(bitmap, file);
+                    gsyVideoShotSaveListener.result(true, file);
+                }
+            }
+        };
+        setGSYVideoShotListener(gsyVideoShotListener, high);
+        takeShotPic();
+    }
+
+    @Override
+    public View getRenderView() {
+        return this;
+    }
+
+
+    @Override
+    public void onRenderResume() {
+        requestLayout();
+        onResume();
+    }
+
+    @Override
+    public void onRenderPause() {
+        requestLayout();
+        onPause();
+
+    }
+
+    @Override
+    public void releaseRenderAll() {
+        requestLayout();
+        releaseAll();
+
+    }
+
+    @Override
+    public void setRenderMode(int mode) {
+        setMode(mode);
+    }
+
+
+    @Override
+    public void setRenderTransform(Matrix transform) {
+        Debuger.printfLog(getClass().getSimpleName() + " not support setRenderTransform now");
+    }
+
+    @Override
+    public void setGLRenderer(GSYVideoGLViewBaseRender renderer) {
+        setCustomRenderer(renderer);
+    }
+
+    @Override
+    public void setGLMVPMatrix(float[] MVPMatrix) {
+        setMVPMatrix(MVPMatrix);
+    }
+
+    /**
+     * 设置滤镜效果
+     */
+    @Override
+    public void setGLEffectFilter(GSYVideoGLView.ShaderInterface effectFilter) {
+        setEffect(effectFilter);
+    }
 
     protected void initRenderMeasure() {
         if (GSYVideoManager.instance().getMediaPlayer() != null && mMode == MODE_RENDER_SIZE) {
@@ -215,7 +318,6 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
         }
     }
 
-
     public GSYVideoGLViewBaseRender getRenderer() {
         return mRenderer;
     }
@@ -228,96 +330,13 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
         return mMVPMatrix;
     }
 
-
-    @Override
-    public Bitmap initCover() {
-        return null;
-    }
-
-    @Override
-    public Bitmap initCoverHigh() {
-        return null;
-    }
-
-
-    /**
-     * 获取截图
-     *
-     * @param shotHigh 是否需要高清的
-     */
-    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh) {
-        if (gsyVideoShotListener != null) {
-            setGSYVideoShotListener(gsyVideoShotListener, shotHigh);
-            takeShotPic();
-
-        }
-    }
-
-    /**
-     * 保存截图
-     *
-     * @param high 是否需要高清的
-     */
-    public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
-        GSYVideoShotListener gsyVideoShotListener = new GSYVideoShotListener() {
-            @Override
-            public void getBitmap(Bitmap bitmap) {
-                if (bitmap == null) {
-                    gsyVideoShotSaveListener.result(false, file);
-                } else {
-                    FileUtils.saveBitmap(bitmap, file);
-                    gsyVideoShotSaveListener.result(true, file);
-                }
-            }
-        };
-        setGSYVideoShotListener(gsyVideoShotListener, high);
-        takeShotPic();
-    }
-
-    @Override
-    public View getRenderView() {
-        return this;
-    }
-
-
-    @Override
-    public void onRenderResume() {
-        requestLayout();
-        onResume();
-    }
-
-    @Override
-    public void onRenderPause() {
-        requestLayout();
-        onPause();
-
-    }
-
-    @Override
-    public void releaseRenderAll() {
-        requestLayout();
-        releaseAll();
-
-    }
-
-    @Override
-    public void setRenderMode(int mode) {
-        setMode(mode);
-    }
-
-
-    @Override
-    public void setRenderTransform(Matrix transform) {
-
-    }
-
     /**
      * 添加播放的view
      */
     public static GSYVideoGLView addGLView(final Context context, final ViewGroup textureViewContainer, final int rotate,
                                            final IGSYSurfaceListener gsySurfaceListener,
                                            final GSYVideoGLView.ShaderInterface effect, final float[] transform,
-                                           final GSYVideoGLViewBaseRender customRender) {
+                                           final GSYVideoGLViewBaseRender customRender, final int renderMode) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
@@ -326,6 +345,7 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
             gsyVideoGLView.setCustomRenderer(customRender);
         }
         gsyVideoGLView.setEffect(effect);
+        gsyVideoGLView.setRenderMode(renderMode);
         gsyVideoGLView.setIGSYSurfaceListener(gsySurfaceListener);
         gsyVideoGLView.setRotation(rotate);
         gsyVideoGLView.initRender();
@@ -339,7 +359,7 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
                             gsySurfaceListener,
                             render.getEffect(),
                             render.getMVPMatrix(),
-                            render);
+                            render, renderMode);
 
             }
         });

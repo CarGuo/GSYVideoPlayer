@@ -10,6 +10,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
@@ -36,17 +37,19 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
     //满屏填充暂停为徒
     protected Bitmap mFullPauseBitmap;
 
-    //滤镜
+    //GL的滤镜
     protected GSYVideoGLView.ShaderInterface mEffectFilter = new NoEffect();
 
+    //GL的自定义渲染
+    protected GSYVideoGLViewBaseRender mRenderer;
+
+    //GL的角度
     protected float[] mMatrixGL = null;
 
     //画面选择角度
     protected int mRotate;
 
-    //自定义渲染
-    protected GSYVideoGLViewBaseRender mRenderer;
-
+    //GL的布局模式
     protected int mMode = GSYVideoGLView.MODE_LAYOUT_SIZE;
 
     public GSYTextureRenderView(@NonNull Context context) {
@@ -150,32 +153,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
         mTextureViewContainer.setOnTouchListener(onTouchListener);
         mTextureViewContainer.setOnClickListener(null);
         setSmallVideoTextureView();
-
     }
-
-    protected GSYVideoGLView getGSYVideoGLSView() {
-        if (mTextureView != null && mTextureView.getShowView() instanceof GSYVideoGLView) {
-            return (GSYVideoGLView) mTextureView.getShowView();
-        }
-        return null;
-    }
-
-
-    //暂停时使用绘制画面显示暂停、避免黑屏
-    protected abstract void showPauseCover();
-
-    //清除暂停画面
-    protected abstract void releasePauseCover();
-
-    //小屏幕绘制层
-    protected abstract void setSmallVideoTextureView();
-
-    //设置播放
-    protected abstract void setDisplay(Surface surface);
-
-    //释放
-    protected abstract void releaseSurface(Surface surface);
-
 
     public GSYVideoGLView.ShaderInterface getEffectFilter() {
         return mEffectFilter;
@@ -193,10 +171,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
      */
     public void setEffectFilter(GSYVideoGLView.ShaderInterface effectFilter) {
         this.mEffectFilter = effectFilter;
-        if (mTextureView != null && mTextureView.getShowView() instanceof GSYVideoGLView) {
-            GSYVideoGLView gsyVideoGLView =
-                    (GSYVideoGLView) mTextureView.getShowView();
-            gsyVideoGLView.setEffect(effectFilter);
+        if (mTextureView != null) {
+            mTextureView.setEffectFilter(effectFilter);
         }
     }
 
@@ -207,11 +183,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
      */
     public void setMatrixGL(float[] matrixGL) {
         this.mMatrixGL = matrixGL;
-        if (mTextureView != null && mTextureView.getShowView() instanceof GSYVideoGLView
-                && mMatrixGL != null && mMatrixGL.length == 16) {
-            GSYVideoGLView gsyVideoGLView =
-                    (GSYVideoGLView) mTextureView.getShowView();
-            gsyVideoGLView.setMVPMatrix(mMatrixGL);
+        if (mTextureView != null) {
+            mTextureView.setMatrixGL(mMatrixGL);
         }
     }
 
@@ -220,11 +193,8 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
      */
     public void setCustomGLRenderer(GSYVideoGLViewBaseRender renderer) {
         this.mRenderer = renderer;
-        if (mTextureView != null && mRenderer != null &&
-                mTextureView.getShowView() instanceof GSYVideoGLView) {
-            GSYVideoGLView gsyVideoGLView =
-                    (GSYVideoGLView) mTextureView.getShowView();
-            gsyVideoGLView.setCustomRenderer(mRenderer);
+        if (mTextureView != null) {
+            mTextureView.setGLRenderer(renderer);
         }
     }
 
@@ -235,11 +205,24 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
      */
     public void setGLRenderMode(int mode) {
         mMode = mode;
-        if (mTextureView != null && mRenderer != null &&
-                mTextureView.getShowView() instanceof GSYVideoGLView) {
-            GSYVideoGLView gsyVideoGLView = (GSYVideoGLView) mTextureView.getShowView();
-            gsyVideoGLView.setMode(mode);
+        if (mTextureView != null) {
+            mTextureView.setGLRenderMode(mode);
         }
     }
 
+
+    //暂停时使用绘制画面显示暂停、避免黑屏
+    protected abstract void showPauseCover();
+
+    //清除暂停画面
+    protected abstract void releasePauseCover();
+
+    //小屏幕绘制层
+    protected abstract void setSmallVideoTextureView();
+
+    //设置播放
+    protected abstract void setDisplay(Surface surface);
+
+    //释放
+    protected abstract void releaseSurface(Surface surface);
 }
