@@ -181,7 +181,17 @@ list.add(videoOphtionModel);
 GSYVideoManager.instance().setOptionModelList(list);
 ```
 
-#### 18、全屏与非全屏的同步问题
+#### 18、url切换400（http与https域名共用）
+
+```
+VideoOptionModel videoOptionModel =
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);
+        List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel);
+        GSYVideoManager.instance().setOptionModelList(list);
+```
+
+#### 19、全屏与非全屏的同步问题
 
 有一些自定义操作，需要全屏与非全屏切换之间做同步处理，具体操作是重载下面两个方法，实现自己的自定义操作，详细可参考demo。
 外部获取当前播放器，推荐使用`play.getCurPlay().xxxxxx`

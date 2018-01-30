@@ -135,6 +135,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 * 4、增加GSYVideoHelper视频帮助类，更加节省资源
 * 5、增加GSYSampleCallBack节省继承
 * 6、增加GSYVideoViewBridge、重载`getGSYVideoManager()`方法实现自己的Manager
+* 7、支持自定义渲染层，demo中`CustomRenderVideoPlayer`演示如何设置自定义渲染层。
 
 
 
