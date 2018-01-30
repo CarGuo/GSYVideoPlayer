@@ -209,5 +209,6 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 
 ```
 请参看IJKPlayer和AndroidVideoCache相关协议。
-项目最开始是从jiecao过来的，只是后来方向不同，所以慢慢的也异化了。
+项目最开始是从jiecao过来的，改着改着直接重构了。
+偶尔有一变量和方法名可能还有点jiaozi的影子，但是基本是一个新项目。
 ```
