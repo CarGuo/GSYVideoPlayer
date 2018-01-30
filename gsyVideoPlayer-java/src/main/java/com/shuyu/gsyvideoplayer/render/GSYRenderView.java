@@ -28,7 +28,7 @@ import java.io.File;
 
 public class GSYRenderView {
 
-    private IGSYRenderView mShowView;
+    protected IGSYRenderView mShowView;
 
     /*************************RenderView function start *************************/
     public void requestLayout() {
