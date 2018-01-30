@@ -108,6 +108,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
 
     /**
      * 添加播放的view
+     * 继承后重载addTextureView，继承GSYRenderView后实现自己的IGSYRenderView类，既可以使用自己自定义的显示层
      */
     protected void addTextureView() {
         mTextureView = new GSYRenderView();
