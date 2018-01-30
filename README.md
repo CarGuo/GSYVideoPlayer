@@ -136,7 +136,8 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 * 5、增加GSYSampleCallBack节省继承。
 * 6、增加GSYVideoViewBridge、重载`getGSYVideoManager()`方法实现自己的Manager。
 * 7、支持自定义渲染层，demo中`CustomRenderVideoPlayer`演示如何设置自定义渲染层。
-* 8、增加音频焦点方法。
+* 8、`getCurrentPlayer()`方法增加getSmallWindowPlayer支持
+* 9、增加音频焦点方法。
 ```
 /**
   * 长时间失去音频焦点，暂停播放器
