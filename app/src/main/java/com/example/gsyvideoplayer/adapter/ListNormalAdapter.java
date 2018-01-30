@@ -93,7 +93,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
         //默认缓存路径
         //使用lazy的set可以避免滑动卡的情况存在
-        holder.gsyVideoPlayer.setUpLazy(url, true, null, null,"这是title");
+        holder.gsyVideoPlayer.setUpLazy(url, true, null, null, "这是title");
 
         //holder.gsyVideoPlayer.setNeedShowWifiTip(false);
 
@@ -166,14 +166,15 @@ public class ListNormalAdapter extends BaseAdapter {
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
                 Debuger.printfLog("onPrepared");
-                if (!holder.gsyVideoPlayer.isIfCurrentIsFullscreen()) {
+                boolean full = holder.gsyVideoPlayer.getCurrentPlayer().isIfCurrentIsFullscreen();
+                if (!holder.gsyVideoPlayer.getCurrentPlayer().isIfCurrentIsFullscreen()) {
                     GSYVideoManager.instance().setNeedMute(true);
                 }
                 curPlayer = (StandardGSYVideoPlayer) objects[1];
                 isPlay = true;
                 if (getListNeedAutoLand()) {
                     //重力全屏工具类
-                    initOrientationUtils(holder.gsyVideoPlayer);
+                    initOrientationUtils(holder.gsyVideoPlayer, full);
                     ListNormalAdapter.this.onPrepared();
                 }
             }
@@ -191,7 +192,7 @@ public class ListNormalAdapter extends BaseAdapter {
             public void onEnterFullscreen(String url, Object... objects) {
                 super.onEnterFullscreen(url, objects);
                 GSYVideoManager.instance().setNeedMute(false);
-                holder.gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String)objects[0]);
+                holder.gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
             }
 
             @Override
@@ -240,11 +241,12 @@ public class ListNormalAdapter extends BaseAdapter {
         return true;
     }
 
-    private void initOrientationUtils(StandardGSYVideoPlayer standardGSYVideoPlayer) {
+    private void initOrientationUtils(StandardGSYVideoPlayer standardGSYVideoPlayer, boolean full) {
         orientationUtils = new OrientationUtils((Activity) context, standardGSYVideoPlayer);
         //是否需要跟随系统旋转设置
         //orientationUtils.setRotateWithSystem(false);
         orientationUtils.setEnable(false);
+        orientationUtils.setIsLand((full) ? 1 : 0);
     }
 
     private void resolveFull() {
