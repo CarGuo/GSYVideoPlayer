@@ -61,7 +61,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     //避免切换时频繁setup
     public static final int CHANGE_DELAY_TIME = 2000;
 
-
     //当前的播放状态
     protected int mCurrentState = -1;
 
@@ -124,6 +123,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     //Prepared
     protected boolean mHadPrepared = false;
+
+    //是否播放器当失去音频焦点
+    protected boolean mReleaseWhenLossAudio = true;
 
     //音频焦点的监听
     protected AudioManager mAudioManager;
@@ -315,15 +317,17 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     post(new Runnable() {
                         @Override
                         public void run() {
-                            releaseVideos();
+                            if (mReleaseWhenLossAudio) {
+                                releaseVideos();
+                            } else {
+                                onVideoPause();
+                            }
                         }
                     });
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     try {
-                        if (getGSYVideoManager().getMediaPlayer() != null && getGSYVideoManager().getMediaPlayer().isPlaying()) {
-                            getGSYVideoManager().getMediaPlayer().pause();
-                        }
+                        onVideoPause();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -465,6 +469,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     getGSYVideoManager().getMediaPlayer().seekTo(mCurrentPosition);
                     getGSYVideoManager().getMediaPlayer().start();
                     setStateAndUi(CURRENT_STATE_PLAYING);
+                    if (mAudioManager != null && !mReleaseWhenLossAudio) {
+                        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                    }
                     mCurrentPosition = 0;
                 }
             } catch (Exception e) {
@@ -1026,7 +1033,25 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         return mStartAfterPrepared;
     }
 
+    /**
+     * 准备成功之后立即播放
+     *
+     * @param startAfterPrepared 默认true，false的时候需要在prepared后调用startAfterPrepared()
+     */
     public void setStartAfterPrepared(boolean startAfterPrepared) {
         this.mStartAfterPrepared = startAfterPrepared;
+    }
+
+    public boolean isReleaseWhenLossAudio() {
+        return mReleaseWhenLossAudio;
+    }
+
+    /**
+     * 长时间失去音频焦点，暂停播放器
+     *
+     * @param releaseWhenLossAudio 默认true，false的时候只会暂停
+     */
+    public void setReleaseWhenLossAudio(boolean releaseWhenLossAudio) {
+        this.mReleaseWhenLossAudio = releaseWhenLossAudio;
     }
 }

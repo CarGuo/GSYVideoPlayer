@@ -217,6 +217,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mHadPrepared = from.mHadPrepared;
         to.mStartAfterPrepared = from.mStartAfterPrepared;
         to.mPauseBeforePrepared = from.mPauseBeforePrepared;
+        to.mReleaseWhenLossAudio = from.mReleaseWhenLossAudio;
         if(from.mSetUpLazy) {
             to.setUpLazy(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
             to.mUrl = from.mUrl;

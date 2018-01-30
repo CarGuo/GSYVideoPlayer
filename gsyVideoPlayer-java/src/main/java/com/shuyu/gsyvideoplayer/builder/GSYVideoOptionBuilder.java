@@ -99,6 +99,12 @@ public class GSYVideoOptionBuilder {
     //是否需要lazy的setup
     protected boolean mSetUpLazy = false;
 
+    //Prepared之后是否自动开始播放
+    protected boolean mStartAfterPrepared = true;
+
+    //是否播放器当失去音频焦点
+    protected boolean mReleaseWhenLossAudio = true;
+
     //播放的tag，防止错误，因为普通的url也可能重复
     protected String mPlayTag = "";
 
@@ -361,6 +367,27 @@ public class GSYVideoOptionBuilder {
     }
 
     /**
+     * 准备成功之后立即播放
+     *
+     * @param startAfterPrepared 默认true，false的时候需要在prepared后调用startAfterPrepared()
+     */
+    public GSYVideoOptionBuilder setStartAfterPrepared(boolean startAfterPrepared) {
+        this.mStartAfterPrepared = startAfterPrepared;
+        return this;
+    }
+
+
+    /**
+     * 长时间失去音频焦点，暂停播放器
+     *
+     * @param releaseWhenLossAudio 默认true，false的时候只会暂停
+     */
+    public GSYVideoOptionBuilder setReleaseWhenLossAudio(boolean releaseWhenLossAudio) {
+        this.mReleaseWhenLossAudio = releaseWhenLossAudio;
+        return this;
+    }
+
+    /**
      * 自定指定缓存路径，推荐不设置，使用默认路径
      *
      * @param cachePath
@@ -563,6 +590,8 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setIsTouchWigetFull(mIsTouchWigetFull);
         gsyVideoPlayer.setNeedShowWifiTip(mNeedShowWifiTip);
         gsyVideoPlayer.setEffectFilter(mEffectFilter);
+        gsyVideoPlayer.setStartAfterPrepared(mStartAfterPrepared);
+        gsyVideoPlayer.setReleaseWhenLossAudio(mReleaseWhenLossAudio);
         if (mEnlargeImageRes > 0) {
             gsyVideoPlayer.setEnlargeImageRes(mEnlargeImageRes);
         }
@@ -572,7 +601,7 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setShowPauseCover(mShowPauseCover);
         gsyVideoPlayer.setSeekRatio(mSeekRatio);
         gsyVideoPlayer.setRotateWithSystem(mRotateWithSystem);
-        if(mSetUpLazy) {
+        if (mSetUpLazy) {
             gsyVideoPlayer.setUpLazy(mUrl, mCacheWithPlay, mCachePath, mMapHeadData, mVideoTitle);
         } else {
             gsyVideoPlayer.setUp(mUrl, mCacheWithPlay, mCachePath, mMapHeadData, mVideoTitle);

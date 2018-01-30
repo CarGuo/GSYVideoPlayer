@@ -177,7 +177,6 @@ public class DetailPlayer extends AppCompatActivity {
                 detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
             }
         });
-
     }
 
     @Override

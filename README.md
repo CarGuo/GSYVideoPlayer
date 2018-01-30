@@ -128,14 +128,24 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 ## 五、近期版本
 
 ### 3.1.0（2018-xx-xx）
-* 1、新增片头广告支持
+* 1、新增片头广告支持。
 `GSYSampleADVideoPlayer 与 DetailADPlayer`
-* 2、优化了ListGSYVideoPlayer、增加`playNext()`接口
-* 3、优化代码结构，调整部分API接口
-* 4、增加GSYVideoHelper视频帮助类，更加节省资源
-* 5、增加GSYSampleCallBack节省继承
-* 6、增加GSYVideoViewBridge、重载`getGSYVideoManager()`方法实现自己的Manager
+* 2、优化了ListGSYVideoPlayer、增加`playNext()`接口。
+* 3、优化代码结构，调整部分API接口。
+* 4、增加GSYVideoHelper视频帮助类，更加节省资源。
+* 5、增加GSYSampleCallBack节省继承。
+* 6、增加GSYVideoViewBridge、重载`getGSYVideoManager()`方法实现自己的Manager。
 * 7、支持自定义渲染层，demo中`CustomRenderVideoPlayer`演示如何设置自定义渲染层。
+* 8、增加音频焦点方法。
+```
+/**
+  * 长时间失去音频焦点，暂停播放器
+  *
+  * @param releaseWhenLossAudio 默认true，false的时候只会暂停
+  */
+ public void setReleaseWhenLossAudio(boolean releaseWhenLossAudio)
+
+```
 
 
 
