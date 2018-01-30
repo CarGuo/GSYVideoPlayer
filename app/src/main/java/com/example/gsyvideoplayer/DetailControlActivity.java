@@ -75,15 +75,9 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     @BindView(R.id.loadingView)
     View loadingView;
 
-    //private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+    private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
     //private String url = "https://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/8908d124aa839d0d3fa9593855ef5957.m3u8";
     //private String url2 = "http://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/3aca1a0db8db9418dcbc765848c8903e.m3u8";
-
-
-    private String url = "rtsp://ajj:12345678@218.21.217.122:65523/h264/ch40/sub/av_stream";
-    private String url2 = "rtsp://ajj:ajj12345678@218.21.217.122:65522/h264/ch15/sub/av_stream";
-
-
 
 
     private GifCreateHelper mGifCreateHelper;
@@ -131,15 +125,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         jump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //JumpUtils.gotoControl(DetailControlActivity.this);
+                JumpUtils.gotoControl(DetailControlActivity.this);
                 //startActivity(new Intent(DetailControlActivity.this, MainActivity.class));
-                detailPlayer.setUp(url2, false, "");
-                detailPlayer.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        detailPlayer.startPlayLogic();
-                    }
-                }, 1000);
             }
         });
 
