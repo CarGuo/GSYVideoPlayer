@@ -20,20 +20,44 @@ public interface IGSYRenderView {
 
     IGSYSurfaceListener getIGSYSurfaceListener();
 
+    /**
+     * Surface变化监听
+     */
     void setIGSYSurfaceListener(IGSYSurfaceListener surfaceListener);
 
+    /**
+     * 当前view高度
+     */
     int getSizeH();
 
+    /**
+     * 当前view宽度
+     */
     int getSizeW();
 
+    /**
+     * 截图
+     */
     void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh);
 
+    /**
+     * 保存当前帧
+     */
     void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener);
 
+    /**
+     * 实现该接口的view
+     */
     View getRenderView();
 
+    /**
+     * 获取当前画面的bitmap，没有返回空
+     */
     Bitmap initCover();
 
+    /**
+     * 获取当前画面的高质量bitmap，没有返回空
+     */
     Bitmap initCoverHigh();
 
     void onRenderResume();
