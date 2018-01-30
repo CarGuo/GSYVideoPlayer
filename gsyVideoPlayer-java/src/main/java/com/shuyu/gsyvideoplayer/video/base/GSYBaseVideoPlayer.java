@@ -754,11 +754,30 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     }
 
     /**
+     * 获取小窗口播放器对象
+     *
+     * @return GSYVideoPlayer 如果没有则返回空。
+     */
+    @SuppressWarnings("ResourceType")
+    public GSYVideoPlayer getSmallWindowPlayer() {
+        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
+        final View small = vp.findViewById(SMALL_ID);
+        GSYVideoPlayer gsyVideoPlayer = null;
+        if (small != null) {
+            gsyVideoPlayer = (GSYVideoPlayer) small;
+        }
+        return gsyVideoPlayer;
+    }
+
+    /**
      * 获取当前长在播放的播放控件
      */
     public GSYBaseVideoPlayer getCurrentPlayer() {
         if (getFullWindowPlayer() != null) {
             return getFullWindowPlayer();
+        }
+        if(getSmallWindowPlayer() != null) {
+            return getSmallWindowPlayer();
         }
         return this;
     }
