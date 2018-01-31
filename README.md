@@ -24,6 +24,7 @@
 **支持**|**没有任何操作控件的纯播放支持。**
 **支持**|**Demo带有RecyclerView列表滑动自动播放。**
 **支持**|**多窗体下（包括桌面）的小窗口播放。**
+**支持**|**同时播放多个视频**
 **支持**|**片头广告、跳过广告支持。**
 待支持|**中简插入广告功能**
 
@@ -131,14 +132,13 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 * 1、新增片头广告支持。
 `GSYSampleADVideoPlayer 与 DetailADPlayer`
 * 2、优化了ListGSYVideoPlayer、增加`playNext()`接口。
-* 3、优化代码结构，调整部分API接口。
+* 3、优化代码结构，调整部分API接口（稍微调整下，偶尔有和旧版本不兼容的，参考源码和demo修改下方法名即可）。
 * 4、增加GSYVideoHelper视频帮助类，更加节省资源。
 * 5、增加GSYSampleCallBack节省继承。
 * 6、增加GSYVideoViewBridge、重载`getGSYVideoManager()`方法实现自己的Manager。
 * 7、支持自定义渲染层，demo中`CustomRenderVideoPlayer`演示如何设置自定义渲染层。
-* 8、支持自定义渲染层，demo中`CustomRenderVideoPlayer`演示如何设置自定义渲染层。
-* 9、`ListMultiVideoActivity`和`MultiSampleVideo`演示如何同时播放多个视频。
-* 10、增加音频焦点方法。
+* 8、`ListMultiVideoActivity`和`MultiSampleVideo`演示如何同时播放多个视频。
+* 9、增加音频焦点方法。
 ```
 /**
   * 长时间失去音频焦点，暂停播放器
