@@ -196,6 +196,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.setSpeed(from.getSpeed(), from.mSoundTouch);
         to.setIsTouchWigetFull(from.mIsTouchWigetFull);
         to.mHadPlay = from.mHadPlay;
+        to.mPlayTag = from.mPlayTag;
+        to.mPlayPosition = from.mPlayPosition;
         to.mEffectFilter = from.mEffectFilter;
         to.mCacheFile = from.mCacheFile;
         to.mFullPauseBitmap = from.mFullPauseBitmap;

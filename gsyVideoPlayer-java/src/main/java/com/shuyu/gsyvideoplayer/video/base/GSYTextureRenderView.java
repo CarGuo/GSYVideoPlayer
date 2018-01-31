@@ -17,13 +17,14 @@ import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 
 /**
  * 绘制View
  * Created by guoshuyu on 2017/8/2.
  */
 
-public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSurfaceListener {
+public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSurfaceListener, MeasureHelper.MeasureFormVideoParamsListener {
 
     //native绘制
     protected Surface mSurface;
@@ -112,7 +113,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
      */
     protected void addTextureView() {
         mTextureView = new GSYRenderView();
-        mTextureView.addView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer, mMode);
+        mTextureView.addView(getContext(), mTextureViewContainer, mRotate, this, this, mEffectFilter, mMatrixGL, mRenderer, mMode);
     }
 
     /**
@@ -226,4 +227,5 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
 
     //释放
     protected abstract void releaseSurface(Surface surface);
+
 }

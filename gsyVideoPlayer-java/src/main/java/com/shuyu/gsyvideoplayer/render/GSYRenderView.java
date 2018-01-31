@@ -18,6 +18,7 @@ import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.render.view.IGSYRenderView;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 
 import java.io.File;
 
@@ -77,14 +78,15 @@ public class GSYRenderView {
      */
     public void addView(final Context context, final ViewGroup textureViewContainer, final int rotate,
                         final IGSYSurfaceListener gsySurfaceListener,
+                        final MeasureHelper.MeasureFormVideoParamsListener videoParamsListener,
                         final GSYVideoGLView.ShaderInterface effect, final float[] transform,
                         final GSYVideoGLViewBaseRender customRender, int mode) {
         if (GSYVideoType.getRenderType() == GSYVideoType.SUFRACE) {
-            mShowView = GSYSurfaceView.addSurfaceView(context, textureViewContainer, rotate, gsySurfaceListener);
+            mShowView = GSYSurfaceView.addSurfaceView(context, textureViewContainer, rotate, gsySurfaceListener, videoParamsListener);
         } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
-            mShowView = GSYVideoGLView.addGLView(context, textureViewContainer, rotate, gsySurfaceListener, effect, transform, customRender, mode);
+            mShowView = GSYVideoGLView.addGLView(context, textureViewContainer, rotate, gsySurfaceListener, videoParamsListener, effect, transform, customRender, mode);
         } else {
-            mShowView = GSYTextureView.addTextureView(context, textureViewContainer, rotate, gsySurfaceListener);
+            mShowView = GSYTextureView.addTextureView(context, textureViewContainer, rotate, gsySurfaceListener, videoParamsListener);
         }
     }
 

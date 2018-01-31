@@ -157,7 +157,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     /***
      * @param libLoader 是否使用外部动态加载so
      * */
-    void init(IjkLibLoader libLoader) {
+    protected void init(IjkLibLoader libLoader) {
         playerManager = getPlayManager(GSYVideoType.IJKPLAYER);
         IJKPlayerManager.setIjkLibLoader(libLoader);
         HandlerThread mediaHandlerThread = new HandlerThread(TAG);

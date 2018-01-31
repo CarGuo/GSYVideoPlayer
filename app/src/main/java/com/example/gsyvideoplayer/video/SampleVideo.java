@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.view.SwitchVideoTypeDialog;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -333,11 +332,11 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                 if (mSourcePosition != position) {
                     if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
                             || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)
-                            && GSYVideoManager.instance().getMediaPlayer() != null) {
+                            && getGSYVideoManager().getMediaPlayer() != null) {
                         final String url = mUrlList.get(position).getUrl();
                         onVideoPause();
                         final long currentPosition = mCurrentPosition;
-                        GSYVideoManager.instance().releaseMediaPlayer();
+                        getGSYVideoManager().releaseMediaPlayer();
                         cancelProgressTimer();
                         hideAllWidget();
                         new Handler().postDelayed(new Runnable() {

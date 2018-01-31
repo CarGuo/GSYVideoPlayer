@@ -42,7 +42,7 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer {
     }
 
     @Override
-    protected GSYVideoViewBridge getGSYVideoManager() {
+    public GSYVideoViewBridge getGSYVideoManager() {
         return GSYVideoManager.instance();
     }
 

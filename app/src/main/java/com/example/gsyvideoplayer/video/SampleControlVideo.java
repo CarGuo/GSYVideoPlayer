@@ -2,27 +2,18 @@ package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
 import android.graphics.Matrix;
-import android.graphics.SurfaceTexture;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gsyvideoplayer.R;
-import com.example.gsyvideoplayer.model.SwitchVideoModel;
-import com.example.gsyvideoplayer.view.SwitchVideoTypeDialog;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by shuyu on 2016/12/7.

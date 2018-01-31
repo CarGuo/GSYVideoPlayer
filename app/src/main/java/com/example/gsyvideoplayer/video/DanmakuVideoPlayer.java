@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.adapter.DanamakuAdapter;
 import com.example.gsyvideoplayer.utils.BiliDanmukuParser;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -266,7 +265,7 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
      * 弹幕偏移
      */
     private void resolveDanmakuSeek(DanmakuVideoPlayer gsyVideoPlayer, long time) {
-        if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay
+        if (getGSYVideoManager().getMediaPlayer() != null && mHadPlay
                 && gsyVideoPlayer.getDanmakuView() != null && gsyVideoPlayer.getDanmakuView().isPrepared()) {
             gsyVideoPlayer.getDanmakuView().seekTo(time);
         }

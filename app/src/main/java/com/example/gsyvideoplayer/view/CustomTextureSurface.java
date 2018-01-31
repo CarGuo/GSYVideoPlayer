@@ -25,11 +25,13 @@ import java.io.File;
  * Created by guoshuyu on 2018/1/30.
  */
 
-public class CustomTextureSurface extends SurfaceView implements IGSYRenderView, SurfaceHolder.Callback2 {
+public class CustomTextureSurface extends SurfaceView implements IGSYRenderView, SurfaceHolder.Callback2, MeasureHelper.MeasureFormVideoParamsListener {
 
     private IGSYSurfaceListener mIGSYSurfaceListener;
 
     private MeasureHelper measureHelper;
+
+    private MeasureHelper.MeasureFormVideoParamsListener mVideoParamsListener;
 
     public CustomTextureSurface(Context context) {
         super(context);
@@ -47,7 +49,7 @@ public class CustomTextureSurface extends SurfaceView implements IGSYRenderView,
     }
 
     private void init() {
-        measureHelper = new MeasureHelper(this);
+        measureHelper = new MeasureHelper(this, this);
     }
 
 
@@ -171,17 +173,56 @@ public class CustomTextureSurface extends SurfaceView implements IGSYRenderView,
 
     }
 
+    @Override
+    public void setVideoParamsListener(MeasureHelper.MeasureFormVideoParamsListener listener) {
+        mVideoParamsListener = listener;
+    }
+
+    @Override
+    public int getCurrentVideoWidth() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getCurrentVideoWidth();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getCurrentVideoHeight() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getCurrentVideoHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarNum() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getVideoSarNum();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarDen() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getVideoSarDen();
+        }
+        return 0;
+    }
+
     /**
      * 添加播放的view
      */
     public static CustomTextureSurface addSurfaceView(Context context, ViewGroup textureViewContainer, int rotate,
-                                                      final IGSYSurfaceListener gsySurfaceListener) {
+                                                      final IGSYSurfaceListener gsySurfaceListener,
+                                                      final MeasureHelper.MeasureFormVideoParamsListener videoParamsListener) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
         CustomTextureSurface showSurfaceView = new CustomTextureSurface(context);
         showSurfaceView.setIGSYSurfaceListener(gsySurfaceListener);
         showSurfaceView.setRotation(rotate);
+        showSurfaceView.setVideoParamsListener(videoParamsListener);
         GSYRenderView.addToParent(textureViewContainer, showSurfaceView);
         return showSurfaceView;
     }
