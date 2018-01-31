@@ -24,9 +24,11 @@ import java.io.File;
  * Created by guoshuyu on 2017/8/26.
  */
 
-public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callback2, IGSYRenderView {
+public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callback2, IGSYRenderView, MeasureHelper.MeasureFormVideoParamsListener {
 
     private IGSYSurfaceListener mIGSYSurfaceListener;
+
+    private MeasureHelper.MeasureFormVideoParamsListener mVideoParamsListener;
 
     private MeasureHelper measureHelper;
 
@@ -41,7 +43,7 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     }
 
     private void init() {
-        measureHelper = new MeasureHelper(this);
+        measureHelper = new MeasureHelper(this, this);
     }
 
     @Override
@@ -154,7 +156,7 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
 
     @Override
-    public  void setRenderTransform(Matrix transform){
+    public void setRenderTransform(Matrix transform) {
         Debuger.printfLog(getClass().getSimpleName() + " not support setRenderTransform now");
     }
 
@@ -177,16 +179,55 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     }
 
 
+    @Override
+    public void setVideoParamsListener(MeasureHelper.MeasureFormVideoParamsListener listener) {
+        mVideoParamsListener = listener;
+    }
+
+    @Override
+    public int getCurrentVideoWidth() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getCurrentVideoWidth();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getCurrentVideoHeight() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getCurrentVideoHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarNum() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getVideoSarNum();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarDen() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getVideoSarDen();
+        }
+        return 0;
+    }
+
     /**
      * 添加播放的view
      */
     public static GSYSurfaceView addSurfaceView(Context context, ViewGroup textureViewContainer, int rotate,
-                                                final IGSYSurfaceListener gsySurfaceListener) {
+                                                final IGSYSurfaceListener gsySurfaceListener,
+                                                final MeasureHelper.MeasureFormVideoParamsListener videoParamsListener) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
         GSYSurfaceView showSurfaceView = new GSYSurfaceView(context);
         showSurfaceView.setIGSYSurfaceListener(gsySurfaceListener);
+        showSurfaceView.setVideoParamsListener(videoParamsListener);
         showSurfaceView.setRotation(rotate);
         GSYRenderView.addToParent(textureViewContainer, showSurfaceView);
         return showSurfaceView;

@@ -17,6 +17,7 @@ import com.example.gsyvideoplayer.DetailMoreTypeActivity;
 import com.example.gsyvideoplayer.DetailPlayer;
 import com.example.gsyvideoplayer.FragmentVideoActivity;
 import com.example.gsyvideoplayer.InputUrlDetailActivity;
+import com.example.gsyvideoplayer.ListMultiVideoActivity;
 import com.example.gsyvideoplayer.ListVideo2Activity;
 import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
@@ -179,6 +180,19 @@ public class JumpUtils {
         Intent intent = new Intent(activity, DetailADPlayer.class);
         activity.startActivity(intent);
     }
+
+    /**
+     * 跳转到多个同时播放
+     *
+     * @param activity
+     */
+    public static void goToMultiVideoPlayer(Activity activity) {
+        Intent intent = new Intent(activity, ListMultiVideoActivity.class);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+        ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+    }
+
+
 
     /**
      * 跳转到详情播放

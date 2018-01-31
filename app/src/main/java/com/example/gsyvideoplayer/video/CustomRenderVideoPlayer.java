@@ -27,6 +27,6 @@ public class CustomRenderVideoPlayer extends NormalGSYVideoPlayer {
     @Override
     protected void addTextureView() {
         mTextureView = new CustomRenderView();
-        mTextureView.addView(getContext(), mTextureViewContainer, mRotate, this, mEffectFilter, mMatrixGL, mRenderer, mMode);
+        mTextureView.addView(getContext(), mTextureViewContainer, mRotate, this, this, mEffectFilter, mMatrixGL, mRenderer, mMode);
     }
 }

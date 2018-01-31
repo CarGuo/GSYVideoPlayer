@@ -213,6 +213,37 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         }
     }
 
+    @Override
+    public int getCurrentVideoWidth() {
+        if (getGSYVideoManager().getMediaPlayer() != null) {
+            return getGSYVideoManager().getMediaPlayer().getVideoWidth();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getCurrentVideoHeight() {
+        if (getGSYVideoManager().getMediaPlayer() != null) {
+            return getGSYVideoManager().getMediaPlayer().getVideoHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarNum() {
+        if (getGSYVideoManager().getMediaPlayer() != null) {
+            return getGSYVideoManager().getMediaPlayer().getVideoSarNum();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarDen() {
+        if (getGSYVideoManager().getMediaPlayer() != null) {
+            return getGSYVideoManager().getMediaPlayer().getVideoSarDen();
+        }
+        return 0;
+    }
 
     protected void updatePauseCover() {
         if ((mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) && mShowPauseCover) {
@@ -813,6 +844,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     /**
      * 获取代理服务
+     *
      * @param file 文件可以为空
      * @return 如果不需要可以为空
      */
@@ -820,6 +852,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     /**
      * 退出全屏
+     *
      * @return 是否在全屏界面
      */
     protected abstract boolean backFromFull(Context context);
@@ -830,16 +863,16 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     protected abstract void releaseVideos();
 
     /**
-     * 获取管理器桥接的实现
-     */
-    protected abstract GSYVideoViewBridge getGSYVideoManager();
-
-    /**
      * 设置播放显示状态
      *
      * @param state
      */
     protected abstract void setStateAndUi(int state);
+
+    /**
+     * 获取管理器桥接的实现
+     */
+    public abstract GSYVideoViewBridge getGSYVideoManager();
 
     /**
      * 当前UI
@@ -859,6 +892,14 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     public int getCurrentState() {
         return mCurrentState;
+    }
+
+    /**
+     * 根据状态判断是否播放中
+     */
+    public boolean isInPlayingState() {
+        return (mCurrentState >= 0 && mCurrentState != CURRENT_STATE_NORMAL
+                && mCurrentState != CURRENT_STATE_AUTO_COMPLETE && mCurrentState != CURRENT_STATE_ERROR);
     }
 
     /**

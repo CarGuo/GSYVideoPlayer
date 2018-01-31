@@ -9,6 +9,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
+import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 
 import java.io.File;
 
@@ -59,6 +60,8 @@ public interface IGSYRenderView {
      * 获取当前画面的高质量bitmap，没有返回空
      */
     Bitmap initCoverHigh();
+
+    void setVideoParamsListener(MeasureHelper.MeasureFormVideoParamsListener listener);
 
     void onRenderResume();
 

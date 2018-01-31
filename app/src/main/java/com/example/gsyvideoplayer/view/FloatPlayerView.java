@@ -59,16 +59,11 @@ public class FloatPlayerView extends FrameLayout {
 
 
     public void onPause() {
-        videoPlayer.onVideoPause();
+        videoPlayer.getCurrentPlayer().onVideoPause();
     }
 
     public void onResume() {
-        videoPlayer.onVideoResume();
+        videoPlayer.getCurrentPlayer().onVideoResume();
     }
 
-    public void onBackPressed() {
-        //释放所有
-        videoPlayer.setStandardVideoAllCallBack(null);
-        GSYVideoManager.releaseAllVideos();
-    }
 }

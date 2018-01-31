@@ -10,7 +10,6 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.render.view.listener.GSYVideoGLRenderErrorListener;
@@ -33,7 +32,7 @@ import java.io.File;
  * 原 @author sheraz.khilji
  */
 @SuppressLint("ViewConstructor")
-public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, IGSYRenderView {
+public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, IGSYRenderView, MeasureHelper.MeasureFormVideoParamsListener {
 
     private static final String TAG = GSYVideoGLView.class.getName();
     /**
@@ -50,6 +49,8 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
     private Context mContext;
 
     private ShaderInterface mEffect = new NoEffect();
+
+    private MeasureHelper.MeasureFormVideoParamsListener mVideoParamsListener;
 
     private MeasureHelper measureHelper;
 
@@ -79,7 +80,7 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
         mContext = context;
         setEGLContextClientVersion(2);
         mRenderer = new GSYVideoGLViewSimpleRender();
-        measureHelper = new MeasureHelper(this);
+        measureHelper = new MeasureHelper(this, this);
         mRenderer.setSurfaceView(GSYVideoGLView.this);
     }
 
@@ -234,11 +235,49 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
         setEffect(effectFilter);
     }
 
+
+    @Override
+    public void setVideoParamsListener(MeasureHelper.MeasureFormVideoParamsListener listener) {
+        mVideoParamsListener = listener;
+    }
+
+    @Override
+    public int getCurrentVideoWidth() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getCurrentVideoWidth();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getCurrentVideoHeight() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getCurrentVideoHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarNum() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getVideoSarNum();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarDen() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getVideoSarDen();
+        }
+        return 0;
+    }
+
     protected void initRenderMeasure() {
-        if (GSYVideoManager.instance().getMediaPlayer() != null && mMode == MODE_RENDER_SIZE) {
+        if (mVideoParamsListener != null && mMode == MODE_RENDER_SIZE) {
             try {
-                int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
-                int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
+                int videoWidth = mVideoParamsListener.getCurrentVideoWidth();
+                int videoHeight = mVideoParamsListener.getCurrentVideoHeight();
                 if (this.mRenderer != null) {
                     this.mRenderer.setCurrentViewWidth(measureHelper.getMeasuredWidth());
                     this.mRenderer.setCurrentViewHeight(measureHelper.getMeasuredHeight());
@@ -335,6 +374,7 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
      */
     public static GSYVideoGLView addGLView(final Context context, final ViewGroup textureViewContainer, final int rotate,
                                            final IGSYSurfaceListener gsySurfaceListener,
+                                           final MeasureHelper.MeasureFormVideoParamsListener videoParamsListener,
                                            final GSYVideoGLView.ShaderInterface effect, final float[] transform,
                                            final GSYVideoGLViewBaseRender customRender, final int renderMode) {
         if (textureViewContainer.getChildCount() > 0) {
@@ -345,6 +385,7 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
             gsyVideoGLView.setCustomRenderer(customRender);
         }
         gsyVideoGLView.setEffect(effect);
+        gsyVideoGLView.setVideoParamsListener(videoParamsListener);
         gsyVideoGLView.setRenderMode(renderMode);
         gsyVideoGLView.setIGSYSurfaceListener(gsySurfaceListener);
         gsyVideoGLView.setRotation(rotate);
@@ -357,6 +398,7 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
                             textureViewContainer,
                             rotate,
                             gsySurfaceListener,
+                            videoParamsListener,
                             render.getEffect(),
                             render.getMVPMatrix(),
                             render, renderMode);
