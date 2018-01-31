@@ -707,7 +707,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
             try {
                 position = (int) getGSYVideoManager().getMediaPlayer().getCurrentPosition();
-            } catch (IllegalStateException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return position;
             }
@@ -725,7 +725,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         int duration = 0;
         try {
             duration = (int) getGSYVideoManager().getMediaPlayer().getDuration();
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return duration;
         }

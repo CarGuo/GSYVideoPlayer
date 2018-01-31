@@ -70,15 +70,13 @@ public class ListMultiNormalAdapter extends BaseAdapter {
 
         final String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
 
+        //多个播放时必须在setUpLazy、setUp和getGSYVideoManager()等前面设置
         holder.gsyVideoPlayer.setPlayTag(TAG);
         holder.gsyVideoPlayer.setPlayPosition(position);
 
-        if (holder.gsyVideoPlayer.getGSYVideoManager() != null && holder.gsyVideoPlayer.getGSYVideoManager().getMediaPlayer() != null) {
-            boolean isPlaying = holder.gsyVideoPlayer.isInPlayingState();
-            if(!isPlaying) {
-                holder.gsyVideoPlayer.setUpLazy(url, false, null, null, "这是title");
-            }
-        } else {
+        boolean isPlaying = holder.gsyVideoPlayer.getCurrentPlayer().isInPlayingState();
+
+        if (!isPlaying) {
             holder.gsyVideoPlayer.setUpLazy(url, false, null, null, "这是title");
         }
 
