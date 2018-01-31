@@ -242,7 +242,9 @@ public final class MeasureHelper {
         mCurrentAspectRatio = aspectRatio;
     }
 
-
+    /**
+     * 构造宽高所需要的视频相关参数
+     */
     public interface MeasureFormVideoParamsListener {
         int getCurrentVideoWidth();
 

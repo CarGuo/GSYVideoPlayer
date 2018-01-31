@@ -26,6 +26,8 @@ public class CustomManager extends GSYVideoBaseManager {
 
     public static String TAG = "GSYVideoManager";
 
+    private static Map<String, CustomManager> sMap = new HashMap<>();
+
     /***
      * @param libLoader 是否使用外部动态加载so
      * */
@@ -83,8 +85,6 @@ public class CustomManager extends GSYVideoBaseManager {
         }
     }
 
-
-    private static Map<String, CustomManager> sMap = new HashMap<>();
 
     /**
      * 单例管理器

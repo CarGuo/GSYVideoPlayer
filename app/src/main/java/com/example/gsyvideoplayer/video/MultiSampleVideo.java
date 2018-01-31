@@ -2,6 +2,7 @@ package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -91,6 +92,12 @@ public class MultiSampleVideo extends SampleCoverVideo {
     }
 
     public String getKey() {
+        if (mPlayPosition == -22) {
+            throw new IllegalStateException("PlayPosition never set.");
+        }
+        if (TextUtils.isEmpty(mPlayTag)) {
+            throw new IllegalStateException("PlayTag never set.");
+        }
         return TAG + mPlayPosition + mPlayTag;
     }
 }

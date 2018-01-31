@@ -22,19 +22,29 @@ public interface IGSYRenderView {
     IGSYSurfaceListener getIGSYSurfaceListener();
 
     /**
-     * Surface变化监听
+     * Surface变化监听，必须
      */
     void setIGSYSurfaceListener(IGSYSurfaceListener surfaceListener);
 
     /**
-     * 当前view高度
+     * 当前view高度，必须
      */
     int getSizeH();
 
     /**
-     * 当前view宽度
+     * 当前view宽度，必须
      */
     int getSizeW();
+
+    /**
+     * 实现该接口的view，必须
+     */
+    View getRenderView();
+
+    /**
+     * 渲染view通过MeasureFormVideoParamsListener获取视频的相关参数，必须
+     */
+    void setVideoParamsListener(MeasureHelper.MeasureFormVideoParamsListener listener);
 
     /**
      * 截图
@@ -47,11 +57,6 @@ public interface IGSYRenderView {
     void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener);
 
     /**
-     * 实现该接口的view
-     */
-    View getRenderView();
-
-    /**
      * 获取当前画面的bitmap，没有返回空
      */
     Bitmap initCover();
@@ -60,8 +65,6 @@ public interface IGSYRenderView {
      * 获取当前画面的高质量bitmap，没有返回空
      */
     Bitmap initCoverHigh();
-
-    void setVideoParamsListener(MeasureHelper.MeasureFormVideoParamsListener listener);
 
     void onRenderResume();
 
