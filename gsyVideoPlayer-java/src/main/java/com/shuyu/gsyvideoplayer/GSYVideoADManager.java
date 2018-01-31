@@ -2,7 +2,20 @@ package com.shuyu.gsyvideoplayer;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+
+import com.danikula.videocache.HttpProxyCacheServer;
+import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+
+import java.io.File;
+
 import tv.danmaku.ijk.media.player.IjkLibLoader;
+
+import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
+import static com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer.FULLSCREEN_ID;
 
 /**
  * 视频管理，单例
@@ -11,7 +24,7 @@ import tv.danmaku.ijk.media.player.IjkLibLoader;
 
 public class GSYVideoADManager extends GSYVideoBaseManager {
 
-    public static String TAG = "GSYVideoManager";
+    public static String TAG = "GSYVideoADManager";
 
     @SuppressLint("StaticFieldLeak")
     private static GSYVideoADManager videoManager;
@@ -29,6 +42,51 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
     }
 
 
+
+    /**
+     * 获取缓存代理服务
+     */
+    protected static HttpProxyCacheServer getProxy(Context context) {
+        HttpProxyCacheServer proxy = GSYVideoADManager.instance().proxy;
+        return proxy == null ? (GSYVideoADManager.instance().proxy =
+                GSYVideoADManager.instance().newProxy(context)) : proxy;
+    }
+
+
+
+
+    /**
+     * 获取缓存代理服务,带文件目录的
+     */
+    public static HttpProxyCacheServer getProxy(Context context, File file) {
+
+        //如果为空，返回默认的
+        if (file == null) {
+            return getProxy(context);
+        }
+
+        //如果已经有缓存文件路径，那么判断缓存文件路径是否一致
+        if (GSYVideoADManager.instance().cacheFile != null
+                && !GSYVideoADManager.instance().cacheFile.getAbsolutePath().equals(file.getAbsolutePath())) {
+            //不一致先关了旧的
+            HttpProxyCacheServer proxy = GSYVideoADManager.instance().proxy;
+
+            if (proxy != null) {
+                proxy.shutdown();
+            }
+            //开启新的
+            return (GSYVideoADManager.instance().proxy =
+                    GSYVideoADManager.instance().newProxy(context, file));
+        } else {
+            //还没有缓存文件的或者一致的，返回原来
+            HttpProxyCacheServer proxy = GSYVideoADManager.instance().proxy;
+
+            return proxy == null ? (GSYVideoADManager.instance().proxy =
+                    GSYVideoADManager.instance().newProxy(context, file)) : proxy;
+        }
+    }
+
+
     /**
      * 单例管理器
      */
@@ -37,6 +95,35 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
             videoManager = new GSYVideoADManager(ijkLibLoader);
         }
         return videoManager;
+    }
+    /**
+     * 退出全屏，主要用于返回键
+     *
+     * @return 返回是否全屏
+     */
+    @SuppressWarnings("ResourceType")
+    public static boolean backFromWindowFull(Context context) {
+        boolean backFrom = false;
+        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(context)).findViewById(Window.ID_ANDROID_CONTENT);
+        View oldF = vp.findViewById(FULLSCREEN_ID);
+        if (oldF != null) {
+            backFrom = true;
+            hideNavKey(context);
+            if (GSYVideoADManager.instance().lastListener() != null) {
+                GSYVideoADManager.instance().lastListener().onBackFullscreen();
+            }
+        }
+        return backFrom;
+    }
+
+    /**
+     * 页面销毁了记得调用是否所有的video
+     */
+    public static void releaseAllVideos() {
+        if (GSYVideoADManager.instance().listener() != null) {
+            GSYVideoADManager.instance().listener().onCompletion();
+        }
+        GSYVideoADManager.instance().releaseMediaPlayer();
     }
 
 
