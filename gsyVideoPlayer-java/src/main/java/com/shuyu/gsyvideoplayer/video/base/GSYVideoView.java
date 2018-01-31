@@ -410,12 +410,14 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         mCurrentState = CURRENT_STATE_NORMAL;
         if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1") && !url.contains(".m3u8")) {
             HttpProxyCacheServer proxy = getProxy(getActivityContext().getApplicationContext(), cachePath);
-            //此处转换了url，然后再赋值给mUrl。
-            url = proxy.getProxyUrl(url);
-            mCacheFile = (!url.startsWith("http"));
-            //注册上缓冲监听
-            if (!mCacheFile && getGSYVideoManager() != null) {
-                proxy.registerCacheListener(getGSYVideoManager().getCacheListener(), mOriginUrl);
+            if (proxy != null) {
+                //此处转换了url，然后再赋值给mUrl。
+                url = proxy.getProxyUrl(url);
+                mCacheFile = (!url.startsWith("http"));
+                //注册上缓冲监听
+                if (!mCacheFile && getGSYVideoManager() != null) {
+                    proxy.registerCacheListener(getGSYVideoManager().getCacheListener(), mOriginUrl);
+                }
             }
         } else if (!cacheWithPlay && (!url.startsWith("http") && !url.startsWith("rtmp")
                 && !url.startsWith("rtsp") && !url.contains(".m3u8"))) {
@@ -809,12 +811,27 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     /************************* 需要继承处理部分 *************************/
 
+    /**
+     * 获取代理服务
+     * @param file 文件可以为空
+     * @return 如果不需要可以为空
+     */
     protected abstract HttpProxyCacheServer getProxy(Context context, File file);
 
+    /**
+     * 退出全屏
+     * @return 是否在全屏界面
+     */
     protected abstract boolean backFromFull(Context context);
 
+    /**
+     * 释放播放器
+     */
     protected abstract void releaseVideos();
 
+    /**
+     * 获取管理器桥接的实现
+     */
     protected abstract GSYVideoViewBridge getGSYVideoManager();
 
     /**
@@ -823,7 +840,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * @param state
      */
     protected abstract void setStateAndUi(int state);
-
 
     /**
      * 当前UI
