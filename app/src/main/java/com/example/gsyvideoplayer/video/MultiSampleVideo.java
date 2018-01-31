@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.example.gsyvideoplayer.video.manager.CustomManager;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoViewBridge;
 
 import java.io.File;
@@ -47,7 +48,7 @@ public class MultiSampleVideo extends SampleCoverVideo {
                         post(new Runnable() {
                             @Override
                             public void run() {
-                                //DO NOTHING NO STOP
+                                //todo 判断如果不是外界造成的就不处理
                             }
                         });
                         break;
@@ -55,7 +56,7 @@ public class MultiSampleVideo extends SampleCoverVideo {
                         post(new Runnable() {
                             @Override
                             public void run() {
-                                //DO NOTHING NO STOP
+                                //todo 判断如果不是外界造成的就不处理
                             }
                         });
                         break;
@@ -93,10 +94,10 @@ public class MultiSampleVideo extends SampleCoverVideo {
 
     public String getKey() {
         if (mPlayPosition == -22) {
-            throw new IllegalStateException("PlayPosition never set.");
+            Debuger.printfError(getClass().getSimpleName() + " used getKey() " + "******* PlayPosition never set. ********");
         }
         if (TextUtils.isEmpty(mPlayTag)) {
-            throw new IllegalStateException("PlayTag never set.");
+            Debuger.printfError(getClass().getSimpleName() + " used getKey() " + "******* PlayTag never set. ********");
         }
         return TAG + mPlayPosition + mPlayTag;
     }
