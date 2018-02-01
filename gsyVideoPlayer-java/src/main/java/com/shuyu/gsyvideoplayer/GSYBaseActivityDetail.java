@@ -40,11 +40,7 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
             getGSYVideoPlayer().getFullscreenButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //直接横屏
-                    orientationUtils.resolveByClick();
-                    //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                    getGSYVideoPlayer().startWindowFullscreen(GSYBaseActivityDetail.this, true, true);
-
+                    showFull();
                     clickForFullScreen();
                 }
             });
@@ -59,6 +55,16 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
         getGSYVideoOptionBuilder().
                 setVideoAllCallBack(this)
                 .build(getGSYVideoPlayer());
+    }
+
+    public void showFull() {
+        if (orientationUtils.getIsLand() != 1) {
+            //直接横屏
+            orientationUtils.resolveByClick();
+        }
+        //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+        getGSYVideoPlayer().startWindowFullscreen(GSYBaseActivityDetail.this, hideActionBarWhenFull(), hideStatusBarWhenFull());
+
     }
 
     @Override
@@ -217,6 +223,14 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
     @Override
     public void onClickBlankFullscreen(String url, Object... objects) {
 
+    }
+
+    public boolean hideActionBarWhenFull() {
+        return  true;
+    }
+
+    public boolean hideStatusBarWhenFull() {
+        return  true;
     }
 
     /**

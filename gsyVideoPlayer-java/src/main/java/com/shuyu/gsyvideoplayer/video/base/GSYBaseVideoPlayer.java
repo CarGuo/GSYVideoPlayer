@@ -36,7 +36,7 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.showSupportActionBar;
 
 public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
-    public static final int SMALL_ID = 84778;
+    public static final int SMALL_ID = 85598;
 
     public static final int FULLSCREEN_ID = 85597;
 
