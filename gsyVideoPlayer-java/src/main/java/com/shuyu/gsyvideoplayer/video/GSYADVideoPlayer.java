@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -90,6 +92,16 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
         return GSYVideoADManager.getProxy(context, file);
     }
 
+
+    @Override
+    protected int getFullId() {
+        return GSYVideoADManager.FULLSCREEN_ID;
+    }
+
+    @Override
+    protected int getSmallId() {
+        return GSYVideoADManager.SMALL_ID;
+    }
 
     @Override
     public void onPrepared() {
@@ -214,6 +226,20 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
         if (mProgressBar != null) {
             mProgressBar.setVisibility((isFirstPrepared) ? INVISIBLE : VISIBLE);
             mProgressBar.setEnabled(!(isFirstPrepared));
+        }
+    }
+
+    /**
+     * 移除没用的
+     */
+    public void removeFullWindowViewOnly() {
+        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
+        View old = vp.findViewById(getFullId());
+        if (old != null) {
+            if (old.getParent() != null) {
+                ViewGroup viewGroup = (ViewGroup) old.getParent();
+                vp.removeView(viewGroup);
+            }
         }
     }
 

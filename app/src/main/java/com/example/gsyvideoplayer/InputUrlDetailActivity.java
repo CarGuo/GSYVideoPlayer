@@ -80,7 +80,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
                 .setUrl(url)
                 .setCacheWithPlay(cache)
                 .setVideoTitle("测试视频")
-                .setStandardVideoAllCallBack(new GSYSampleCallBack() {
+                .setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override
                     public void onPrepared(String url, Object... objects) {
                         super.onPrepared(url, objects);

@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
-import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -698,10 +697,6 @@ public class GSYVideoHelper {
 
         public VideoAllCallBack getVideoAllCallBack() {
             return mVideoAllCallBack;
-        }
-
-        public StandardVideoAllCallBack getStandardVideoAllCallBack() {
-            return mStandardVideoAllCallBack;
         }
 
         public LockClickListener getLockClickListener() {

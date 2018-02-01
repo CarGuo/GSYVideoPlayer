@@ -7,7 +7,6 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
-import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -105,6 +104,12 @@ public class GSYVideoOptionBuilder {
     //是否播放器当失去音频焦点
     protected boolean mReleaseWhenLossAudio = true;
 
+    //是否需要在利用window实现全屏幕的时候隐藏actionbar
+    protected boolean mActionBar = false;
+
+    //是否需要在利用window实现全屏幕的时候隐藏statusbar
+    protected boolean mStatusBar = false;
+
     //播放的tag，防止错误，因为普通的url也可能重复
     protected String mPlayTag = "";
 
@@ -122,9 +127,6 @@ public class GSYVideoOptionBuilder {
 
     //视频状体回调
     protected VideoAllCallBack mVideoAllCallBack;
-
-    //标准播放器的回调
-    protected StandardVideoAllCallBack mStandardVideoAllCallBack;
 
     //点击锁屏的回调
     protected LockClickListener mLockClickListener;
@@ -408,11 +410,6 @@ public class GSYVideoOptionBuilder {
     }
 
 
-    public GSYVideoOptionBuilder setStandardVideoAllCallBack(StandardVideoAllCallBack standardVideoAllCallBack) {
-        this.mStandardVideoAllCallBack = standardVideoAllCallBack;
-        return this;
-    }
-
     /**
      * 进度回调
      */
@@ -525,11 +522,17 @@ public class GSYVideoOptionBuilder {
         return this;
     }
 
-    public void build(StandardGSYVideoPlayer gsyVideoPlayer) {
-        if (mStandardVideoAllCallBack != null) {
-            gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
-        }
+    public GSYVideoOptionBuilder setFullHideActionBar(boolean actionBar) {
+        this.mActionBar = actionBar;
+        return this;
+    }
 
+    public GSYVideoOptionBuilder setFullHideStatusBar(boolean statusBar) {
+        this.mStatusBar = statusBar;
+        return this;
+    }
+
+    public void build(StandardGSYVideoPlayer gsyVideoPlayer) {
         if (mBottomShowProgressDrawable != null && mBottomShowProgressThumbDrawable != null) {
             gsyVideoPlayer.setBottomShowProgressBarDrawable(mBottomShowProgressDrawable, mBottomShowProgressThumbDrawable);
         }
@@ -576,7 +579,7 @@ public class GSYVideoOptionBuilder {
 
         gsyVideoPlayer.setShowFullAnimation(mShowFullAnimation);
         gsyVideoPlayer.setLooping(mLooping);
-        if (mStandardVideoAllCallBack == null) {
+        if (mVideoAllCallBack != null) {
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
         }
         if (mGSYVideoProgressListener != null) {
@@ -592,6 +595,8 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setEffectFilter(mEffectFilter);
         gsyVideoPlayer.setStartAfterPrepared(mStartAfterPrepared);
         gsyVideoPlayer.setReleaseWhenLossAudio(mReleaseWhenLossAudio);
+        gsyVideoPlayer.setFullHideActionBar(mActionBar);
+        gsyVideoPlayer.setFullHideStatusBar(mStatusBar);
         if (mEnlargeImageRes > 0) {
             gsyVideoPlayer.setEnlargeImageRes(mEnlargeImageRes);
         }

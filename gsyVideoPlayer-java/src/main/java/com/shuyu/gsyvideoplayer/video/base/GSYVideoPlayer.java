@@ -60,4 +60,15 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer {
     protected HttpProxyCacheServer getProxy(Context context, File file) {
         return GSYVideoManager.getProxy(context, file);
     }
+
+    @Override
+    protected int getFullId() {
+        return GSYVideoManager.FULLSCREEN_ID;
+    }
+
+    @Override
+    protected int getSmallId() {
+        return GSYVideoManager.SMALL_ID;
+    }
+
 }

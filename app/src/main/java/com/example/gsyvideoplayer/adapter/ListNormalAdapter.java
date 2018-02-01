@@ -157,7 +157,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
         holder.gsyVideoPlayer.setPlayPosition(position);
 
-        holder.gsyVideoPlayer.setStandardVideoAllCallBack(new GSYSampleCallBack() {
+        holder.gsyVideoPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
             @Override
             public void onClickStartIcon(String url, Object... objects) {
                 super.onClickStartIcon(url, objects);

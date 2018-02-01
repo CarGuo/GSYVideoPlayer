@@ -57,7 +57,7 @@ public class DetailADPlayer2 extends GSYBaseActivityDetail<NormalGSYVideoPlayer>
         detailPlayer.setStartAfterPrepared(false);
         detailPlayer.setReleaseWhenLossAudio(false);
 
-        GSYVideoOptionBuilder adBuilder = getGSYVideoOptionBuilder();
+        final GSYVideoOptionBuilder adBuilder = getGSYVideoOptionBuilder();
         adBuilder.setUrl(urlAd)
                 .setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override
@@ -71,11 +71,13 @@ public class DetailADPlayer2 extends GSYBaseActivityDetail<NormalGSYVideoPlayer>
                     @Override
                     public void onAutoComplete(String url, Object... objects) {
                         adPlayer.release();
+                        adPlayer.onVideoReset();
                         adPlayer.setVisibility(View.GONE);
                         //todo 如果在全屏下的处理
                         //todo 中间弹出逻辑处理
                         getGSYVideoPlayer().getCurrentPlayer().startAfterPrepared();
                         if (adPlayer.getCurrentPlayer().isIfCurrentIsFullscreen()) {
+                            adPlayer.removeFullWindowViewOnly();
                             if (!getGSYVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
                                 showFull();
                             }
@@ -108,12 +110,20 @@ public class DetailADPlayer2 extends GSYBaseActivityDetail<NormalGSYVideoPlayer>
                     //直接横屏
                     adOrientationUtils.resolveByClick();
                     //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                    adPlayer.startWindowFullscreen(DetailADPlayer2.this, true, true);
-
-
+                    adPlayer.startWindowFullscreen(DetailADPlayer2.this, hideActionBarWhenFull(), hideStatusBarWhenFull());
                 }
             });
         }
+    }
+
+    @Override
+    public void showFull() {
+        if (orientationUtils.getIsLand() != 1) {
+            //直接横屏
+            orientationUtils.resolveByClick();
+        }
+        getGSYVideoPlayer().startWindowFullscreen(DetailADPlayer2.this);
+
     }
 
     @Override
@@ -177,6 +187,8 @@ public class DetailADPlayer2 extends GSYBaseActivityDetail<NormalGSYVideoPlayer>
                 .setUrl(url)
                 .setCacheWithPlay(true)
                 .setVideoTitle(" ")
+                .setFullHideActionBar(true)
+                .setFullHideStatusBar(true)
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)

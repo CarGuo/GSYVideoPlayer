@@ -112,7 +112,7 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
             }
         });
 
-        detailPlayer.setStandardVideoAllCallBack(new GSYSampleCallBack() {
+        detailPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
