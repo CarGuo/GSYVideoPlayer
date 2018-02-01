@@ -90,7 +90,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
             }
         });
 
-        danmakuVideoPlayer.setStandardVideoAllCallBack(new GSYSampleCallBack() {
+        danmakuVideoPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);

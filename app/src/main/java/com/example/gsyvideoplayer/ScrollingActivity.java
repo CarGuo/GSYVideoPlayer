@@ -75,7 +75,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 .setUrl(url)
                 .setCacheWithPlay(false)
                 .setVideoTitle("测试视频")
-                .setStandardVideoAllCallBack(new GSYSampleCallBack() {
+                .setVideoAllCallBack(new GSYSampleCallBack() {
 
                     @Override
                     public void onPrepared(String url, Object... objects) {

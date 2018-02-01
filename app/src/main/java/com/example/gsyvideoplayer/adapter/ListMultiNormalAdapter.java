@@ -107,7 +107,7 @@ public class ListMultiNormalAdapter extends BaseAdapter {
             holder.gsyVideoPlayer.loadCoverImage(url, R.mipmap.xxx2);
         }
 
-        holder.gsyVideoPlayer.setStandardVideoAllCallBack(new GSYSampleCallBack() {
+        holder.gsyVideoPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
 
 
             @Override

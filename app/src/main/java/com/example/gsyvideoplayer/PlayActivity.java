@@ -150,7 +150,7 @@ public class PlayActivity extends AppCompatActivity {
             return;
         }
         //释放所有
-        videoPlayer.setStandardVideoAllCallBack(null);
+        videoPlayer.setVideoAllCallBack(null);
         GSYVideoManager.releaseAllVideos();
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onBackPressed();

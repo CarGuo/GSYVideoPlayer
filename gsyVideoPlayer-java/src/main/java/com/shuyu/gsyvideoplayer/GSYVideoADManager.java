@@ -15,7 +15,6 @@ import java.io.File;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
-import static com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer.FULLSCREEN_ID;
 
 /**
  * 视频管理，单例
@@ -23,6 +22,10 @@ import static com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer.FULLSCREEN_
  */
 
 public class GSYVideoADManager extends GSYVideoBaseManager {
+
+    public static final int SMALL_ID =95598;
+
+    public static final int FULLSCREEN_ID = 95597;
 
     public static String TAG = "GSYVideoADManager";
 

@@ -92,6 +92,18 @@ public class MultiSampleVideo extends SampleCoverVideo {
         return null;
     }
 
+
+
+    @Override
+    protected int getFullId() {
+        return CustomManager.FULLSCREEN_ID;
+    }
+
+    @Override
+    protected int getSmallId() {
+        return CustomManager.SMALL_ID;
+    }
+
     public String getKey() {
         if (mPlayPosition == -22) {
             Debuger.printfError(getClass().getSimpleName() + " used getKey() " + "******* PlayPosition never set. ********");
