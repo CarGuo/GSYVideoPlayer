@@ -51,7 +51,9 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
             mJumpAd.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onAutoCompletion();
+                    if (getGSYVideoManager().listener() != null) {
+                        getGSYVideoManager().listener().onAutoCompletion();
+                    }
                 }
             });
         }
@@ -87,7 +89,6 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
     protected HttpProxyCacheServer getProxy(Context context, File file) {
         return GSYVideoADManager.getProxy(context, file);
     }
-
 
 
     @Override
