@@ -51,6 +51,13 @@
             android:text="带广告" />
 
         <Button
+            android:id="@+id/open_btn_ad2"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="带广告2" />
+
+        <Button
             android:id="@+id/open_btn_pick"
             android:layout_width="240dp"
             android:layout_height="wrap_content"

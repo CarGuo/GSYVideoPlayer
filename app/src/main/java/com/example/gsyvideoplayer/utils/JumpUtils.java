@@ -10,6 +10,7 @@ import android.view.View;
 import com.example.gsyvideoplayer.AutoPlayRecyclerViewActivity;
 import com.example.gsyvideoplayer.DanmkuVideoActivity;
 import com.example.gsyvideoplayer.DetailADPlayer;
+import com.example.gsyvideoplayer.DetailADPlayer2;
 import com.example.gsyvideoplayer.DetailControlActivity;
 import com.example.gsyvideoplayer.DetailFilterActivity;
 import com.example.gsyvideoplayer.DetailListPlayer;
@@ -213,6 +214,19 @@ public class JumpUtils {
         Intent intent = new Intent(activity, DetailListPlayer.class);
         activity.startActivity(intent);
     }
+
+
+    /**
+     * 跳转到带广告的
+     *
+     * @param activity
+     */
+    public static void goToVideoADPlayer2(Activity activity) {
+        Intent intent = new Intent(activity, DetailADPlayer2.class);
+        activity.startActivity(intent);
+    }
+
+
 
 
     /**
