@@ -358,9 +358,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     try {
-                        if (mCurrentState == CURRENT_STATE_PLAYING  || mCurrentState == CURRENT_STATE_PLAYING_BUFFERING_START) {
-                            onVideoPause();
-                        }
+                        onVideoPause();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -556,7 +554,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             mVideoAllCallBack.onPrepared(mOriginUrl, mTitle, this);
         }
 
-        if (!mStartAfterPrepared) return;
+        if (!mStartAfterPrepared) {
+            setStateAndUi(CURRENT_STATE_PAUSE);
+            return;
+        }
 
         startAfterPrepared();
     }

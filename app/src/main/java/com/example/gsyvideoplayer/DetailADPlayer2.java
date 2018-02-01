@@ -58,7 +58,8 @@ public class DetailADPlayer2 extends GSYBaseActivityDetail<NormalGSYVideoPlayer>
             public void onAutoComplete(String url, Object... objects) {
                 adPlayer.release();
                 adPlayer.setVisibility(View.GONE);
-                detailPlayer.startAfterPrepared();
+                //todo 如果在全屏下的处理
+                getGSYVideoPlayer().getCurrentPlayer().startAfterPrepared();
             }
 
         });
