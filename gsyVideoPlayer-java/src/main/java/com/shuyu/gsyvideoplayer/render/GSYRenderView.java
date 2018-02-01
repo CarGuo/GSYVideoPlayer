@@ -61,7 +61,9 @@ public class GSYRenderView {
     }
 
     public View getShowView() {
-        return mShowView.getRenderView();
+        if (mShowView != null)
+            return mShowView.getRenderView();
+        return null;
     }
 
     public ViewGroup.LayoutParams getLayoutParams() {
