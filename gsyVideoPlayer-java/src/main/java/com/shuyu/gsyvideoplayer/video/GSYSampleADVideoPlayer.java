@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 广告播放
+ * 只支持每个片头广告播放的类
+ * 其实就是根据实体，判断播放列表中哪个是广告，哪个不是，从而处理不同的UI显示效果
  * Created by guoshuyu on 2018/1/26.
  */
 
