@@ -813,4 +813,12 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     public void setFullHideStatusBar(boolean statusBar) {
         this.mStatusBar = statusBar;
     }
+
+    public int getSaveBeforeFullSystemUiVisibility() {
+        return mSystemUiVisibility;
+    }
+
+    public void setSaveBeforeFullSystemUiVisibility(int systemUiVisibility) {
+        this.mSystemUiVisibility = systemUiVisibility;
+    }
 }
