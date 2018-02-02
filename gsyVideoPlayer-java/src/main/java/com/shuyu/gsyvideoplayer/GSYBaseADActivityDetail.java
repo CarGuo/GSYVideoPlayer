@@ -99,8 +99,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
             //直接横屏
             orientationUtils.resolveByClick();
         }
-        getGSYVideoPlayer().startWindowFullscreen(this);
-
+        getGSYVideoPlayer().startWindowFullscreen(this, hideActionBarWhenFull(), hideStatusBarWhenFull());
     }
 
     @Override
