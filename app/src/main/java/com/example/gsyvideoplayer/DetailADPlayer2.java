@@ -12,7 +12,7 @@ import com.shuyu.gsyvideoplayer.video.GSYADVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 
-public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlayer> {
+public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlayer, GSYADVideoPlayer> {
 
     private NormalGSYVideoPlayer detailPlayer;
 
