@@ -20,7 +20,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
  * 详情AD模式播放页面基础类
  * Created by guoshuyu on 2017/9/14.
  */
-public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer> extends GSYBaseActivityDetail<T> {
+public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R extends GSYADVideoPlayer> extends GSYBaseActivityDetail<T> {
 
     protected OrientationUtils mADOrientationUtils;
 
@@ -216,7 +216,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer> exte
         getGSYADVideoPlayer().startWindowFullscreen(GSYBaseADActivityDetail.this, hideActionBarWhenFull(), hideStatusBarWhenFull());
     }
 
-    public abstract GSYADVideoPlayer getGSYADVideoPlayer();
+    public abstract R getGSYADVideoPlayer();
 
     /**
      * 配置AD播放器
