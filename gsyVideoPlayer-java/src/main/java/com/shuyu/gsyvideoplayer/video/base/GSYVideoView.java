@@ -325,6 +325,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         if (getGSYVideoManager().listener() != null) {
             getGSYVideoManager().listener().onCompletion();
         }
+        if(mVideoAllCallBack != null) {
+            Debuger.printfLog("onStartPrepared");
+            mVideoAllCallBack.onStartPrepared(mOriginUrl, mTitle, this);
+        }
         getGSYVideoManager().setListener(this);
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);

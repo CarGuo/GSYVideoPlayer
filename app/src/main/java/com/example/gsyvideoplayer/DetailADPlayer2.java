@@ -60,12 +60,18 @@ public class DetailADPlayer2 extends GSYBaseActivityDetail<NormalGSYVideoPlayer>
         final GSYVideoOptionBuilder adBuilder = getGSYVideoOptionBuilder();
         adBuilder.setUrl(urlAd)
                 .setVideoAllCallBack(new GSYSampleCallBack() {
+
                     @Override
-                    public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
+                    public void onStartPrepared(String url, Object... objects) {
+                        super.onStartPrepared(url, objects);
                         isAdPlayer = true;
                         //开始播放了才能旋转和全屏
                         adOrientationUtils.setEnable(getDetailOrientationRotateAuto());
+                    }
+
+                    @Override
+                    public void onPrepared(String url, Object... objects) {
+                        super.onPrepared(url, objects);
                     }
 
                     @Override
@@ -75,11 +81,14 @@ public class DetailADPlayer2 extends GSYBaseActivityDetail<NormalGSYVideoPlayer>
                         adPlayer.setVisibility(View.GONE);
                         //todo 如果在全屏下的处理
                         //todo 中间弹出逻辑处理
+                        //todo 开始缓冲的时候问题
+                        //todo 是否增加一个开始缓冲的回调
                         getGSYVideoPlayer().getCurrentPlayer().startAfterPrepared();
                         if (adPlayer.getCurrentPlayer().isIfCurrentIsFullscreen()) {
                             adPlayer.removeFullWindowViewOnly();
                             if (!getGSYVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
                                 showFull();
+                                getGSYVideoPlayer().setSaveBeforeFullSystemUiVisibility(adPlayer.getSaveBeforeFullSystemUiVisibility());
                             }
                         }
                     }
@@ -198,9 +207,14 @@ public class DetailADPlayer2 extends GSYBaseActivityDetail<NormalGSYVideoPlayer>
     }
 
     @Override
+    public void onStartPrepared(String url, Object... objects) {
+        super.onStartPrepared(url, objects);
+        adPlayer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onPrepared(String url, Object... objects) {
         super.onPrepared(url, objects);
-        adPlayer.setVisibility(View.VISIBLE);
         adPlayer.startPlayLogic();
     }
 
