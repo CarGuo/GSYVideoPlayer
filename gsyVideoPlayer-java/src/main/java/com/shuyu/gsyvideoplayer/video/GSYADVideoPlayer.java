@@ -111,16 +111,27 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
     }
 
     @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.start) {
+            if (mCurrentState == CURRENT_STATE_ERROR) {
+                clickStartIcon();
+            }
+        } else {
+            super.onClick(v);
+        }
+    }
+
+    @Override
     protected void updateStartImage() {
         if (mStartButton != null) {
             if (mStartButton instanceof ImageView) {
                 ImageView imageView = (ImageView) mStartButton;
                 if (mCurrentState == CURRENT_STATE_PLAYING) {
-                    imageView.setImageResource(R.drawable.video_click_pause_selector);
+                    imageView.setImageResource(R.drawable.empty_drawable);
                 } else if (mCurrentState == CURRENT_STATE_ERROR) {
-                    imageView.setImageResource(R.drawable.video_click_play_selector);
+                    imageView.setImageResource(R.drawable.video_click_error_selector);
                 } else {
-                    imageView.setImageResource(R.drawable.video_click_play_selector);
+                    imageView.setImageResource(R.drawable.empty_drawable);
                 }
             }
         }
