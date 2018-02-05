@@ -150,15 +150,14 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     @Override
     public void onStartPrepared(String url, Object... objects) {
         super.onStartPrepared(url, objects);
-        if (isNeedAdOnStart())
-            getGSYADVideoPlayer().setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onPrepared(String url, Object... objects) {
         super.onPrepared(url, objects);
-        if (isNeedAdOnStart())
-            getGSYADVideoPlayer().startPlayLogic();
+        if (isNeedAdOnStart()) {
+            startAdPlay();
+        }
     }
 
     @Override
@@ -172,6 +171,15 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     @Override
     public void clickForFullScreen() {
 
+    }
+
+    public void startAdPlay() {
+        getGSYADVideoPlayer().setVisibility(View.VISIBLE);
+        getGSYADVideoPlayer().startPlayLogic();
+        if (getGSYVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
+            showADFull();
+            getGSYADVideoPlayer().setSaveBeforeFullSystemUiVisibility(getGSYVideoPlayer().getSaveBeforeFullSystemUiVisibility());
+        }
     }
 
     public void showADFull() {
