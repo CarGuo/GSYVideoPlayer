@@ -160,12 +160,6 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     }
 
     @Override
-    public void clickForFullScreen() {
-
-    }
-
-
-    @Override
     public void onEnterFullscreen(String url, Object... objects) {
         super.onEnterFullscreen(url, objects);
         //隐藏调全屏对象的返回按键
@@ -173,42 +167,10 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
     }
 
-
     @Override
-    public void onAutoComplete(String url, Object... objects) {
-        if (objects[1] instanceof GSYADVideoPlayer) {
-            getGSYADVideoPlayer().release();
-            getGSYADVideoPlayer().onVideoReset();
-            getGSYADVideoPlayer().setVisibility(View.GONE);
-            //todo 如果在全屏下的处理
-            //todo 中间弹出逻辑处理
-            //todo 开始缓冲的时候问题
-            //todo 是否增加一个开始缓冲的回调
-            getGSYVideoPlayer().getCurrentPlayer().startAfterPrepared();
-            if (getGSYADVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
-                getGSYADVideoPlayer().removeFullWindowViewOnly();
-                if (!getGSYVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
-                    showFull();
-                    getGSYVideoPlayer().setSaveBeforeFullSystemUiVisibility(getGSYADVideoPlayer().getSaveBeforeFullSystemUiVisibility());
-                }
-            }
-        } else {
-            super.onAutoComplete(url, objects);
-        }
+    public void clickForFullScreen() {
+
     }
-
-    @Override
-    public void onQuitFullscreen(String url, Object... objects) {
-        if (objects[1] instanceof GSYADVideoPlayer) {
-            if (mADOrientationUtils != null) {
-                mADOrientationUtils.backToProtVideo();
-            }
-        } else {
-            super.onQuitFullscreen(url, objects);
-        }
-    }
-
-
 
     public void showADFull() {
         mADOrientationUtils.resolveByClick();

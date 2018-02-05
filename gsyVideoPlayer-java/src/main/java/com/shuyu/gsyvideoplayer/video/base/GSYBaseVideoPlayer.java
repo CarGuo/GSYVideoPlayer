@@ -490,7 +490,6 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     @SuppressWarnings("ResourceType, unchecked")
     public GSYBaseVideoPlayer startWindowFullscreen(final Context context, final boolean actionBar, final boolean statusBar) {
 
-        //TODO mSystemUiVisibility保存在广告切换中需要特殊处理
         mSystemUiVisibility = ((Activity) context).getWindow().getDecorView().getSystemUiVisibility();
 
         hideSupportActionBar(context, actionBar, statusBar);
@@ -812,6 +811,14 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
     public void setFullHideStatusBar(boolean statusBar) {
         this.mStatusBar = statusBar;
+    }
+
+    public boolean isFullHideActionBar() {
+        return mActionBar;
+    }
+
+    public boolean isFullHideStatusBar() {
+        return mStatusBar;
     }
 
     public int getSaveBeforeFullSystemUiVisibility() {
