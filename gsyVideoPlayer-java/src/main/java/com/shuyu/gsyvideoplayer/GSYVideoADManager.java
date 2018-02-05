@@ -23,9 +23,9 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 public class GSYVideoADManager extends GSYVideoBaseManager {
 
-    public static final int SMALL_ID =95598;
+    public static final int SMALL_ID = R.id.ad_small_id;
 
-    public static final int FULLSCREEN_ID = 95597;
+    public static final int FULLSCREEN_ID = R.id.ad_full_id;
 
     public static String TAG = "GSYVideoADManager";
 
@@ -45,7 +45,6 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
     }
 
 
-
     /**
      * 获取缓存代理服务
      */
@@ -54,8 +53,6 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
         return proxy == null ? (GSYVideoADManager.instance().proxy =
                 GSYVideoADManager.instance().newProxy(context)) : proxy;
     }
-
-
 
 
     /**
@@ -99,6 +96,7 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
         }
         return videoManager;
     }
+
     /**
      * 退出全屏，主要用于返回键
      *
