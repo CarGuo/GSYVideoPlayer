@@ -25,8 +25,6 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
 
     private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
 
-    private boolean mHadADMiddle;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +51,13 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
         detailPlayer.setReleaseWhenLossAudio(false);
 
         detailPlayer.setGSYVideoProgressListener(new GSYVideoProgressListener() {
+            private int preSecond = 0;
             @Override
             public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
-                if (currentPosition / 1000 == 5 && !mHadADMiddle) {
-                    mHadADMiddle = true;
+                int currentSecond = currentPosition / 1000;
+                if (currentSecond == 5 && currentSecond != preSecond) {
                     detailPlayer.getCurrentPlayer().onVideoPause();
-                    adPlayer.setUp(urlAd2, false, "");
+                    getGSYADVideoOptionBuilder().setUrl(urlAd2).build(adPlayer);
                     adPlayer.setVisibility(View.VISIBLE);
                     adPlayer.startPlayLogic();
                     if (detailPlayer.getCurrentPlayer().isIfCurrentIsFullscreen()) {
@@ -66,6 +65,7 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
                         adPlayer.setSaveBeforeFullSystemUiVisibility(getGSYVideoPlayer().getSaveBeforeFullSystemUiVisibility());
                     }
                 }
+                preSecond = currentSecond;
             }
         });
 
@@ -101,6 +101,11 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
     @Override
     public void clickForFullScreen() {
 
+    }
+
+    @Override
+    public boolean isNeedAdOnStart() {
+        return true;
     }
 
     /**
