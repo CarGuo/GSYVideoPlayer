@@ -64,10 +64,12 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
 
                     @Override
                     public void onAutoComplete(String url, Object... objects) {
+                        //广告结束，释放
                         getGSYADVideoPlayer().release();
                         getGSYADVideoPlayer().onVideoReset();
                         getGSYADVideoPlayer().setVisibility(View.GONE);
                         isAdPlayed = false;
+                        //开始播放原视频，根据是否处于全屏状态判断
                         getGSYVideoPlayer().getCurrentPlayer().startAfterPrepared();
                         if (getGSYADVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
                             getGSYADVideoPlayer().removeFullWindowViewOnly();
@@ -80,6 +82,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
 
                     @Override
                     public void onQuitFullscreen(String url, Object... objects) {
+                        //退出全屏逻辑
                         if (mADOrientationUtils != null) {
                             mADOrientationUtils.backToProtVideo();
                         }
@@ -92,7 +95,9 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
                 .build(getGSYADVideoPlayer());
     }
 
-
+    /**
+     * 正常视频内容的全屏显示
+     */
     @Override
     public void showFull() {
         if (orientationUtils.getIsLand() != 1) {
@@ -173,6 +178,9 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
 
     }
 
+    /**
+     * 显示播放广告
+     */
     public void startAdPlay() {
         getGSYADVideoPlayer().setVisibility(View.VISIBLE);
         getGSYADVideoPlayer().startPlayLogic();
@@ -182,6 +190,9 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
         }
     }
 
+    /**
+     * 广告视频的全屏显示
+     */
     public void showADFull() {
         if (mADOrientationUtils.getIsLand() != 1) {
             mADOrientationUtils.resolveByClick();
@@ -196,6 +207,8 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
      */
     public abstract GSYVideoOptionBuilder getGSYADVideoOptionBuilder();
 
-
+    /**
+     * 是否播放开始广告
+     */
     public abstract boolean isNeedAdOnStart();
 }
