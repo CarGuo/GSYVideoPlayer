@@ -455,11 +455,25 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      * @param orientationUtils 旋转工具类
      */
     public void onConfigurationChanged(Activity activity, Configuration newConfig, OrientationUtils orientationUtils) {
+        onConfigurationChanged(activity, newConfig, orientationUtils, true, true);
+
+    }
+
+    /**
+     * 旋转处理
+     *
+     * @param activity         页面
+     * @param newConfig        配置
+     * @param orientationUtils 旋转工具类
+     * @param hideActionBar    是否隐藏actionbar
+     * @param hideStatusBar    是否隐藏statusbar
+     */
+    public void onConfigurationChanged(Activity activity, Configuration newConfig, OrientationUtils orientationUtils, boolean hideActionBar, boolean hideStatusBar) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
             if (!isIfCurrentIsFullscreen()) {
-                startWindowFullscreen(activity, true, true);
+                startWindowFullscreen(activity, hideActionBar, hideStatusBar);
             }
         } else {
             //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
@@ -471,16 +485,6 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             }
         }
 
-    }
-
-    /**
-     * 利用window层播放全屏效果
-     *
-     * @param context
-     */
-    @SuppressWarnings("ResourceType, unchecked")
-    public GSYBaseVideoPlayer startWindowFullscreen(final Context context) {
-        return startWindowFullscreen(context, mActionBar, mStatusBar);
     }
 
     /**

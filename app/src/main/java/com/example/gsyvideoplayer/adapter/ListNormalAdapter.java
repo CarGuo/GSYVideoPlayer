@@ -283,7 +283,7 @@ public class ListNormalAdapter extends BaseAdapter {
     public void onConfigurationChanged(Activity activity, Configuration newConfig) {
         //如果旋转了就全屏
         if (isPlay && curPlayer != null && orientationUtils != null) {
-            curPlayer.onConfigurationChanged(activity, newConfig, orientationUtils);
+            curPlayer.onConfigurationChanged(activity, newConfig, orientationUtils, false, true);
         }
     }
 

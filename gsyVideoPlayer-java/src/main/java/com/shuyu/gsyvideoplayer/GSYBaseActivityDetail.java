@@ -108,7 +108,7 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            getGSYVideoPlayer().onConfigurationChanged(this, newConfig, orientationUtils);
+            getGSYVideoPlayer().onConfigurationChanged(this, newConfig, orientationUtils, hideActionBarWhenFull(), hideStatusBarWhenFull());
         }
     }
 
