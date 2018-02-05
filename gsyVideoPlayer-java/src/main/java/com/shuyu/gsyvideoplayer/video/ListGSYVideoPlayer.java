@@ -162,7 +162,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
      */
     @Override
     protected void prepareVideo() {
-        startPrepare();
+        super.prepareVideo();
         if (mHadPlay && mPlayPosition < (mUriList.size())) {
             setViewShowState(mLoadingProgressBar, VISIBLE);
             if (mLoadingProgressBar instanceof ENDownloadView) {
@@ -175,7 +175,6 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
     @Override
     public void onPrepared() {
         super.onPrepared();
-        addTextureView();
     }
 
     @Override
