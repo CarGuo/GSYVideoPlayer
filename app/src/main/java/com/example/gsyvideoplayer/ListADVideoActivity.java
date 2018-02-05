@@ -27,6 +27,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 带广告播放列表，支持中间插入广告模式
+ */
 public class ListADVideoActivity extends AppCompatActivity {
 
     @BindView(R.id.video_list)
@@ -66,6 +69,7 @@ public class ListADVideoActivity extends AppCompatActivity {
                     if (GSYVideoManager.instance().getPlayTag().equals(ListADNormalAdapter.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果滑出去了上面和下面就是否，和今日头条一样
+                        //释放广告和视频
                         if (GSYVideoADManager.instance().listener() != null) {
                             GSYVideoADManager.instance().listener().onAutoCompletion();
                         }
@@ -183,6 +187,7 @@ public class ListADVideoActivity extends AppCompatActivity {
 
             //设置返回键
             holder.gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
+
 
             //设置全屏按键功能
             holder.gsyVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
