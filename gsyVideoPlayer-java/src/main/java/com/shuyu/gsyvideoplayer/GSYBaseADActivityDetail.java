@@ -15,6 +15,7 @@ import com.shuyu.gsyvideoplayer.video.GSYADVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView;
 
 /**
  * 详情AD模式播放页面基础类
@@ -23,8 +24,6 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R extends GSYADVideoPlayer> extends GSYBaseActivityDetail<T> {
 
     protected OrientationUtils mADOrientationUtils;
-
-    protected boolean isAdPlayed;
 
     @Override
     public void initVideo() {
@@ -57,7 +56,6 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
                     @Override
                     public void onStartPrepared(String url, Object... objects) {
                         super.onStartPrepared(url, objects);
-                        isAdPlayed = true;
                         //开始播放了才能旋转和全屏
                         mADOrientationUtils.setEnable(getDetailOrientationRotateAuto());
                     }
@@ -68,7 +66,6 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
                         getGSYADVideoPlayer().release();
                         getGSYADVideoPlayer().onVideoReset();
                         getGSYADVideoPlayer().setVisibility(View.GONE);
-                        isAdPlayed = false;
                         //开始播放原视频，根据是否处于全屏状态判断
                         getGSYVideoPlayer().getCurrentPlayer().startAfterPrepared();
                         if (getGSYADVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
@@ -142,8 +139,8 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     public void onConfigurationChanged(Configuration newConfig) {
         //如果旋转了就全屏
         boolean backUpIsPlay = isPlay;
-        if (isAdPlayed && !isPause && getGSYADVideoPlayer().getVisibility() == View.VISIBLE) {
-            if (getGSYADVideoPlayer().getCurrentPlayer().isInPlayingState()) {
+        if (!isPause && getGSYADVideoPlayer().getVisibility() == View.VISIBLE) {
+            if (isADStarted()) {
                 isPlay = false;
                 getGSYADVideoPlayer().getCurrentPlayer().onConfigurationChanged(this, newConfig, mADOrientationUtils);
             }
@@ -176,6 +173,12 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     @Override
     public void clickForFullScreen() {
 
+    }
+
+    protected boolean isADStarted() {
+        return getGSYADVideoPlayer().getCurrentPlayer().getCurrentState() >= 0 &&
+                getGSYADVideoPlayer().getCurrentPlayer().getCurrentState() != GSYVideoView.CURRENT_STATE_NORMAL
+                && getGSYADVideoPlayer().getCurrentPlayer().getCurrentState() != GSYVideoView.CURRENT_STATE_AUTO_COMPLETE;
     }
 
     /**
