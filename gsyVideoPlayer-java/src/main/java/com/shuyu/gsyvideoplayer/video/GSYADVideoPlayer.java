@@ -237,7 +237,7 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
     }
 
     /**
-     * 移除没用的
+     * 移除广告播放的全屏
      */
     public void removeFullWindowViewOnly() {
         ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
