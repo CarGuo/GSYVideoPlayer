@@ -12,7 +12,9 @@ import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.GSYADVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-
+/**
+ * 带广告播放，支持中间插入广告模式
+ */
 public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlayer, GSYADVideoPlayer> {
 
     private NormalGSYVideoPlayer detailPlayer;

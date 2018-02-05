@@ -26,7 +26,8 @@
 **支持**|**多窗体下（包括桌面）的小窗口播放。**
 **支持**|**同时播放多个视频**
 **支持**|**片头广告、跳过广告支持。**
-待支持|**中简插入广告功能**
+**支持**|**中简插入广告功能。**
+
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
@@ -51,21 +52,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:3.0.0'
+compile 'com.shuyu:GSYVideoPlayer:4.0.0'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-java:4.0.0'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:3.0.0'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:3.0.0'
-compile 'com.shuyu:gsyVideoPlayer-arm64:3.0.0'
-compile 'com.shuyu:gsyVideoPlayer-x64:3.0.0'
-compile 'com.shuyu:gsyVideoPlayer-x86:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-armv5:4.0.0'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:4.0.0'
+compile 'com.shuyu:gsyVideoPlayer-arm64:4.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x64:4.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x86:4.0.0'
 
 ```
 
@@ -75,9 +76,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-java:4.0.0'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:4.0.0'
 
 ```
 
@@ -128,17 +129,18 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:3.0.0'
 
 ## 五、近期版本
 
-### 3.1.0（2018-xx-xx）
-* 1、新增片头广告支持。
+### 4.0.0（2018-xx-xx）
+* 1、新增简单片头广告支持。
 `GSYSampleADVideoPlayer 与 DetailADPlayer`
 * 2、优化了ListGSYVideoPlayer、增加`playNext()`接口。
 * 3、优化代码结构，调整部分API接口（稍微调整下，偶尔有和旧版本不兼容的，参考源码和demo修改下方法名即可）。
 * 4、增加GSYVideoHelper视频帮助类，更加节省资源。
-* 5、增加GSYSampleCallBack节省继承。
+* 5、增加GSYSampleCallBack节省继承，优化GSYVideoProgressListener的回调。
 * 6、增加GSYVideoViewBridge、重载`getGSYVideoManager()`方法实现自己的Manager。
 * 7、支持自定义渲染层，demo中`CustomRenderVideoPlayer`演示如何设置自定义渲染层。
 * 8、`ListMultiVideoActivity`和`MultiSampleVideo`演示如何同时播放多个视频。
-* 9、增加音频焦点方法。
+* 9、`DetailADPlayer2`和`ListADVideoActivity`演示广告与中间插入广告支持。
+* 10、增加音频焦点方法。
 ```
 /**
   * 长时间失去音频焦点，暂停播放器
