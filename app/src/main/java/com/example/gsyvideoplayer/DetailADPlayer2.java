@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.shuyu.gsyvideoplayer.GSYBaseADActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.GSYADVideoPlayer;
@@ -23,6 +24,8 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
     private String urlAd2 = "http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4";
 
     private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+
+    private boolean mHadADMiddle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,19 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
         });
         detailPlayer.setStartAfterPrepared(false);
         detailPlayer.setReleaseWhenLossAudio(false);
+
+        detailPlayer.setGSYVideoProgressListener(new GSYVideoProgressListener() {
+            @Override
+            public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
+                if (currentPosition / 1000 == 5 && !mHadADMiddle) {
+                    mHadADMiddle = true;
+                    detailPlayer.getCurrentPlayer().onVideoPause();
+                    adPlayer.setUp(urlAd2, false, "");
+                    adPlayer.setVisibility(View.VISIBLE);
+                    adPlayer.startPlayLogic();
+                }
+            }
+        });
 
     }
 
