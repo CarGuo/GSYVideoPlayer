@@ -40,6 +40,14 @@
             android:src="@drawable/video_enlarge" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/loading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/jump_ad"
