@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.GSYVideoBaseManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 
@@ -23,9 +24,9 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 public class CustomManager extends GSYVideoBaseManager {
 
-    public static final int SMALL_ID = 86598;
+    public static final int SMALL_ID = R.id.custom_small_id;
 
-    public static final int FULLSCREEN_ID = 86597;
+    public static final int FULLSCREEN_ID = R.id.custom_full_id;
 
     public static String TAG = "GSYVideoManager";
 

@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.Surface;
+
 import com.danikula.videocache.CacheListener;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
@@ -34,6 +35,7 @@ import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
+
 /**
  * 基类管理器
  * Created by guoshuyu on 2018/1/25.
