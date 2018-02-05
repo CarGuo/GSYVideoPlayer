@@ -202,6 +202,13 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
         st.changeAdUIState();
     }
 
+    @Override
+    public void release() {
+        super.release();
+        if (mADTime != null) {
+            mADTime.setVisibility(GONE);
+        }
+    }
 
     /**
      * 根据是否广告url修改ui显示状态
@@ -241,6 +248,7 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
                 vp.removeView(viewGroup);
             }
         }
+        mIfCurrentIsFullscreen = false;
     }
 
 }
