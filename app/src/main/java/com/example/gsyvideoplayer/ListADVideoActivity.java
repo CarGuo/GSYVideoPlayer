@@ -202,8 +202,8 @@ public class ListADVideoActivity extends AppCompatActivity {
                     resolveFullBtn(holder.adVideoPlayer);
                 }
             });
-            holder.gsyVideoPlayer.setRotateViewAuto(true);
-            holder.adVideoPlayer.setRotateViewAuto(true);
+            holder.gsyVideoPlayer.setRotateViewAuto(false);
+            holder.adVideoPlayer.setRotateViewAuto(false);
             holder.gsyVideoPlayer.setLockLand(true);
             holder.adVideoPlayer.setLockLand(true);
             holder.gsyVideoPlayer.setReleaseWhenLossAudio(false);
@@ -254,7 +254,7 @@ public class ListADVideoActivity extends AppCompatActivity {
                 @Override
                 public void onAutoComplete(String url, Object... objects) {
                     //广告结束，释放
-                    holder.adVideoPlayer.release();
+                    holder.adVideoPlayer.getCurrentPlayer().release();
                     holder.adVideoPlayer.onVideoReset();
                     holder.adVideoPlayer.setVisibility(View.GONE);
                     //开始播放原视频，根据是否处于全屏状态判断
@@ -296,7 +296,7 @@ public class ListADVideoActivity extends AppCompatActivity {
         public void startAdPlay(GSYADVideoPlayer gsyadVideoPlayer, StandardGSYVideoPlayer normalPlayer) {
             gsyadVideoPlayer.setVisibility(View.VISIBLE);
             gsyadVideoPlayer.startPlayLogic();
-            if (gsyadVideoPlayer.getCurrentPlayer().isIfCurrentIsFullscreen()) {
+            if (normalPlayer.getCurrentPlayer().isIfCurrentIsFullscreen()) {
                 resolveFullBtn(gsyadVideoPlayer);
                 gsyadVideoPlayer.setSaveBeforeFullSystemUiVisibility(normalPlayer.getSaveBeforeFullSystemUiVisibility());
             }

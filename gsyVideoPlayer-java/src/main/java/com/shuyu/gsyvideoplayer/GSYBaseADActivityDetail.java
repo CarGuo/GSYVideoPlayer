@@ -63,7 +63,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
                     @Override
                     public void onAutoComplete(String url, Object... objects) {
                         //广告结束，释放
-                        getGSYADVideoPlayer().release();
+                        getGSYADVideoPlayer().getCurrentPlayer().release();
                         getGSYADVideoPlayer().onVideoReset();
                         getGSYADVideoPlayer().setVisibility(View.GONE);
                         //开始播放原视频，根据是否处于全屏状态判断
