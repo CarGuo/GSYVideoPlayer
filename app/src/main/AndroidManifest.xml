@@ -132,6 +132,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"  />
 
+        <activity
+            android:name=".ListADVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent"  />
+
     </application>
 
 </manifest>
