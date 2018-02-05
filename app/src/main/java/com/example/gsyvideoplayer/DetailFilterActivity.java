@@ -219,11 +219,11 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
                     percentageType = 1;
                 }
                 //水印图动起来
-                cancelTask2();
-                mTimerTask2 = new TaskLocal2();
-                timer.schedule(mTimerTask2, 0, 400);
+                //cancelTask2();
+                //mTimerTask2 = new TaskLocal2();
+                //timer.schedule(mTimerTask2, 0, 400);
 
-                moveBitmap = !moveBitmap;
+                //moveBitmap = !moveBitmap;
             }
         });
 

@@ -318,7 +318,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     protected void prepareVideo() {
         startPrepare();
-        addTextureView();
     }
 
     protected void startPrepare() {
@@ -778,6 +777,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        addTextureView();
 
         createNetWorkState();
 
