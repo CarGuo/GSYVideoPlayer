@@ -61,6 +61,10 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
                     adPlayer.setUp(urlAd2, false, "");
                     adPlayer.setVisibility(View.VISIBLE);
                     adPlayer.startPlayLogic();
+                    if (detailPlayer.getCurrentPlayer().isIfCurrentIsFullscreen()) {
+                        showADFull();
+                        adPlayer.setSaveBeforeFullSystemUiVisibility(getGSYVideoPlayer().getSaveBeforeFullSystemUiVisibility());
+                    }
                 }
             }
         });

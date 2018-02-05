@@ -67,6 +67,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
                         getGSYADVideoPlayer().release();
                         getGSYADVideoPlayer().onVideoReset();
                         getGSYADVideoPlayer().setVisibility(View.GONE);
+                        isAdPlayed = false;
                         //todo 如果在全屏下的处理
                         //todo 中间弹出逻辑处理
                         //todo 开始缓冲的时候问题
@@ -85,6 +86,9 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
                     public void onQuitFullscreen(String url, Object... objects) {
                         if (mADOrientationUtils != null) {
                             mADOrientationUtils.backToProtVideo();
+                        }
+                        if (getGSYVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
+                            getGSYVideoPlayer().onBackFullscreen();
                         }
                     }
 
@@ -173,7 +177,9 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     }
 
     public void showADFull() {
-        mADOrientationUtils.resolveByClick();
+        if (mADOrientationUtils.getIsLand() != 1) {
+            mADOrientationUtils.resolveByClick();
+        }
         getGSYADVideoPlayer().startWindowFullscreen(GSYBaseADActivityDetail.this, hideActionBarWhenFull(), hideStatusBarWhenFull());
     }
 
