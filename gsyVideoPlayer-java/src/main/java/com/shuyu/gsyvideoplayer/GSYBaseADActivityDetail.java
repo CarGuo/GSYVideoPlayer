@@ -68,10 +68,6 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
                         getGSYADVideoPlayer().onVideoReset();
                         getGSYADVideoPlayer().setVisibility(View.GONE);
                         isAdPlayed = false;
-                        //todo 如果在全屏下的处理
-                        //todo 中间弹出逻辑处理
-                        //todo 开始缓冲的时候问题
-                        //todo 是否增加一个开始缓冲的回调
                         getGSYVideoPlayer().getCurrentPlayer().startAfterPrepared();
                         if (getGSYADVideoPlayer().getCurrentPlayer().isIfCurrentIsFullscreen()) {
                             getGSYADVideoPlayer().removeFullWindowViewOnly();
@@ -141,7 +137,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     public void onConfigurationChanged(Configuration newConfig) {
         //如果旋转了就全屏
         boolean backUpIsPlay = isPlay;
-        if (isAdPlayed && !isPause) {
+        if (isAdPlayed && !isPause && getGSYADVideoPlayer().getVisibility() == View.VISIBLE) {
             if (getGSYADVideoPlayer().getCurrentPlayer().isInPlayingState()) {
                 isPlay = false;
                 getGSYADVideoPlayer().getCurrentPlayer().onConfigurationChanged(this, newConfig, mADOrientationUtils);
@@ -154,13 +150,15 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     @Override
     public void onStartPrepared(String url, Object... objects) {
         super.onStartPrepared(url, objects);
-        getGSYADVideoPlayer().setVisibility(View.VISIBLE);
+        if (isNeedAdOnStart())
+            getGSYADVideoPlayer().setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onPrepared(String url, Object... objects) {
         super.onPrepared(url, objects);
-        getGSYADVideoPlayer().startPlayLogic();
+        if (isNeedAdOnStart())
+            getGSYADVideoPlayer().startPlayLogic();
     }
 
     @Override
@@ -189,4 +187,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
      * 配置AD播放器
      */
     public abstract GSYVideoOptionBuilder getGSYADVideoOptionBuilder();
+
+
+    public abstract boolean isNeedAdOnStart();
 }
