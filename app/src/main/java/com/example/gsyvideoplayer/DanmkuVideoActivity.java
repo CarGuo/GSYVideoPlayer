@@ -175,7 +175,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            danmakuVideoPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
+            danmakuVideoPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
         }
     }
 

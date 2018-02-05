@@ -190,7 +190,7 @@ public class ScrollingActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
+            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
         }
     }
 
