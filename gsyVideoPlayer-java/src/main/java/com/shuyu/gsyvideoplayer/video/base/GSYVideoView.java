@@ -324,7 +324,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         if (getGSYVideoManager().listener() != null) {
             getGSYVideoManager().listener().onCompletion();
         }
-        if(mVideoAllCallBack != null) {
+        if (mVideoAllCallBack != null) {
             Debuger.printfLog("onStartPrepared");
             mVideoAllCallBack.onStartPrepared(mOriginUrl, mTitle, this);
         }
@@ -649,7 +649,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
             if (mBackUpPlayingBufferState != -1) {
-
+                if (mBackUpPlayingBufferState == CURRENT_STATE_PLAYING_BUFFERING_START) {
+                    mBackUpPlayingBufferState = CURRENT_STATE_PLAYING;
+                }
                 if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
                     setStateAndUi(mBackUpPlayingBufferState);
 
