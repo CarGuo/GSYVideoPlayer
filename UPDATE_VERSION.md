@@ -1,5 +1,28 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 4.0.0-beat1（2018-02-06）
+* 1、新增简单片头广告支持。
+`GSYSampleADVideoPlayer 与 DetailADPlayer`
+* 2、优化了ListGSYVideoPlayer、增加`playNext()`接口。
+* 3、优化代码结构，调整部分API接口（稍微调整下，偶尔有和旧版本不兼容的，参考源码和demo修改下方法名即可）。
+* 4、增加GSYVideoHelper视频帮助类，更加节省资源。
+* 5、增加GSYSampleCallBack节省继承，优化GSYVideoProgressListener的回调。
+* 6、增加GSYVideoViewBridge、重载`getGSYVideoManager()`方法实现自己的Manager。
+* 7、支持自定义渲染层，demo中`CustomRenderVideoPlayer`演示如何设置自定义渲染层。
+* 8、`ListMultiVideoActivity`和`MultiSampleVideo`演示如何同时播放多个视频。
+* 9、`DetailADPlayer2`和`ListADVideoActivity`演示广告与中间插入广告支持。
+* 10、增加音频焦点方法。
+```
+/**
+  * 长时间失去音频焦点，暂停播放器
+  *
+  * @param releaseWhenLossAudio 默认true，false的时候只会暂停
+  */
+ public void setReleaseWhenLossAudio(boolean releaseWhenLossAudio)
+
+```
+
+
 ### 3.0.0（2018-01-14）
 
 1、增肌PlayerManager，更新为ExoPlayer2，优化对ExoPlayer2的支持。

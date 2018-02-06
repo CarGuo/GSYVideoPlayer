@@ -52,21 +52,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:4.0.0'
+compile 'com.shuyu:GSYVideoPlayer:4.0.0-beat1'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:4.0.0'
+compile 'com.shuyu:gsyVideoPlayer-java:4.0.0-beat1'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:4.0.0'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:4.0.0'
-compile 'com.shuyu:gsyVideoPlayer-arm64:4.0.0'
-compile 'com.shuyu:gsyVideoPlayer-x64:4.0.0'
-compile 'com.shuyu:gsyVideoPlayer-x86:4.0.0'
+compile 'com.shuyu:gsyVideoPlayer-armv5:4.0.0-beat1'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:4.0.0-beat1'
+compile 'com.shuyu:gsyVideoPlayer-arm64:4.0.0-beat1'
+compile 'com.shuyu:gsyVideoPlayer-x64:4.0.0-beat1'
+compile 'com.shuyu:gsyVideoPlayer-x86:4.0.0-beat1'
 
 ```
 
@@ -76,9 +76,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:4.0.0'
+compile 'com.shuyu:gsyVideoPlayer-java:4.0.0-beat1'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:4.0.0'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:4.0.0-beat1'
 
 ```
 
@@ -129,7 +129,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.0.0'
 
 ## 五、近期版本
 
-### 4.0.0（2018-xx-xx）
+### 4.0.0-beat1（2018-02-06）
 * 1、新增简单片头广告支持。
 `GSYSampleADVideoPlayer 与 DetailADPlayer`
 * 2、优化了ListGSYVideoPlayer、增加`playNext()`接口。
