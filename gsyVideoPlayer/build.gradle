@@ -51,6 +51,17 @@ dependencies {
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
     api "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
+
+
+    //compile fileTree(dir: 'libs', include: ['*.jar'])
+    //compile "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
+
+
 }
 
 apply from: './bintray.gradle'

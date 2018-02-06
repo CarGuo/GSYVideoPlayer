@@ -36,6 +36,15 @@ dependencies {
 
     api viewDependencies.exo_player2
     api viewDependencies.exo_player2_rtmp
+
+
+    //compile fileTree(dir: 'libs', include: ['*.jar'])
+    //def viewDependencies = rootProject.ext.viewDependencies
+    //compile viewDependencies.ijkplayer_java
+    //compile androidDependencies.appcompat_v7
+    //compile viewDependencies.exo_player2
+    //compile viewDependencies.exo_player2_rtmp
+
 }
 
 apply from: './bintray.gradle'
