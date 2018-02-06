@@ -29,6 +29,7 @@ javadoc {
         version true
         links "http://docs.oracle.com/javase/7/docs/api"
         title "$PROJ_NAME $PROJ_VERSION"
+        failOnError false
     }
 }
 
