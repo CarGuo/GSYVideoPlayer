@@ -42,6 +42,15 @@ dependencies {
     api project(':gsyvideoplayer-androidvideocache')
     //api project(':gsyvideoplayer-exo2')
 
+
+    //compile fileTree(dir: 'libs', include: ['*.jar'])
+    //compile androidDependencies.appcompat_v7
+    //def viewDependencies = rootProject.ext.viewDependencies
+    //def dataDependencies = rootProject.ext.dataDependencies
+    //compile viewDependencies.ijkplayer_java
+    //compile viewDependencies.transitionseverywhere
+    //compile dataDependencies.videocache
+    //compile "com.shuyu:GSYVideoPlayer-exo2:$gsyVideoVersion"
 }
 
 apply from: './bintray.gradle'
