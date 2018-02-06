@@ -1,7 +1,7 @@
 
 ![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/home_logo.png)
 
-## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
+## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)（兼容系统MediaPlayer与EXOPlayer2），实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
 状态 | 功能
 -------- | ---
@@ -27,6 +27,7 @@
 **支持**|**同时播放多个视频**
 **支持**|**片头广告、跳过广告支持。**
 **支持**|**中简插入广告功能。**
+**支持**|**可自定义渲染层、自定义管理层、自定义播放层。**
 
 
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
