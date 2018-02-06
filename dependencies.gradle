@@ -23,12 +23,11 @@ ext {
     floatWindow = '1.0.6'
 
     //DataLibraries
-    videocache = '2.1.1'
     leakcanary = '1.5'
 
     imageLoader = '4.0.0'
 
-    gsyVideoVersion = '3.0.0'
+    gsyVideoVersion = '4.0.0-beat1'
 
     exo_player2 = '2.6.1'
 
@@ -64,7 +63,7 @@ ext {
     ]
 
     dataDependencies = [
-            videocache: "com.shuyu:gsyvideoplayer-androidvideocache:${videocache}",
+            videocache: "com.shuyu:gsyvideoplayer-androidvideocache:${gsyVideoVersion}",
             leakcanary: "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
     ]
 }
