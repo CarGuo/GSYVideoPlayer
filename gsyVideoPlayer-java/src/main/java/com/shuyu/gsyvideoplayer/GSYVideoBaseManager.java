@@ -584,9 +584,10 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     /**
-     * 设置了视频的播放类型,IJKEXOPLAYER和IJKEXOPLAYER2是互斥的
-     * GSYVideoType IJKPLAYER = 0 or IJKEXOPLAYER = 1 or IJKEXOPLAYER2 = 2;
-     * IJKEXOPLAYER2 must be compile com.shuyu:gsyVideoPlayer-exo2:$gsyVideoVersion
+     * 设置了视频的播放类型
+     * IJKPLAYER = 0; 默认IJK
+     * IJKEXOPLAYER2 = 2;EXOPlayer2 (最好配合GSYVideoType.SUFRACE)
+     * SYSTEMPLAYER = 4;系统播放器 (最好配合GSYVideoType.SUFRACE)
      */
     public void setVideoType(Context context, int videoType) {
         this.context = context.getApplicationContext();
