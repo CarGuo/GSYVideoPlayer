@@ -32,14 +32,14 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     api project(':gsyVideoPlayer-java')
-    api project(':gsyVideoPlayer-armv5')
-    api project(':gsyVideoPlayer-armv7a')
-    api project(':gsyVideoPlayer-armv64')
-    api project(':gsyVideoPlayer-x86')
-    api project(':gsyVideoPlayer-x86_64')
+    //api project(':gsyVideoPlayer-armv5')
+    //api project(':gsyVideoPlayer-armv7a')
+    //api project(':gsyVideoPlayer-armv64')
+    //api project(':gsyVideoPlayer-x86')
+    //api project(':gsyVideoPlayer-x86_64')
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
-    //api project(':gsyVideoPlayer-ex_so')
+    api project(':gsyVideoPlayer-ex_so')
 
     //api "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
