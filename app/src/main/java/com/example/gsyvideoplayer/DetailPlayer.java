@@ -54,7 +54,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
 
         //String url =  "http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4";
-        String url =  "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8";
+        //String url =  "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8";
         //String url =  "rtsp://cloud.easydarwin.org:554/stream0.sdp";
         //String url =  "http://s.swao.cn/o_1c4gm8o1nniu1had13bk1t0l1rq64m.mov";
         //String url =  "http://api.ciguang.tv/avideo/play?num=02-041-0491&type=flv&v=1&client=android";
@@ -71,7 +71,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
         //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
         //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
-        //String url = "https://res.exexm.com/cw_145225549855002";
+        String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
 
         //detailPlayer.setUp(url, false, null, "测试视频");
