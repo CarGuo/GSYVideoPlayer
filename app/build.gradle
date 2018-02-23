@@ -13,8 +13,8 @@ android {
         minSdkVersion globalConfiguration.androidMinSdkVersion
         targetSdkVersion globalConfiguration.androidTargetSdkVersion
 
-        versionCode 3
-        versionName "1.4.9"
+        versionCode 5
+        versionName "4.0.0"
 
         javaCompileOptions {
             annotationProcessorOptions.includeCompileClasspath = true
