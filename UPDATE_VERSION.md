@@ -1,5 +1,30 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 4.1.0 (2018-02-26)
+* 1、update to ijk 0.8.8
+* 2、去除cache模块的log库依赖
+* 3、去除exo模块的无用依赖
+* 4、增加恢复播放方法参数
+```
+ XXXXManager相关
+/**
+  * 恢复暂停状态
+  *
+  * @param seek 是否产生seek动作,直播设置为false
+  */
+ public static void onResume(String key, boolean seek)
+
+ Video相关
+ /**
+  * 恢复暂停状态
+  *
+  * @param seek 是否产生seek动作
+  */
+ @Override
+ public void onVideoResume(boolean seek)
+
+```
+
 ### 4.0.0-beat1（2018-02-06）
 * 1、新增简单片头广告支持。
 `GSYSampleADVideoPlayer 与 DetailADPlayer`
