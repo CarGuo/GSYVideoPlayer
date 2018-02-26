@@ -145,4 +145,16 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
             GSYVideoADManager.instance().listener().onVideoResume();
         }
     }
+
+
+    /**
+     * 恢复暂停状态
+     *
+     * @param seek 是否产生seek动作,直播设置为false
+     */
+    public static void onResume(boolean seek) {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onVideoResume(seek);
+        }
+    }
 }

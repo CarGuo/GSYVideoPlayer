@@ -53,21 +53,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:4.0.0-beat1'
+compile 'com.shuyu:GSYVideoPlayer:4.1.0'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:4.0.0-beat1'
+compile 'com.shuyu:gsyVideoPlayer-java:4.1.0'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:4.0.0-beat1'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:4.0.0-beat1'
-compile 'com.shuyu:gsyVideoPlayer-arm64:4.0.0-beat1'
-compile 'com.shuyu:gsyVideoPlayer-x64:4.0.0-beat1'
-compile 'com.shuyu:gsyVideoPlayer-x86:4.0.0-beat1'
+compile 'com.shuyu:gsyVideoPlayer-armv5:4.1.0'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:4.1.0'
+compile 'com.shuyu:gsyVideoPlayer-arm64:4.1.0'
+compile 'com.shuyu:gsyVideoPlayer-x64:4.1.0'
+compile 'com.shuyu:gsyVideoPlayer-x86:4.1.0'
 
 ```
 
@@ -77,9 +77,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:4.0.0-beat1'
+compile 'com.shuyu:gsyVideoPlayer-java:4.1.0'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:4.0.0-beat1'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.0'
 
 ```
 
@@ -129,6 +129,31 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.0.0-beat1'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
 ## 五、近期版本
+
+### 4.1.0 (2018-03-xx)
+* 1、update to ijk 0.8.8
+* 2、去除cache模块的log库依赖
+* 3、去除exo模块的无用依赖
+* 4、增加恢复播放方法参数
+```
+ XXXXManager相关
+/**
+  * 恢复暂停状态
+  *
+  * @param seek 是否产生seek动作,直播设置为false
+  */
+ public static void onResume(String key, boolean seek)
+
+ Video相关
+ /**
+  * 恢复暂停状态
+  *
+  * @param seek 是否产生seek动作
+  */
+ @Override
+ public void onVideoResume(boolean seek)
+
+```
 
 ### 4.0.0-beat1（2018-02-06）
 * 1、新增简单片头广告支持。

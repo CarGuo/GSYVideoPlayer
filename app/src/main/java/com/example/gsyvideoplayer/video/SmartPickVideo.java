@@ -288,6 +288,11 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
         public void onVideoResume() {
 
         }
+
+        @Override
+        public void onVideoResume(boolean seek) {
+
+        }
     };
 
     private void resolveStartChange(int position) {
