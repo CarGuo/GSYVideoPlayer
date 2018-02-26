@@ -130,7 +130,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.0'
 
 ## 五、近期版本
 
-### 4.1.0 (2018-03-xx)
+### 4.1.0 (2018-02-26)
 * 1、update to ijk 0.8.8
 * 2、去除cache模块的log库依赖
 * 3、去除exo模块的无用依赖
