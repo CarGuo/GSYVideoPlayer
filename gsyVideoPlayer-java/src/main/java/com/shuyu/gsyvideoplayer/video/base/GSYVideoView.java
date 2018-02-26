@@ -498,11 +498,23 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     @Override
     public void onVideoResume() {
+        onVideoResume(true);
+    }
+
+    /**
+     * 恢复暂停状态
+     *
+     * @param seek 是否产生seek动作
+     */
+    @Override
+    public void onVideoResume(boolean seek) {
         mPauseBeforePrepared = false;
         if (mCurrentState == CURRENT_STATE_PAUSE) {
             try {
                 if (mCurrentPosition > 0 && getGSYVideoManager().getMediaPlayer() != null) {
-                    getGSYVideoManager().getMediaPlayer().seekTo(mCurrentPosition);
+                    if (seek) {
+                        getGSYVideoManager().getMediaPlayer().seekTo(mCurrentPosition);
+                    }
                     getGSYVideoManager().getMediaPlayer().start();
                     setStateAndUi(CURRENT_STATE_PLAYING);
                     if (mAudioManager != null && !mReleaseWhenLossAudio) {

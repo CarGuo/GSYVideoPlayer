@@ -205,7 +205,7 @@ public class DetailPlayer extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        getCurPlay().onVideoResume();
+        getCurPlay().onVideoResume(false);
         super.onResume();
         isPause = false;
     }

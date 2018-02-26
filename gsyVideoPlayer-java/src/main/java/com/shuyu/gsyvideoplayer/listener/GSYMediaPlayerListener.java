@@ -22,4 +22,6 @@ public interface GSYMediaPlayerListener {
     void onVideoPause();
 
     void onVideoResume();
+
+    void onVideoResume(boolean seek);
 }

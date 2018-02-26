@@ -91,6 +91,18 @@ public class CustomManager extends GSYVideoBaseManager {
 
 
     /**
+     * 恢复暂停状态
+     *
+     * @param seek 是否产生seek动作,直播设置为false
+     */
+    public void onResume(String key, boolean seek) {
+        if (getCustomManager(key).listener() != null) {
+            getCustomManager(key).listener().onVideoResume(seek);
+        }
+    }
+
+
+    /**
      * 单例管理器
      */
     public static synchronized Map<String, CustomManager> instance() {
@@ -124,6 +136,19 @@ public class CustomManager extends GSYVideoBaseManager {
         if (sMap.size() > 0) {
             for (Map.Entry<String, CustomManager> header : sMap.entrySet()) {
                 header.getValue().onResume(header.getKey());
+            }
+        }
+    }
+
+    /**
+     * 恢复暂停状态
+     *
+     * @param seek 是否产生seek动作
+     */
+    public static void onResumeAll(boolean seek) {
+        if (sMap.size() > 0) {
+            for (Map.Entry<String, CustomManager> header : sMap.entrySet()) {
+                header.getValue().onResume(header.getKey(), seek);
             }
         }
     }
