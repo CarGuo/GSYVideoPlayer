@@ -8,10 +8,9 @@ ext {
     //Android
     androidBuildToolsVersion = "26.0.2"
     androidMinSdkVersion = 16
-    androidTargetSdkVersion = 22
-    androidCompileSdkVersion = 22
-    supportLibraryVersion = '24.2.0'
-    otherLibraryVersion = '22.2.1'
+    androidTargetSdkVersion = 26
+    androidCompileSdkVersion = 26
+    supportLibraryVersion = '26.0.2'
 
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
@@ -33,10 +32,10 @@ ext {
 
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
-            appcompat_v7: "com.android.support:appcompat-v7:${otherLibraryVersion}",
-            cardview_v7 : "com.android.support:cardview-v7:23.2.0",
+            appcompat_v7: "com.android.support:appcompat-v7:${supportLibraryVersion}",
+            cardview_v7 : "com.android.support:cardview-v7:${supportLibraryVersion}",
             support_v4  : "com.android.support:support-v4:${supportLibraryVersion}",
-            design      : "com.android.support:design:${otherLibraryVersion}",
+            design      : "com.android.support:design:${supportLibraryVersion}",
     ]
 
     viewDependencies = [
