@@ -12,27 +12,17 @@ import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 
 public class RecyclerItemBaseHolder extends RecyclerView.ViewHolder {
 
-    RecyclerBaseAdapter recyclerBaseAdapter;
-
-    ListVideoUtil listVideoUtil;
+    RecyclerView.Adapter recyclerBaseAdapter;
 
     public RecyclerItemBaseHolder(View itemView) {
         super(itemView);
     }
 
-    public RecyclerBaseAdapter getRecyclerBaseAdapter() {
+    public RecyclerView.Adapter getRecyclerBaseAdapter() {
         return recyclerBaseAdapter;
     }
 
-    public void setRecyclerBaseAdapter(RecyclerBaseAdapter recyclerBaseAdapter) {
+    public void setRecyclerBaseAdapter(RecyclerView.Adapter recyclerBaseAdapter) {
         this.recyclerBaseAdapter = recyclerBaseAdapter;
-    }
-
-    public ListVideoUtil getListVideoUtil() {
-        return listVideoUtil;
-    }
-
-    public void setListVideoUtil(ListVideoUtil listVideoUtil) {
-        this.listVideoUtil = listVideoUtil;
     }
 }

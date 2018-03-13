@@ -1,23 +1,19 @@
 package com.example.gsyvideoplayer;
 
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.example.gsyvideoplayer.listener.SampleListener;
-import com.shuyu.gsyvideoplayer.GSYPreViewManager;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.ListGSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +22,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * Activity可以继承GSYBaseActivityDetail实现详情模式的页面
+ * 或者参考DetailPlayer、DetailListPlayer实现
  * Created by shuyu on 2016/12/20.
  */
 
-public class DetailListPlayer extends AppCompatActivity {
+public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
 
     @BindView(R.id.post_detail_nested_scroll)
@@ -38,11 +36,8 @@ public class DetailListPlayer extends AppCompatActivity {
     ListGSYVideoPlayer detailPlayer;
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
-
-    private boolean isPlay;
-    private boolean isPause;
-
-    private OrientationUtils orientationUtils;
+    @BindView(R.id.next)
+    View next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +45,16 @@ public class DetailListPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_deatil_list_player);
         ButterKnife.bind(this);
 
+        //普通模式
+        initVideo();
+
         //String url = "http://baobab.wd jcdn.com/14564977406580.mp4";
         List<GSYVideoModel> urls = new ArrayList<>();
-        urls.add(new GSYVideoModel("http://baobab.wdjcdn.com/14564977406580.mp4", "标题1"));
+        urls.add(new GSYVideoModel("http://7xse1z.com1.z0.glb.clouddn.com/1491813192", "标题1"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题2"));
-        urls.add(new GSYVideoModel("http://baobab.wdjcdn.com/14564977406580.mp4", "标题3"));
+        urls.add(new GSYVideoModel("https://res.exexm.com/cw_145225549855002", "标题3"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题4"));
-        detailPlayer.setUp(urls, true, 0, "");
+        detailPlayer.setUp(urls, true, 0);
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -66,11 +64,6 @@ public class DetailListPlayer extends AppCompatActivity {
 
         resolveNormalVideoUI();
 
-        //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
-        //初始化不打开外部的旋转
-        orientationUtils.setEnable(false);
-
         detailPlayer.setIsTouchWiget(true);
         //关闭自动旋转
         detailPlayer.setRotateViewAuto(false);
@@ -78,44 +71,7 @@ public class DetailListPlayer extends AppCompatActivity {
         detailPlayer.setShowFullAnimation(false);
         detailPlayer.setNeedLockFull(true);
 
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //直接横屏
-                orientationUtils.resolveByClick();
-
-                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(DetailListPlayer.this, true, true);
-            }
-        });
-
-        detailPlayer.setStandardVideoAllCallBack(new SampleListener() {
-            @Override
-            public void onPrepared(String url, Object... objects) {
-                super.onPrepared(url, objects);
-                //开始播放了才能旋转和全屏
-                orientationUtils.setEnable(true);
-                isPlay = true;
-            }
-
-            @Override
-            public void onAutoComplete(String url, Object... objects) {
-                super.onAutoComplete(url, objects);
-            }
-
-            @Override
-            public void onClickStartError(String url, Object... objects) {
-                super.onClickStartError(url, objects);
-            }
-
-            @Override
-            public void onQuitFullscreen(String url, Object... objects) {
-                super.onQuitFullscreen(url, objects);
-                if (orientationUtils != null) {
-                    orientationUtils.backToProtVideo();
-                }
-            }
-        });
+        detailPlayer.setVideoAllCallBack(this);
 
         detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
@@ -127,70 +83,62 @@ public class DetailListPlayer extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        isPause = true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        isPause = false;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        GSYVideoPlayer.releaseAllVideos();
-        GSYPreViewManager.instance().releaseMediaPlayer();
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (isPlay && !isPause) {
-            if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
-                if (!detailPlayer.isIfCurrentIsFullscreen()) {
-                    detailPlayer.startWindowFullscreen(DetailListPlayer.this, true, true);
-                }
-            } else {
-                //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
-                if (detailPlayer.isIfCurrentIsFullscreen()) {
-                    StandardGSYVideoPlayer.backFromWindowFull(this);
-                }
-                if (orientationUtils != null) {
-                    orientationUtils.setEnable(true);
-                }
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListGSYVideoPlayer)detailPlayer.getCurrentPlayer()).playNext();
             }
-        }
+        });
+
     }
+
+    @Override
+    public ListGSYVideoPlayer getGSYVideoPlayer() {
+        return detailPlayer;
+    }
+
+    @Override
+    public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
+        //不需要builder的
+        return null;
+    }
+
+    @Override
+    public void clickForFullScreen() {
+
+    }
+
+    /**
+     * 是否启动旋转横屏，true表示启动
+     * @return true
+     */
+    @Override
+    public boolean getDetailOrientationRotateAuto() {
+        return true;
+    }
+
+    @Override
+    public void onEnterFullscreen(String url, Object... objects) {
+        super.onEnterFullscreen(url, objects);
+        //隐藏调全屏对象的返回按键
+        GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer)objects[1];
+        gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
+    }
+
 
 
     private void resolveNormalVideoUI() {
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getTitleTextView().setText("测试视频");
-        detailPlayer.getBackButton().setVisibility(View.GONE);
+        detailPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+        detailPlayer.getBackButton().setVisibility(View.VISIBLE);
     }
+
+    private GSYVideoPlayer getCurPlay() {
+        if (detailPlayer.getFullWindowPlayer() != null) {
+            return  detailPlayer.getFullWindowPlayer();
+        }
+        return detailPlayer;
+    }
+
 
 }

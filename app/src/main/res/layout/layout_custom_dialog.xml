@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_wiht_shadow"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_input_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp"
+        android:text="请输入URL"
+        android:textColor="#E6E6E6"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/dialog_input_dialog_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@null"
+        android:gravity="left"
+        android:minLines="4"
+        android:textColor="#E6E6E6"
+        android:textColorHint="#a1a1a1"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="是否缓存"
+            android:textColor="#FFFFFF" />
+
+        <CheckBox
+            android:id="@+id/dialog_input_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/dialog_input_dialog_negative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/dialog_btn_bg"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:text="取消"
+            android:textColor="#E6E6E6"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/dialog_input_dialog_postive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_btn_bg"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:text="确定"
+            android:textColor="#E6E6E6"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>

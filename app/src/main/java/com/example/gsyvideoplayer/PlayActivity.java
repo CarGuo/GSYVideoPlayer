@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
@@ -14,12 +15,9 @@ import android.widget.ImageView;
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.video.SampleVideo;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +52,9 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void init() {
-        String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+        String url = "https://res.exexm.com/cw_145225549855002";
+
+        //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
         //需要路径的
         //videoPlayer.setUp(url, true, new File(FileUtils.getPath()), "");
 
@@ -71,7 +71,7 @@ public class PlayActivity extends AppCompatActivity {
         list.add(switchVideoModel);
         list.add(switchVideoModel2);
 
-        videoPlayer.setUp(list, true, "");
+        videoPlayer.setUp(list, true, "测试视频");
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -81,7 +81,9 @@ public class PlayActivity extends AppCompatActivity {
 
         //增加title
         videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-        videoPlayer.getTitleTextView().setText("测试视频");
+        //videoPlayer.setShowPauseCover(false);
+
+        //videoPlayer.setSpeed(2f);
 
         //设置返回键
         videoPlayer.getBackButton().setVisibility(View.VISIBLE);
@@ -89,7 +91,7 @@ public class PlayActivity extends AppCompatActivity {
         //设置旋转
         orientationUtils = new OrientationUtils(this, videoPlayer);
 
-        //设置全屏按键功能
+        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
         videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +131,7 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        videoPlayer.onVideoResume();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -137,9 +140,6 @@ public class PlayActivity extends AppCompatActivity {
         super.onDestroy();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
-        if (isTransition && transition != null) {
-            transition.removeListener(onTransitionListener);
-        }
     }
 
     @Override
@@ -150,13 +150,18 @@ public class PlayActivity extends AppCompatActivity {
             return;
         }
         //释放所有
-        videoPlayer.setStandardVideoAllCallBack(null);
-        GSYVideoPlayer.releaseAllVideos();
+        videoPlayer.setVideoAllCallBack(null);
+        GSYVideoManager.releaseAllVideos();
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onBackPressed();
         } else {
-            finish();
-            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                    overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                }
+            }, 500);
         }
     }
 
@@ -176,20 +181,17 @@ public class PlayActivity extends AppCompatActivity {
     private boolean addTransitionListener() {
         transition = getWindow().getSharedElementEnterTransition();
         if (transition != null) {
-            transition.addListener(onTransitionListener);
+            transition.addListener(new OnTransitionListener(){
+                @Override
+                public void onTransitionEnd(Transition transition) {
+                    super.onTransitionEnd(transition);
+                    videoPlayer.startPlayLogic();
+                    transition.removeListener(this);
+                }
+            });
             return true;
         }
         return false;
     }
-
-    OnTransitionListener onTransitionListener = new OnTransitionListener() {
-
-        @TargetApi(Build.VERSION_CODES.KITKAT)
-        @Override
-        public void onTransitionEnd(Transition transition) {
-            videoPlayer.startPlayLogic();
-            transition.removeListener(onTransitionListener);
-        }
-    };
 
 }

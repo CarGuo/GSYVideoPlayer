@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="video_progress_dialog_margin_top">80dp</dimen>
+    <dimen name="video_volume_dialog_margin_left">24dp</dimen>
+
+
+    <dimen name="seek_bar_image">150dp</dimen>
+    <dimen name="brightness_icon">40dp</dimen>
+</resources>

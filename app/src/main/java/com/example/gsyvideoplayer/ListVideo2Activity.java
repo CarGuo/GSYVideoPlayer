@@ -12,27 +12,37 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
-import com.example.gsyvideoplayer.listener.SampleListener;
-import com.shuyu.gsyvideoplayer.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
-import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 列表小窗口
+ */
 public class ListVideo2Activity extends AppCompatActivity {
 
     @BindView(R.id.video_list)
     ListView videoList;
+
     @BindView(R.id.video_full_container)
     FrameLayout videoFullContainer;
+
     @BindView(R.id.activity_list_video)
     RelativeLayout activityListVideo;
 
-    ListVideoUtil listVideoUtil;
+    GSYVideoHelper smallVideoHelper;
+
     ListVideoAdapter listVideoAdapter;
+
+    GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
+
     int lastVisibleItem;
+
     int firstVisibleItem;
 
     @Override
@@ -47,20 +57,51 @@ public class ListVideo2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_list_video2);
         ButterKnife.bind(this);
 
-        listVideoUtil = new ListVideoUtil(this);
-        listVideoUtil.setFullViewContainer(videoFullContainer);
-        listVideoUtil.setHideStatusBar(true);
-        //listVideoUtil.setHideActionBar(true);
-        listVideoUtil.setNeedLockFull(true);
+        //创建小窗口帮助类
+        smallVideoHelper = new GSYVideoHelper(this);
 
-        listVideoAdapter = new ListVideoAdapter(this, listVideoUtil);
+        //如果不设置即使用默认的 windowViewContainer
+        //smallVideoHelper.setFullViewContainer(videoFullContainer);
+
+        //配置
+        gsySmallVideoHelperBuilder = new GSYVideoHelper.GSYVideoHelperBuilder();
+        gsySmallVideoHelperBuilder
+                .setHideStatusBar(true)
+                .setNeedLockFull(true)
+                .setCacheWithPlay(true)
+                .setShowFullAnimation(false)
+                .setRotateViewAuto(false)
+                .setLockLand(true)
+                .setVideoAllCallBack(new GSYSampleCallBack(){
+            @Override
+            public void onPrepared(String url, Object... objects) {
+                super.onPrepared(url, objects);
+                Debuger.printfLog("Duration " + smallVideoHelper.getGsyVideoPlayer().getDuration() + " CurrentPosition " + smallVideoHelper.getGsyVideoPlayer().getCurrentPositionWhenPlaying());
+            }
+
+            @Override
+            public void onQuitSmallWidget(String url, Object... objects) {
+                super.onQuitSmallWidget(url, objects);
+                //大于0说明有播放,//对应的播放列表TAG
+                if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(ListVideoAdapter.TAG)) {
+                    //当前播放的位置
+                    int position = smallVideoHelper.getPlayPosition();
+                    //不可视的是时候
+                    if ((position < firstVisibleItem || position > lastVisibleItem)) {
+                        //释放掉视频
+                        smallVideoHelper.releaseVideoPlayer();
+                        listVideoAdapter.notifyDataSetChanged();
+                    }
+                }
+
+            }
+        });
+
+        smallVideoHelper.setGsyVideoOptionBuilder(gsySmallVideoHelperBuilder);
+
+        listVideoAdapter = new ListVideoAdapter(this, smallVideoHelper, gsySmallVideoHelperBuilder);
         listVideoAdapter.setRootView(activityListVideo);
         videoList.setAdapter(listVideoAdapter);
-
-        //listVideoUtil.setShowFullAnimation(true);
-        //listVideoUtil.setAutoRotation(true);
-        //listVideoUtil.setFullLandFrist(true);
-
 
         videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -72,60 +113,32 @@ public class ListVideo2Activity extends AppCompatActivity {
                 ListVideo2Activity.this.firstVisibleItem = firstVisibleItem;
                 lastVisibleItem = firstVisibleItem + visibleItemCount;
                 //大于0说明有播放,//对应的播放列表TAG
-                if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(ListVideoAdapter.TAG)) {
+                if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(ListVideoAdapter.TAG)) {
                     //当前播放的位置
-                    int position = listVideoUtil.getPlayPosition();
+                    int position = smallVideoHelper.getPlayPosition();
                     //不可视的是时候
                     if ((position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果是小窗口就不需要处理
-                        if (!listVideoUtil.isSmall()) {
+                        if (!smallVideoHelper.isSmall()) {
                             //小窗口
                             int size = CommonUtil.dip2px(ListVideo2Activity.this, 150);
-                            listVideoUtil.showSmallVideo(new Point(size, size), false, true);
+                            smallVideoHelper.showSmallVideo(new Point(size, size), false, true);
                         }
                     } else {
-                        if (listVideoUtil.isSmall()) {
-                            listVideoUtil.smallVideoToNormal();
+                        if (smallVideoHelper.isSmall()) {
+                            smallVideoHelper.smallVideoToNormal();
                         }
                     }
                 }
             }
 
         });
-
-        //小窗口关闭被点击的时候回调处理回复页面
-        listVideoUtil.setVideoAllCallBack(new SampleListener(){
-            @Override
-            public void onPrepared(String url, Object... objects) {
-                super.onPrepared(url, objects);
-                Debuger.printfLog("Duration " + listVideoUtil.getDuration() + " CurrentPosition " + listVideoUtil.getCurrentPositionWhenPlaying());
-            }
-
-            @Override
-            public void onQuitSmallWidget(String url, Object... objects) {
-                super.onQuitSmallWidget(url, objects);
-                //大于0说明有播放,//对应的播放列表TAG
-                if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(ListVideoAdapter.TAG)) {
-                    //当前播放的位置
-                    int position = listVideoUtil.getPlayPosition();
-                    //不可视的是时候
-                    if ((position < firstVisibleItem || position > lastVisibleItem)) {
-                        //释放掉视频
-                        listVideoUtil.releaseVideoPlayer();
-                        listVideoAdapter.notifyDataSetChanged();
-                    }
-                }
-
-            }
-        });
-
-
     }
 
 
     @Override
     public void onBackPressed() {
-        if (listVideoUtil.backFromFull()) {
+        if (smallVideoHelper.backFromFull()) {
             return;
         }
         super.onBackPressed();
@@ -135,8 +148,8 @@ public class ListVideo2Activity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        listVideoUtil.releaseVideoPlayer();
-        GSYVideoPlayer.releaseAllVideos();
+        smallVideoHelper.releaseVideoPlayer();
+        GSYVideoManager.releaseAllVideos();
     }
 
 }

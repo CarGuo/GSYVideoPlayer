@@ -6,7 +6,7 @@ allprojects {
 
 ext {
     //Android
-    androidBuildToolsVersion = "23.0.1"
+    androidBuildToolsVersion = "26.0.2"
     androidMinSdkVersion = 16
     androidTargetSdkVersion = 22
     androidCompileSdkVersion = 22
@@ -16,13 +16,20 @@ ext {
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
 
-    ijkplayer = '0.7.5'
+    ijkplayer = '0.8.8'
+    DanmakuFlameMaster = '0.9.16'
 
     transitionseverywhere = '1.7.0'
+    floatWindow = '1.0.6'
 
     //DataLibraries
-    videocache = '2.6.4'
     leakcanary = '1.5'
+
+    imageLoader = '4.0.0'
+
+    gsyVideoVersion = '4.1.0'
+
+    exo_player2 = '2.6.1'
 
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
@@ -43,10 +50,21 @@ ext {
             ijkplayer_x86        : "tv.danmaku.ijk.media:ijkplayer-x86:${ijkplayer}",
             ijkplayer_exo        : "tv.danmaku.ijk.media:ijkplayer-exo:${ijkplayer}",
             transitionseverywhere: "com.andkulikov:transitionseverywhere:${transitionseverywhere}",
+            DanmakuFlameMaster   : "com.github.ctiao:DanmakuFlameMaster:${DanmakuFlameMaster}",
+            ndkbitmap_armv7a     : "com.github.ctiao:ndkbitmap-armv7a:${DanmakuFlameMaster}",
+            ndkbitmap_armv5      : "com.github.ctiao:ndkbitmap-armv5:${DanmakuFlameMaster}",
+            ndkbitmap_x86        : "com.github.ctiao:ndkbitmap-x86:${DanmakuFlameMaster}",
+
+            glide                : "com.github.bumptech.glide:glide:${imageLoader}",
+            glideProcessor       : "com.github.bumptech.glide:compiler:${imageLoader}",
+            floatWindow          : "com.github.yhaolpz:FloatWindow:${floatWindow}",
+            exo_player2          : "com.google.android.exoplayer:exoplayer:${exo_player2}",
+            exo_player2_rtmp     : "com.google.android.exoplayer:extension-rtmp:${exo_player2}",
+
     ]
 
     dataDependencies = [
-            videocache: "com.danikula:videocache:${videocache}",
+            videocache: "com.shuyu:gsyvideoplayer-androidvideocache:${gsyVideoVersion}",
             leakcanary: "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
     ]
 }

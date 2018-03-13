@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+
 
 android {
 
@@ -13,10 +13,12 @@ android {
         minSdkVersion globalConfiguration.androidMinSdkVersion
         targetSdkVersion globalConfiguration.androidTargetSdkVersion
 
-        versionCode 3
-        versionName "1.4.9"
+        versionCode 5
+        versionName "4.0.0"
 
-
+        javaCompileOptions {
+            annotationProcessorOptions.includeCompileClasspath = true
+        }
         ndk {
             //设置支持的SO库架构
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
@@ -36,16 +38,44 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
     def androidDependencies = rootProject.ext.androidDependencies
     def dataDependencies = rootProject.ext.dataDependencies
-    apt viewDependencies.apt_butterKnife
-    compile viewDependencies.butterKnife
-    compile androidDependencies.recyclerView
+    annotationProcessor viewDependencies.apt_butterKnife
     //debugCompile dataDependencies.leakcanary
-    compile project(':gsyVideoPlayer')
+    implementation viewDependencies.butterKnife
+    implementation androidDependencies.recyclerView
+    implementation viewDependencies.DanmakuFlameMaster
+    implementation viewDependencies.ndkbitmap_armv7a
+    implementation viewDependencies.ndkbitmap_armv5
+    implementation viewDependencies.ndkbitmap_x86
+    implementation viewDependencies.glide
+    implementation viewDependencies.glideProcessor
+    implementation androidDependencies.support_v4
+    implementation androidDependencies.design
+
+    implementation project(':gsyVideoPlayer')
+    //jcenter
+    //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
+
+    //implementation "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion'
+
+    //implementation "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
+    //implementation "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
+
+    //implementation "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
+
 }

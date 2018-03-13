@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.holder.RecyclerItemViewHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
-import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 
 import java.util.List;
 
@@ -25,8 +25,12 @@ public class RecyclerBaseAdapter extends RecyclerView.Adapter {
     private final static String TAG = "RecyclerBaseAdapter";
 
     private List<VideoModel> itemDataList = null;
+
     private Context context = null;
-    private ListVideoUtil listVideoUtil;
+
+    private GSYVideoHelper smallVideoHelper;
+
+    private GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
 
     public RecyclerBaseAdapter(Context context, List<VideoModel> itemDataList) {
         this.itemDataList = itemDataList;
@@ -45,7 +49,7 @@ public class RecyclerBaseAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         RecyclerItemViewHolder recyclerItemViewHolder = (RecyclerItemViewHolder) holder;
-        recyclerItemViewHolder.setListVideoUtil(listVideoUtil);
+        recyclerItemViewHolder.setVideoHelper(smallVideoHelper, gsySmallVideoHelperBuilder);
         recyclerItemViewHolder.setRecyclerBaseAdapter(this);
         recyclerItemViewHolder.onBind(position, itemDataList.get(position));
     }
@@ -66,11 +70,12 @@ public class RecyclerBaseAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public ListVideoUtil getListVideoUtil() {
-        return listVideoUtil;
+    public GSYVideoHelper getVideoHelper() {
+        return smallVideoHelper;
     }
 
-    public void setListVideoUtil(ListVideoUtil listVideoUtil) {
-        this.listVideoUtil = listVideoUtil;
+    public void setVideoHelper(GSYVideoHelper smallVideoHelper, GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder) {
+        this.smallVideoHelper = smallVideoHelper;
+        this.gsySmallVideoHelperBuilder = gsySmallVideoHelperBuilder;
     }
 }

@@ -4,20 +4,12 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/surface_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
-
-    </RelativeLayout>
-
-    <com.shuyu.gsyvideoplayer.GSYImageCover
-        android:id="@+id/cover"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:scaleType="fitXY" />
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/thumb"
@@ -35,17 +27,18 @@
     <LinearLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:background="#99000000"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="invisible">
 
-        <moe.codeest.enviews.ENPlayView
+        <ImageView
             android:id="@+id/start"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/video_click_play_selector"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
@@ -80,16 +73,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:text="00:00"
-            android:textColor="#ffffff" />
-
-        <TextView
-            android:id="@+id/switchSize"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="16dp"
-            android:gravity="center"
-            android:minEms="2"
-            android:text="标准"
             android:textColor="#ffffff" />
 
         <ImageView
@@ -174,17 +157,16 @@
             android:paddingLeft="10dp"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/moreScale"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:minEms="5"
-            android:paddingLeft="10dp"
-            android:text="默认比例"
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/preview_layout"
+        android:layout_width="@dimen/seek_bar_image"
+        android:layout_height="100dp"
+        android:layout_above="@+id/layout_bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:visibility="gone" />
 
 </RelativeLayout>
