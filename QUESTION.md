@@ -235,3 +235,14 @@ protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gs
     }
 }
 ```
+
+#### 20、精准的某个时间开始播放
+
+注意，这个是全局地设置，设置之后如果不需要需要清除这个item。
+```
+VideoOptionModel videoOptionModel =
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "seek-at-start", startPosition);
+        List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel);
+        GSYVideoManager.instance().setOptionModelList(list);
+```
