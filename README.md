@@ -132,6 +132,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
 
 ### 4.1.1 (2018-03-13)
 * 1、update support lib to 26.0.2 
+* 2、修复了渲染层在某些条件下，截图时返回大小不对问题。
 
 ### 4.1.0 (2018-02-26)
 * 1、update to ijk 0.8.8
