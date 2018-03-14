@@ -101,12 +101,12 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
 
     @Override
     public int getSizeH() {
-        return measureHelper.getMeasuredHeight();
+        return getHeight();
     }
 
     @Override
     public int getSizeW() {
-        return measureHelper.getMeasuredWidth();
+        return getWidth();
     }
 
     /**

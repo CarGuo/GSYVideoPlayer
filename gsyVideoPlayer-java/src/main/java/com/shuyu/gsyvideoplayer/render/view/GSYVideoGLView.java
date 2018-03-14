@@ -124,12 +124,12 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
 
     @Override
     public int getSizeH() {
-        return measureHelper.getMeasuredHeight();
+        return getHeight();
     }
 
     @Override
     public int getSizeW() {
-        return measureHelper.getMeasuredWidth();
+        return getWidth();
     }
 
     @Override
