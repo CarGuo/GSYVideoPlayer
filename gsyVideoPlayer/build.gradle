@@ -41,7 +41,7 @@ dependencies {
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
     //api project(':gsyVideoPlayer-ex_so')
 
-    api "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
+    //api "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
     api "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
     api "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
