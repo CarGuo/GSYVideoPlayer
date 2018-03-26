@@ -14,7 +14,7 @@
 对于视频相关的，推荐雷宵骅的视频基础：[视音频编解码技术零基础学习方法](http://blog.csdn.net/leixiaohua1020/article/details/18893769)，这里你可以了解到视频和音频相关编码和协议的东西。
 
 
-项目普通so默认支持的视频编码和音频编码配置可查看[编译配置文件](https://github.com/CarGuo/GSYVideoPlayer/blob/master/module-lite-hevc.sh)。
+项目普通so默认支持的视频编码和音频编码配置可查看[编译配置文件](https://github.com/CarGuo/GSYVideoPlayer/blob/master/module-lite.sh)。
 
 ex_so支持的视频编码和音频编码配置可查看[编译配置文件](https://github.com/CarGuo/GSYVideoPlayer/blob/master/module-lite-more.sh)。
 
