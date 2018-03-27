@@ -59,10 +59,12 @@ public class OrientationUtils {
                         if (mIsLand > 0) {
                             screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
                             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                            if (gsyVideoPlayer.isIfCurrentIsFullscreen()) {
-                                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
-                            } else {
-                                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
+                            if (gsyVideoPlayer.getFullscreenButton() != null) {
+                                if (gsyVideoPlayer.isIfCurrentIsFullscreen()) {
+                                    gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                                } else {
+                                    gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
+                                }
                             }
                             mIsLand = 0;
                             mClick = false;
@@ -83,7 +85,9 @@ public class OrientationUtils {
                         if (!(mIsLand == 1)) {
                             screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
                             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                            gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                            if (gsyVideoPlayer.getFullscreenButton() != null) {
+                                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                            }
                             mIsLand = 1;
                             mClick = false;
                         }
@@ -102,7 +106,9 @@ public class OrientationUtils {
                     } else if (!(mIsLand == 2)) {
                         screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
                         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                        gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                        if (gsyVideoPlayer.getFullscreenButton() != null) {
+                            gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                        }
                         mIsLand = 2;
                         mClick = false;
                     }
@@ -120,16 +126,20 @@ public class OrientationUtils {
         if (mIsLand == 0) {
             screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+            if (gsyVideoPlayer.getFullscreenButton() != null) {
+                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+            }
             mIsLand = 1;
             mClickLand = false;
         } else {
             screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            if (gsyVideoPlayer.isIfCurrentIsFullscreen()) {
-                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
-            } else {
-                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
+            if (gsyVideoPlayer.getFullscreenButton() != null) {
+                if (gsyVideoPlayer.isIfCurrentIsFullscreen()) {
+                    gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                } else {
+                    gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
+                }
             }
             mIsLand = 0;
             mClickPort = false;
@@ -144,7 +154,7 @@ public class OrientationUtils {
         if (mIsLand > 0) {
             mClick = true;
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            if (gsyVideoPlayer != null)
+            if (gsyVideoPlayer != null && gsyVideoPlayer.getFullscreenButton() != null)
                 gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
             mIsLand = 0;
             mClickPort = false;
