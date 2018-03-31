@@ -57,6 +57,9 @@ public class ListVideoActivity extends AppCompatActivity {
                     //对应的播放列表TAG
                     if (GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
+                        if(listNormalAdapter.isFull()) {
+                            return;
+                        }
                         //如果滑出去了上面和下面就是否，和今日头条一样
                         GSYVideoManager.releaseAllVideos();
                         listNormalAdapter.notifyDataSetChanged();

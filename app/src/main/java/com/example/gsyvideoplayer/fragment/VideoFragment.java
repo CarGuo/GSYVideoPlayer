@@ -1,8 +1,6 @@
 package com.example.gsyvideoplayer.fragment;
 
 
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +34,6 @@ public class VideoFragment extends Fragment {
 
     List<VideoModel> dataList = new ArrayList<>();
 
-    boolean mFull;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -86,7 +83,7 @@ public class VideoFragment extends Fragment {
                     if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果滑出去了上面和下面就是否，和今日头条一样
-                        if(!mFull) {
+                        if(!GSYVideoManager.isFullState(getActivity())) {
                             GSYVideoManager.releaseAllVideos();
                             recyclerNormalAdapter.notifyDataSetChanged();
                         }
@@ -103,18 +100,6 @@ public class VideoFragment extends Fragment {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (newConfig.orientation != ActivityInfo.SCREEN_ORIENTATION_USER) {
-            mFull = false;
-        } else {
-            mFull = true;
-        }
-
     }
 
     @Override

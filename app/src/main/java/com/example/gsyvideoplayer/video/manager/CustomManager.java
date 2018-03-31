@@ -1,5 +1,6 @@
 package com.example.gsyvideoplayer.video.manager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.Window;
 import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.GSYVideoBaseManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -164,5 +166,21 @@ public class CustomManager extends GSYVideoBaseManager {
 
     public static void removeManager(String key) {
         sMap.remove(key);
+    }
+
+    /**
+     * 当前是否全屏状态
+     *
+     * @return 当前是否全屏状态， true代表是。
+     */
+    @SuppressWarnings("ResourceType")
+    public static boolean isFullState(Activity activity) {
+        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(activity)).findViewById(Window.ID_ANDROID_CONTENT);
+        final View full = vp.findViewById(FULLSCREEN_ID);
+        GSYVideoPlayer gsyVideoPlayer = null;
+        if (full != null) {
+            gsyVideoPlayer = (GSYVideoPlayer) full;
+        }
+        return gsyVideoPlayer != null;
     }
 }
