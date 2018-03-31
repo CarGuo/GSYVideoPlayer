@@ -91,12 +91,12 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
     @Override
     public int getSizeH() {
-        return measureHelper.getMeasuredHeight();
+        return getHeight();
     }
 
     @Override
     public int getSizeW() {
-        return measureHelper.getMeasuredWidth();
+        return getWidth();
     }
 
     @Override

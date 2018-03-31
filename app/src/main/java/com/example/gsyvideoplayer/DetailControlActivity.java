@@ -76,6 +76,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     View loadingView;
 
     private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+    //private String url = "http://livecdn1.news.cn/Live_MajorEvent01Phone/manifest.m3u8";
     //private String url = "https://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/8908d124aa839d0d3fa9593855ef5957.m3u8";
     //private String url2 = "http://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/3aca1a0db8db9418dcbc765848c8903e.m3u8";
 
@@ -279,6 +280,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
 
     /**
      * 视频截图
+     * 这里没有做读写本地sd卡的权限处理，记得实际使用要加上
      */
     private void shotImage(final View v) {
         //获取截图
