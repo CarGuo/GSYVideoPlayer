@@ -1,7 +1,18 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-### 4.1.1 (2018-03-13)
-* 1、update support lib to 26.0.2 
+### 4.1.1 (2018-04-01)
+* 1、update support lib to 26.0.2
+* 2、修复了渲染层在某些条件下，截图时返回大小不对问题。
+* 3、一些细节的优化处理。
+* 4、增加Manager的isFullState方法
+```
+ /*
+  * 当前是否全屏状态
+  *
+  * @return 当前是否全屏状态， true代表是。
+  */
+ public static boolean isFullState(Activity activity)
+```
 
 ### 4.1.0 (2018-02-26)
 * 1、update to ijk 0.8.8
