@@ -38,6 +38,8 @@ public class ListNormalAdapter extends BaseAdapter {
 
     protected boolean isPlay;
 
+    protected boolean isFull;
+
     public ListNormalAdapter(Context context) {
         super();
         this.context = context;
@@ -183,6 +185,7 @@ public class ListNormalAdapter extends BaseAdapter {
             @Override
             public void onQuitFullscreen(String url, Object... objects) {
                 super.onQuitFullscreen(url, objects);
+                isFull = false;
                 GSYVideoManager.instance().setNeedMute(true);
                 if (getListNeedAutoLand()) {
                     ListNormalAdapter.this.onQuitFullscreen();
@@ -193,6 +196,7 @@ public class ListNormalAdapter extends BaseAdapter {
             public void onEnterFullscreen(String url, Object... objects) {
                 super.onEnterFullscreen(url, objects);
                 GSYVideoManager.instance().setNeedMute(false);
+                isFull = true;
                 holder.gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
             }
 
@@ -201,6 +205,7 @@ public class ListNormalAdapter extends BaseAdapter {
                 super.onAutoComplete(url, objects);
                 curPlayer = null;
                 isPlay = false;
+                isFull = false;
                 if (getListNeedAutoLand()) {
                     ListNormalAdapter.this.onAutoComplete();
                 }
@@ -230,6 +235,9 @@ public class ListNormalAdapter extends BaseAdapter {
         }
     }
 
+    public boolean isFull() {
+        return isFull;
+    }
 
     /**************************支持全屏重力全屏的部分**************************/
 
@@ -307,5 +315,7 @@ public class ListNormalAdapter extends BaseAdapter {
             orientationUtils = null;
         }
     }
+
+
 
 }

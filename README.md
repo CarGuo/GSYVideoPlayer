@@ -130,9 +130,19 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
 
 ## 五、近期版本
 
-### 4.1.1 (2018-03-13)
+### 4.1.1 (2018-04-01)
 * 1、update support lib to 26.0.2 
 * 2、修复了渲染层在某些条件下，截图时返回大小不对问题。
+* 3、一些细节的优化处理。
+* 4、增加Manager的isFullState方法
+```
+ /*
+  * 当前是否全屏状态
+  *
+  * @return 当前是否全屏状态， true代表是。
+  */
+ public static boolean isFullState(Activity activity)
+```
 
 ### 4.1.0 (2018-02-26)
 * 1、update to ijk 0.8.8
@@ -158,30 +168,6 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
  public void onVideoResume(boolean seek)
 
 ```
-
-### 4.0.0-beat1（2018-02-06）
-* 1、新增简单片头广告支持。
-`GSYSampleADVideoPlayer 与 DetailADPlayer`
-* 2、优化了ListGSYVideoPlayer、增加`playNext()`接口。
-* 3、优化代码结构，调整部分API接口（稍微调整下，偶尔有和旧版本不兼容的，参考源码和demo修改下方法名即可）。
-* 4、增加GSYVideoHelper视频帮助类，更加节省资源。
-* 5、增加GSYSampleCallBack节省继承，优化GSYVideoProgressListener的回调。
-* 6、增加GSYVideoViewBridge、重载`getGSYVideoManager()`方法实现自己的Manager。
-* 7、支持自定义渲染层，demo中`CustomRenderVideoPlayer`演示如何设置自定义渲染层。
-* 8、`ListMultiVideoActivity`和`MultiSampleVideo`演示如何同时播放多个视频。
-* 9、`DetailADPlayer2`和`ListADVideoActivity`演示广告与中间插入广告支持。
-* 10、增加音频焦点方法。
-```
-/**
-  * 长时间失去音频焦点，暂停播放器
-  *
-  * @param releaseWhenLossAudio 默认true，false的时候只会暂停
-  */
- public void setReleaseWhenLossAudio(boolean releaseWhenLossAudio)
-
-```
-
-
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)

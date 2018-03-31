@@ -2,6 +2,7 @@ package com.shuyu.gsyvideoplayer;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.view.Window;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.io.File;
 
@@ -182,6 +184,22 @@ public class GSYVideoManager extends GSYVideoBaseManager {
         if (GSYVideoManager.instance().listener() != null) {
             GSYVideoManager.instance().listener().onVideoResume(seek);
         }
+    }
+
+    /**
+     * 当前是否全屏状态
+     *
+     * @return 当前是否全屏状态， true代表是。
+     */
+    @SuppressWarnings("ResourceType")
+    public static boolean isFullState(Activity activity) {
+        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(activity)).findViewById(Window.ID_ANDROID_CONTENT);
+        final View full = vp.findViewById(FULLSCREEN_ID);
+        GSYVideoPlayer gsyVideoPlayer = null;
+        if (full != null) {
+            gsyVideoPlayer = (GSYVideoPlayer) full;
+        }
+        return gsyVideoPlayer != null;
     }
 
 }
