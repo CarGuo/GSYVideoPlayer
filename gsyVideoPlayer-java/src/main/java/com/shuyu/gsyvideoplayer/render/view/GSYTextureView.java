@@ -75,7 +75,7 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         //清空释放
         if (mIGSYSurfaceListener != null) {
-            mIGSYSurfaceListener.onSurfaceAvailable(mSurface);
+            mIGSYSurfaceListener.onSurfaceDestroyed(mSurface);
         }
         return true;
     }
