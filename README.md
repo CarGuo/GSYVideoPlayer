@@ -88,7 +88,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
 ## 二、其他推荐
 
 ### * QQ群，有兴趣的欢迎（平时吹水吐槽多，因为人数饱和，目前开启付费入群）：174815284 。
-### * [GSYGithubAPP 跨平台github客户端](https://github.com/CarGuo/GSYGithubAPP)
+### * [React Native Github客户端](https://github.com/CarGuo/GSYGithubAPP) 、 [Weex Github客户端](https://github.com/CarGuo/GSYGithubAPPWeex)
 ### * [RickText](https://github.com/CarGuo/RickText)
 ### * [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
 
