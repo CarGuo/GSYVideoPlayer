@@ -130,6 +130,10 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
 
 ## 五、近期版本
 
+### 4.1.2(未发布)
+* 修复已知问题。
+* 增加raw播放支持。
+
 ### 4.1.1 (2018-04-01)
 * 1、update support lib to 26.0.2 
 * 2、修复了渲染层在某些条件下，截图时返回大小不对问题。
@@ -142,31 +146,6 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
   * @return 当前是否全屏状态， true代表是。
   */
  public static boolean isFullState(Activity activity)
-```
-
-### 4.1.0 (2018-02-26)
-* 1、update to ijk 0.8.8
-* 2、去除cache模块的log库依赖
-* 3、去除exo模块的无用依赖
-* 4、增加恢复播放方法参数
-```
- XXXXManager相关
-/**
-  * 恢复暂停状态
-  *
-  * @param seek 是否产生seek动作,直播设置为false
-  */
- public static void onResume(String key, boolean seek)
-
- Video相关
- /**
-  * 恢复暂停状态
-  *
-  * @param seek 是否产生seek动作
-  */
- @Override
- public void onVideoResume(boolean seek)
-
 ```
 
 
