@@ -594,6 +594,14 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         this.videoType = videoType;
     }
 
+    /**
+     * 打开raw播放支持
+     * @param context
+     */
+    public void enableRawPlay(Context context) {
+        this.context = context.getApplicationContext();
+    }
+
     public List<VideoOptionModel> getOptionModelList() {
         return optionModelList;
     }

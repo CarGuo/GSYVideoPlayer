@@ -1,15 +1,19 @@
 package com.shuyu.gsyvideoplayer.player;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.Surface;
 
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.utils.RawDataSourceProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +65,17 @@ public class IJKPlayerManager implements IPlayerManager {
                 mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
                 mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
             }
-            mediaPlayer.setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());
+            String url = ((GSYModel) msg.obj).getUrl();
+            if(!TextUtils.isEmpty(url)) {
+                Uri uri = Uri.parse(url);
+                if(uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)){
+                    RawDataSourceProvider rawDataSourceProvider = RawDataSourceProvider.create(context, uri);
+                    mediaPlayer.setDataSource(rawDataSourceProvider);
+                }
+
+            } else {
+                mediaPlayer.setDataSource(url, ((GSYModel) msg.obj).getMapHeadData());
+            }
             mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
             if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
                 mediaPlayer.setSpeed(((GSYModel) msg.obj).getSpeed());
