@@ -71,8 +71,9 @@ public class IJKPlayerManager implements IPlayerManager {
                 if(uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)){
                     RawDataSourceProvider rawDataSourceProvider = RawDataSourceProvider.create(context, uri);
                     mediaPlayer.setDataSource(rawDataSourceProvider);
+                } else {
+                    mediaPlayer.setDataSource(url, ((GSYModel) msg.obj).getMapHeadData());
                 }
-
             } else {
                 mediaPlayer.setDataSource(url, ((GSYModel) msg.obj).getMapHeadData());
             }
