@@ -795,7 +795,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             return;
         }
         if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {
-            if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getContext())
+            if (!mUrl.startsWith("file") && !mUrl.startsWith("android.resource") && !CommonUtil.isWifiConnected(getContext())
                     && mNeedShowWifiTip) {
                 showWifiDialog();
                 return;
