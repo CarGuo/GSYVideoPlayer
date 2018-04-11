@@ -2,10 +2,14 @@ package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 /**
  * Created by shuyu on 2016/12/23.
@@ -54,6 +58,16 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
         } else {
             super.updateStartImage();
         }
+    }
+
+    @Override
+    public int getEnlargeImageRes() {
+            return R.drawable.custom_enlarge;
+    }
+
+    @Override
+    public int getShrinkImageRes() {
+        return R.drawable.custom_shrink;
     }
 
 
