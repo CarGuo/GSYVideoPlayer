@@ -1,5 +1,14 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 4.1.2(2018-04-14)
+* 修复已知问题。
+* 增加ijkplayer的raw播放支持。
+```
+String url = "android.resource://" + getPackageName() + "/" + R.raw.test;
+GSYVideoManager.instance().enableRawPlay(getApplicationContext());
+```
+* danmku分支提供网络弹幕demo
+
 ### 4.1.1 (2018-04-01)
 * 1、update support lib to 26.0.2
 * 2、修复了渲染层在某些条件下，截图时返回大小不对问题。
