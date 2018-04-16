@@ -264,7 +264,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
      * 开始gif截图
      */
     private void startGif() {
-        Toast.makeText(this, "项目里目前没做动态授权，需要你去做设置里授权哦", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "项目里目前没做动态授权，需要你去做设置里授权文件读取哦", Toast.LENGTH_LONG).show();
         //开始缓存各个帧
         mGifCreateHelper.startGif(new File(FileUtils.getPath()));
 
@@ -274,7 +274,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
      * 生成gif
      */
     private void stopGif() {
-        Toast.makeText(this, "项目里目前没做动态授权，需要你去做设置里授权哦", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "项目里目前没做动态授权，需要你去做设置里授权文件读取哦", Toast.LENGTH_LONG).show();
         loadingView.setVisibility(View.VISIBLE);
         mGifCreateHelper.stopGif(new File(FileUtils.getPath(), "GSY-Z-" + System.currentTimeMillis() + ".gif"));
     }
