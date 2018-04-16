@@ -53,21 +53,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:4.1.1'
+compile 'com.shuyu:GSYVideoPlayer:4.1.2'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:4.1.1'
+compile 'com.shuyu:gsyVideoPlayer-java:4.1.2'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:4.1.1'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:4.1.1'
-compile 'com.shuyu:gsyVideoPlayer-arm64:4.1.1'
-compile 'com.shuyu:gsyVideoPlayer-x64:4.1.1'
-compile 'com.shuyu:gsyVideoPlayer-x86:4.1.1'
+compile 'com.shuyu:gsyVideoPlayer-armv5:4.1.2'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:4.1.2'
+compile 'com.shuyu:gsyVideoPlayer-arm64:4.1.2'
+compile 'com.shuyu:gsyVideoPlayer-x64:4.1.2'
+compile 'com.shuyu:gsyVideoPlayer-x86:4.1.2'
 
 ```
 
@@ -77,9 +77,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:4.1.1'
+compile 'com.shuyu:gsyVideoPlayer-java:4.1.2'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.2'
 
 ```
 
@@ -94,13 +94,12 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
 
 ## 三、文档Wiki
 
-### [--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)
-### [--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
-### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/DECODERS.md)
-### [--- IJKPlayer问题 - 入口](http://www.jianshu.com/p/220b00d00deb)　
-### [--- IJKPlayer编译自定义SO - 入口](http://www.jianshu.com/p/bd289e25d272)　
-### [--- 简书详解 （项目的基础）- 入口](http://www.jianshu.com/p/9fe377dd9750)
-### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
+#### [--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)
+#### [--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
+#### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/DECODERS.md)
+#### [--- IJKPlayer问题 - 入口](http://www.jianshu.com/p/220b00d00deb)　
+#### [--- IJKPlayer编译自定义SO - 入口](http://www.jianshu.com/p/bd289e25d272)　
+#### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
 ## 四、运行效果
 
@@ -130,9 +129,14 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.1'
 
 ## 五、近期版本
 
-### 4.1.2(未发布)
+### 4.1.2(2018-04-14)
 * 修复已知问题。
-* 增加raw播放支持。
+* 增加ijkplayer的raw播放支持。
+```
+String url = "android.resource://" + getPackageName() + "/" + R.raw.test;
+GSYVideoManager.instance().enableRawPlay(getApplicationContext());
+```
+* danmku分支提供网络弹幕demo
 
 ### 4.1.1 (2018-04-01)
 * 1、update support lib to 26.0.2 

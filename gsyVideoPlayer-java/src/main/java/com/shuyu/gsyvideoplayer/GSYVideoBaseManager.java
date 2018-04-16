@@ -288,7 +288,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             @Override
             public void run() {
                 cancelTimeOutBuffer();
-                if (listener != null) {
+                if (listener() != null) {
                     listener().onPrepared();
                 }
             }
@@ -301,7 +301,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             @Override
             public void run() {
                 cancelTimeOutBuffer();
-                if (listener != null) {
+                if (listener() != null) {
                     listener().onAutoCompletion();
                 }
             }
@@ -313,7 +313,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (listener != null) {
+                if (listener() != null) {
                     if (percent > buffterPoint) {
                         listener().onBufferingUpdate(percent);
                     } else {
@@ -330,7 +330,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             @Override
             public void run() {
                 cancelTimeOutBuffer();
-                if (listener != null) {
+                if (listener() != null) {
                     listener().onSeekComplete();
                 }
             }
@@ -343,7 +343,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             @Override
             public void run() {
                 cancelTimeOutBuffer();
-                if (listener != null) {
+                if (listener() != null) {
                     listener().onError(what, extra);
                 }
             }
@@ -363,7 +363,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
                         cancelTimeOutBuffer();
                     }
                 }
-                if (listener != null) {
+                if (listener() != null) {
                     listener().onInfo(what, extra);
                 }
             }
@@ -378,7 +378,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (listener != null) {
+                if (listener() != null) {
                     listener().onVideoSizeChanged();
                 }
             }
