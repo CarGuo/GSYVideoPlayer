@@ -65,6 +65,10 @@ dependencies {
     implementation androidDependencies.design
 
     implementation project(':gsyVideoPlayer')
+
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation 'com.zhy:okhttputils:2.6.2'
+
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
