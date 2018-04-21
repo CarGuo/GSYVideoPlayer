@@ -49,6 +49,7 @@ public class DetailPlayer extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //String url = "android.resource://" + getPackageName() + "/" + R.raw.test;
+        //注意，用ijk模式播放raw视频，这个必须打开
         //GSYVideoManager.instance().enableRawPlay(getApplicationContext());
 
         //断网自动重新链接，url前接上ijkhttphook:
