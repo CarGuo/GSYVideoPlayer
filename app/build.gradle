@@ -66,8 +66,14 @@ dependencies {
 
     implementation project(':gsyVideoPlayer')
 
-    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
-    implementation 'com.zhy:okhttputils:2.6.2'
+    implementation dataDependencies.okhttpUtil
+    implementation dataDependencies.okhttp
+
+    implementation (dataDependencies.permissionsdispatcher) {
+        // if you don't use android.app.Fragment you can exclude support for them
+        exclude module: "support-v13"
+    }
+    annotationProcessor dataDependencies.permissionsdispatcherProcessor
 
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"

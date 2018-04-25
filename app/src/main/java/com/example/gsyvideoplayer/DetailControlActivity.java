@@ -1,8 +1,12 @@
 package com.example.gsyvideoplayer;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +39,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
@@ -44,7 +54,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  * <p>
  * Created by guoshuyu on 2017/6/18.
  */
-
+@RuntimePermissions
 public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
     @BindView(R.id.post_detail_nested_scroll)
@@ -134,7 +144,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         shot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shotImage(v);
+                DetailControlActivityPermissionsDispatcher.shotImageWithPermissionCheck(DetailControlActivity.this, v);
             }
         });
 
@@ -142,7 +152,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         startGif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startGif();
+                DetailControlActivityPermissionsDispatcher.startGifWithPermissionCheck(DetailControlActivity.this);
             }
         });
 
@@ -263,7 +273,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     /**
      * 开始gif截图
      */
-    private void startGif() {
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void startGif() {
         //开始缓存各个帧
         mGifCreateHelper.startGif(new File(FileUtils.getPath()));
 
@@ -272,17 +283,46 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     /**
      * 生成gif
      */
-    private void stopGif() {
+    void stopGif() {
         loadingView.setVisibility(View.VISIBLE);
         mGifCreateHelper.stopGif(new File(FileUtils.getPath(), "GSY-Z-" + System.currentTimeMillis() + ".gif"));
     }
 
+    @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void showRationaleForCamera(final PermissionRequest request) {
+        new AlertDialog.Builder(this)
+                .setMessage("快给我权限")
+                .setPositiveButton("允许", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.proceed();
+                    }
+                })
+                .setNegativeButton("拒绝", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.cancel();
+                    }
+                })
+                .show();
+    }
+
+    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void showDeniedForCamera() {
+        Toast.makeText(this, "没有权限啊", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnNeverAskAgain(Manifest.permission.CAMERA)
+    void showNeverAskForCamera() {
+        Toast.makeText(this, "再次授权", Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * 视频截图
      * 这里没有做读写本地sd卡的权限处理，记得实际使用要加上
      */
-    private void shotImage(final View v) {
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void shotImage(final View v) {
         //获取截图
         detailPlayer.taskShotPic(new GSYVideoShotListener() {
             @Override
@@ -355,6 +395,13 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
                 Toast.makeText(DetailControlActivity.this, tip, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // NOTE: delegate the permission handling to generated method
+        DetailControlActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
 }

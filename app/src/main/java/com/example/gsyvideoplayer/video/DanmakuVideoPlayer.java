@@ -62,7 +62,7 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
 
     private boolean mDanmaKuShow = true;
 
-    private File mIs;
+    private File mDumakuFile;
 
     public DanmakuVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -156,7 +156,7 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
 
     @Override
     protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
-        ((DanmakuVideoPlayer)to).mIs = ((DanmakuVideoPlayer)from).mIs;
+        ((DanmakuVideoPlayer)to).mDumakuFile = ((DanmakuVideoPlayer)from).mDumakuFile;
         super.cloneParams(from, to);
     }
 
@@ -197,7 +197,7 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
     }
 
     public void setDanmaKuStream(File is) {
-        mIs = is;
+        mDumakuFile = is;
         if(!getDanmakuView().isPrepared()) {
             onPrepareDanmaku((DanmakuVideoPlayer)getCurrentPlayer());
         }
@@ -220,10 +220,13 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
                 .setMaximumLines(maxLinesPair)
                 .preventOverlapping(overlappingEnablePair);
         if (mDanmakuView != null) {
-            //todo 替换成你的数据流
-            if(mIs != null) {
-                mParser = createParser(getIsStream(mIs));
+            if(mDumakuFile != null) {
+                mParser = createParser(getIsStream(mDumakuFile));
             }
+
+            //todo 这是为了demo效果，实际上需要去掉这个，外部传输文件进来
+            mParser = createParser(this.getResources().openRawResource(R.raw.comments));
+
             mDanmakuView.setCallback(new master.flame.danmaku.controller.DrawHandler.Callback() {
                 @Override
                 public void updateTimer(DanmakuTimer timer) {
@@ -363,8 +366,8 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
 
     public BaseDanmakuParser getParser() {
         if(mParser == null) {
-            if (mIs != null) {
-                mParser = createParser(getIsStream(mIs));
+            if (mDumakuFile != null) {
+                mParser = createParser(getIsStream(mDumakuFile));
             }
         }
         return mParser;

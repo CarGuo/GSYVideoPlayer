@@ -138,6 +138,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"  />
 
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
     </application>
+
+
 
 </manifest>

@@ -1,9 +1,8 @@
 package com.example.gsyvideoplayer;
 
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Environment;
+
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -18,17 +17,12 @@ import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -200,6 +194,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
 
 
     private void getDanmu() {
+        //下载demo然后设置
         OkHttpUtils.get().url(TextUtils.concat("http://xingyuyou.com/Public/app/barragefile/","608","barrage.txt").toString())
                 .build()
                 .execute(new FileCallBack(getApplication().getCacheDir().getAbsolutePath(), "barrage.txt")//
@@ -210,27 +205,8 @@ public class DanmkuVideoActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(File response, int id) {
-                        try {
-                            InputStream instream = new FileInputStream(response);
-                            InputStreamReader inputreader = new InputStreamReader(instream);
-                            BufferedReader buffreader = new BufferedReader(inputreader);
-                            String line;
-                            StringBuilder sb1=new StringBuilder();
-                            sb1.append("<i>");
-                            //分行读取
-                            while (( line = buffreader.readLine()) != null) {
-                                sb1.append(line);
-                            }
-                            sb1.append("</i>");
-                            Log.e("3333333",sb1.toString());
-                            instream.close();
-                            if(!isDestory) {
-                                ((DanmakuVideoPlayer)danmakuVideoPlayer.getCurrentPlayer()).setDanmaKuStream(response);
-                            }
-                         } catch (java.io.FileNotFoundException e) {
-                            Log.d("TestFile", "The File doesn't not exist.");
-                        } catch (IOException e) {
-                            Log.d("TestFile", e.getMessage());
+                        if (!isDestory) {
+                            ((DanmakuVideoPlayer) danmakuVideoPlayer.getCurrentPlayer()).setDanmaKuStream(response);
                         }
 
                     }
