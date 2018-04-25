@@ -418,6 +418,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             touchDoubleUp();
             return super.onDoubleTap(e);
         }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                onClickUiToggle();
+            }
+            return super.onSingleTapConfirmed(e);
+        }
     });
 
     /**
@@ -700,9 +708,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
             if (mBottomProgressBar != null)
                 mBottomProgressBar.setProgress(progress);
-        }
-        if (!mChangePosition && !mChangeVolume && !mBrightness) {
-            onClickUiToggle();
         }
 
         mTouchingProgressBar = false;
