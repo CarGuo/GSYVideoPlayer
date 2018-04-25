@@ -6,11 +6,11 @@ allprojects {
 
 ext {
     //Android
-    androidBuildToolsVersion = "26.0.2"
+    androidBuildToolsVersion = "27.0.2"
     androidMinSdkVersion = 16
-    androidTargetSdkVersion = 26
-    androidCompileSdkVersion = 26
-    supportLibraryVersion = '26.0.2'
+    androidTargetSdkVersion = 27
+    androidCompileSdkVersion = 27
+    supportLibraryVersion = '27.0.2'
 
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
@@ -29,6 +29,11 @@ ext {
     gsyVideoVersion = '4.1.2'
 
     exo_player2 = '2.6.1'
+
+    permissionsdispatcher = '3.2.0'
+
+    okhttp = '3.2.0'
+    okhttpUtil = '2.6.2'
 
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
@@ -63,7 +68,11 @@ ext {
     ]
 
     dataDependencies = [
-            videocache: "com.shuyu:gsyvideoplayer-androidvideocache:${gsyVideoVersion}",
-            leakcanary: "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
+            videocache                    : "com.shuyu:gsyvideoplayer-androidvideocache:${gsyVideoVersion}",
+            leakcanary                    : "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
+            okhttpUtil                    : "com.squareup.okhttp3:okhttp:${okhttp}",
+            okhttp                        : "com.zhy:okhttputils:${okhttpUtil}",
+            permissionsdispatcher         : "com.github.hotchemi:permissionsdispatcher:${permissionsdispatcher}",
+            permissionsdispatcherProcessor: "com.github.hotchemi:permissionsdispatcher-processor:${permissionsdispatcher}",
     ]
 }
