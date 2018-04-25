@@ -129,6 +129,9 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.2'
 
 ## 五、近期版本
 
+### 4.1.3(2018-xx-xx 未发布)
+* 优化单双击
+
 ### 4.1.2(2018-04-14)
 * 修复已知问题。
 * 增加ijkplayer的raw播放支持。
