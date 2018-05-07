@@ -131,6 +131,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.2'
 
 ### 4.1.3(2018-xx-xx 未发布)
 * 优化单双击
+* update support and build sdk to 27
 
 ### 4.1.2(2018-04-14)
 * 修复已知问题。
