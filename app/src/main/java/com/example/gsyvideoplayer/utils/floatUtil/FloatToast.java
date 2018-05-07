@@ -68,6 +68,7 @@ class FloatToast extends FloatView {
 
     private void initTN() {
         try {
+            //todo android P test
             Field tnField = toast.getClass().getDeclaredField("mTN");
             tnField.setAccessible(true);
             mTN = tnField.get(toast);
