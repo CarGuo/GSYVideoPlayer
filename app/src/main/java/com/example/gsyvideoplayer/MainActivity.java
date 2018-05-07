@@ -1,9 +1,13 @@
 package com.example.gsyvideoplayer;
 
+import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -12,6 +16,8 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import permissions.dispatcher.PermissionUtils;
+import permissions.dispatcher.RuntimePermissions;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,12 +27,28 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.open_btn_empty)
     Button openBtn2;
 
+    final String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Debuger.enable();
         ButterKnife.bind(this);
+        boolean hadPermission = PermissionUtils.hasSelfPermissions(this, permissions);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hadPermission) {
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            requestPermissions(permissions, 1110);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean sdPermissionResult = PermissionUtils.verifyPermissions(grantResults);
+        if (!sdPermissionResult) {
+            Toast.makeText(this, "没获取到sd卡权限，无法播放本地视频哦", Toast.LENGTH_LONG).show();
+        }
     }
 
     @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video, R.id.fragment_video,
