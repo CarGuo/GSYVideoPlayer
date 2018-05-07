@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.example.gsyvideoplayer.view.CustomInputDialog;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -126,6 +127,18 @@ public class InputUrlDetailActivity extends AppCompatActivity {
                 showInputDialog();
             }
         });
+
+
+
+        detailPlayer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ImageView testImage = findViewById(R.id.test_image_view);
+                Glide.with(InputUrlDetailActivity.this.getApplicationContext())
+                        .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525708180755&di=078af5aedf4b44268425be46bf25e407&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F203fb80e7bec54e78494e3a3bb389b504fc26a17.jpg")
+                        .into(testImage);
+            }
+        }, 5000);
 
     }
 
