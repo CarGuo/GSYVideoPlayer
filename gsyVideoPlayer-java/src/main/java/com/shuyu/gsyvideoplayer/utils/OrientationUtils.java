@@ -46,7 +46,7 @@ public class OrientationUtils {
                 if (!autoRotateOn && mRotateWithSystem) {
                     return;
                 }
-                if (gsyVideoPlayer != null && gsyVideoPlayer.isVerticalVideoFull()) {
+                if (gsyVideoPlayer != null && gsyVideoPlayer.isVerticalFullByVideoSize()) {
                     return;
                 }
                 // 设置竖屏
@@ -126,7 +126,7 @@ public class OrientationUtils {
      * 点击切换的逻辑，比如竖屏的时候点击了就是切换到横屏不会受屏幕的影响
      */
     public void resolveByClick() {
-        if (mIsLand == 0 && gsyVideoPlayer != null && gsyVideoPlayer.isVerticalVideoFull()) {
+        if (mIsLand == 0 && gsyVideoPlayer != null && gsyVideoPlayer.isVerticalFullByVideoSize()) {
             return;
         }
         mClick = true;
