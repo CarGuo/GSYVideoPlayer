@@ -63,7 +63,8 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
 
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
-        String url = "http://qiniu.carmmi.com/image/132451525666042.mp4";
+        //String url = "http://qiniu.carmmi.com/image/132451525666042.mp4";
+        String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
         //String url = "file://"+ Environment.getExternalStorageDirectory().getPath() + "Download/132451525666042.mp4";
 
         //String url =   "http://ipsimg-huabei2.speiyou.cn/010/video/other/20180427/40288b156241ec6301624243bdf7021e/40288b156290270d0162a3e7eb2e0726/1524814477/movie.mp4";
@@ -127,6 +128,7 @@ public class DetailPlayer extends AppCompatActivity {
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
+                .setAutoFullWithSize(true)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
                 .setUrl(url)
