@@ -21,9 +21,12 @@ public class OrientationUtils {
     private int screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     private int mIsLand;
 
-    private boolean mClick, mClickLand, mClickPort;
+    private boolean mClick = false;
+    private boolean mClickLand = false;
+    private boolean mClickPort;
     private boolean mEnable = true;
-    private boolean mRotateWithSystem = true; //是否跟随系统
+    //是否跟随系统
+    private boolean mRotateWithSystem = true;
 
     /**
      * @param activity
@@ -42,7 +45,7 @@ public class OrientationUtils {
                 boolean autoRotateOn = (Settings.System.getInt(activity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
                 if (!autoRotateOn && mRotateWithSystem) {
                     //if (mIsLand == 0) {
-                        return;
+                    return;
                     //}
                 }
                 // 设置竖屏
@@ -231,6 +234,7 @@ public class OrientationUtils {
 
     /**
      * 是否更新系统旋转，false的话，系统禁止旋转也会跟着旋转
+     *
      * @param rotateWithSystem 默认true
      */
     public void setRotateWithSystem(boolean rotateWithSystem) {

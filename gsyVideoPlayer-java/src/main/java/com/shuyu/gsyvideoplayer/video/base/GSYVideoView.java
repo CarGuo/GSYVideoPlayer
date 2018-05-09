@@ -1133,4 +1133,18 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public void setReleaseWhenLossAudio(boolean releaseWhenLossAudio) {
         this.mReleaseWhenLossAudio = releaseWhenLossAudio;
     }
+
+    public Map<String, String> getMapHeadData() {
+        return mMapHeadData;
+    }
+
+    /**
+     * 单独设置mapHeader
+     * @param headData
+     */
+    public void setMapHeadData(Map<String, String> headData) {
+        if (headData != null) {
+            this.mMapHeadData = headData;
+        }
+    }
 }
