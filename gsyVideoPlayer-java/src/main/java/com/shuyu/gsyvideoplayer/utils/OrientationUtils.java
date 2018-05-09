@@ -44,9 +44,10 @@ public class OrientationUtils {
             public void onOrientationChanged(int rotation) {
                 boolean autoRotateOn = (Settings.System.getInt(activity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
                 if (!autoRotateOn && mRotateWithSystem) {
-                    //if (mIsLand == 0) {
                     return;
-                    //}
+                }
+                if (gsyVideoPlayer != null && gsyVideoPlayer.isVerticalVideoFull()) {
+                    return;
                 }
                 // 设置竖屏
                 if (((rotation >= 0) && (rotation <= 30)) || (rotation >= 330)) {
@@ -125,6 +126,9 @@ public class OrientationUtils {
      * 点击切换的逻辑，比如竖屏的时候点击了就是切换到横屏不会受屏幕的影响
      */
     public void resolveByClick() {
+        if (mIsLand == 0 && gsyVideoPlayer != null && gsyVideoPlayer.isVerticalVideoFull()) {
+            return;
+        }
         mClick = true;
         if (mIsLand == 0) {
             screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
