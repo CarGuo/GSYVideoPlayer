@@ -101,6 +101,8 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.2'
 #### [--- IJKPlayer编译自定义SO - 入口](http://www.jianshu.com/p/bd289e25d272)　
 #### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
+![框架图](https://github.com/CarGuo/GSYVideoPlayer/blob/master/StructureChart.jpg)
+
 ## 四、运行效果
 
 * ### 1、打开一个播放(旋转、镜像、填充)
