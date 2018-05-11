@@ -94,7 +94,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.2'
 
 ## 三、文档Wiki
 
-#### [--- 项目解析说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/GSYVIDEO_PLAYER_PROJECT_INFO.md)
+### [--- 项目解析说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/GSYVIDEO_PLAYER_PROJECT_INFO.md)
 #### [--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)
 #### [--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
 #### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/DECODERS.md)

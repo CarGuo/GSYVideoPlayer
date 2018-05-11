@@ -2,21 +2,28 @@
 
 #### 项目经过多版本调整之后，目前大致结构分为如下 ：
 
-* Player 播放内核层：IjkMediaPlayer、ExoPlayr2、MediaPlayer（IPlayerManager）。
-* Manager 内核管理层：GSYVideoManager（GSYVideoBaseManager <- GSYVideoViewBridge）。
-* Video  播放器控件层：GSYTextureRenderVIew 到 GSYVideoPlayer 五层。
-* Render 渲染控件层：TextureView、SurfaceView、GLSurfaceView（GSYRenderView <- IGSYRenderView）。
+* **Player 播放内核层**：IjkMediaPlayer、ExoPlayr2、MediaPlayer（IPlayerManager）。
+* **Manager 内核管理层**：GSYVideoManager（GSYVideoBaseManager <- GSYVideoViewBridge）。
+* **Video  播放器控件层**：GSYTextureRenderVIew 到 GSYVideoPlayer 五层。
+* **Render 渲染控件层**：TextureView、SurfaceView、GLSurfaceView（GSYRenderView <- IGSYRenderView）。
 
 #### 结构如下图：
 
 ![框架图](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/StructureChartImg.jpg)
 
+```
+
 * 管理层GSVideoManager继承GSYVideoBaseManager，通过IPlayerManager控制播放内核。
+
 * 管理层GSVideoManager实现了GSYVideoViewBridge，和UI层交互（主要通过UI层的GSYVideoPlayer）。
+
 * UI层GSYTextureRenderView通过GSYRenderView，内置IGSYRenderView实现类，和渲染层交互。
+
 * UI层逐层继承实现各层逻辑，内部大部分方法为protect。
 
-从这里看出，项目的播放内核、管理器、渲染层都是可以自定义替换的。
+```
+
+**从这里看出，项目的播放内核、管理器、渲染层都是可以自定义替换的。**
 
 #### 自定义流程
 
