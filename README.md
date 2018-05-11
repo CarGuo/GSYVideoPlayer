@@ -133,6 +133,15 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.2'
 
 ### 4.1.3(2018-xx-xx 未发布)
 * 优化单双击
+* update support and build sdk to 27
+* 增加是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效。
+```
+/**
+  * 是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
+  * @param autoFullWithSize 默认false
+  */
+ public void setAutoFullWithSize(boolean autoFullWithSize)
+```
 
 ### 4.1.2(2018-04-14)
 * 修复已知问题。

@@ -124,7 +124,7 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
             throw new NullPointerException("initVideo() or initVideoBuilderMode() first");
         }
         //开始播放了才能旋转和全屏
-        orientationUtils.setEnable(getDetailOrientationRotateAuto());
+        orientationUtils.setEnable(getDetailOrientationRotateAuto() && !isAutoFullWithSize());
         isPlay = true;
     }
 
@@ -257,4 +257,11 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
      * 是否启动旋转横屏，true表示启动
      */
     public abstract boolean getDetailOrientationRotateAuto();
+
+    /**
+     * 是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
+     */
+    public boolean isAutoFullWithSize() {
+        return false;
+    }
 }
