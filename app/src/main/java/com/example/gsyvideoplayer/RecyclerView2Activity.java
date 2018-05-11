@@ -137,6 +137,7 @@ public class RecyclerView2Activity extends AppCompatActivity {
                 .setHideStatusBar(true)
                 .setNeedLockFull(true)
                 .setCacheWithPlay(true)
+                .setAutoFullWithSize(true)
                 .setShowFullAnimation(true)
                 .setLockLand(true).setVideoAllCallBack(new GSYSampleCallBack() {
             @Override

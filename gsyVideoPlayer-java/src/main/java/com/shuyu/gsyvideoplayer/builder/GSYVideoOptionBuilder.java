@@ -59,6 +59,9 @@ public class GSYVideoOptionBuilder {
     //是否使用全屏动画效果
     protected boolean mShowFullAnimation = true;
 
+    //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
+    protected boolean mAutoFullWithSize = false;
+
     //是否需要显示流量提示
     protected boolean mNeedShowWifiTip = true;
 
@@ -155,6 +158,16 @@ public class GSYVideoOptionBuilder {
     //进度回调
     protected GSYVideoProgressListener mGSYVideoProgressListener;
 
+
+    /**
+     * 是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
+     *
+     * @param autoFullWithSize 默认false
+     */
+    public GSYVideoOptionBuilder setAutoFullWithSize(boolean autoFullWithSize) {
+        this.mAutoFullWithSize = autoFullWithSize;
+        return this;
+    }
 
     /**
      * 全屏动画
@@ -585,6 +598,7 @@ public class GSYVideoOptionBuilder {
         if (mGSYVideoProgressListener != null) {
             gsyVideoPlayer.setGSYVideoProgressListener(mGSYVideoProgressListener);
         }
+        gsyVideoPlayer.setAutoFullWithSize(mAutoFullWithSize);
         gsyVideoPlayer.setRotateViewAuto(mRotateViewAuto);
         gsyVideoPlayer.setLockLand(mLockLand);
         gsyVideoPlayer.setSpeed(mSpeed, mSounchTouch);
