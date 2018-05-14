@@ -39,6 +39,7 @@ public class ScrollingActivity extends AppCompatActivity {
     private AppBarLayout appBar;
     private FloatingActionButton fab;
     private CoordinatorLayout root;
+
     private CollapsingToolbarLayout toolBarLayout;
 
     private AppBarStateChangeListener.State curState;
@@ -143,6 +144,7 @@ public class ScrollingActivity extends AppCompatActivity {
             }
         });
 
+        detailPlayer.setLinkScroll(true);
     }
 
     @Override
