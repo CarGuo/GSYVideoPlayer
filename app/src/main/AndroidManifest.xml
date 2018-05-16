@@ -138,6 +138,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"  />
 
+        <activity
+            android:name=".exo.DetailExoListPlayer"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
