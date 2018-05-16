@@ -272,7 +272,6 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         msg.what = HANDLER_SETDISPLAY;
         msg.obj = holder;
         showDisplay(msg);
-        Debuger.printfError("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
     }
 
     @Override
@@ -586,8 +585,8 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     /**
      * 设置了视频的播放类型
      * IJKPLAYER = 0; 默认IJK
-     * IJKEXOPLAYER2 = 2;EXOPlayer2 (最好配合GSYVideoType.SUFRACE)
-     * SYSTEMPLAYER = 4;系统播放器 (最好配合GSYVideoType.SUFRACE)
+     * IJKEXOPLAYER2 = 2;EXOPlayer2
+     * SYSTEMPLAYER = 4;系统播放器
      */
     public void setVideoType(Context context, int videoType) {
         this.context = context.getApplicationContext();

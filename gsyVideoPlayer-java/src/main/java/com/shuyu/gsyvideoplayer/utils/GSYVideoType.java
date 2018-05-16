@@ -43,12 +43,12 @@ public class GSYVideoType {
     public final static int GLSURFACE = 2;
 
     /**
-     * SurfaceView，与动画全屏的效果不是很兼容，但是与IJKEXOPLAYER2模式兼容性比较好
+     * SurfaceView，与动画全屏的效果不是很兼容
      */
     public final static int SUFRACE = 1;
 
     /**
-     * TextureView，与IJKPLAYER兼容号，但是与IJKEXOPLAYER2在切换时兼容比较差
+     * TextureView,默认
      */
     public final static int TEXTURE = 0;
 
