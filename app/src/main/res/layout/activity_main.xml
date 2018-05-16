@@ -181,6 +181,13 @@
             android:text="列表带广告模式" />
 
         <Button
+            android:id="@+id/open_custom_exo"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="自定义Exo" />
+
+        <Button
             android:id="@+id/clear_cache"
             android:layout_width="240dp"
             android:layout_height="wrap_content"

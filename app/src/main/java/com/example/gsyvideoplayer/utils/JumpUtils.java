@@ -31,6 +31,7 @@ import com.example.gsyvideoplayer.RecyclerViewActivity;
 import com.example.gsyvideoplayer.ScrollingActivity;
 import com.example.gsyvideoplayer.WebDetailActivity;
 import com.example.gsyvideoplayer.WindowActivity;
+import com.example.gsyvideoplayer.exo.DetailExoListPlayer;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -227,6 +228,17 @@ public class JumpUtils {
         Intent intent = new Intent(activity, DetailListPlayer.class);
         activity.startActivity(intent);
     }
+
+    /**
+     * 跳转到详情播放
+     *
+     * @param activity
+     */
+    public static void goToDetailExoListPlayer(Activity activity) {
+        Intent intent = new Intent(activity, DetailExoListPlayer.class);
+        activity.startActivity(intent);
+    }
+
 
 
     /**
