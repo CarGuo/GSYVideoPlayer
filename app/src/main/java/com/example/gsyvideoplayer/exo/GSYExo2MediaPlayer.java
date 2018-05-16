@@ -373,6 +373,8 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             reset();
             mEventLogger = null;
         }
+
+        SimpleCache.disableCacheFolderLocking();
     }
 
     public void stopPlayback() {
@@ -482,7 +484,6 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             return getDataSourceFactory(preview);
         }
     }
-
 
     private DataSource.Factory getDataSourceFactory(boolean preview) {
         return new DefaultDataSourceFactory(mAppContext, preview ? null : new DefaultBandwidthMeter(),
