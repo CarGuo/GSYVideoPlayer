@@ -1,7 +1,9 @@
 package com.example.gsyvideoplayer.exo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -10,8 +12,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -37,6 +41,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
 
     protected List<GSYVideoModel> mUriList = new ArrayList<>();
     protected int mPlayPosition;
+    protected boolean mExoCache = false;
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -121,6 +126,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         GSYExo2PlayerView st = (GSYExo2PlayerView) to;
         st.mPlayPosition = sf.mPlayPosition;
         st.mUriList = sf.mUriList;
+        st.mExoCache = sf.mExoCache;
     }
 
     @Override
@@ -173,9 +179,41 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
             Debuger.printfError("********************** urls isEmpty . Do you know why ? **********************");
         }
 
-        ((GSYExoVideoManager)getGSYVideoManager()).prepare(urls, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed);
+        ((GSYExoVideoManager)getGSYVideoManager()).prepare(urls, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mExoCache);
 
         setStateAndUi(CURRENT_STATE_PREPAREING);
+    }
+
+
+    /**
+     * 显示wifi确定框，如需要自定义继承重写即可
+     */
+    @Override
+    protected void showWifiDialog() {
+        if (!NetworkUtils.isAvailable(mContext)) {
+            startPlayLogic();
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivityContext());
+        builder.setMessage(getResources().getString(R.string.tips_not_wifi));
+        builder.setPositiveButton(getResources().getString(R.string.tips_not_wifi_confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startPlayLogic();
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.tips_not_wifi_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    public void setExoCache(boolean exoCache) {
+        this.mExoCache = exoCache;
     }
 
     /**********以下重载GSYVideoPlayer的GSYVideoViewBridge相关实现***********/
@@ -216,4 +254,6 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
     protected int getSmallId() {
         return GSYExoVideoManager.SMALL_ID;
     }
+
+
 }

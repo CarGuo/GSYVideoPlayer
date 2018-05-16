@@ -6,7 +6,6 @@ import android.os.Message;
 import android.view.Surface;
 
 import com.google.android.exoplayer2.video.DummySurface;
-import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.IPlayerManager;
 
@@ -39,11 +38,11 @@ public class GSYExoPlayerManager implements IPlayerManager {
             dummySurface = DummySurface.newInstanceV17(context, false);
         }
         try {
-            mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
-            mediaPlayer.setDataSource(((GSYExoModel) msg.obj).getUrls(), ((GSYModel) msg.obj).getMapHeadData());
+            mediaPlayer.setLooping(((GSYExoModel) msg.obj).isLooping());
+            mediaPlayer.setDataSource(((GSYExoModel) msg.obj).getUrls(), ((GSYExoModel) msg.obj).getMapHeadData(), ((GSYExoModel) msg.obj).isCache());
             //很遗憾，EXO2的setSpeed只能在播放前生效
-            if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
-                mediaPlayer.setSpeed(((GSYModel) msg.obj).getSpeed(), 1);
+            if (((GSYExoModel) msg.obj).getSpeed() != 1 && ((GSYExoModel) msg.obj).getSpeed() > 0) {
+                mediaPlayer.setSpeed(((GSYExoModel) msg.obj).getSpeed(), 1);
             }
         } catch (Exception e) {
             e.printStackTrace();

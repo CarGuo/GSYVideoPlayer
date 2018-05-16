@@ -47,11 +47,13 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
         initVideo();
 
         List<GSYVideoModel> urls = new ArrayList<>();
+        urls.add(new GSYVideoModel("https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8", "标题3"));
         urls.add(new GSYVideoModel("http://7xse1z.com1.z0.glb.clouddn.com/1491813192", "标题1"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题2"));
-        urls.add(new GSYVideoModel("https://res.exexm.com/cw_145225549855002", "标题3"));
-        urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题4"));
         detailPlayer.setUp(urls, 0);
+
+        //使用 exo 的 CacheDataSourceFactory 实现
+        detailPlayer.setExoCache(true);
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -88,6 +90,9 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
         });
 
     }
+
+
+
 
     /**
      * 重载为GSYExoVideoManager的方法处理
