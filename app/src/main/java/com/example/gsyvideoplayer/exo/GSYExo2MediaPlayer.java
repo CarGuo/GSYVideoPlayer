@@ -10,6 +10,7 @@ import android.support.annotation.Size;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
+import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -44,8 +45,14 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.Cache;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -145,7 +152,7 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         throw new UnsupportedOperationException("Deprecated, try setDataSource(List<String> uris, Map<String, String> headers)");
     }
 
-    public void setDataSource(List<String> uris, Map<String, String> headers) {
+    public void setDataSource(List<String> uris, Map<String, String> headers, boolean cache) {
         mHeaders = headers;
         this.uris.clear();
         if (uris != null) {
@@ -155,7 +162,7 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         }
         ConcatenatingMediaSource concatenatedSource = new ConcatenatingMediaSource();
         for (String uri : uris) {
-            MediaSource mediaSource = getMediaSource(Uri.parse(uri).toString(), false);
+            MediaSource mediaSource = getMediaSource(Uri.parse(uri).toString(), false,  cache);
             concatenatedSource.addMediaSource(mediaSource);
         }
         mMediaSource = concatenatedSource;
@@ -422,24 +429,24 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         }
     }
 
-    private MediaSource getMediaSource(String dataSource, boolean preview) {
+    private MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable) {
         Uri contentUri = Uri.parse(dataSource);
         int contentType = inferContentType(dataSource);
         MediaSource mediaSource;
         switch (contentType) {
             case C.TYPE_SS:
                 mediaSource = new SsMediaSource.Factory(
-                        new DefaultSsChunkSource.Factory(getDataSourceFactory(preview)),
+                        new DefaultSsChunkSource.Factory(getDataSourceFactoryCache(dataSource, cacheEnable, preview)),
                         new DefaultDataSourceFactory(mAppContext, null,
                                 getHttpDataSourceFactory(preview))).createMediaSource(contentUri);
                 break;
             case C.TYPE_DASH:
-                mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactory(preview)),
+                mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactoryCache(dataSource, cacheEnable, preview)),
                         new DefaultDataSourceFactory(mAppContext, null,
                                 getHttpDataSourceFactory(preview))).createMediaSource(contentUri);
                 break;
             case C.TYPE_HLS:
-                mediaSource = new HlsMediaSource.Factory(getDataSourceFactory(preview)).createMediaSource(contentUri);
+                mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(dataSource, cacheEnable, preview)).createMediaSource(contentUri);
                 break;
             case TYPE_RTMP:
                 RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory(null);
@@ -449,7 +456,7 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                 break;
             case C.TYPE_OTHER:
             default:
-                mediaSource = new ExtractorMediaSource.Factory(getDataSourceFactory(preview))
+                mediaSource = new ExtractorMediaSource.Factory(getDataSourceFactoryCache(dataSource, cacheEnable, preview))
                         .setExtractorsFactory(new DefaultExtractorsFactory())
                         .createMediaSource(contentUri);
                 break;
@@ -459,6 +466,23 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         }
         return mediaSource;
     }
+
+    private DataSource.Factory getDataSourceFactoryCache(String dataSource, boolean cacheEnable, boolean preview) {
+        if (cacheEnable) {
+            String path = mAppContext.getCacheDir().getAbsolutePath();
+            File cachePath = new File(path + File.pathSeparator + new Md5FileNameGenerator().generate(dataSource));
+            boolean isLocked = SimpleCache.isCacheFolderLocked(cachePath);
+            if (!isLocked) {
+                Cache cache = new SimpleCache(cachePath, new LeastRecentlyUsedCacheEvictor(1024 * 1024 * 100));
+                return new CacheDataSourceFactory(cache, getDataSourceFactory(preview), CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+            } else {
+                return getDataSourceFactory(preview);
+            }
+        } else {
+            return getDataSourceFactory(preview);
+        }
+    }
+
 
     private DataSource.Factory getDataSourceFactory(boolean preview) {
         return new DefaultDataSourceFactory(mAppContext, preview ? null : new DefaultBandwidthMeter(),
