@@ -35,7 +35,6 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     @Override
     public void initVideoPlayer(Context context, Message msg, List<VideoOptionModel> optionModelList) {
-        //目前EXO2在频繁的切换Surface时会可能出现 (queueBuffer: BufferQueue has been abandoned)
         mediaPlayer = new IjkExo2MediaPlayer(context);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         if (dummySurface == null) {
