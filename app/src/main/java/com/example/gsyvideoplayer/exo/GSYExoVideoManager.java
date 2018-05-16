@@ -85,6 +85,27 @@ public class GSYExoVideoManager extends GSYVideoBaseManager {
         }
     }
 
+
+    /**
+     * 上一集
+     */
+    public void previous() {
+        if (playerManager == null) {
+            return;
+        }
+        ((GSYExoPlayerManager)playerManager).previous();
+    }
+
+    /**
+     * 下一集
+     */
+    public void next() {
+        if (playerManager == null) {
+            return;
+        }
+        ((GSYExoPlayerManager)playerManager).next();
+    }
+
     /**
      * 退出全屏，主要用于返回键
      *

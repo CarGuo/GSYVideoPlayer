@@ -80,6 +80,13 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
             }
         });
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GSYExoVideoManager.instance().next();
+            }
+        });
+
     }
 
     /**

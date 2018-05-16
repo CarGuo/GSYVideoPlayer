@@ -755,4 +755,56 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     public void onDrmKeysRemoved(EventTime eventTime) {
 
     }
+
+
+
+    /*************自定义***************/
+
+
+    private final Timeline.Window window = new Timeline.Window();
+    private static final long MAX_POSITION_FOR_SEEK_TO_PREVIOUS = 3000;
+
+    /**
+     * 上一集
+     */
+    public void previous() {
+        if (mInternalPlayer == null) {
+            return;
+        }
+        Timeline timeline = mInternalPlayer.getCurrentTimeline();
+        if (timeline.isEmpty()) {
+            return;
+        }
+        int windowIndex = mInternalPlayer.getCurrentWindowIndex();
+        timeline.getWindow(windowIndex, window);
+        int previousWindowIndex = mInternalPlayer.getPreviousWindowIndex();
+        if (previousWindowIndex != C.INDEX_UNSET
+                && (mInternalPlayer.getCurrentPosition() <= MAX_POSITION_FOR_SEEK_TO_PREVIOUS
+                || (window.isDynamic && !window.isSeekable))) {
+            mInternalPlayer.seekTo(previousWindowIndex, C.TIME_UNSET);
+        } else {
+            mInternalPlayer.seekTo(0);
+        }
+    }
+
+    /**
+     * 下一集
+     */
+    public void next() {
+        if (mInternalPlayer == null) {
+            return;
+        }
+        Timeline timeline = mInternalPlayer.getCurrentTimeline();
+        if (timeline.isEmpty()) {
+            return;
+        }
+        int windowIndex = mInternalPlayer.getCurrentWindowIndex();
+        int nextWindowIndex = mInternalPlayer.getNextWindowIndex();
+        if (nextWindowIndex != C.INDEX_UNSET) {
+            mInternalPlayer.seekTo(nextWindowIndex, C.TIME_UNSET);
+        } else if (timeline.getWindow(windowIndex, window, false).isDynamic) {
+            mInternalPlayer.seekTo(windowIndex, C.TIME_UNSET);
+        }
+    }
+
 }
