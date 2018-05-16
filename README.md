@@ -131,6 +131,9 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.3'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
 ## 五、近期版本
+### 4.1.4(2018-XX-XX)
+* update ExoPlayer to 2.8.0
+* 优化ExoPlayer的问题，增加ExoPlayer循环播放支持
 
 ### 4.1.3(2018-05-11)
 * 优化单双击
@@ -143,30 +146,6 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.3'
   */
  public void setAutoFullWithSize(boolean autoFullWithSize)
 ```
-
-### 4.1.2(2018-04-14)
-* 修复已知问题。
-* 增加ijkplayer的raw播放支持。
-```
-String url = "android.resource://" + getPackageName() + "/" + R.raw.test;
-GSYVideoManager.instance().enableRawPlay(getApplicationContext());
-```
-* danmku分支提供网络弹幕demo
-
-### 4.1.1 (2018-04-01)
-* 1、update support lib to 26.0.2 
-* 2、修复了渲染层在某些条件下，截图时返回大小不对问题。
-* 3、一些细节的优化处理。
-* 4、增加Manager的isFullState方法
-```
- /*
-  * 当前是否全屏状态
-  *
-  * @return 当前是否全屏状态， true代表是。
-  */
- public static boolean isFullState(Activity activity)
-```
-
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 

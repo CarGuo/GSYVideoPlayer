@@ -29,7 +29,7 @@ import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
-import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
+import com.google.android.exoplayer2.drm.DefaultDrmSessionEventListener;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.MetadataOutput;
 import com.google.android.exoplayer2.metadata.emsg.EventMessage;
@@ -40,8 +40,6 @@ import com.google.android.exoplayer2.metadata.id3.Id3Frame;
 import com.google.android.exoplayer2.metadata.id3.PrivFrame;
 import com.google.android.exoplayer2.metadata.id3.TextInformationFrame;
 import com.google.android.exoplayer2.metadata.id3.UrlLinkFrame;
-import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -50,7 +48,6 @@ import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
 import java.io.IOException;
@@ -59,8 +56,8 @@ import java.util.Locale;
 
 
 public final class EventLogger implements Player.EventListener, MetadataOutput,
-        AudioRendererEventListener, VideoRendererEventListener, AdaptiveMediaSourceEventListener,
-        ExtractorMediaSource.EventListener, DefaultDrmSessionManager.EventListener {
+        AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener,
+        DefaultDrmSessionEventListener {
 
     private static final String TAG = "EventLogger";
     private static final int MAX_TIMELINE_ITEM_LINES = 3;
@@ -279,7 +276,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
         Log.d(TAG, "renderedFirstFrame [" + surface + "]");
     }
 
-    // DefaultDrmSessionManager.EventListener
+    // DefaultDrmSessionEventListener
 
     @Override
     public void onDrmSessionManagerError(Exception e) {
@@ -301,15 +298,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
         Log.d(TAG, "drmKeysLoaded [" + getSessionTimeString() + "]");
     }
 
-    // ExtractorMediaSource.EventListener
-
-    @Override
-    public void onLoadError(IOException error) {
-        printInternalError("loadError", error);
-    }
-
-    // AdaptiveMediaSourceEventListener
-
+    //MediaSourceEventListener
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {

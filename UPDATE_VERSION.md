@@ -1,5 +1,9 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 4.1.4(2018-XX-XX)
+* update ExoPlayer to 2.8.0
+* 优化ExoPlayer的问题
+
 ### 4.1.3(2018-05-11)
 * 优化单双击
 * update support and build sdk to 27
