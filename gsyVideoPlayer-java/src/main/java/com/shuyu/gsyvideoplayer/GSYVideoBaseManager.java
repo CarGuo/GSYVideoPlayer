@@ -271,7 +271,8 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         Message msg = new Message();
         msg.what = HANDLER_SETDISPLAY;
         msg.obj = holder;
-        mMediaHandler.sendMessage(msg);
+        showDisplay(msg);
+        Debuger.printfError("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
     }
 
     @Override
@@ -469,7 +470,6 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
                     initVideo(msg);
                     break;
                 case HANDLER_SETDISPLAY:
-                    showDisplay(msg);
                     break;
                 case HANDLER_RELEASE:
                     if (playerManager != null) {

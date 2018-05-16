@@ -6,9 +6,9 @@ import android.net.Uri;
 import android.os.Message;
 import android.view.Surface;
 
+import com.google.android.exoplayer2.video.DummySurface;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.util.List;
 
@@ -26,6 +26,8 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     private Surface surface;
 
+    private DummySurface dummySurface;
+
     @Override
     public IMediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -36,6 +38,9 @@ public class EXO2PlayerManager implements IPlayerManager {
         //目前EXO2在频繁的切换Surface时会可能出现 (queueBuffer: BufferQueue has been abandoned)
         mediaPlayer = new IjkExo2MediaPlayer(context);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        if (dummySurface == null) {
+            dummySurface = DummySurface.newInstanceV17(context, false);
+        }
         try {
             mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
             //很遗憾，EXO2的setSpeed只能在播放前生效
@@ -53,11 +58,7 @@ public class EXO2PlayerManager implements IPlayerManager {
             return;
         }
         if (msg.obj == null) {
-            mediaPlayer.setSurface(null);
-            if (surface != null) {
-                surface.release();
-                surface = null;
-            }
+            mediaPlayer.setSurface(dummySurface);
         } else {
             Surface holder = (Surface) msg.obj;
             surface = holder;
@@ -96,7 +97,12 @@ public class EXO2PlayerManager implements IPlayerManager {
     @Override
     public void release() {
         if(mediaPlayer != null) {
+            mediaPlayer.setSurface(null);
             mediaPlayer.release();
+        }
+        if (dummySurface != null) {
+            dummySurface.release();
+            dummySurface = null;
         }
     }
 }
