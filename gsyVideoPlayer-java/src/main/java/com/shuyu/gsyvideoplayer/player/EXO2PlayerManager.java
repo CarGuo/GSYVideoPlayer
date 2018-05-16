@@ -41,6 +41,7 @@ public class EXO2PlayerManager implements IPlayerManager {
             dummySurface = DummySurface.newInstanceV17(context, false);
         }
         try {
+            mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
             mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
             //很遗憾，EXO2的setSpeed只能在播放前生效
             if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {

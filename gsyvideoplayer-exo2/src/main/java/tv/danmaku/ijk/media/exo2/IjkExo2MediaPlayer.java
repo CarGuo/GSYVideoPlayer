@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
@@ -42,6 +43,7 @@ import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -66,7 +68,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.demo.EventLogger;
-import tv.danmaku.ijk.media.exo2.demo.player.SimpleExoPlayer2;
 import tv.danmaku.ijk.media.player.AbstractMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.MediaInfo;
@@ -98,6 +99,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private boolean lastReportedPlayWhenReady;
     private boolean mIsPrepareing = true;
     private boolean mIsBuffering = false;
+    private boolean isLooping = false;
 
     private int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
 
@@ -193,7 +195,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
         renderersFactory = new DefaultRenderersFactory(mAppContext, extensionRendererMode);
         DefaultLoadControl loadControl = new DefaultLoadControl();
-        mInternalPlayer =  SimpleExoPlayer2.createSimpleExoPlayer2(renderersFactory, mTrackSelector, loadControl, null);
+        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, mTrackSelector, loadControl, null);
         mInternalPlayer.addListener(this);
         mInternalPlayer.addAnalyticsListener(this);
         mInternalPlayer.addListener(mEventLogger);
@@ -316,14 +318,12 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     @Override
     public void setLooping(boolean looping) {
-        // TODO: no support
-        throw new UnsupportedOperationException("no support");
+        isLooping = looping;
     }
 
     @Override
     public boolean isLooping() {
-        // TODO: no support
-        return false;
+        return isLooping;
     }
 
     @Override
@@ -428,38 +428,39 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private MediaSource getMediaSource(boolean preview) {
         Uri contentUri = Uri.parse(mDataSource);
         int contentType = inferContentType(mDataSource);
+        MediaSource mediaSource;
         switch (contentType) {
-            case C.TYPE_SS: {
-                MediaSource mediaSource = new SsMediaSource.Factory(
+            case C.TYPE_SS:
+                mediaSource = new SsMediaSource.Factory(
                         new DefaultSsChunkSource.Factory(getDataSourceFactory(preview)),
                         new DefaultDataSourceFactory(mAppContext, null,
                                 getHttpDataSourceFactory(preview))).createMediaSource(contentUri);
-                return mediaSource;
-            }
-            case C.TYPE_DASH: {
-                MediaSource mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactory(preview)),
+                break;
+            case C.TYPE_DASH:
+                mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactory(preview)),
                         new DefaultDataSourceFactory(mAppContext, null,
                                 getHttpDataSourceFactory(preview))).createMediaSource(contentUri);
-                return mediaSource;
-            }
-            case C.TYPE_HLS: {
-                MediaSource mediaSource = new HlsMediaSource.Factory(getDataSourceFactory(preview)).createMediaSource(contentUri);
-                return mediaSource;
-            }
-            case TYPE_RTMP: {
+                break;
+            case C.TYPE_HLS:
+                mediaSource = new HlsMediaSource.Factory(getDataSourceFactory(preview)).createMediaSource(contentUri);
+                break;
+            case TYPE_RTMP:
                 RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory(null);
-                MediaSource mediaSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
+                mediaSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
                         .setExtractorsFactory(new DefaultExtractorsFactory())
                         .createMediaSource(contentUri);
-                return mediaSource;
-            }
+                break;
             case C.TYPE_OTHER:
             default:
-                MediaSource mediaSource = new ExtractorMediaSource.Factory(getDataSourceFactory(preview))
+                mediaSource = new ExtractorMediaSource.Factory(getDataSourceFactory(preview))
                         .setExtractorsFactory(new DefaultExtractorsFactory())
                         .createMediaSource(contentUri);
-                return mediaSource;
+                break;
         }
+        if (isLooping()) {
+            return new LoopingMediaSource(mediaSource);
+        }
+        return mediaSource;
     }
 
     private DataSource.Factory getDataSourceFactory(boolean preview) {
