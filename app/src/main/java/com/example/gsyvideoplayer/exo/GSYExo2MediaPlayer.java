@@ -374,6 +374,7 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             mEventLogger = null;
         }
 
+        //todo 是这么unlock的？
         SimpleCache.disableCacheFolderLocking();
     }
 
@@ -474,6 +475,8 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             String path = mAppContext.getCacheDir().getAbsolutePath();
             File cachePath = new File(path + File.pathSeparator + new Md5FileNameGenerator().generate(dataSource));
             boolean isLocked = SimpleCache.isCacheFolderLocked(cachePath);
+
+            //todo lock目录不能一样，url一样怎么办
             if (!isLocked) {
                 Cache cache = new SimpleCache(cachePath, new LeastRecentlyUsedCacheEvictor(1024 * 1024 * 100));
                 return new CacheDataSourceFactory(cache, getDataSourceFactory(preview), CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
