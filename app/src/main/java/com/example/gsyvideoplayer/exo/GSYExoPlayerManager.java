@@ -103,4 +103,25 @@ public class GSYExoPlayerManager implements IPlayerManager {
             dummySurface = null;
         }
     }
+
+
+    /**
+     * 上一集
+     */
+    public void previous() {
+        if (mediaPlayer == null) {
+            return;
+        }
+        mediaPlayer.previous();
+    }
+
+    /**
+     * 下一集
+     */
+    public void next() {
+        if (mediaPlayer == null) {
+            return;
+        }
+        mediaPlayer.next();
+    }
 }
