@@ -163,8 +163,11 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     @Override
     public String getDataSource() {
-        //todo en·······
-        return "";
+        return null;
+    }
+
+    public MediaSource getMediaSource() {
+        return mMediaSource;
     }
 
     public List<String> getDataSourceList() {
