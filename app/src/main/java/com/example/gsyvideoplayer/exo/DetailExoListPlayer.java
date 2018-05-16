@@ -40,19 +40,18 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
         setContentView(R.layout.activity_deatil_exo_list_player);
         ButterKnife.bind(this);
 
-        //初始化context
+        //初始化 GSYExoVideoManager context
         GSYExoVideoManager.instance().initContext(this);
 
-        //普通模式
+        //GSYBaseActivityDetail 的 普通模式初始化
         initVideo();
 
-        //String url = "http://baobab.wd jcdn.com/14564977406580.mp4";
         List<GSYVideoModel> urls = new ArrayList<>();
         urls.add(new GSYVideoModel("http://7xse1z.com1.z0.glb.clouddn.com/1491813192", "标题1"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题2"));
         urls.add(new GSYVideoModel("https://res.exexm.com/cw_145225549855002", "标题3"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题4"));
-        detailPlayer.setUp(urls, true, 0);
+        detailPlayer.setUp(urls, 0);
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -83,7 +82,9 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
 
     }
 
-
+    /**
+     * 重载为GSYExoVideoManager的方法处理
+     */
     @Override
     public void onBackPressed() {
         if (orientationUtils != null) {
@@ -103,13 +104,12 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
 
     @Override
     public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
-        //不需要builder的
+        //不用builder的模式
         return null;
     }
 
     @Override
     public void clickForFullScreen() {
-
     }
 
     /**
@@ -130,7 +130,6 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
     }
 
 
-
     private void resolveNormalVideoUI() {
         //增加title
         detailPlayer.getTitleTextView().setVisibility(View.VISIBLE);
@@ -143,6 +142,4 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
         }
         return detailPlayer;
     }
-
-
 }

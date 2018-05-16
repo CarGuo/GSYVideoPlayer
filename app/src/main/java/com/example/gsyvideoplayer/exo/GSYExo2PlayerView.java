@@ -28,6 +28,9 @@ import tv.danmaku.ijk.media.player.IjkLibLoader;
 /**
  * Created by guoshuyu on 2018/5/16.
  * 自定义View支持exo的list数据，实现无缝切换效果
+ *
+ * 这是一种思路，通过自定义后GSYExo2MediaPlayer内部，通过ConcatenatingMediaSource实现列表播放
+ * 诸如此类，还可以实现AdsMediaSource等
  */
 
 public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
@@ -56,56 +59,54 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
      *
      * @param url           播放url
      * @param position      需要播放的位置
-     * @param cacheWithPlay 是否边播边缓存
      * @return
      */
-    public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position) {
-        return setUp(url, cacheWithPlay, position, null, new HashMap<String, String>());
+    public boolean setUp(List<GSYVideoModel> url, int position) {
+        return setUp(url, position, null, new HashMap<String, String>());
     }
 
     /**
      * 设置播放URL
      *
      * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
      * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @return
      */
-    public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath) {
-        return setUp(url, cacheWithPlay, position, cachePath, new HashMap<String, String>());
+    public boolean setUp(List<GSYVideoModel> url, int position, File cachePath) {
+        return setUp(url, position, cachePath, new HashMap<String, String>());
     }
 
     /**
      * 设置播放URL
      *
      * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
      * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   http header
      * @return
      */
-    public boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath, Map<String, String> mapHeadData) {
-        return setUp(url, cacheWithPlay, position, cachePath, mapHeadData, true);
+    public boolean setUp(List<GSYVideoModel> url,  int position, File cachePath, Map<String, String> mapHeadData) {
+        return setUp(url, position, cachePath, mapHeadData, true);
     }
 
     /**
      * 设置播放URL
      *
      * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
      * @param position      需要播放的位置
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   http header
      * @param changeState   切换的时候释放surface
      * @return
      */
-    protected boolean setUp(List<GSYVideoModel> url, boolean cacheWithPlay, int position, File cachePath, Map<String, String> mapHeadData, boolean changeState) {
+    protected boolean setUp(List<GSYVideoModel> url, int position, File cachePath, Map<String, String> mapHeadData, boolean changeState) {
         mUriList = url;
         mPlayPosition = position;
         mMapHeadData = mapHeadData;
         GSYVideoModel gsyVideoModel = url.get(position);
+
+        //不支持边播边缓存
         boolean set = setUp(gsyVideoModel.getUrl(), false, cachePath, gsyVideoModel.getTitle(), changeState);
         if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
             mTitleTextView.setText(gsyVideoModel.getTitle());
@@ -161,19 +162,24 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         ((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBackUpPlayingBufferState = -1;
+
+        //prepare通过list初始化
         List<String> urls = new ArrayList<>();
         for (GSYVideoModel gsyVideoModel : mUriList) {
             urls.add(gsyVideoModel.getUrl());
         }
+
+        if (urls.size() == 0) {
+            Debuger.printfError("********************** urls isEmpty . Do you know why ? **********************");
+        }
+
         ((GSYExoVideoManager)getGSYVideoManager()).prepare(urls, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed);
+
         setStateAndUi(CURRENT_STATE_PREPAREING);
     }
 
+    /**********以下重载GSYVideoPlayer的GSYVideoViewBridge相关实现***********/
 
-    /**
-     * 设置自定义so包加载类，必须在setUp之前调用
-     * 不然setUp时会第一次实例化GSYExoVideoManager
-     */
     public void setIjkLibLoader(IjkLibLoader libLoader) {
         GSYExoVideoManager.setIjkLibLoader(libLoader);
     }
@@ -193,6 +199,9 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         GSYExoVideoManager.releaseAllVideos();
     }
 
+    /**
+     * 不支持边播边缓存，也就不存在proxy
+     */
     @Override
     protected HttpProxyCacheServer getProxy(Context context, File file) {
         return null;
