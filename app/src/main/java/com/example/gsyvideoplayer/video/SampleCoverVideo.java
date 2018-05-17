@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -75,4 +76,15 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
         sampleCoverVideo.loadCoverImage(mCoverOriginUrl, mDefaultRes);
         return gsyBaseVideoPlayer;
     }
+
+
+    @Override
+    public GSYBaseVideoPlayer showSmallVideo(Point size, boolean actionBar, boolean statusBar) {
+        //下面这里替换成你自己的强制转化
+        SampleCoverVideo sampleCoverVideo =  (SampleCoverVideo)super.showSmallVideo(size, actionBar, statusBar);
+        sampleCoverVideo.mStartButton.setVisibility(GONE);
+        sampleCoverVideo.mStartButton = null;
+        return sampleCoverVideo;
+    }
+
 }
