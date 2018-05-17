@@ -83,6 +83,7 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private Map<String, String> mHeaders = new HashMap<>();
     private List<String> uris = new ArrayList<>();
     private PlaybackParameters mSpeedPlaybackParameters;
+    private Cache mCache;
     private int mVideoWidth;
     private int mVideoHeight;
     private int lastReportedPlaybackState;
@@ -373,9 +374,13 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             reset();
             mEventLogger = null;
         }
-
-        //todo 是这么unlock的？
-        SimpleCache.disableCacheFolderLocking();
+        if (mCache != null) {
+            try {
+                mCache.release();
+            } catch (Cache.CacheException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void stopPlayback() {
@@ -464,30 +469,41 @@ public class GSYExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                         .createMediaSource(contentUri);
                 break;
         }
-        if (isLooping()) {
+        /*if (isLooping()) {
             return new LoopingMediaSource(mediaSource);
-        }
+        }*/
         return mediaSource;
     }
 
+    /**
+     * 获取SourceFactory，是否带Cache
+     */
     private DataSource.Factory getDataSourceFactoryCache(String dataSource, boolean cacheEnable, boolean preview) {
         if (cacheEnable) {
-            String path = mAppContext.getCacheDir().getAbsolutePath();
-            File cachePath = new File(path + File.pathSeparator + new Md5FileNameGenerator().generate(dataSource));
-            boolean isLocked = SimpleCache.isCacheFolderLocked(cachePath);
-
-            //todo lock目录不能一样，url一样怎么办
-            if (!isLocked) {
-                Cache cache = new SimpleCache(cachePath, new LeastRecentlyUsedCacheEvictor(1024 * 1024 * 100));
-                return new CacheDataSourceFactory(cache, getDataSourceFactory(preview), CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
-            } else {
-                return getDataSourceFactory(preview);
-            }
+            Cache cache = getCache();
+            return new CacheDataSourceFactory(cache, getDataSourceFactory(preview), CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
         } else {
             return getDataSourceFactory(preview);
         }
     }
 
+    /**
+     * 本地缓存目录
+     */
+    private Cache getCache() {
+        if (mCache == null) {
+            String path = mAppContext.getCacheDir().getAbsolutePath() + File.separator + "exo";
+            boolean isLocked = SimpleCache.isCacheFolderLocked(new File(path));
+            if (!isLocked) {
+                mCache = new SimpleCache(new File(path), new LeastRecentlyUsedCacheEvictor(1024 * 1024 * 100));
+            }
+        }
+        return mCache;
+    }
+
+    /**
+     * 获取SourceFactory
+     */
     private DataSource.Factory getDataSourceFactory(boolean preview) {
         return new DefaultDataSourceFactory(mAppContext, preview ? null : new DefaultBandwidthMeter(),
                 getHttpDataSourceFactory(preview));
