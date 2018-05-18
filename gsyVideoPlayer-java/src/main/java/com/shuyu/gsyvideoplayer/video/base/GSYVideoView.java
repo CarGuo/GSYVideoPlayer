@@ -582,6 +582,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         setStateAndUi(CURRENT_STATE_AUTO_COMPLETE);
 
         mSaveChangeViewTIme = 0;
+        mCurrentPosition = 0;
 
         if (mTextureViewContainer.getChildCount() > 0) {
             mTextureViewContainer.removeAllViews();
@@ -606,6 +607,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         setStateAndUi(CURRENT_STATE_NORMAL);
 
         mSaveChangeViewTIme = 0;
+        mCurrentPosition = 0;
 
         if (mTextureViewContainer.getChildCount() > 0) {
             mTextureViewContainer.removeAllViews();

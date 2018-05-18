@@ -87,4 +87,18 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
         return sampleCoverVideo;
     }
 
+
+    /**下方两个重载方法，在播放开始不显示底部进度*/
+    @Override
+    protected void changeUiToPreparingShow() {
+        super.changeUiToPreparingShow();
+        setViewShowState(mBottomContainer, INVISIBLE);
+    }
+
+    @Override
+    public void startAfterPrepared() {
+        super.startAfterPrepared();
+        setViewShowState(mBottomContainer, INVISIBLE);
+    }
+
 }
