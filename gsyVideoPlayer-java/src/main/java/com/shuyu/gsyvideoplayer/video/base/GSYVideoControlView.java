@@ -897,7 +897,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             if (progress != 0) mProgressBar.setProgress(progress);
         }
         if (secProgress > 94) secProgress = 100;
-        if (secProgress != 0 && !mCacheFile) {
+        if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
             mProgressBar.setSecondaryProgress(secProgress);
         }
         mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
@@ -906,7 +906,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
         if (mBottomProgressBar != null) {
             if (progress != 0) mBottomProgressBar.setProgress(progress);
-            if (secProgress != 0 && !mCacheFile)
+            if (secProgress != 0 && !getGSYVideoManager().isCacheFile())
                 mBottomProgressBar.setSecondaryProgress(secProgress);
         }
     }

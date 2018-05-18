@@ -8,11 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-
-import java.io.File;
 
 import tv.danmaku.ijk.media.player.IjkLibLoader;
 
@@ -45,49 +42,6 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
         ijkLibLoader = libLoader;
         init(libLoader);
     }
-
-
-    /**
-     * 获取缓存代理服务
-     */
-    protected static HttpProxyCacheServer getProxy(Context context) {
-        HttpProxyCacheServer proxy = GSYVideoADManager.instance().proxy;
-        return proxy == null ? (GSYVideoADManager.instance().proxy =
-                GSYVideoADManager.instance().newProxy(context)) : proxy;
-    }
-
-
-    /**
-     * 获取缓存代理服务,带文件目录的
-     */
-    public static HttpProxyCacheServer getProxy(Context context, File file) {
-
-        //如果为空，返回默认的
-        if (file == null) {
-            return getProxy(context);
-        }
-
-        //如果已经有缓存文件路径，那么判断缓存文件路径是否一致
-        if (GSYVideoADManager.instance().cacheFile != null
-                && !GSYVideoADManager.instance().cacheFile.getAbsolutePath().equals(file.getAbsolutePath())) {
-            //不一致先关了旧的
-            HttpProxyCacheServer proxy = GSYVideoADManager.instance().proxy;
-
-            if (proxy != null) {
-                proxy.shutdown();
-            }
-            //开启新的
-            return (GSYVideoADManager.instance().proxy =
-                    GSYVideoADManager.instance().newProxy(context, file));
-        } else {
-            //还没有缓存文件的或者一致的，返回原来
-            HttpProxyCacheServer proxy = GSYVideoADManager.instance().proxy;
-
-            return proxy == null ? (GSYVideoADManager.instance().proxy =
-                    GSYVideoADManager.instance().newProxy(context, file)) : proxy;
-        }
-    }
-
 
     /**
      * 单例管理器

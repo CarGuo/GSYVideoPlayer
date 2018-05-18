@@ -14,9 +14,11 @@ import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,13 +98,13 @@ public class ListNormalAdapter extends BaseAdapter {
 
         //默认缓存路径
         //使用lazy的set可以避免滑动卡的情况存在
-        holder.gsyVideoPlayer.setUpLazy(url, false, null, null, "这是title");
+        //holder.gsyVideoPlayer.setUpLazy(url, false, null, null, "这是title");
 
         //holder.gsyVideoPlayer.setNeedShowWifiTip(false);
 
         /************************下方为其他路径************************************/
         //如果一个列表的缓存路劲都一一致
-        //holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath()), "");
+        holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath()), "这是title");
 
         /************************下方为其他路径************************************/
         //如果一个列表里的缓存路劲不一致

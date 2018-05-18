@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.shuyu.gsyvideoplayer.GSYVideoBaseManager;
 import com.shuyu.gsyvideoplayer.player.IPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -54,31 +53,16 @@ public class GSYExoVideoManager extends GSYVideoBaseManager {
     }
 
     @Override
-    public HttpProxyCacheServer newProxy(Context context, File file) {
-        throw new UnsupportedOperationException("no support");
-    }
-
-    @Override
-    public void setProxy(HttpProxyCacheServer proxy) {
-        throw new UnsupportedOperationException("no support");
-    }
-
-    @Override
-    public HttpProxyCacheServer newProxy(Context context) {
-        throw new UnsupportedOperationException("no support");
-    }
-
-    @Override
     protected IPlayerManager getPlayManager(int videoType) {
         return new GSYExoPlayerManager();
     }
 
-    public void prepare(List<String> urls, Map<String, String> mapHeadData, boolean loop, float speed, boolean cache) {
+    public void prepare(List<String> urls, Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath) {
         if (urls.size() == 0) return;
         Message msg = new Message();
         msg.what = HANDLER_PREPARE;
         mMapHeadData = mapHeadData;
-        msg.obj = new GSYExoModel(urls, mapHeadData, loop, speed, cache);
+        msg.obj = new GSYExoModel(urls, mapHeadData, loop, speed, cache, cachePath);
         sendMessage(msg);
         if (needTimeOutOther) {
             startTimeOutBuffer();
