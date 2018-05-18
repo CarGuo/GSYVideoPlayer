@@ -100,6 +100,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private boolean mIsPrepareing = true;
     private boolean mIsBuffering = false;
     private boolean isLooping = false;
+    private boolean isPreview = false;
 
     private int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
 
@@ -138,11 +139,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             if (surface != null && !surface.isValid()) {
                 mSurface = null;
             }
-            /*if (mSurface == null) {
-                mTrackSelector.setParameters(mTrackSelector.buildUponParameters().setRendererDisabled(getVideoRendererIndex(), true));
-            } else {
-                mTrackSelector.setParameters(mTrackSelector.buildUponParameters().setRendererDisabled(getVideoRendererIndex(), false));
-            }*/
             mInternalPlayer.setVideoSurface(surface);
         }
     }
@@ -150,12 +146,11 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     @Override
     public void setDataSource(Context context, Uri uri) {
         mDataSource = uri.toString();
-        mMediaSource = getMediaSource(false);
+        mMediaSource = getMediaSource(isPreview);
     }
 
     @Override
     public void setDataSource(Context context, Uri uri, Map<String, String> headers) {
-        // TODO: handle headers
         mHeaders = headers;
         setDataSource(context, uri);
     }
@@ -373,6 +368,18 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     public void stopPlayback() {
         mInternalPlayer.stop();
+    }
+
+    public void setPreview(boolean preview) {
+        isPreview = preview;
+    }
+
+    public MediaSource getMediaSource() {
+        return mMediaSource;
+    }
+
+    public void setMediaSource(MediaSource mediaSource) {
+        this.mMediaSource = mediaSource;
     }
 
     /**
