@@ -5,7 +5,6 @@ import android.media.AudioManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.example.gsyvideoplayer.video.manager.CustomManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoViewBridge;
@@ -74,6 +73,7 @@ public class MultiSampleVideo extends SampleCoverVideo {
 
     @Override
     public GSYVideoViewBridge getGSYVideoManager() {
+        CustomManager.getCustomManager(getKey()).initContext(getContext().getApplicationContext());
         return CustomManager.getCustomManager(getKey());
     }
 
@@ -86,12 +86,6 @@ public class MultiSampleVideo extends SampleCoverVideo {
     protected void releaseVideos() {
         CustomManager.releaseAllVideos(getKey());
     }
-
-    @Override
-    protected HttpProxyCacheServer getProxy(Context context, File file) {
-        return null;
-    }
-
 
 
     @Override

@@ -1,15 +1,12 @@
 package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
-import android.graphics.Matrix;
-import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.view.LoadingDialog;
@@ -192,21 +189,6 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
             mCache = cacheWithPlay;
             mCachePath = cachePath;
             mOriginUrl = url;
-            if (cacheWithPlay && url.startsWith("http") && !url.contains("127.0.0.1") && !url.contains(".m3u8")) {
-                HttpProxyCacheServer proxy = (cachePath != null) ?
-                        mTmpManager.newProxy(getActivityContext().getApplicationContext(), cachePath) : mTmpManager.newProxy(getActivityContext().getApplicationContext());
-                //此处转换了url，然后再赋值给mUrl。
-                url = proxy.getProxyUrl(url);
-                mCacheFile = (!url.startsWith("http"));
-                mTmpManager.setProxy(proxy);
-                //注册上缓冲监听
-                if (!mCacheFile && GSYVideoManager.instance() != null) {
-                    proxy.registerCacheListener(GSYVideoManager.instance(), mOriginUrl);
-                }
-            } else if (!cacheWithPlay && (!url.startsWith("http") && !url.startsWith("rtmp")
-                    && !url.startsWith("rtsp") && !url.contains(".m3u8"))) {
-                mCacheFile = true;
-            }
             this.mUrl = url;
         }
     }
@@ -315,8 +297,9 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
                 mSourcePosition = position;
                 //创建临时管理器执行加载播放
                 mTmpManager = GSYVideoManager.tmpInstance(gsyMediaPlayerListener);
+                mTmpManager.initContext(getContext().getApplicationContext());
                 resolveChangeUrl(mCache, mCachePath, url);
-                mTmpManager.prepare(mUrl, mMapHeadData, mLooping, mSpeed);
+                mTmpManager.prepare(mUrl, mMapHeadData, mLooping, mSpeed, mCache, mCachePath);
                 changeUiToPlayingBufferingShow();
             }
         } else {

@@ -135,7 +135,7 @@ public class GSYPreViewManager implements IMediaPlayer.OnPreparedListener, IjkMe
         if (TextUtils.isEmpty(url)) return;
         Message msg = new Message();
         msg.what = HANDLER_PREPARE;
-        GSYModel fb = new GSYModel(url, mapHeadData, loop, speed);
+        GSYModel fb = new GSYModel(url, mapHeadData, loop, speed, false, null);
         msg.obj = fb;
         mMediaHandler.sendMessage(msg);
     }

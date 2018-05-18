@@ -9,7 +9,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.shuyu.gsyvideoplayer.GSYVideoADManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -74,6 +73,7 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
 
     @Override
     public GSYVideoViewBridge getGSYVideoManager() {
+        GSYVideoADManager.instance().initContext(getContext().getApplicationContext());
         return GSYVideoADManager.instance();
     }
 
@@ -86,12 +86,6 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
     protected void releaseVideos() {
         GSYVideoADManager.releaseAllVideos();
     }
-
-    @Override
-    protected HttpProxyCacheServer getProxy(Context context, File file) {
-        return GSYVideoADManager.getProxy(context, file);
-    }
-
 
     @Override
     protected int getFullId() {

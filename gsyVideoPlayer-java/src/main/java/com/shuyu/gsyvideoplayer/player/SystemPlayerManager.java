@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Message;
 import android.view.Surface;
 
+import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -34,14 +35,19 @@ public class SystemPlayerManager implements IPlayerManager {
     }
 
     @Override
-    public void initVideoPlayer(Context context, Message msg, List<VideoOptionModel> optionModelList) {
+    public void initVideoPlayer(Context context, Message msg, List<VideoOptionModel> optionModelList, ICacheManager cacheManager) {
         mediaPlayer = new AndroidMediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         release = false;
+        GSYModel gsyModel = (GSYModel) msg.obj;
         try {
-            mediaPlayer.setDataSource(context, Uri.parse(((GSYModel) msg.obj).getUrl()), ((GSYModel) msg.obj).getMapHeadData());
-            mediaPlayer.setLooping(((GSYModel) msg.obj).isLooping());
-            if (((GSYModel) msg.obj).getSpeed() != 1 && ((GSYModel) msg.obj).getSpeed() > 0) {
+            if (gsyModel.isCache() && cacheManager != null) {
+                cacheManager.doCacheLogic(context, mediaPlayer, gsyModel.getUrl(), gsyModel.getMapHeadData(), gsyModel.getCachePath());
+            } else {
+                mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), ((GSYModel) msg.obj).getMapHeadData());
+            }
+            mediaPlayer.setLooping(gsyModel.isLooping());
+            if (gsyModel.getSpeed() != 1 && gsyModel.getSpeed() > 0) {
 
             }
         } catch (Exception e) {
