@@ -131,23 +131,14 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.3'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
 ## 五、近期版本
-### 4.1.4(2018-XX-XX)
-* update ExoPlayer to 2.8.0
+### 5.0.0(2018-XX-XX)
+* 调整cache机制，抽离cache管理器
+* update ExoPlayer to 2.8.0，全面针对ExoPlayer进行优化
 * 优化ExoPlayer的问题
 * 增加ExoPlayer循环播放支持
 * 增加ExoPlayer自定义DEMO，演示ExoPlayer实现无缝切换
 
-### 4.1.3(2018-05-11)
-* 优化单双击
-* update support and build sdk to 27
-* 增加是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效。
-```
-/**
-  * 是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
-  * @param autoFullWithSize 默认false
-  */
- public void setAutoFullWithSize(boolean autoFullWithSize)
-```
+
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
