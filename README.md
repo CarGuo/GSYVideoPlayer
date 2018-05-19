@@ -132,7 +132,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.3'
 
 ## 五、近期版本
 ### 5.0.0(2018-XX-XX)
-* 调整cache机制，抽离cache管理器
+* 调整cache机制，抽离cache管理器。
 * update ExoPlayer to 2.8.0，全面针对ExoPlayer进行优化
 * 优化ExoPlayer的问题
 * 增加ExoPlayer循环播放支持

@@ -165,6 +165,11 @@ public class IJKPlayerManager implements IPlayerManager {
         }
     }
 
+    @Override
+    public int getBufferedPercentage() {
+        return -1;
+    }
+
     private void initIJKOption(IjkMediaPlayer ijkMediaPlayer, List<VideoOptionModel> optionModelList) {
         if (optionModelList != null && optionModelList.size() > 0) {
             for (VideoOptionModel videoOptionModel : optionModelList) {

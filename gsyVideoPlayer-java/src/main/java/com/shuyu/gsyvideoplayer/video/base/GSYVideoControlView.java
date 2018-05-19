@@ -896,6 +896,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (!mTouchingProgressBar) {
             if (progress != 0) mProgressBar.setProgress(progress);
         }
+        if (getGSYVideoManager().getBufferedPercentage() > 0) {
+            secProgress = getGSYVideoManager().getBufferedPercentage();
+        }
         if (secProgress > 94) secProgress = 100;
         if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
             mProgressBar.setSecondaryProgress(secProgress);
