@@ -1,27 +1,9 @@
-/*
- * Copyright (C) 2015 Bilibili
- * Copyright (C) 2015 Zhang Rui <bbcallen@gmail.com>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package tv.danmaku.ijk.media.exo2;
 
 import android.content.Context;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 import android.view.Surface;
@@ -39,29 +21,17 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
-import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.metadata.Metadata;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
-import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.HashMap;
@@ -76,8 +46,7 @@ import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
 /**
  * Created by guoshuyu on 2018/1/10.
- * ExoPlayer2
- * fork from https://github.com/DyncKathline/IJKPlayer-android
+ * Exo
  */
 public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.EventListener, AnalyticsListener {
     private static final String TAG = "IjkExo2MediaPlayer";
@@ -99,9 +68,22 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private boolean mIsPrepareing = true;
     private boolean mIsBuffering = false;
     private boolean isLooping = false;
+    /**
+     * 是否带上header
+     */
     private boolean isPreview = false;
+    /**
+     * 是否开启缓存
+     */
     private boolean isCache = false;
+    /**
+     * dataSource等的帮组类
+     */
     private ExoHelper mExoHelper;
+    /**
+     * 缓存目录，可以为空
+     */
+    private File mCacheDir;
 
     private int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
 
@@ -143,11 +125,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         }
     }
 
-    @Override
-    public void setDataSource(Context context, Uri uri) {
-        mDataSource = uri.toString();
-        mMediaSource = mExoHelper.getMediaSource(mDataSource, isPreview, isCache, isLooping);
-    }
 
     @Override
     public void setDataSource(Context context, Uri uri, Map<String, String> headers) {
@@ -161,6 +138,12 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     @Override
     public void setDataSource(String path) {
         setDataSource(mAppContext, Uri.parse(path));
+    }
+
+    @Override
+    public void setDataSource(Context context, Uri uri) {
+        mDataSource = uri.toString();
+        mMediaSource = mExoHelper.getMediaSource(mDataSource, isPreview, isCache, isLooping, mCacheDir);
     }
 
     @Override
@@ -374,6 +357,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     /**
+     * 是否需要带上header
      * setDataSource之前生效
      *
      * @param preview
@@ -391,12 +375,27 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     /**
+     * 是否开启cache
      * setDataSource之前生效
      *
      * @param cache
      */
     public void setCache(boolean cache) {
         isCache = cache;
+    }
+
+    public File getCacheDir() {
+        return mCacheDir;
+    }
+
+    /**
+     * cache文件的目录
+     * setDataSource之前生效
+     *
+     * @param cacheDir
+     */
+    public void setCacheDir(File cacheDir) {
+        this.mCacheDir = cacheDir;
     }
 
     public MediaSource getMediaSource() {

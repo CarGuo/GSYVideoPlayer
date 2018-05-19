@@ -37,6 +37,8 @@ public interface GSYVideoViewBridge {
 
     IMediaPlayer getMediaPlayer();
 
+    int getBufferedPercentage();
+
     void releaseMediaPlayer();
 
     void setCurrentVideoHeight(int currentVideoHeight);

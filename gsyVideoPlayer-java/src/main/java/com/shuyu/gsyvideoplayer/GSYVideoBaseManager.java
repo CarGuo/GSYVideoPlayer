@@ -433,6 +433,15 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         clearDefaultCache(context, url);
     }
 
+
+    @Override
+    public int getBufferedPercentage() {
+        if (playerManager != null) {
+            return playerManager.getBufferedPercentage();
+        }
+        return 0;
+    }
+
     protected void sendMessage(Message message) {
         mMediaHandler.sendMessage(message);
     }

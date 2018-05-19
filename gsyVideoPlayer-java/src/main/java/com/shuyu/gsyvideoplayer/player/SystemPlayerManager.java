@@ -104,4 +104,9 @@ public class SystemPlayerManager implements IPlayerManager {
             mediaPlayer.release();
         }
     }
+
+    @Override
+    public int getBufferedPercentage() {
+        return -1;
+    }
 }

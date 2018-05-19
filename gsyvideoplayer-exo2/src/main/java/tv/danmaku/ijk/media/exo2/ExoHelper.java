@@ -50,24 +50,24 @@ public class ExoHelper {
     }
 
 
-    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping) {
+    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
         Uri contentUri = Uri.parse(dataSource);
         int contentType = inferContentType(dataSource);
         MediaSource mediaSource;
         switch (contentType) {
             case C.TYPE_SS:
                 mediaSource = new SsMediaSource.Factory(
-                        new DefaultSsChunkSource.Factory(getDataSourceFactoryCache(mAppContext, dataSource, cacheEnable, preview)),
+                        new DefaultSsChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir)),
                         new DefaultDataSourceFactory(mAppContext, null,
                                 getHttpDataSourceFactory(mAppContext, preview))).createMediaSource(contentUri);
                 break;
             case C.TYPE_DASH:
-                mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactoryCache(mAppContext, dataSource, cacheEnable, preview)),
+                mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir)),
                         new DefaultDataSourceFactory(mAppContext, null,
                                 getHttpDataSourceFactory(mAppContext, preview))).createMediaSource(contentUri);
                 break;
             case C.TYPE_HLS:
-                mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(mAppContext, dataSource, cacheEnable, preview)).createMediaSource(contentUri);
+                mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir)).createMediaSource(contentUri);
                 break;
             case TYPE_RTMP:
                 RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory(null);
@@ -77,7 +77,7 @@ public class ExoHelper {
                 break;
             case C.TYPE_OTHER:
             default:
-                mediaSource = new ExtractorMediaSource.Factory(getDataSourceFactoryCache(mAppContext, dataSource, cacheEnable, preview))
+                mediaSource = new ExtractorMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir))
                         .setExtractorsFactory(new DefaultExtractorsFactory())
                         .createMediaSource(contentUri);
                 break;
@@ -109,9 +109,13 @@ public class ExoHelper {
     /**
      * 本地缓存目录
      */
-    public Cache getCache(Context context) {
+    public Cache getCache(Context context, File cacheDir) {
+        String dirs = context.getCacheDir().getAbsolutePath();
+        if (cacheDir != null) {
+            dirs = cacheDir.getAbsolutePath();
+        }
         if (mCache == null) {
-            String path = context.getCacheDir().getAbsolutePath() + File.separator + "exo";
+            String path = dirs + File.separator + "exo";
             boolean isLocked = SimpleCache.isCacheFolderLocked(new File(path));
             if (!isLocked) {
                 mCache = new SimpleCache(new File(path), new LeastRecentlyUsedCacheEvictor(1024 * 1024 * 100));
@@ -135,9 +139,9 @@ public class ExoHelper {
     /**
      * 获取SourceFactory，是否带Cache
      */
-    private DataSource.Factory getDataSourceFactoryCache(Context context, String dataSource, boolean cacheEnable, boolean preview) {
+    private DataSource.Factory getDataSourceFactoryCache(Context context, boolean cacheEnable, boolean preview, File cacheDir) {
         if (cacheEnable) {
-            Cache cache = getCache(context);
+            Cache cache = getCache(context, cacheDir);
             return new CacheDataSourceFactory(cache, getDataSourceFactory(context, preview), CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
         } else {
             return getDataSourceFactory(context, preview);

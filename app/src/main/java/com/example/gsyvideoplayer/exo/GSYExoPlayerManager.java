@@ -89,7 +89,10 @@ public class GSYExoPlayerManager implements IPlayerManager {
 
     @Override
     public void releaseSurface() {
-
+        if (surface != null) {
+            surface.release();
+            surface = null;
+        }
     }
 
     @Override
@@ -104,6 +107,10 @@ public class GSYExoPlayerManager implements IPlayerManager {
         }
     }
 
+    @Override
+    public int getBufferedPercentage() {
+        return -1;
+    }
 
     /**
      * 上一集

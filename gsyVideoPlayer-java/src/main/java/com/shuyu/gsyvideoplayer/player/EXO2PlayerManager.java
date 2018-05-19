@@ -46,10 +46,11 @@ public class EXO2PlayerManager implements IPlayerManager {
         try {
             mediaPlayer.setLooping(gsyModel.isLooping());
             mediaPlayer.setCache(gsyModel.isCache());
+            mediaPlayer.setCacheDir(gsyModel.getCachePath());
             mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), gsyModel.getMapHeadData());
             //很遗憾，EXO2的setSpeed只能在播放前生效
             if (gsyModel.getSpeed() != 1 && gsyModel.getSpeed() > 0) {
-                 mediaPlayer.setSpeed(gsyModel.getSpeed(), 1);
+                mediaPlayer.setSpeed(gsyModel.getSpeed(), 1);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,7 +84,7 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     @Override
     public void setNeedMute(boolean needMute) {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             if (needMute) {
                 mediaPlayer.setVolume(0, 0);
             } else {
@@ -95,7 +96,7 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     @Override
     public void releaseSurface() {
-        if (surface!= null) {
+        if (surface != null) {
             surface.release();
             surface = null;
         }
@@ -103,7 +104,7 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     @Override
     public void release() {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             mediaPlayer.setSurface(null);
             mediaPlayer.release();
         }
@@ -111,5 +112,13 @@ public class EXO2PlayerManager implements IPlayerManager {
             dummySurface.release();
             dummySurface = null;
         }
+    }
+
+    @Override
+    public int getBufferedPercentage() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getBufferedPercentage();
+        }
+        return 0;
     }
 }

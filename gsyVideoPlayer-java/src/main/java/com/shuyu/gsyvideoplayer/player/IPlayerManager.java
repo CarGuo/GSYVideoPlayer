@@ -31,4 +31,5 @@ public interface IPlayerManager {
 
     void release();
 
+    int getBufferedPercentage();
 }
