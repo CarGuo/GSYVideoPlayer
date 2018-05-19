@@ -143,7 +143,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void showWifiDialog() {
         if (!NetworkUtils.isAvailable(mContext)) {
-            Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
+            //Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
+            startPlayLogic();
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivityContext());

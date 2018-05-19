@@ -41,14 +41,12 @@ public class EXO2PlayerManager implements IPlayerManager {
         if (dummySurface == null) {
             dummySurface = DummySurface.newInstanceV17(context, false);
         }
+        //使用自己的cache模式
         GSYModel gsyModel = (GSYModel) msg.obj;
         try {
             mediaPlayer.setLooping(gsyModel.isLooping());
-            if (gsyModel.isCache() && cacheManager != null) {
-                cacheManager.doCacheLogic(context, mediaPlayer, gsyModel.getUrl(), gsyModel.getMapHeadData(), gsyModel.getCachePath());
-            } else {
-                mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), gsyModel.getMapHeadData());
-            }
+            mediaPlayer.setCache(gsyModel.isCache());
+            mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), gsyModel.getMapHeadData());
             //很遗憾，EXO2的setSpeed只能在播放前生效
             if (gsyModel.getSpeed() != 1 && gsyModel.getSpeed() > 0) {
                  mediaPlayer.setSpeed(gsyModel.getSpeed(), 1);
@@ -97,7 +95,10 @@ public class EXO2PlayerManager implements IPlayerManager {
 
     @Override
     public void releaseSurface() {
-
+        if (surface!= null) {
+            surface.release();
+            surface = null;
+        }
     }
 
     @Override
