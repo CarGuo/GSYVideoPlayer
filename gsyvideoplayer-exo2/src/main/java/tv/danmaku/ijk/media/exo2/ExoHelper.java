@@ -120,6 +120,17 @@ public class ExoHelper {
         return mCache;
     }
 
+    public void release() {
+        if (mCache != null) {
+            try {
+                mCache.release();
+                mCache = null;
+            } catch (Cache.CacheException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     /**
      * 获取SourceFactory，是否带Cache

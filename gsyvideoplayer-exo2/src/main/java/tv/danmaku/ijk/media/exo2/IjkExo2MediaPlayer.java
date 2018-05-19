@@ -90,7 +90,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private DefaultTrackSelector mTrackSelector;
     private String mDataSource;
     private Surface mSurface;
-    private Handler mainHandler;
     private Map<String, String> mHeaders = new HashMap<>();
     private PlaybackParameters mSpeedPlaybackParameters;
     private int mVideoWidth;
@@ -101,15 +100,16 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private boolean mIsBuffering = false;
     private boolean isLooping = false;
     private boolean isPreview = false;
+    private boolean isCache = false;
+    private ExoHelper mExoHelper;
 
     private int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
 
 
     public IjkExo2MediaPlayer(Context context) {
         mAppContext = context.getApplicationContext();
-        Looper eventLooper = Looper.myLooper() != null ? Looper.myLooper() : Looper.getMainLooper();
-        mainHandler = new Handler(eventLooper);
         lastReportedPlaybackState = Player.STATE_IDLE;
+        mExoHelper = new ExoHelper(context, mHeaders);
     }
 
 
@@ -146,12 +146,15 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     @Override
     public void setDataSource(Context context, Uri uri) {
         mDataSource = uri.toString();
-        mMediaSource = getMediaSource(isPreview);
+        mMediaSource = mExoHelper.getMediaSource(mDataSource, isPreview, isCache, isLooping);
     }
 
     @Override
     public void setDataSource(Context context, Uri uri, Map<String, String> headers) {
-        mHeaders = headers;
+        if (headers != null) {
+            mHeaders.clear();
+            mHeaders.putAll(headers);
+        }
         setDataSource(context, uri);
     }
 
@@ -162,7 +165,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     @Override
     public void setDataSource(FileDescriptor fd) {
-        // TODO: no support
         throw new UnsupportedOperationException("no support");
     }
 
@@ -304,7 +306,9 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             mInternalPlayer.release();
             mInternalPlayer = null;
         }
-
+        if (mExoHelper != null) {
+            mExoHelper.release();
+        }
         mSurface = null;
         mDataSource = null;
         mVideoWidth = 0;
@@ -334,7 +338,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     @Override
     public MediaInfo getMediaInfo() {
-        // TODO: no support
         return null;
     }
 
@@ -370,8 +373,30 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         mInternalPlayer.stop();
     }
 
+    /**
+     * setDataSource之前生效
+     *
+     * @param preview
+     */
     public void setPreview(boolean preview) {
         isPreview = preview;
+    }
+
+    public boolean isPreview() {
+        return isPreview;
+    }
+
+    public boolean isCache() {
+        return isCache;
+    }
+
+    /**
+     * setDataSource之前生效
+     *
+     * @param cache
+     */
+    public void setCache(boolean cache) {
+        isCache = cache;
     }
 
     public MediaSource getMediaSource() {
@@ -405,85 +430,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             return 0;
 
         return mInternalPlayer.getBufferedPercentage();
-    }
-
-    public static final int TYPE_RTMP = 4;
-
-    /**
-     * Makes a best guess to infer the type from a file name.
-     *
-     * @param fileName Name of the file. It can include the path of the file.
-     * @return The content type.
-     */
-    @C.ContentType
-    private int inferContentType(String fileName) {
-        fileName = Util.toLowerInvariant(fileName);
-        if (fileName.endsWith(".mpd")) {
-            return C.TYPE_DASH;
-        } else if (fileName.endsWith(".m3u8")) {
-            return C.TYPE_HLS;
-        } else if (fileName.endsWith(".ism") || fileName.endsWith(".isml")
-                || fileName.endsWith(".ism/manifest") || fileName.endsWith(".isml/manifest")) {
-            return C.TYPE_SS;
-        } else if (fileName.startsWith("rtmp:")) {
-            return TYPE_RTMP;
-        } else {
-            return C.TYPE_OTHER;
-        }
-    }
-
-    private MediaSource getMediaSource(boolean preview) {
-        Uri contentUri = Uri.parse(mDataSource);
-        int contentType = inferContentType(mDataSource);
-        MediaSource mediaSource;
-        switch (contentType) {
-            case C.TYPE_SS:
-                mediaSource = new SsMediaSource.Factory(
-                        new DefaultSsChunkSource.Factory(getDataSourceFactory(preview)),
-                        new DefaultDataSourceFactory(mAppContext, null,
-                                getHttpDataSourceFactory(preview))).createMediaSource(contentUri);
-                break;
-            case C.TYPE_DASH:
-                mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactory(preview)),
-                        new DefaultDataSourceFactory(mAppContext, null,
-                                getHttpDataSourceFactory(preview))).createMediaSource(contentUri);
-                break;
-            case C.TYPE_HLS:
-                mediaSource = new HlsMediaSource.Factory(getDataSourceFactory(preview)).createMediaSource(contentUri);
-                break;
-            case TYPE_RTMP:
-                RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory(null);
-                mediaSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
-                        .setExtractorsFactory(new DefaultExtractorsFactory())
-                        .createMediaSource(contentUri);
-                break;
-            case C.TYPE_OTHER:
-            default:
-                mediaSource = new ExtractorMediaSource.Factory(getDataSourceFactory(preview))
-                        .setExtractorsFactory(new DefaultExtractorsFactory())
-                        .createMediaSource(contentUri);
-                break;
-        }
-        if (isLooping()) {
-            return new LoopingMediaSource(mediaSource);
-        }
-        return mediaSource;
-    }
-
-    private DataSource.Factory getDataSourceFactory(boolean preview) {
-        return new DefaultDataSourceFactory(mAppContext, preview ? null : new DefaultBandwidthMeter(),
-                getHttpDataSourceFactory(preview));
-    }
-
-    private DataSource.Factory getHttpDataSourceFactory(boolean preview) {
-        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(mAppContext,
-                TAG), preview ? null : new DefaultBandwidthMeter());
-        if (mHeaders != null && mHeaders.size() > 0) {
-            for (Map.Entry<String, String> header : mHeaders.entrySet()) {
-                dataSourceFactory.getDefaultRequestProperties().set(header.getKey(), header.getValue());
-            }
-        }
-        return dataSourceFactory;
     }
 
     @Override
