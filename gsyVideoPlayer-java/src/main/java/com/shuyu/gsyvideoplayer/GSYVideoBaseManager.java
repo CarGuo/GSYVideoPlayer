@@ -9,6 +9,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.Surface;
 
+import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
@@ -17,6 +18,7 @@ import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.EXO2PlayerManager;
 import com.shuyu.gsyvideoplayer.player.IJKPlayerManager;
 import com.shuyu.gsyvideoplayer.player.IPlayerManager;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
+
 /**
  * 基类管理器
  * Created by guoshuyu on 2018/1/25.
@@ -148,27 +151,11 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     protected IPlayerManager getPlayManager(int videoType) {
-        switch (videoType) {
-            case GSYVideoType.IJKEXOPLAYER2:
-                return new EXO2PlayerManager();
-            case GSYVideoType.SYSTEMPLAYER:
-                return new SystemPlayerManager();
-            case GSYVideoType.IJKPLAYER:
-            default:
-                return new IJKPlayerManager();
-        }
+        return PlayerFactory.getPlayManager(videoType);
     }
 
-    protected ICacheManager getCacheManager(int type) {
-        switch (type) {
-            case GSYVideoType.IJKEXOPLAYER2:
-                //TODO 针对exoPlayer的cache处理
-                return null;
-            case GSYVideoType.SYSTEMPLAYER:
-            case GSYVideoType.IJKPLAYER:
-            default:
-                return new ProxyCacheManager();
-        }
+    protected ICacheManager getCacheManager(int videoType) {
+        return CacheFactory.getCacheManager(videoType);
     }
 
     @Override
