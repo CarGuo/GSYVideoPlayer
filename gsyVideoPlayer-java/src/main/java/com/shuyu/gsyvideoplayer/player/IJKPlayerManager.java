@@ -31,7 +31,9 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class IJKPlayerManager implements IPlayerManager {
 
-    //log level
+    /**
+     * log level
+     */
     private static int logLevel = IjkMediaPlayer.IJK_LOG_DEFAULT;
 
     private static IjkLibLoader ijkLibLoader;

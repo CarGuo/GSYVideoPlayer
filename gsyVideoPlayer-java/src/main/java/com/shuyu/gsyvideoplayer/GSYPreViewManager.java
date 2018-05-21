@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
-import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
@@ -37,7 +36,6 @@ public class GSYPreViewManager implements IMediaPlayer.OnPreparedListener, IjkMe
     private MediaHandler mMediaHandler;
 
     private boolean seekToComplete = true;
-    private static IjkLibLoader ijkLibLoader; //自定义so包加载类
 
     public static synchronized GSYPreViewManager instance() {
         if (videoManager == null) {
@@ -47,9 +45,7 @@ public class GSYPreViewManager implements IMediaPlayer.OnPreparedListener, IjkMe
     }
 
     private GSYPreViewManager() {
-        IjkLibLoader libLoader = GSYVideoManager.getIjkLibLoader();
-        mediaPlayer = (libLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(libLoader);
-        ijkLibLoader = libLoader;
+        mediaPlayer = new IjkMediaPlayer();
 
         mMediaHandlerThread = new HandlerThread(TAG);
         mMediaHandlerThread.start();
@@ -99,7 +95,7 @@ public class GSYPreViewManager implements IMediaPlayer.OnPreparedListener, IjkMe
     }
 
     private void initIJKPlayer(Message msg) {
-        mediaPlayer = (ijkLibLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(ijkLibLoader);
+        mediaPlayer = new IjkMediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.setDataSource(((GSYModel) msg.obj).getUrl(), ((GSYModel) msg.obj).getMapHeadData());

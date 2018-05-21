@@ -11,8 +11,6 @@ import android.view.Window;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-import tv.danmaku.ijk.media.player.IjkLibLoader;
-
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 /**
@@ -31,16 +29,10 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
     @SuppressLint("StaticFieldLeak")
     private static GSYVideoADManager videoManager;
 
-    //单例模式实在不好给instance()加参数，还是直接设为静态变量吧
-    //自定义so包加载类
-    private static IjkLibLoader ijkLibLoader;
 
-    /***
-     * @param libLoader 是否使用外部动态加载so
-     * */
-    private GSYVideoADManager(IjkLibLoader libLoader) {
-        ijkLibLoader = libLoader;
-        init(libLoader);
+
+    private GSYVideoADManager() {
+        init();
     }
 
     /**
@@ -48,7 +40,7 @@ public class GSYVideoADManager extends GSYVideoBaseManager {
      */
     public static synchronized GSYVideoADManager instance() {
         if (videoManager == null) {
-            videoManager = new GSYVideoADManager(ijkLibLoader);
+            videoManager = new GSYVideoADManager();
         }
         return videoManager;
     }

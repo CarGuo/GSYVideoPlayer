@@ -12,8 +12,6 @@ import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-import tv.danmaku.ijk.media.player.IjkLibLoader;
-
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 
@@ -33,11 +31,9 @@ public class GSYVideoManager extends GSYVideoBaseManager {
     @SuppressLint("StaticFieldLeak")
     private static GSYVideoManager videoManager;
 
-    /***
-     * @param libLoader 是否使用外部动态加载so
-     * */
-    private GSYVideoManager(IjkLibLoader libLoader) {
-        init(libLoader);
+
+    private GSYVideoManager() {
+        init();
     }
 
     /**
@@ -45,7 +41,7 @@ public class GSYVideoManager extends GSYVideoBaseManager {
      */
     public static synchronized GSYVideoManager instance() {
         if (videoManager == null) {
-            videoManager = new GSYVideoManager(ijkLibLoader);
+            videoManager = new GSYVideoManager();
         }
         return videoManager;
     }
@@ -54,12 +50,10 @@ public class GSYVideoManager extends GSYVideoBaseManager {
      * 同步创建一个临时管理器
      */
     public static synchronized GSYVideoManager tmpInstance(GSYMediaPlayerListener listener) {
-        GSYVideoManager gsyVideoManager = new GSYVideoManager(ijkLibLoader);
-        gsyVideoManager.buffterPoint = videoManager.buffterPoint;
+        GSYVideoManager gsyVideoManager = new GSYVideoManager();
+        gsyVideoManager.bufferPoint = videoManager.bufferPoint;
         gsyVideoManager.optionModelList = videoManager.optionModelList;
-        gsyVideoManager.cacheFile = videoManager.cacheFile;
         gsyVideoManager.playTag = videoManager.playTag;
-        gsyVideoManager.mMapHeadData = videoManager.mMapHeadData;
         gsyVideoManager.currentVideoWidth = videoManager.currentVideoWidth;
         gsyVideoManager.currentVideoHeight = videoManager.currentVideoHeight;
         gsyVideoManager.context = videoManager.context;

@@ -2,6 +2,7 @@ package tv.danmaku.ijk.media.exo2;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
@@ -32,9 +33,9 @@ import java.util.Map;
  * Created by guoshuyu on 2018/5/18.
  */
 
-public class ExoHelper {
+public class ExoSourceManager {
 
-    private static final String TAG = "IjkExo2MediaPlayer";
+    private static final String TAG = "ExoSourceManager";
 
     public static final int TYPE_RTMP = 4;
 
@@ -44,11 +45,14 @@ public class ExoHelper {
 
     protected Map<String, String> mMapHeadData;
 
-    public ExoHelper(Context context, Map<String, String> mapHeadData) {
+    public static ExoSourceManager newInstance(Context context, @Nullable Map<String, String> mapHeadData) {
+        return new ExoSourceManager(context, mapHeadData);
+    }
+
+    private ExoSourceManager(Context context, Map<String, String> mapHeadData) {
         mAppContext = context.getApplicationContext();
         mMapHeadData = mapHeadData;
     }
-
 
     public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
         Uri contentUri = Uri.parse(dataSource);
