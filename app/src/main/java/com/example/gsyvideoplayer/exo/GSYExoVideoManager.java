@@ -17,8 +17,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import tv.danmaku.ijk.media.player.IjkLibLoader;
-
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 /**
@@ -35,11 +33,9 @@ public class GSYExoVideoManager extends GSYVideoBaseManager {
     @SuppressLint("StaticFieldLeak")
     private static GSYExoVideoManager videoManager;
 
-    /***
-     * @param libLoader 是否使用外部动态加载so
-     * */
-    private GSYExoVideoManager(IjkLibLoader libLoader) {
-        init(libLoader);
+
+    private GSYExoVideoManager() {
+        init();
     }
 
     /**
@@ -47,7 +43,7 @@ public class GSYExoVideoManager extends GSYVideoBaseManager {
      */
     public static synchronized GSYExoVideoManager instance() {
         if (videoManager == null) {
-            videoManager = new GSYExoVideoManager(ijkLibLoader);
+            videoManager = new GSYExoVideoManager();
         }
         return videoManager;
     }
@@ -61,7 +57,6 @@ public class GSYExoVideoManager extends GSYVideoBaseManager {
         if (urls.size() == 0) return;
         Message msg = new Message();
         msg.what = HANDLER_PREPARE;
-        mMapHeadData = mapHeadData;
         msg.obj = new GSYExoModel(urls, mapHeadData, loop, speed, cache, cachePath);
         sendMessage(msg);
         if (needTimeOutOther) {

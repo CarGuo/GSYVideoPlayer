@@ -137,6 +137,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.3'
 * 优化ExoPlayer的问题
 * 增加ExoPlayer循环播放支持
 * 增加ExoPlayer自定义DEMO，演示ExoPlayer实现无缝切换
+* ijk的`logLevel`、`ijkLibLoader`直接通过IJKPlayerManager静态方法设置
 
 
 

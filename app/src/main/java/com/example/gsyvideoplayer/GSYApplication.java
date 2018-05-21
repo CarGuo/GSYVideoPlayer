@@ -5,8 +5,6 @@ import android.app.Application;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-
 //import com.squareup.leakcanary.LeakCanary;
 
 /**

@@ -49,12 +49,13 @@ import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
  * Exo
  */
 public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.EventListener, AnalyticsListener {
+
     private static final String TAG = "IjkExo2MediaPlayer";
 
     private Context mAppContext;
     private SimpleExoPlayer mInternalPlayer;
     private EventLogger mEventLogger;
-    private DefaultRenderersFactory renderersFactory;
+    private DefaultRenderersFactory rendererFactory;
     private MediaSource mMediaSource;
     private DefaultTrackSelector mTrackSelector;
     private String mDataSource;
@@ -64,9 +65,9 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     private int mVideoWidth;
     private int mVideoHeight;
     private int lastReportedPlaybackState;
-    private boolean lastReportedPlayWhenReady;
-    private boolean mIsPrepareing = true;
-    private boolean mIsBuffering = false;
+    private boolean isLastReportedPlayWhenReady;
+    private boolean isPreparing = true;
+    private boolean isBuffering = false;
     private boolean isLooping = false;
     /**
      * 是否带上header
@@ -79,7 +80,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     /**
      * dataSource等的帮组类
      */
-    private ExoHelper mExoHelper;
+    private ExoSourceManager mExoHelper;
     /**
      * 缓存目录，可以为空
      */
@@ -91,7 +92,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     public IjkExo2MediaPlayer(Context context) {
         mAppContext = context.getApplicationContext();
         lastReportedPlaybackState = Player.STATE_IDLE;
-        mExoHelper = new ExoHelper(context, mHeaders);
+        mExoHelper = ExoSourceManager.newInstance(context, mHeaders);
     }
 
 
@@ -173,9 +174,9 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                 : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
                 : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
 
-        renderersFactory = new DefaultRenderersFactory(mAppContext, extensionRendererMode);
+        rendererFactory = new DefaultRenderersFactory(mAppContext, extensionRendererMode);
         DefaultLoadControl loadControl = new DefaultLoadControl();
-        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, mTrackSelector, loadControl, null);
+        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(rendererFactory, mTrackSelector, loadControl, null);
         mInternalPlayer.addListener(this);
         mInternalPlayer.addAnalyticsListener(this);
         mInternalPlayer.addListener(mEventLogger);
@@ -406,6 +407,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         this.mMediaSource = mediaSource;
     }
 
+    public ExoSourceManager getExoHelper() {
+        return mExoHelper;
+    }
+
     /**
      * 倍速播放
      *
@@ -431,6 +436,8 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         return mInternalPlayer.getBufferedPercentage();
     }
 
+
+
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
@@ -451,22 +458,22 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         //重新播放状态顺序为：STATE_IDLE -》STATE_BUFFERING -》STATE_READY
         //缓冲时顺序为：STATE_BUFFERING -》STATE_READY
         //Log.e(TAG, "onPlayerStateChanged: playWhenReady = " + playWhenReady + ", playbackState = " + playbackState);
-        if (lastReportedPlayWhenReady != playWhenReady || lastReportedPlaybackState != playbackState) {
-            if (mIsBuffering) {
+        if (isLastReportedPlayWhenReady != playWhenReady || lastReportedPlaybackState != playbackState) {
+            if (isBuffering) {
                 switch (playbackState) {
                     case Player.STATE_ENDED:
                     case Player.STATE_READY:
                         notifyOnInfo(IMediaPlayer.MEDIA_INFO_BUFFERING_END, mInternalPlayer.getBufferedPercentage());
-                        mIsBuffering = false;
+                        isBuffering = false;
                         break;
                 }
             }
 
-            if (mIsPrepareing) {
+            if (isPreparing) {
                 switch (playbackState) {
                     case Player.STATE_READY:
                         notifyOnPrepared();
-                        mIsPrepareing = false;
+                        isPreparing = false;
                         break;
                 }
             }
@@ -474,7 +481,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             switch (playbackState) {
                 case Player.STATE_BUFFERING:
                     notifyOnInfo(IMediaPlayer.MEDIA_INFO_BUFFERING_START, mInternalPlayer.getBufferedPercentage());
-                    mIsBuffering = true;
+                    isBuffering = true;
                     break;
                 case Player.STATE_READY:
                     break;
@@ -485,7 +492,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                     break;
             }
         }
-        lastReportedPlayWhenReady = playWhenReady;
+        isLastReportedPlayWhenReady = playWhenReady;
         lastReportedPlaybackState = playbackState;
     }
 

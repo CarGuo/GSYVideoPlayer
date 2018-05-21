@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tv.danmaku.ijk.media.player.IjkLibLoader;
 
 /**
  * Created by guoshuyu on 2018/5/16.
@@ -216,10 +215,6 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
     }
 
     /**********以下重载GSYVideoPlayer的GSYVideoViewBridge相关实现***********/
-
-    public void setIjkLibLoader(IjkLibLoader libLoader) {
-        GSYExoVideoManager.setIjkLibLoader(libLoader);
-    }
 
     @Override
     public GSYVideoViewBridge getGSYVideoManager() {

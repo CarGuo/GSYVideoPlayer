@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
-import tv.danmaku.ijk.media.player.IjkLibLoader;
 
 /**
  * 兼容的空View，目前用于 GSYVideoManager的设置
@@ -28,14 +27,6 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer {
 
     public GSYVideoPlayer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    /**
-     * 设置自定义so包加载类，必须在setUp之前调用
-     * 不然setUp时会第一次实例化GSYVideoManager
-     */
-    public void setIjkLibLoader(IjkLibLoader libLoader) {
-        GSYVideoManager.setIjkLibLoader(libLoader);
     }
 
     @Override

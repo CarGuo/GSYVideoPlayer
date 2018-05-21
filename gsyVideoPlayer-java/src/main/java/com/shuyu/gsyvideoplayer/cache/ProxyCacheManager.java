@@ -20,6 +20,7 @@ import java.util.Map;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
+ * 代理缓存管理器
  * Created by guoshuyu on 2018/5/18.
  */
 

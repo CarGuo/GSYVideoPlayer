@@ -44,7 +44,7 @@ public class SystemPlayerManager implements IPlayerManager {
             if (gsyModel.isCache() && cacheManager != null) {
                 cacheManager.doCacheLogic(context, mediaPlayer, gsyModel.getUrl(), gsyModel.getMapHeadData(), gsyModel.getCachePath());
             } else {
-                mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), ((GSYModel) msg.obj).getMapHeadData());
+                mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), gsyModel.getMapHeadData());
             }
             mediaPlayer.setLooping(gsyModel.isLooping());
             if (gsyModel.getSpeed() != 1 && gsyModel.getSpeed() > 0) {

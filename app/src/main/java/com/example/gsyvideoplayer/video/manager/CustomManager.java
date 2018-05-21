@@ -15,8 +15,6 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.HashMap;
 import java.util.Map;
 
-import tv.danmaku.ijk.media.player.IjkLibLoader;
-
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 /**
@@ -34,11 +32,9 @@ public class CustomManager extends GSYVideoBaseManager {
 
     private static Map<String, CustomManager> sMap = new HashMap<>();
 
-    /***
-     * @param libLoader 是否使用外部动态加载so
-     * */
-    public CustomManager(IjkLibLoader libLoader) {
-        init(libLoader);
+
+    public CustomManager() {
+        init();
     }
 
 
@@ -120,7 +116,7 @@ public class CustomManager extends GSYVideoBaseManager {
         }
         CustomManager customManager = sMap.get(key);
         if (customManager == null) {
-            customManager = new CustomManager(null);
+            customManager = new CustomManager();
             sMap.put(key, customManager);
         }
         return customManager;

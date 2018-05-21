@@ -45,9 +45,16 @@ public class EXO2PlayerManager implements IPlayerManager {
         GSYModel gsyModel = (GSYModel) msg.obj;
         try {
             mediaPlayer.setLooping(gsyModel.isLooping());
-            mediaPlayer.setCache(gsyModel.isCache());
-            mediaPlayer.setCacheDir(gsyModel.getCachePath());
-            mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), gsyModel.getMapHeadData());
+            mediaPlayer.setPreview(gsyModel.getMapHeadData() != null && gsyModel.getMapHeadData().size() > 0);
+            if (gsyModel.isCache() && cacheManager != null) {
+                //通过管理器处理
+                cacheManager.doCacheLogic(context, mediaPlayer, gsyModel.getUrl(), gsyModel.getMapHeadData(), gsyModel.getCachePath());
+            } else {
+                //通过自己的内部缓存机制
+                mediaPlayer.setCache(gsyModel.isCache());
+                mediaPlayer.setCacheDir(gsyModel.getCachePath());
+                mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), gsyModel.getMapHeadData());
+            }
             //很遗憾，EXO2的setSpeed只能在播放前生效
             if (gsyModel.getSpeed() != 1 && gsyModel.getSpeed() > 0) {
                 mediaPlayer.setSpeed(gsyModel.getSpeed(), 1);

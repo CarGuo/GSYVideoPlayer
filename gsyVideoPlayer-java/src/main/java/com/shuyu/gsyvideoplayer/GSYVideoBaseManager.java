@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
-import tv.danmaku.ijk.media.player.IjkLibLoader;
-
 /**
  * 基类管理器
  * Created by guoshuyu on 2018/1/25.
@@ -51,9 +49,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     protected static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
 
-    //单例模式实在不好给instance()加参数，还是直接设为静态变量吧
-    //自定义so包加载类
-    protected static IjkLibLoader ijkLibLoader;
+    protected Context context;
 
     protected MediaHandler mMediaHandler;
 
@@ -63,71 +59,70 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     protected WeakReference<GSYMediaPlayerListener> lastListener;
 
-    //配置ijk option
+    /**
+     * 配置ijk option
+     */
     protected List<VideoOptionModel> optionModelList;
 
-    //是否需要的自定义缓冲路径
-    protected File cacheFile;
-
-    //播放的tag，防止错位置，因为普通的url也可能重复
+    /**
+     * 播放的tag，防止错位置，因为普通的url也可能重复
+     */
     protected String playTag = "";
 
-    //header for cache
-    protected Map<String, String> mMapHeadData;
-
-    protected Context context;
-
     /**
-     *
+     * 播放内核管理
      */
     protected IPlayerManager playerManager;
 
     /**
-     *
+     * 缓存管理
      */
     protected ICacheManager cacheManager;
 
-    //当前播放的视频宽的高
+    /**
+     * 当前播放的视频宽的高
+     */
     protected int currentVideoWidth = 0;
 
-    //当前播放的视屏的高
+    /**
+     * 当前播放的视屏的高
+     */
     protected int currentVideoHeight = 0;
 
-    //当前视频的最后状态
+    /**
+     * 当前视频的最后状态
+     */
     protected int lastState;
 
-    //播放的tag，防止错位置，因为普通的url也可能重复
+    /**
+     * 播放的tag，防止错位置，因为普通的url也可能重复
+     */
     protected int playPosition = -22;
 
-    //缓冲比例
-    protected int buffterPoint;
-
-    //播放超时
-    protected int timeOut = 8 * 1000;
-
-    //播放类型，默认IJK
-    protected int videoType = GSYVideoType.IJKPLAYER;
-
-    //是否需要静音
-    protected boolean needMute = false;
-
-    //是否需要外部超时判断
-    protected boolean needTimeOutOther;
+    /**
+     * 缓冲比例
+     */
+    protected int bufferPoint;
 
     /**
-     * 设置自定义so包加载类
-     * 需要在instance之前设置
+     * 播放超时
      */
-    public static void setIjkLibLoader(IjkLibLoader libLoader) {
-        IJKPlayerManager.setIjkLibLoader(libLoader);
-        ijkLibLoader = libLoader;
-    }
+    protected int timeOut = 8 * 1000;
 
+    /**
+     * 播放类型，默认IJK
+     */
+    protected int videoType = GSYVideoType.IJKPLAYER;
 
-    public static IjkLibLoader getIjkLibLoader() {
-        return ijkLibLoader;
-    }
+    /**
+     * 是否需要静音
+     */
+    protected boolean needMute = false;
 
+    /**
+     * 是否需要外部超时判断
+     */
+    protected boolean needTimeOutOther;
 
     /**
      * 删除默认所有缓存文件
@@ -145,11 +140,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         }
     }
 
-    /***
-     * @param libLoader 是否使用外部动态加载so
-     * */
-    protected void init(IjkLibLoader libLoader) {
-        IJKPlayerManager.setIjkLibLoader(libLoader);
+    protected void init() {
         HandlerThread mediaHandlerThread = new HandlerThread(TAG);
         mediaHandlerThread.start();
         mMediaHandler = new MediaHandler((mediaHandlerThread.getLooper()));
@@ -171,6 +162,8 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     protected ICacheManager getCacheManager(int type) {
         switch (type) {
             case GSYVideoType.IJKEXOPLAYER2:
+                //TODO 针对exoPlayer的cache处理
+                return null;
             case GSYVideoType.SYSTEMPLAYER:
             case GSYVideoType.IJKPLAYER:
             default:
@@ -220,7 +213,6 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         if (TextUtils.isEmpty(url)) return;
         Message msg = new Message();
         msg.what = HANDLER_PREPARE;
-        mMapHeadData = mapHeadData;
         GSYModel fb = new GSYModel(url, mapHeadData, loop, speed, cache, cachePath);
         msg.obj = fb;
         sendMessage(msg);
@@ -286,10 +278,10 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             @Override
             public void run() {
                 if (listener() != null) {
-                    if (percent > buffterPoint) {
+                    if (percent > bufferPoint) {
                         listener().onBufferingUpdate(percent);
                     } else {
-                        listener().onBufferingUpdate(buffterPoint);
+                        listener().onBufferingUpdate(bufferPoint);
                     }
                 }
             }
@@ -360,7 +352,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     @Override
     public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
-        buffterPoint = percentsAvailable;
+        bufferPoint = percentsAvailable;
     }
 
     @Override
@@ -469,7 +461,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
                     if (cacheManager != null) {
                         cacheManager.release();
                     }
-                    buffterPoint = 0;
+                    bufferPoint = 0;
                     cancelTimeOutBuffer();
                     break;
                 case HANDLER_RELEASE_SURFACE:
@@ -491,7 +483,9 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
             playerManager = getPlayManager(videoType);
             cacheManager = getCacheManager(videoType);
-            cacheManager.setCacheAvailableListener(this);
+            if (cacheManager != null) {
+                cacheManager.setCacheAvailableListener(this);
+            }
             playerManager.initVideoPlayer(context, msg, optionModelList, cacheManager);
             setNeedMute(needMute);
             IMediaPlayer mediaPlayer = playerManager.getMediaPlayer();

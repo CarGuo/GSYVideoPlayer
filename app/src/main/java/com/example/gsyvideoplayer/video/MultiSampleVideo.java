@@ -9,9 +9,6 @@ import com.example.gsyvideoplayer.video.manager.CustomManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoViewBridge;
 
-import java.io.File;
-
-import tv.danmaku.ijk.media.player.IjkLibLoader;
 
 /**
  * 多个同时播放的播放控件
@@ -64,11 +61,6 @@ public class MultiSampleVideo extends SampleCoverVideo {
                 }
             }
         };
-    }
-
-    @Override
-    public void setIjkLibLoader(IjkLibLoader libLoader) {
-
     }
 
     @Override
