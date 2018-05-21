@@ -84,7 +84,7 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
     }
 
     @Override
-    public void clearCache(Context context, String url) {
+    public void clearCache(Context context, File cachePath, String url) {
         if (TextUtils.isEmpty(url)) {
             String path = StorageUtils.getIndividualCacheDirectory
                     (context.getApplicationContext()).getAbsolutePath();
@@ -92,9 +92,9 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
         } else {
             Md5FileNameGenerator md5FileNameGenerator = new Md5FileNameGenerator();
             String name = md5FileNameGenerator.generate(url);
-            if (mCacheDir != null) {
-                String tmpPath = mCacheDir.getAbsolutePath() + File.separator + name + ".download";
-                String path = mCacheDir.getAbsolutePath() + File.separator + name ;
+            if (cachePath != null) {
+                String tmpPath = cachePath.getAbsolutePath() + File.separator + name + ".download";
+                String path = cachePath.getAbsolutePath() + File.separator + name;
                 CommonUtil.deleteFile(tmpPath);
                 CommonUtil.deleteFile(path);
             } else {
@@ -119,6 +119,16 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean cachePreview(Context context, File cacheDir, String url) {
+        HttpProxyCacheServer proxy = getProxy(context.getApplicationContext(), cacheDir);
+        if (proxy != null) {
+            //此处转换了url，然后再赋值给mUrl。
+            url = proxy.getProxyUrl(url);
+        }
+        return (!url.startsWith("http"));
     }
 
     @Override
@@ -157,6 +167,7 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
         return new HttpProxyCacheServer.Builder(context.getApplicationContext())
                 .headerInjector(new UserAgentHeadersInjector()).build();
     }
+
     /**
      * for android video cache header
      */
@@ -209,6 +220,6 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
                     ProxyCacheManager.instance().newProxy(context, file)) : proxy;
         }
     }
-    
+
 
 }

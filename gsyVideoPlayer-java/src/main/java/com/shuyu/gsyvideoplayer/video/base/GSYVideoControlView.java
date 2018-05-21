@@ -899,17 +899,27 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             secProgress = getGSYVideoManager().getBufferedPercentage();
         }
         if (secProgress > 94) secProgress = 100;
-        if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
-            mProgressBar.setSecondaryProgress(secProgress);
-        }
+        setSecondaryProgress(secProgress);
         mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
         if (currentTime > 0)
             mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
 
         if (mBottomProgressBar != null) {
             if (progress != 0) mBottomProgressBar.setProgress(progress);
-            if (secProgress != 0 && !getGSYVideoManager().isCacheFile())
+            setSecondaryProgress(secProgress);
+        }
+    }
+
+    protected void setSecondaryProgress(int secProgress) {
+        if (mProgressBar != null ) {
+            if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
+                mProgressBar.setSecondaryProgress(secProgress);
+            }
+        }
+        if (mBottomProgressBar != null) {
+            if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
                 mBottomProgressBar.setSecondaryProgress(secProgress);
+            }
         }
     }
 
@@ -1005,8 +1015,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     protected boolean isShowNetConfirm() {
-        return !mUrl.startsWith("file") && !mUrl.startsWith("android.resource") && !CommonUtil.isWifiConnected(getContext())
-                && mNeedShowWifiTip && !getGSYVideoManager().isCacheFile();
+        return !mOriginUrl.startsWith("file") && !mOriginUrl.startsWith("android.resource") && !CommonUtil.isWifiConnected(getContext())
+                && mNeedShowWifiTip && !getGSYVideoManager().cachePreview(mContext.getApplicationContext(), mCachePath, mOriginUrl);
     }
 
     private class ProgressTimerTask extends TimerTask {

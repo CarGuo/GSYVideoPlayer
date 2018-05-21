@@ -15,11 +15,13 @@ public interface ICacheManager {
 
     void doCacheLogic(Context context, IMediaPlayer mediaPlayer, String url, Map<String, String> header, File cachePath);
 
-    void clearCache(Context context, String url);
+    void clearCache(Context context, File cachePath, String url);
 
     void release();
 
     boolean hadCached();
+
+    boolean cachePreview(Context context, File cacheDir, String url);
 
     void setCacheAvailableListener(ICacheAvailableListener cacheAvailableListener);
 

@@ -681,15 +681,13 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 清除当前缓存
      */
     public void clearCurrentCache() {
-        //只有都为true时，才是缓存文件
         if (getGSYVideoManager().isCacheFile() && mCache) {
             //是否为缓存文件
-            Debuger.printfError(" mCacheFile Local Error " + mUrl);
-            //可能是因为缓存文件除了问题
-            CommonUtil.deleteFile(mUrl.replace("file://", ""));
+            Debuger.printfError("Play Error " + mUrl);
             mUrl = mOriginUrl;
+            getGSYVideoManager().clearCache(mContext, mCachePath, mOriginUrl);
         } else if (mUrl.contains("127.0.0.1")) {
-            getGSYVideoManager().clearCache(getContext(), mOriginUrl);
+            getGSYVideoManager().clearCache(getContext(), mCachePath, mOriginUrl);
         }
 
     }
