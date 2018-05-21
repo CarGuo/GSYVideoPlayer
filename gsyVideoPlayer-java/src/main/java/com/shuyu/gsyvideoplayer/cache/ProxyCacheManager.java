@@ -113,7 +113,11 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
     @Override
     public void release() {
         if (proxy != null) {
-            proxy.unregisterCacheListener(this);
+            try {
+                proxy.unregisterCacheListener(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

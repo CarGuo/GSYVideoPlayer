@@ -387,7 +387,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 return;
             }
             if (mCurrentState == CURRENT_STATE_NORMAL) {
-                if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getActivityContext()) && mNeedShowWifiTip) {
+                if (isShowNetConfirm()) {
                     showWifiDialog();
                     return;
                 }
@@ -800,8 +800,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             return;
         }
         if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {
-            if (!mUrl.startsWith("file") && !mUrl.startsWith("android.resource") && !CommonUtil.isWifiConnected(getContext())
-                    && mNeedShowWifiTip) {
+            if (isShowNetConfirm()) {
                 showWifiDialog();
                 return;
             }
@@ -1004,6 +1003,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         ((Activity) (mContext)).getWindow().setAttributes(lpa);
     }
 
+
+    protected boolean isShowNetConfirm() {
+        return !mUrl.startsWith("file") && !mUrl.startsWith("android.resource") && !CommonUtil.isWifiConnected(getContext())
+                && mNeedShowWifiTip && !getGSYVideoManager().isCacheFile();
+    }
 
     private class ProgressTimerTask extends TimerTask {
         @Override
