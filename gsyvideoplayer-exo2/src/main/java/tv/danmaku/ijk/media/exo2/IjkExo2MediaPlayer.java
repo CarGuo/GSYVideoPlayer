@@ -52,41 +52,41 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     private static final String TAG = "IjkExo2MediaPlayer";
 
-    private Context mAppContext;
-    private SimpleExoPlayer mInternalPlayer;
-    private EventLogger mEventLogger;
-    private DefaultRenderersFactory rendererFactory;
-    private MediaSource mMediaSource;
-    private DefaultTrackSelector mTrackSelector;
-    private String mDataSource;
-    private Surface mSurface;
-    private Map<String, String> mHeaders = new HashMap<>();
-    private PlaybackParameters mSpeedPlaybackParameters;
-    private int mVideoWidth;
-    private int mVideoHeight;
-    private int lastReportedPlaybackState;
-    private boolean isLastReportedPlayWhenReady;
-    private boolean isPreparing = true;
-    private boolean isBuffering = false;
-    private boolean isLooping = false;
+    protected Context mAppContext;
+    protected SimpleExoPlayer mInternalPlayer;
+    protected EventLogger mEventLogger;
+    protected DefaultRenderersFactory rendererFactory;
+    protected MediaSource mMediaSource;
+    protected DefaultTrackSelector mTrackSelector;
+    protected String mDataSource;
+    protected Surface mSurface;
+    protected Map<String, String> mHeaders = new HashMap<>();
+    protected PlaybackParameters mSpeedPlaybackParameters;
+    protected int mVideoWidth;
+    protected int mVideoHeight;
+    protected int lastReportedPlaybackState;
+    protected boolean isLastReportedPlayWhenReady;
+    protected boolean isPreparing = true;
+    protected boolean isBuffering = false;
+    protected boolean isLooping = false;
     /**
      * 是否带上header
      */
-    private boolean isPreview = false;
+    protected boolean isPreview = false;
     /**
      * 是否开启缓存
      */
-    private boolean isCache = false;
+    protected boolean isCache = false;
     /**
      * dataSource等的帮组类
      */
-    private ExoSourceManager mExoHelper;
+    protected ExoSourceManager mExoHelper;
     /**
      * 缓存目录，可以为空
      */
-    private File mCacheDir;
+    protected File mCacheDir;
 
-    private int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
+    protected int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
 
 
     public IjkExo2MediaPlayer(Context context) {
