@@ -32,8 +32,8 @@ public class CacheFactory {
         switch (videoType) {
             case GSYVideoType.IJKEXOPLAYER2:
                 if (sCacheMode == EXO_DEFAULT) {
-                    //TODO 针对exoPlayer的cache处理
-                    return null;
+                    //针对exoPlayer的source cache处理
+                    return new ExoPlayerCacheManager();
                 }
             case GSYVideoType.SYSTEMPLAYER:
             case GSYVideoType.IJKPLAYER:
@@ -43,7 +43,7 @@ public class CacheFactory {
     }
 
     /**
-     * 设置缓存模式
+     * 设置缓存模式, 默认EXO使用Source缓存，其他使用proxy缓存
      *
      * @param mode CACHE_NULL、EXO_CACHE_PROXY、EXO_DEFAULT
      */

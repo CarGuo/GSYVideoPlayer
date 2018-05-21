@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer;
 import android.app.Application;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.player.IJKPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
 //import com.squareup.leakcanary.LeakCanary;
@@ -37,7 +38,7 @@ public class GSYApplication extends Application {
         //GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
         //GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 
-        //GSYVideoManager.instance().setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
+        //IJKPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
     }

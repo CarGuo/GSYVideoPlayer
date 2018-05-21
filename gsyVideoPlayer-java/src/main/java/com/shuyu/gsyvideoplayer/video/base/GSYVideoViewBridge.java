@@ -61,6 +61,8 @@ public interface GSYVideoViewBridge {
 
     boolean isCacheFile();
 
-    void clearCache(Context context, String url);
+    boolean cachePreview(Context context, File cacheDir, String url);
+
+    void clearCache(Context context, File clearCache, String url);
 
 }

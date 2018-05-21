@@ -3,6 +3,7 @@ package tv.danmaku.ijk.media.exo2;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
@@ -22,12 +23,15 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheSpan;
+import com.google.android.exoplayer2.upstream.cache.CacheUtil;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
 import java.util.Map;
+import java.util.NavigableSet;
 
 /**
  * Created by guoshuyu on 2018/5/18.
@@ -37,13 +41,19 @@ public class ExoSourceManager {
 
     private static final String TAG = "ExoSourceManager";
 
+    private static final long DEFAULT_MAX_SIZE = 512 * 1024 * 1024;
+
     public static final int TYPE_RTMP = 4;
+
+    protected static Cache mCache;
 
     protected Context mAppContext;
 
-    protected Cache mCache;
-
     protected Map<String, String> mMapHeadData;
+
+    protected String mDataSource;
+
+    private boolean isCached = false;
 
     public static ExoSourceManager newInstance(Context context, @Nullable Map<String, String> mapHeadData) {
         return new ExoSourceManager(context, mapHeadData);
@@ -55,6 +65,7 @@ public class ExoSourceManager {
     }
 
     public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+        mDataSource = dataSource;
         Uri contentUri = Uri.parse(dataSource);
         int contentType = inferContentType(dataSource);
         MediaSource mediaSource;
@@ -109,11 +120,10 @@ public class ExoSourceManager {
         }
     }
 
-
     /**
      * 本地缓存目录
      */
-    public Cache getCache(Context context, File cacheDir) {
+    public static synchronized Cache getCacheSingleInstance(Context context, File cacheDir) {
         String dirs = context.getCacheDir().getAbsolutePath();
         if (cacheDir != null) {
             dirs = cacheDir.getAbsolutePath();
@@ -122,13 +132,14 @@ public class ExoSourceManager {
             String path = dirs + File.separator + "exo";
             boolean isLocked = SimpleCache.isCacheFolderLocked(new File(path));
             if (!isLocked) {
-                mCache = new SimpleCache(new File(path), new LeastRecentlyUsedCacheEvictor(1024 * 1024 * 100));
+                mCache = new SimpleCache(new File(path), new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE));
             }
         }
         return mCache;
     }
 
     public void release() {
+        isCached = false;
         if (mCache != null) {
             try {
                 mCache.release();
@@ -139,17 +150,53 @@ public class ExoSourceManager {
         }
     }
 
+    /**
+     * Cache需要release之后才能clear
+     *
+     * @param context
+     * @param cacheDir
+     * @param url
+     */
+    public static void clearCache(Context context, File cacheDir, String url) {
+        try {
+            Cache cache = getCacheSingleInstance(context, cacheDir);
+            if (!TextUtils.isEmpty(url)) {
+                if (cache != null) {
+                    CacheUtil.remove(cache, CacheUtil.generateKey(Uri.parse(url)));
+                }
+            } else {
+                if (cache != null) {
+                    for (String key : cache.getKeys()) {
+                        CacheUtil.remove(cache, key);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean cachePreView(Context context, File cacheDir, String url) {
+        return resolveCacheState(getCacheSingleInstance(context, cacheDir), url);
+    }
+
+    public boolean hadCached() {
+        return isCached;
+    }
+
 
     /**
      * 获取SourceFactory，是否带Cache
      */
     private DataSource.Factory getDataSourceFactoryCache(Context context, boolean cacheEnable, boolean preview, File cacheDir) {
         if (cacheEnable) {
-            Cache cache = getCache(context, cacheDir);
-            return new CacheDataSourceFactory(cache, getDataSourceFactory(context, preview), CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
-        } else {
-            return getDataSourceFactory(context, preview);
+            Cache cache = getCacheSingleInstance(context, cacheDir);
+            if (cache != null) {
+                isCached = resolveCacheState(cache, mDataSource);
+                return new CacheDataSourceFactory(cache, getDataSourceFactory(context, preview), CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+            }
         }
+        return getDataSourceFactory(context, preview);
     }
 
     /**
@@ -169,5 +216,33 @@ public class ExoSourceManager {
             }
         }
         return dataSourceFactory;
+    }
+
+    /**
+     * 根据缓存块判断是否缓存成功
+     *
+     * @param cache
+     */
+    private static boolean resolveCacheState(Cache cache, String url) {
+        boolean isCache = true;
+        if (!TextUtils.isEmpty(url)) {
+            String key = CacheUtil.generateKey(Uri.parse(url));
+            if (!TextUtils.isEmpty(key)) {
+                NavigableSet<CacheSpan> cachedSpans = cache.getCachedSpans(key);
+                if (cachedSpans.size() == 0) {
+                    isCache = false;
+                } else {
+                    long contentLength = cache.getContentLength(key);
+                    long currentLength = 0;
+                    for (CacheSpan cachedSpan : cachedSpans) {
+                        currentLength += cache.getCachedLength(key, cachedSpan.position, cachedSpan.length);
+                    }
+                    isCache = currentLength >= contentLength;
+                }
+            } else {
+                isCache = false;
+            }
+        }
+        return isCache;
     }
 }
