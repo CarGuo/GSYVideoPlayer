@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
 
@@ -918,18 +917,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 再打开已经缓存的本地文件，网络速度才会回0.因为是播放本地文件了
      */
     public long getNetSpeed() {
-        if (getGSYVideoManager().getMediaPlayer() != null
-                && (getGSYVideoManager().getMediaPlayer() instanceof IjkMediaPlayer)) {
-            try {
-                return ((IjkMediaPlayer) getGSYVideoManager().getMediaPlayer()).getTcpSpeed();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return -1;
-        } else {
-            return -1;
-        }
-
+        return getGSYVideoManager().getNetSpeed();
     }
 
     /**
@@ -1027,17 +1015,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     public void setSpeedPlaying(float speed, boolean soundTouch) {
         setSpeed(speed, soundTouch);
-        if (getGSYVideoManager().getMediaPlayer() != null) {
-            if (getGSYVideoManager().getMediaPlayer() instanceof IjkMediaPlayer) {
-                IjkMediaPlayer ijkMediaPlayer = (IjkMediaPlayer) getGSYVideoManager().getMediaPlayer();
-                try {
-                    ijkMediaPlayer.setSpeed(speed);
-                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", (soundTouch) ? 1 : 0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        getGSYVideoManager().setSpeedPlaying( speed,  soundTouch);
     }
 
     public boolean isShowPauseCover() {

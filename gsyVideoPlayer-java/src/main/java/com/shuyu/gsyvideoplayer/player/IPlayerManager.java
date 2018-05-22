@@ -32,4 +32,8 @@ public interface IPlayerManager {
     void release();
 
     int getBufferedPercentage();
+
+    long getNetSpeed();
+
+    void setSpeedPlaying(float speed, boolean soundTouch);
 }

@@ -2,7 +2,9 @@ package com.shuyu.gsyvideoplayer.player;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.PlaybackParams;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Message;
 import android.view.Surface;
 
@@ -74,7 +76,7 @@ public class SystemPlayerManager implements IPlayerManager {
 
     @Override
     public void setSpeed(float speed, boolean soundTouch) {
-        Debuger.printfError(" not support setSpeed");
+        setSpeed(speed);
     }
 
     @Override
@@ -108,5 +110,30 @@ public class SystemPlayerManager implements IPlayerManager {
     @Override
     public int getBufferedPercentage() {
         return -1;
+    }
+
+    @Override
+    public long getNetSpeed() {
+        if (mediaPlayer != null) {
+            //todo
+        }
+        return 0;
+    }
+
+    @Override
+    public void setSpeedPlaying(float speed, boolean soundTouch) {
+
+    }
+
+    private void setSpeed(float speed) {
+        if (mediaPlayer != null && mediaPlayer.getInternalMediaPlayer() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PlaybackParams playbackParams = new PlaybackParams();
+                playbackParams.setSpeed(speed);
+                mediaPlayer.getInternalMediaPlayer().setPlaybackParams(playbackParams);
+            } else {
+                Debuger.printfError(" not support setSpeed");
+            }
+        }
     }
 }

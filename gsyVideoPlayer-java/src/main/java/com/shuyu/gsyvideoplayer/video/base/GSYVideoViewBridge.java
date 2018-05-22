@@ -65,4 +65,7 @@ public interface GSYVideoViewBridge {
 
     void clearCache(Context context, File clearCache, String url);
 
+    long getNetSpeed();
+
+    void setSpeedPlaying(float speed, boolean soundTouch);
 }
