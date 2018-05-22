@@ -53,21 +53,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:4.1.3'
+compile 'com.shuyu:GSYVideoPlayer:5.0.0'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:4.1.3'
+compile 'com.shuyu:gsyVideoPlayer-java:5.0.0'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:4.1.3'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:4.1.3'
-compile 'com.shuyu:gsyVideoPlayer-arm64:4.1.3'
-compile 'com.shuyu:gsyVideoPlayer-x64:4.1.3'
-compile 'com.shuyu:gsyVideoPlayer-x86:4.1.3'
+compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.0'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.0'
+compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x64:5.0.0'
+compile 'com.shuyu:gsyVideoPlayer-x86:5.0.0'
 
 ```
 
@@ -77,9 +77,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:4.1.3'
+compile 'com.shuyu:gsyVideoPlayer-java:5.0.0'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.3'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0'
 
 ```
 
@@ -138,6 +138,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:4.1.3'
 * 增加ExoPlayer循环播放支持
 * 增加ExoPlayer自定义DEMO，演示ExoPlayer实现无缝切换
 * ijk的`logLevel`、`ijkLibLoader`直接通过IJKPlayerManager静态方法设置
+* 进一步调整框架结构和内部耦合度
 
 
 
