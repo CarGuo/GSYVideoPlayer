@@ -21,7 +21,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  * Created by guoshuyu on 2018/1/11.
  */
 
-public class EXO2PlayerManager implements IPlayerManager {
+public class Exo2PlayerManager implements IPlayerManager {
 
     private IjkExo2MediaPlayer mediaPlayer;
 

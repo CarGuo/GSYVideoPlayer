@@ -29,7 +29,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  * Created by guoshuyu on 2018/1/11.
  */
 
-public class IJKPlayerManager implements IPlayerManager {
+public class IjkPlayerManager implements IPlayerManager {
 
     /**
      * log level
@@ -299,7 +299,7 @@ public class IJKPlayerManager implements IPlayerManager {
     }
 
     public static void setIjkLibLoader(IjkLibLoader ijkLibLoader) {
-        IJKPlayerManager.ijkLibLoader = ijkLibLoader;
+        IjkPlayerManager.ijkLibLoader = ijkLibLoader;
     }
 
     public static int getLogLevel() {
@@ -307,6 +307,6 @@ public class IJKPlayerManager implements IPlayerManager {
     }
 
     public static void setLogLevel(int logLevel) {
-        IJKPlayerManager.logLevel = logLevel;
+        IjkPlayerManager.logLevel = logLevel;
     }
 }
