@@ -414,6 +414,14 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     @Override
+    public long getNetSpeed() {
+        if (playerManager != null) {
+            return playerManager.getNetSpeed();
+        }
+        return 0;
+    }
+
+    @Override
     public void clearCache(Context context, File cacheDir, String url) {
         clearDefaultCache(context, cacheDir, url);
     }
@@ -425,6 +433,13 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             return playerManager.getBufferedPercentage();
         }
         return 0;
+    }
+
+    @Override
+    public void setSpeedPlaying(float speed, boolean soundTouch) {
+        if (playerManager != null) {
+            playerManager.setSpeedPlaying(speed, soundTouch);
+        }
     }
 
     protected void sendMessage(Message message) {

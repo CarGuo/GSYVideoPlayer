@@ -68,10 +68,12 @@ public class GSYExoPlayerManager implements IPlayerManager {
     public void setSpeed(float speed, boolean soundTouch) {
         //很遗憾，EXO2的setSpeed只能在播放前生效
         //Debuger.printfError("很遗憾，目前EXO2的setSpeed只能在播放前设置生效");
-        try {
-            mediaPlayer.setSpeed(speed, 1);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (mediaPlayer != null) {
+            try {
+                mediaPlayer.setSpeed(speed, 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -130,5 +132,15 @@ public class GSYExoPlayerManager implements IPlayerManager {
             return;
         }
         mediaPlayer.next();
+    }
+
+    @Override
+    public long getNetSpeed() {
+        return 0;
+    }
+
+    @Override
+    public void setSpeedPlaying(float speed, boolean soundTouch) {
+
     }
 }

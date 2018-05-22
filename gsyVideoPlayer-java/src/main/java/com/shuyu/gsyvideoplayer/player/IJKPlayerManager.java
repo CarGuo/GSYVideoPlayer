@@ -172,6 +172,22 @@ public class IJKPlayerManager implements IPlayerManager {
         return -1;
     }
 
+    @Override
+    public long getNetSpeed() {
+        if(mediaPlayer != null) {
+            return mediaPlayer.getTcpSpeed();
+        }
+        return 0;
+    }
+
+    @Override
+    public void setSpeedPlaying(float speed, boolean soundTouch) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setSpeed(speed);
+            mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", (soundTouch) ? 1 : 0);
+        }
+    }
+
     private void initIJKOption(IjkMediaPlayer ijkMediaPlayer, List<VideoOptionModel> optionModelList) {
         if (optionModelList != null && optionModelList.size() > 0) {
             for (VideoOptionModel videoOptionModel : optionModelList) {
