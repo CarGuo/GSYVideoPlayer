@@ -11,12 +11,12 @@ public class PlayerFactory {
     public static IPlayerManager getPlayManager(int videoType) {
         switch (videoType) {
             case GSYVideoType.IJKEXOPLAYER2:
-                return new EXO2PlayerManager();
+                return new Exo2PlayerManager();
             case GSYVideoType.SYSTEMPLAYER:
                 return new SystemPlayerManager();
             case GSYVideoType.IJKPLAYER:
             default:
-                return new IJKPlayerManager();
+                return new IjkPlayerManager();
         }
     }
 
