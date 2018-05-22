@@ -118,7 +118,7 @@ public class IJKPlayerManager implements IPlayerManager {
     public void setSpeed(float speed, boolean soundTouch) {
         if (speed > 0) {
             try {
-                if(mediaPlayer != null) {
+                if (mediaPlayer != null) {
                     mediaPlayer.setSpeed(speed);
                 }
             } catch (Exception e) {
@@ -142,7 +142,7 @@ public class IJKPlayerManager implements IPlayerManager {
 
     @Override
     public void setNeedMute(boolean needMute) {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             if (needMute) {
                 mediaPlayer.setVolume(0, 0);
             } else {
@@ -162,7 +162,7 @@ public class IJKPlayerManager implements IPlayerManager {
 
     @Override
     public void release() {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             mediaPlayer.release();
         }
     }
@@ -174,7 +174,7 @@ public class IJKPlayerManager implements IPlayerManager {
 
     @Override
     public long getNetSpeed() {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             return mediaPlayer.getTcpSpeed();
         }
         return 0;

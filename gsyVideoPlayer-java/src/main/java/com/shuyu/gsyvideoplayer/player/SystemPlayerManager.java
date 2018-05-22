@@ -50,7 +50,7 @@ public class SystemPlayerManager implements IPlayerManager {
             }
             mediaPlayer.setLooping(gsyModel.isLooping());
             if (gsyModel.getSpeed() != 1 && gsyModel.getSpeed() > 0) {
-
+                setSpeed(gsyModel.getSpeed());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,10 +61,6 @@ public class SystemPlayerManager implements IPlayerManager {
     public void showDisplay(Message msg) {
         if (msg.obj == null && mediaPlayer != null && !release) {
             mediaPlayer.setSurface(null);
-            if (surface != null) {
-                surface.release();
-                surface = null;
-            }
         } else if (msg.obj != null) {
             Surface holder = (Surface) msg.obj;
             surface = holder;
@@ -96,7 +92,10 @@ public class SystemPlayerManager implements IPlayerManager {
 
     @Override
     public void releaseSurface() {
-
+        if (surface != null) {
+            surface.release();
+            surface = null;
+        }
     }
 
     @Override
@@ -126,13 +125,20 @@ public class SystemPlayerManager implements IPlayerManager {
     }
 
     private void setSpeed(float speed) {
-        if (mediaPlayer != null && mediaPlayer.getInternalMediaPlayer() != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PlaybackParams playbackParams = new PlaybackParams();
-                playbackParams.setSpeed(speed);
-                mediaPlayer.getInternalMediaPlayer().setPlaybackParams(playbackParams);
-            } else {
-                Debuger.printfError(" not support setSpeed");
+        if (release) {
+            return;
+        }
+        if (mediaPlayer != null && mediaPlayer.getInternalMediaPlayer() != null && mediaPlayer.isPlayable()) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PlaybackParams playbackParams = new PlaybackParams();
+                    playbackParams.setSpeed(speed);
+                    mediaPlayer.getInternalMediaPlayer().setPlaybackParams(playbackParams);
+                } else {
+                    Debuger.printfError(" not support setSpeed");
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
