@@ -30,6 +30,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * 基类管理器
+ * GSYVideoViewBridge接口说明可以查阅GSYVideoViewBridge类
  * Created by guoshuyu on 2018/1/25.
  */
 
@@ -132,10 +133,10 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     /**
-     * 删除url对应默认缓存文件
+     * 清除缓存
      *
-     * @param cacheDir 可以为空，空目录清除默认
-     * @param url      可以为空，空目录清除默认
+     * @param cacheDir 缓存目录，为空是使用默认目录
+     * @param url      指定url缓存，为空时清除所有
      */
     public void clearDefaultCache(Context context, @Nullable File cacheDir, @Nullable String url) {
         if (cacheManager != null) {
@@ -408,6 +409,10 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         return cacheManager != null && cacheManager.hadCached();
     }
 
+    /**
+     * 这里只是用于点击时判断是否已经缓存
+     * 所以每次直接通过一个CacheManager对象判断即可
+     */
     @Override
     public boolean cachePreview(Context context, File cacheDir, String url) {
         return getCacheManager(videoType).cachePreview(context, cacheDir, url);
