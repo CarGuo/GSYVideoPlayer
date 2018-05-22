@@ -331,8 +331,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                 final String name = mUrlList.get(position).getName();
                 if (mSourcePosition != position) {
                     if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
-                            || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)
-                            && getGSYVideoManager().getMediaPlayer() != null) {
+                            || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)) {
                         final String url = mUrlList.get(position).getUrl();
                         onVideoPause();
                         final long currentPosition = mCurrentPosition;

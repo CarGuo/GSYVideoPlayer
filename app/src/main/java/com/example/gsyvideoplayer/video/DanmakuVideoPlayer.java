@@ -316,8 +316,7 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
      * 弹幕偏移
      */
     private void resolveDanmakuSeek(DanmakuVideoPlayer gsyVideoPlayer, long time) {
-        if (getGSYVideoManager().getMediaPlayer() != null && mHadPlay
-                && gsyVideoPlayer.getDanmakuView() != null && gsyVideoPlayer.getDanmakuView().isPrepared()) {
+        if (mHadPlay && gsyVideoPlayer.getDanmakuView() != null && gsyVideoPlayer.getDanmakuView().isPrepared()) {
             gsyVideoPlayer.getDanmakuView().seekTo(time);
         }
     }

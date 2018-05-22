@@ -141,4 +141,90 @@ public class EXO2PlayerManager implements IPlayerManager {
     public void setSpeedPlaying(float speed, boolean soundTouch) {
 
     }
+
+
+    @Override
+    public void start() {
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+    }
+
+    @Override
+    public void pause() {
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    public int getVideoWidth() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getVideoWidth();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoHeight() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getVideoHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isPlaying() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.isPlaying();
+        }
+        return false;
+    }
+
+    @Override
+    public void seekTo(long time) {
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo(time);
+        }
+    }
+
+    @Override
+    public long getCurrentPosition() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getCurrentPosition();
+        }
+        return 0;
+    }
+
+    @Override
+    public long getDuration() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getDuration();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarNum() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getVideoSarNum();
+        }
+        return 1;
+    }
+
+    @Override
+    public int getVideoSarDen() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getVideoSarDen();
+        }
+        return 1;
+    }
+
 }

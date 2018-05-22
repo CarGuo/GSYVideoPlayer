@@ -198,8 +198,8 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
         @Override
         public void onPrepared() {
             if (mTmpManager != null) {
-                mTmpManager.getMediaPlayer().start();
-                mTmpManager.getMediaPlayer().seekTo(getCurrentPositionWhenPlaying());
+                mTmpManager.start();
+                mTmpManager.seekTo(getCurrentPositionWhenPlaying());
             }
         }
 
@@ -281,8 +281,7 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
         final String name = mUrlList.get(position).getName();
         if (mSourcePosition != position) {
             if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
-                    || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)
-                    && GSYVideoManager.instance().getMediaPlayer() != null) {
+                    || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)) {
                 showLoading();
                 final String url = mUrlList.get(position).getUrl();
                 cancelProgressTimer();

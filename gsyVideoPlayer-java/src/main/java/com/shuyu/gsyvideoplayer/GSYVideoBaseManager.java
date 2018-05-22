@@ -346,14 +346,6 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     @Override
-    public IMediaPlayer getMediaPlayer() {
-        if (playerManager != null) {
-            return playerManager.getMediaPlayer();
-        }
-        return null;
-    }
-
-    @Override
     public int getLastState() {
         return lastState;
     }
@@ -445,6 +437,100 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         if (playerManager != null) {
             playerManager.setSpeedPlaying(speed, soundTouch);
         }
+    }
+
+    @Override
+    public IPlayerManager getPlayer() {
+        return playerManager;
+    }
+
+    @Override
+    public void start() {
+        if (playerManager != null) {
+            playerManager.start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (playerManager != null) {
+            playerManager.stop();
+        }
+    }
+
+    @Override
+    public void pause() {
+        if (playerManager != null) {
+            playerManager.pause();
+        }
+    }
+
+    @Override
+    public int getVideoWidth() {
+        if (playerManager != null) {
+            return playerManager.getVideoWidth();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoHeight() {
+        if (playerManager != null) {
+            return playerManager.getVideoHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isPlaying() {
+        if (playerManager != null) {
+            return playerManager.isPlaying();
+        }
+        return false;
+    }
+
+    @Override
+    public void seekTo(long time) {
+        if (playerManager != null) {
+            playerManager.seekTo(time);
+        }
+    }
+
+    @Override
+    public long getCurrentPosition() {
+        if (playerManager != null) {
+            return playerManager.getCurrentPosition();
+        }
+        return 0;
+    }
+
+    @Override
+    public long getDuration() {
+        if (playerManager != null) {
+            return playerManager.getDuration();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarNum() {
+        if (playerManager != null) {
+            return playerManager.getVideoSarNum();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarDen() {
+        if (playerManager != null) {
+            return playerManager.getVideoSarDen();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getRotateInfoFlag() {
+        return IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED;
     }
 
     protected void sendMessage(Message message) {

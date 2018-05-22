@@ -576,10 +576,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 mVideoAllCallBack.onClickSeekbar(mOriginUrl, mTitle, this);
             }
         }
-        if (getGSYVideoManager().getMediaPlayer() != null && mHadPlay) {
+        if (getGSYVideoManager() != null && mHadPlay) {
             try {
                 int time = seekBar.getProgress() * getDuration() / 100;
-                getGSYVideoManager().getMediaPlayer().seekTo(time);
+                getGSYVideoManager().seekTo(time);
             } catch (Exception e) {
                 Debuger.printfWarning(e.toString());
             }
@@ -714,9 +714,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         dismissProgressDialog();
         dismissVolumeDialog();
         dismissBrightnessDialog();
-        if (mChangePosition && getGSYVideoManager().getMediaPlayer() != null && (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE)) {
+        if (mChangePosition && getGSYVideoManager() != null && (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE)) {
             try {
-                getGSYVideoManager().getMediaPlayer().seekTo(mSeekTimePosition);
+                getGSYVideoManager().seekTo(mSeekTimePosition);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -807,7 +807,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             startButtonLogic();
         } else if (mCurrentState == CURRENT_STATE_PLAYING) {
             try {
-                getGSYVideoManager().getMediaPlayer().pause();
+                getGSYVideoManager().pause();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -832,7 +832,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 }
             }
             try {
-                getGSYVideoManager().getMediaPlayer().start();
+                getGSYVideoManager().start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
