@@ -3,6 +3,7 @@
 #### 项目经过多版本调整之后，目前大致结构分为如下 ：
 
 * **Player 播放内核层**：IjkMediaPlayer、ExoPlayr2、MediaPlayer（IPlayerManager）。
+* **Cache 缓存层**：ProxyCacheManager、ExoPlayerCacheManager（ICacheManager）。
 * **Manager 内核管理层**：GSYVideoManager（GSYVideoBaseManager <- GSYVideoViewBridge）。
 * **Video  播放器控件层**：GSYTextureRenderVIew 到 GSYVideoPlayer 五层。
 * **Render 渲染控件层**：TextureView、SurfaceView、GLSurfaceView（GSYRenderView <- IGSYRenderView）。
@@ -16,6 +17,8 @@
 * 管理层GSVideoManager继承GSYVideoBaseManager，通过IPlayerManager控制播放内核。
 
 * 管理层GSVideoManager实现了GSYVideoViewBridge，和UI层交互（主要通过UI层的GSYVideoPlayer）。
+
+* Cache层主要是对缓存的实现和管理，目前有通用的代理缓存，与exo的CacheDataSourceFactory。
 
 * UI层GSYTextureRenderView通过GSYRenderView，内置IGSYRenderView实现类，和渲染层交互。
 
@@ -47,5 +50,11 @@
 如上图所示，前面说过播放内核Player层、Manger层、渲染层都是可以替换的，只要实现了对应的接口，继承后替换对应的实现类，就可以替换对应层的内部实现逻辑。
 例如Demo中： [ListMultiVideoActivity](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/ListMultiVideoActivity.java) 、[CustomManager](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/video/manager/CustomManager.java) 、[MultiSampleVideo](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/video/MultiSampleVideo.java)  就演示了如何通过自定义Manager实现，多个播放内核同时播放的效果。
 
-#### 4、还无法解决(｀・ω・´)，那就提个issue吧！
+
+### 4、整套的自定义demo
+
+[演示整套自定义的Demo](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exo)
+
+
+#### 5、还无法解决(｀・ω・´)，那就提个issue吧！
 
