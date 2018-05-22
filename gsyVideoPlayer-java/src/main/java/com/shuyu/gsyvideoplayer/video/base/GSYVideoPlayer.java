@@ -29,6 +29,8 @@ public abstract class GSYVideoPlayer extends GSYBaseVideoPlayer {
         super(context, attrs, defStyleAttr);
     }
 
+    /*******************************下面方法为管理器和播放控件交互的方法****************************************/
+
     @Override
     public GSYVideoViewBridge getGSYVideoManager() {
         GSYVideoManager.instance().initContext(getContext().getApplicationContext());

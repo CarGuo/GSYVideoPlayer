@@ -64,4 +64,26 @@ public interface IPlayerManager {
     void setSpeedPlaying(float speed, boolean soundTouch);
 
     void setSpeed(float speed, boolean soundTouch);
+
+    void start();
+
+    void stop();
+
+    void pause();
+
+    int getVideoWidth();
+
+    int getVideoHeight();
+
+    boolean isPlaying();
+
+    void seekTo(long time);
+
+    long getCurrentPosition();
+
+    long getDuration();
+
+    int getVideoSarNum();
+
+    int getVideoSarDen();
 }

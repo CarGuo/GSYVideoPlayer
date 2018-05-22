@@ -84,8 +84,7 @@ public class PreViewGSYVideoPlayer extends NormalGSYVideoPlayer {
             layoutParams.leftMargin = offset;
             //设置帧预览图的显示位置
             mPreviewLayout.setLayoutParams(layoutParams);
-            if (getGSYVideoManager().getMediaPlayer() != null
-                    && mHadPlay && (mOpenPreView)) {
+            if (mHadPlay && mOpenPreView) {
                 mPreProgress = progress;
             }
         }

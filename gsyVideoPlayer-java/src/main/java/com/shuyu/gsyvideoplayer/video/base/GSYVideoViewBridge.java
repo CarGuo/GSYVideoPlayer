@@ -4,11 +4,10 @@ import android.content.Context;
 import android.view.Surface;
 
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
+import com.shuyu.gsyvideoplayer.player.IPlayerManager;
 
 import java.io.File;
 import java.util.Map;
-
-import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * Manager 与 View之间的接口
@@ -48,7 +47,7 @@ public interface GSYVideoViewBridge {
     /**
      * 获取当前播放内核
      */
-    IMediaPlayer getMediaPlayer();
+    IPlayerManager getPlayer();
 
     /**
      * 针对某些内核，缓冲百分比
@@ -119,4 +118,31 @@ public interface GSYVideoViewBridge {
      * @param soundTouch
      */
     void setSpeedPlaying(float speed, boolean soundTouch);
+
+    /**
+     * 获取Rotate选择的flag，目前只有ijk用到
+     */
+    int getRotateInfoFlag();
+
+    void start();
+
+    void stop();
+
+    void pause();
+
+    int getVideoWidth();
+
+    int getVideoHeight();
+
+    boolean isPlaying();
+
+    void seekTo(long time);
+
+    long getCurrentPosition();
+
+    long getDuration();
+
+    int getVideoSarNum();
+
+    int getVideoSarDen();
 }
