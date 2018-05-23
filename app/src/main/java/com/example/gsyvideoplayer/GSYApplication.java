@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 //import com.squareup.leakcanary.LeakCanary;
 
@@ -8,7 +9,7 @@ import android.app.Application;
  * Created by shuyu on 2016/11/11.
  */
 
-public class GSYApplication extends Application {
+public class GSYApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {

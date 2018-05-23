@@ -10,6 +10,8 @@ android {
     defaultConfig {
         applicationId "com.example.gsyvideoplayer"
 
+        multiDexEnabled true
+
         minSdkVersion globalConfiguration.androidMinSdkVersion
         targetSdkVersion globalConfiguration.androidTargetSdkVersion
 
