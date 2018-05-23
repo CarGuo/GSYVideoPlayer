@@ -181,7 +181,7 @@ list.add(videoOphtionModel);
 GSYVideoManager.instance().setOptionModelList(list);
 ```
 
-更多优化
+更多优化（一个setOption对应gsy中VideoOptionModel）
 ```
 //硬解码：1、打开，0、关闭
 //mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
