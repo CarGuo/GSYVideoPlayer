@@ -42,6 +42,8 @@
 
 ### [微信赞赏链接](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
 
+### [Demo APK 下载地址](https://github.com/CarGuo/GSYVideoPlayer/releases)
+
 ## 一、使用依赖
 
 ##### 新版本调整了代码结构，如更新后显示类路径错误，参考demo调整包路径即可。
