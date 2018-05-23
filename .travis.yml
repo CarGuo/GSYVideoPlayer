@@ -11,8 +11,9 @@ android:
 before_install:
 - chmod +x gradlew
 script:
-- cd gsyVideoPlayer
+- cd app
 - "../gradlew assembleRelease"
+
 deploy:
   provider: releases
   api_key:
