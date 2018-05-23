@@ -96,7 +96,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0'
 
 ### [--- 项目解析说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/GSYVIDEO_PLAYER_PROJECT_INFO.md)
 #### [--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)
-#### [--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
+### [--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
 #### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/DECODERS.md)
 #### [--- IJKPlayer问题 - 入口](http://www.jianshu.com/p/220b00d00deb)　
 #### [--- IJKPlayer编译自定义SO - 入口](http://www.jianshu.com/p/bd289e25d272)　
