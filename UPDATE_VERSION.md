@@ -1,8 +1,15 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-### 4.1.4(2018-XX-XX)
-* update ExoPlayer to 2.8.0
+
+### 5.0.0-beta(2018-05-24)
+* 调整cache机制，抽离cache管理器。
+* update ExoPlayer to 2.8.0，全面针对ExoPlayer进行优化
 * 优化ExoPlayer的问题
+* 增加ExoPlayer循环播放支持
+* 增加ExoPlayer自定义DEMO，演示ExoPlayer实现无缝切换
+* ijk的`logLevel`、`ijkLibLoader`直接通过IJKPlayerManager静态方法设置
+* 进一步调整框架结构和内部耦合度
+
 
 ### 4.1.3(2018-05-11)
 * 优化单双击
