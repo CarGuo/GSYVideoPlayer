@@ -10,7 +10,7 @@
 
 #### 结构如下图：
 
-![框架图](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/StructureChartImg.jpg)
+![框架图](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/StructureChart2.jpg)
 
 ```
 
