@@ -97,7 +97,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0-beta'
 #### [--- IJKPlayer编译自定义SO - 入口](http://www.jianshu.com/p/bd289e25d272)　
 #### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
 
-![框架图](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/StructureChartImg2.jpg)
+![框架图](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/StructureChart2.jpg)
 
 ## 四、运行效果
 
