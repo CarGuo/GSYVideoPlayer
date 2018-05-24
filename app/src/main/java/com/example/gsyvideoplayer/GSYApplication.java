@@ -3,6 +3,9 @@ package com.example.gsyvideoplayer;
 import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+
 //import com.squareup.leakcanary.LeakCanary;
 
 /**
