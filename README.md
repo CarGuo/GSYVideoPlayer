@@ -5,7 +5,7 @@
 
 状态 | 功能
 -------- | ---
-**支持**|**边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)。**
+**支持**|**边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)。ExoPlayer使用Cache**
 **支持**|**其他协议和编码concat、rtsp、hls、rtmp、crypto、mpeg等。**
 **支持**|**DEMO演示获取视频第一帧等实现。**
 **支持**|**简单滤镜（马赛克、黑白、色彩过滤、高斯、模糊、模糊等等20多种）。**
