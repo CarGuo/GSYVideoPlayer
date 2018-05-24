@@ -53,21 +53,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:5.0.0'
+compile 'com.shuyu:GSYVideoPlayer:5.0.0-beta'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.0'
+compile 'com.shuyu:gsyVideoPlayer-java:5.0.0-beta'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.0'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.0'
-compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.0'
-compile 'com.shuyu:gsyVideoPlayer-x64:5.0.0'
-compile 'com.shuyu:gsyVideoPlayer-x86:5.0.0'
+compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.0-beta'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.0-beta'
+compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.0-beta'
+compile 'com.shuyu:gsyVideoPlayer-x64:5.0.0-beta'
+compile 'com.shuyu:gsyVideoPlayer-x86:5.0.0-beta'
 
 ```
 
@@ -77,9 +77,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.0'
+compile 'com.shuyu:gsyVideoPlayer-java:5.0.0-beta'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0-beta'
 
 ```
 
@@ -131,7 +131,8 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
 
 ## 五、近期版本
-### 5.0.0(2018-XX-XX)
+
+### 5.0.0-beta(2018-05-24)
 * 调整cache机制，抽离cache管理器。
 * update ExoPlayer to 2.8.0，全面针对ExoPlayer进行优化
 * 优化ExoPlayer的问题
