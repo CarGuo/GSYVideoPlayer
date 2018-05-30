@@ -30,9 +30,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/issues)
 [![GitHub license](https://img.shields.io/github/license/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/blob/master/LICENSE)
 
-### [微信赞赏链接](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/thanks.jpg)
+### [-----------------微信赞赏链接-----------------](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/thanks.jpg)
 
-### [Demo APK 下载地址](https://github.com/CarGuo/GSYVideoPlayer/releases)
+### [--------------Demo APK 下载地址---------------](https://github.com/CarGuo/GSYVideoPlayer/releases)
 
 ## 一、使用依赖
 
