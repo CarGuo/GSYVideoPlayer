@@ -1,5 +1,5 @@
 
-![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/home_logo.png)
+![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/home_logo.png)
 
 ## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)（兼容系统MediaPlayer与EXOPlayer2），实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
@@ -33,7 +33,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/issues)
 [![GitHub license](https://img.shields.io/github/license/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/blob/master/LICENSE)
 
-### [微信赞赏链接](https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg)
+### [微信赞赏链接](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/thanks.jpg)
 
 ### [Demo APK 下载地址](https://github.com/CarGuo/GSYVideoPlayer/releases)
 
@@ -78,7 +78,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0-beta'
 
 ```
 
-### [--- 更多依赖方式请点击 - ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/dependencies.md)
+### [--- 更多依赖方式请点击 - ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DEPENDENCIES.md)
 
 ## 二、其他推荐
 
@@ -89,41 +89,41 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0-beta'
 
 ## 三、文档Wiki
 
-### [--- 项目解析说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/GSYVIDEO_PLAYER_PROJECT_INFO.md)
+### [--- 项目解析说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/GSYVIDEO_PLAYER_PROJECT_INFO.md)
 #### [--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)
-### [--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/QUESTION.md)
-#### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/DECODERS.md)
+### [--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/QUESTION.md)
+#### [--- 项目支持视频格式（如果遇上黑屏，没声音）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DECODERS.md)
 #### [--- IJKPlayer问题 - 入口](http://www.jianshu.com/p/220b00d00deb)　
 #### [--- IJKPlayer编译自定义SO - 入口](http://www.jianshu.com/p/bd289e25d272)　
-#### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
+#### [--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)
 
-![框架图](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/StructureChart2.jpg)
+![框架图](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/StructureChart2.jpg)
 
 ## 四、运行效果
 
 * ### 1、打开一个播放(旋转、镜像、填充)
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/11.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/11.gif" width="240px" height="426px"/>
 
 * ### 2、列表/详情模式(动画、旋转、小窗体)
 
 <div>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/22.gif" width="240px" height="426px"/>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/33.gif" width="240px" height="426px"/>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/44.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/22.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/33.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/44.gif" width="240px" height="426px"/>
 </div>
 
 * ### 3、弹幕
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/55.gif" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/55.gif" width="240px" height="426px"/>
 
 * ### 4、滤镜和GL动画
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/09.gif"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/09.gif"/>
 
 * ### 6、背景铺满模糊播放
 
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/99.png" width="426px" height="240px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/99.png" width="426px" height="240px"/>
 
 * ### 7、进度条小窗口预览
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/07.gif" height="240px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/07.gif" height="240px"/>
 
 ## 五、近期版本
 
@@ -138,7 +138,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0-beta'
 
 
 
-### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/UPDATE_VERSION.md)
+### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)
 
 ## 六、关于Issues
 
@@ -201,7 +201,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0-beta'
 
 ##### 微信赞赏码
 
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/thanks.jpg" height="400px" width="400px"/>
+<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/thanks.jpg" height="400px" width="400px"/>
 
 
 ## License

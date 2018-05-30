@@ -8,6 +8,8 @@
 * **Video  播放器控件层**：GSYTextureRenderVIew 到 GSYVideoPlayer 五层。
 * **Render 渲染控件层**：TextureView、SurfaceView、GLSurfaceView（GSYRenderView <- IGSYRenderView）。
 
+**目前整个video层即是传统controller层，也是大部分时候自定义实现需要继承的层**
+
 #### 结构如下图：
 
 ![框架图](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/StructureChart2.jpg)
