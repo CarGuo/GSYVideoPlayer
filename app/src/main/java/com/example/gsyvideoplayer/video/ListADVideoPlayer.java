@@ -3,6 +3,8 @@ package com.example.gsyvideoplayer.video;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.GSYADVideoPlayer;
 
 public class ListADVideoPlayer extends GSYADVideoPlayer {
@@ -21,10 +23,20 @@ public class ListADVideoPlayer extends GSYADVideoPlayer {
 
     @Override
     protected void startPrepare() {
-        if (getGSYVideoManager().listener() != null) {
-            getGSYVideoManager().listener().onAutoCompletion();
-        }
+        GSYMediaPlayerListener listener = getGSYVideoManager().listener();
         super.startPrepare();
+        if (listener != null) {
+            listener.onAutoCompletion();
+        }
+    }
+
+    @Override
+    public void onAutoCompletion() {
+        super.onAutoCompletion();
+        if (!isCurrentMediaListener() && mVideoAllCallBack != null) {
+            Debuger.printfLog("onAutoComplete");
+            mVideoAllCallBack.onAutoComplete(mOriginUrl, mTitle, this);
+        }
     }
 
     @Override
