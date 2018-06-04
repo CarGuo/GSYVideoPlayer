@@ -9,7 +9,7 @@
         android:layout_height="@dimen/post_media_height" />
 
 
-    <com.shuyu.gsyvideoplayer.video.GSYADVideoPlayer
+    <com.example.gsyvideoplayer.video.ListADVideoPlayer
         android:id="@+id/video_ad_player"
         android:layout_width="match_parent"
         android:layout_height="@dimen/post_media_height"
