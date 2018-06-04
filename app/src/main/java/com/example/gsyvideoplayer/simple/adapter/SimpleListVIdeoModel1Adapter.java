@@ -20,7 +20,7 @@ public class SimpleListVideoModel1Adapter extends BaseAdapter {
     public static final String TAG = "ListNormalAdapter22";
 
     private List<VideoModel> list = new ArrayList<>();
-    private LayoutInflater inflater = null;
+    private LayoutInflater inflater;
     private Context context;
 
     private StandardGSYVideoPlayer curPlayer;
