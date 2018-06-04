@@ -1,8 +1,22 @@
-## 两种简单的使用方法
+## 三种简单的使用方法
 
-### 一、列表中使用
 
-#### 模式一 [ListVideoActivity](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/ListVideoActivity.java)
+*注意：下面几种方式所在的Activity不要忘记配置manifest的config。*
+```
+<activity
+    android:name=".xxxxx"
+    android:configChanges="orientation|keyboardHidden|screenSize"
+    android:screenOrientation="portrait" />
+
+```
+
+### 一、直接播放
+
+[SimplePlayer](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimplePlayer.java)
+
+### 二、列表中使用
+
+#### 模式一 [SimpleListVideoActivityMode1](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleListVideoActivityMode1.java)
 
 1、adapter布局中添加播放控件
 ```
@@ -15,15 +29,16 @@
 
 2、配置播放控件（也可以使用builder模式，详见下方detail模式中）
 ```
-
+holder.gsyVideoPlayer.setUpLazy(url, true, null, null, "这是title");
 //增加title
 holder.gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
 //设置返回键
 holder.gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
-//设置全屏按键功能        holder.gsyVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+//设置全屏按键功能
+holder.gsyVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-       holder.gsyVideoPlayer.startWindowFullscreen(context, false, true);
+        holder.gsyVideoPlayer.startWindowFullscreen(context, false, true);
     }
 });
 //防止错位设置
@@ -37,8 +52,6 @@ holder.gsyVideoPlayer.setReleaseWhenLossAudio(false);
 holder.gsyVideoPlayer.setShowFullAnimation(true);
 //小屏时不触摸滑动
 holder.gsyVideoPlayer.setIsTouchWiget(false);
-//全屏是否需要lock功能
-holder.gsyVideoPlayer.setNeedLockFull(true);
 ```
 
 3、Activity中配置生命周期
@@ -100,7 +113,7 @@ holder.gsyVideoPlayer.setNeedLockFull(true);
 ```
 
 
-#### 模式二  [ListVideo2Activity](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/ListVideo2Activity.java)
+#### 模式二  [SimpleListVideoActivityMode2](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleListVideoActivityMode2.java)
 
 一、item布局中添加
 ```
@@ -229,6 +242,7 @@ holder.gsyVideoPlayer.setNeedLockFull(true);
 
 3、adapter中使用helper
 ```
+···
 smallVideoHelper.addVideoPlayer(position, holder.imageView, TAG, holder.videoContainer, holder.playerBtn);
 
 holder.playerBtn.setOnClickListener(new View.OnClickListener() {
@@ -242,12 +256,14 @@ holder.playerBtn.setOnClickListener(new View.OnClickListener() {
                 smallVideoHelper.startPlay();
             }
 });
+
+···
 ```
 
 
-### 二、详情页播放
+### 三、详情页播放
 
-#### 模式一  [DetailControlActivity](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/DetailControlActivity.java)
+#### 模式一  [SimpleDetailActivityMode1](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode1.java)
 
 1、布局中添加播放控件
 ```
@@ -266,14 +282,20 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
 3、重载配置
 ```
 
-   @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-  		···
-  		//调用父类方法
+        setContentView(R.layout.activity_detail_player);
+
+        detailPlayer = (StandardGSYVideoPlayer) findViewById(R.id.detail_player);
+        //增加title
+        detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        detailPlayer.getBackButton().setVisibility(View.GONE);
+
         initVideoBuilderMode();
-        ···
-        });
+
+    }
+
     @Override
     public StandardGSYVideoPlayer getGSYVideoPlayer() {
         return detailPlayer;
@@ -292,17 +314,27 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
-                .setShowFullAnimation(true)//打开动画
+                .setShowFullAnimation(false)
                 .setNeedLockFull(true)
                 .setSeekRatio(1);
     }
 
     @Override
     public void clickForFullScreen() {
+
+    }
+
+
+    /**
+     * 是否启动旋转横屏，true表示启动
+     */
+    @Override
+    public boolean getDetailOrientationRotateAuto() {
+        return true;
     }
 ```
 
-#### 模式二  [DetailPlayer](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/DetailPlayer.java)
+#### 模式二  [SimpleDetailActivityMode2](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
 
 1、布局中添加播放控件
 ```
@@ -313,9 +345,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
 
 ```
 
-2、配置播放器、添加旋转外部旋转支持、增加监听。（可以用builder模式，也可以会直接通过player设置）
+2、onCreate中配置播放器、添加旋转外部旋转支持、增加监听。（也可以会直接通过player设置，不用builder）
 ```
-
 //外部辅助的旋转，帮助全屏
 orientationUtils = new OrientationUtils(this, detailPlayer);
 //初始化不打开外部的旋转
@@ -335,24 +366,10 @@ gsyVideoOption.setThumbImageView(imageView)
         .setVideoAllCallBack(new GSYSampleCallBack() {
             @Override
             public void onPrepared(String url, Object... objects) {
-                Debuger.printfError("***** onPrepared **** " + objects[0]);//title
-                Debuger.printfError("***** onPrepared **** " + objects[1]);//当前全屏player
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
                 orientationUtils.setEnable(true);
-                //记录是否播放标记位
                 isPlay = true;
-            }
-            @Override
-            public void onEnterFullscreen(String url, Object... objects) {
-                super.onEnterFullscreen(url, objects);
-                Debuger.printfError("***** onEnterFullscreen **** " + objects[0]);//title
-                Debuger.printfError("***** onEnterFullscreen **** " + objects[1]);//当前全屏player
-            }
-
-            @Override
-            public void onAutoComplete(String url, Object... objects) {
-                super.onAutoComplete(url, objects);
             }
 
             @Override
@@ -372,13 +389,8 @@ gsyVideoOption.setThumbImageView(imageView)
                     orientationUtils.setEnable(!lock);
                 }
             }
-        }).setGSYVideoProgressListener(new GSYVideoProgressListener() {
-            @Override
-            public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
-                Debuger.printfLog(" progress " + progress + " secProgress " + secProgress + " currentPosition " + currentPosition + " duration " + duration);
-            }
-        }) .build(detailPlayer);
-//全屏方法
+        }).build(detailPlayer);
+
 detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
@@ -386,7 +398,7 @@ detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener()
         orientationUtils.resolveByClick();
 
         //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-        detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
+        detailPlayer.startWindowFullscreen(SimpleDetailActivityMode2.this, true, true);
     }
 });
 ```
@@ -394,53 +406,50 @@ detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener()
 3、配置生命周期
 
 ```
-    @Override
-    public void onBackPressed() {
-		//配置返回
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
+@Override
+public void onBackPressed() {
+    if (orientationUtils != null) {
+        orientationUtils.backToProtVideo();
     }
-
-
-    @Override
-    protected void onPause() {
-    	//暂停
-        detailPlayer.getFullWindowPlayer().onVideoPause();
-        super.onPause();
-        isPause = true;
+    if (GSYVideoManager.backFromWindowFull(this)) {
+        return;
     }
+    super.onBackPressed();
+}
 
-    @Override
-    protected void onResume() {
-    	//恢复播放
-        detailPlayer.getFullWindowPlayer().onVideoResume(false);
-        super.onResume();
-        isPause = false;
-    }
 
-    @Override
-    protected void onDestroy() {
-    	//销毁
-        super.onDestroy();
-        if (isPlay) {
-           detailPlayer.getFullWindowPlayer().release();
-        }
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
-    }
+@Override
+protected void onPause() {
+    detailPlayer.getCurrentPlayer().onVideoPause();
+    super.onPause();
+    isPause = true;
+}
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
-        }
+@Override
+protected void onResume() {
+    detailPlayer.getCurrentPlayer().onVideoResume(false);
+    super.onResume();
+    isPause = false;
+}
+
+@Override
+protected void onDestroy() {
+    super.onDestroy();
+    if (isPlay) {
+        detailPlayer.getCurrentPlayer().release();
     }
+    if (orientationUtils != null)
+        orientationUtils.releaseListener();
+}
+
+
+
+@Override
+public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    //如果旋转了就全屏
+    if (isPlay && !isPause) {
+        detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+    }
+}
 ```

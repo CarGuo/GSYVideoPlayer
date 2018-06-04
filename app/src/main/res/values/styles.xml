@@ -16,6 +16,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="Theme.AppCompat.Full" parent="Theme.AppCompat.Translucent">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 
     <style name="dialog_style" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>

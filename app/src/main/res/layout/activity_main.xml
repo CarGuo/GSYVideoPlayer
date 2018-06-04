@@ -16,9 +16,16 @@
         tools:context="com.example.gsyvideoplayer.MainActivity">
 
         <Button
+            android:id="@+id/open_simple"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="简单播放" />
+
+        <Button
             android:id="@+id/open_btn"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="打开Video" />
 
         <Button
