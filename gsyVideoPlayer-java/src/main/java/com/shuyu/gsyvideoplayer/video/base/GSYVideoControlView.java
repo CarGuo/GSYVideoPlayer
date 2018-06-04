@@ -317,7 +317,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     cancelProgressTimer();
                     getGSYVideoManager().releaseMediaPlayer();
                     releasePauseCover();
-                    mBuffterPoint = 0;
+                    mBufferPoint = 0;
                     mSaveChangeViewTIme = 0;
                 }
                 if (mAudioManager != null) {
@@ -599,7 +599,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
             if (percent != 0) {
                 setTextAndProgress(percent);
-                mBuffterPoint = percent;
+                mBufferPoint = percent;
                 Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
             }
             if (mProgressBar == null) {
@@ -807,7 +807,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             startButtonLogic();
         } else if (mCurrentState == CURRENT_STATE_PLAYING) {
             try {
-                getGSYVideoManager().pause();
+                onVideoPause();
             } catch (Exception e) {
                 e.printStackTrace();
             }

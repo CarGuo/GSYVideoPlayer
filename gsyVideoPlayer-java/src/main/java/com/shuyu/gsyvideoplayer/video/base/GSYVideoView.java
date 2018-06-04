@@ -68,7 +68,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     protected int mScreenHeight;
 
     //缓存进度
-    protected int mBuffterPoint;
+    protected int mBufferPoint;
 
     //备份缓存前的播放状态
     protected int mBackUpPlayingBufferState = -1;
@@ -945,7 +945,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 缓冲进度/缓存进度
      */
     public int getBuffterPoint() {
-        return mBuffterPoint;
+        return mBufferPoint;
     }
 
     /**
