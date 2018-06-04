@@ -12,7 +12,7 @@
 
 ### 一、直接播放
 
-[SimplePlayer](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimplePlayer.java)
+#### [SimplePlayer](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimplePlayer.java)
 
 ### 二、列表中使用
 
@@ -27,7 +27,7 @@
 
 ```
 
-2、配置播放控件（也可以使用builder模式，详见下方detail模式中）
+2、adapter中配置播放控件（也可以使用builder模式，详见下方detail模式中）
 ```
 holder.gsyVideoPlayer.setUpLazy(url, true, null, null, "这是title");
 //增加title
