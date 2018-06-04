@@ -15,7 +15,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleListVideoModel1Adapter extends BaseAdapter {
+public class SimpleListVideoModelAdapter extends BaseAdapter {
 
     public static final String TAG = "ListNormalAdapter22";
 
@@ -31,7 +31,7 @@ public class SimpleListVideoModel1Adapter extends BaseAdapter {
 
     protected boolean isFull;
 
-    public SimpleListVideoModel1Adapter(Context context) {
+    public SimpleListVideoModelAdapter(Context context) {
         super();
         this.context = context;
         inflater = LayoutInflater.from(context);

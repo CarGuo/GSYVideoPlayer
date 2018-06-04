@@ -6,7 +6,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.example.gsyvideoplayer.R;
-import com.example.gsyvideoplayer.simple.adapter.SimpleListVideoModel1Adapter;
+import com.example.gsyvideoplayer.simple.adapter.SimpleListVideoModelAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 /**
@@ -16,7 +16,7 @@ public class SimpleListVideoActivityMode1 extends AppCompatActivity {
 
     ListView videoList;
 
-    SimpleListVideoModel1Adapter listNormalAdapter;
+    SimpleListVideoModelAdapter listNormalAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class SimpleListVideoActivityMode1 extends AppCompatActivity {
 
         videoList = (ListView)findViewById(R.id.video_list);
 
-        listNormalAdapter = new SimpleListVideoModel1Adapter(this);
+        listNormalAdapter = new SimpleListVideoModelAdapter(this);
         videoList.setAdapter(listNormalAdapter);
 
         videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -41,7 +41,7 @@ public class SimpleListVideoActivityMode1 extends AppCompatActivity {
                     //当前播放的位置
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
-                    if (GSYVideoManager.instance().getPlayTag().equals(SimpleListVideoModel1Adapter.TAG)
+                    if (GSYVideoManager.instance().getPlayTag().equals(SimpleListVideoModelAdapter.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
                         if(GSYVideoManager.isFullState(SimpleListVideoActivityMode1.this)) {
                             return;
