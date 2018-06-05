@@ -453,3 +453,57 @@ public void onConfigurationChanged(Configuration newConfig) {
     }
 }
 ```
+
+
+### 更多使用
+
+（以下设置全局生效哦）
+
+#### 切换内核
+```
+  //默认ijk播放内核
+  GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKPLAYER); 
+  //EXO 2 播放内核
+  GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER2); 
+  //系统播放器
+  GSYVideoManager.instance().setVideoType(this, GSYVideoType.SYSTEMPLAYER); 
+
+```
+
+#### 切换比例
+
+```
+ 
+//默认显示比例
+GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
+    
+//16:9 
+GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9);
+
+//全屏裁减显示，为了显示正常 CoverImageView 建议使用FrameLayout作为父布局
+GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
+
+//全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
+GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL); 
+
+ //4:3
+GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3); 
+
+```
+
+#### 切换渲染
+```
+//默认TextureView
+GSYVideoType.setRenderType(GSYVideoType.TEXTURE);
+
+//SurfaceView，动画切换等时候效果比较差
+GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
+
+//GLSurfaceView、支持滤镜
+GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+
+```
+
+### 高级自定义
+
+[--- 项目解析说明、包含项目架构和解析](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/GSYVIDEO_PLAYER_PROJECT_INFO.md)***
