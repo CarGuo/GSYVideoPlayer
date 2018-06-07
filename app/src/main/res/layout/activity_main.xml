@@ -181,6 +181,14 @@
 
 
         <Button
+            android:id="@+id/open_switch"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="列表详情切换" />
+
+
+        <Button
             android:id="@+id/open_list_ad"
             android:layout_width="240dp"
             android:layout_height="wrap_content"

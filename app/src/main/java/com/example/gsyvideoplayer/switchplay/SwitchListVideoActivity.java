@@ -1,4 +1,4 @@
-package com.example.gsyvideoplayer.simple;
+package com.example.gsyvideoplayer.switchplay;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,13 +10,13 @@ import com.example.gsyvideoplayer.simple.adapter.SimpleListVideoModeAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 /**
- * 简单列表实现模式1
+ * 可切换列表
  */
-public class SimpleListVideoActivityMode1 extends AppCompatActivity {
+public class SwitchListVideoActivity extends AppCompatActivity {
 
     ListView videoList;
 
-    SimpleListVideoModeAdapter listNormalAdapter;
+    SwitchListVideoAdapter listNormalAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class SimpleListVideoActivityMode1 extends AppCompatActivity {
 
         videoList = (ListView)findViewById(R.id.video_list);
 
-        listNormalAdapter = new SimpleListVideoModeAdapter(this);
+        listNormalAdapter = new SwitchListVideoAdapter(this);
         videoList.setAdapter(listNormalAdapter);
 
         videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -41,9 +41,9 @@ public class SimpleListVideoActivityMode1 extends AppCompatActivity {
                     //当前播放的位置
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
-                    if (GSYVideoManager.instance().getPlayTag().equals(SimpleListVideoModeAdapter.TAG)
+                    if (GSYVideoManager.instance().getPlayTag().equals(SwitchListVideoAdapter.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
-                        if(GSYVideoManager.isFullState(SimpleListVideoActivityMode1.this)) {
+                        if(GSYVideoManager.isFullState(SwitchListVideoActivity.this)) {
                             return;
                         }
                         //如果滑出去了上面和下面就是否，和今日头条一样
@@ -67,13 +67,13 @@ public class SimpleListVideoActivityMode1 extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        GSYVideoManager.onPause();
+        //GSYVideoManager.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        GSYVideoManager.onResume();
+        //GSYVideoManager.onResume();
     }
 
     @Override

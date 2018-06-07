@@ -16,7 +16,7 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleListVideoModel2Adapter extends BaseAdapter {
+public class SimpleListVideoMode2Adapter extends BaseAdapter {
 
     public final static String TAG = "TT22";
 
@@ -34,7 +34,7 @@ public class SimpleListVideoModel2Adapter extends BaseAdapter {
 
     private GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
 
-    public SimpleListVideoModel2Adapter(Context context, GSYVideoHelper smallVideoHelper, GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder) {
+    public SimpleListVideoMode2Adapter(Context context, GSYVideoHelper smallVideoHelper, GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder) {
         super();
         this.context = context;
         this.smallVideoHelper = smallVideoHelper;
@@ -67,7 +67,7 @@ public class SimpleListVideoModel2Adapter extends BaseAdapter {
         final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.list_video_simple_model2, null);
+            convertView = inflater.inflate(R.layout.list_video_simple_mode2, null);
             holder.videoContainer = (FrameLayout) convertView.findViewById(R.id.list_item_container);
             holder.playerBtn = (ImageView) convertView.findViewById(R.id.list_item_btn);
             holder.imageView = new ImageView(context);
