@@ -1,5 +1,6 @@
 package com.example.gsyvideoplayer.switchplay;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -37,12 +38,6 @@ public class SwitchUtil {
         gsyVideoPlayer.setSwitchTitle(title);
     }
 
-
-    public static void gotoDetail(Context context, String url) {
-        Intent intent = new Intent(context, SwitchDetailActivity.class);
-        intent.putExtra(SwitchDetailActivity.URL, url);
-        context.startActivity(intent);
-    }
 
     public static void savePlayState(SwitchVideo switchVideo) {
         sSwitchVideo = switchVideo.saveState();

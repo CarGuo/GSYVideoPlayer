@@ -178,13 +178,13 @@
         <activity
             android:name=".switchplay.SwitchListVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.AppCompat.Translucent"
+            android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".switchplay.SwitchDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.AppCompat.Translucent"
+            android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
 
         <meta-data
