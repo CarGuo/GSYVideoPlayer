@@ -1,7 +1,13 @@
 package com.example.gsyvideoplayer.switchplay;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +26,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 public class SwitchDetailActivity extends AppCompatActivity {
 
     public static final String URL = "url";
+    private static final String OPTION_VIEW = "view";
 
     SwitchVideo detailPlayer;
 
@@ -27,6 +34,13 @@ public class SwitchDetailActivity extends AppCompatActivity {
     private boolean isPause;
 
     private OrientationUtils orientationUtils;
+
+    public static void startTActivity(Activity activity, View transitionView) {
+        Intent intent = new Intent(activity, SwitchDetailActivity.class);
+        // 这里指定了共享的视图元素
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView, OPTION_VIEW);
+        ActivityCompat.startActivity(activity, intent, options.toBundle());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +93,10 @@ public class SwitchDetailActivity extends AppCompatActivity {
         });
 
         detailPlayer.setSurfaceToPlay();
+
+
+        // 这里指定了被共享的视图元素
+        ViewCompat.setTransitionName(detailPlayer, OPTION_VIEW);
     }
 
     @Override

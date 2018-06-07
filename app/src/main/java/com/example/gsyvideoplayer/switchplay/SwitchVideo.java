@@ -1,5 +1,6 @@
 package com.example.gsyvideoplayer.switchplay;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -34,7 +35,7 @@ public class SwitchVideo extends StandardGSYVideoPlayer {
                 if (isInPlayingState()) {
                     SwitchUtil.savePlayState(SwitchVideo.this);
                     getGSYVideoManager().setLastListener(SwitchVideo.this);
-                    SwitchUtil.gotoDetail(getContext(), mOriginUrl);
+                    SwitchDetailActivity.startTActivity((Activity) getContext(), SwitchVideo.this);
                 }
             }
         });
