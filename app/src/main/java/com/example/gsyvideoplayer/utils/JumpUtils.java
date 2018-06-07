@@ -32,6 +32,7 @@ import com.example.gsyvideoplayer.ScrollingActivity;
 import com.example.gsyvideoplayer.WebDetailActivity;
 import com.example.gsyvideoplayer.WindowActivity;
 import com.example.gsyvideoplayer.exo.DetailExoListPlayer;
+import com.example.gsyvideoplayer.switchplay.SwitchListVideoActivity;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -321,6 +322,12 @@ public class JumpUtils {
      */
     public static void gotoFilter(Activity activity) {
         Intent intent = new Intent(activity, DetailFilterActivity.class);
+        activity.startActivity(intent);
+    }
+
+
+    public static void goToSwitch(Activity activity) {
+        Intent intent = new Intent(activity, SwitchListVideoActivity.class);
         activity.startActivity(intent);
     }
 

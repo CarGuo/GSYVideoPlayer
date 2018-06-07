@@ -8,7 +8,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.R;
-import com.example.gsyvideoplayer.simple.adapter.SimpleListVideoModel2Adapter;
+import com.example.gsyvideoplayer.simple.adapter.SimpleListVideoMode2Adapter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -26,7 +26,7 @@ public class SimpleListVideoActivityMode2 extends AppCompatActivity {
 
     GSYVideoHelper smallVideoHelper;
 
-    SimpleListVideoModel2Adapter listVideoAdapter;
+    SimpleListVideoMode2Adapter listVideoAdapter;
 
     GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
 
@@ -59,7 +59,7 @@ public class SimpleListVideoActivityMode2 extends AppCompatActivity {
                     public void onQuitSmallWidget(String url, Object... objects) {
                         super.onQuitSmallWidget(url, objects);
                         //大于0说明有播放,//对应的播放列表TAG
-                        if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(SimpleListVideoModel2Adapter.TAG)) {
+                        if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(SimpleListVideoMode2Adapter.TAG)) {
                             //当前播放的位置
                             int position = smallVideoHelper.getPlayPosition();
                             //不可视的是时候
@@ -75,7 +75,7 @@ public class SimpleListVideoActivityMode2 extends AppCompatActivity {
 
         smallVideoHelper.setGsyVideoOptionBuilder(gsySmallVideoHelperBuilder);
 
-        listVideoAdapter = new SimpleListVideoModel2Adapter(this, smallVideoHelper, gsySmallVideoHelperBuilder);
+        listVideoAdapter = new SimpleListVideoMode2Adapter(this, smallVideoHelper, gsySmallVideoHelperBuilder);
         listVideoAdapter.setRootView(activityListVideo);
         videoList.setAdapter(listVideoAdapter);
 
@@ -89,7 +89,7 @@ public class SimpleListVideoActivityMode2 extends AppCompatActivity {
                 SimpleListVideoActivityMode2.this.firstVisibleItem = firstVisibleItem;
                 lastVisibleItem = firstVisibleItem + visibleItemCount;
                 //大于0说明有播放,//对应的播放列表TAG
-                if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(SimpleListVideoModel2Adapter.TAG)) {
+                if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(SimpleListVideoMode2Adapter.TAG)) {
                     //当前播放的位置
                     int position = smallVideoHelper.getPlayPosition();
                     //不可视的是时候
