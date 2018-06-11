@@ -1,9 +1,9 @@
 allprojects {
     repositories {
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com' }
         jcenter()
+        maven { url 'https://maven.google.com' }
         google()
+        maven { url 'https://jitpack.io' }
     }
 }
 
