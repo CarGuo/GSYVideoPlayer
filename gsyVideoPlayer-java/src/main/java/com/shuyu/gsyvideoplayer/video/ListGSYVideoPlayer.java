@@ -106,6 +106,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         return set;
     }
 
+
     @Override
     protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
         super.cloneParams(from, to);
@@ -142,6 +143,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
 
     @Override
     public void onCompletion() {
+        releaseNetWorkState();
         if (mPlayPosition < (mUriList.size())) {
             return;
         }
