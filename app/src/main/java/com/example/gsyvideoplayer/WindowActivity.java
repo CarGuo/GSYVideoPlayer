@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -56,8 +57,7 @@ public class WindowActivity extends AppCompatActivity {
 
     @RequiresApi(api = 23)
     private void requestAlertWindowPermission() {
-        Intent intent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION");
-        intent.setData(Uri.parse("package:" + getPackageName()));
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
         startActivityForResult(intent, 1);
     }
 
