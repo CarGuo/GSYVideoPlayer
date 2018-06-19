@@ -71,10 +71,10 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
                 .setSetUpLazy(true)//lazy可以防止滑动卡顿
                 .setVideoTitle(title)
                 .setCacheWithPlay(true)
-                .setRotateViewAuto(true)
+                .setRotateViewAuto(false)
                 .setLockLand(true)
                 .setPlayTag(TAG)
-                .setShowFullAnimation(true)
+                .setShowFullAnimation(false)
                 .setNeedLockFull(true)
                 .setPlayPosition(position)
                 .setVideoAllCallBack(new GSYSampleCallBack() {

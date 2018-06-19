@@ -28,6 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 
 public class DetailPlayer extends AppCompatActivity {
@@ -66,7 +67,12 @@ public class DetailPlayer extends AppCompatActivity {
         //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
         //list<VideoOptionModel> list = new ArrayList<>();
         //list.add(videoOptionModel);
-        //GSYVideoManager.instance().setOptionModelList(list);
+
+        List<VideoOptionModel> list = new ArrayList<>();
+        //硬解码：1、打开，0、关闭
+        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tcp");
+        list.add(videoOptionModel);
+        GSYVideoManager.instance().setOptionModelList(list);
 
         //GSYVideoManager.instance().setTimeOut(4000, true);
 
@@ -238,11 +244,15 @@ public class DetailPlayer extends AppCompatActivity {
         //断网自动重新链接，url前接上ijkhttphook:
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
 
-        String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+        //String url = "http://120.27.209.83/video/2018/2b0532425dd6401cacffc89eef50221e.avi";
         //String url = "http://qiniu.carmmi.com/image/132451525666042.mp4";
         //String url = "http://ucp.wn.sunmath.cn/file-upload/gYQJHxK9iNQKJeWyS/V80418-103803.mp4?rc_uid=7sCFCGoaF2iTc9vH9&rc_token=prJK-xGutKmy2LDQO-OZASjob0o1u_s3e5SgMHmgjtn";
         //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
         //String url = "file://"+ Environment.getExternalStorageDirectory().getPath() + "Download/132451525666042.mp4";
+        //String url = "file://"+ Environment.getExternalStorageDirectory().getPath() + "/3333.avi";
+        //String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
+        String url = "http://120.27.209.83/video/2018/2b0532425dd6401cacffc89eef50221e.avi";
 
         //String url =  "http://ipsimg-huabei2.speiyou.cn/010/video/other/20180427/40288b156241ec6301624243bdf7021e/40288b156290270d0162a3e7eb2e0726/1524814477/movie.mp4";
         //String url =  "http://ipsimg-huabei2.speiyou.cn/010/video/other/20180424/40288b156290270d0162a3db8cdd033e/40288b156290270d0162a3e8207f074f/e787a64c-f2d0-48fe-896d-246af05f111a.mp4";
@@ -254,7 +264,8 @@ public class DetailPlayer extends AppCompatActivity {
 
         //String url = "rtsp://ajj:12345678@218.21.217.122:65523/h264/ch40/sub/av_stream";
         //String url = "rtsp://ajj:ajj12345678@218.21.217.122:65522/h264/ch15/sub/av_stream";//String url =  "rtsp://cloud.easydarwin.org:554/stream0.sdp";
-        //String url = "http://s.swao.cn/o_1c4gm8o1nniu1had13bk1t0l1rq64m.mov";
+        //String url = "http://s.swao.cn/o_1c4gm8o
+        // 1nniu1had13bk1t0l1rq64m.mov";
         //String url = "http://api.ciguang.tv/avideo/play?num=02-041-0491&type=flv&v=1&client=android";
         //String url = "http://video.7k.cn/app_video/20171213/276d8195/v.m3u8.mp4";
         //String url = "http://103.233.191.21/riak/riak-bucket/6469ac502e813a4c1df7c99f364e70c1.mp4";

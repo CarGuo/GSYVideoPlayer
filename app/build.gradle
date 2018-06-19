@@ -23,7 +23,7 @@ android {
         }
         ndk {
             //设置支持的SO库架构
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
+            abiFilters 'armeabi-v7a'
         }
 
     }
@@ -77,7 +77,7 @@ dependencies {
     implementation androidDependencies.support_v4
     implementation androidDependencies.design
 
-    implementation project(':gsyVideoPlayer')
+    //implementation project(':gsyVideoPlayer')
 
     implementation dataDependencies.okhttpUtil
     implementation dataDependencies.okhttp
@@ -91,7 +91,7 @@ dependencies {
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
-    //implementation "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion'
+    implementation "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
 
     //implementation "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
     //implementation "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
