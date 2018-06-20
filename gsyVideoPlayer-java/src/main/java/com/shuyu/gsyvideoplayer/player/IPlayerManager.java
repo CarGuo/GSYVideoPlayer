@@ -63,6 +63,12 @@ public interface IPlayerManager {
      */
     void setSpeedPlaying(float speed, boolean soundTouch);
 
+    /**
+     * Surface是否支持外部lockCanvas，来自定义暂停时的绘制画面
+     * exoplayer目前不支持，因为外部lock后，切换surface会导致异常
+     */
+    boolean isSurfaceSupportLockCanvas();
+
     void setSpeed(float speed, boolean soundTouch);
 
     void start();

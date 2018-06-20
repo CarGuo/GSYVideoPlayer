@@ -145,4 +145,10 @@ public interface GSYVideoViewBridge {
     int getVideoSarNum();
 
     int getVideoSarDen();
+
+    /**
+     * Surface是否支持外部lockCanvas，来自定义暂停时的绘制画面
+     * exoplayer目前不支持，因为外部lock后，切换surface会导致异常
+     */
+    boolean isSurfaceSupportLockCanvas();
 }

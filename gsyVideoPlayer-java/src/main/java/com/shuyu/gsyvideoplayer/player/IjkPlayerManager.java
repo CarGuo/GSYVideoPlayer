@@ -272,6 +272,12 @@ public class IjkPlayerManager implements IPlayerManager {
         return 1;
     }
 
+
+    @Override
+    public boolean isSurfaceSupportLockCanvas() {
+        return true;
+    }
+
     private void initIJKOption(IjkMediaPlayer ijkMediaPlayer, List<VideoOptionModel> optionModelList) {
         if (optionModelList != null && optionModelList.size() > 0) {
             for (VideoOptionModel videoOptionModel : optionModelList) {
