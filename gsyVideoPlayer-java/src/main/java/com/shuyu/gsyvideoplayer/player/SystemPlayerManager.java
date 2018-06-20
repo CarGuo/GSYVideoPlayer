@@ -209,6 +209,10 @@ public class SystemPlayerManager implements IPlayerManager {
         return 1;
     }
 
+    @Override
+    public boolean isSurfaceSupportLockCanvas() {
+        return false;
+    }
 
     private void setSpeed(float speed) {
         if (release) {

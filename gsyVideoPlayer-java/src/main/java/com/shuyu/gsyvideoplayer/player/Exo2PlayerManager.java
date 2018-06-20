@@ -227,4 +227,8 @@ public class Exo2PlayerManager implements IPlayerManager {
         return 1;
     }
 
+    @Override
+    public boolean isSurfaceSupportLockCanvas() {
+        return false;
+    }
 }

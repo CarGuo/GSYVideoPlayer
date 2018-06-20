@@ -127,6 +127,13 @@ IJK编码格式|**[--- 项目支持视频格式（如果遇上黑屏，没声音
 
 ## 五、近期版本
 
+### 5.0.1(2018-xx-xx 未发布)
+* Update ListGSYVideoPlayer 
+* ijkPlayer的ex_so增加avi支持
+* update ExoPlayer to 2.8.1
+* ExoPlayer模式的问题修复
+
+
 ### 5.0.0-beta(2018-05-24)
 * 调整cache机制，抽离cache管理器。
 * update ExoPlayer to 2.8.0，全面针对ExoPlayer进行优化

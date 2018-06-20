@@ -1,6 +1,7 @@
 package com.shuyu.gsyvideoplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -531,6 +532,15 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     @Override
     public int getRotateInfoFlag() {
         return IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED;
+    }
+
+
+    @Override
+    public boolean isSurfaceSupportLockCanvas() {
+        if (playerManager != null) {
+            return playerManager.isSurfaceSupportLockCanvas();
+        }
+        return false;
     }
 
     protected void sendMessage(Message message) {
