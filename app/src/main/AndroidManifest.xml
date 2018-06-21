@@ -138,6 +138,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
+
+        <activity
+            android:name=".ListADVideoActivity2"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+
         <activity
             android:name=".exo.DetailExoListPlayer"
             android:configChanges="orientation|keyboardHidden|screenSize"
