@@ -19,6 +19,7 @@ import com.example.gsyvideoplayer.DetailPlayer;
 import com.example.gsyvideoplayer.FragmentVideoActivity;
 import com.example.gsyvideoplayer.InputUrlDetailActivity;
 import com.example.gsyvideoplayer.ListADVideoActivity;
+import com.example.gsyvideoplayer.ListADVideoActivity2;
 import com.example.gsyvideoplayer.ListMultiVideoActivity;
 import com.example.gsyvideoplayer.ListVideo2Activity;
 import com.example.gsyvideoplayer.ListVideoActivity;
@@ -202,7 +203,8 @@ public class JumpUtils {
      * @param activity
      */
     public static void goToADListVideoPlayer(Activity activity) {
-        Intent intent = new Intent(activity, ListADVideoActivity.class);
+        //Intent intent = new Intent(activity, ListADVideoActivity.class);
+        Intent intent = new Intent(activity, ListADVideoActivity2.class);
         ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
         ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
     }
