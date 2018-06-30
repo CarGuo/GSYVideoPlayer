@@ -45,21 +45,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:5.0.0-beta'
+compile 'com.shuyu:GSYVideoPlayer:5.0.1'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.0-beta'
+compile 'com.shuyu:gsyVideoPlayer-java:5.0.1'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.0-beta'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.0-beta'
-compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.0-beta'
-compile 'com.shuyu:gsyVideoPlayer-x64:5.0.0-beta'
-compile 'com.shuyu:gsyVideoPlayer-x86:5.0.0-beta'
+compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.1'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.1'
+compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.1'
+compile 'com.shuyu:gsyVideoPlayer-x64:5.0.1'
+compile 'com.shuyu:gsyVideoPlayer-x86:5.0.1'
 
 ```
 
@@ -69,9 +69,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.0-beta'
+compile 'com.shuyu:gsyVideoPlayer-java:5.0.1'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.0-beta'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.1'
 
 ```
 
@@ -127,21 +127,11 @@ IJK编码格式|**[--- 项目支持视频格式（如果遇上黑屏，没声音
 
 ## 五、近期版本
 
-### 5.0.1(2018-xx-xx 未发布)
+### 5.0.1(2018-07-01)
 * Update ListGSYVideoPlayer 
 * ijkPlayer的ex_so增加avi支持
-* update ExoPlayer to 2.8.1
+* update ExoPlayer to 2.8.2
 * ExoPlayer模式的问题修复
-
-
-### 5.0.0-beta(2018-05-24)
-* 调整cache机制，抽离cache管理器。
-* update ExoPlayer to 2.8.0，全面针对ExoPlayer进行优化
-* 优化ExoPlayer的问题
-* 增加ExoPlayer循环播放支持
-* 增加ExoPlayer自定义DEMO，演示ExoPlayer实现无缝切换
-* ijk的`logLevel`、`ijkLibLoader`直接通过IJKPlayerManager静态方法设置
-* 进一步调整框架结构和内部耦合度
 
 
 

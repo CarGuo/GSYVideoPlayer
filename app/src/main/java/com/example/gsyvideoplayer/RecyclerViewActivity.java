@@ -106,7 +106,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        GSYVideoManager.onResume();
+        GSYVideoManager.onResume(false);
     }
 
     @Override

@@ -1,5 +1,10 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 5.0.1(2018-07-01)
+* Update ListGSYVideoPlayer 
+* ijkPlayer的ex_so增加avi支持
+* update ExoPlayer to 2.8.2
+* ExoPlayer模式的问题修复
 
 ### 5.0.0-beta(2018-05-24)
 * 调整cache机制，抽离cache管理器。
