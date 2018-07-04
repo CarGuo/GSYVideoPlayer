@@ -122,7 +122,7 @@ GSYVideoManager.instance().setOptionModelList(list);
 #### 11、有画面没声音，有声音没画面。
 1、这种情况一般都是so里没有打包支持的格式，如果需要支持你想要的格式，可以自己重新编译so，在module配置文件加上需要额外支持的格式。github首页有编译教程。
 
-[2、某些时候，TextureView需要开启硬件加速](https://github.com/CarGuo/GSYVideoPlayer/issues/266)
+[2、某些时候，TextureView需要开启硬件加速](https://github.com/CarGuo/GSYVideoPlayer/issues/266) 如application标签中的 `android:hardwareAccelerated="true"`
 
 #### 12、视频声音画面不同步。
 
