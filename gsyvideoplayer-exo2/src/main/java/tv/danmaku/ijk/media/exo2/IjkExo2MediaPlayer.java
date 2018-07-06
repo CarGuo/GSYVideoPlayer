@@ -50,6 +50,9 @@ import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
  */
 public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.EventListener, AnalyticsListener {
 
+
+    public static int ON_POSITION_DISCOUNTINUITY = 2702;
+
     private static final String TAG = "IjkExo2MediaPlayer";
 
     protected Context mAppContext;
@@ -541,7 +544,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     @Override
     public void onPositionDiscontinuity(EventTime eventTime, int reason) {
-
+        notifyOnInfo(ON_POSITION_DISCOUNTINUITY, reason);
     }
 
     @Override
