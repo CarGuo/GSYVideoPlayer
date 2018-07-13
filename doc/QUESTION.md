@@ -297,3 +297,14 @@ VideoOptionModel videoOptionModel =
         list.add(videoOptionModel);
         GSYVideoManager.instance().setOptionModelList(list);
 ```
+
+
+
+#### 更多配置
+
+更多配置可通过下方链接和图片参考配置
+
+![ff_ffplay_options](https://github.com/Bilibili/ijkplayer/blob/cced91e3ae3730f5c63f3605b00d25eafcf5b97b/ijkmedia/ijkplayer/ff_ffplay_options.h)
+
+![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/option1.jpg)
+![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/option2.jpg)

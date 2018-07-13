@@ -20,5 +20,14 @@ ex_so支持的视频编码和音频编码配置可查看[编译配置文件](htt
 
 ex_so多支持了mepg、concat协议，crypto协议。
 
+ffmpeg 支持的编码，解码，容器等格式如下图
+
+![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/code01.jpg)
+![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/code02.jpg)
+![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/code03.jpg)
+![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/code04.jpg)
+![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/code05.jpg)
+![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/code06.jpg)
+
 
 
