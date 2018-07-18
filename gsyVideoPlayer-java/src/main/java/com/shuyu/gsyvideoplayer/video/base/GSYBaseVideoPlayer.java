@@ -141,7 +141,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     @Override
     protected void lockTouchLogic() {
         super.lockTouchLogic();
-        if (mLockCurScreen) {
+        if (!mLockCurScreen) {
             if (mOrientationUtils != null)
                 mOrientationUtils.setEnable(isRotateViewAuto());
         } else {
