@@ -104,7 +104,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     protected boolean mSoundTouch = false;
 
     //是否需要显示暂停锁定效果
-    protected boolean mShowPauseCover = true;
+    protected boolean mShowPauseCover = false;
 
     //是否准备完成前调用了暂停
     protected boolean mPauseBeforePrepared = false;
