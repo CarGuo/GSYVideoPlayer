@@ -10,8 +10,11 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+
+import moe.codeest.enviews.ENDownloadView;
 
 /**
  * 带封面
@@ -80,13 +83,15 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
     @Override
     public GSYBaseVideoPlayer showSmallVideo(Point size, boolean actionBar, boolean statusBar) {
         //下面这里替换成你自己的强制转化
-        SampleCoverVideo sampleCoverVideo =  (SampleCoverVideo)super.showSmallVideo(size, actionBar, statusBar);
+        SampleCoverVideo sampleCoverVideo = (SampleCoverVideo) super.showSmallVideo(size, actionBar, statusBar);
         sampleCoverVideo.mStartButton.setVisibility(GONE);
         sampleCoverVideo.mStartButton = null;
         return sampleCoverVideo;
     }
 
-    /**下方两个重载方法，在播放开始前不屏蔽封面*/
+    /**
+     * 下方两个重载方法，在播放开始前不屏蔽封面
+     */
     @Override
     public void onSurfaceUpdated(Surface surface) {
         super.onSurfaceUpdated(surface);
@@ -103,17 +108,61 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
         super.setViewShowState(view, visibility);
     }
 
-    /**下方两个重载方法，在播放开始不显示底部进度*/
+
+    /**
+     * 下方重载方法，在播放开始不显示底部进度和按键
+     */
+
+    protected boolean byStartedClick;
+
+    @Override
+    protected void onClickUiToggle() {
+        if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
+            setViewShowState(mLockScreen, VISIBLE);
+            return;
+        }
+        byStartedClick = true;
+        super.onClickUiToggle();
+
+    }
+
+    @Override
+    protected void changeUiToNormal() {
+        super.changeUiToNormal();
+        byStartedClick = false;
+    }
+
     @Override
     protected void changeUiToPreparingShow() {
         super.changeUiToPreparingShow();
+        Debuger.printfLog("Sample changeUiToPreparingShow");
         setViewShowState(mBottomContainer, INVISIBLE);
+        setViewShowState(mStartButton, INVISIBLE);
+    }
+
+    @Override
+    protected void changeUiToPlayingBufferingShow() {
+        super.changeUiToPlayingBufferingShow();
+        Debuger.printfLog("Sample changeUiToPlayingBufferingShow");
+        setViewShowState(mBottomContainer, INVISIBLE);
+        setViewShowState(mStartButton, INVISIBLE);
+    }
+
+    @Override
+    protected void changeUiToPlayingShow() {
+        super.changeUiToPlayingShow();
+        Debuger.printfLog("Sample changeUiToPlayingShow");
+        if (!byStartedClick) {
+            setViewShowState(mBottomContainer, INVISIBLE);
+            setViewShowState(mStartButton, INVISIBLE);
+        }
     }
 
     @Override
     public void startAfterPrepared() {
         super.startAfterPrepared();
+        Debuger.printfLog("Sample startAfterPrepared");
         setViewShowState(mBottomContainer, INVISIBLE);
+        setViewShowState(mStartButton, INVISIBLE);
     }
-
 }
