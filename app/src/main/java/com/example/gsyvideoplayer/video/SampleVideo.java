@@ -359,6 +359,18 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         });
         switchVideoTypeDialog.show();
     }
+    @Override
+    protected void changeUiToPreparingShow() {
+        super.changeUiToPreparingShow();
+        setViewShowState(mStartButton, INVISIBLE);
+        setViewShowState(mBottomContainer, INVISIBLE);
+    }
 
+    @Override
+    public void startAfterPrepared() {
+        super.startAfterPrepared();
+        setViewShowState(mStartButton, INVISIBLE);
+        setViewShowState(mBottomContainer, INVISIBLE);
+    }
 
 }
