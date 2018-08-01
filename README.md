@@ -45,21 +45,21 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:5.0.1'
+compile 'com.shuyu:GSYVideoPlayer:5.0.2'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.1'
+compile 'com.shuyu:gsyVideoPlayer-java:5.0.2'
 
 //根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.1'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.1'
-compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.1'
-compile 'com.shuyu:gsyVideoPlayer-x64:5.0.1'
-compile 'com.shuyu:gsyVideoPlayer-x86:5.0.1'
+compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.2'
+compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.2'
+compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.2'
+compile 'com.shuyu:gsyVideoPlayer-x64:5.0.2'
+compile 'com.shuyu:gsyVideoPlayer-x86:5.0.2'
 
 ```
 
@@ -69,9 +69,9 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.1'
+compile 'com.shuyu:gsyVideoPlayer-java:5.0.2'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.1'
+compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.2'
 
 ```
 
@@ -126,6 +126,14 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.1'
 <img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/07.gif" height="240px"/>
 
 ## 五、近期版本
+
+
+### 5.0.2（2018-08-01）
+* Fix跟随屏幕旋转存在的问题。
+* 修改对于Audio冲突时候的处理，子类可以复写方法自行另外处理.
+* fix #1300
+* 默认暂停图片修改为false
+
 
 ### 5.0.1(2018-07-01)
 * Update ListGSYVideoPlayer 
