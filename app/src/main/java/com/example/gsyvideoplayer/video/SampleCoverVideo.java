@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -144,8 +145,10 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
     protected void changeUiToPlayingBufferingShow() {
         super.changeUiToPlayingBufferingShow();
         Debuger.printfLog("Sample changeUiToPlayingBufferingShow");
-        setViewShowState(mBottomContainer, INVISIBLE);
-        setViewShowState(mStartButton, INVISIBLE);
+        if (!byStartedClick) {
+            setViewShowState(mBottomContainer, INVISIBLE);
+            setViewShowState(mStartButton, INVISIBLE);
+        }
     }
 
     @Override
@@ -164,5 +167,11 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
         Debuger.printfLog("Sample startAfterPrepared");
         setViewShowState(mBottomContainer, INVISIBLE);
         setViewShowState(mStartButton, INVISIBLE);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        byStartedClick = true;
+        super.onStartTrackingTouch(seekBar);
     }
 }
