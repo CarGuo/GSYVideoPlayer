@@ -69,7 +69,8 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
         detailPlayer.setRotateViewAuto(false);
         detailPlayer.setLockLand(false);
         detailPlayer.setShowFullAnimation(false);
-        detailPlayer.setNeedLockFull(true);
+        //detailPlayer.setNeedLockFull(true);
+        detailPlayer.setAutoFullWithSize(true);
 
         detailPlayer.setVideoAllCallBack(this);
 
@@ -86,7 +87,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ListGSYVideoPlayer)detailPlayer.getCurrentPlayer()).playNext();
+                ((ListGSYVideoPlayer) detailPlayer.getCurrentPlayer()).playNext();
             }
         });
 
@@ -110,6 +111,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
 
     /**
      * 是否启动旋转横屏，true表示启动
+     *
      * @return true
      */
     @Override
@@ -121,10 +123,9 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
     public void onEnterFullscreen(String url, Object... objects) {
         super.onEnterFullscreen(url, objects);
         //隐藏调全屏对象的返回按键
-        GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer)objects[1];
+        GSYVideoPlayer gsyVideoPlayer = (GSYVideoPlayer) objects[1];
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
     }
-
 
 
     private void resolveNormalVideoUI() {
@@ -135,7 +136,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
 
     private GSYVideoPlayer getCurPlay() {
         if (detailPlayer.getFullWindowPlayer() != null) {
-            return  detailPlayer.getFullWindowPlayer();
+            return detailPlayer.getFullWindowPlayer();
         }
         return detailPlayer;
     }
