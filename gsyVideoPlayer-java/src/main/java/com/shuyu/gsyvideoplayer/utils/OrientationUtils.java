@@ -39,7 +39,7 @@ public class OrientationUtils {
     }
 
     private void init() {
-        orientationEventListener = new OrientationEventListener(activity) {
+        orientationEventListener = new OrientationEventListener(activity.getApplicationContext()) {
             @Override
             public void onOrientationChanged(int rotation) {
                 boolean autoRotateOn = (Settings.System.getInt(activity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
