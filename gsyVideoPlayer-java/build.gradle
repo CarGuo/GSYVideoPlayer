@@ -38,7 +38,7 @@ dependencies {
     api viewDependencies.transitionseverywhere
     //api dataDependencies.videocache
     //api "com.shuyu:GSYVideoPlayer-base:$gsyVideoVersion"
-    api project(':gsyvideoplayer-androidvideocache')
+    api project(':gsyVideoPlayer-proxy_cache')
     api project(':gsyVideoPlayer-base')
 
 
