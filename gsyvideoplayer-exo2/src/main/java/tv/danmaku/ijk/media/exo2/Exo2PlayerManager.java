@@ -1,4 +1,4 @@
-package com.shuyu.gsyvideoplayer.player;
+package tv.danmaku.ijk.media.exo2;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -10,10 +10,10 @@ import com.google.android.exoplayer2.video.DummySurface;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
+import com.shuyu.gsyvideoplayer.player.IPlayerManager;
 
 import java.util.List;
 
-import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**

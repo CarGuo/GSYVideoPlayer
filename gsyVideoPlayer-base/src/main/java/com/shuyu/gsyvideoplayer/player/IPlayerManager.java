@@ -3,8 +3,8 @@ package com.shuyu.gsyvideoplayer.player;
 import android.content.Context;
 import android.os.Message;
 
-import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
+import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 
 import java.util.List;
 

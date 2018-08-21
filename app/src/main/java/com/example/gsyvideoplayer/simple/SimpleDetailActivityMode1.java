@@ -17,7 +17,7 @@ public class SimpleDetailActivityMode1 extends GSYBaseActivityDetail<StandardGSY
 
     StandardGSYVideoPlayer detailPlayer;
 
-    private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+    private String url = "http://7xp06y.com1.z0.glb.clouddn.com/b10/%E4%B8%80%E6%97%A0%E6%89%80%E6%9C%89%E6%9C%89%E6%A2%A6%E8%80%8C%E5%B7%B2%20solo%20cut.mp3";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class SimpleDetailActivityMode1 extends GSYBaseActivityDetail<StandardGSY
     public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
         //内置封面可参考SampleCoverVideo
         ImageView imageView = new ImageView(this);
-        loadCover(imageView, url);
+        //loadCover(imageView, url);
         return new GSYVideoOptionBuilder()
                 .setThumbImageView(imageView)
                 .setUrl(url)

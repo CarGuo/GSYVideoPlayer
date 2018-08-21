@@ -1,13 +1,13 @@
-package com.shuyu.gsyvideoplayer.cache;
+package tv.danmaku.ijk.media.exo2;
 
 import android.content.Context;
 import android.net.Uri;
 
+import com.shuyu.gsyvideoplayer.cache.ICacheManager;
+
 import java.io.File;
 import java.util.Map;
 
-import tv.danmaku.ijk.media.exo2.ExoSourceManager;
-import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
