@@ -1,6 +1,5 @@
 package com.example.gsyvideoplayer;
 
-import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -14,7 +13,7 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager;
 
-//import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -25,12 +24,12 @@ public class GSYApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        //if (LeakCanary.isInAnalyzerProcess(this)) {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
-            //return;
-        //}
-        //LeakCanary.install(this);
+            return;
+        }
+        LeakCanary.install(this);
 
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();
@@ -44,12 +43,12 @@ public class GSYApplication extends MultiDexApplication {
 
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
+        //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
 
         //GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
         //GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 
         //IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
-        //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
     }
 }
