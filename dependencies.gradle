@@ -25,7 +25,7 @@ ext {
     floatWindow = '1.0.6'
 
     //DataLibraries
-    leakcanary = '1.5'
+    leakcanary= '1.6.1'
 
     imageLoader = '4.0.0'
 

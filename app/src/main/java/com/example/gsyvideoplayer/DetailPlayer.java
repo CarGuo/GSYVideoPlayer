@@ -239,8 +239,8 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
 
         //
-        // String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
-        String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/out2.m3u8";
+        String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+        //String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/out2.m3u8";
         //String url = "http://223.110.243.138/PLTV/2510088/224/3221227177/index.m3u8";
         //String url = "http://qiniu.carmmi.com/image/132451525666042.mp4";
         //String url = "http://ucp.wn.sunmath.cn/file-upload/gYQJHxK9iNQKJeWyS/V80418-103803.mp4?rc_uid=7sCFCGoaF2iTc9vH9&rc_token=prJK-xGutKmy2LDQO-OZASjob0o1u_s3e5SgMHmgjtn";
