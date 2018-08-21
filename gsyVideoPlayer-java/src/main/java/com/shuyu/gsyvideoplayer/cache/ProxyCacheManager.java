@@ -60,6 +60,7 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
     @Override
     public void doCacheLogic(Context context, IMediaPlayer mediaPlayer, String originUrl, Map<String, String> header, File cachePath) {
         String url = originUrl;
+        mMapHeadData = header;
         if (url.startsWith("http") && !url.contains("127.0.0.1") && !url.contains(".m3u8")) {
             HttpProxyCacheServer proxy = getProxy(context.getApplicationContext(), cachePath);
             if (proxy != null) {
