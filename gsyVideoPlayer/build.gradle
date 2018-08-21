@@ -32,7 +32,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     api project(':gsyVideoPlayer-java')
-    api project(':gsyvideoplayer-exo2')
+    api project(':gsyVideoPlayer-exo_player2')
     //api project(':gsyVideoPlayer-armv5')
     //api project(':gsyVideoPlayer-armv7a')
     //api project(':gsyVideoPlayer-armv64')
