@@ -112,11 +112,6 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     protected int timeOut = 8 * 1000;
 
     /**
-     * 播放类型，默认IJK
-     */
-    protected int videoType = GSYVideoType.IJKPLAYER;
-
-    /**
      * 是否需要静音
      */
     protected boolean needMute = false;
@@ -143,7 +138,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         if (cacheManager != null) {
             cacheManager.clearCache(context, cacheDir, url);
         } else {
-            getCacheManager(videoType).clearCache(context, cacheDir, url);
+            getCacheManager().clearCache(context, cacheDir, url);
         }
     }
 
@@ -154,12 +149,12 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         mainThreadHandler = new Handler();
     }
 
-    protected IPlayerManager getPlayManager(int videoType) {
-        return PlayerFactory.getPlayManager(videoType);
+    protected IPlayerManager getPlayManager() {
+        return PlayerFactory.getPlayManager();
     }
 
-    protected ICacheManager getCacheManager(int videoType) {
-        return CacheFactory.getCacheManager(videoType);
+    protected ICacheManager getCacheManager() {
+        return CacheFactory.getCacheManager();
     }
 
     @Override
@@ -408,7 +403,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
      */
     @Override
     public boolean cachePreview(Context context, File cacheDir, String url) {
-        return getCacheManager(videoType).cachePreview(context, cacheDir, url);
+        return getCacheManager().cachePreview(context, cacheDir, url);
     }
 
     @Override
@@ -589,8 +584,8 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             if (playerManager != null) {
                 playerManager.release();
             }
-            playerManager = getPlayManager(videoType);
-            cacheManager = getCacheManager(videoType);
+            playerManager = getPlayManager();
+            cacheManager = getCacheManager();
             if (cacheManager != null) {
                 cacheManager.setCacheAvailableListener(this);
             }
@@ -660,21 +655,6 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         if (playerManager != null) {
             playerManager.showDisplay(msg);
         }
-    }
-
-    public int getVideoType() {
-        return videoType;
-    }
-
-    /**
-     * 设置了视频的播放类型
-     * IJKPLAYER = 0; 默认IJK
-     * IJKEXOPLAYER2 = 2;EXOPlayer2
-     * SYSTEMPLAYER = 4;系统播放器
-     */
-    public void setVideoType(Context context, int videoType) {
-        this.context = context.getApplicationContext();
-        this.videoType = videoType;
     }
 
     public void initContext(Context context) {

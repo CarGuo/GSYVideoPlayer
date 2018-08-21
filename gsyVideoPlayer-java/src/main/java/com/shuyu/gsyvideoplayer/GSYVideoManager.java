@@ -60,7 +60,6 @@ public class GSYVideoManager extends GSYVideoBaseManager {
         gsyVideoManager.lastState = videoManager.lastState;
         gsyVideoManager.playPosition = videoManager.playPosition;
         gsyVideoManager.timeOut = videoManager.timeOut;
-        gsyVideoManager.videoType = videoManager.videoType;
         gsyVideoManager.needMute = videoManager.needMute;
         gsyVideoManager.needTimeOutOther = videoManager.needTimeOutOther;
         gsyVideoManager.setListener(listener);

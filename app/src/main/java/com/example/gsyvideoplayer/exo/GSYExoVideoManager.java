@@ -49,7 +49,7 @@ public class GSYExoVideoManager extends GSYVideoBaseManager {
     }
 
     @Override
-    protected IPlayerManager getPlayManager(int videoType) {
+    protected IPlayerManager getPlayManager() {
         return new GSYExoPlayerManager();
     }
 
