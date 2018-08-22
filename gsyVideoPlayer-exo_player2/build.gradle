@@ -31,20 +31,16 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
-    api viewDependencies.ijkplayer_java
-
     api viewDependencies.exo_player2
     api viewDependencies.exo_player2_rtmp
-
-    //api "com.shuyu:GSYVideoPlayer-base:$gsyVideoVersion"
-    api project(':gsyVideoPlayer-base')
+    //api project(':gsyVideoPlayer-base')
+    api "com.shuyu:gsyVideoPlayer-base:$gsyVideoVersion"
 
     //compile fileTree(dir: 'libs', include: ['*.jar'])
     //def viewDependencies = rootProject.ext.viewDependencies
-    //compile viewDependencies.ijkplayer_java
     //compile viewDependencies.exo_player2
     //compile viewDependencies.exo_player2_rtmp
-    //compile "com.shuyu:GSYVideoPlayer-base:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-base:6.0.0-beta"
 
 }
 

@@ -55,7 +55,7 @@ implementation 'com.shuyu:GSYVideoPlayer:6.0.0-beta'
 implementation 'com.shuyu:gsyVideoPlayer-java:6.0.0-beta'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:gsyVideoPlayer-exo2:6.0.0-beta'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.0-beta'
 
 //根据你的需求ijk模式的so
 implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.0-beta'
@@ -75,7 +75,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 implementation 'com.shuyu:gsyVideoPlayer-java:6.0.0-beta'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:gsyVideoPlayer-exo2:6.0.0-beta'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.0-beta'
 
 //更多ijk的编码支持
 implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.0-beta'
