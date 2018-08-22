@@ -103,5 +103,6 @@ dependencies {
 
 
     debugImplementation dataDependencies.leakcanary
+    releaseImplementation dataDependencies.leakcanary_no_op
 
 }
