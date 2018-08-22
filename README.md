@@ -36,7 +36,7 @@
 
 ## 一、使用依赖
 
-##### 新版本调整了代码结构，如更新后显示类路径错误，参考demo调整包路径即可。
+#### 6.0版本调整了部分API，请查看：[--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
 
 ### 1、JCenter 引入方法（推荐）
 
