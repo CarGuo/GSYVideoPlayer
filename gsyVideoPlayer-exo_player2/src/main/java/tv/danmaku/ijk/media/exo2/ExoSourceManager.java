@@ -45,13 +45,16 @@ public class ExoSourceManager {
 
     public static final int TYPE_RTMP = 4;
 
-    protected static Cache mCache;
 
-    protected Context mAppContext;
+    private static Cache mCache;
 
-    protected Map<String, String> mMapHeadData;
+    private Context mAppContext;
 
-    protected String mDataSource;
+    private Map<String, String> mMapHeadData;
+
+    private String mDataSource;
+
+    private static ExoMediaSourceInterceptListener sExoMediaSourceInterceptListener;
 
     private boolean isCached = false;
 
@@ -64,11 +67,24 @@ public class ExoSourceManager {
         mMapHeadData = mapHeadData;
     }
 
+    /**
+     * @param dataSource  链接
+     * @param preview     是否带上header，默认有header自动设置为true
+     * @param cacheEnable 是否需要缓存
+     * @param isLooping   是否循环
+     * @param cacheDir    自定义缓存目录
+     */
     public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+        MediaSource mediaSource = null;
+        if (sExoMediaSourceInterceptListener != null) {
+            mediaSource = sExoMediaSourceInterceptListener.getMediaSource(dataSource, preview, cacheEnable, isLooping, cacheDir);
+        }
+        if (mediaSource != null) {
+            return mediaSource;
+        }
         mDataSource = dataSource;
         Uri contentUri = Uri.parse(dataSource);
         int contentType = inferContentType(dataSource);
-        MediaSource mediaSource;
         switch (contentType) {
             case C.TYPE_SS:
                 mediaSource = new SsMediaSource.Factory(
@@ -102,6 +118,23 @@ public class ExoSourceManager {
         }
         return mediaSource;
     }
+
+
+    /**
+     * 设置ExoPlayer 的 MediaSource 创建拦截
+     */
+    public static void setExoMediaSourceInterceptListener(ExoMediaSourceInterceptListener exoMediaSourceInterceptListener) {
+        sExoMediaSourceInterceptListener = exoMediaSourceInterceptListener;
+    }
+
+    public static void resetExoMediaSourceInterceptListener() {
+        sExoMediaSourceInterceptListener = null;
+    }
+
+    public static ExoMediaSourceInterceptListener getExoMediaSourceInterceptListener() {
+        return sExoMediaSourceInterceptListener;
+    }
+
 
     @C.ContentType
     public static int inferContentType(String fileName) {
@@ -183,7 +216,6 @@ public class ExoSourceManager {
     public boolean hadCached() {
         return isCached;
     }
-
 
     /**
      * 获取SourceFactory，是否带Cache

@@ -2,6 +2,7 @@ package com.example.gsyvideoplayer;
 
 import android.support.multidex.MultiDexApplication;
 
+import com.google.android.exoplayer2.source.MediaSource;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
@@ -11,9 +12,13 @@ import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
 import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager;
+import tv.danmaku.ijk.media.exo2.ExoSourceManager;
 
 import com.squareup.leakcanary.LeakCanary;
+
+import java.io.File;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -49,6 +54,14 @@ public class GSYApplication extends MultiDexApplication {
         //GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 
         //IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
+
+
+        /*ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
+            @Override
+            public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+                return null;
+            }
+        });*/
 
     }
 }
