@@ -45,21 +45,24 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:5.0.2'
+implementation 'com.shuyu:GSYVideoPlayer:6.0.0-beta'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-java:6.0.0-beta'
 
-//根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.2'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.2'
-compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.2'
-compile 'com.shuyu:gsyVideoPlayer-x64:5.0.2'
-compile 'com.shuyu:gsyVideoPlayer-x86:5.0.2'
+//是否需要ExoPlayer模式
+implementation 'com.shuyu:gsyVideoPlayer-exo2:6.0.0-beta'
+
+//根据你的需求ijk模式的so
+implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.0-beta'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.0-beta'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.0-beta'
+implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.0-beta'
+implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.0-beta'
 
 ```
 
@@ -69,9 +72,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-java:6.0.0-beta'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.2'
+//是否需要ExoPlayer模式
+implementation 'com.shuyu:gsyVideoPlayer-exo2:6.0.0-beta'
+
+//更多ijk的编码支持
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.0-beta'
 
 ```
 
@@ -127,7 +134,7 @@ compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.2'
 
 ## 五、近期版本
 
-### 6.0.0-beta (2018-xx-xx)
+### 6.0.0-beta (2018-08-22)
 * 升级 ExoPlayer 到 2.8.4。
 * 修复代理缓存时头部信息不存在问题。
 * 调整代码结构，移除 GSYVideoType 中的内核切换，直接通过 PlayerFactory 装载。

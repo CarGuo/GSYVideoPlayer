@@ -57,7 +57,7 @@ dependencies {
 
     //compile fileTree(dir: 'libs', include: ['*.jar'])
     //compile "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
-    //compile "com.shuyu:GSYVideoPlayer-exo2:$gsyVideoVersion"
+    //compile "com.shuyu:gsyVideoPlayer-exo2:$gsyVideoVersion"
     //compile "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
     //compile "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
     //compile "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
