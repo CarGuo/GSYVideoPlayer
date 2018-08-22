@@ -7,21 +7,24 @@
 #### A、直接引入
 ```
 //完整版引入
-compile 'com.shuyu:GSYVideoPlayer:5.0.0-beta'
+implementation 'com.shuyu:GSYVideoPlayer:6.0.0-beta'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-java:6.0.0-beta'
 
-//根据你的需求
-compile 'com.shuyu:gsyVideoPlayer-armv5:5.0.2'
-compile 'com.shuyu:gsyVideoPlayer-armv7a:5.0.2'
-compile 'com.shuyu:gsyVideoPlayer-arm64:5.0.2'
-compile 'com.shuyu:gsyVideoPlayer-x64:5.0.2'
-compile 'com.shuyu:gsyVideoPlayer-x86:5.0.2'
+//是否需要ExoPlayer模式
+implementation 'com.shuyu:gsyVideoPlayer-exo2:6.0.0-beta'
+
+//根据你的需求ijk模式的so
+implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.0-beta'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.0-beta'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.0-beta'
+implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.0-beta'
+implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.0-beta'
 
 ```
 
@@ -31,70 +34,18 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-compile 'com.shuyu:gsyVideoPlayer-java:5.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-java:6.0.0-beta'
 
-compile 'com.shuyu:gsyVideoPlayer-ex_so:5.0.2'
+//是否需要ExoPlayer模式
+implementation 'com.shuyu:gsyVideoPlayer-exo2:6.0.0-beta'
 
-```
+//更多ijk的编码支持
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.0-beta'
 
-#### D、支持使用ijkPlayer的so
-
-```
-compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
-compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.8.8'
-compile 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
-compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
-compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
 ```
 
 --------------------------------------------------------------------------------
 
 ### 2、JitPack引入方法
 
-#### First、在project下的build.gradle添加
-```
-allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
-}
-```
-
-#### Sencond、在module下的build.gradle添加
-
-**你可以选择下面三种的其中一种，在module下的build.gradle添加。**
-
-#### A、直接引入
-```
-//完整版引入
-compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v5.0.2'
-
-```
-
-#### B、添加java和你想要的so支持：
-
-```
-
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v5.0.2'
-
-//根据你的需求
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v5.0.2'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v5.0.2'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v5.0.2'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v5.0.2'
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v5.0.2'
-
-```
-
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
-
-A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
-C 方法引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
- 
-```
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v5.0.2'
-
-compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v5.0.2'
-
-```
+Not Support after 6.x.x 
