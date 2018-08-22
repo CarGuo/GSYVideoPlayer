@@ -1,5 +1,46 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+### 6.0.0-beta (2018-08-22)
+* 升级 ExoPlayer 到 2.8.4。
+* 修复代理缓存时头部信息不存在问题。
+* 调整代码结构，移除 GSYVideoType 中的内核切换，直接通过 PlayerFactory 装载。
+* 调整代码结构，ExoPlayer可单独依赖，通过 PlayerFactory 装载，更方便自定义PlayerManager。
+
+``` 
+//PlayerFactory.setPlayManager(new Exo2PlayerManager());//EXO模式
+//PlayerFactory.setPlayManager(new SystemPlayerManager());//系统模式
+//PlayerFactory.setPlayManager(new IjkPlayerManager());//ijk模式
+```
+
+* 调整代码结构，CacheFactory 更方便自定义，默认 ProxyCacheManager。
+
+``` 
+//CacheFactory.setCacheManager(new ExoPlayerCacheManager());//exo缓存模式，支持m3u8，只支持exo
+//CacheFactory.setCacheManager(new ProxyCacheManager());//代理缓存模式，支持所有模式，不支持m3u8等
+```
+
+* 增加 ExoMediaSourceInterceptListener，方便 Exo 模式下使用自定义的 MediaSource。
+
+``` 
+ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
+           /**
+            * @param dataSource  链接
+            * @param preview     是否带上header，默认有header自动设置为true
+            * @param cacheEnable 是否需要缓存
+            * @param isLooping   是否循环
+            * @param cacheDir    自定义缓存目录
+            * @return 返回不为空时，使用返回的自定义mediaSource
+            */
+            @Override
+            public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+                return null;
+            }
+});
+```
+
+
+
 ### 5.0.2（2018-08-01）
 * Fix跟随屏幕旋转存在的问题。
 * 修改对于Audio冲突时候的处理，子类可以复写方法自行另外处理.
