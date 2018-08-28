@@ -9,6 +9,8 @@ import android.view.Window;
 
 import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.GSYVideoBaseManager;
+import com.shuyu.gsyvideoplayer.player.IPlayerManager;
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
@@ -37,6 +39,10 @@ public class CustomManager extends GSYVideoBaseManager {
         init();
     }
 
+    @Override
+    protected IPlayerManager getPlayManager() {
+        return new IjkPlayerManager();
+    }
 
     /**
      * 退出全屏，主要用于返回键
