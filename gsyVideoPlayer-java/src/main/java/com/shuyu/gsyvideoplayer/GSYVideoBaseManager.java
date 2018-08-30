@@ -138,7 +138,9 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         if (cacheManager != null) {
             cacheManager.clearCache(context, cacheDir, url);
         } else {
-            getCacheManager().clearCache(context, cacheDir, url);
+            if(getCacheManager() != null) {
+                getCacheManager().clearCache(context, cacheDir, url);
+            }
         }
     }
 
@@ -403,7 +405,10 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
      */
     @Override
     public boolean cachePreview(Context context, File cacheDir, String url) {
-        return getCacheManager().cachePreview(context, cacheDir, url);
+        if(getCacheManager() != null) {
+            return getCacheManager().cachePreview(context, cacheDir, url);
+        }
+        return  false;
     }
 
     @Override

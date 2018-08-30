@@ -39,12 +39,12 @@ public class GSYApplication extends MultiDexApplication {
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();
 
-        //PlayerFactory.setPlayManager(new Exo2PlayerManager());//EXO模式
-        //PlayerFactory.setPlayManager(new SystemPlayerManager());//系统模式
-        //PlayerFactory.setPlayManager(new IjkPlayerManager());//ijk模式
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);//EXO模式
+        //PlayerFactory.setPlayManager(SystemPlayerManager.class);//系统模式
+        //PlayerFactory.setPlayManager(IjkPlayerManager.class);//ijk模式
 
-        //CacheFactory.setCacheManager(new ExoPlayerCacheManager());//exo缓存模式，支持m3u8，只支持exo
-        //CacheFactory.setCacheManager(new ProxyCacheManager());//代理缓存模式，支持所有模式，不支持m3u8等
+        CacheFactory.setCacheManager(ExoPlayerCacheManager.class);//exo缓存模式，支持m3u8，只支持exo
+        //CacheFactory.setCacheManager(ProxyCacheManager.class);//代理缓存模式，支持所有模式，不支持m3u8等
 
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
