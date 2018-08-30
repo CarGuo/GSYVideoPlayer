@@ -6,16 +6,23 @@ package com.shuyu.gsyvideoplayer.cache;
  */
 public class CacheFactory {
 
-    private static ICacheManager sICacheManager;
+    private static Class<? extends ICacheManager> sICacheManager;
 
-    public static void setCacheManager(ICacheManager cacheManager) {
+    public static void setCacheManager(Class<? extends ICacheManager>  cacheManager) {
         sICacheManager = cacheManager;
     }
 
     public static ICacheManager getCacheManager() {
         if (sICacheManager == null) {
-            sICacheManager = new ProxyCacheManager();
+            sICacheManager = ProxyCacheManager.class;
         }
-        return sICacheManager;
+        try {
+            return sICacheManager.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
