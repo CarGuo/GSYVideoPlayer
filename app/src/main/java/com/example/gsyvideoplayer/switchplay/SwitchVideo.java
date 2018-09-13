@@ -35,6 +35,9 @@ public class SwitchVideo extends StandardGSYVideoPlayer {
                 if (isInPlayingState()) {
                     SwitchUtil.savePlayState(SwitchVideo.this);
                     getGSYVideoManager().setLastListener(SwitchVideo.this);
+                    //fixme 页面跳转是，元素共享，效果会有一个中间中间控件的存在
+                    //fixme 这时候中间控件 CURRENT_STATE_PLAYING，会触发 startProgressTimer
+                    //FIXME 但是没有cancel
                     SwitchDetailActivity.startTActivity((Activity) getContext(), SwitchVideo.this);
                 }
             }
