@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -88,7 +89,13 @@ public class SwitchListVideoAdapter extends BaseAdapter {
             viewGroup.removeView(holder.imageView);
         }
         holder.gsyVideoPlayer.setThumbImageView(holder.imageView);
-        holder.gsyVideoPlayer.getThumbImageViewLayout().setVisibility(View.VISIBLE);
+
+        if (GSYVideoManager.instance().getPlayTag().equals(SwitchListVideoAdapter.TAG)
+                && (position == GSYVideoManager.instance().getPlayPosition())) {
+            holder.gsyVideoPlayer.getThumbImageViewLayout().setVisibility(View.GONE);
+        } else {
+            holder.gsyVideoPlayer.getThumbImageViewLayout().setVisibility(View.VISIBLE);
+        }
 
         return convertView;
 
