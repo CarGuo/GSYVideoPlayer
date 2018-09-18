@@ -24,7 +24,9 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +86,8 @@ public class DetailPlayer extends AppCompatActivity {
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
+        Map<String, String> header = new HashMap<>();
+        header.put("ee", "33");
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setThumbImageView(imageView)
                 .setIsTouchWiget(true)
@@ -93,7 +97,8 @@ public class DetailPlayer extends AppCompatActivity {
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
                 .setUrl(url)
-                .setCacheWithPlay(false)
+                .setMapHeadData(header)
+                .setCacheWithPlay(true)
                 .setVideoTitle("测试视频")
                 .setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override

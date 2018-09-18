@@ -180,6 +180,7 @@ public class HttpUrlSource implements Source {
         if (extraHeaders == null) {
             return;
         }
+        HttpProxyCacheDebuger.printfError("****** injectCustomHeaders ****** :" + extraHeaders.size());
         for (Map.Entry<String, String> header : extraHeaders.entrySet()) {
             connection.setRequestProperty(header.getKey(), header.getValue());
         }
