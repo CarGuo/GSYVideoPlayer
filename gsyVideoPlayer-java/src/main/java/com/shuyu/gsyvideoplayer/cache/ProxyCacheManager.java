@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer.cache;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.danikula.videocache.CacheListener;
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -62,7 +63,7 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
         String url = originUrl;
         mMapHeadData = header;
         if (url.startsWith("http") && !url.contains("127.0.0.1") && !url.contains(".m3u8")) {
-            HttpProxyCacheServer proxy = getProxy(context.getApplicationContext(), cachePath);
+            HttpProxyCacheServer proxy = getProxy(context.getApplicationContext(), cachePath, header);
             if (proxy != null) {
                 //此处转换了url，然后再赋值给mUrl。
                 url = proxy.getProxyUrl(url);
@@ -124,7 +125,7 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
 
     @Override
     public boolean cachePreview(Context context, File cacheDir, String url) {
-        HttpProxyCacheServer proxy = getProxy(context.getApplicationContext(), cacheDir);
+        HttpProxyCacheServer proxy = getProxy(context.getApplicationContext(), cacheDir, mMapHeadData);
         if (proxy != null) {
             //此处转换了url，然后再赋值给mUrl。
             url = proxy.getProxyUrl(url);
@@ -146,13 +147,13 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
     /**
      * 创建缓存代理服务,带文件目录的.
      */
-    public HttpProxyCacheServer newProxy(Context context, File file) {
+    public HttpProxyCacheServer newProxy(Context context, File file, Map<String, String> header) {
         if (!file.exists()) {
             file.mkdirs();
         }
         HttpProxyCacheServer.Builder builder = new HttpProxyCacheServer.Builder(context);
         builder.cacheDirectory(file);
-        builder.headerInjector(new UserAgentHeadersInjector());
+        builder.headerInjector(new UserAgentHeadersInjector(header));
         mCacheDir = file;
         return builder.build();
     }
@@ -164,15 +165,20 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
     /**
      * 创建缓存代理服务
      */
-    public HttpProxyCacheServer newProxy(Context context) {
+    public HttpProxyCacheServer newProxy(Context context, Map<String, String> header) {
         return new HttpProxyCacheServer.Builder(context.getApplicationContext())
-                .headerInjector(new UserAgentHeadersInjector()).build();
+                .headerInjector(new UserAgentHeadersInjector(header)).build();
     }
 
     /**
      * for android video cache header
      */
     private class UserAgentHeadersInjector implements HeaderInjector {
+
+        Map<String, String> mMapHeadData;
+        public UserAgentHeadersInjector(Map<String, String> header){
+            mMapHeadData = header;
+        }
 
         @Override
         public Map<String, String> addHeaders(String url) {
@@ -184,21 +190,23 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
     /**
      * 获取缓存代理服务
      */
-    protected static HttpProxyCacheServer getProxy(Context context) {
+    protected static HttpProxyCacheServer getProxy(Context context, Map<String, String> header) {
+
+
         HttpProxyCacheServer proxy = ProxyCacheManager.instance().proxy;
         return proxy == null ? (ProxyCacheManager.instance().proxy =
-                ProxyCacheManager.instance().newProxy(context)) : proxy;
+                ProxyCacheManager.instance().newProxy(context, header)) : proxy;
     }
 
 
     /**
      * 获取缓存代理服务,带文件目录的
      */
-    public static HttpProxyCacheServer getProxy(Context context, File file) {
+    public static HttpProxyCacheServer getProxy(Context context, File file, Map<String, String> header) {
 
         //如果为空，返回默认的
         if (file == null) {
-            return getProxy(context);
+            return getProxy(context, header);
         }
 
         //如果已经有缓存文件路径，那么判断缓存文件路径是否一致
@@ -212,13 +220,13 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
             }
             //开启新的
             return (ProxyCacheManager.instance().proxy =
-                    ProxyCacheManager.instance().newProxy(context, file));
+                    ProxyCacheManager.instance().newProxy(context, file, header));
         } else {
             //还没有缓存文件的或者一致的，返回原来
             HttpProxyCacheServer proxy = ProxyCacheManager.instance().proxy;
 
             return proxy == null ? (ProxyCacheManager.instance().proxy =
-                    ProxyCacheManager.instance().newProxy(context, file)) : proxy;
+                    ProxyCacheManager.instance().newProxy(context, file, header)) : proxy;
         }
     }
 
