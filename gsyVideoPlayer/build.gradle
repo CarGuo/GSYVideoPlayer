@@ -40,17 +40,17 @@ dependencies {
     //api project(':gsyVideoPlayer-x86_64')
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
-    //api project(':gsyVideoPlayer-ex_so')
+    api project(':gsyVideoPlayer-ex_so')
 
     //api "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
     //api "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
     api "com.shuyu:GSYVideoPlayer-exo2:$gsyVideoVersion"
-    api "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
-    api "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
-    api "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
-    api "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
-    api "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
+//    api "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
+//    api "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
+//    api "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
+//    api "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
+//    api "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
     //api "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
