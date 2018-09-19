@@ -134,6 +134,21 @@ implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.0-beta'
 
 ## 五、近期版本
 
+### 6.0.1 (未发布)
+* 正式发布6.0版本，调整player和cache加载模式。
+
+``` 
+PlayerFactory.setPlayManager(Exo2PlayerManager.class);//EXO模式
+PlayerFactory.setPlayManager(SystemPlayerManager.class);//系统模式
+PlayerFactory.setPlayManager(IjkPlayerManager.class);//ijk模式
+
+CacheFactory.setCacheManager(ExoPlayerCacheManager.class);//exo缓存模式，支持m3u8，只支持exo
+CacheFactory.setCacheManager(ProxyCacheManager.class);//代理缓存模式，支持所有模式，不支持m3u8等
+```
+* 修复 ProxyCacheManager header设置无效问题。
+* 去除无用资源。
+* 修复某种场景下的内存泄漏问题。
+
 ### 6.0.0-beta (2018-08-22)
 * 升级 ExoPlayer 到 2.8.4。
 * 修复代理缓存时头部信息不存在问题。
