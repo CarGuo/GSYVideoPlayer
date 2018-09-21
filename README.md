@@ -1,7 +1,7 @@
 
 ![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/home_logo.png)
 
-## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)（兼容系统MediaPlayer与EXOPlayer2），实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
+## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)（兼容系统MediaPlayer与EXOPlayer2），实现了多功能的视频(音频)播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
 类型 | 功能
 -------- | ---
@@ -18,6 +18,7 @@
 **广告**|**片头广告、跳过广告支持、中间插入广告功能。**
 **更多**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持；锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **自定义**|**可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
+**另外**|**对主流音频格式的播放支持友好。**
 
 [ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer-java/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer-java/_latestVersion)
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
