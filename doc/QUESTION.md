@@ -298,6 +298,10 @@ VideoOptionModel videoOptionModel =
         GSYVideoManager.instance().setOptionModelList(list);
 ```
 
+#### 21、AudioManager泄漏
+
+https://stackoverflow.com/questions/6445052/android-context-memory-leak-listview-due-to-audiomanager
+
 
 
 #### 更多配置
