@@ -2,6 +2,7 @@
 
 #### ijkplayer模式的，你可能会需要的option大全 : [ff_ffplay_options.h](https://github.com/Bilibili/ijkplayer/blob/cced91e3ae3730f5c63f3605b00d25eafcf5b97b/ijkmedia/ijkplayer/ff_ffplay_options.h)
 
+**ijkplayer问题第三方总结 https://juejin.im/entry/5bc7e7d6e51d450e4f392088**
 
 #### 0、依赖不成功的，如果是jitpach的依赖，记得在project下的build.gradle文件jitpack的依赖。
 ```
@@ -308,7 +309,6 @@ https://stackoverflow.com/questions/6445052/android-context-memory-leak-listview
 
 更多配置可通过下方链接和图片参考配置
 
-**ijkplayer问题第三方总结 https://juejin.im/entry/5bc7e7d6e51d450e4f392088**
 
 ##### [ff_ffplay_options](https://github.com/Bilibili/ijkplayer/blob/cced91e3ae3730f5c63f3605b00d25eafcf5b97b/ijkmedia/ijkplayer/ff_ffplay_options.h)
 
