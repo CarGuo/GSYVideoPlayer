@@ -12,6 +12,9 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -62,18 +65,23 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
             url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
             title = "哦？Title？";
         }
+
+
+        Map<String, String> header = new HashMap<>();
+        header.put("ee", "33");
+
         //防止错位，离开释放
         //gsyVideoPlayer.initUIState();
         gsyVideoOptionBuilder
                 .setIsTouchWiget(false)
                 .setThumbImageView(imageView)
                 .setUrl(url)
-                .setSetUpLazy(true)//lazy可以防止滑动卡顿
                 .setVideoTitle(title)
-                .setCacheWithPlay(true)
+                .setCacheWithPlay(false)
                 .setRotateViewAuto(true)
                 .setLockLand(true)
                 .setPlayTag(TAG)
+                .setMapHeadData(header)
                 .setShowFullAnimation(true)
                 .setNeedLockFull(true)
                 .setPlayPosition(position)
