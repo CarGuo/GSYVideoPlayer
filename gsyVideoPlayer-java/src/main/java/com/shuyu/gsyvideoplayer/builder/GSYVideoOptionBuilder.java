@@ -529,7 +529,9 @@ public class GSYVideoOptionBuilder {
 
     /**
      * 在播放前才真正执行setup
+     * 目前弃用，请使用正常setup
      */
+    @Deprecated
     public GSYVideoOptionBuilder setSetUpLazy(boolean setUpLazy) {
         this.mSetUpLazy = setUpLazy;
         return this;
