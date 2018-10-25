@@ -11,6 +11,7 @@ import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.view.LoadingDialog;
 import com.example.gsyvideoplayer.view.SwitchVideoTypeDialog;
+import com.shuyu.gsyvideoplayer.GSYVideoBaseManager;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -127,6 +128,8 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
     public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
         SmartPickVideo sampleVideo = (SmartPickVideo) super.startWindowFullscreen(context, actionBar, statusBar);
         sampleVideo.mSourcePosition = mSourcePosition;
+        sampleVideo.mListItemRect = mListItemRect;
+        sampleVideo.mListItemSize = mListItemSize;
         sampleVideo.mType = mType;
         sampleVideo.mUrlList = mUrlList;
         sampleVideo.mTypeText = mTypeText;
@@ -221,13 +224,14 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
         @Override
         public void onSeekComplete() {
             if (mTmpManager != null) {
-                GSYVideoManager.instance().releaseMediaPlayer();
+                GSYVideoBaseManager manager = GSYVideoManager.instance();
                 GSYVideoManager.changeManager(mTmpManager);
-                mTmpManager.setLastListener(SmartPickVideo.this);
-                mTmpManager.setListener(SmartPickVideo.this);
+                mTmpManager.setLastListener(manager.lastListener());
+                mTmpManager.setListener(manager.listener());
                 mTmpManager.setDisplay(mSurface);
                 changeUiToPlayingClear();
                 resolveChangedResult();
+                manager.releaseMediaPlayer();
             }
         }
 
