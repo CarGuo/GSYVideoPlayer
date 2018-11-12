@@ -4,6 +4,7 @@ package tv.danmaku.ijk.media.exo2;
 import android.content.Context;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 import android.view.Surface;
@@ -179,7 +180,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
         rendererFactory = new DefaultRenderersFactory(mAppContext, extensionRendererMode);
         DefaultLoadControl loadControl = new DefaultLoadControl();
-        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, rendererFactory, mTrackSelector, loadControl, null);
+        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, rendererFactory, mTrackSelector, loadControl, null, Looper.getMainLooper());
         mInternalPlayer.addListener(this);
         mInternalPlayer.addAnalyticsListener(this);
         mInternalPlayer.addListener(mEventLogger);
