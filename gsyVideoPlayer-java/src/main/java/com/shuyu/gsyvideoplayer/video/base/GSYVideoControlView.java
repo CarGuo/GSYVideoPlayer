@@ -609,21 +609,26 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     @Override
-    public void onBufferingUpdate(int percent) {
-        if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
-            if (percent != 0) {
-                setTextAndProgress(percent);
-                mBufferPoint = percent;
-                Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
+    public void onBufferingUpdate(final int percent) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
+                    if (percent != 0) {
+                        setTextAndProgress(percent);
+                        mBufferPoint = percent;
+                        Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
+                    }
+                    if (mProgressBar == null) {
+                        return;
+                    }
+                    //循环清除进度
+                    if (mLooping && mHadPlay && percent == 0 && mProgressBar.getProgress() >= (mProgressBar.getMax() - 1)) {
+                        loopSetProgressAndTime();
+                    }
+                }
             }
-            if (mProgressBar == null) {
-                return;
-            }
-            //循环清除进度
-            if (mLooping && mHadPlay && percent == 0 && mProgressBar.getProgress() >= (mProgressBar.getMax() - 1)) {
-                loopSetProgressAndTime();
-            }
-        }
+        });
     }
 
     /**

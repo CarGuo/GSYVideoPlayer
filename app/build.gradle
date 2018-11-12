@@ -59,6 +59,11 @@ android {
     }
 
     compileOptions { targetCompatibility JavaVersion.VERSION_1_8 }
+
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 dependencies {
@@ -83,12 +88,11 @@ dependencies {
     implementation dataDependencies.okhttpUtil
     implementation dataDependencies.okhttp
 
-    implementation (dataDependencies.permissionsdispatcher) {
+    implementation(dataDependencies.permissionsdispatcher) {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"
     }
     annotationProcessor dataDependencies.permissionsdispatcherProcessor
-
 
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
