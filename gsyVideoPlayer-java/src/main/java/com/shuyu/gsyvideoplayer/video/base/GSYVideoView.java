@@ -7,6 +7,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +29,6 @@ import com.shuyu.gsyvideoplayer.utils.NetInfoModule;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
 
 /**
@@ -364,7 +365,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 失去了Audio Focus，并将会持续很长的时间
      */
     protected void onLossAudio() {
-        this.post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             public void run() {
                 if (GSYVideoView.this.mReleaseWhenLossAudio) {
                     GSYVideoView.this.releaseVideos();
