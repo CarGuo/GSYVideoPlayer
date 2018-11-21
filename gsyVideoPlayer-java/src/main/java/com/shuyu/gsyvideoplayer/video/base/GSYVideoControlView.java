@@ -3,6 +3,8 @@ package com.shuyu.gsyvideoplayer.video.base;
 import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -899,6 +901,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         int duration = getDuration();
         int progress = position * 100 / (duration == 0 ? 1 : duration);
         setProgressAndTime(progress, secProgress, position, duration);
+        setProgressAndTime(progress, secProgress, position, duration);
     }
 
     protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
@@ -1042,12 +1045,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         @Override
         public void run() {
             if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setTextAndProgress(0);
-                    }
-                });
+                new Handler(Looper.getMainLooper()).post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                setTextAndProgress(0);
+                            }
+                        }
+                );
             }
         }
     }
@@ -1060,16 +1065,18 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     && mCurrentState != CURRENT_STATE_ERROR
                     && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
                 if (getActivityContext() != null) {
-                    ((Activity) getActivityContext()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideAllWidget();
-                            setViewShowState(mLockScreen, GONE);
-                            if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
-                                hideNavKey(mContext);
+                    new Handler(Looper.getMainLooper()).post(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideAllWidget();
+                                    setViewShowState(mLockScreen, GONE);
+                                    if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
+                                        hideNavKey(mContext);
+                                    }
+                                }
                             }
-                        }
-                    });
+                    );
                 }
             }
         }
