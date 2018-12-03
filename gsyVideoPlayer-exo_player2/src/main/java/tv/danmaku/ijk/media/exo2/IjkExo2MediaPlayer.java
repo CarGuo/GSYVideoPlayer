@@ -4,6 +4,7 @@ package tv.danmaku.ijk.media.exo2;
 import android.content.Context;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
@@ -165,33 +166,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     public void prepareAsync() throws IllegalStateException {
         if (mInternalPlayer != null)
             throw new IllegalStateException("can't prepare a prepared player");
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(new DefaultBandwidthMeter());
-        mTrackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
-        mEventLogger = new EventLogger(mTrackSelector);
-
-        boolean preferExtensionDecoders = true;
-        boolean useExtensionRenderers = true;//是否开启扩展
-        @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = useExtensionRenderers
-                ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
-                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
-                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
-
-        rendererFactory = new DefaultRenderersFactory(mAppContext, extensionRendererMode);
-        DefaultLoadControl loadControl = new DefaultLoadControl();
-        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, rendererFactory, mTrackSelector, loadControl, null, Looper.getMainLooper());
-        mInternalPlayer.addListener(this);
-        mInternalPlayer.addAnalyticsListener(this);
-        mInternalPlayer.addListener(mEventLogger);
-        if (mSpeedPlaybackParameters != null) {
-            mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
-        }
-        if (mSurface != null)
-            mInternalPlayer.setVideoSurface(mSurface);
-
-        mInternalPlayer.prepare(mMediaSource);
-        mInternalPlayer.setPlayWhenReady(false);
+        prepareAsyncInternal();
     }
 
     @Override
@@ -357,6 +332,39 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         }
     }
 
+    protected void prepareAsyncInternal() {
+        new Handler(Looper.getMainLooper()).post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        mTrackSelector = new DefaultTrackSelector();
+                        mEventLogger = new EventLogger(mTrackSelector);
+                        boolean preferExtensionDecoders = true;
+                        boolean useExtensionRenderers = true;//是否开启扩展
+                        @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = useExtensionRenderers
+                                ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+                                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+                                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
+
+                        rendererFactory = new DefaultRenderersFactory(mAppContext, extensionRendererMode);
+                        DefaultLoadControl loadControl = new DefaultLoadControl();
+                        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, rendererFactory, mTrackSelector, loadControl, null, Looper.getMainLooper());
+                        mInternalPlayer.addListener(IjkExo2MediaPlayer.this);
+                        mInternalPlayer.addAnalyticsListener(IjkExo2MediaPlayer.this);
+                        mInternalPlayer.addListener(mEventLogger);
+                        if (mSpeedPlaybackParameters != null) {
+                            mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
+                        }
+                        if (mSurface != null)
+                            mInternalPlayer.setVideoSurface(mSurface);
+
+                        mInternalPlayer.prepare(mMediaSource);
+                        mInternalPlayer.setPlayWhenReady(false);
+                    }
+                }
+        );
+    }
+
     public void stopPlayback() {
         mInternalPlayer.stop();
     }
@@ -439,7 +447,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
         return mInternalPlayer.getBufferedPercentage();
     }
-
 
 
     @Override
