@@ -3,6 +3,8 @@ package tv.danmaku.ijk.media.exo2;
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.Surface;
 
@@ -28,6 +30,8 @@ public class Exo2PlayerManager implements IPlayerManager {
     private Surface surface;
 
     private DummySurface dummySurface;
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     public IMediaPlayer getMediaPlayer() {
@@ -65,39 +69,54 @@ public class Exo2PlayerManager implements IPlayerManager {
     }
 
     @Override
-    public void showDisplay(Message msg) {
+    public void showDisplay(final Message msg) {
         if (mediaPlayer == null) {
             return;
         }
-        if (msg.obj == null) {
-            mediaPlayer.setSurface(dummySurface);
-        } else {
-            Surface holder = (Surface) msg.obj;
-            surface = holder;
-            mediaPlayer.setSurface(holder);
-        }
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (msg.obj == null) {
+                    mediaPlayer.setSurface(dummySurface);
+                } else {
+                    Surface holder = (Surface) msg.obj;
+                    surface = holder;
+                    mediaPlayer.setSurface(holder);
+                }
+            }
+        });
     }
 
     @Override
-    public void setSpeed(float speed, boolean soundTouch) {
-        if (mediaPlayer != null) {
-            try {
-                mediaPlayer.setSpeed(speed, 1);
-            } catch (Exception e) {
-                e.printStackTrace();
+    public void setSpeed(final float speed, final boolean soundTouch) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mediaPlayer != null) {
+                    try {
+                        mediaPlayer.setSpeed(speed, 1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
+        });
     }
 
     @Override
-    public void setNeedMute(boolean needMute) {
-        if (mediaPlayer != null) {
-            if (needMute) {
-                mediaPlayer.setVolume(0, 0);
-            } else {
-                mediaPlayer.setVolume(1, 1);
+    public void setNeedMute(final boolean needMute) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mediaPlayer != null) {
+                    if (needMute) {
+                        mediaPlayer.setVolume(0, 0);
+                    } else {
+                        mediaPlayer.setVolume(1, 1);
+                    }
+                }
             }
-        }
+        });
     }
 
 
@@ -111,14 +130,19 @@ public class Exo2PlayerManager implements IPlayerManager {
 
     @Override
     public void release() {
-        if (mediaPlayer != null) {
-            mediaPlayer.setSurface(null);
-            mediaPlayer.release();
-        }
-        if (dummySurface != null) {
-            dummySurface.release();
-            dummySurface = null;
-        }
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mediaPlayer != null) {
+                    mediaPlayer.setSurface(null);
+                    mediaPlayer.release();
+                }
+                if (dummySurface != null) {
+                    dummySurface.release();
+                    dummySurface = null;
+                }
+            }
+        });
     }
 
     @Override
