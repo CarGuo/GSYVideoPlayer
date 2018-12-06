@@ -53,6 +53,7 @@ public class Exo2PlayerManager implements IPlayerManager {
                 //通过自己的内部缓存机制
                 mediaPlayer.setCache(gsyModel.isCache());
                 mediaPlayer.setCacheDir(gsyModel.getCachePath());
+                mediaPlayer.setOverrideExtension(gsyModel.getOverrideExtension());
                 mediaPlayer.setDataSource(context, Uri.parse(gsyModel.getUrl()), gsyModel.getMapHeadData());
             }
             if (gsyModel.getSpeed() != 1 && gsyModel.getSpeed() > 0) {

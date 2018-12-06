@@ -90,6 +90,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
      * 缓存目录，可以为空
      */
     protected File mCacheDir;
+    /**
+     * 类型覆盖
+     */
+    private String mOverrideExtension;
 
     protected int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
 
@@ -149,7 +153,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     @Override
     public void setDataSource(Context context, Uri uri) {
         mDataSource = uri.toString();
-        mMediaSource = mExoHelper.getMediaSource(mDataSource, isPreview, isCache, isLooping, mCacheDir);
+        mMediaSource = mExoHelper.getMediaSource(mDataSource, isPreview, isCache, isLooping, mCacheDir, mOverrideExtension);
     }
 
     @Override
@@ -363,6 +367,14 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                     }
                 }
         );
+    }
+
+    public String getOverrideExtension() {
+        return mOverrideExtension;
+    }
+
+    public void setOverrideExtension(String overrideExtension) {
+        this.mOverrideExtension = overrideExtension;
     }
 
     public void stopPlayback() {

@@ -302,7 +302,7 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
                 mTmpManager = GSYVideoManager.tmpInstance(gsyMediaPlayerListener);
                 mTmpManager.initContext(getContext().getApplicationContext());
                 resolveChangeUrl(mCache, mCachePath, url);
-                mTmpManager.prepare(mUrl, mMapHeadData, mLooping, mSpeed, mCache, mCachePath);
+                mTmpManager.prepare(mUrl, mMapHeadData, mLooping, mSpeed, mCache, mCachePath, null);
                 changeUiToPlayingBufferingShow();
             }
         } else {
