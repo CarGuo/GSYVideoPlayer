@@ -1,5 +1,6 @@
 package tv.danmaku.ijk.media.exo2;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -74,7 +75,7 @@ public class ExoSourceManager {
      * @param isLooping   是否循环
      * @param cacheDir    自定义缓存目录
      */
-    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir, @Nullable String overrideExtension) {
         MediaSource mediaSource = null;
         if (sExoMediaSourceInterceptListener != null) {
             mediaSource = sExoMediaSourceInterceptListener.getMediaSource(dataSource, preview, cacheEnable, isLooping, cacheDir);
@@ -84,7 +85,7 @@ public class ExoSourceManager {
         }
         mDataSource = dataSource;
         Uri contentUri = Uri.parse(dataSource);
-        int contentType = inferContentType(dataSource);
+        int contentType = inferContentType(dataSource, overrideExtension);
         switch (contentType) {
             case C.TYPE_SS:
                 mediaSource = new SsMediaSource.Factory(
@@ -136,21 +137,20 @@ public class ExoSourceManager {
     }
 
 
+    @SuppressLint("WrongConstant")
     @C.ContentType
-    public static int inferContentType(String fileName) {
+    public static int inferContentType(String fileName, @Nullable String overrideExtension) {
         fileName = Util.toLowerInvariant(fileName);
-        if (fileName.endsWith(".mpd")) {
-            return C.TYPE_DASH;
-        } else if (fileName.endsWith(".m3u8")) {
-            return C.TYPE_HLS;
-        } else if (fileName.endsWith(".ism") || fileName.endsWith(".isml")
-                || fileName.endsWith(".ism/manifest") || fileName.endsWith(".isml/manifest")) {
-            return C.TYPE_SS;
-        } else if (fileName.startsWith("rtmp:")) {
+        if (fileName.startsWith("rtmp:")) {
             return TYPE_RTMP;
         } else {
-            return C.TYPE_OTHER;
+            return inferContentType(Uri.parse(fileName), overrideExtension);
         }
+    }
+
+    @C.ContentType
+    public static int inferContentType(Uri uri, @Nullable String overrideExtension) {
+        return Util.inferContentType(uri, overrideExtension);
     }
 
     /**
