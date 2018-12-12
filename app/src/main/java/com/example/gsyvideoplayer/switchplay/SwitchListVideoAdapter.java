@@ -70,7 +70,7 @@ public class SwitchListVideoAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         final String urlH = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        final String urlV = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
+        final String urlV = "http://wdquan-space.b0.upaiyun.com/VIDEO/2018/11/22/ae0645396048_hls_time10.m3u8";
         final String url = (position % 2 == 0) ? urlH : urlV;
         final int coverId = (position % 2 == 0) ? R.mipmap.xxx1 : R.mipmap.xxx2;
 

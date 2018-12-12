@@ -2,12 +2,14 @@ package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -35,6 +37,38 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
         super(context, attrs);
     }
 
+
+    @Override
+    protected void init(Context context) {
+        super.init(context);
+        post(new Runnable() {
+            @Override
+            public void run() {
+                gestureDetector = new GestureDetector(getContext().getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDoubleTap(MotionEvent e) {
+                        touchDoubleUp();
+                        return super.onDoubleTap(e);
+                    }
+
+                    @Override
+                    public boolean onSingleTapConfirmed(MotionEvent e) {
+                        if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                            onClickUiToggle();
+                        }
+                        Debuger.printfError("555a","9999999999999999999999");
+                        return super.onSingleTapConfirmed(e);
+                    }
+
+                    @Override
+                    public void onLongPress(MotionEvent e) {
+                        super.onLongPress(e);
+                        Debuger.printfError("555a","0000000000000000000000");
+                    }
+                });
+            }
+        });
+    }
 
     //这个必须配置最上面的构造才能生效
     @Override

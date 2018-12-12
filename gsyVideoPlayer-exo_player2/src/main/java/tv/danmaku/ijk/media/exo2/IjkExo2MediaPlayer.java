@@ -546,7 +546,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     @Override
     public void onSeekProcessed() {
-
+        notifyOnSeekComplete();
     }
 
     /////////////////////////////////////AudioRendererEventListener/////////////////////////////////////////////
