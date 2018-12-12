@@ -34,7 +34,7 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
 
         detailPlayer = (StandardGSYVideoPlayer) findViewById(R.id.detail_player);
 
-        String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
+        String url = "http://wdquan-space.b0.upaiyun.com/VIDEO/2018/11/22/ae0645396048_hls_time10.m3u8";
 
         //增加封面
         ImageView imageView = new ImageView(this);
