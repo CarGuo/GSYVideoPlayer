@@ -864,5 +864,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
     }
 
-
+    /**
+     * 重新开启进度查询以及控制view消失的定时任务
+     * 用于解决GSYVideoHelper中通过removeview方式做全屏切换导致的定时任务停止的问题
+     * GSYVideoControlView   onDetachedFromWindow（）
+     */
+    public void restartTimerTask() {
+        startProgressTimer();
+        startDismissControlViewTimer();
+    }
 }
