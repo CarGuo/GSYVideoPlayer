@@ -247,6 +247,7 @@ public class GSYVideoHelper {
                 mGsyVideoPlayer.getFullscreenButton().setImageResource(mGsyVideoPlayer.getEnlargeImageRes());
                 mGsyVideoPlayer.getBackButton().setVisibility(View.GONE);
                 mGsyVideoPlayer.setIfCurrentIsFullscreen(false);
+                mGsyVideoPlayer.restartTimerTask();
                 if (mVideoOptionBuilder.getVideoAllCallBack() != null) {
                     Debuger.printfLog("onQuitFullscreen");
                     mVideoOptionBuilder.getVideoAllCallBack().onQuitFullscreen(mVideoOptionBuilder.getUrl(), mVideoOptionBuilder.getVideoTitle(), mGsyVideoPlayer);
@@ -318,6 +319,7 @@ public class GSYVideoHelper {
             }
         }
         mGsyVideoPlayer.setIfCurrentIsFullscreen(true);
+        mGsyVideoPlayer.restartTimerTask();
         if (mVideoOptionBuilder.getVideoAllCallBack() != null) {
             Debuger.printfLog("onEnterFullscreen");
             mVideoOptionBuilder.getVideoAllCallBack().onEnterFullscreen(mVideoOptionBuilder.getUrl(), mVideoOptionBuilder.getVideoTitle(), mGsyVideoPlayer);
