@@ -582,6 +582,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         if (!mStartAfterPrepared) {
             setStateAndUi(CURRENT_STATE_PAUSE);
+            onVideoPause();//todo 加上这个
             return;
         }
 

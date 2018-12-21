@@ -852,6 +852,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     mVideoAllCallBack.onClickResume(mOriginUrl, mTitle, this);
                 }
             }
+
+            if (!mHadPlay && !mStartAfterPrepared) {
+                startAfterPrepared();
+            }
+
             try {
                 getGSYVideoManager().start();
             } catch (Exception e) {
