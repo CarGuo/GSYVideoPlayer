@@ -29,7 +29,7 @@ ext {
 
     imageLoader = '4.0.0'
 
-    gsyVideoVersion = '6.0.1'
+    gsyVideoVersion = '6.0.2'
 
     exo_player2 = '2.9.1'
 
