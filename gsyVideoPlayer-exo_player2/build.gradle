@@ -40,7 +40,7 @@ dependencies {
 //    def viewDependencies = rootProject.ext.viewDependencies
 //    compile viewDependencies.exo_player2
 //    compile viewDependencies.exo_player2_rtmp
-//    compile "com.shuyu:gsyVideoPlayer-base:6.0.1"
+//    compile "com.shuyu:gsyVideoPlayer-base:6.0.2"
 
 }
 
