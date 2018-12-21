@@ -45,24 +45,24 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:6.0.1'
+implementation 'com.shuyu:GSYVideoPlayer:6.0.2'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:6.0.1'
+implementation 'com.shuyu:gsyVideoPlayer-java:6.0.2'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.1'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.2'
 
 //根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.1'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.1'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.1'
-implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.1'
-implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.1'
+implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.2'
 
 ```
 
@@ -72,13 +72,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:6.0.1'
+implementation 'com.shuyu:gsyVideoPlayer-java:6.0.2'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.1'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.2'
 
 //更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.1'
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.2'
 
 ```
 
@@ -134,6 +134,15 @@ implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.1'
 
 ## 五、近期版本
 
+### 6.0.1(2018-12-21)
+
+* update exoPlayer to 2.9.1
+* Deprecated setupLazy
+* fix exoPlayer looper
+* add `overrideExtension` to exoPlayer
+
+ 
+
 ### 6.0.1 (2018-10-14)
 * 正式发布6.0版本，调整player和cache加载模式。
 
@@ -148,44 +157,6 @@ CacheFactory.setCacheManager(ProxyCacheManager.class);//代理缓存模式，支
 * 修复 ProxyCacheManager header设置无效问题。
 * 去除无用资源。
 * 修复某种场景下的内存泄漏问题。
-
-### 6.0.0-beta (2018-08-22)
-* 升级 ExoPlayer 到 2.8.4。
-* 修复代理缓存时头部信息不存在问题。
-* 调整代码结构，移除 GSYVideoType 中的内核切换，直接通过 PlayerFactory 装载。
-* 调整代码结构，ExoPlayer可单独依赖，通过 PlayerFactory 装载，更方便自定义PlayerManager。
-
-``` 
-//PlayerFactory.setPlayManager(new Exo2PlayerManager());//EXO模式
-//PlayerFactory.setPlayManager(new SystemPlayerManager());//系统模式
-//PlayerFactory.setPlayManager(new IjkPlayerManager());//ijk模式
-```
-
-* 调整代码结构，CacheFactory 更方便自定义，默认 ProxyCacheManager。
-
-``` 
-//CacheFactory.setCacheManager(new ExoPlayerCacheManager());//exo缓存模式，支持m3u8，只支持exo
-//CacheFactory.setCacheManager(new ProxyCacheManager());//代理缓存模式，支持所有模式，不支持m3u8等
-```
-
-* 增加 ExoMediaSourceInterceptListener，方便 Exo 模式下使用自定义的 MediaSource。
-
-``` 
-ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
-           /**
-            * @param dataSource  链接
-            * @param preview     是否带上header，默认有header自动设置为true
-            * @param cacheEnable 是否需要缓存
-            * @param isLooping   是否循环
-            * @param cacheDir    自定义缓存目录
-            * @return 返回不为空时，使用返回的自定义mediaSource
-            */
-            @Override
-            public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
-                return null;
-            }
-});
-```
 
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)

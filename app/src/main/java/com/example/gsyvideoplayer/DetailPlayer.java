@@ -97,7 +97,6 @@ public class DetailPlayer extends AppCompatActivity {
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
                 .setUrl(url)
-                .setLooping(true)
                 .setMapHeadData(header)
                 .setCacheWithPlay(false)
                 .setVideoTitle("测试视频")

@@ -1,5 +1,13 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 6.0.1(2018-12-21)
+
+* update exoPlayer to 2.9.1
+* Deprecated setupLazy
+* fix exoPlayer looper
+* add `overrideExtension` to exoPlayer
+
+
 ### 6.0.1 (2018-10-14)
 * 正式发布6.0版本，调整player和cache加载模式。
 

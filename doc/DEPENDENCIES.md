@@ -7,24 +7,24 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:6.0.1'
+implementation 'com.shuyu:GSYVideoPlayer:6.0.2'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:6.0.1'
+implementation 'com.shuyu:gsyVideoPlayer-java:6.0.2'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.1'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.2'
 
 //根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.1'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.1'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.1'
-implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.1'
-implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.1'
+implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.2'
+implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.2'
 
 ```
 
@@ -34,13 +34,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:6.0.1'
+implementation 'com.shuyu:gsyVideoPlayer-java:6.0.2'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.1'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.2'
 
 //更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.1'
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.2'
 
 ```
 
