@@ -73,18 +73,13 @@ public class Exo2PlayerManager implements IPlayerManager {
         if (mediaPlayer == null) {
             return;
         }
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (msg.obj == null) {
-                    mediaPlayer.setSurface(dummySurface);
-                } else {
-                    Surface holder = (Surface) msg.obj;
-                    surface = holder;
-                    mediaPlayer.setSurface(holder);
-                }
-            }
-        });
+        if (msg.obj == null) {
+            mediaPlayer.setSurface(dummySurface);
+        } else {
+            Surface holder = (Surface) msg.obj;
+            surface = holder;
+            mediaPlayer.setSurface(holder);
+        }
     }
 
     @Override
