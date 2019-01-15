@@ -145,9 +145,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     protected void init() {
-        HandlerThread mediaHandlerThread = new HandlerThread(TAG);
-        mediaHandlerThread.start();
-        mMediaHandler = new MediaHandler((mediaHandlerThread.getLooper()));
+        mMediaHandler = new MediaHandler((Looper.getMainLooper()));
         mainThreadHandler = new Handler();
     }
 

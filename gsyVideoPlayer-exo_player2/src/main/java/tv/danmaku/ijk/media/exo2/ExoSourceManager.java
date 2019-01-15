@@ -177,7 +177,7 @@ public class ExoSourceManager {
             try {
                 mCache.release();
                 mCache = null;
-            } catch (Cache.CacheException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
