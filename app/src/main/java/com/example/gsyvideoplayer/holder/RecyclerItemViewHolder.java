@@ -51,9 +51,9 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
         listItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                smallVideoHelper.setPlayPositionAndTag(position, TAG);
                 getRecyclerBaseAdapter().notifyDataSetChanged();
                 //listVideoUtil.setLoop(true);
-                smallVideoHelper.setPlayPositionAndTag(position, TAG);
                 String url;
                 if (position % 2 == 0) {
                     url = "https://res.exexm.com/cw_145225549855002";

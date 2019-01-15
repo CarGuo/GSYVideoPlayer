@@ -31,8 +31,6 @@ public class Exo2PlayerManager implements IPlayerManager {
 
     private DummySurface dummySurface;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
-
     @Override
     public IMediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -84,34 +82,24 @@ public class Exo2PlayerManager implements IPlayerManager {
 
     @Override
     public void setSpeed(final float speed, final boolean soundTouch) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mediaPlayer != null) {
-                    try {
-                        mediaPlayer.setSpeed(speed, 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+        if (mediaPlayer != null) {
+            try {
+                mediaPlayer.setSpeed(speed, 1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
     }
 
     @Override
     public void setNeedMute(final boolean needMute) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mediaPlayer != null) {
-                    if (needMute) {
-                        mediaPlayer.setVolume(0, 0);
-                    } else {
-                        mediaPlayer.setVolume(1, 1);
-                    }
-                }
+        if (mediaPlayer != null) {
+            if (needMute) {
+                mediaPlayer.setVolume(0, 0);
+            } else {
+                mediaPlayer.setVolume(1, 1);
             }
-        });
+        }
     }
 
 
@@ -125,19 +113,14 @@ public class Exo2PlayerManager implements IPlayerManager {
 
     @Override
     public void release() {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mediaPlayer != null) {
-                    mediaPlayer.setSurface(null);
-                    mediaPlayer.release();
-                }
-                if (dummySurface != null) {
-                    dummySurface.release();
-                    dummySurface = null;
-                }
-            }
-        });
+        if (mediaPlayer != null) {
+            mediaPlayer.setSurface(null);
+            mediaPlayer.release();
+        }
+        if (dummySurface != null) {
+            dummySurface.release();
+            dummySurface = null;
+        }
     }
 
     @Override
