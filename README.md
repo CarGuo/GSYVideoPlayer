@@ -82,6 +82,61 @@ implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.3'
 
 ```
 
+#### D、代码中的全局切换支持（更多请参看下方文档和demo）
+
+```
+
+//EXOPlayer内核，支持格式更多
+PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+//系统内核模式
+PlayerFactory.setPlayManager(SystemPlayerManager.class);
+//ijk内核，默认模式
+PlayerFactory.setPlayManager(IjkPlayerManager.class);
+
+
+//exo缓存模式，支持m3u8，只支持exo
+CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
+//代理缓存模式，支持所有模式，不支持m3u8等，默认
+CacheFactory.setCacheManager(ProxyCacheManager.class);
+
+
+
+//切换渲染模式
+GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
+//默认显示比例
+GSYVideoType.SCREEN_TYPE_DEFAULT = 0;
+//16:9
+GSYVideoType.SCREEN_TYPE_16_9 = 1;
+//4:3
+GSYVideoType.SCREEN_TYPE_4_3 = 2;
+//全屏裁减显示，为了显示正常 CoverImageView 建议使用FrameLayout作为父布局
+GSYVideoType.SCREEN_TYPE_FULL = 4;
+//全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
+GSYVideoType.SCREEN_MATCH_FULL = -4;
+
+
+
+//切换绘制模式
+GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
+GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+GSYVideoType.setRenderType(GSYVideoType.TEXTURE);
+
+
+//ijk关闭log
+IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
+
+
+//exoplayer自定义MediaSource
+ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
+    @Override
+    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+        //可自定义MediaSource
+        return null;
+    }
+});
+
+```
+
 ### [--- 更多依赖方式请点击 - ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DEPENDENCIES.md)
 
 ## 二、其他推荐
