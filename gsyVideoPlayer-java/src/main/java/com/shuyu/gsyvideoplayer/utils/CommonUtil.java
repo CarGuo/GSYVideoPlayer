@@ -1,16 +1,18 @@
 package com.shuyu.gsyvideoplayer.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.TintContextWrapper;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.TintContextWrapper;
+import androidx.fragment.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Surface;
@@ -105,6 +107,7 @@ public class CommonUtil {
     }
 
 
+    @SuppressLint("RestrictedApi")
     public static void hideSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
             AppCompatActivity appCompatActivity = CommonUtil.getAppCompActivity(context);
@@ -128,6 +131,7 @@ public class CommonUtil {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     public static void showSupportActionBar(Context context, boolean actionBar, boolean statusBar) {
         if (actionBar) {
             AppCompatActivity appCompatActivity = CommonUtil.getAppCompActivity(context);
