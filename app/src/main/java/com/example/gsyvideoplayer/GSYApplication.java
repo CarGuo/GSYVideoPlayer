@@ -1,24 +1,8 @@
 package com.example.gsyvideoplayer;
 
-import android.support.multidex.MultiDexApplication;
-
-import com.google.android.exoplayer2.source.MediaSource;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.cache.CacheFactory;
-import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
-import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
-import com.shuyu.gsyvideoplayer.player.PlayerFactory;
-import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
-import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
-
-import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
-import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
-import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager;
-import tv.danmaku.ijk.media.exo2.ExoSourceManager;
+import androidx.multidex.MultiDexApplication;
 
 import com.squareup.leakcanary.LeakCanary;
-
-import java.io.File;
 
 /**
  * Created by shuyu on 2016/11/11.

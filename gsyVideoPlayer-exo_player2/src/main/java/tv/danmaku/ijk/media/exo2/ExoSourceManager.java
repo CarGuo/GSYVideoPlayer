@@ -3,7 +3,7 @@ package tv.danmaku.ijk.media.exo2;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;

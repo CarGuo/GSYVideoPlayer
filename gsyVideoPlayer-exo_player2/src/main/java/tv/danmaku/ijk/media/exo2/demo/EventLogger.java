@@ -16,7 +16,7 @@
 package tv.danmaku.ijk.media.exo2.demo;
 
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.Surface;
 

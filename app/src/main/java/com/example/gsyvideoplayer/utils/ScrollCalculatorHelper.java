@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
-import android.widget.AbsListView;
 import android.widget.Toast;
 
 import com.shuyu.gsyvideoplayer.utils.*;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 计算滑动，自动播放的帮助类

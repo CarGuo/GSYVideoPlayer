@@ -1,12 +1,11 @@
 package com.example.gsyvideoplayer.switchplay;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.example.gsyvideoplayer.R;
-import com.example.gsyvideoplayer.simple.adapter.SimpleListVideoModeAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 /**
