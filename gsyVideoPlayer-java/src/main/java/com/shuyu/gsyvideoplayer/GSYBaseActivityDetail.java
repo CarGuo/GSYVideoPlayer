@@ -84,6 +84,9 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
     protected void onPause() {
         super.onPause();
         getGSYVideoPlayer().getCurrentPlayer().onVideoPause();
+        if (orientationUtils != null) {
+            orientationUtils.setIsPause(true);
+        }
         isPause = true;
     }
 
@@ -91,6 +94,9 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
     protected void onResume() {
         super.onResume();
         getGSYVideoPlayer().getCurrentPlayer().onVideoResume();
+        if (orientationUtils != null) {
+            orientationUtils.setIsPause(false);
+        }
         isPause = false;
     }
 
