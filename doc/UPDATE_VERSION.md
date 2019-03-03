@@ -1,6 +1,6 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-### 7.0.0-beta1
+### 7.0.0-beta1(2019-03-03)
 * orientation 增加 pause
 ```
  orientationUtils.setIsPause(true);
