@@ -1,5 +1,16 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 7.0.0-beta1
+* orientation 增加 pause
+```
+ orientationUtils.setIsPause(true);
+```
+* update exoPlayer to 2.9.5。
+* exoPlayer 和 mediaPlayer 支持网速显示。
+* 修复一些问题。
+* 支持库切换到 androidx
+
+
 ### 6.0.3(2019-01-15)
 
 * update exoPlayer to 2.9.3
