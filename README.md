@@ -190,7 +190,7 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 ## 五、近期版本
 
 
-### 7.0.0-beta1
+### 7.0.0-beta1(2019-03-03)
 * orientation 增加 pause
 ```
  orientationUtils.setIsPause(true);

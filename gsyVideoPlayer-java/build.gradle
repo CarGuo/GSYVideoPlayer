@@ -40,19 +40,10 @@ dependencies {
     api viewDependencies.ijkplayer_java
     api viewDependencies.ijkplayer_exo
     api viewDependencies.transitionseverywhere
-    api project(':gsyVideoPlayer-proxy_cache')
-    api project(':gsyVideoPlayer-base')
-    //api "com.shuyu:gsyVideoPlayer-base:$gsyVideoVersion"
-    //api "com.shuyu:gsyvideoplayer-androidvideocache:$gsyVideoVersion"
-
-
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile androidDependencies.appcompat_v7
-//    def viewDependencies = rootProject.ext.viewDependencies
-//    compile viewDependencies.ijkplayer_java
-//    compile viewDependencies.transitionseverywhere
-//    compile "com.shuyu:gsyvideoplayer-androidvideocache:$gsyVideoVersion"
-//    compile "com.shuyu:gsyVideoPlayer-base:$gsyVideoVersion"
+    //api project(':gsyVideoPlayer-proxy_cache')
+    //api project(':gsyVideoPlayer-base')
+    api "com.shuyu:gsyVideoPlayer-base:$gsyVideoVersion"
+    api "com.shuyu:gsyvideoplayer-androidvideocache:$gsyVideoVersion"
 
 }
 

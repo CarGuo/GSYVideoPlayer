@@ -33,14 +33,8 @@ dependencies {
     def viewDependencies = rootProject.ext.viewDependencies
     api viewDependencies.exo_player2
     api viewDependencies.exo_player2_rtmp
-    api project(':gsyVideoPlayer-base')
-    //api "com.shuyu:gsyVideoPlayer-base:$gsyVideoVersion"
-
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    def viewDependencies = rootProject.ext.viewDependencies
-//    compile viewDependencies.exo_player2
-//    compile viewDependencies.exo_player2_rtmp
-//    compile "com.shuyu:gsyVideoPlayer-base:6.0.2"
+    //api project(':gsyVideoPlayer-base')
+    api "com.shuyu:gsyVideoPlayer-base:$gsyVideoVersion"
 
 }
 
