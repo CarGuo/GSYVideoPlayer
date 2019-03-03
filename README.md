@@ -45,24 +45,24 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:6.0.3'
+implementation 'com.shuyu:GSYVideoPlayer:7.0.0-beta1'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:6.0.3'
+implementation 'com.shuyu:gsyVideoPlayer-java:7.0.0-beta1'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.3'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:7.0.0-beta1'
 
 //根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.3'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.3'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.3'
-implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.3'
-implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.3'
+implementation 'com.shuyu:gsyVideoPlayer-armv5:7.0.0-beta1'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:7.0.0-beta1'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:7.0.0-beta1'
+implementation 'com.shuyu:gsyVideoPlayer-x64:7.0.0-beta1'
+implementation 'com.shuyu:gsyVideoPlayer-x86:7.0.0-beta1'
 
 ```
 
@@ -72,13 +72,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:6.0.3'
+implementation 'com.shuyu:gsyVideoPlayer-java:7.0.0-beta1'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.3'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:7.0.0-beta1'
 
 //更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:6.0.3'
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.0.0-beta1'
 
 ```
 
@@ -189,39 +189,18 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 五、近期版本
 
-### 6.0.3(2019-01-15)
 
-* update exoPlayer to 2.9.3
-* update gradle 3.3.0 
-* update build sdk 28 
-* update support sdk 27.1.1
-* 修復exoplayer内核的一些问题。
-
-
-### 6.0.2(2018-12-21)
-
-* update exoPlayer to 2.9.1
-* Deprecated setupLazy
-* fix exoPlayer looper
-* add `overrideExtension` to exoPlayer
-
- 
-
-### 6.0.1 (2018-10-14)
-* 正式发布6.0版本，调整player和cache加载模式。
-
-``` 
-PlayerFactory.setPlayManager(Exo2PlayerManager.class);//EXO模式
-PlayerFactory.setPlayManager(SystemPlayerManager.class);//系统模式
-PlayerFactory.setPlayManager(IjkPlayerManager.class);//ijk模式
-
-CacheFactory.setCacheManager(ExoPlayerCacheManager.class);//exo缓存模式，支持m3u8，只支持exo
-CacheFactory.setCacheManager(ProxyCacheManager.class);//代理缓存模式，支持所有模式，不支持m3u8等
+### 7.0.0-beta1
+* orientation 增加 pause
 ```
-* 修复 ProxyCacheManager header设置无效问题。
-* 去除无用资源。
-* 修复某种场景下的内存泄漏问题。
+ orientationUtils.setIsPause(true);
+```
+* update exoPlayer to 2.9.5。
+* exoPlayer 和 mediaPlayer 支持网速显示。
+* 修复一些问题。
+* 支持库切换到 androidx
 
+### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)
 
