@@ -101,7 +101,7 @@ public class SystemPlayerManager implements IPlayerManager {
     @Override
     public void releaseSurface() {
         if (surface != null) {
-            surface.release();
+            //surface.release();
             surface = null;
         }
     }

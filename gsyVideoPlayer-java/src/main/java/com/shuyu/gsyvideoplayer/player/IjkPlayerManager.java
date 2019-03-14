@@ -155,7 +155,7 @@ public class IjkPlayerManager implements IPlayerManager {
     @Override
     public void releaseSurface() {
         if (surface != null) {
-            surface.release();
+            //surface.release();
             surface = null;
         }
     }
