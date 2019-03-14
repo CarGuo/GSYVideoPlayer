@@ -1,5 +1,8 @@
 ## 依赖方法
 
+
+#### 7.0版本使用了anndroidx，support版本请看6.x.x，请查看：[--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
+
 ### 1、JCenter 引入方法（推荐）
 
 **你可以选择下面三种的其中一种，在module下的build.gradle添加。**
