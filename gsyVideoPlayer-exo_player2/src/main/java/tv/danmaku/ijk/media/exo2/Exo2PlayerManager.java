@@ -115,7 +115,7 @@ public class Exo2PlayerManager implements IPlayerManager {
     @Override
     public void releaseSurface() {
         if (surface != null) {
-            surface.release();
+            //surface.release();
             surface = null;
         }
     }
