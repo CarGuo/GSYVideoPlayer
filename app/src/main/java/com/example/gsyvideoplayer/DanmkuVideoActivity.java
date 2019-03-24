@@ -78,7 +78,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
-        danmakuVideoPlayer.setIsTouchWiget(true);
+        danmakuVideoPlayer.setIsTouchWidget(true);
         //关闭自动旋转
         danmakuVideoPlayer.setRotateViewAuto(false);
         danmakuVideoPlayer.setLockLand(false);

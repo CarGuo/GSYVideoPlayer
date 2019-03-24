@@ -71,7 +71,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
         gsyVideoOptionBuilder = new GSYVideoOptionBuilder()
                 .setThumbImageView(imageView)
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(false)

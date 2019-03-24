@@ -68,7 +68,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setThumbImageView(imageView)
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(false)

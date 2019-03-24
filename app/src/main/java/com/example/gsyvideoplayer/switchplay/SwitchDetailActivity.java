@@ -58,7 +58,7 @@ public class SwitchDetailActivity extends AppCompatActivity {
 
         SwitchUtil.clonePlayState(detailPlayer);
 
-        detailPlayer.setIsTouchWiget(true);
+        detailPlayer.setIsTouchWidget(true);
 
         detailPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override

@@ -180,7 +180,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
                 .setUrl(url)
                 .setCacheWithPlay(true)
                 .setVideoTitle(" ")
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(true)//打开动画

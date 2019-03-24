@@ -107,10 +107,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected boolean mNeedShowWifiTip = true;
 
     //是否支持非全屏滑动触摸有效
-    protected boolean mIsTouchWiget = true;
+    protected boolean mIsTouchWidget = true;
 
     //是否支持全屏滑动触摸有效
-    protected boolean mIsTouchWigetFull = true;
+    protected boolean mIsTouchWidgetFull = true;
 
     //是否点击封面播放
     protected boolean mThumbPlay;
@@ -470,8 +470,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     float absDeltaX = Math.abs(deltaX);
                     float absDeltaY = Math.abs(deltaY);
 
-                    if ((mIfCurrentIsFullscreen && mIsTouchWigetFull)
-                            || (mIsTouchWiget && !mIfCurrentIsFullscreen)) {
+                    if ((mIfCurrentIsFullscreen && mIsTouchWidgetFull)
+                            || (mIsTouchWidget && !mIfCurrentIsFullscreen)) {
                         if (!mChangePosition && !mChangeVolume && !mBrightness) {
                             touchSurfaceMoveFullLogic(absDeltaX, absDeltaY);
                         }
@@ -1249,8 +1249,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      * 是否可以全屏滑动界面改变进度，声音等
      * 默认 true
      */
-    public void setIsTouchWigetFull(boolean isTouchWigetFull) {
-        this.mIsTouchWigetFull = isTouchWigetFull;
+    public void setIsTouchWidgetFull(boolean isTouchWidgetFull) {
+        this.mIsTouchWidgetFull = isTouchWidgetFull;
     }
 
     /**
@@ -1277,20 +1277,20 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
 
-    public boolean isTouchWiget() {
-        return mIsTouchWiget;
+    public boolean isTouchWidget() {
+        return mIsTouchWidget;
     }
 
     /**
      * 是否可以滑动界面改变进度，声音等
      * 默认true
      */
-    public void setIsTouchWiget(boolean isTouchWiget) {
-        this.mIsTouchWiget = isTouchWiget;
+    public void setIsTouchWidget(boolean isTouchWidget) {
+        this.mIsTouchWidget = isTouchWidget;
     }
 
-    public boolean isTouchWigetFull() {
-        return mIsTouchWigetFull;
+    public boolean isTouchWidgetFull() {
+        return mIsTouchWidgetFull;
     }
 
     /**

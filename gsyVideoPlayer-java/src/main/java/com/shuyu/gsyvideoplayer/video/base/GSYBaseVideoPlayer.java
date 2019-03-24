@@ -243,7 +243,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
         }
         to.setLooping(from.isLooping());
-        to.setIsTouchWigetFull(from.mIsTouchWigetFull);
+        to.setIsTouchWidgetFull(from.mIsTouchWidgetFull);
         to.setSpeed(from.getSpeed(), from.mSoundTouch);
         to.setStateAndUi(from.mCurrentState);
     }
@@ -743,7 +743,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             cloneParams(this, gsyVideoPlayer);
 
-            gsyVideoPlayer.setIsTouchWiget(false);//小窗口不能点击
+            gsyVideoPlayer.setIsTouchWidget(false);//小窗口不能点击
 
             gsyVideoPlayer.addTextureView();
             //隐藏掉所有的弹出状态哟

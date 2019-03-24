@@ -133,7 +133,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
                 .setCacheWithPlay(false)
                 .setRotateWithSystem(false)
                 .setVideoTitle("测试视频")
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(false)

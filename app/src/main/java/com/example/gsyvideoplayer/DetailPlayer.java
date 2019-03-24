@@ -86,7 +86,7 @@ public class DetailPlayer extends AppCompatActivity {
         header.put("ee", "33");
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setThumbImageView(imageView)
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setAutoFullWithSize(true)

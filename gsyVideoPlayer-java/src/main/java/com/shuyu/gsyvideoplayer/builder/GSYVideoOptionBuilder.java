@@ -75,10 +75,10 @@ public class GSYVideoOptionBuilder {
     protected boolean mLooping = false;
 
     //是否支持非全屏滑动触摸有效
-    protected boolean mIsTouchWiget = true;
+    protected boolean mIsTouchWidget = true;
 
     //是否支持全屏滑动触摸有效
-    protected boolean mIsTouchWigetFull = true;
+    protected boolean mIsTouchWidgetFull = true;
 
     //是否显示暂停图片
     protected boolean mShowPauseCover = true;
@@ -246,8 +246,8 @@ public class GSYVideoOptionBuilder {
      * 是否可以滑动界面改变进度，声音等
      * 默认true
      */
-    public GSYVideoOptionBuilder setIsTouchWiget(boolean isTouchWiget) {
-        this.mIsTouchWiget = isTouchWiget;
+    public GSYVideoOptionBuilder setIsTouchWidget(boolean isTouchWidget) {
+        this.mIsTouchWidget = isTouchWidget;
         return this;
     }
 
@@ -255,8 +255,8 @@ public class GSYVideoOptionBuilder {
      * 是否可以全屏滑动界面改变进度，声音等
      * 默认 true
      */
-    public GSYVideoOptionBuilder setIsTouchWigetFull(boolean isTouchWigetFull) {
-        this.mIsTouchWigetFull = isTouchWigetFull;
+    public GSYVideoOptionBuilder setIsTouchWidgetFull(boolean isTouchWidgetFull) {
+        this.mIsTouchWidgetFull = isTouchWidgetFull;
         return this;
     }
 
@@ -618,8 +618,8 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setLockLand(mLockLand);
         gsyVideoPlayer.setSpeed(mSpeed, mSounchTouch);
         gsyVideoPlayer.setHideKey(mHideKey);
-        gsyVideoPlayer.setIsTouchWiget(mIsTouchWiget);
-        gsyVideoPlayer.setIsTouchWigetFull(mIsTouchWigetFull);
+        gsyVideoPlayer.setIsTouchWidget(mIsTouchWidget);
+        gsyVideoPlayer.setIsTouchWidgetFull(mIsTouchWidgetFull);
         gsyVideoPlayer.setNeedShowWifiTip(mNeedShowWifiTip);
         gsyVideoPlayer.setEffectFilter(mEffectFilter);
         gsyVideoPlayer.setStartAfterPrepared(mStartAfterPrepared);

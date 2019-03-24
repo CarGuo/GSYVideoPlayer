@@ -29,7 +29,7 @@ public class SwitchUtil {
         //全屏动画
         gsyVideoPlayer.setShowFullAnimation(false);
         //小屏时不触摸滑动
-        gsyVideoPlayer.setIsTouchWiget(false);
+        gsyVideoPlayer.setIsTouchWidget(false);
 
         gsyVideoPlayer.setSwitchUrl(url);
 

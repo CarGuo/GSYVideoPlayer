@@ -154,7 +154,7 @@ public class ListNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.setAutoFullWithSize(true);
         holder.gsyVideoPlayer.setReleaseWhenLossAudio(false);
         holder.gsyVideoPlayer.setShowFullAnimation(!getListNeedAutoLand());
-        holder.gsyVideoPlayer.setIsTouchWiget(false);
+        holder.gsyVideoPlayer.setIsTouchWidget(false);
         //循环
         //holder.gsyVideoPlayer.setLooping(true);
         holder.gsyVideoPlayer.setNeedLockFull(true);

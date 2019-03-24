@@ -52,7 +52,7 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
 
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setThumbImageView(imageView)
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setAutoFullWithSize(true)

@@ -60,7 +60,7 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
 
         resolveNormalVideoUI();
 
-        detailPlayer.setIsTouchWiget(true);
+        detailPlayer.setIsTouchWidget(true);
         //关闭自动旋转
         detailPlayer.setRotateViewAuto(false);
         detailPlayer.setLockLand(false);

@@ -97,7 +97,7 @@ public class ListMultiNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.setLockLand(true);
         holder.gsyVideoPlayer.setReleaseWhenLossAudio(false);
         holder.gsyVideoPlayer.setShowFullAnimation(true);
-        holder.gsyVideoPlayer.setIsTouchWiget(false);
+        holder.gsyVideoPlayer.setIsTouchWidget(false);
 
         holder.gsyVideoPlayer.setNeedLockFull(true);
 

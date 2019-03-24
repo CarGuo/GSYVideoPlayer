@@ -642,12 +642,12 @@ public class SmallVideoHelper {
             return mLooping;
         }
 
-        public boolean isIsTouchWiget() {
-            return mIsTouchWiget;
+        public boolean isIsTouchWidget() {
+            return mIsTouchWidget;
         }
 
-        public boolean isIsTouchWigetFull() {
-            return mIsTouchWigetFull;
+        public boolean isIsTouchWidgetFull() {
+            return mIsTouchWidgetFull;
         }
 
         public boolean isShowPauseCover() {

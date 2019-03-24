@@ -53,7 +53,7 @@ public class FloatPlayerView extends FrameLayout {
         videoPlayer.setThumbImageView(imageView);*/
 
         //是否可以滑动调整
-        videoPlayer.setIsTouchWiget(false);
+        videoPlayer.setIsTouchWidget(false);
 
     }
 

@@ -100,7 +100,7 @@ public class SimpleListVideoModeAdapter extends BaseAdapter {
         //全屏动画
         holder.gsyVideoPlayer.setShowFullAnimation(true);
         //小屏时不触摸滑动
-        holder.gsyVideoPlayer.setIsTouchWiget(false);
+        holder.gsyVideoPlayer.setIsTouchWidget(false);
         //全屏是否需要lock功能
         return convertView;
 

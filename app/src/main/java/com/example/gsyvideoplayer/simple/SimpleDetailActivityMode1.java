@@ -48,7 +48,7 @@ public class SimpleDetailActivityMode1 extends GSYBaseActivityDetail<StandardGSY
                 .setUrl(url)
                 .setCacheWithPlay(true)
                 .setVideoTitle(" ")
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(false)//打开动画

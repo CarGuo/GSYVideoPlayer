@@ -136,7 +136,7 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
                 .setVideoTitle(" ")
                 .setFullHideActionBar(true)
                 .setFullHideStatusBar(true)
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(false)//打开动画

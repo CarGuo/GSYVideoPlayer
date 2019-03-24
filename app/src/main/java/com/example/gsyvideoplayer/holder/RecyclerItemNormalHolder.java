@@ -73,7 +73,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         //防止错位，离开释放
         //gsyVideoPlayer.initUIState();
         gsyVideoOptionBuilder
-                .setIsTouchWiget(false)
+                .setIsTouchWidget(false)
                 .setThumbImageView(imageView)
                 .setUrl(url)
                 .setVideoTitle(title)

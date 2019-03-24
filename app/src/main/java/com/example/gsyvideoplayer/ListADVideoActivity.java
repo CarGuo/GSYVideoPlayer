@@ -210,8 +210,8 @@ public class ListADVideoActivity extends AppCompatActivity {
             holder.adVideoPlayer.setReleaseWhenLossAudio(false);
             holder.gsyVideoPlayer.setShowFullAnimation(false);
             holder.adVideoPlayer.setShowFullAnimation(false);
-            holder.gsyVideoPlayer.setIsTouchWiget(false);
-            holder.adVideoPlayer.setIsTouchWiget(false);
+            holder.gsyVideoPlayer.setIsTouchWidget(false);
+            holder.adVideoPlayer.setIsTouchWidget(false);
 
             holder.gsyVideoPlayer.setNeedLockFull(true);
 

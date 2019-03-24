@@ -51,7 +51,7 @@ holder.gsyVideoPlayer.setReleaseWhenLossAudio(false);
 //全屏动画
 holder.gsyVideoPlayer.setShowFullAnimation(true);
 //小屏时不触摸滑动
-holder.gsyVideoPlayer.setIsTouchWiget(false);
+holder.gsyVideoPlayer.setIsTouchWidget(false);
 ```
 
 3、Activity中配置生命周期
@@ -311,7 +311,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
                 .setUrl(url)
                 .setCacheWithPlay(true)
                 .setVideoTitle(" ")
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(false)
@@ -354,7 +354,7 @@ orientationUtils.setEnable(false);
 
 GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
 gsyVideoOption.setThumbImageView(imageView)
-        .setIsTouchWiget(true)
+        .setIsTouchWidget(true)
         .setRotateViewAuto(false)
         .setLockLand(false)
         .setAutoFullWithSize(true)

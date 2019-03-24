@@ -273,7 +273,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
                 .setUrl(url)
                 .setCacheWithPlay(true)
                 .setVideoTitle(" ")
-                .setIsTouchWiget(true)
+                .setIsTouchWidget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(false)

@@ -87,8 +87,8 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
-        detailPlayer.setIsTouchWiget(true);
-        //detailPlayer.setIsTouchWigetFull(false);
+        detailPlayer.setIsTouchWidget(true);
+        //detailPlayer.setIsTouchWidgetFull(false);
         //关闭自动旋转
         detailPlayer.setRotateViewAuto(false);
         detailPlayer.setLockLand(false);
