@@ -1,8 +1,22 @@
 package com.example.gsyvideoplayer;
 
-import androidx.multidex.MultiDexApplication;
+import android.net.Uri;
 
+import androidx.multidex.MultiDexApplication;
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
+import tv.danmaku.ijk.media.exo2.ExoSourceManager;
+
+import com.example.gsyvideoplayer.source.CustomSourceTag;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.squareup.leakcanary.LeakCanary;
+
+import java.io.File;
+
+import static com.google.android.exoplayer2.util.Util.inferContentType;
 
 /**
  * Created by shuyu on 2016/11/11.
@@ -39,13 +53,20 @@ public class GSYApplication extends MultiDexApplication {
 
         //IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
-
         /*ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
             @Override
             public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+                Uri contentUri = Uri.parse(dataSource);
+                int contentType = inferContentType(dataSource);
+                switch (contentType) {
+                    case C.TYPE_HLS:
+                        return new HlsMediaSource.Factory(CustomSourceTag.getDataSourceFactory(GSYApplication.this.getApplicationContext(), preview)).createMediaSource(contentUri);
+                }
                 return null;
             }
         });*/
 
     }
+
+
 }
