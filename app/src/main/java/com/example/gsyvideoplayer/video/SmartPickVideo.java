@@ -231,6 +231,8 @@ public class SmartPickVideo extends StandardGSYVideoPlayer {
                 mTmpManager.setLastListener(manager.lastListener());
                 mTmpManager.setListener(manager.listener());
 
+                manager.setDisplay(null);
+
                 Debuger.printfError("**** showDisplay onSeekComplete ***** " + mSurface);
                 Debuger.printfError("**** showDisplay onSeekComplete isValid***** " + mSurface.isValid());
                 mTmpManager.setDisplay(mSurface);
