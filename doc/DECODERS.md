@@ -20,6 +20,146 @@ ex_so支持的视频编码和音频编码配置可查看[编译配置文件](htt
 
 *ex_so多支持了mepg、concat协议，crypto协议*。
 
+
+
+### 常用音频编译方式小结
+
+#### mp3
+```
+    --enable-libmp3lame 
+    --enable-decoder=mp3 
+    --enable-demuxer=mp3 
+    --enable-muxer=mp3
+    --enable-encoder=libmp3lame
+```  
+#### 支持vorbis
+```  
+    --enable-libvorbis 
+    --enable-parser=vorbis 
+    --enable-encoder=vorbis 
+    --enable-decoder=vorbis 
+    --enable-encoder=libvorbis 
+    --enable-decoder=libvorbis 
+    --enable-muxer=ogg
+    --enable-demuxer=ogg
+```  
+
+#### 支持wav
+
+
+```  
+    --enable-libwavpack
+    --enable-muxer=wav
+    --enable-demuxer=wav
+    --enable-decoder=wavpack
+    --enable-encoder=wavpack
+    --enable-decoder=wav
+    --enable-encoder=wav
+    --enable-encoder=pcm_s16le
+    --enable-decoder=pcm_s16le
+
+    --enable-encoder=pcm_u8
+    --enable-decoder=pcm_u8
+    --enable-muxer=pcm_u8
+    --enable-demuxer=pcm_u8  
+```  
+
+#### 支持aac
+```
+
+     --enable-libvo-aacenc
+    --enable-libfdk_aac
+    --enable-libfaac
+    --enable-parser=aac
+    --enable-encoder=aac
+    --enable-decoder=aac
+    --enable-encoder=libfaac
+    --enable-encoder=libvo_aacenc
+    --enable-encoder=libaacplus
+    --enable-encoder=libfdk_aac
+    --enable-decoder=libfdk_aac
+    --enable-demuxer=aac
+    --enable-muxer=adts
+```
+
+#### 支持mp2
+```
+    --enable-encoder=mp2 
+    --enable-decoder=mp2 
+    --enable-muxer=mp2 
+    --enable-decoder=mp2float 
+    --enable-encoder=mp2fixed 
+```
+
+#### flac 支持
+```
+   --enable-encoder=flac
+    --enable-decoder=flac
+    --enable-demuxer=flac
+    --enable-muxer=flac
+    --enable-parser=flac
+```
+#### jpeg等
+
+    --enable-encoder=jpeg2000 
+    --enable-encoder=mjpeg 
+    --enable-encoder=ljpeg 
+    --enable-encoder=jpegls
+    --enable-decoder=jpeg2000 
+    --enable-decoder=jpegls 
+    --enable-decoder=mjpeg 
+    --enable-decoder=mjpegb 
+    --enable-muxer=mjpeg 
+    --enable-demuxer=mjpeg 
+    --enable-encoder=png 
+    --enable-decoder=png 
+    --enable-parser=png 
+    
+    
+#### 添加scale的支持    
+    --enable-swscale 
+    --enable-swscale-alpha 
+    --enable-filter=scale 
+
+
+#### ac3
+    --enable-encoder=ac3 
+    --enable-decoder=ac3 
+    --enable-encoder=ac3_fixed
+    --enable-decoder=atrac3 
+    --enable-decoder=atrac3p 
+    --enable-encoder=eac3 
+    --enable-decoder=eac3 
+    --enable-muxer=ac3 
+    --enable-demuxer=ac3 
+    --enable-muxer=eac3 
+    --enable-demuxer=eac3 
+
+#### 支持wma/wmv
+
+    --enable-decoder=wmalossless 
+    --enable-decoder=wmapro 
+    --enable-encoder=wmav1 
+    --enable-decoder=wmav1 
+    --enable-encoder=wmav2 
+    --enable-decoder=wmav2 
+    --enable-decoder=wmavoice 
+    --enable-demuxer=xwma 
+    --enable-demuxer=avi 
+    --enable-muxer=avi 
+    --enable-demuxer=asf 
+    --enable-muxer=asf 
+    --enable-encoder=wmv1
+    --enable-decoder=wmv1 
+    --enable-encoder=wmv2 
+    --enable-decoder=wmv2 
+    --enable-decoder=wmv3 
+    --enable-decoder=wmv3_crystalhd 
+    --enable-decoder=wmv3_vdpau 
+    --enable-decoder=wmv3image 
+
+
+
 ### ffmpeg 支持的编码，解码，容器等格式如下图
 
 ![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/code01.jpg)
