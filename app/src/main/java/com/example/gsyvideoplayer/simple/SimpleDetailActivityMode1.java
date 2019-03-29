@@ -17,7 +17,7 @@ public class SimpleDetailActivityMode1 extends GSYBaseActivityDetail<StandardGSY
 
     StandardGSYVideoPlayer detailPlayer;
 
-    private String url = "http://7xp06y.com1.z0.glb.clouddn.com/b10/%E4%B8%80%E6%97%A0%E6%89%80%E6%9C%89%E6%9C%89%E6%A2%A6%E8%80%8C%E5%B7%B2%20solo%20cut.mp3";
+    private String url = "http://wdquan-space.b0.upaiyun.com/VIDEO/2018/11/22/ae0645396048_hls_time10.m3u8";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

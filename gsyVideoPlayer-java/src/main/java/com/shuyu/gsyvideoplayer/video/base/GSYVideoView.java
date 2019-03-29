@@ -7,9 +7,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.annotation.AttrRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.os.Handler;
+import android.os.Looper;
+import androidx.annotation.AttrRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.Surface;
@@ -27,7 +29,6 @@ import com.shuyu.gsyvideoplayer.utils.NetInfoModule;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
 
 /**
@@ -138,6 +139,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     //网络状态
     protected String mNetSate = "NORMAL";
+
+    // 是否需要覆盖拓展类型
+    protected String mOverrideExtension;
 
     //缓存路径，可不设置
     protected File mCachePath;
@@ -327,7 +331,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         ((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBackUpPlayingBufferState = -1;
-        getGSYVideoManager().prepare(mUrl, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mCache, mCachePath);
+        getGSYVideoManager().prepare(mUrl, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mCache, mCachePath, mOverrideExtension);
         setStateAndUi(CURRENT_STATE_PREPAREING);
     }
 
@@ -364,7 +368,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 失去了Audio Focus，并将会持续很长的时间
      */
     protected void onLossAudio() {
-        this.post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             public void run() {
                 if (GSYVideoView.this.mReleaseWhenLossAudio) {
                     GSYVideoView.this.releaseVideos();
@@ -578,6 +582,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         if (!mStartAfterPrepared) {
             setStateAndUi(CURRENT_STATE_PAUSE);
+            onVideoPause();//todo 加上这个
             return;
         }
 
@@ -636,7 +641,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     @Override
     public void onSeekComplete() {
-
+        Debuger.printfLog("onSeekComplete");
     }
 
     @Override
@@ -1114,5 +1119,17 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         if (headData != null) {
             this.mMapHeadData = headData;
         }
+    }
+
+    public String getOverrideExtension() {
+        return mOverrideExtension;
+    }
+
+    /**
+     * 是否需要覆盖拓展类型，目前只针对exoPlayer内核模式有效
+     * @param overrideExtension 比如传入 m3u8,mp4,avi 等类型
+     */
+    public void setOverrideExtension(String overrideExtension) {
+        this.mOverrideExtension = overrideExtension;
     }
 }

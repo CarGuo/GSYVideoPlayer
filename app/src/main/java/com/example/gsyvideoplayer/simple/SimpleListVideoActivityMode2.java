@@ -2,7 +2,7 @@ package com.example.gsyvideoplayer.simple;
 
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;

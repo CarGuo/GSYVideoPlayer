@@ -51,14 +51,14 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
         listItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                smallVideoHelper.setPlayPositionAndTag(position, TAG);
                 getRecyclerBaseAdapter().notifyDataSetChanged();
                 //listVideoUtil.setLoop(true);
-                smallVideoHelper.setPlayPositionAndTag(position, TAG);
                 String url;
                 if (position % 2 == 0) {
                     url = "https://res.exexm.com/cw_145225549855002";
                 } else {
-                    url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
+                    url = "http://wdquan-space.b0.upaiyun.com/VIDEO/2018/11/22/ae0645396048_hls_time10.m3u8";
                 }
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
 

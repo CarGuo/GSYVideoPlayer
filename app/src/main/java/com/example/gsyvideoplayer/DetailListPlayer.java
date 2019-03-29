@@ -1,15 +1,13 @@
 package com.example.gsyvideoplayer;
 
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
+import androidx.core.widget.NestedScrollView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
@@ -50,7 +48,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
 
         //String url = "http://baobab.wd jcdn.com/14564977406580.mp4";
         List<GSYVideoModel> urls = new ArrayList<>();
-        urls.add(new GSYVideoModel("http://7xse1z.com1.z0.glb.clouddn.com/1491813192", "标题1"));
+        urls.add(new GSYVideoModel("http://wdquan-space.b0.upaiyun.com/VIDEO/2018/11/22/ae0645396048_hls_time10.m3u8", "标题1"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题2"));
         urls.add(new GSYVideoModel("https://res.exexm.com/cw_145225549855002", "标题3"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题4"));

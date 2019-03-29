@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer.player;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.PlaybackParams;
+import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Message;
@@ -25,11 +26,17 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 public class SystemPlayerManager implements IPlayerManager {
 
+    private Context context;
+
     private AndroidMediaPlayer mediaPlayer;
 
     private Surface surface;
 
     private boolean release;
+
+    private long lastTotalRxBytes = 0;
+
+    private long lastTimeStamp = 0;
 
     @Override
     public IMediaPlayer getMediaPlayer() {
@@ -38,6 +45,7 @@ public class SystemPlayerManager implements IPlayerManager {
 
     @Override
     public void initVideoPlayer(Context context, Message msg, List<VideoOptionModel> optionModelList, ICacheManager cacheManager) {
+        this.context = context.getApplicationContext();
         mediaPlayer = new AndroidMediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         release = false;
@@ -93,7 +101,7 @@ public class SystemPlayerManager implements IPlayerManager {
     @Override
     public void releaseSurface() {
         if (surface != null) {
-            surface.release();
+            //surface.release();
             surface = null;
         }
     }
@@ -104,6 +112,8 @@ public class SystemPlayerManager implements IPlayerManager {
             release = true;
             mediaPlayer.release();
         }
+        lastTotalRxBytes = 0;
+        lastTimeStamp = 0;
     }
 
     @Override
@@ -114,7 +124,7 @@ public class SystemPlayerManager implements IPlayerManager {
     @Override
     public long getNetSpeed() {
         if (mediaPlayer != null) {
-            //todo
+            return getNetSpeed(context);
         }
         return 0;
     }
@@ -231,5 +241,22 @@ public class SystemPlayerManager implements IPlayerManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    private long getNetSpeed(Context context) {
+        if (context == null) {
+            return 0;
+        }
+        long nowTotalRxBytes = TrafficStats.getUidRxBytes(context.getApplicationInfo().uid) == TrafficStats.UNSUPPORTED ? 0 : (TrafficStats.getTotalRxBytes() / 1024);//转为KB
+        long nowTimeStamp = System.currentTimeMillis();
+        long calculationTime = (nowTimeStamp - lastTimeStamp);
+        if (calculationTime == 0) {
+            return calculationTime;
+        }
+        //毫秒转换
+        long speed = ((nowTotalRxBytes - lastTotalRxBytes) * 1000 / calculationTime);
+        lastTimeStamp = nowTimeStamp;
+        lastTotalRxBytes = nowTotalRxBytes;
+        return speed;
     }
 }

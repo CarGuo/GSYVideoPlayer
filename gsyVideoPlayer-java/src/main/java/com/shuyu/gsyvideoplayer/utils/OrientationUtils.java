@@ -28,6 +28,8 @@ public class OrientationUtils {
     //是否跟随系统
     private boolean mRotateWithSystem = true;
 
+    private boolean mIsPause = false;
+
     /**
      * @param activity
      * @param gsyVideoPlayer
@@ -47,6 +49,9 @@ public class OrientationUtils {
                     return;
                 }
                 if (gsyVideoPlayer != null && gsyVideoPlayer.isVerticalFullByVideoSize()) {
+                    return;
+                }
+                if (mIsPause) {
                     return;
                 }
                 // 设置竖屏
@@ -243,5 +248,13 @@ public class OrientationUtils {
      */
     public void setRotateWithSystem(boolean rotateWithSystem) {
         this.mRotateWithSystem = rotateWithSystem;
+    }
+
+    public boolean isPause() {
+        return mIsPause;
+    }
+
+    public void setIsPause(boolean isPause) {
+        this.mIsPause = isPause;
     }
 }

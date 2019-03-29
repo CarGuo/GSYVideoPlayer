@@ -1,7 +1,6 @@
 package com.example.gsyvideoplayer.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by GUO on 2015/12/3.

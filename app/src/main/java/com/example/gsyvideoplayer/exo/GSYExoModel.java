@@ -17,7 +17,7 @@ public class GSYExoModel extends GSYModel {
     List<String> urls = new ArrayList<>();
 
     public GSYExoModel(List<String> urls, Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath) {
-        super("", mapHeadData, loop, speed, cache, cachePath);
+        super("", mapHeadData, loop, speed, cache, cachePath, "");
         this.urls = urls;
     }
 

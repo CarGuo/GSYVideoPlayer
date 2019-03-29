@@ -3,9 +3,11 @@ package com.shuyu.gsyvideoplayer.video.base;
 import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
-import android.support.annotation.AttrRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.os.Handler;
+import android.os.Looper;
+import androidx.annotation.AttrRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -609,21 +611,26 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     @Override
-    public void onBufferingUpdate(int percent) {
-        if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
-            if (percent != 0) {
-                setTextAndProgress(percent);
-                mBufferPoint = percent;
-                Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
+    public void onBufferingUpdate(final int percent) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                if (mCurrentState != CURRENT_STATE_NORMAL && mCurrentState != CURRENT_STATE_PREPAREING) {
+                    if (percent != 0) {
+                        setTextAndProgress(percent);
+                        mBufferPoint = percent;
+                        Debuger.printfLog("Net speed: " + getNetSpeedText() + " percent " + percent);
+                    }
+                    if (mProgressBar == null) {
+                        return;
+                    }
+                    //循环清除进度
+                    if (mLooping && mHadPlay && percent == 0 && mProgressBar.getProgress() >= (mProgressBar.getMax() - 1)) {
+                        loopSetProgressAndTime();
+                    }
+                }
             }
-            if (mProgressBar == null) {
-                return;
-            }
-            //循环清除进度
-            if (mLooping && mHadPlay && percent == 0 && mProgressBar.getProgress() >= (mProgressBar.getMax() - 1)) {
-                loopSetProgressAndTime();
-            }
-        }
+        });
     }
 
     /**
@@ -845,6 +852,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     mVideoAllCallBack.onClickResume(mOriginUrl, mTitle, this);
                 }
             }
+
+            if (!mHadPlay && !mStartAfterPrepared) {
+                startAfterPrepared();
+            }
+
             try {
                 getGSYVideoManager().start();
             } catch (Exception e) {
@@ -893,6 +905,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         int position = getCurrentPositionWhenPlaying();
         int duration = getDuration();
         int progress = position * 100 / (duration == 0 ? 1 : duration);
+        setProgressAndTime(progress, secProgress, position, duration);
         setProgressAndTime(progress, secProgress, position, duration);
     }
 
@@ -1037,12 +1050,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         @Override
         public void run() {
             if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setTextAndProgress(0);
-                    }
-                });
+                new Handler(Looper.getMainLooper()).post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                setTextAndProgress(0);
+                            }
+                        }
+                );
             }
         }
     }
@@ -1055,16 +1070,18 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     && mCurrentState != CURRENT_STATE_ERROR
                     && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
                 if (getActivityContext() != null) {
-                    ((Activity) getActivityContext()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideAllWidget();
-                            setViewShowState(mLockScreen, GONE);
-                            if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
-                                hideNavKey(mContext);
+                    new Handler(Looper.getMainLooper()).post(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideAllWidget();
+                                    setViewShowState(mLockScreen, GONE);
+                                    if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
+                                        hideNavKey(mContext);
+                                    }
+                                }
                             }
-                        }
-                    });
+                    );
                 }
             }
         }

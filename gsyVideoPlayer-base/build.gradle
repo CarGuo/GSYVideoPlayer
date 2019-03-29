@@ -33,10 +33,6 @@ dependencies {
     def viewDependencies = rootProject.ext.viewDependencies
     api viewDependencies.ijkplayer_java
 
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
-    //def viewDependencies = rootProject.ext.viewDependencies
-    //compile viewDependencies.ijkplayer_java
-
 }
 
 apply from: './bintray.gradle'

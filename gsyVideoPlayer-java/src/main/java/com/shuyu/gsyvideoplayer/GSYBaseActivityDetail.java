@@ -2,13 +2,14 @@ package com.shuyu.gsyvideoplayer;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 详情模式播放页面基础类
@@ -83,6 +84,9 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
     protected void onPause() {
         super.onPause();
         getGSYVideoPlayer().getCurrentPlayer().onVideoPause();
+        if (orientationUtils != null) {
+            orientationUtils.setIsPause(true);
+        }
         isPause = true;
     }
 
@@ -90,6 +94,9 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
     protected void onResume() {
         super.onResume();
         getGSYVideoPlayer().getCurrentPlayer().onVideoResume();
+        if (orientationUtils != null) {
+            orientationUtils.setIsPause(false);
+        }
         isPause = false;
     }
 

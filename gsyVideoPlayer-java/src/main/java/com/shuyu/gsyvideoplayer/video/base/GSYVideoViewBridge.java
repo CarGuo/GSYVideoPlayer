@@ -45,6 +45,19 @@ public interface GSYVideoViewBridge {
     void prepare(final String url, final Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath);
 
     /**
+     * 开始准备播放
+     *
+     * @param url         播放url
+     * @param mapHeadData 头部信息
+     * @param loop        是否循环
+     * @param speed       播放速度
+     * @param cache       是否缓存
+     * @param cachePath   缓存目录，可以为空，为空时使用默认
+     * @param overrideExtension   是否需要覆盖拓展类型
+     */
+    void prepare(final String url, final Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath, String overrideExtension);
+
+    /**
      * 获取当前播放内核
      */
     IPlayerManager getPlayer();
