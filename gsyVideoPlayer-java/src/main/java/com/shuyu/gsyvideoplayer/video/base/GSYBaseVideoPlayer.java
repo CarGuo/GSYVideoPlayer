@@ -363,7 +363,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             showNavKey(mContext, mSystemUiVisibility);
         }
         showSupportActionBar(mContext, mActionBar, mStatusBar);
-        getFullscreenButton().setImageResource(getEnlargeImageRes());
+        if(getFullscreenButton() != null) {
+            getFullscreenButton().setImageResource(getEnlargeImageRes());
+        }
     }
 
 
