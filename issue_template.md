@@ -13,7 +13,7 @@ XXXX发生了这样的问题！
 
 ## GSY依赖版本
 
-例如 `implementation 'com.shuyu:gsyVideoPlayer-java:6.0.1'`
+例如 `implementation 'com.shuyu:gsyVideoPlayer-java:7.0.1'`
 
 ## Demo中的复现步骤
 
