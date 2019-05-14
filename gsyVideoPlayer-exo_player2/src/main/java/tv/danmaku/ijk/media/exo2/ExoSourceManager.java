@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import androidx.annotation.Nullable;
+import tv.danmaku.ijk.media.exo2.source.GSYExoHttpDataSourceFactory;
+
 import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;
@@ -26,6 +28,7 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheSpan;
 import com.google.android.exoplayer2.upstream.cache.CacheUtil;
+import com.google.android.exoplayer2.upstream.cache.ContentMetadata;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
@@ -46,8 +49,11 @@ public class ExoSourceManager {
 
     public static final int TYPE_RTMP = 4;
 
-
     private static Cache mCache;
+    /**
+     * 忽律Https证书校验
+     */
+    private static boolean mSkipSSLChain = false;
 
     private Context mAppContext;
 
@@ -217,6 +223,19 @@ public class ExoSourceManager {
         return isCached;
     }
 
+
+    public static boolean isSkipSSLChain() {
+        return mSkipSSLChain;
+    }
+
+    /**
+     * 设置https忽略证书
+     * @param skipSSLChain true时是hulve
+     */
+    public static void setSkipSSLChain(boolean skipSSLChain) {
+        mSkipSSLChain = skipSSLChain;
+    }
+
     /**
      * 获取SourceFactory，是否带Cache
      */
@@ -240,6 +259,16 @@ public class ExoSourceManager {
     }
 
     private DataSource.Factory getHttpDataSourceFactory(Context context, boolean preview) {
+        if(mSkipSSLChain) {
+            GSYExoHttpDataSourceFactory dataSourceFactory = new GSYExoHttpDataSourceFactory(Util.getUserAgent(context,
+                    TAG), preview ? null : new DefaultBandwidthMeter());
+            if (mMapHeadData != null && mMapHeadData.size() > 0) {
+                for (Map.Entry<String, String> header : mMapHeadData.entrySet()) {
+                    dataSourceFactory.getDefaultRequestProperties().set(header.getKey(), header.getValue());
+                }
+            }
+            return  dataSourceFactory;
+        }
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(context,
                 TAG), preview ? null : new DefaultBandwidthMeter());
         if (mMapHeadData != null && mMapHeadData.size() > 0) {
@@ -264,7 +293,7 @@ public class ExoSourceManager {
                 if (cachedSpans.size() == 0) {
                     isCache = false;
                 } else {
-                    long contentLength = cache.getContentLength(key);
+                    long contentLength = cache.getContentMetadata(key).get(ContentMetadata.KEY_CONTENT_LENGTH, C.LENGTH_UNSET);
                     long currentLength = 0;
                     for (CacheSpan cachedSpan : cachedSpans) {
                         currentLength += cache.getCachedLength(key, cachedSpan.position, cachedSpan.length);

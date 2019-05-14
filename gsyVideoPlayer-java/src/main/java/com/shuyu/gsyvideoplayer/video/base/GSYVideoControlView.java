@@ -323,9 +323,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     releasePauseCover();
                     mBufferPoint = 0;
                     mSaveChangeViewTIme = 0;
-                }
-                if (mAudioManager != null) {
-                    mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+                    if (mAudioManager != null) {
+                        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+                    }
                 }
                 releaseNetWorkState();
                 break;
@@ -369,7 +369,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected void setSmallVideoTextureView(View.OnTouchListener onTouchListener) {
         super.setSmallVideoTextureView(onTouchListener);
         //小窗口播放停止了也可以移动
-        mThumbImageViewLayout.setOnTouchListener(onTouchListener);
+        if(mThumbImageViewLayout != null) {
+            mThumbImageViewLayout.setOnTouchListener(onTouchListener);
+        }
     }
 
     @Override

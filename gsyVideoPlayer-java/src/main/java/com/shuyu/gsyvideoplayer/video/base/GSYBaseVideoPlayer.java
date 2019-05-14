@@ -68,6 +68,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
     protected boolean mAutoFullWithSize = false;
 
+    //全屏动画是否结束了
+    protected boolean mFullAnimEnd = true;
+
     //小窗口关闭按键
     protected View mSmallClose;
 
@@ -309,9 +312,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Debuger.printfLog("GSYVideoBase resolveFullVideoShow isVerticalFullByVideoSize " + isVertical);
                     //autoFull模式下，非横屏视频视频不横屏，并且不自动旋转
-                    if (!isVertical && isLockLand && mOrientationUtils.getIsLand() != 1) {
+                    if (!isVertical && isLockLand && mOrientationUtils != null && mOrientationUtils.getIsLand() != 1) {
                         mOrientationUtils.resolveByClick();
                     }
                     gsyVideoPlayer.setVisibility(VISIBLE);
@@ -319,7 +321,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 }
             }, 300);
         } else {
-            if (!isVertical && isLockLand) {
+            if (!isVertical && isLockLand && mOrientationUtils != null ) {
                 mOrientationUtils.resolveByClick();
             }
             gsyVideoPlayer.setVisibility(VISIBLE);
@@ -363,7 +365,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             showNavKey(mContext, mSystemUiVisibility);
         }
         showSupportActionBar(mContext, mActionBar, mStatusBar);
-        getFullscreenButton().setImageResource(getEnlargeImageRes());
+        if(getFullscreenButton() != null) {
+            getFullscreenButton().setImageResource(getEnlargeImageRes());
+        }
     }
 
 
@@ -372,6 +376,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      */
     @SuppressWarnings("ResourceType")
     protected void clearFullscreenLayout() {
+        if(!mFullAnimEnd) {
+            return;
+        }
         mIfCurrentIsFullscreen = false;
         int delay = 0;
         if (mOrientationUtils != null) {
@@ -666,6 +673,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             frameLayout.setBackgroundColor(Color.BLACK);
 
             if (mShowFullAnimation) {
+                mFullAnimEnd = false;
                 LayoutParams lp = new LayoutParams(getWidth(), getHeight());
                 lp.setMargins(mListItemRect[0], mListItemRect[1], 0, 0);
                 frameLayout.addView(gsyVideoPlayer, lp);
@@ -675,6 +683,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                     public void run() {
                         TransitionManager.beginDelayedTransition(vp);
                         resolveFullVideoShow(context, gsyVideoPlayer, frameLayout);
+                        mFullAnimEnd = true;
                     }
                 }, 300);
             } else {
