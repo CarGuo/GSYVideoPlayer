@@ -3,7 +3,10 @@ package tv.danmaku.ijk.media.exo2;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
+
 import androidx.annotation.Nullable;
+
+import tv.danmaku.ijk.media.exo2.source.GSYExoHttpDataSource;
 import tv.danmaku.ijk.media.exo2.source.GSYExoHttpDataSourceFactory;
 
 import android.text.TextUtils;
@@ -230,6 +233,7 @@ public class ExoSourceManager {
 
     /**
      * 设置https忽略证书
+     *
      * @param skipSSLChain true时是hulve
      */
     public static void setSkipSSLChain(boolean skipSSLChain) {
@@ -259,18 +263,24 @@ public class ExoSourceManager {
     }
 
     private DataSource.Factory getHttpDataSourceFactory(Context context, boolean preview) {
-        if(mSkipSSLChain) {
+        boolean allowCrossProtocolRedirects = false;
+        if (mMapHeadData != null && mMapHeadData.size() > 0) {
+            allowCrossProtocolRedirects = "true".equals(mMapHeadData.get("allowCrossProtocolRedirects"));
+        }
+        if (mSkipSSLChain) {
             GSYExoHttpDataSourceFactory dataSourceFactory = new GSYExoHttpDataSourceFactory(Util.getUserAgent(context,
-                    TAG), preview ? null : new DefaultBandwidthMeter());
+                    TAG), preview ? null : new DefaultBandwidthMeter(), GSYExoHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                    GSYExoHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, allowCrossProtocolRedirects);
             if (mMapHeadData != null && mMapHeadData.size() > 0) {
                 for (Map.Entry<String, String> header : mMapHeadData.entrySet()) {
                     dataSourceFactory.getDefaultRequestProperties().set(header.getKey(), header.getValue());
                 }
             }
-            return  dataSourceFactory;
+            return dataSourceFactory;
         }
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(context,
-                TAG), preview ? null : new DefaultBandwidthMeter());
+                TAG), preview ? null : new DefaultBandwidthMeter(), GSYExoHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                GSYExoHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, allowCrossProtocolRedirects);
         if (mMapHeadData != null && mMapHeadData.size() > 0) {
             for (Map.Entry<String, String> header : mMapHeadData.entrySet()) {
                 dataSourceFactory.getDefaultRequestProperties().set(header.getKey(), header.getValue());
