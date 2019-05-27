@@ -522,7 +522,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         mPauseBeforePrepared = false;
         if (mCurrentState == CURRENT_STATE_PAUSE) {
             try {
-                if (mCurrentPosition > 0 && getGSYVideoManager() != null) {
+                if (mCurrentPosition >= 0 && getGSYVideoManager() != null) {
                     if (seek) {
                         getGSYVideoManager().seekTo(mCurrentPosition);
                     }
