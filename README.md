@@ -277,9 +277,7 @@ ExoSourceManager.setSkipSSLChain(true);
 
 #### 撸码不易，如果对你有所帮助，欢迎您的赞赏
 
-##### 微信赞赏码
-
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/thanks.jpg" height="400px" width="400px"/>
+![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/thanks.jpg)
 
 
 ## License
