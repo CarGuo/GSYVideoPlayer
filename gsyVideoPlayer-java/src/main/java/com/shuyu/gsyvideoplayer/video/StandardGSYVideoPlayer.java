@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -258,12 +259,12 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             }
             mVolumeDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mVolumeDialog.setContentView(localView);
-            mVolumeDialog.getWindow().addFlags(8);
-            mVolumeDialog.getWindow().addFlags(32);
-            mVolumeDialog.getWindow().addFlags(16);
-            mVolumeDialog.getWindow().setLayout(-2, -2);
+            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            mBrightnessDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             WindowManager.LayoutParams localLayoutParams = mVolumeDialog.getWindow().getAttributes();
-            localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+            localLayoutParams.gravity = Gravity.TOP | Gravity.START;
             localLayoutParams.width = getWidth();
             localLayoutParams.height = getHeight();
             int location[] = new int[2];
@@ -301,12 +302,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             }
             mBrightnessDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mBrightnessDialog.setContentView(localView);
-            mBrightnessDialog.getWindow().addFlags(8);
-            mBrightnessDialog.getWindow().addFlags(32);
-            mBrightnessDialog.getWindow().addFlags(16);
-            mBrightnessDialog.getWindow().setLayout(-2, -2);
+            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            mBrightnessDialog.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            mBrightnessDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             WindowManager.LayoutParams localLayoutParams = mBrightnessDialog.getWindow().getAttributes();
-            localLayoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+            localLayoutParams.gravity = Gravity.TOP | Gravity.END;
             localLayoutParams.width = getWidth();
             localLayoutParams.height = getHeight();
             int location[] = new int[2];
