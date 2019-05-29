@@ -3,14 +3,13 @@
     android:id="@+id/app_video_brightness_box"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="center|right"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_width="100dp"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/app_video_brightness_icon"
