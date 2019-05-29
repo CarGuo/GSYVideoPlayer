@@ -259,10 +259,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             }
             mVolumeDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mVolumeDialog.setContentView(localView);
-            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-            mBrightnessDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            mBrightnessDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mVolumeDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            mVolumeDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+            mVolumeDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            mVolumeDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             WindowManager.LayoutParams localLayoutParams = mVolumeDialog.getWindow().getAttributes();
             localLayoutParams.gravity = Gravity.TOP | Gravity.START;
             localLayoutParams.width = getWidth();
