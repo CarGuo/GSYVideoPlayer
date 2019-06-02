@@ -34,4 +34,19 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/post_media_height" />
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_player">
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="下一级" />
+
+
+    </RelativeLayout>
 </RelativeLayout>

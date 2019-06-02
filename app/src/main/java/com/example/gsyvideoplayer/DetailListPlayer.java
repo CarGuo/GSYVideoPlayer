@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by shuyu on 2016/12/20.
  */
 
-public class DetailListPlayer extends GSYBaseActivityDetail {
+public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
 
     @BindView(R.id.post_detail_nested_scroll)
@@ -35,7 +36,8 @@ public class DetailListPlayer extends GSYBaseActivityDetail {
     ListGSYVideoPlayer detailPlayer;
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
-
+    @BindView(R.id.next)
+    View next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail {
         detailPlayer.setShowFullAnimation(false);
         detailPlayer.setNeedLockFull(true);
 
-        detailPlayer.setStandardVideoAllCallBack(this);
+        detailPlayer.setVideoAllCallBack(this);
 
         detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
@@ -81,10 +83,17 @@ public class DetailListPlayer extends GSYBaseActivityDetail {
             }
         });
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListGSYVideoPlayer)detailPlayer.getCurrentPlayer()).playNext();
+            }
+        });
+
     }
 
     @Override
-    public GSYBaseVideoPlayer getGSYVideoPlayer() {
+    public ListGSYVideoPlayer getGSYVideoPlayer() {
         return detailPlayer;
     }
 

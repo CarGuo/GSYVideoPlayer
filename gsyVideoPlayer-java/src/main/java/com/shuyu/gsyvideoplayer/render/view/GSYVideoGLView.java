@@ -2,17 +2,28 @@ package com.shuyu.gsyvideoplayer.render.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.Surface;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
+import com.shuyu.gsyvideoplayer.render.GSYRenderView;
+import com.shuyu.gsyvideoplayer.render.view.listener.GSYVideoGLRenderErrorListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
+import com.shuyu.gsyvideoplayer.render.view.listener.GLSurfaceListener;
+import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
+
+import java.io.File;
 
 
 /**
@@ -21,7 +32,7 @@ import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
  * 原 @author sheraz.khilji
  */
 @SuppressLint("ViewConstructor")
-public class GSYVideoGLView extends GLSurfaceView {
+public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, IGSYRenderView, MeasureHelper.MeasureFormVideoParamsListener {
 
     private static final String TAG = GSYVideoGLView.class.getName();
     /**
@@ -39,17 +50,17 @@ public class GSYVideoGLView extends GLSurfaceView {
 
     private ShaderInterface mEffect = new NoEffect();
 
-    private float[] mMVPMatrix;
+    private MeasureHelper.MeasureFormVideoParamsListener mVideoParamsListener;
 
     private MeasureHelper measureHelper;
 
-    private onGSYSurfaceListener mGSYSurfaceListener;
+    private GLSurfaceListener mOnGSYSurfaceListener;
+
+    private IGSYSurfaceListener mIGSYSurfaceListener;
+
+    private float[] mMVPMatrix;
 
     private int mMode = MODE_LAYOUT_SIZE;
-
-    public interface onGSYSurfaceListener {
-        void onSurfaceAvailable(Surface surface);
-    }
 
     public interface ShaderInterface {
         String getShader(GLSurfaceView mGlSurfaceView);
@@ -69,12 +80,224 @@ public class GSYVideoGLView extends GLSurfaceView {
         mContext = context;
         setEGLContextClientVersion(2);
         mRenderer = new GSYVideoGLViewSimpleRender();
-        measureHelper = new MeasureHelper(this);
+        measureHelper = new MeasureHelper(this, this);
         mRenderer.setSurfaceView(GSYVideoGLView.this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mRenderer != null) {
+            mRenderer.initRenderSize();
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (mMode == MODE_RENDER_SIZE) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
+            initRenderMeasure();
+        } else {
+            measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
+            setMeasuredDimension(measureHelper.getMeasuredWidth(), measureHelper.getMeasuredHeight());
+        }
+    }
+
+    @Override
+    public IGSYSurfaceListener getIGSYSurfaceListener() {
+        return mIGSYSurfaceListener;
+    }
+
+    @Override
+    public void setIGSYSurfaceListener(IGSYSurfaceListener surfaceListener) {
+        setOnGSYSurfaceListener(this);
+        mIGSYSurfaceListener = surfaceListener;
+    }
+
+    @Override
+    public void onSurfaceAvailable(Surface surface) {
+        if (mIGSYSurfaceListener != null) {
+            mIGSYSurfaceListener.onSurfaceAvailable(surface);
+        }
+    }
+
+    @Override
+    public int getSizeH() {
+        return getHeight();
+    }
+
+    @Override
+    public int getSizeW() {
+        return getWidth();
+    }
+
+    @Override
+    public Bitmap initCover() {
+        Debuger.printfLog(getClass().getSimpleName() + " not support initCover now");
+        return null;
+    }
+
+    @Override
+    public Bitmap initCoverHigh() {
+        Debuger.printfLog(getClass().getSimpleName() + " not support initCoverHigh now");
+        return null;
+    }
+
+    /**
+     * 获取截图
+     *
+     * @param shotHigh 是否需要高清的
+     */
+    @Override
+    public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh) {
+        if (gsyVideoShotListener != null) {
+            setGSYVideoShotListener(gsyVideoShotListener, shotHigh);
+            takeShotPic();
+
+        }
+    }
+
+    /**
+     * 保存截图
+     *
+     * @param high 是否需要高清的
+     */
+    @Override
+    public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
+        GSYVideoShotListener gsyVideoShotListener = new GSYVideoShotListener() {
+            @Override
+            public void getBitmap(Bitmap bitmap) {
+                if (bitmap == null) {
+                    gsyVideoShotSaveListener.result(false, file);
+                } else {
+                    FileUtils.saveBitmap(bitmap, file);
+                    gsyVideoShotSaveListener.result(true, file);
+                }
+            }
+        };
+        setGSYVideoShotListener(gsyVideoShotListener, high);
+        takeShotPic();
+    }
+
+    @Override
+    public View getRenderView() {
+        return this;
+    }
+
+
+    @Override
+    public void onRenderResume() {
+        requestLayout();
+        onResume();
+    }
+
+    @Override
+    public void onRenderPause() {
+        requestLayout();
+        onPause();
+
+    }
+
+    @Override
+    public void releaseRenderAll() {
+        requestLayout();
+        releaseAll();
+
+    }
+
+    @Override
+    public void setRenderMode(int mode) {
+        setMode(mode);
+    }
+
+
+    @Override
+    public void setRenderTransform(Matrix transform) {
+        Debuger.printfLog(getClass().getSimpleName() + " not support setRenderTransform now");
+    }
+
+    @Override
+    public void setGLRenderer(GSYVideoGLViewBaseRender renderer) {
+        setCustomRenderer(renderer);
+    }
+
+    @Override
+    public void setGLMVPMatrix(float[] MVPMatrix) {
+        setMVPMatrix(MVPMatrix);
+    }
+
+    /**
+     * 设置滤镜效果
+     */
+    @Override
+    public void setGLEffectFilter(GSYVideoGLView.ShaderInterface effectFilter) {
+        setEffect(effectFilter);
+    }
+
+
+    @Override
+    public void setVideoParamsListener(MeasureHelper.MeasureFormVideoParamsListener listener) {
+        mVideoParamsListener = listener;
+    }
+
+    @Override
+    public int getCurrentVideoWidth() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getCurrentVideoWidth();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getCurrentVideoHeight() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getCurrentVideoHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarNum() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getVideoSarNum();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoSarDen() {
+        if (mVideoParamsListener != null) {
+            return mVideoParamsListener.getVideoSarDen();
+        }
+        return 0;
+    }
+
+    protected void initRenderMeasure() {
+        if (mVideoParamsListener != null && mMode == MODE_RENDER_SIZE) {
+            try {
+                int videoWidth = mVideoParamsListener.getCurrentVideoWidth();
+                int videoHeight = mVideoParamsListener.getCurrentVideoHeight();
+                if (this.mRenderer != null) {
+                    this.mRenderer.setCurrentViewWidth(measureHelper.getMeasuredWidth());
+                    this.mRenderer.setCurrentViewHeight(measureHelper.getMeasuredHeight());
+                    this.mRenderer.setCurrentVideoWidth(videoWidth);
+                    this.mRenderer.setCurrentVideoHeight(videoHeight);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public void initRender() {
         setRenderer(mRenderer);
+    }
+
+
+    public void setGSYVideoGLRenderErrorListener(GSYVideoGLRenderErrorListener videoGLRenderErrorListener) {
+        this.mRenderer.setGSYVideoGLRenderErrorListener(videoGLRenderErrorListener);
     }
 
     /**
@@ -89,9 +312,9 @@ public class GSYVideoGLView extends GLSurfaceView {
         initRenderMeasure();
     }
 
-    public void setGSYSurfaceListener(onGSYSurfaceListener mGSYSurfaceListener) {
-        this.mGSYSurfaceListener = mGSYSurfaceListener;
-        mRenderer.setGSYSurfaceListener(this.mGSYSurfaceListener);
+    public void setOnGSYSurfaceListener(GLSurfaceListener mGSYSurfaceListener) {
+        this.mOnGSYSurfaceListener = mGSYSurfaceListener;
+        mRenderer.setGSYSurfaceListener(this.mOnGSYSurfaceListener);
     }
 
     public void setEffect(ShaderInterface shaderEffect) {
@@ -117,52 +340,6 @@ public class GSYVideoGLView extends GLSurfaceView {
         this.mRenderer.setGSYVideoShotListener(listener, high);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mRenderer != null) {
-            mRenderer.initRenderSize();
-        }
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (mMode == MODE_RENDER_SIZE) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
-            initRenderMeasure();
-        } else {
-            measureHelper.prepareMeasure(widthMeasureSpec, heightMeasureSpec, (int) getRotation());
-            setMeasuredDimension(measureHelper.getMeasuredWidth(), measureHelper.getMeasuredHeight());
-        }
-    }
-
-    protected void initRenderMeasure() {
-        if (GSYVideoManager.instance().getMediaPlayer() != null && mMode == MODE_RENDER_SIZE) {
-            try {
-                int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
-                int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
-                if (this.mRenderer != null) {
-                    this.mRenderer.setCurrentViewWidth(measureHelper.getMeasuredWidth());
-                    this.mRenderer.setCurrentViewHeight(measureHelper.getMeasuredHeight());
-                    this.mRenderer.setCurrentVideoWidth(videoWidth);
-                    this.mRenderer.setCurrentVideoHeight(videoHeight);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public int getSizeH() {
-        return measureHelper.getMeasuredHeight();
-    }
-
-    public int getSizeW() {
-        return measureHelper.getMeasuredWidth();
-    }
-
-
     public int getMode() {
         return mMode;
     }
@@ -179,4 +356,61 @@ public class GSYVideoGLView extends GLSurfaceView {
             mRenderer.releaseAll();
         }
     }
+
+    public GSYVideoGLViewBaseRender getRenderer() {
+        return mRenderer;
+    }
+
+    public ShaderInterface getEffect() {
+        return mEffect;
+    }
+
+    public float[] getMVPMatrix() {
+        return mMVPMatrix;
+    }
+
+    /**
+     * 添加播放的view
+     */
+    public static GSYVideoGLView addGLView(final Context context, final ViewGroup textureViewContainer, final int rotate,
+                                           final IGSYSurfaceListener gsySurfaceListener,
+                                           final MeasureHelper.MeasureFormVideoParamsListener videoParamsListener,
+                                           final GSYVideoGLView.ShaderInterface effect, final float[] transform,
+                                           final GSYVideoGLViewBaseRender customRender, final int renderMode) {
+        if (textureViewContainer.getChildCount() > 0) {
+            textureViewContainer.removeAllViews();
+        }
+        final GSYVideoGLView gsyVideoGLView = new GSYVideoGLView(context);
+        if (customRender != null) {
+            gsyVideoGLView.setCustomRenderer(customRender);
+        }
+        gsyVideoGLView.setEffect(effect);
+        gsyVideoGLView.setVideoParamsListener(videoParamsListener);
+        gsyVideoGLView.setRenderMode(renderMode);
+        gsyVideoGLView.setIGSYSurfaceListener(gsySurfaceListener);
+        gsyVideoGLView.setRotation(rotate);
+        gsyVideoGLView.initRender();
+        gsyVideoGLView.setGSYVideoGLRenderErrorListener(new GSYVideoGLRenderErrorListener() {
+            @Override
+            public void onError(GSYVideoGLViewBaseRender render, String Error, int code, boolean byChangedRenderError) {
+                if (byChangedRenderError)
+                    addGLView(context,
+                            textureViewContainer,
+                            rotate,
+                            gsySurfaceListener,
+                            videoParamsListener,
+                            render.getEffect(),
+                            render.getMVPMatrix(),
+                            render, renderMode);
+
+            }
+        });
+        if (transform != null && transform.length == 16) {
+            gsyVideoGLView.setMVPMatrix(transform);
+        }
+        GSYRenderView.addToParent(textureViewContainer, gsyVideoGLView);
+        return gsyVideoGLView;
+    }
+
+
 }
