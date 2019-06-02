@@ -29,40 +29,28 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    api project(':gsyVideoPlayer-java')
-    //api project(':gsyVideoPlayer-armv5')
-    //api project(':gsyVideoPlayer-armv7a')
-    //api project(':gsyVideoPlayer-armv64')
-    //api project(':gsyVideoPlayer-x86')
-    //api project(':gsyVideoPlayer-x86_64')
-
-    //更多配置版so，增加了concat,rtsp,mpeg，crypto
-    //api project(':gsyVideoPlayer-ex_so')
-
-    //api "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
-
-    //api "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
-    //api "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
-    //api "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
-    //api "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
-    //api "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
-    //api "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
+    //compile project(':gsyVideoPlayer-java')
+    //compile project(':gsyVideoPlayer-armv5')
+    //compile project(':gsyVideoPlayer-armv7a')
+    //compile project(':gsyVideoPlayer-armv64')
+    //compile project(':gsyVideoPlayer-x86')
+    //compile project(':gsyVideoPlayer-x86_64')
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
-    api "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
+    //compile project(':gsyVideoPlayer-ex_so')
 
+    compile "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
 
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
-    //compile "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
-    //compile "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
+    compile "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
 
-
+    //更多配置版so，增加了concat,rtsp,mpeg，crypto
+    //compile "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
 }
 
 apply from: './bintray.gradle'

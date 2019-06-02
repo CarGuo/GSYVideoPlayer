@@ -1,6 +1,7 @@
 package com.danikula.videocache;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,6 +32,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 class Pinger {
 
+    private static final Logger LOG = LoggerFactory.getLogger("Pinger");
     private static final String PING_REQUEST = "ping";
     private static final String PING_RESPONSE = "ping ok";
 
@@ -57,9 +59,9 @@ class Pinger {
                     return true;
                 }
             } catch (TimeoutException e) {
-                HttpProxyCacheDebuger.printfWarning("Error pinging server (attempt: " + attempts + ", timeout: " + timeout + "). ");
+                LOG.warn("Error pinging server (attempt: " + attempts + ", timeout: " + timeout + "). ");
             } catch (InterruptedException | ExecutionException e) {
-                HttpProxyCacheDebuger.printfError("Error pinging server due to unexpected error", e);
+                LOG.error("Error pinging server due to unexpected error", e);
             }
             attempts++;
             timeout *= 2;
@@ -68,7 +70,7 @@ class Pinger {
                         "If you see this message, please, report at https://github.com/danikula/AndroidVideoCache/issues/134. " +
                         "Default proxies are: %s"
                 , attempts, timeout / 2, getDefaultProxies());
-        HttpProxyCacheDebuger.printfError(error, new ProxyCacheException(error));
+        LOG.error(error, new ProxyCacheException(error));
         return false;
     }
 
@@ -100,10 +102,10 @@ class Pinger {
             byte[] response = new byte[expectedResponse.length];
             source.read(response);
             boolean pingOk = Arrays.equals(expectedResponse, response);
-            HttpProxyCacheDebuger.printfLog("Ping response: `" + new String(response) + "`, pinged? " + pingOk);
+            LOG.info("Ping response: `" + new String(response) + "`, pinged? " + pingOk);
             return pingOk;
         } catch (ProxyCacheException e) {
-            HttpProxyCacheDebuger.printfError("Error reading ping response", e);
+            LOG.error("Error reading ping response", e);
             return false;
         } finally {
             source.close();

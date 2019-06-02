@@ -13,9 +13,10 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
+import com.example.gsyvideoplayer.video.SampleVideo;
 import com.example.gsyvideoplayer.video.SmartPickVideo;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,8 +134,8 @@ public class PlayPickActivity extends AppCompatActivity {
             return;
         }
         //释放所有
-        videoPlayer.setVideoAllCallBack(null);
-        GSYVideoManager.releaseAllVideos();
+        videoPlayer.setStandardVideoAllCallBack(null);
+        GSYVideoPlayer.releaseAllVideos();
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onBackPressed();
         } else {

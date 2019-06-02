@@ -2,23 +2,16 @@ package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 /**
  * Created by shuyu on 2016/12/23.
  * CustomGSYVideoPlayer是试验中，建议使用的时候使用StandardGSYVideoPlayer
  */
 public class LandLayoutVideo extends StandardGSYVideoPlayer {
-
-    private boolean isLinkScroll = false;
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -63,35 +56,5 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
         }
     }
 
-    @Override
-    public int getEnlargeImageRes() {
-            return R.drawable.custom_enlarge;
-    }
 
-    @Override
-    public int getShrinkImageRes() {
-        return R.drawable.custom_shrink;
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (isLinkScroll && !isIfCurrentIsFullscreen()) {
-            getParent().requestDisallowInterceptTouchEvent(true);
-        }
-        return super.onInterceptTouchEvent(ev);
-    }
-
-
-    @Override
-    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
-        LandLayoutVideo landLayoutVideo = (LandLayoutVideo)gsyVideoPlayer;
-        landLayoutVideo.dismissProgressDialog();
-        landLayoutVideo.dismissVolumeDialog();
-        landLayoutVideo.dismissBrightnessDialog();
-        super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
-    }
-
-    public void setLinkScroll(boolean linkScroll) {
-        isLinkScroll = linkScroll;
-    }
 }

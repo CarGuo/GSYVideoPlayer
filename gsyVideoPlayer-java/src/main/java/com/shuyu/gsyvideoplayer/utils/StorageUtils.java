@@ -3,6 +3,9 @@ package com.shuyu.gsyvideoplayer.utils;
 import android.content.Context;
 import android.os.Environment;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 import static android.os.Environment.MEDIA_MOUNTED;
@@ -12,6 +15,7 @@ import static android.os.Environment.MEDIA_MOUNTED;
  */
 public class StorageUtils {
 
+    private static final Logger LOG = LoggerFactory.getLogger("StorageUtils");
     private static final String INDIVIDUAL_DIR_NAME = "video-cache";
 
     /**
@@ -54,6 +58,7 @@ public class StorageUtils {
         }
         if (appCacheDir == null) {
             String cacheDirPath = "/data/data/" + context.getPackageName() + "/cache/";
+            LOG.warn("Can't define system cache directory! '" + cacheDirPath + "%s' will be used.");
             appCacheDir = new File(cacheDirPath);
         }
         return appCacheDir;
@@ -64,6 +69,7 @@ public class StorageUtils {
         File appCacheDir = new File(new File(dataDir, context.getPackageName()), "cache");
         if (!appCacheDir.exists()) {
             if (!appCacheDir.mkdirs()) {
+                LOG.warn("Unable to create external cache directory");
                 return null;
             }
         }

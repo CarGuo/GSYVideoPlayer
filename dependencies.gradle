@@ -1,49 +1,40 @@
 allprojects {
     repositories {
-        maven { url 'https://maven.google.com' }
-        google()
         jcenter()
-        maven { url 'https://jitpack.io' }
     }
 }
 
 ext {
     //Android
-    androidBuildToolsVersion = "27.0.2"
+    androidBuildToolsVersion = "25.0.0"
     androidMinSdkVersion = 16
-    androidTargetSdkVersion = 27
-    androidCompileSdkVersion = 27
-    supportLibraryVersion = '27.0.2'
+    androidTargetSdkVersion = 22
+    androidCompileSdkVersion = 22
+    supportLibraryVersion = '24.2.0'
+    otherLibraryVersion = '22.2.1'
 
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
 
-    ijkplayer = '0.8.8'
-    DanmakuFlameMaster = '0.9.16'
+    ijkplayer = '0.8.4'
+    DanmakuFlameMaster = '0.6.4'
 
     transitionseverywhere = '1.7.0'
-    floatWindow = '1.0.6'
 
     //DataLibraries
+    videocache = '2.1.1'
     leakcanary = '1.5'
 
     imageLoader = '4.0.0'
 
-    gsyVideoVersion = '5.0.0-beta'
-
-    exo_player2 = '2.8.0'
-
-    permissionsdispatcher = '3.2.0'
-
-    okhttp = '3.2.0'
-    okhttpUtil = '2.6.2'
+    gsyVideoVersion = '2.1.2'
 
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
-            appcompat_v7: "com.android.support:appcompat-v7:${supportLibraryVersion}",
-            cardview_v7 : "com.android.support:cardview-v7:${supportLibraryVersion}",
+            appcompat_v7: "com.android.support:appcompat-v7:${otherLibraryVersion}",
+            cardview_v7 : "com.android.support:cardview-v7:23.2.0",
             support_v4  : "com.android.support:support-v4:${supportLibraryVersion}",
-            design      : "com.android.support:design:${supportLibraryVersion}",
+            design      : "com.android.support:design:${otherLibraryVersion}",
     ]
 
     viewDependencies = [
@@ -61,21 +52,13 @@ ext {
             ndkbitmap_armv7a     : "com.github.ctiao:ndkbitmap-armv7a:${DanmakuFlameMaster}",
             ndkbitmap_armv5      : "com.github.ctiao:ndkbitmap-armv5:${DanmakuFlameMaster}",
             ndkbitmap_x86        : "com.github.ctiao:ndkbitmap-x86:${DanmakuFlameMaster}",
-
             glide                : "com.github.bumptech.glide:glide:${imageLoader}",
-            glideProcessor       : "com.github.bumptech.glide:compiler:${imageLoader}",
-            floatWindow          : "com.github.yhaolpz:FloatWindow:${floatWindow}",
-            exo_player2          : "com.google.android.exoplayer:exoplayer:${exo_player2}",
-            exo_player2_rtmp     : "com.google.android.exoplayer:extension-rtmp:${exo_player2}",
+            glideProcessor       : "com.github.bumptech.glide:compiler:${imageLoader}"
 
     ]
 
     dataDependencies = [
-            videocache                    : "com.shuyu:gsyvideoplayer-androidvideocache:${gsyVideoVersion}",
-            leakcanary                    : "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
-            okhttpUtil                    : "com.squareup.okhttp3:okhttp:${okhttp}",
-            okhttp                        : "com.zhy:okhttputils:${okhttpUtil}",
-            permissionsdispatcher         : "com.github.hotchemi:permissionsdispatcher:${permissionsdispatcher}",
-            permissionsdispatcherProcessor: "com.github.hotchemi:permissionsdispatcher-processor:${permissionsdispatcher}",
+            videocache: "com.shuyu:gsyvideoplayer-androidvideocache:${videocache}",
+            leakcanary: "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
     ]
 }

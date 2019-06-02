@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
+import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -36,6 +37,8 @@ import moe.codeest.enviews.ENPlayView;
  */
 
 public class StandardGSYVideoPlayer extends GSYVideoPlayer {
+
+    protected StandardVideoAllCallBack mStandardVideoAllCallBack;
 
     //亮度dialog
     protected Dialog mBrightnessDialog;
@@ -129,9 +132,9 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
      */
     @Override
     public void startPlayLogic() {
-        if (mVideoAllCallBack != null) {
+        if (mStandardVideoAllCallBack != null) {
             Debuger.printfLog("onClickStartThumb");
-            mVideoAllCallBack.onClickStartThumb(mOriginUrl, mTitle, StandardGSYVideoPlayer.this);
+            mStandardVideoAllCallBack.onClickStartThumb(mOriginUrl, mTitle, StandardGSYVideoPlayer.this);
         }
         prepareVideo();
         startDismissControlViewTimer();
@@ -143,8 +146,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void showWifiDialog() {
         if (!NetworkUtils.isAvailable(mContext)) {
-            //Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
-            startPlayLogic();
+            Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivityContext());
@@ -172,32 +174,24 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @SuppressWarnings("ResourceType")
     protected void showProgressDialog(float deltaX, String seekTime, int seekTimePosition, String totalTime, int totalTimeDuration) {
         if (mProgressDialog == null) {
-            View localView = LayoutInflater.from(getActivityContext()).inflate(getProgressDialogLayoutId(), null);
-            if (localView.findViewById(getProgressDialogProgressId()) instanceof ProgressBar) {
-                mDialogProgressBar = ((ProgressBar) localView.findViewById(getProgressDialogProgressId()));
-                if (mDialogProgressBarDrawable != null) {
-                    mDialogProgressBar.setProgressDrawable(mDialogProgressBarDrawable);
-                }
+            View localView = LayoutInflater.from(getActivityContext()).inflate(R.layout.video_progress_dialog, null);
+            mDialogProgressBar = ((ProgressBar) localView.findViewById(R.id.duration_progressbar));
+            if (mDialogProgressBarDrawable != null) {
+                mDialogProgressBar.setProgressDrawable(mDialogProgressBarDrawable);
             }
-            if (localView.findViewById(getProgressDialogCurrentDurationTextId()) instanceof TextView) {
-                mDialogSeekTime = ((TextView) localView.findViewById(getProgressDialogCurrentDurationTextId()));
-            }
-            if (localView.findViewById(getProgressDialogAllDurationTextId()) instanceof TextView) {
-                mDialogTotalTime = ((TextView) localView.findViewById(getProgressDialogAllDurationTextId()));
-            }
-            if (localView.findViewById(getProgressDialogImageId()) instanceof ImageView) {
-                mDialogIcon = ((ImageView) localView.findViewById(getProgressDialogImageId()));
-            }
+            mDialogSeekTime = ((TextView) localView.findViewById(R.id.tv_current));
+            mDialogTotalTime = ((TextView) localView.findViewById(R.id.tv_duration));
+            mDialogIcon = ((ImageView) localView.findViewById(R.id.duration_image_tip));
             mProgressDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mProgressDialog.setContentView(localView);
             mProgressDialog.getWindow().addFlags(Window.FEATURE_ACTION_BAR);
             mProgressDialog.getWindow().addFlags(32);
             mProgressDialog.getWindow().addFlags(16);
             mProgressDialog.getWindow().setLayout(getWidth(), getHeight());
-            if (mDialogProgressNormalColor != -11 && mDialogTotalTime != null) {
+            if (mDialogProgressNormalColor != -11) {
                 mDialogTotalTime.setTextColor(mDialogProgressNormalColor);
             }
-            if (mDialogProgressHighLightColor != -11 && mDialogSeekTime != null) {
+            if (mDialogProgressHighLightColor != -11) {
                 mDialogSeekTime.setTextColor(mDialogProgressHighLightColor);
             }
             WindowManager.LayoutParams localLayoutParams = mProgressDialog.getWindow().getAttributes();
@@ -213,24 +207,15 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         if (!mProgressDialog.isShowing()) {
             mProgressDialog.show();
         }
-        if (mDialogSeekTime != null) {
-            mDialogSeekTime.setText(seekTime);
-        }
-        if (mDialogTotalTime != null) {
-            mDialogTotalTime.setText(" / " + totalTime);
-        }
+
+        mDialogSeekTime.setText(seekTime);
+        mDialogTotalTime.setText(" / " + totalTime);
         if (totalTimeDuration > 0)
-            if (mDialogProgressBar != null) {
-                mDialogProgressBar.setProgress(seekTimePosition * 100 / totalTimeDuration);
-            }
+            mDialogProgressBar.setProgress(seekTimePosition * 100 / totalTimeDuration);
         if (deltaX > 0) {
-            if (mDialogIcon != null) {
-                mDialogIcon.setBackgroundResource(R.drawable.video_forward_icon);
-            }
+            mDialogIcon.setBackgroundResource(R.drawable.video_forward_icon);
         } else {
-            if (mDialogIcon != null) {
-                mDialogIcon.setBackgroundResource(R.drawable.video_backward_icon);
-            }
+            mDialogIcon.setBackgroundResource(R.drawable.video_backward_icon);
         }
 
     }
@@ -249,12 +234,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void showVolumeDialog(float deltaY, int volumePercent) {
         if (mVolumeDialog == null) {
-            View localView = LayoutInflater.from(getActivityContext()).inflate(getVolumeLayoutId(), null);
-            if (localView.findViewById(getVolumeProgressId()) instanceof ProgressBar) {
-                mDialogVolumeProgressBar = ((ProgressBar) localView.findViewById(getVolumeProgressId()));
-                if (mVolumeProgressDrawable != null && mDialogVolumeProgressBar != null) {
-                    mDialogVolumeProgressBar.setProgressDrawable(mVolumeProgressDrawable);
-                }
+            View localView = LayoutInflater.from(getActivityContext()).inflate(R.layout.video_volume_dialog, null);
+            mDialogVolumeProgressBar = ((ProgressBar) localView.findViewById(R.id.volume_progressbar));
+            if (mVolumeProgressDrawable != null) {
+                mDialogVolumeProgressBar.setProgressDrawable(mVolumeProgressDrawable);
             }
             mVolumeDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mVolumeDialog.setContentView(localView);
@@ -275,9 +258,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         if (!mVolumeDialog.isShowing()) {
             mVolumeDialog.show();
         }
-        if (mDialogVolumeProgressBar != null) {
-            mDialogVolumeProgressBar.setProgress(volumePercent);
-        }
+
+        mDialogVolumeProgressBar.setProgress(volumePercent);
     }
 
     @Override
@@ -295,10 +277,8 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void showBrightnessDialog(float percent) {
         if (mBrightnessDialog == null) {
-            View localView = LayoutInflater.from(getActivityContext()).inflate(getBrightnessLayoutId(), null);
-            if (localView.findViewById(getBrightnessTextId()) instanceof TextView) {
-                mBrightnessDialogTv = (TextView) localView.findViewById(getBrightnessTextId());
-            }
+            View localView = LayoutInflater.from(getActivityContext()).inflate(R.layout.video_brightness, null);
+            mBrightnessDialogTv = (TextView) localView.findViewById(R.id.app_video_brightness);
             mBrightnessDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
             mBrightnessDialog.setContentView(localView);
             mBrightnessDialog.getWindow().addFlags(8);
@@ -321,7 +301,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         if (mBrightnessDialogTv != null)
             mBrightnessDialogTv.setText((int) (percent * 100) + "%");
     }
-
 
     @Override
     protected void dismissBrightnessDialog() {
@@ -361,6 +340,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
         if (gsyBaseVideoPlayer != null) {
             StandardGSYVideoPlayer gsyVideoPlayer = (StandardGSYVideoPlayer) gsyBaseVideoPlayer;
+            gsyVideoPlayer.setStandardVideoAllCallBack(mStandardVideoAllCallBack);
             gsyVideoPlayer.setLockClickListener(mLockClickListener);
             gsyVideoPlayer.setNeedLockFull(isNeedLockFull());
             initFullUI(gsyVideoPlayer);
@@ -563,87 +543,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         updateStartImage();
     }
 
-    /**
-     * 触摸进度dialog的layoutId
-     * 继承后重写可返回自定义
-     * 有自定义的实现逻辑可重载showProgressDialog方法
-     */
-    protected int getProgressDialogLayoutId() {
-        return R.layout.video_progress_dialog;
-    }
-
-    /**
-     * 触摸进度dialog的进度条id
-     * 继承后重写可返回自定义，如果没有可返回空
-     * 有自定义的实现逻辑可重载showProgressDialog方法
-     */
-    protected int getProgressDialogProgressId() {
-        return R.id.duration_progressbar;
-    }
-
-    /**
-     * 触摸进度dialog的当前时间文本
-     * 继承后重写可返回自定义，如果没有可返回空
-     * 有自定义的实现逻辑可重载showProgressDialog方法
-     */
-    protected int getProgressDialogCurrentDurationTextId() {
-        return R.id.tv_current;
-    }
-
-    /**
-     * 触摸进度dialog全部时间文本
-     * 继承后重写可返回自定义，如果没有可返回空
-     * 有自定义的实现逻辑可重载showProgressDialog方法
-     */
-    protected int getProgressDialogAllDurationTextId() {
-        return R.id.tv_duration;
-    }
-
-    /**
-     * 触摸进度dialog的图片id
-     * 继承后重写可返回自定义，如果没有可返回空
-     * 有自定义的实现逻辑可重载showProgressDialog方法
-     */
-    protected int getProgressDialogImageId() {
-        return R.id.duration_image_tip;
-    }
-
-    /**
-     * 音量dialog的layoutId
-     * 继承后重写可返回自定义
-     * 有自定义的实现逻辑可重载showVolumeDialog方法
-     */
-    protected int getVolumeLayoutId() {
-        return R.layout.video_volume_dialog;
-    }
-
-    /**
-     * 音量dialog的百分比进度条 id
-     * 继承后重写可返回自定义，如果没有可返回空
-     * 有自定义的实现逻辑可重载showVolumeDialog方法
-     */
-    protected int getVolumeProgressId() {
-        return R.id.volume_progressbar;
-    }
-
-
-    /**
-     * 亮度dialog的layoutId
-     * 继承后重写可返回自定义
-     * 有自定义的实现逻辑可重载showBrightnessDialog方法
-     */
-    protected int getBrightnessLayoutId() {
-        return R.layout.video_brightness;
-    }
-
-    /**
-     * 亮度dialog的百分比text id
-     * 继承后重写可返回自定义，如果没有可返回空
-     * 有自定义的实现逻辑可重载showBrightnessDialog方法
-     */
-    protected int getBrightnessTextId() {
-        return R.id.app_video_brightness;
-    }
 
     protected void changeUiToPrepareingClear() {
         Debuger.printfLog("changeUiToPrepareingClear");
@@ -825,6 +724,11 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         mDialogProgressNormalColor = normalColor;
     }
 
+
+    public void setStandardVideoAllCallBack(StandardVideoAllCallBack standardVideoAllCallBack) {
+        this.mStandardVideoAllCallBack = standardVideoAllCallBack;
+        setVideoAllCallBack(standardVideoAllCallBack);
+    }
 
     /************************************* 关于截图的 ****************************************/
 

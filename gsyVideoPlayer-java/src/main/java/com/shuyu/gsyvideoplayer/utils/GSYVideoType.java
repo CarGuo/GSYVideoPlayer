@@ -22,34 +22,19 @@ public class GSYVideoType {
     //全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
     public final static int SCREEN_MATCH_FULL = -4;
 
-    //默认播放内核IJK
+
     public final static int IJKPLAYER = 0;
-    /**
-     * IJKEXOPLAYER 和 IJKEXOPLAYER2 是互斥的
-     * IJKEXOPLAYER2 must be compile com.shuyu:gsyVideoPlayer-exo2:$gsyVideoVersion
-     */
-    //EXO 2 播放内核
-    public final static int IJKEXOPLAYER2 = 2;
-    //EXO 1 播放内核，弃用，现在使用的是IJKEXOPLAYER2
-    @Deprecated
-    public final static int IJKEXOPLAYER = IJKEXOPLAYER2;
-    //系统播放器
-    public final static int SYSTEMPLAYER = 4;
+
+    public final static int IJKEXOPLAYER = 1;
 
 
-    /**
-     * GLSurfaceView 主要用于OpenGL渲染的
-     */
+    //gl
     public final static int GLSURFACE = 2;
 
-    /**
-     * SurfaceView，与动画全屏的效果不是很兼容
-     */
+    //surface
     public final static int SUFRACE = 1;
 
-    /**
-     * TextureView,默认
-     */
+    //texture
     public final static int TEXTURE = 0;
 
 
