@@ -6,11 +6,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
-import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
@@ -63,19 +62,22 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
             url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
             title = "哦？Title？";
         }
+        //防止错位，离开释放
+        //gsyVideoPlayer.initUIState();
         gsyVideoOptionBuilder
                 .setIsTouchWiget(false)
                 .setThumbImageView(imageView)
                 .setUrl(url)
+                .setSetUpLazy(true)//lazy可以防止滑动卡顿
                 .setVideoTitle(title)
                 .setCacheWithPlay(true)
-                .setRotateViewAuto(true)
+                .setRotateViewAuto(false)
                 .setLockLand(true)
                 .setPlayTag(TAG)
-                .setShowFullAnimation(true)
+                .setShowFullAnimation(false)
                 .setNeedLockFull(true)
                 .setPlayPosition(position)
-                .setStandardVideoAllCallBack(new SampleListener() {
+                .setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override
                     public void onPrepared(String url, Object... objects) {
                         super.onPrepared(url, objects);
@@ -97,6 +99,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
                     public void onEnterFullscreen(String url, Object... objects) {
                         super.onEnterFullscreen(url, objects);
                         GSYVideoManager.instance().setNeedMute(false);
+                        gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String)objects[0]);
                     }
                 }).build(gsyVideoPlayer);
 

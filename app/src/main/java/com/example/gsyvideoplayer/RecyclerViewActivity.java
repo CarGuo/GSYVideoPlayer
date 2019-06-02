@@ -1,8 +1,6 @@
 package com.example.gsyvideoplayer;
 
 
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,11 +14,7 @@ import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
 
 import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
-import com.example.gsyvideoplayer.utils.ScrollCalculatorHelper;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.utils.CommonUtil;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +34,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
     List<VideoModel> dataList = new ArrayList<>();
 
-    boolean mFull = false;
-
-    ScrollCalculatorHelper scrollCalculatorHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +49,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         resolveData();
 
-
-        //限定范围为屏幕一半的上下偏移100
-        int playTop = CommonUtil.getScreenHeight(this) / 2 - CommonUtil.dip2px(this, 100);
-        int playBottom = CommonUtil.getScreenHeight(this) / 2 + CommonUtil.dip2px(this, 100);
-        //自定播放帮助类
-        scrollCalculatorHelper = new ScrollCalculatorHelper(R.id.video_item_player, playTop, playBottom);
-
         final RecyclerNormalAdapter recyclerNormalAdapter = new RecyclerNormalAdapter(this, dataList);
         linearLayoutManager = new LinearLayoutManager(this);
         videoList.setLayoutManager(linearLayoutManager);
@@ -77,23 +61,15 @@ public class RecyclerViewActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                scrollCalculatorHelper.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                firstVisibleItem   = linearLayoutManager.findFirstVisibleItemPosition();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-
-                //这是滑动自动播放的代码
-                if (!mFull) {
-                    scrollCalculatorHelper.onScroll(recyclerView, firstVisibleItem, lastVisibleItem, lastVisibleItem - firstVisibleItem);
-                }
-
-
-                //这是划出屏幕释放的代码
-                /*if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
                     //当前播放的位置
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
@@ -102,32 +78,20 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
                         //如果滑出去了上面和下面就是否，和今日头条一样
                         //是否全屏
-                        if(!mFull) {
-                            GSYVideoPlayer.releaseAllVideos();
+                        if(!GSYVideoManager.isFullState(RecyclerViewActivity.this)) {
+                            GSYVideoManager.releaseAllVideos();
                             recyclerNormalAdapter.notifyDataSetChanged();
                         }
                     }
-                }*/
+                }
             }
         });
 
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (newConfig.orientation != ActivityInfo.SCREEN_ORIENTATION_USER) {
-            mFull = false;
-        } else {
-            mFull = true;
-        }
-
-    }
-
-    @Override
     public void onBackPressed() {
-        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
+        if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
         super.onBackPressed();
@@ -148,7 +112,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GSYVideoPlayer.releaseAllVideos();
+        GSYVideoManager.releaseAllVideos();
     }
 
 

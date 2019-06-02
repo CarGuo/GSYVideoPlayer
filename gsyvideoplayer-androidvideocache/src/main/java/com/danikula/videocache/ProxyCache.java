@@ -1,7 +1,5 @@
 package com.danikula.videocache;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -18,7 +16,6 @@ import static com.danikula.videocache.Preconditions.checkNotNull;
  */
 class ProxyCache {
 
-    private static final Logger LOG = LoggerFactory.getLogger("ProxyCache");
     private static final int MAX_READ_SOURCE_ATTEMPTS = 1;
 
     private final Source source;
@@ -62,7 +59,6 @@ class ProxyCache {
 
     public void shutdown() {
         synchronized (stopLock) {
-            LOG.debug("Shutdown proxy for " + source);
             try {
                 stopped = true;
                 if (sourceReaderThread != null) {
@@ -174,9 +170,9 @@ class ProxyCache {
     protected final void onError(final Throwable e) {
         boolean interruption = e instanceof InterruptedProxyCacheException;
         if (interruption) {
-            LOG.debug("ProxyCache is interrupted");
+            HttpProxyCacheDebuger.printfLog("ProxyCache is interrupted");
         } else {
-            LOG.error("ProxyCache error", e);
+            HttpProxyCacheDebuger.printfError("ProxyCache error", e.getMessage());
         }
     }
 

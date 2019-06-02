@@ -1,8 +1,12 @@
 package com.example.gsyvideoplayer;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.Button;
@@ -16,20 +20,31 @@ import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.GifCreateHelper;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
 /**
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
@@ -38,8 +53,8 @@ import butterknife.ButterKnife;
  * <p>
  * Created by guoshuyu on 2017/6/18.
  */
-
-public class DetailControlActivity extends GSYBaseActivityDetail {
+@RuntimePermissions
+public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
     @BindView(R.id.post_detail_nested_scroll)
     NestedScrollView postDetailNestedScroll;
@@ -69,7 +84,11 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
     @BindView(R.id.loadingView)
     View loadingView;
 
-    private String url = "https://res.exexm.com/cw_145225549855002";
+    private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+    //private String url = "http://livecdn1.news.cn/Live_MajorEvent01Phone/manifest.m3u8";
+    //private String url = "https://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/8908d124aa839d0d3fa9593855ef5957.m3u8";
+    //private String url2 = "http://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/3aca1a0db8db9418dcbc765848c8903e.m3u8";
+
 
     private GifCreateHelper mGifCreateHelper;
 
@@ -104,6 +123,14 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
             }
         });
 
+        /*VideoOptionModel videoOptionModel =
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);
+        List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel);
+        videoOptionModel =
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tcp");
+        list.add(videoOptionModel);
+        GSYVideoManager.instance().setOptionModelList(list);*/
 
         jump.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +143,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
         shot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shotImage(v);
+                DetailControlActivityPermissionsDispatcher.shotImageWithPermissionCheck(DetailControlActivity.this, v);
             }
         });
 
@@ -124,7 +151,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
         startGif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startGif();
+                DetailControlActivityPermissionsDispatcher.startGifWithPermissionCheck(DetailControlActivity.this);
             }
         });
 
@@ -144,7 +171,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
     }
 
     @Override
-    public GSYBaseVideoPlayer getGSYVideoPlayer() {
+    public StandardGSYVideoPlayer getGSYVideoPlayer() {
         return detailPlayer;
     }
 
@@ -245,7 +272,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
     /**
      * 开始gif截图
      */
-    private void startGif() {
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void startGif() {
         //开始缓存各个帧
         mGifCreateHelper.startGif(new File(FileUtils.getPath()));
 
@@ -254,16 +282,46 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
     /**
      * 生成gif
      */
-    private void stopGif() {
+    void stopGif() {
         loadingView.setVisibility(View.VISIBLE);
         mGifCreateHelper.stopGif(new File(FileUtils.getPath(), "GSY-Z-" + System.currentTimeMillis() + ".gif"));
     }
 
+    @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void showRationaleForCamera(final PermissionRequest request) {
+        new AlertDialog.Builder(this)
+                .setMessage("快给我权限")
+                .setPositiveButton("允许", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.proceed();
+                    }
+                })
+                .setNegativeButton("拒绝", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.cancel();
+                    }
+                })
+                .show();
+    }
+
+    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void showDeniedForCamera() {
+        Toast.makeText(this, "没有权限啊", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnNeverAskAgain(Manifest.permission.CAMERA)
+    void showNeverAskForCamera() {
+        Toast.makeText(this, "再次授权", Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * 视频截图
+     * 这里没有做读写本地sd卡的权限处理，记得实际使用要加上
      */
-    private void shotImage(final View v) {
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void shotImage(final View v) {
         //获取截图
         detailPlayer.taskShotPic(new GSYVideoShotListener() {
             @Override
@@ -336,6 +394,13 @@ public class DetailControlActivity extends GSYBaseActivityDetail {
                 Toast.makeText(DetailControlActivity.this, tip, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // NOTE: delegate the permission handling to generated method
+        DetailControlActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
 }

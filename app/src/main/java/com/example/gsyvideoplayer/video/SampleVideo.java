@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,7 +14,6 @@ import android.widget.Toast;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.view.SwitchVideoTypeDialog;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -150,11 +150,17 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 需要在尺寸发生变化的时候重新处理
      */
     @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        super.onSurfaceTextureSizeChanged(surface, width, height);
+    public void onSurfaceSizeChanged(Surface surface, int width, int height) {
+        super.onSurfaceSizeChanged(surface, width, height);
         resolveTransform();
     }
 
+    @Override
+    public void onSurfaceAvailable(Surface surface) {
+        super.onSurfaceAvailable(surface);
+        resolveRotateUI();
+        resolveTransform();
+    }
 
     /**
      * 处理镜像旋转
@@ -271,16 +277,6 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     }
 
     /**
-     * 处理显示逻辑
-     */
-    @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        super.onSurfaceTextureAvailable(surface, width, height);
-        resolveRotateUI();
-        resolveTransform();
-    }
-
-    /**
      * 旋转逻辑
      */
     private void resolveRotateUI() {
@@ -335,12 +331,11 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                 final String name = mUrlList.get(position).getName();
                 if (mSourcePosition != position) {
                     if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
-                            || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)
-                            && GSYVideoManager.instance().getMediaPlayer() != null) {
+                            || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)) {
                         final String url = mUrlList.get(position).getUrl();
                         onVideoPause();
                         final long currentPosition = mCurrentPosition;
-                        GSYVideoManager.instance().releaseMediaPlayer();
+                        getGSYVideoManager().releaseMediaPlayer();
                         cancelProgressTimer();
                         hideAllWidget();
                         new Handler().postDelayed(new Runnable() {

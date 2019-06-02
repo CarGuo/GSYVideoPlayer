@@ -40,12 +40,6 @@
     native <methods>;
 }
 
-
--keepclassmembers class fqcn.of.javascript.interface.for.webview {
-   public *;
-}
-
-
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;
@@ -77,7 +71,53 @@ public static ** valueOf(java.lang.String);
 }
 
 
--keep class com.shuyu.gsyvideoplayer.** { *; }
--dontwarn com.shuyu.gsyvideoplayer.**
+# 对于带有回调函数的onXXEvent、**On*Listener的，不能被混淆
+-keepclassmembers class * {
+    void *(**On*Event);
+    void *(**On*Listener);
+}
+
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.webView, jav.lang.String);
+}
+
+
+# ButterKnife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+
+# 保留我们自定义控件（继承自View）不被混淆
+-keep public class * extends android.view.View{
+    *** get*();
+    void set*(***);
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+-keep class com.shuyu.gsyvideoplayer.video.** { *; }
+-dontwarn com.shuyu.gsyvideoplayer.video.**
+-keep class com.shuyu.gsyvideoplayer.video.base.** { *; }
+-dontwarn com.shuyu.gsyvideoplayer.video.base.**
+-keep class com.shuyu.gsyvideoplayer.utils.** { *; }
+-dontwarn com.shuyu.gsyvideoplayer.utils.**
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**

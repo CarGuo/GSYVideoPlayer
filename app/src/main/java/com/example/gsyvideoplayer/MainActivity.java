@@ -1,10 +1,16 @@
 package com.example.gsyvideoplayer;
 
+import android.Manifest;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.gsyvideoplayer.simple.SimpleActivity;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -12,6 +18,8 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import permissions.dispatcher.PermissionUtils;
+import permissions.dispatcher.RuntimePermissions;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,18 +29,39 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.open_btn_empty)
     Button openBtn2;
 
+    final String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Debuger.enable();
         ButterKnife.bind(this);
+        boolean hadPermission = PermissionUtils.hasSelfPermissions(this, permissions);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hadPermission) {
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            requestPermissions(permissions, 1110);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean sdPermissionResult = PermissionUtils.verifyPermissions(grantResults);
+        if (!sdPermissionResult) {
+            Toast.makeText(this, "没获取到sd卡权限，无法播放本地视频哦", Toast.LENGTH_LONG).show();
+        }
     }
 
     @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video, R.id.fragment_video,
-            R.id.more_type, R.id.input_type, R.id.open_btn_empty, R.id.open_control, R.id.open_filter, R.id.open_btn_pick, R.id.open_btn_auto})
+            R.id.more_type, R.id.input_type, R.id.open_btn_empty, R.id.open_control, R.id.open_filter, R.id.open_btn_pick, R.id.open_btn_auto, R.id.open_scroll, R.id.open_window, R.id.open_btn_ad,
+            R.id.open_btn_multi, R.id.open_btn_ad2, R.id.open_list_ad, R.id.open_custom_exo, R.id.open_simple, R.id.open_switch})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.open_simple:
+                //简单的播放
+                startActivity(new Intent(this, SimpleActivity.class));
+                break;
             case R.id.open_btn:
                 //直接一个页面播放的
                 JumpUtils.goToVideoPlayer(this, openBtn);
@@ -97,9 +126,40 @@ public class MainActivity extends AppCompatActivity {
                 //列表自动播放
                 JumpUtils.goToAutoVideoPlayer(this);
                 break;
+            case R.id.open_scroll:
+                //列表自动播放
+                JumpUtils.goToScrollDetailPlayer(this);
+                break;
+            case R.id.open_window:
+                //多窗体下的悬浮窗
+                JumpUtils.goToScrollWindow(this);
+                break;
+            case R.id.open_btn_ad:
+                //广告
+                JumpUtils.goToVideoADPlayer(this);
+                break;
+            case R.id.open_btn_multi:
+                //多个同时播放
+                JumpUtils.goToMultiVideoPlayer(this);
+                break;
+            case R.id.open_btn_ad2:
+                //多个同时播放
+                JumpUtils.goToVideoADPlayer2(this);
+                break;
+            case R.id.open_list_ad:
+                //多个同时播放
+                JumpUtils.goToADListVideoPlayer(this);
+                break;
+            case R.id.open_custom_exo:
+                //多个同时播放
+                JumpUtils.goToDetailExoListPlayer(this);
+                break;
+            case R.id.open_switch:
+                JumpUtils.goToSwitch(this);
+                break;
             case R.id.clear_cache:
                 //清理缓存
-                GSYVideoManager.clearAllDefaultCache(MainActivity.this);
+                GSYVideoManager.instance().clearAllDefaultCache(MainActivity.this);
                 //String url = "https://res.exexm.com/cw_145225549855002";
                 //GSYVideoManager.clearDefaultCache(MainActivity.this, url);
                 break;

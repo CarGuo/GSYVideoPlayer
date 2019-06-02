@@ -18,7 +18,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
  * Created by shuyu on 2016/12/10.
  * 进度图小图预览，目前对本地视频还可以，网络视频效果不好，不建议使用
  */
-
+@Deprecated
 public class CustomGSYVideoPlayer extends StandardGSYVideoPlayer {
 
     private RelativeLayout mPreviewLayout;

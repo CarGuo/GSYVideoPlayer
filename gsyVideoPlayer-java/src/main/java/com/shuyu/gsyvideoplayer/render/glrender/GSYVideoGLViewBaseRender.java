@@ -7,10 +7,13 @@ import android.opengl.GLES20;
 import android.opengl.GLException;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.Handler;
 import android.view.Surface;
 
+import com.shuyu.gsyvideoplayer.render.view.listener.GSYVideoGLRenderErrorListener;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
+import com.shuyu.gsyvideoplayer.render.view.listener.GLSurfaceListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.nio.IntBuffer;
@@ -27,7 +30,7 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
     //是否需要高清截图
     protected boolean mHighShot = false;
 
-    protected GSYVideoGLView.onGSYSurfaceListener mGSYSurfaceListener;
+    protected GLSurfaceListener mGSYSurfaceListener;
 
     protected GLSurfaceView mSurfaceView;
 
@@ -43,6 +46,13 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
 
     protected int mCurrentVideoHeight = 0;
 
+    protected boolean mChangeProgram = false;
+
+    protected boolean mChangeProgramSupportError = false;
+
+    protected GSYVideoGLRenderErrorListener mGSYVideoGLRenderErrorListener;
+
+    protected Handler mHandler = new Handler();
 
     public abstract void releaseAll();
 
@@ -50,10 +60,15 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
         this.mSurfaceView = surfaceView;
     }
 
-    public void sendSurfaceForPlayer(Surface surface) {
-        if (mGSYSurfaceListener != null) {
-            mGSYSurfaceListener.onSurfaceAvailable(surface);
-        }
+    public void sendSurfaceForPlayer(final Surface surface) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mGSYSurfaceListener != null) {
+                    mGSYSurfaceListener.onSurfaceAvailable(surface);
+                }
+            }
+        });
     }
 
     protected int loadShader(int shaderType, String source) {
@@ -105,11 +120,20 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
         return program;
     }
 
-    protected void checkGlError(String op) {
-        int error;
-        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+    protected void checkGlError(final String op) {
+        final int error;
+        if ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
             Debuger.printfError(op + ": glError " + error);
-            throw new RuntimeException(op + ": glError " + error);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mGSYVideoGLRenderErrorListener != null) {
+                        mGSYVideoGLRenderErrorListener.onError(GSYVideoGLViewBaseRender.this, op + ": glError " + error, error, mChangeProgramSupportError);
+                    }
+                    mChangeProgramSupportError = false;
+                }
+            });
+            //throw new RuntimeException(op + ": glError " + error);
         }
     }
 
@@ -148,7 +172,7 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
     }
 
 
-    public void setGSYSurfaceListener(GSYVideoGLView.onGSYSurfaceListener onSurfaceListener) {
+    public void setGSYSurfaceListener(GLSurfaceListener onSurfaceListener) {
         this.mGSYSurfaceListener = onSurfaceListener;
     }
 
@@ -182,6 +206,12 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
      */
     public void setEffect(GSYVideoGLView.ShaderInterface shaderEffect) {
     }
+
+
+    public GSYVideoGLView.ShaderInterface getEffect() {
+        return null;
+    }
+
 
     public int getCurrentViewWidth() {
         return mCurrentViewWidth;
@@ -220,6 +250,10 @@ public abstract class GSYVideoGLViewBaseRender implements GLSurfaceView.Renderer
             Matrix.scaleM(mMVPMatrix, 0, (float) mCurrentViewWidth / mSurfaceView.getWidth(),
                     (float) mCurrentViewHeight / mSurfaceView.getHeight(), 1);
         }
+    }
+
+    public void setGSYVideoGLRenderErrorListener(GSYVideoGLRenderErrorListener videoGLRenderErrorListener) {
+        this.mGSYVideoGLRenderErrorListener = videoGLRenderErrorListener;
     }
 }
 

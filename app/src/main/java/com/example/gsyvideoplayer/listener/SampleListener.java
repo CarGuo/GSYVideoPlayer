@@ -1,12 +1,18 @@
 package com.example.gsyvideoplayer.listener;
 
-import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
+import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 
 /**
  * Created by shuyu on 2016/11/23.
  */
 
-public class SampleListener implements StandardVideoAllCallBack {
+public class SampleListener implements VideoAllCallBack {
+
+    //开始加载，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
+    @Override
+    public  void onStartPrepared(String url, Object... objects) {
+
+    }
 
     //加载成功，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
     @Override

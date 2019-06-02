@@ -19,7 +19,6 @@ package com.shuyu.gsyvideoplayer.utils;
 
 import android.view.View;
 
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import java.lang.ref.WeakReference;
 
@@ -38,9 +37,13 @@ public final class MeasureHelper {
 
     private int mCurrentAspectRatio = GSYVideoType.SCREEN_TYPE_DEFAULT;
 
-    public MeasureHelper(View view) {
-        mWeakView = new WeakReference<View>(view);
+    private final MeasureFormVideoParamsListener mParamsListener;
+
+    public MeasureHelper(View view, MeasureFormVideoParamsListener listener) {
+        mParamsListener = listener;
+        mWeakView = new WeakReference<>(view);
     }
+
 
     public View getView() {
         if (mWeakView == null)
@@ -206,13 +209,13 @@ public final class MeasureHelper {
 
 
     public void prepareMeasure(int widthMeasureSpec, int heightMeasureSpec, int rotate) {
-        if (GSYVideoManager.instance().getMediaPlayer() != null) {
+        if (mParamsListener != null) {
             try {
-                int videoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
-                int videoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
+                int videoWidth = mParamsListener.getCurrentVideoWidth();
+                int videoHeight = mParamsListener.getCurrentVideoHeight();
                 Debuger.printfLog("videoWidth: " + videoWidth + " videoHeight: " + videoHeight);
-                int videoSarNum = GSYVideoManager.instance().getMediaPlayer().getVideoSarNum();
-                int videoSarDen = GSYVideoManager.instance().getMediaPlayer().getVideoSarDen();
+                int videoSarNum = mParamsListener.getVideoSarNum();
+                int videoSarDen = mParamsListener.getVideoSarDen();
 
                 if (videoWidth > 0 && videoHeight > 0) {
                     setVideoSampleAspectRatio(videoSarNum, videoSarDen);
@@ -237,6 +240,19 @@ public final class MeasureHelper {
 
     public void setAspectRatio(int aspectRatio) {
         mCurrentAspectRatio = aspectRatio;
+    }
+
+    /**
+     * 构造宽高所需要的视频相关参数
+     */
+    public interface MeasureFormVideoParamsListener {
+        int getCurrentVideoWidth();
+
+        int getCurrentVideoHeight();
+
+        int getVideoSarNum();
+
+        int getVideoSarDen();
     }
 
 }
