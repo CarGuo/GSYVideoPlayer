@@ -1,6 +1,5 @@
 package com.shuyu.gsyvideoplayer.model;
 
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -11,24 +10,17 @@ import java.util.Map;
 public class GSYModel {
 
     String url;
-
-    File mCachePath;
-
     Map<String, String> mapHeadData;
 
     float speed = 1;
 
     boolean looping;
 
-    boolean isCache;
-
-    public GSYModel(String url, Map<String, String> mapHeadData, boolean loop, float speed, boolean isCache, File cachePath) {
+    public GSYModel(String url, Map<String, String> mapHeadData, boolean loop, float speed) {
         this.url = url;
         this.mapHeadData = mapHeadData;
         this.looping = loop;
         this.speed = speed;
-        this.isCache = isCache;
-        this.mCachePath = cachePath;
     }
 
     public String getUrl() {
@@ -61,21 +53,5 @@ public class GSYModel {
 
     public void setSpeed(float speed) {
         this.speed = speed;
-    }
-
-    public boolean isCache() {
-        return isCache;
-    }
-
-    public void setCache(boolean cache) {
-        isCache = cache;
-    }
-
-    public File getCachePath() {
-        return mCachePath;
-    }
-
-    public void setCachePath(File cachePath) {
-        this.mCachePath = cachePath;
     }
 }

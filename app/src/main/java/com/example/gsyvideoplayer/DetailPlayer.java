@@ -1,26 +1,25 @@
 package com.example.gsyvideoplayer;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
-import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 
 import java.util.ArrayList;
@@ -55,24 +54,39 @@ public class DetailPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_detail_player);
         ButterKnife.bind(this);
 
-        String url =  getUrl();
+        //断网自动重新链接，url前接上ijkhttphook:
+        //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
+
+        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+
+        //String url =  "http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4";
+        String url = "http://video.7k.cn/app_video/20171213/276d8195/v.m3u8.mp4";
+        //String url = "http://103.233.191.21/riak/riak-bucket/6469ac502e813a4c1df7c99f364e70c1.mp4";
+        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+        //String url = "https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8";
+        //String url = "http://cdn.tiaobatiaoba.com/Upload/square/2017-11-02/1509585140_1279.mp4";
+
+        //String url = "http://hcjs2ra2rytd8v8np1q.exp.bcevod.com/mda-hegtjx8n5e8jt9zv/mda-hegtjx8n5e8jt9zv.m3u8";
+        //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
+        //String url = "http://ocgk7i2aj.bkt.clouddn.com/17651ac2-693c-47e9-b2d2-b731571bad37";
+        //String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
+        //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
+        //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
+        //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
+        //String url = "https://res.exexm.com/cw_145225549855002";
+        //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
 
         //detailPlayer.setUp(url, false, null, "测试视频");
         //detailPlayer.setLooping(true);
         //detailPlayer.setShowPauseCover(false);
 
         //如果视频帧数太高导致卡画面不同步
-        //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 30);
+        //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 5);
         //如果视频seek之后从头播放
         //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
-        //list<VideoOptionModel> list = new ArrayList<>();
+        //List<VideoOptionModel> list = new ArrayList<>();
         //list.add(videoOptionModel);
-
-        List<VideoOptionModel> list = new ArrayList<>();
-        //硬解码：1、打开，0、关闭
-        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tcp");
-        list.add(videoOptionModel);
-        GSYVideoManager.instance().setOptionModelList(list);
+        //GSYVideoManager.instance().setOptionModelList(list);
 
         //GSYVideoManager.instance().setTimeOut(4000, true);
 
@@ -95,13 +109,13 @@ public class DetailPlayer extends AppCompatActivity {
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
-                .setAutoFullWithSize(true)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
+                .setSeekRatio(1)
                 .setUrl(url)
                 .setCacheWithPlay(false)
                 .setVideoTitle("测试视频")
-                .setVideoAllCallBack(new GSYSampleCallBack() {
+                .setStandardVideoAllCallBack(new SampleListener() {
                     @Override
                     public void onPrepared(String url, Object... objects) {
                         Debuger.printfError("***** onPrepared **** " + objects[0]);
@@ -147,14 +161,7 @@ public class DetailPlayer extends AppCompatActivity {
                             orientationUtils.setEnable(!lock);
                         }
                     }
-                })
-                .setGSYVideoProgressListener(new GSYVideoProgressListener() {
-                    @Override
-                    public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
-                        Debuger.printfLog(" progress " + progress + " secProgress " + secProgress + " currentPosition " + currentPosition + " duration " + duration);
-                    }
-                })
-                .build(detailPlayer);
+                }).build(detailPlayer);
 
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +173,7 @@ public class DetailPlayer extends AppCompatActivity {
                 detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
             }
         });
+
     }
 
     @Override
@@ -175,7 +183,7 @@ public class DetailPlayer extends AppCompatActivity {
             orientationUtils.backToProtVideo();
         }
 
-        if (GSYVideoManager.backFromWindowFull(this)) {
+        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
             return;
         }
         super.onBackPressed();
@@ -191,7 +199,7 @@ public class DetailPlayer extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        getCurPlay().onVideoResume(false);
+        getCurPlay().onVideoResume();
         super.onResume();
         isPause = false;
     }
@@ -214,7 +222,7 @@ public class DetailPlayer extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
         }
     }
 
@@ -230,58 +238,5 @@ public class DetailPlayer extends AppCompatActivity {
             return  detailPlayer.getFullWindowPlayer();
         }
         return detailPlayer;
-    }
-
-
-
-
-    private String getUrl() {
-
-        //String url = "android.resource://" + getPackageName() + "/" + R.raw.test;
-        //注意，用ijk模式播放raw视频，这个必须打开
-        //GSYVideoManager.instance().enableRawPlay(getApplicationContext());
-
-        //断网自动重新链接，url前接上ijkhttphook:
-        //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
-
-        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
-        //String url = "http://120.27.209.83/video/2018/2b0532425dd6401cacffc89eef50221e.avi";
-        //String url = "http://qiniu.carmmi.com/image/132451525666042.mp4";
-        //String url = "http://ucp.wn.sunmath.cn/file-upload/gYQJHxK9iNQKJeWyS/V80418-103803.mp4?rc_uid=7sCFCGoaF2iTc9vH9&rc_token=prJK-xGutKmy2LDQO-OZASjob0o1u_s3e5SgMHmgjtn";
-        //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
-        //String url = "file://"+ Environment.getExternalStorageDirectory().getPath() + "Download/132451525666042.mp4";
-        //String url = "file://"+ Environment.getExternalStorageDirectory().getPath() + "/3333.avi";
-        //String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
-        String url = "http://120.27.209.83/video/2018/2b0532425dd6401cacffc89eef50221e.avi";
-
-        //String url =  "http://ipsimg-huabei2.speiyou.cn/010/video/other/20180427/40288b156241ec6301624243bdf7021e/40288b156290270d0162a3e7eb2e0726/1524814477/movie.mp4";
-        //String url =  "http://ipsimg-huabei2.speiyou.cn/010/video/other/20180424/40288b156290270d0162a3db8cdd033e/40288b156290270d0162a3e8207f074f/e787a64c-f2d0-48fe-896d-246af05f111a.mp4";
-
-        //String url =  "http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4";
-        //String url =  "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8";
-        //String url =  "https://cdn61.ytbbs.tv/cn/tv/55550/55550-1/play.m3u8?md5=v4sI4lWlo4XojzeAjgBGaQ&expires=1521204012&token=55550";
-        //String url =  "http://1253492636.vod2.myqcloud.com/2e5fc148vodgzp1253492636/d08af82d4564972819086152830/plHZZoSkje0A.mp4";
-
-        //String url = "rtsp://ajj:12345678@218.21.217.122:65523/h264/ch40/sub/av_stream";
-        //String url = "rtsp://ajj:ajj12345678@218.21.217.122:65522/h264/ch15/sub/av_stream";//String url =  "rtsp://cloud.easydarwin.org:554/stream0.sdp";
-        //String url = "http://s.swao.cn/o_1c4gm8o
-        // 1nniu1had13bk1t0l1rq64m.mov";
-        //String url = "http://api.ciguang.tv/avideo/play?num=02-041-0491&type=flv&v=1&client=android";
-        //String url = "http://video.7k.cn/app_video/20171213/276d8195/v.m3u8.mp4";
-        //String url = "http://103.233.191.21/riak/riak-bucket/6469ac502e813a4c1df7c99f364e70c1.mp4";
-        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
-        //String url = "https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8";
-        //String url = "http://cdn.tiaobatiaoba.com/Upload/square/2017-11-02/1509585140_1279.mp4";
-
-        //String url = "http://hcjs2ra2rytd8v8np1q.exp.bcevod.com/mda-hegtjx8n5e8jt9zv/mda-hegtjx8n5e8jt9zv.m3u8";
-        //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
-        //String url = "http://ocgk7i2aj.bkt.clouddn.com/17651ac2-693c-47e9-b2d2-b731571bad37";
-        //String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
-        //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
-        //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
-        //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
-        //String url = "https://res.exexm.com/cw_145225549855002";
-        //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
-        return url;
     }
 }

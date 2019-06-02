@@ -6,15 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
-import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
+import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 /**
  * 详情模式播放页面基础类
  * Created by guoshuyu on 2017/9/14.
  */
-public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extends AppCompatActivity implements VideoAllCallBack {
+public abstract class GSYBaseActivityDetail extends AppCompatActivity implements StandardVideoAllCallBack {
 
     protected boolean isPlay;
 
@@ -40,7 +41,11 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
             getGSYVideoPlayer().getFullscreenButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showFull();
+                    //直接横屏
+                    orientationUtils.resolveByClick();
+                    //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+                    getGSYVideoPlayer().startWindowFullscreen(GSYBaseActivityDetail.this, true, true);
+
                     clickForFullScreen();
                 }
             });
@@ -57,22 +62,12 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
                 .build(getGSYVideoPlayer());
     }
 
-    public void showFull() {
-        if (orientationUtils.getIsLand() != 1) {
-            //直接横屏
-            orientationUtils.resolveByClick();
-        }
-        //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-        getGSYVideoPlayer().startWindowFullscreen(GSYBaseActivityDetail.this, hideActionBarWhenFull(), hideStatusBarWhenFull());
-
-    }
-
     @Override
     public void onBackPressed() {
         if (orientationUtils != null) {
             orientationUtils.backToProtVideo();
         }
-        if (GSYVideoManager.backFromWindowFull(this)) {
+        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
             return;
         }
         super.onBackPressed();
@@ -108,13 +103,8 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            getGSYVideoPlayer().onConfigurationChanged(this, newConfig, orientationUtils, hideActionBarWhenFull(), hideStatusBarWhenFull());
+            getGSYVideoPlayer().onConfigurationChanged(this, newConfig, orientationUtils);
         }
-    }
-
-    @Override
-    public void onStartPrepared(String url, Object... objects) {
-
     }
 
     @Override
@@ -124,7 +114,7 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
             throw new NullPointerException("initVideo() or initVideoBuilderMode() first");
         }
         //开始播放了才能旋转和全屏
-        orientationUtils.setEnable(getDetailOrientationRotateAuto() && !isAutoFullWithSize());
+        orientationUtils.setEnable(getDetailOrientationRotateAuto());
         isPlay = true;
     }
 
@@ -230,18 +220,10 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
 
     }
 
-    public boolean hideActionBarWhenFull() {
-        return  true;
-    }
-
-    public boolean hideStatusBarWhenFull() {
-        return  true;
-    }
-
     /**
      * 播放控件
      */
-    public abstract T getGSYVideoPlayer();
+    public abstract GSYBaseVideoPlayer getGSYVideoPlayer();
 
     /**
      * 配置播放器
@@ -257,11 +239,4 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
      * 是否启动旋转横屏，true表示启动
      */
     public abstract boolean getDetailOrientationRotateAuto();
-
-    /**
-     * 是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
-     */
-    public boolean isAutoFullWithSize() {
-        return false;
-    }
 }

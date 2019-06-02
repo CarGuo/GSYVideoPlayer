@@ -2,24 +2,16 @@ language: android
 jdk: oraclejdk8
 android:
   components:
-  - platform-tools
-  - tools
-  - build-tools-27.0.2
-  - android-27
-  - extra-android-support
-  - extra-android-m2repository
-before_install:
-- chmod +x gradlew
-script:
-- cd app
-- "../gradlew assembleRelease"
+    - platform-tools
+    - tools
+    - build-tools-25.0.0
+    - android-22
+    - extra-android-support
+    - extra-android-m2repository
 
-deploy:
-  provider: releases
-  api_key:
-    secure: 37XZTS6kJROMJtr77FuCwhlYMUaSWzh2wC8aBE49ZSzhJIkhUy3BiaVK2h+AyQtMT7qb0D2c3efuNViJKwR8lQ7BZG5pSG/2bky3ilXINfnCn84SzUXGyHYPzCT/VzjNMcrnkqlawTvtPmoR5ohWJ1RD+oiL2RXMCbjQYmkTA4SZQqdOvcmGsw1rbqtC3085SmF5nB27IAOX29phZSJ/T3J3MTDmFuosfBrQBmFdzOt/9A1n/Qew4npF5xitvQC/rjhVelEXOC015HaJN2co802l8XDLQp2sZvNU5UHaX2ENawe08tHNpuNMKDxwaGVwi9t579OJCbOiNerIIRcM6ZYTy97OdxsMHFhfW+NvMae4pf1B4EwsgI+La9stfERW4XUuK6xL3tmvUZEvre5tuat+Y6aZfzDDObmt1/V8eljGycYt2ab7/sSppi97NBOI/dYAeLv5a1MTrqqfkA0igx5tNcnGPVENW9XmgXyeMHOyBdvYA2plnhhG/ef2G+QxMC+zMH1QTKYceObaKQs9COv3X5pdAH5fDQ1L+oNELG4Q3VlyEDCQ54n9dfrMNVu9V7IyA04iWilv30aOOIFNCJfXP+b2HtB7idV+9UDDsyln+ynesrs3nqQ0dd8MjOxKSIS+GSfqKVLg4r6H9qIAz0U4RbFKc+jlvAjQowhbpa4=
-  file: build/outputs/apk/release/app-release.apk
-  skip_cleanup: true
-  on:
-    tags: true
-    all_branches: true
+before_install:
+ - chmod +x gradlew
+
+script:
+    - cd gsyVideoPlayer
+    - ../gradlew assembleRelease

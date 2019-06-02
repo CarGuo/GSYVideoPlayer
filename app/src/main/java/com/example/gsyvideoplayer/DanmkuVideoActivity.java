@@ -1,32 +1,24 @@
 package com.example.gsyvideoplayer;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.DanmakuVideoPlayer;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.FileCallBack;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.Call;
 
 /**
  * Created by guoshuyu on 2017/2/19.
@@ -47,7 +39,6 @@ public class DanmkuVideoActivity extends AppCompatActivity {
 
     private boolean isPlay;
     private boolean isPause;
-    private boolean isDestory;
 
     private OrientationUtils orientationUtils;
 
@@ -63,8 +54,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         danmakuVideoPlayer.setShrinkImageRes(R.drawable.custom_shrink);
         danmakuVideoPlayer.setEnlargeImageRes(R.drawable.custom_enlarge);
 
-        //String url = "https://res.exexm.com/cw_145225549855002";
-        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "https://res.exexm.com/cw_145225549855002";
         danmakuVideoPlayer.setUp(url, true, null, "测试视频");
 
@@ -100,14 +90,13 @@ public class DanmkuVideoActivity extends AppCompatActivity {
             }
         });
 
-        danmakuVideoPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
+        danmakuVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
                 orientationUtils.setEnable(true);
                 isPlay = true;
-                getDanmu();
             }
 
             @Override
@@ -148,7 +137,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
             orientationUtils.backToProtVideo();
         }
 
-        if (GSYVideoManager.backFromWindowFull(this)) {
+        if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
             return;
         }
         super.onBackPressed();
@@ -178,8 +167,6 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         //GSYPreViewManager.instance().releaseMediaPlayer();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
-
-        isDestory = true;
     }
 
 
@@ -188,31 +175,10 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            danmakuVideoPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+            danmakuVideoPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
         }
     }
 
-
-    private void getDanmu() {
-        //下载demo然后设置
-        OkHttpUtils.get().url(TextUtils.concat("http://xingyuyou.com/Public/app/barragefile/","608","barrage.txt").toString())
-                .build()
-                .execute(new FileCallBack(getApplication().getCacheDir().getAbsolutePath(), "barrage.txt")//
-                {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                    }
-
-                    @Override
-                    public void onResponse(File response, int id) {
-                        if (!isDestory) {
-                            ((DanmakuVideoPlayer) danmakuVideoPlayer.getCurrentPlayer()).setDanmaKuStream(response);
-                        }
-
-                    }
-
-                });
-    }
 
     private void resolveNormalVideoUI() {
         //增加title

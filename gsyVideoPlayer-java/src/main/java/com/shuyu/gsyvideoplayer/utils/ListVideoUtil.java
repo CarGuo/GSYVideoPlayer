@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.transitionseverywhere.TransitionManager;
@@ -44,7 +44,7 @@ public class ListVideoUtil {
     private ViewGroup listParent;//记录列表中item的父布局
     private ViewGroup.LayoutParams listParams;
     private OrientationUtils orientationUtils;
-    private VideoAllCallBack videoAllCallBack;
+    private StandardVideoAllCallBack videoAllCallBack;
     private String url;
     private Context context;
     private File cachePath;
@@ -518,9 +518,9 @@ public class ListVideoUtil {
      *
      * @param videoAllCallBack 回调
      */
-    public void setVideoAllCallBack(VideoAllCallBack videoAllCallBack) {
+    public void setVideoAllCallBack(StandardVideoAllCallBack videoAllCallBack) {
         this.videoAllCallBack = videoAllCallBack;
-        gsyVideoPlayer.setVideoAllCallBack(videoAllCallBack);
+        gsyVideoPlayer.setStandardVideoAllCallBack(videoAllCallBack);
     }
 
     public int getPlayPosition() {

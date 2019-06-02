@@ -9,6 +9,7 @@ import android.widget.SeekBar;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
@@ -84,7 +85,8 @@ public class PreViewGSYVideoPlayer extends NormalGSYVideoPlayer {
             layoutParams.leftMargin = offset;
             //设置帧预览图的显示位置
             mPreviewLayout.setLayoutParams(layoutParams);
-            if (mHadPlay && mOpenPreView) {
+            if (GSYVideoManager.instance().getMediaPlayer() != null
+                    && mHadPlay && (mOpenPreView)) {
                 mPreProgress = progress;
             }
         }

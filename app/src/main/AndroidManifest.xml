@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.gsyvideoplayer">
 
     <!-- 请求访问网络状态 -->
@@ -9,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+     
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
@@ -100,97 +99,6 @@
             android:name=".AutoPlayRecyclerViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ScrollingActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_scrolling"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".WindowActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".EmptyActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".utils.floatUtil.FloatActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".DetailADPlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".DetailADPlayer2"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ListMultiVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Translucent" />
-
-        <activity
-            android:name=".ListADVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Translucent" />
-
-        <activity
-            android:name=".exo.DetailExoListPlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".simple.SimplePlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.AppCompat.Full"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".simple.SimpleDetailActivityMode1"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".simple.SimpleDetailActivityMode2"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".simple.SimpleListVideoActivityMode1"
-            android:theme="@style/Theme.AppCompat.Translucent"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".simple.SimpleListVideoActivityMode2"
-            android:theme="@style/Theme.AppCompat.Translucent"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".simple.SimpleActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".switchplay.SwitchListVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.AppCompat.Transitions"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".switchplay.SwitchDetailActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.AppCompat.Transitions"
-            android:screenOrientation="portrait" />
-
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="2.1" />
     </application>
-
 
 </manifest>

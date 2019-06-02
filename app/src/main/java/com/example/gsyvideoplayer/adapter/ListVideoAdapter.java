@@ -10,7 +10,9 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
-import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
+import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
+import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
 import java.io.File;
@@ -30,20 +32,16 @@ public class ListVideoAdapter extends BaseAdapter {
     private Context context;
 
     private ViewGroup rootView;
-
     private OrientationUtils orientationUtils;
 
     private boolean isFullVideo;
 
-    private GSYVideoHelper smallVideoHelper;
+    private ListVideoUtil listVideoUtil;
 
-    private GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
-
-    public ListVideoAdapter(Context context, GSYVideoHelper smallVideoHelper, GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder) {
+    public ListVideoAdapter(Context context, ListVideoUtil listVideoUtil) {
         super();
         this.context = context;
-        this.smallVideoHelper = smallVideoHelper;
-        this.gsySmallVideoHelperBuilder = gsySmallVideoHelperBuilder;
+        this.listVideoUtil = listVideoUtil;
 
         inflater = LayoutInflater.from(context);
         for (int i = 0; i < 40; i++) {
@@ -84,21 +82,20 @@ public class ListVideoAdapter extends BaseAdapter {
         //增加封面
         holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         holder.imageView.setImageResource(R.mipmap.xxx1);
-        smallVideoHelper.addVideoPlayer(position, holder.imageView, TAG, holder.videoContainer, holder.playerBtn);
+        listVideoUtil.addVideoPlayer(position, holder.imageView, TAG, holder.videoContainer, holder.playerBtn);
         holder.playerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 notifyDataSetChanged();
                 //listVideoUtil.setLoop(true);
-                smallVideoHelper.setPlayPositionAndTag(position, TAG);
-                //final String url = "https://res.exexm.com/cw_145225549855002";
-                final String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-                gsySmallVideoHelperBuilder.setVideoTitle("title " + position)
-                        .setUrl(url);
-                smallVideoHelper.startPlay();
+                listVideoUtil.setPlayPositionAndTag(position, TAG);
+                final String url = "https://res.exexm.com/cw_145225549855002";
+                listVideoUtil.setTitle("title " + position);
+                //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
+                listVideoUtil.startPlay(url);
 
                 //必须在startPlay之后设置才能生效
-                //smallVideoHelper.getGsyVideoPlayer().getTitleTextView().setVisibility(View.VISIBLE);
+                //listVideoUtil.getGsyVideoPlayer().getTitleTextView().setVisibility(View.VISIBLE);
             }
         });
         return convertView;

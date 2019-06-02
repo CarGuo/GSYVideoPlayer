@@ -7,16 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
+import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,8 +41,6 @@ public class ListNormalAdapter extends BaseAdapter {
     protected OrientationUtils orientationUtils;
 
     protected boolean isPlay;
-
-    protected boolean isFull;
 
     public ListNormalAdapter(Context context) {
         super();
@@ -80,10 +80,8 @@ public class ListNormalAdapter extends BaseAdapter {
         }
 
 
-        //final String url = "https://res.exexm.com/cw_145225549855002";
-        final String urlH = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        final String urlV = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
-        final String url = (position % 2 == 0) ? urlH : urlV;
+        final String url = "https://res.exexm.com/cw_145225549855002";
+        //final String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
         //final String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
 
 
@@ -93,18 +91,14 @@ public class ListNormalAdapter extends BaseAdapter {
             holder.gsyVideoPlayer.loadCoverImage(url, R.mipmap.xxx2);
         }
 
-        //防止错位，离开释放
-        //holder.gsyVideoPlayer.initUIState();
-
         //默认缓存路径
-        //使用lazy的set可以避免滑动卡的情况存在
-        holder.gsyVideoPlayer.setUpLazy(url, true, null, null, "这是title");
+        holder.gsyVideoPlayer.setUp(url, true, null, "这是title");
 
         //holder.gsyVideoPlayer.setNeedShowWifiTip(false);
 
         /************************下方为其他路径************************************/
         //如果一个列表的缓存路劲都一一致
-        //holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath()), "这是title");
+        //holder.gsyVideoPlayer.setUp(url, true, new File(FileUtils.getTestPath()), "");
 
         /************************下方为其他路径************************************/
         //如果一个列表里的缓存路劲不一致
@@ -151,8 +145,6 @@ public class ListNormalAdapter extends BaseAdapter {
         holder.gsyVideoPlayer.setRotateViewAuto(!getListNeedAutoLand());
         holder.gsyVideoPlayer.setLockLand(!getListNeedAutoLand());
         holder.gsyVideoPlayer.setPlayTag(TAG);
-        holder.gsyVideoPlayer.setAutoFullWithSize(true);
-        holder.gsyVideoPlayer.setReleaseWhenLossAudio(false);
         holder.gsyVideoPlayer.setShowFullAnimation(!getListNeedAutoLand());
         holder.gsyVideoPlayer.setIsTouchWiget(false);
         //循环
@@ -163,7 +155,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
         holder.gsyVideoPlayer.setPlayPosition(position);
 
-        holder.gsyVideoPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
+        holder.gsyVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
             public void onClickStartIcon(String url, Object... objects) {
                 super.onClickStartIcon(url, objects);
@@ -173,15 +165,14 @@ public class ListNormalAdapter extends BaseAdapter {
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
                 Debuger.printfLog("onPrepared");
-                boolean full = holder.gsyVideoPlayer.getCurrentPlayer().isIfCurrentIsFullscreen();
-                if (!holder.gsyVideoPlayer.getCurrentPlayer().isIfCurrentIsFullscreen()) {
+                if (!holder.gsyVideoPlayer.isIfCurrentIsFullscreen()) {
                     GSYVideoManager.instance().setNeedMute(true);
                 }
                 curPlayer = (StandardGSYVideoPlayer) objects[1];
                 isPlay = true;
                 if (getListNeedAutoLand()) {
                     //重力全屏工具类
-                    initOrientationUtils(holder.gsyVideoPlayer, full);
+                    initOrientationUtils(holder.gsyVideoPlayer);
                     ListNormalAdapter.this.onPrepared();
                 }
             }
@@ -189,7 +180,6 @@ public class ListNormalAdapter extends BaseAdapter {
             @Override
             public void onQuitFullscreen(String url, Object... objects) {
                 super.onQuitFullscreen(url, objects);
-                isFull = false;
                 GSYVideoManager.instance().setNeedMute(true);
                 if (getListNeedAutoLand()) {
                     ListNormalAdapter.this.onQuitFullscreen();
@@ -200,8 +190,6 @@ public class ListNormalAdapter extends BaseAdapter {
             public void onEnterFullscreen(String url, Object... objects) {
                 super.onEnterFullscreen(url, objects);
                 GSYVideoManager.instance().setNeedMute(false);
-                isFull = true;
-                holder.gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
             }
 
             @Override
@@ -209,7 +197,6 @@ public class ListNormalAdapter extends BaseAdapter {
                 super.onAutoComplete(url, objects);
                 curPlayer = null;
                 isPlay = false;
-                isFull = false;
                 if (getListNeedAutoLand()) {
                     ListNormalAdapter.this.onAutoComplete();
                 }
@@ -239,9 +226,6 @@ public class ListNormalAdapter extends BaseAdapter {
         }
     }
 
-    public boolean isFull() {
-        return isFull;
-    }
 
     /**************************支持全屏重力全屏的部分**************************/
 
@@ -251,15 +235,14 @@ public class ListNormalAdapter extends BaseAdapter {
      * @return 返回true为支持列表重力全屏
      */
     public boolean getListNeedAutoLand() {
-        return false;
+        return true;
     }
 
-    private void initOrientationUtils(StandardGSYVideoPlayer standardGSYVideoPlayer, boolean full) {
+    private void initOrientationUtils(StandardGSYVideoPlayer standardGSYVideoPlayer) {
         orientationUtils = new OrientationUtils((Activity) context, standardGSYVideoPlayer);
         //是否需要跟随系统旋转设置
         //orientationUtils.setRotateWithSystem(false);
         orientationUtils.setEnable(false);
-        orientationUtils.setIsLand((full) ? 1 : 0);
     }
 
     private void resolveFull() {
@@ -295,7 +278,7 @@ public class ListNormalAdapter extends BaseAdapter {
     public void onConfigurationChanged(Activity activity, Configuration newConfig) {
         //如果旋转了就全屏
         if (isPlay && curPlayer != null && orientationUtils != null) {
-            curPlayer.onConfigurationChanged(activity, newConfig, orientationUtils, false, true);
+            curPlayer.onConfigurationChanged(activity, newConfig, orientationUtils);
         }
     }
 
@@ -319,7 +302,5 @@ public class ListNormalAdapter extends BaseAdapter {
             orientationUtils = null;
         }
     }
-
-
 
 }

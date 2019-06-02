@@ -29,28 +29,15 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation androidDependencies.appcompat_v7
-
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
     def dataDependencies = rootProject.ext.dataDependencies
-    api viewDependencies.ijkplayer_java
-    api viewDependencies.ijkplayer_exo
-    api viewDependencies.transitionseverywhere
-    //api dataDependencies.videocache
-    //api "com.shuyu:GSYVideoPlayer-exo2:$gsyVideoVersion"
-    api project(':gsyvideoplayer-androidvideocache')
-    api project(':gsyvideoplayer-exo2')
-
-
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile androidDependencies.appcompat_v7
-//    def viewDependencies = rootProject.ext.viewDependencies
-//    def dataDependencies = rootProject.ext.dataDependencies
-//    compile viewDependencies.ijkplayer_java
-//    compile viewDependencies.transitionseverywhere
-//    compile "com.shuyu:gsyvideoplayer-androidvideocache:$gsyVideoVersion"
-//    compile "com.shuyu:GSYVideoPlayer-exo2:$gsyVideoVersion"
+    compile viewDependencies.ijkplayer_java
+    compile viewDependencies.ijkplayer_exo
+    compile viewDependencies.transitionseverywhere
+    compile dataDependencies.videocache
+    //compile project(':gsyvideoplayer-androidvideocache')
+    compile androidDependencies.appcompat_v7
 }
 
 apply from: './bintray.gradle'
