@@ -171,7 +171,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
 
     @Override
     protected boolean isShowNetConfirm() {
-        return true;
+        return false;
     }
 
     @Override
