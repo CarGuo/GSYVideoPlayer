@@ -14,7 +14,8 @@ ext {
     androidTargetSdkVersion = 28
     androidCompileSdkVersion = 28
 
-    supportLibraryVersion = '1.0.0-beta01'
+    supportLibraryVersion = '1.1.0-alpha05'
+    otherVersion = '1.0.0'
 
 
     butterKnifeVersion = '10.1.0'
@@ -24,7 +25,7 @@ ext {
     DanmakuFlameMaster = '0.9.25'
     DanmakuFlameMasterSo = '0.9.21'
 
-    transitionseverywhere = '2.0.0-alpha01'
+    transitionseverywhere = '2.0.0-beta01'
 
     floatWindow = '1.0.6'
 
@@ -34,7 +35,7 @@ ext {
 
     gsyVideoVersion = '7.0.1'
 
-    exo_player2 = '2.10.0'
+    exo_player2 = '2.10.1'
 
     permissionsdispatcher = '4.3.0'
 
@@ -44,8 +45,8 @@ ext {
     androidDependencies = [
             recyclerView: "androidx.recyclerview:recyclerview:${supportLibraryVersion}",
             appcompat_v7: "androidx.appcompat:appcompat:${supportLibraryVersion}",
-            support_v4  : "androidx.legacy:legacy-support-v4:${supportLibraryVersion}",
-            design      : "com.google.android.material:material:${supportLibraryVersion}",
+            support_v4  : "androidx.legacy:legacy-support-v4:${otherVersion}",
+            design      : "com.google.android.material:material:${otherVersion}",
     ]
 
     viewDependencies = [
