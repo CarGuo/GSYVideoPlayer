@@ -6,4 +6,5 @@
 
 
     <dimen name="seek_bar_image">150dp</dimen>
+    <dimen name="brightness_icon">40dp</dimen>
 </resources>

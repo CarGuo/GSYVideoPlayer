@@ -96,7 +96,7 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
     public void onDrawFrame(GL10 glUnused) {
         super.onDrawFrame(glUnused);
 
-        curProgram = createProgram(getVertexShader(), mBitmapEffect.getShader(mSurfaceView));
+        //curProgram = createProgram(getVertexShader(), mBitmapEffect.getShader(mSurfaceView));
 
         GLES20.glUseProgram(curProgram);
         checkGlError("glUseProgram");
@@ -214,7 +214,7 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         }
     }
 
-    public float[] getMVPMatrix() {
+    public float[] getCurrentMVPMatrix() {
         return mMVPMatrix;
     }
 

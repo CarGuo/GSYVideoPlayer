@@ -1,10 +1,8 @@
 package com.example.gsyvideoplayer;
 
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.widget.ImageView;
@@ -12,17 +10,15 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.PreViewGSYVideoPlayer;
 import com.example.gsyvideoplayer.view.ScrollWebView;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by shuyu on 2016/12/26.
  */
 
-public class WebDetailActivity extends GSYBaseActivityDetail {
+public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
     @BindView(R.id.scroll_webView)
     ScrollWebView webView;
@@ -42,7 +38,9 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
     @BindView(R.id.web_top_layout_video)
     RelativeLayout webTopLayoutVideo;
 
-    private boolean isSamll;
+    private boolean isSmall;
+
+    private int backupRendType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +48,10 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
         setContentView(R.layout.activity_web_detail);
         ButterKnife.bind(this);
 
+        backupRendType = GSYVideoType.getRenderType();
+
+        //设置为Surface播放模式，注意此设置是全局的
+        GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
 
         resolveNormalVideoUI();
 
@@ -81,15 +83,15 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
                 if (!webPlayer.isIfCurrentIsFullscreen() && scrollY >= 0 && isPlay) {
                     if (scrollY > webPlayer.getHeight()) {
                         //如果是小窗口就不需要处理
-                        if (!isSamll) {
-                            isSamll = true;
+                        if (!isSmall) {
+                            isSmall = true;
                             int size = CommonUtil.dip2px(WebDetailActivity.this, 150);
                             webPlayer.showSmallVideo(new Point(size, size), true, true);
                             orientationUtils.setEnable(false);
                         }
                     } else {
-                        if (isSamll) {
-                            isSamll = false;
+                        if (isSmall) {
+                            isSmall = false;
                             orientationUtils.setEnable(true);
                             //必须
                             webTopLayoutVideo.postDelayed(new Runnable() {
@@ -108,13 +110,20 @@ public class WebDetailActivity extends GSYBaseActivityDetail {
     }
 
     @Override
-    public GSYBaseVideoPlayer getGSYVideoPlayer() {
+    protected void onDestroy() {
+        super.onDestroy();
+        //设置为GL播放模式，才能支持滤镜，注意此设置是全局的
+        GSYVideoType.setRenderType(backupRendType);
+    }
+
+    @Override
+    public StandardGSYVideoPlayer getGSYVideoPlayer() {
         return webPlayer;
     }
 
     @Override
     public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
-        String url = "https://res.exexm.com/cw_145225549855002";
+        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
         //增加封面。内置封面可参考SampleCoverVideo
         ImageView imageView = new ImageView(this);

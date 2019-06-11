@@ -4,11 +4,12 @@ apply from: 'dependencies.gradle'
 buildscript {
     repositories {
         maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.google.com' }
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:3.0.1'
 
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
@@ -19,7 +20,9 @@ buildscript {
 allprojects {
     repositories {
         maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.google.com' }
         jcenter()
+        google()
     }
 }
 

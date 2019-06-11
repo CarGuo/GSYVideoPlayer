@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/start_window"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="启动悬浮窗口" />
+
+    <Button
+        android:id="@+id/jump_other"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="跳转其他页面" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:textSize="15sp"
+        android:text="返回到桌面，或者点击跳转其他页面均可以存在，demo这里在返回主页Main的时候销毁，因为不想和DEMO中其他页面冲突" />
+
+</LinearLayout>
