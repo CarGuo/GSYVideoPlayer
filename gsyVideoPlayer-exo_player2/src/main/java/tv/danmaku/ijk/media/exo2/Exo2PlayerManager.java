@@ -9,6 +9,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.Surface;
 
+import androidx.annotation.Nullable;
+
+import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.video.DummySurface;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
@@ -244,6 +247,16 @@ public class Exo2PlayerManager implements IPlayerManager {
     @Override
     public boolean isSurfaceSupportLockCanvas() {
         return false;
+    }
+
+
+    /**
+     * 设置seek 的临近帧。
+     **/
+    public void setSeekParameter(@Nullable SeekParameters seekParameters) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setSeekParameter(seekParameters);
+        }
     }
 
 

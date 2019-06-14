@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
+import com.google.android.exoplayer2.SeekParameters;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 
 public class DetailPlayer extends AppCompatActivity {
@@ -106,6 +108,12 @@ public class DetailPlayer extends AppCompatActivity {
                         //开始播放了才能旋转和全屏
                         orientationUtils.setEnable(true);
                         isPlay = true;
+
+                        //设置 seek 的临近帧。
+                        if(detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                            ((Exo2PlayerManager) detailPlayer.getGSYVideoManager().getPlayer()).setSeekParameter(SeekParameters.NEXT_SYNC);
+                            Debuger.printfError("***** setSeekParameter **** ");
+                        }
                     }
 
                     @Override

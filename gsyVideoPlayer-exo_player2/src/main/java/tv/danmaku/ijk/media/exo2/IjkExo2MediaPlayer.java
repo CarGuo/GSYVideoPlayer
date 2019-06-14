@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
@@ -394,6 +395,15 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     public boolean isCache() {
         return isCache;
     }
+
+
+    /**
+     * 设置seek 的临近帧。
+     **/
+    public void  setSeekParameter(@Nullable SeekParameters seekParameters) {
+        mInternalPlayer.setSeekParameters(seekParameters);
+    }
+
 
     /**
      * 是否开启cache
