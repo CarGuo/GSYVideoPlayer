@@ -303,7 +303,14 @@ VideoOptionModel videoOptionModel =
 
 https://stackoverflow.com/questions/6445052/android-context-memory-leak-listview-due-to-audiomanager
 
-
+#### 22、重连次数
+```
+VideoOptionModel videoOptionModel =
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"reconnect",5);
+        List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel);
+        GSYVideoManager.instance().setOptionModelList(list);
+```
 
 #### 更多配置
 

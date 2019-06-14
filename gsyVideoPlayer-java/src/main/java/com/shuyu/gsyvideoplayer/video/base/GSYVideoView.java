@@ -270,9 +270,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         mTextureViewContainer = (ViewGroup) findViewById(R.id.surface_container);
         if (isInEditMode())
             return;
-        mScreenWidth = getActivityContext().getResources().getDisplayMetrics().widthPixels;
-        mScreenHeight = getActivityContext().getResources().getDisplayMetrics().heightPixels;
-        mAudioManager = (AudioManager) getActivityContext().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        mScreenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+        mScreenHeight = mContext.getResources().getDisplayMetrics().heightPixels;
+        mAudioManager = (AudioManager) mContext.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
     }
 
@@ -329,7 +329,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-        ((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (mContext instanceof Activity) {
+            ((Activity) mContext).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
         mBackUpPlayingBufferState = -1;
         getGSYVideoManager().prepare(mUrl, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mCache, mCachePath, mOverrideExtension);
         setStateAndUi(CURRENT_STATE_PREPAREING);
@@ -603,8 +605,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         if (!mIfCurrentIsFullscreen)
             getGSYVideoManager().setLastListener(null);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
-        ((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+        if (mContext instanceof Activity) {
+            ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
         releaseNetWorkState();
 
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
@@ -633,7 +636,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         getGSYVideoManager().setCurrentVideoWidth(0);
 
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
-        ((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (mContext instanceof Activity) {
+            ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
 
         releaseNetWorkState();
 
@@ -821,7 +826,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     protected void createNetWorkState() {
         if (mNetInfoModule == null) {
-            mNetInfoModule = new NetInfoModule(getActivityContext().getApplicationContext(), new NetInfoModule.NetChangeListener() {
+            mNetInfoModule = new NetInfoModule(mContext.getApplicationContext(), new NetInfoModule.NetChangeListener() {
                 @Override
                 public void changed(String state) {
                     if (!mNetSate.equals(state)) {
