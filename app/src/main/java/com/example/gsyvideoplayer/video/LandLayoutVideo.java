@@ -56,14 +56,12 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
                         if (!mChangePosition && !mChangeVolume && !mBrightness) {
                             onClickUiToggle();
                         }
-                        Debuger.printfError("555a","9999999999999999999999");
                         return super.onSingleTapConfirmed(e);
                     }
 
                     @Override
                     public void onLongPress(MotionEvent e) {
                         super.onLongPress(e);
-                        Debuger.printfError("555a","0000000000000000000000");
                     }
                 });
             }
