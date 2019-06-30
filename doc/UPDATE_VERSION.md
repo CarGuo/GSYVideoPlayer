@@ -1,5 +1,30 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+### 7.0.2(2019-07-01)
+* update ExoPlayer 到 2.10.0
+* 增加 allowCrossProtocolRedirects
+
+```
+Map<String, String> header = new HashMap<>();
+        header.put("allowCrossProtocolRedirects", "true");
+
+ xxx.setMapHeadData(header)
+```
+
+* 调整 onVideoResume 内部方法
+* 修改默认亮度布局和布局兼容问题
+* 升级一些依赖
+* exo player setSeekParameter
+
+```
+ //设置 seek 的临近帧。
+if(detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+    ((Exo2PlayerManager) detailPlayer.getGSYVideoManager().getPlayer()).setSeekParameter(SeekParameters.NEXT_SYNC);
+    Debuger.printfError("***** setSeekParameter **** ");
+}
+```
+
 ### 7.0.1(2019-04-07)
 * 升级 ExoPlayer 到 2.9.6
 * ExoPlayer 增加 SSL 证书忽略支持
