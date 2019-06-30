@@ -11,7 +11,9 @@ import android.widget.SeekBar;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
@@ -108,6 +110,15 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
         super.setViewShowState(view, visibility);
     }
 
+    @Override
+    public void onSurfaceAvailable(Surface surface) {
+        super.onSurfaceAvailable(surface);
+        if (GSYVideoType.getRenderType() != GSYVideoType.TEXTURE) {
+            if (mThumbImageViewLayout != null && mThumbImageViewLayout.getVisibility() == VISIBLE) {
+                mThumbImageViewLayout.setVisibility(INVISIBLE);
+            }
+        }
+    }
 
     /******************* 下方重载方法，在播放开始不显示底部进度和按键，不需要可屏蔽 ********************/
 
