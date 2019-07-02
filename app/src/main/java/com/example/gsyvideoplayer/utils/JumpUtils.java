@@ -27,6 +27,7 @@ import com.example.gsyvideoplayer.PlayEmptyControlActivity;
 import com.example.gsyvideoplayer.PlayPickActivity;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.RecyclerView2Activity;
+import com.example.gsyvideoplayer.RecyclerView3Activity;
 import com.example.gsyvideoplayer.RecyclerViewActivity;
 import com.example.gsyvideoplayer.ScrollingActivity;
 import com.example.gsyvideoplayer.WebDetailActivity;
@@ -154,6 +155,18 @@ public class JumpUtils {
         ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
         ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
     }
+
+    /**
+     * 跳转到硬解码
+     *
+     * @param activity
+     */
+    public static void goMediaCodec(Activity activity) {
+        Intent intent = new Intent(activity, RecyclerView3Activity.class);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+        ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+    }
+
 
     /**
      * 跳转到详情播放

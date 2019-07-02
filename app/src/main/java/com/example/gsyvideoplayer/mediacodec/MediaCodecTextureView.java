@@ -1,4 +1,4 @@
-package com.shuyu.gsyvideoplayer.render.view;
+package com.example.gsyvideoplayer.mediacodec;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,6 +14,8 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotSaveListener;
 import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
+import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
+import com.shuyu.gsyvideoplayer.render.view.IGSYRenderView;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
@@ -22,11 +24,11 @@ import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 import java.io.File;
 
 /**
- * 用于显示video的，做了横屏与竖屏的匹配，还有需要rotation需求的
+ * 用于硬解码
  * Created by shuyu on 2016/11/11.
  */
 
-public class GSYTextureView extends TextureView implements TextureView.SurfaceTextureListener, IGSYRenderView, MeasureHelper.MeasureFormVideoParamsListener {
+public class MediaCodecTextureView extends TextureView implements TextureView.SurfaceTextureListener, IGSYRenderView, MeasureHelper.MeasureFormVideoParamsListener {
 
     private IGSYSurfaceListener mIGSYSurfaceListener;
 
@@ -35,14 +37,15 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
     private MeasureHelper measureHelper;
 
     private SurfaceTexture mSaveTexture;
+
     private Surface mSurface;
 
-    public GSYTextureView(Context context) {
+    public MediaCodecTextureView(Context context) {
         super(context);
         init();
     }
 
-    public GSYTextureView(Context context, AttributeSet attrs) {
+    public MediaCodecTextureView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -58,18 +61,15 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
     }
 
     @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+    public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
         if (mSaveTexture == null) {
-            Debuger.printfError("FFFFFFFFFFFF 1");
-            mSaveTexture = surface;
-            mSurface = new Surface(surface);
+            mSaveTexture = texture;
+            mSurface = new Surface(texture);
             if (mIGSYSurfaceListener != null) {
                 mIGSYSurfaceListener.onSurfaceAvailable(mSurface);
             }
         } else {
             setSurfaceTexture(mSaveTexture);
-            Debuger.printfError("FFFFFFFFFFFF 2");
-            //mSurface = new Surface(mSaveTexture);
         }
     }
 
@@ -269,16 +269,20 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
     }
 
 
+    public void release() {
+        mSaveTexture = null;
+    }
+
     /**
      * 添加播放的view
      */
-    public static GSYTextureView addTextureView(Context context, ViewGroup textureViewContainer, int rotate,
-                                                final IGSYSurfaceListener gsySurfaceListener,
-                                                final MeasureHelper.MeasureFormVideoParamsListener videoParamsListener) {
+    public static MediaCodecTextureView addTextureView(Context context, ViewGroup textureViewContainer, int rotate,
+                                                       final IGSYSurfaceListener gsySurfaceListener,
+                                                       final MeasureHelper.MeasureFormVideoParamsListener videoParamsListener) {
         if (textureViewContainer.getChildCount() > 0) {
             textureViewContainer.removeAllViews();
         }
-        GSYTextureView gsyTextureView = new GSYTextureView(context);
+        MediaCodecTextureView gsyTextureView = new MediaCodecTextureView(context);
         gsyTextureView.setIGSYSurfaceListener(gsySurfaceListener);
         gsyTextureView.setVideoParamsListener(videoParamsListener);
         gsyTextureView.setRotation(rotate);

@@ -194,6 +194,12 @@
             android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".RecyclerView3Activity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Transitions"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
