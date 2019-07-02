@@ -32,6 +32,10 @@ import butterknife.ButterKnife;
 
 /**
  * MediaCodec
+ *
+ *
+ *
+ * 没有适配小窗口切换的，请悉知
  */
 public class RecyclerView3Activity extends AppCompatActivity {
 
