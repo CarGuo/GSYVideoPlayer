@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
@@ -34,8 +35,8 @@ public class GSYApplication extends MultiDexApplication {
         }
         LeakCanary.install(this);
 
-        //GSYVideoType.enableMediaCodec();
-        //GSYVideoType.enableMediaCodecTexture();
+        GSYVideoType.enableMediaCodec();
+        GSYVideoType.enableMediaCodecTexture();
 
         //PlayerFactory.setPlayManager(Exo2PlayerManager.class);//EXO模式
         //ExoSourceManager.setSkipSSLChain(true);
