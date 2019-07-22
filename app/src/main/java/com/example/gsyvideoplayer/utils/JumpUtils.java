@@ -15,6 +15,7 @@ import com.example.gsyvideoplayer.DetailControlActivity;
 import com.example.gsyvideoplayer.DetailFilterActivity;
 import com.example.gsyvideoplayer.DetailListPlayer;
 import com.example.gsyvideoplayer.DetailMoreTypeActivity;
+import com.example.gsyvideoplayer.DetailNormalActivityPlayer;
 import com.example.gsyvideoplayer.DetailPlayer;
 import com.example.gsyvideoplayer.FragmentVideoActivity;
 import com.example.gsyvideoplayer.InputUrlDetailActivity;
@@ -241,6 +242,16 @@ public class JumpUtils {
      */
     public static void goToDetailListPlayer(Activity activity) {
         Intent intent = new Intent(activity, DetailListPlayer.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳转到详情播放
+     *
+     * @param activity
+     */
+    public static void goToDetailNormalActivity(Activity activity) {
+        Intent intent = new Intent(activity, DetailNormalActivityPlayer.class);
         activity.startActivity(intent);
     }
 
