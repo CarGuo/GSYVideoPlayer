@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.TintContextWrapper;
 import androidx.fragment.app.FragmentActivity;
+
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Surface;
@@ -124,6 +125,10 @@ public class CommonUtil {
                 FragmentActivity fragmentActivity = (FragmentActivity) context;
                 fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                         WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            } else if (context instanceof Activity) {
+                Activity activity = (Activity) context;
+                activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
             } else {
                 CommonUtil.getAppCompActivity(context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                         WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -148,6 +153,9 @@ public class CommonUtil {
             if (context instanceof FragmentActivity) {
                 FragmentActivity fragmentActivity = (FragmentActivity) context;
                 fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            } else if (context instanceof Activity) {
+                Activity activity = (Activity) context;
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             } else {
                 CommonUtil.getAppCompActivity(context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
