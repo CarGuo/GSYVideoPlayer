@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,178 +33,178 @@
         </activity>
         <activity
             android:name=".PlayActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".ListVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".ListVideo2Activity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".DetailPlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".RecyclerView2Activity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DetailListPlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".WebDetailActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".RecyclerViewActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DanmkuVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".FragmentVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DetailMoreTypeActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".InputUrlDetailActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".PlayEmptyControlActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DetailControlActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DetailFilterActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".PlayPickActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".AutoPlayRecyclerViewActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ScrollingActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_scrolling"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".WindowActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".EmptyActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".utils.floatUtil.FloatActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DetailADPlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DetailADPlayer2"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ListMultiVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
         <activity
             android:name=".ListADVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
 
         <activity
             android:name=".ListADVideoActivity2"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
         <activity
             android:name=".exo.DetailExoListPlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".simple.SimplePlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.AppCompat.Full"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".simple.SimpleDetailActivityMode1"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".simple.SimpleDetailActivityMode2"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".simple.SimpleListVideoActivityMode1"
             android:theme="@style/Theme.AppCompat.Translucent"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".simple.SimpleListVideoActivityMode2"
             android:theme="@style/Theme.AppCompat.Translucent"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".simple.SimpleActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".switchplay.SwitchListVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".switchplay.SwitchDetailActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".RecyclerView3Activity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".DetailNormalActivityPlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
 
