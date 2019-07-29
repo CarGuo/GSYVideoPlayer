@@ -58,7 +58,7 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
                 if (position % 2 == 0) {
                     url = "https://res.exexm.com/cw_145225549855002";
                 } else {
-                    url = "http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4";
+                    url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
                 }
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
 

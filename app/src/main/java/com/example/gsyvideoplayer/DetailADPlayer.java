@@ -41,13 +41,13 @@ public class DetailADPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
         ArrayList<GSYSampleADVideoPlayer.GSYADVideoModel> urls = new ArrayList<>();
         //广告1
-        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4",
+        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4",
                 "", GSYSampleADVideoPlayer.GSYADVideoModel.TYPE_AD));
         //正式内容1
         urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4",
                 "正文1标题", GSYSampleADVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
         //广告2
-        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://video.7k.cn/app_video/20171202/6c8cf3ea/v.m3u8.mp4",
+        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4",
                 "", GSYSampleADVideoPlayer.GSYADVideoModel.TYPE_AD, true));
         //正式内容2
         urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4",
