@@ -103,6 +103,7 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
 
     /**
      * 需要片头广告
+     * 如果返回 false ，setStartAfterPrepared 需要设置为 ture
      */
     @Override
     public boolean isNeedAdOnStart() {

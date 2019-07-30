@@ -206,6 +206,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
 
     /**
      * 是否播放开始广告
+     * 如果返回 false ，setStartAfterPrepared 需要设置为 ture
      */
     public abstract boolean isNeedAdOnStart();
 }
