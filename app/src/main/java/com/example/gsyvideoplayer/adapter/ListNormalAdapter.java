@@ -251,7 +251,7 @@ public class ListNormalAdapter extends BaseAdapter {
      * @return 返回true为支持列表重力全屏
      */
     public boolean getListNeedAutoLand() {
-        return false;
+        return true;
     }
 
     private void initOrientationUtils(StandardGSYVideoPlayer standardGSYVideoPlayer, boolean full) {
@@ -295,7 +295,7 @@ public class ListNormalAdapter extends BaseAdapter {
     public void onConfigurationChanged(Activity activity, Configuration newConfig) {
         //如果旋转了就全屏
         if (isPlay && curPlayer != null && orientationUtils != null) {
-            curPlayer.onConfigurationChanged(activity, newConfig, orientationUtils, false, true);
+            curPlayer.getCurrentPlayer().onConfigurationChanged(activity, newConfig, orientationUtils, false, true);
         }
     }
 
