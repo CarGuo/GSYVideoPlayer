@@ -233,14 +233,17 @@ VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATE
         list.add(videoOptionModel);
 ```
 
-#### 18、url切换400（http与https域名共用）
+#### 18、url切换400/404（http与https域名共用等）
 
 ```
-VideoOptionModel videoOptionModel =
+        VideoOptionModel videoOptionModel =
                 new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);
         List<VideoOptionModel> list = new ArrayList<>();
         list.add(videoOptionModel);
+        VideoOptionModel videoOptionModel2 = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_timeout", -1);
+        list.add(videoOptionModel2);
         GSYVideoManager.instance().setOptionModelList(list);
+
 ```
 
 #### 19、全屏与非全屏的同步问题
