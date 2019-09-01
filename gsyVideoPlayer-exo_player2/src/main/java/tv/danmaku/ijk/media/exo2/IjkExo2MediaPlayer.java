@@ -353,7 +353,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                                 ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
                                 : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
                                 : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
-                        if (mRendererFactory != null) {
+                        if (mRendererFactory == null) {
                             mRendererFactory = new DefaultRenderersFactory(mAppContext);
                             mRendererFactory.setExtensionRendererMode(extensionRendererMode);
                         }
