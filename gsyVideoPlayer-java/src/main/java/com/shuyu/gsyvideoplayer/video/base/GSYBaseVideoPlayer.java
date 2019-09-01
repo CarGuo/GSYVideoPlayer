@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.shuyu.gsyvideoplayer.R;
@@ -192,13 +193,18 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      */
     private void saveLocationStatus(Context context, boolean statusBar, boolean actionBar) {
         getLocationOnScreen(mListItemRect);
-        int statusBarH = getStatusBarHeight(context);
-        int actionBerH = getActionBarHeight((Activity) context);
-        if (statusBar) {
-            mListItemRect[1] = mListItemRect[1] - statusBarH;
-        }
-        if (actionBar) {
-            mListItemRect[1] = mListItemRect[1] - actionBerH;
+        if(context instanceof Activity) {
+            int statusBarH = getStatusBarHeight(context);
+            int actionBerH = getActionBarHeight((Activity) context);
+            boolean isTranslucent = ((WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS & ((Activity) context).getWindow().getAttributes().flags)
+                    == WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            Debuger.printfLog("*************isTranslucent*************** " + isTranslucent);
+            if (statusBar && !isTranslucent) {
+                mListItemRect[1] = mListItemRect[1] - statusBarH;
+            }
+            if (actionBar) {
+                mListItemRect[1] = mListItemRect[1] - actionBerH;
+            }
         }
         mListItemSize[0] = getWidth();
         mListItemSize[1] = getHeight();

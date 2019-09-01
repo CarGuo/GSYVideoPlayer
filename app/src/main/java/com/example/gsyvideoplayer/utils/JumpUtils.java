@@ -15,6 +15,7 @@ import com.example.gsyvideoplayer.DetailControlActivity;
 import com.example.gsyvideoplayer.DetailFilterActivity;
 import com.example.gsyvideoplayer.DetailListPlayer;
 import com.example.gsyvideoplayer.DetailMoreTypeActivity;
+import com.example.gsyvideoplayer.DetailNormalActivityPlayer;
 import com.example.gsyvideoplayer.DetailPlayer;
 import com.example.gsyvideoplayer.FragmentVideoActivity;
 import com.example.gsyvideoplayer.InputUrlDetailActivity;
@@ -27,6 +28,7 @@ import com.example.gsyvideoplayer.PlayEmptyControlActivity;
 import com.example.gsyvideoplayer.PlayPickActivity;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.RecyclerView2Activity;
+import com.example.gsyvideoplayer.RecyclerView3Activity;
 import com.example.gsyvideoplayer.RecyclerViewActivity;
 import com.example.gsyvideoplayer.ScrollingActivity;
 import com.example.gsyvideoplayer.WebDetailActivity;
@@ -156,6 +158,18 @@ public class JumpUtils {
     }
 
     /**
+     * 跳转到硬解码
+     *
+     * @param activity
+     */
+    public static void goMediaCodec(Activity activity) {
+        Intent intent = new Intent(activity, RecyclerView3Activity.class);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+        ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+    }
+
+
+    /**
      * 跳转到详情播放
      *
      * @param activity
@@ -228,6 +242,16 @@ public class JumpUtils {
      */
     public static void goToDetailListPlayer(Activity activity) {
         Intent intent = new Intent(activity, DetailListPlayer.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳转到详情播放
+     *
+     * @param activity
+     */
+    public static void goToDetailNormalActivity(Activity activity) {
+        Intent intent = new Intent(activity, DetailNormalActivityPlayer.class);
         activity.startActivity(intent);
     }
 
