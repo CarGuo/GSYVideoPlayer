@@ -189,6 +189,29 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 五、近期版本
 
+
+### 7.1.0(2019-09-01)
+
+* update ExoPlayer to 2.10.4
+* 添加沉浸式支持
+* 增加 IPlayerInitSuccessListener 播放器初始化成果回调
+```
+GSYVideoManager
+    .instance()
+    .setPlayerInitSuccessListener(new IPlayerInitSuccessListener() {
+        ///播放器初始化成果回调，可用于播放前的自定义设置
+        @Override
+        public void onPlayerInitSuccess(IMediaPlayer player, GSYModel model) {
+            if (player instanceof IjkExo2MediaPlayer) {
+                ((IjkExo2MediaPlayer) player).setTrackSelector(new DefaultTrackSelector());
+                ((IjkExo2MediaPlayer) player).setLoadControl(new DefaultLoadControl());
+            }
+        }
+    });
+```
+* fix #2142
+* 增加硬解码不花屏幕 [RecyclerView3Activity](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/RecyclerView3Activity.java)
+
 ### 7.0.2(2019-07-01)
 * update ExoPlayer 到 2.10.0
 * 增加 allowCrossProtocolRedirects

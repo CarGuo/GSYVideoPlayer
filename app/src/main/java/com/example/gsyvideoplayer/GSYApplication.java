@@ -1,26 +1,25 @@
 package com.example.gsyvideoplayer;
 
-import android.net.Uri;
-
 import androidx.multidex.MultiDexApplication;
+
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
-import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
-import tv.danmaku.ijk.media.exo2.ExoSourceManager;
+import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 
-import com.example.gsyvideoplayer.source.CustomSourceTag;
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.model.GSYModel;
+import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
+import com.shuyu.gsyvideoplayer.player.IPlayerInitSuccessListener;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
-import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.squareup.leakcanary.LeakCanary;
-
-import java.io.File;
 
 import static com.google.android.exoplayer2.util.Util.inferContentType;
 
 /**
- * Created by shuyu on 2016/11/11.
+ Created by shuyu on 2016/11/11.
  */
 
 public class GSYApplication extends MultiDexApplication {
@@ -38,7 +37,7 @@ public class GSYApplication extends MultiDexApplication {
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();
 
-        //PlayerFactory.setPlayManager(Exo2PlayerManager.class);//EXO模式
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);//EXO模式
         //ExoSourceManager.setSkipSSLChain(true);
 
 
@@ -69,6 +68,18 @@ public class GSYApplication extends MultiDexApplication {
                 return null;
             }
         });*/
+
+        /*GSYVideoManager.instance().setPlayerInitSuccessListener(new IPlayerInitSuccessListener() {
+            ///播放器初始化成果回调
+            @Override
+            public void onPlayerInitSuccess(IMediaPlayer player, GSYModel model) {
+                if (player instanceof IjkExo2MediaPlayer) {
+                    ((IjkExo2MediaPlayer) player).setTrackSelector(new DefaultTrackSelector());
+                    ((IjkExo2MediaPlayer) player).setLoadControl(new DefaultLoadControl());
+                }
+            }
+        });*/
+
 
     }
 

@@ -5,8 +5,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.Size;
+
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
@@ -16,6 +18,7 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
@@ -28,6 +31,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 
 import java.io.File;
@@ -44,8 +48,8 @@ import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
 
 /**
- * Created by guoshuyu on 2018/1/10.
- * Exo
+ Created by guoshuyu on 2018/1/10.
+ Exo
  */
 public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.EventListener, AnalyticsListener {
 
@@ -57,9 +61,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     protected Context mAppContext;
     protected SimpleExoPlayer mInternalPlayer;
     protected EventLogger mEventLogger;
-    protected DefaultRenderersFactory rendererFactory;
+    protected DefaultRenderersFactory mRendererFactory;
     protected MediaSource mMediaSource;
-    protected DefaultTrackSelector mTrackSelector;
+    protected MappingTrackSelector mTrackSelector;
+    protected LoadControl mLoadControl;
     protected String mDataSource;
     protected Surface mSurface;
     protected Map<String, String> mHeaders = new HashMap<>();
@@ -72,23 +77,23 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     protected boolean isBuffering = false;
     protected boolean isLooping = false;
     /**
-     * 是否带上header
+     是否带上header
      */
     protected boolean isPreview = false;
     /**
-     * 是否开启缓存
+     是否开启缓存
      */
     protected boolean isCache = false;
     /**
-     * dataSource等的帮组类
+     dataSource等的帮组类
      */
     protected ExoSourceManager mExoHelper;
     /**
-     * 缓存目录，可以为空
+     缓存目录，可以为空
      */
     protected File mCacheDir;
     /**
-     * 类型覆盖
+     类型覆盖
      */
     private String mOverrideExtension;
 
@@ -338,7 +343,9 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                 new Runnable() {
                     @Override
                     public void run() {
-                        mTrackSelector = new DefaultTrackSelector();
+                        if (mTrackSelector == null) {
+                            mTrackSelector = new DefaultTrackSelector();
+                        }
                         mEventLogger = new EventLogger(mTrackSelector);
                         boolean preferExtensionDecoders = true;
                         boolean useExtensionRenderers = true;//是否开启扩展
@@ -346,10 +353,14 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                                 ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
                                 : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
                                 : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
-
-                        rendererFactory = new DefaultRenderersFactory(mAppContext, extensionRendererMode);
-                        DefaultLoadControl loadControl = new DefaultLoadControl();
-                        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, rendererFactory, mTrackSelector, loadControl, null, Looper.getMainLooper());
+                        if (mRendererFactory != null) {
+                            mRendererFactory = new DefaultRenderersFactory(mAppContext);
+                            mRendererFactory.setExtensionRendererMode(extensionRendererMode);
+                        }
+                        if (mLoadControl == null) {
+                            mLoadControl = new DefaultLoadControl();
+                        }
+                        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, mRendererFactory, mTrackSelector, mLoadControl, null, Looper.getMainLooper());
                         mInternalPlayer.addListener(IjkExo2MediaPlayer.this);
                         mInternalPlayer.addAnalyticsListener(IjkExo2MediaPlayer.this);
                         mInternalPlayer.addListener(mEventLogger);
@@ -379,10 +390,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     /**
-     * 是否需要带上header
-     * setDataSource之前生效
-     *
-     * @param preview
+     是否需要带上header
+     setDataSource之前生效
+
+     @param preview
      */
     public void setPreview(boolean preview) {
         isPreview = preview;
@@ -398,18 +409,18 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
 
     /**
-     * 设置seek 的临近帧。
+     设置seek 的临近帧。
      **/
-    public void  setSeekParameter(@Nullable SeekParameters seekParameters) {
+    public void setSeekParameter(@Nullable SeekParameters seekParameters) {
         mInternalPlayer.setSeekParameters(seekParameters);
     }
 
 
     /**
-     * 是否开启cache
-     * setDataSource之前生效
-     *
-     * @param cache
+     是否开启cache
+     setDataSource之前生效
+
+     @param cache
      */
     public void setCache(boolean cache) {
         isCache = cache;
@@ -420,10 +431,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     /**
-     * cache文件的目录
-     * setDataSource之前生效
-     *
-     * @param cacheDir
+     cache文件的目录
+     setDataSource之前生效
+
+     @param cacheDir
      */
     public void setCacheDir(File cacheDir) {
         this.mCacheDir = cacheDir;
@@ -442,10 +453,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     /**
-     * 倍速播放
-     *
-     * @param speed 倍速播放，默认为1
-     * @param pitch 音量缩放，默认为1，修改会导致声音变调
+     倍速播放
+
+     @param speed 倍速播放，默认为1
+     @param pitch 音量缩放，默认为1，修改会导致声音变调
      */
     public void setSpeed(@Size(min = 0) float speed, @Size(min = 0) float pitch) {
         PlaybackParameters playbackParameters = new PlaybackParameters(speed, pitch);
@@ -470,6 +481,30 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
+    }
+
+    public MappingTrackSelector getTrackSelector() {
+        return mTrackSelector;
+    }
+
+    public void setTrackSelector(MappingTrackSelector trackSelector) {
+        this.mTrackSelector = trackSelector;
+    }
+
+    public LoadControl getLoadControl() {
+        return mLoadControl;
+    }
+
+    public void setLoadControl(LoadControl loadControl) {
+        this.mLoadControl = loadControl;
+    }
+
+    public DefaultRenderersFactory getRendererFactory() {
+        return mRendererFactory;
+    }
+
+    public void setRendererFactory(DefaultRenderersFactory rendererFactory) {
+        this.mRendererFactory = rendererFactory;
     }
 
     @Override
