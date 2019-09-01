@@ -25,14 +25,14 @@ import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
- * IJKPLayer
- * Created by guoshuyu on 2018/1/11.
+ IJKPLayer
+ Created by guoshuyu on 2018/1/11.
  */
 
-public class IjkPlayerManager implements IPlayerManager {
+public class IjkPlayerManager extends BasePlayerManager {
 
     /**
-     * log level
+     log level
      */
     private static int logLevel = IjkMediaPlayer.IJK_LOG_DEFAULT;
 
@@ -99,6 +99,8 @@ public class IjkPlayerManager implements IPlayerManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        initSuccess(gsyModel);
     }
 
     @Override

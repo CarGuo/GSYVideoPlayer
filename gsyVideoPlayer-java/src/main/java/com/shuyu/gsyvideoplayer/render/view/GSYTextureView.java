@@ -60,7 +60,6 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         if (mSaveTexture == null) {
-            Debuger.printfError("FFFFFFFFFFFF 1");
             mSaveTexture = surface;
             mSurface = new Surface(surface);
             if (mIGSYSurfaceListener != null) {
@@ -68,7 +67,6 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
             }
         } else {
             setSurfaceTexture(mSaveTexture);
-            Debuger.printfError("FFFFFFFFFFFF 2");
             //mSurface = new Surface(mSaveTexture);
         }
     }

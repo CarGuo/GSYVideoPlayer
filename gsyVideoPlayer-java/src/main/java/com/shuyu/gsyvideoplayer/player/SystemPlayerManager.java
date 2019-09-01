@@ -24,7 +24,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  * Created by guoshuyu on 2018/1/11.
  */
 
-public class SystemPlayerManager implements IPlayerManager {
+public class SystemPlayerManager extends BasePlayerManager {
 
     private Context context;
 
@@ -63,6 +63,7 @@ public class SystemPlayerManager implements IPlayerManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        initSuccess(gsyModel);
     }
 
     @Override
