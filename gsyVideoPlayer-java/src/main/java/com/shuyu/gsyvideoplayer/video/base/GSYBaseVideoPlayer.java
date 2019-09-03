@@ -68,6 +68,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
     protected boolean mAutoFullWithSize = false;
 
+    //是否需要竖屏全屏的时候判断状态栏
+    protected boolean isNeedAutoAdaptation = false;
+
     //全屏动画是否结束了
     protected boolean mFullAnimEnd = true;
 
@@ -952,6 +955,20 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         this.mAutoFullWithSize = autoFullWithSize;
     }
 
+
+    public boolean isNeedAutoAdaptation() {
+        return isNeedAutoAdaptation;
+    }
+
+    /**
+     * 是否需要适配在竖屏横屏时，由于刘海屏或者打孔屏占据空间，导致标题显示被遮盖的问题
+     *
+     * @param needAutoAdaptation 默认false
+     */
+    public void setNeedAutoAdaptation(boolean needAutoAdaptation) {
+        isNeedAutoAdaptation = needAutoAdaptation;
+    }
+
     /**
      * 检测是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏；
      * 并且适配在竖屏横屏时，由于刘海屏或者打孔屏占据空间，导致标题显示被遮盖的问题
@@ -961,11 +978,12 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     protected void checkAutoFullWithSizeAndAdaptation(final GSYBaseVideoPlayer gsyVideoPlayer) {
         if (gsyVideoPlayer != null) {
             //判断是否自动选择；判断是否是竖直的视频；判断是否隐藏状态栏
-            if (isAutoFullWithSize() && isVerticalVideo() && isFullHideStatusBar()) {
+            if (isNeedAutoAdaptation &&
+                    isAutoFullWithSize() && isVerticalVideo() && isFullHideStatusBar()) {
                 gsyVideoPlayer.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        gsyVideoPlayer.autoAdaptation();
+                        gsyVideoPlayer.getCurrentPlayer().autoAdaptation();
                     }
                 }, 100);
             }
@@ -973,15 +991,15 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     }
 
     /**
-     * 自动适配在竖屏全屏时，由于刘海屏或者打孔屏占据空间带来的影响(某些机型在全屏时会自动将布局下移（或者添加padding），例如三星S10、小米8；但是也有一些机型在全屏时不会处理，此时，就为了兼容这部分机型)
+     * 自动适配在竖屏全屏时，
+     * 由于刘海屏或者打孔屏占据空间带来的影响(某些机型在全屏时会自动将布局下移（或者添加padding），
+     * 例如三星S10、小米8；但是也有一些机型在全屏时不会处理，此时，就为了兼容这部分机型)
      */
     protected void autoAdaptation() {
         Context context = getContext();
         if (isVerticalVideo()) {
-
             int[] location = new int[2];
             getLocationOnScreen(location);
-
             /*同时判断系统是否有自动将布局从statusbar下方开始显示，根据在屏幕中的位置判断*/
             //如果系统没有将布局下移，那么此时处理
             if (location[1] == 0) {
