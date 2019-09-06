@@ -79,7 +79,7 @@ public class IjkPlayerManager extends BasePlayerManager {
             } else {
                 if (!TextUtils.isEmpty(url)) {
                     Uri uri = Uri.parse(url);
-                    if (uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
+                    if (ContentResolver.SCHEME_ANDROID_RESOURCE.equals(uri.getScheme())) {
                         RawDataSourceProvider rawDataSourceProvider = RawDataSourceProvider.create(context, uri);
                         mediaPlayer.setDataSource(rawDataSourceProvider);
                     } else {
