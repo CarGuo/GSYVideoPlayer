@@ -5,23 +5,24 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.render.GSYRenderView;
+import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
-import moe.codeest.enviews.ENDownloadView;
 
 /**
- 带封面
- Created by guoshuyu on 2017/9/3.
+ * 带封面
+ * Created by guoshuyu on 2017/9/3.
  */
 
 public class SampleCoverVideo extends StandardGSYVideoPlayer {
@@ -90,6 +91,60 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
         sampleCoverVideo.mStartButton.setVisibility(GONE);
         sampleCoverVideo.mStartButton = null;
         return sampleCoverVideo;
+    }
+
+    @Override
+    protected void cloneParams(GSYBaseVideoPlayer from, GSYBaseVideoPlayer to) {
+        super.cloneParams(from, to);
+        SampleCoverVideo sf = (SampleCoverVideo) from;
+        SampleCoverVideo st = (SampleCoverVideo) to;
+        st.mShowFullAnimation = sf.mShowFullAnimation;
+    }
+
+
+    /**
+     * 退出window层播放全屏效果
+     */
+    @SuppressWarnings("ResourceType")
+    @Override
+    protected void clearFullscreenLayout() {
+        if (!mFullAnimEnd) {
+            return;
+        }
+        mIfCurrentIsFullscreen = false;
+        int delay = 0;
+        if (mOrientationUtils != null) {
+            delay = mOrientationUtils.backToProtVideo();
+            mOrientationUtils.setEnable(false);
+            if (mOrientationUtils != null) {
+                mOrientationUtils.releaseListener();
+                mOrientationUtils = null;
+            }
+        }
+
+        if (!mShowFullAnimation) {
+            delay = 0;
+        }
+
+        final ViewGroup vp = (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
+        final View oldF = vp.findViewById(getFullId());
+        if (oldF != null) {
+            //此处fix bug#265，推出全屏的时候，虚拟按键问题
+            SampleCoverVideo gsyVideoPlayer = (SampleCoverVideo) oldF;
+            gsyVideoPlayer.mIfCurrentIsFullscreen = false;
+        }
+
+        if (delay == 0) {
+            backToNormal();
+        } else {
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    backToNormal();
+                }
+            }, delay);
+        }
+
     }
 
 
