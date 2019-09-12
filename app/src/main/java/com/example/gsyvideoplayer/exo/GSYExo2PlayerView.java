@@ -26,13 +26,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.gsyvideoplayer.exo.GSYExo2MediaPlayer.POSITION_DISCONTINUITY;
+
 
 /**
- * Created by guoshuyu on 2018/5/16.
- * 自定义View支持exo的list数据，实现无缝切换效果
- *
- * 这是一种思路，通过自定义后GSYExo2MediaPlayer内部，通过ConcatenatingMediaSource实现列表播放
- * 诸如此类，还可以实现AdsMediaSource等
+ Created by guoshuyu on 2018/5/16.
+ 自定义View支持exo的list数据，实现无缝切换效果
+ 这是一种思路，通过自定义后GSYExo2MediaPlayer内部，通过ConcatenatingMediaSource实现列表播放
+ 诸如此类，还可以实现AdsMediaSource等
  */
 
 public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
@@ -42,7 +43,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
     protected boolean mExoCache = false;
 
     /**
-     * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
+     1.5.0开始加入，如果需要不同布局区分功能，需要重载
      */
     public GSYExo2PlayerView(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -58,50 +59,50 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
 
 
     /**
-     * 设置播放URL
-     *
-     * @param url           播放url
-     * @param position      需要播放的位置
-     * @return
+     设置播放URL
+
+     @param url      播放url
+     @param position 需要播放的位置
+     @return
      */
     public boolean setUp(List<GSYVideoModel> url, int position) {
         return setUp(url, position, null, new HashMap<String, String>());
     }
 
     /**
-     * 设置播放URL
-     *
-     * @param url           播放url
-     * @param position      需要播放的位置
-     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @return
+     设置播放URL
+
+     @param url       播放url
+     @param position  需要播放的位置
+     @param cachePath 缓存路径，如果是M3U8或者HLS，请设置为false
+     @return
      */
     public boolean setUp(List<GSYVideoModel> url, int position, File cachePath) {
         return setUp(url, position, cachePath, new HashMap<String, String>());
     }
 
     /**
-     * 设置播放URL
-     *
-     * @param url           播放url
-     * @param position      需要播放的位置
-     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param mapHeadData   http header
-     * @return
+     设置播放URL
+
+     @param url         播放url
+     @param position    需要播放的位置
+     @param cachePath   缓存路径，如果是M3U8或者HLS，请设置为false
+     @param mapHeadData http header
+     @return
      */
-    public boolean setUp(List<GSYVideoModel> url,  int position, File cachePath, Map<String, String> mapHeadData) {
+    public boolean setUp(List<GSYVideoModel> url, int position, File cachePath, Map<String, String> mapHeadData) {
         return setUp(url, position, cachePath, mapHeadData, true);
     }
 
     /**
-     * 设置播放URL
-     *
-     * @param url           播放url
-     * @param position      需要播放的位置
-     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param mapHeadData   http header
-     * @param changeState   切换的时候释放surface
-     * @return
+     设置播放URL
+
+     @param url         播放url
+     @param position    需要播放的位置
+     @param cachePath   缓存路径，如果是M3U8或者HLS，请设置为false
+     @param mapHeadData http header
+     @param changeState 切换的时候释放surface
+     @return
      */
     protected boolean setUp(List<GSYVideoModel> url, int position, File cachePath, Map<String, String> mapHeadData, boolean changeState) {
         mUriList = url;
@@ -125,6 +126,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         st.mPlayPosition = sf.mPlayPosition;
         st.mUriList = sf.mUriList;
         st.mExoCache = sf.mExoCache;
+        st.mTitle = sf.mTitle;
     }
 
     @Override
@@ -150,6 +152,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         }
         super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
     }
+
 
     @Override
     protected void startPrepare() {
@@ -177,14 +180,14 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
             Debuger.printfError("********************** urls isEmpty . Do you know why ? **********************");
         }
 
-        ((GSYExoVideoManager)getGSYVideoManager()).prepare(urls, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mExoCache, mCachePath);
+        ((GSYExoVideoManager) getGSYVideoManager()).prepare(urls, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mExoCache, mCachePath);
 
         setStateAndUi(CURRENT_STATE_PREPAREING);
     }
 
 
     /**
-     * 显示wifi确定框，如需要自定义继承重写即可
+     显示wifi确定框，如需要自定义继承重写即可
      */
     @Override
     protected void showWifiDialog() {
@@ -242,5 +245,17 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         return GSYExoVideoManager.SMALL_ID;
     }
 
-
+    @Override
+    public void onInfo(int what, int extra) {
+        if (what == POSITION_DISCONTINUITY) {
+            int window =  ((GSYExo2MediaPlayer)getGSYVideoManager().getPlayer().getMediaPlayer()).getCurrentWindowIndex();
+            mPlayPosition = window;
+            GSYVideoModel gsyVideoModel = mUriList.get(window);
+            if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+                mTitleTextView.setText(gsyVideoModel.getTitle());
+            }
+        } else {
+            super.onInfo(what, extra);
+        }
+    }
 }
