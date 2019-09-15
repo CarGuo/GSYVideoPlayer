@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -82,6 +83,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
     //全屏返回监听，如果设置了，默认返回无效
     protected View.OnClickListener mBackFromFullScreenListener;
+    protected Handler mInnerHandler = new Handler();
 
     public GSYBaseVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -317,7 +319,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         final boolean isLockLand = isLockLandByAutoFullSize();
 
         if (isShowFullAnimation()) {
-            postDelayed(new Runnable() {
+            mInnerHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     //autoFull模式下，非横屏视频视频不横屏，并且不自动旋转
@@ -412,7 +414,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             gsyVideoPlayer.mIfCurrentIsFullscreen = false;
         }
 
-        postDelayed(new Runnable() {
+        mInnerHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 backToNormal();
@@ -446,7 +448,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 lp.gravity = Gravity.NO_GRAVITY;
                 gsyVideoPlayer.setLayoutParams(lp);
 
-                postDelayed(new Runnable() {
+                mInnerHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
@@ -480,7 +482,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      */
     protected void checkoutState() {
         removeCallbacks(mCheckoutTask);
-        postDelayed(mCheckoutTask, 500);
+        mInnerHandler.postDelayed(mCheckoutTask, 500);
     }
 
     /**
@@ -691,7 +693,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 lp.setMargins(mListItemRect[0], mListItemRect[1], 0, 0);
                 frameLayout.addView(gsyVideoPlayer, lp);
                 vp.addView(frameLayout, lpParent);
-                postDelayed(new Runnable() {
+                mInnerHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         TransitionManager.beginDelayedTransition(vp);
@@ -980,7 +982,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             //判断是否自动选择；判断是否是竖直的视频；判断是否隐藏状态栏
             if (isNeedAutoAdaptation &&
                     isAutoFullWithSize() && isVerticalVideo() && isFullHideStatusBar()) {
-                gsyVideoPlayer.postDelayed(new Runnable() {
+                mInnerHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         gsyVideoPlayer.getCurrentPlayer().autoAdaptation();
