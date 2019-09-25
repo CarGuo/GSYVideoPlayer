@@ -9,6 +9,7 @@ import com.google.android.exoplayer2.video.DummySurface;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.util.List;
 
@@ -40,6 +41,8 @@ public class GSYExoPlayerManager extends BasePlayerManager {
         }
         try {
             mediaPlayer.setLooping(((GSYExoModel) msg.obj).isLooping());
+            Debuger.printfError("###### " + ((GSYExoModel) msg.obj).getOverrideExtension());
+            mediaPlayer.setOverrideExtension(((GSYExoModel) msg.obj).getOverrideExtension());
             mediaPlayer.setDataSource(((GSYExoModel) msg.obj).getUrls(), ((GSYExoModel) msg.obj).getMapHeadData(), ((GSYExoModel) msg.obj).isCache());
             //很遗憾，EXO2的setSpeed只能在播放前生效
             if (((GSYExoModel) msg.obj).getSpeed() != 1 && ((GSYExoModel) msg.obj).getSpeed() > 0) {

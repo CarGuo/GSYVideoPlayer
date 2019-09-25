@@ -70,7 +70,7 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
         }
         ConcatenatingMediaSource concatenatedSource = new ConcatenatingMediaSource();
         for (String uri : uris) {
-            MediaSource mediaSource = mExoHelper.getMediaSource(uri, isPreview, cache, false, mCacheDir, null);
+            MediaSource mediaSource = mExoHelper.getMediaSource(uri, isPreview, cache, false, mCacheDir,  getOverrideExtension());
             concatenatedSource.addMediaSource(mediaSource);
         }
         mMediaSource = concatenatedSource;
