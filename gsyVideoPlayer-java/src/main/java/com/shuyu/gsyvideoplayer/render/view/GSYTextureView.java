@@ -62,12 +62,11 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
         if (mSaveTexture == null) {
             mSaveTexture = surface;
             mSurface = new Surface(surface);
-            if (mIGSYSurfaceListener != null) {
-                mIGSYSurfaceListener.onSurfaceAvailable(mSurface);
-            }
         } else {
             setSurfaceTexture(mSaveTexture);
-            //mSurface = new Surface(mSaveTexture);
+        }
+        if (mIGSYSurfaceListener != null) {
+            mIGSYSurfaceListener.onSurfaceAvailable(mSurface);
         }
     }
 
