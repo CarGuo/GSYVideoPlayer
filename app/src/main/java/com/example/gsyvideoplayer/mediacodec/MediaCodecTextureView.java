@@ -70,6 +70,9 @@ public class MediaCodecTextureView extends TextureView implements TextureView.Su
             }
         } else {
             setSurfaceTexture(mSaveTexture);
+            if (mIGSYSurfaceListener != null) {
+                mIGSYSurfaceListener.onSurfaceAvailable(mSurface);
+            }
         }
     }
 
