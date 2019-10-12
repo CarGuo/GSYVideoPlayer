@@ -28,7 +28,7 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 public class FloatingVideo extends StandardGSYVideoPlayer {
 
-    protected DismissControlViewTimerTask mDismissControlViewTimerTask;
+    protected Timer mDismissControlViewTimer;
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -147,27 +147,6 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
         return getContext();
     }
 
-    @Override
-    protected void startDismissControlViewTimer() {
-        cancelDismissControlViewTimer();
-        mDismissControlViewTimer = new Timer();
-        mDismissControlViewTimerTask = new DismissControlViewTimerTask();
-        mDismissControlViewTimer.schedule(mDismissControlViewTimerTask, mDismissControlTime);
-    }
-
-    @Override
-    protected void cancelDismissControlViewTimer() {
-        if (mDismissControlViewTimer != null) {
-            mDismissControlViewTimer.cancel();
-            mDismissControlViewTimer = null;
-        }
-        if (mDismissControlViewTimerTask != null) {
-            mDismissControlViewTimerTask.cancel();
-            mDismissControlViewTimerTask = null;
-        }
-
-    }
-
 
     @Override
     protected boolean isShowNetConfirm() {
@@ -203,27 +182,5 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
             alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         }
         alertDialog.show();
-    }
-
-    private class DismissControlViewTimerTask extends TimerTask {
-        @Override
-        public void run() {
-            if (mCurrentState != CURRENT_STATE_NORMAL
-                    && mCurrentState != CURRENT_STATE_ERROR
-                    && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
-                if (getActivityContext() != null) {
-                   FloatingVideo.this.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideAllWidget();
-                            setViewShowState(mLockScreen, GONE);
-                            if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
-                                hideNavKey(mContext);
-                            }
-                        }
-                    });
-                }
-            }
-        }
     }
 }
