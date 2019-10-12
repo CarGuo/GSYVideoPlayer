@@ -1,5 +1,20 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### 7.1.1(2019-10-12)
+
+* fix #2244、#2252(resolveFullVideoShow 不执行情况)、#2279、#2280
+* fix #2303(去除 TimerTask)、#2306（某些机型退到后台返回不显示）
+* 增加 setNeedAutoAdaptation
+```
+    /**
+     * 是否需要适配在竖屏横屏时，由于刘海屏或者打孔屏占据空间，导致标题显示被遮盖的问题
+     *
+     * @param needAutoAdaptation 默认false
+     */
+    public void setNeedAutoAdaptation(boolean needAutoAdaptation)
+```
+
+
 ### 7.1.0(2019-09-01)
 
 * update ExoPlayer to 2.10.4
