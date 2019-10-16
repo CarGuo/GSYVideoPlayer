@@ -3,6 +3,8 @@
 
 ## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)（兼容系统MediaPlayer与EXOPlayer2），实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
+> ## [如果克隆太慢，可尝试从码云地址下载](https://gitee.com/CarGuo/GSYVideoPlayer)
+
 类型 | 功能
 -------- | ---
 **缓存**|**边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)；ExoPlayer使用SimpleCache。**
@@ -265,6 +267,8 @@ GSYVideoManager
 ```
 
 ## 温馨提示
+
+#### [如果克隆太慢，可尝试从码云地址下载](https://gitee.com/CarGuo/GSYVideoPlayer)
 
 ```
 关于自定义和出现问题的请先看问题集锦、demo、issue。
