@@ -14,12 +14,16 @@ import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 public class OrientationUtils {
 
-    private Activity activity;
-    private GSYBaseVideoPlayer gsyVideoPlayer;
-    private OrientationEventListener orientationEventListener;
+    private static final int LAND_TYPE_NULL = 0;
+    private static final int LAND_TYPE_NORMAL = 1;
+    private static final int LAND_TYPE_REVERSE = 2;
 
-    private int screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-    private int mIsLand;
+    private Activity mActivity;
+    private GSYBaseVideoPlayer mVideoPlayer;
+    private OrientationEventListener mOrientationEventListener;
+
+    private int mScreenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    private int mIsLand = LAND_TYPE_NULL;
 
     private boolean mClick = false;
     private boolean mClickLand = false;
@@ -35,20 +39,20 @@ public class OrientationUtils {
      * @param gsyVideoPlayer
      */
     public OrientationUtils(Activity activity, GSYBaseVideoPlayer gsyVideoPlayer) {
-        this.activity = activity;
-        this.gsyVideoPlayer = gsyVideoPlayer;
+        this.mActivity = activity;
+        this.mVideoPlayer = gsyVideoPlayer;
         init();
     }
 
     private void init() {
-        orientationEventListener = new OrientationEventListener(activity.getApplicationContext()) {
+        mOrientationEventListener = new OrientationEventListener(mActivity.getApplicationContext()) {
             @Override
             public void onOrientationChanged(int rotation) {
-                boolean autoRotateOn = (Settings.System.getInt(activity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
+                boolean autoRotateOn = (Settings.System.getInt(mActivity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
                 if (!autoRotateOn && mRotateWithSystem) {
                     return;
                 }
-                if (gsyVideoPlayer != null && gsyVideoPlayer.isVerticalFullByVideoSize()) {
+                if (mVideoPlayer != null && mVideoPlayer.isVerticalFullByVideoSize()) {
                     return;
                 }
                 if (mIsPause) {
@@ -57,25 +61,25 @@ public class OrientationUtils {
                 // 设置竖屏
                 if (((rotation >= 0) && (rotation <= 30)) || (rotation >= 330)) {
                     if (mClick) {
-                        if (mIsLand > 0 && !mClickLand) {
+                        if (mIsLand > LAND_TYPE_NULL && !mClickLand) {
                             return;
                         } else {
                             mClickPort = true;
                             mClick = false;
-                            mIsLand = 0;
+                            mIsLand = LAND_TYPE_NULL;
                         }
                     } else {
-                        if (mIsLand > 0) {
-                            screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                            if (gsyVideoPlayer.getFullscreenButton() != null) {
-                                if (gsyVideoPlayer.isIfCurrentIsFullscreen()) {
-                                    gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                        if (mIsLand > LAND_TYPE_NULL) {
+                            mScreenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                            if (mVideoPlayer.getFullscreenButton() != null) {
+                                if (mVideoPlayer.isIfCurrentIsFullscreen()) {
+                                    mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getShrinkImageRes());
                                 } else {
-                                    gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
+                                    mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getEnlargeImageRes());
                                 }
                             }
-                            mIsLand = 0;
+                            mIsLand = LAND_TYPE_NULL;
                             mClick = false;
                         }
                     }
@@ -83,19 +87,19 @@ public class OrientationUtils {
                 // 设置横屏
                 else if (((rotation >= 230) && (rotation <= 310))) {
                     if (mClick) {
-                        if (!(mIsLand == 1) && !mClickPort) {
+                        if (!(mIsLand == LAND_TYPE_NORMAL) && !mClickPort) {
                             return;
                         } else {
                             mClickLand = true;
                             mClick = false;
-                            mIsLand = 1;
+                            mIsLand = LAND_TYPE_NORMAL;
                         }
                     } else {
-                        if (!(mIsLand == 1)) {
-                            screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                            if (gsyVideoPlayer.getFullscreenButton() != null) {
-                                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                        if (!(mIsLand == LAND_TYPE_NORMAL)) {
+                            mScreenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                            if (mVideoPlayer.getFullscreenButton() != null) {
+                                mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getShrinkImageRes());
                             }
                             mIsLand = 1;
                             mClick = false;
@@ -105,55 +109,55 @@ public class OrientationUtils {
                 // 设置反向横屏
                 else if (rotation > 30 && rotation < 95) {
                     if (mClick) {
-                        if (!(mIsLand == 2) && !mClickPort) {
+                        if (!(mIsLand == LAND_TYPE_REVERSE) && !mClickPort) {
                             return;
                         } else {
                             mClickLand = true;
                             mClick = false;
-                            mIsLand = 2;
+                            mIsLand = LAND_TYPE_REVERSE;
                         }
-                    } else if (!(mIsLand == 2)) {
-                        screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                        if (gsyVideoPlayer.getFullscreenButton() != null) {
-                            gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+                    } else if (!(mIsLand == LAND_TYPE_REVERSE)) {
+                        mScreenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                        if (mVideoPlayer.getFullscreenButton() != null) {
+                            mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getShrinkImageRes());
                         }
-                        mIsLand = 2;
+                        mIsLand = LAND_TYPE_REVERSE;
                         mClick = false;
                     }
                 }
             }
         };
-        orientationEventListener.enable();
+        mOrientationEventListener.enable();
     }
 
     /**
      * 点击切换的逻辑，比如竖屏的时候点击了就是切换到横屏不会受屏幕的影响
      */
     public void resolveByClick() {
-        if (mIsLand == 0 && gsyVideoPlayer != null && gsyVideoPlayer.isVerticalFullByVideoSize()) {
+        if (mIsLand == LAND_TYPE_NULL && mVideoPlayer != null && mVideoPlayer.isVerticalFullByVideoSize()) {
             return;
         }
         mClick = true;
-        if (mIsLand == 0) {
-            screenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            if (gsyVideoPlayer.getFullscreenButton() != null) {
-                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+        if (mIsLand == LAND_TYPE_NULL) {
+            mScreenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            if (mVideoPlayer.getFullscreenButton() != null) {
+                mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getShrinkImageRes());
             }
-            mIsLand = 1;
+            mIsLand = LAND_TYPE_NORMAL;
             mClickLand = false;
         } else {
-            screenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            if (gsyVideoPlayer.getFullscreenButton() != null) {
-                if (gsyVideoPlayer.isIfCurrentIsFullscreen()) {
-                    gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getShrinkImageRes());
+            mScreenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            if (mVideoPlayer.getFullscreenButton() != null) {
+                if (mVideoPlayer.isIfCurrentIsFullscreen()) {
+                    mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getShrinkImageRes());
                 } else {
-                    gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
+                    mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getEnlargeImageRes());
                 }
             }
-            mIsLand = 0;
+            mIsLand = LAND_TYPE_NULL;
             mClickPort = false;
         }
 
@@ -163,16 +167,16 @@ public class OrientationUtils {
      * 列表返回的样式判断。因为立即旋转会导致界面跳动的问题
      */
     public int backToProtVideo() {
-        if (mIsLand > 0) {
+        if (mIsLand > LAND_TYPE_NULL) {
             mClick = true;
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            if (gsyVideoPlayer != null && gsyVideoPlayer.getFullscreenButton() != null)
-                gsyVideoPlayer.getFullscreenButton().setImageResource(gsyVideoPlayer.getEnlargeImageRes());
-            mIsLand = 0;
+            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            if (mVideoPlayer != null && mVideoPlayer.getFullscreenButton() != null)
+                mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getEnlargeImageRes());
+            mIsLand = LAND_TYPE_NULL;
             mClickPort = false;
             return 500;
         }
-        return 0;
+        return LAND_TYPE_NULL;
     }
 
 
@@ -183,15 +187,15 @@ public class OrientationUtils {
     public void setEnable(boolean enable) {
         this.mEnable = enable;
         if (mEnable) {
-            orientationEventListener.enable();
+            mOrientationEventListener.enable();
         } else {
-            orientationEventListener.disable();
+            mOrientationEventListener.disable();
         }
     }
 
     public void releaseListener() {
-        if (orientationEventListener != null) {
-            orientationEventListener.disable();
+        if (mOrientationEventListener != null) {
+            mOrientationEventListener.disable();
         }
     }
 
@@ -199,8 +203,8 @@ public class OrientationUtils {
         return mClick;
     }
 
-    public void setClick(boolean Click) {
-        this.mClick = mClick;
+    public void setClick(boolean click) {
+        this.mClick = click;
     }
 
     public boolean isClickLand() {
@@ -229,11 +233,11 @@ public class OrientationUtils {
     }
 
     public int getScreenType() {
-        return screenType;
+        return mScreenType;
     }
 
-    public void setScreenType(int screenType) {
-        this.screenType = screenType;
+    public void setScreenType(int mScreenType) {
+        this.mScreenType = mScreenType;
     }
 
 
