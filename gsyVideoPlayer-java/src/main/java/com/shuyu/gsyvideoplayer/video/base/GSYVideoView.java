@@ -329,8 +329,12 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-        if (mContext instanceof Activity) {
-            ((Activity) mContext).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        try {
+            if (mContext instanceof Activity) {
+                ((Activity) mContext).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         mBackUpPlayingBufferState = -1;
         getGSYVideoManager().prepare(mUrl, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mCache, mCachePath, mOverrideExtension);
@@ -606,7 +610,11 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             getGSYVideoManager().setLastListener(null);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         if (mContext instanceof Activity) {
-            ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            try {
+                ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         releaseNetWorkState();
 
@@ -637,7 +645,11 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         if (mContext instanceof Activity) {
-            ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            try {
+                ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         releaseNetWorkState();
