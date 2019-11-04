@@ -25,7 +25,7 @@ public class SwitchUtil {
         //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
         gsyVideoPlayer.setAutoFullWithSize(true);
         //音频焦点冲突时是否释放
-        gsyVideoPlayer.setReleaseWhenLossAudio(false);
+        gsyVideoPlayer.setReleaseWhenLossAudio(true);
         //全屏动画
         gsyVideoPlayer.setShowFullAnimation(false);
         //小屏时不触摸滑动
