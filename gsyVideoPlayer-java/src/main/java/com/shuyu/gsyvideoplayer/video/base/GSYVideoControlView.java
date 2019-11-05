@@ -902,7 +902,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         int duration = getDuration();
         int progress = position * 100 / (duration == 0 ? 1 : duration);
         setProgressAndTime(progress, secProgress, position, duration);
-        setProgressAndTime(progress, secProgress, position, duration);
     }
 
     protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
