@@ -140,8 +140,13 @@ public class OrientationUtils {
         }
         mClick = true;
         if (mIsLand == LAND_TYPE_NULL) {
-            mScreenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            int request = mActivity.getRequestedOrientation();
+            if(request == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
+                mScreenType = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+            } else {
+                mScreenType = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+            }
+            mActivity.setRequestedOrientation(mScreenType);
             if (mVideoPlayer.getFullscreenButton() != null) {
                 mVideoPlayer.getFullscreenButton().setImageResource(mVideoPlayer.getShrinkImageRes());
             }
