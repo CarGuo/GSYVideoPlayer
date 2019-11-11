@@ -16,11 +16,22 @@ public class GSYVideoType {
     //4:3
     public final static int SCREEN_TYPE_4_3 = 2;
 
+    //18:9
+    public final static int SCREEN_TYPE_18_9 = 6;
+
     //全屏裁减显示，为了显示正常 CoverImageView 建议使用FrameLayout作为父布局
     public final static int SCREEN_TYPE_FULL = 4;
 
     //全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
     public final static int SCREEN_MATCH_FULL = -4;
+
+    //自定义比例，需要设置 sScreenScaleRatio
+    public final static int SCREEN_TYPE_CUSTOM = -5;
+
+    /**
+     * 自定义的显示比例
+     */
+    private static float sScreenScaleRatio = 0;
 
     /**
      * GLSurfaceView 主要用于OpenGL渲染的
@@ -118,4 +129,15 @@ public class GSYVideoType {
         sRenderType = renderType;
     }
 
+    public static float getScreenScaleRatio() {
+        return sScreenScaleRatio;
+    }
+
+    /***
+     * SCREEN_TYPE_CUSTOM 下自定义显示比例
+     * @param screenScaleRatio  高宽比，如 16：9
+     */
+    public static void setScreenScaleRatio(float screenScaleRatio) {
+        GSYVideoType.sScreenScaleRatio = screenScaleRatio;
+    }
 }
