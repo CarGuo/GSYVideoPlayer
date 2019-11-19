@@ -604,6 +604,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     @Override
     public void onPrepared() {
+        setTextAndProgress(0, true);
         super.onPrepared();
         if (mCurrentState != CURRENT_STATE_PREPAREING) return;
         startProgressTimer();
@@ -898,13 +899,17 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
     protected void setTextAndProgress(int secProgress) {
+        setTextAndProgress(secProgress, false);
+    }
+
+    protected void setTextAndProgress(int secProgress, boolean forceChange) {
         int position = getCurrentPositionWhenPlaying();
         int duration = getDuration();
         int progress = position * 100 / (duration == 0 ? 1 : duration);
-        setProgressAndTime(progress, secProgress, position, duration);
+        setProgressAndTime(progress, secProgress, position, duration, forceChange);
     }
 
-    protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
+    protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime, boolean forceChange) {
 
         if (mGSYVideoProgressListener != null && mCurrentState == CURRENT_STATE_PLAYING) {
             mGSYVideoProgressListener.onProgress(progress, secProgress, currentTime, totalTime);
@@ -917,7 +922,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             return;
         }
         if (!mTouchingProgressBar) {
-            if (progress != 0) mProgressBar.setProgress(progress);
+            if (progress != 0 || forceChange) mProgressBar.setProgress(progress);
         }
         if (getGSYVideoManager().getBufferedPercentage() > 0) {
             secProgress = getGSYVideoManager().getBufferedPercentage();
@@ -929,7 +934,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
 
         if (mBottomProgressBar != null) {
-            if (progress != 0) mBottomProgressBar.setProgress(progress);
+            if (progress != 0 || forceChange) mBottomProgressBar.setProgress(progress);
             setSecondaryProgress(secProgress);
         }
     }

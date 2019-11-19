@@ -180,8 +180,8 @@ public class GSYADVideoPlayer extends StandardGSYVideoPlayer {
     }
 
     @Override
-    protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime) {
-        super.setProgressAndTime(progress, secProgress, currentTime, totalTime);
+    protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime, boolean forceChange) {
+        super.setProgressAndTime(progress, secProgress, currentTime, totalTime, forceChange);
         if (mADTime != null && currentTime > 0) {
             int totalSeconds = totalTime / 1000;
             int currentSeconds = currentTime / 1000;
