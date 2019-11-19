@@ -3,4 +3,4 @@
 
 2、拆分缓存框架
 
-3、拆分绘制surface框架，增加SurfaceFactory
+3、升级 ffmpeg 到 4.0 https://github.com/bilibili/ijkplayer/issues/4772
