@@ -145,8 +145,10 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ### * QQ群，有兴趣的欢迎（平时吹水吐槽多，因为人数饱和，目前开启付费入群）：174815284 。
 ### * [Flutter Github客户端](https://github.com/CarGuo/gsy_github_app_flutter) 、[React Native Github客户端](https://github.com/CarGuo/GSYGithubAPP) 、 [Weex Github客户端](https://github.com/CarGuo/GSYGithubAPPWeex) 、 [原生 Kotlin Github客户端](https://github.com/CarGuo/GSYGithubAPPKotlin)
+### * [RxFFmpeg Android 的音视频编辑工具](https://github.com/microshow/RxFFmpeg)
 ### * [RickText](https://github.com/CarGuo/RickText)
 ### * [LazyRecyclerAdapter](https://github.com/CarGuo/LazyRecyclerAdapter)
+
 
 ## 三、文档Wiki
 
