@@ -207,6 +207,11 @@
             android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".DetailDownloadPlayer"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Transitions"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="android.max_aspect"

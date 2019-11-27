@@ -202,8 +202,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="硬解码支持" />
-
-
+        <Button
+            android:id="@+id/detail_download_activity"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="缓存下载支持" />
         <Button
             android:id="@+id/detail_normal_activity"
             android:layout_width="240dp"
