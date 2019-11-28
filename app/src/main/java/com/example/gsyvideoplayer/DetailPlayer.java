@@ -254,12 +254,12 @@ public class DetailPlayer extends AppCompatActivity {
 
     private String getUrl() {
 
-        ///String url = "android.resource://" + getPackageName() + "/" + R.raw.test1;
+        //String url = "android.resource://" + getPackageName() + "/" + R.raw.test1;
         //注意，用ijk模式播放raw视频，这个必须打开
-        ///GSYVideoManager.instance().enableRawPlay(getApplicationContext());
+        //GSYVideoManager.instance().enableRawPlay(getApplicationContext());
 
         ///exo raw 支持
-        ///String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
+        //String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
 
         //断网自动重新链接，url前接上ijkhttphook:
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
@@ -302,6 +302,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
+        //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
         return url;
     }
 }
