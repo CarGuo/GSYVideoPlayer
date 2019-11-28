@@ -740,9 +740,9 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     @Override
     public void onVideoSizeChanged(EventTime eventTime, int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-        mVideoWidth = width;
+        mVideoWidth = (int) (width * pixelWidthHeightRatio);
         mVideoHeight = height;
-        notifyOnVideoSizeChanged(width, height, 1, 1);
+        notifyOnVideoSizeChanged((int) (width * pixelWidthHeightRatio), height, 1, 1);
         if (unappliedRotationDegrees > 0)
             notifyOnInfo(IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED, unappliedRotationDegrees);
     }
