@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.google.android.exoplayer2.SeekParameters;
+import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
@@ -253,9 +254,12 @@ public class DetailPlayer extends AppCompatActivity {
 
     private String getUrl() {
 
-        //String url = "android.resource://" + getPackageName() + "/" + R.raw.test;
+        ///String url = "android.resource://" + getPackageName() + "/" + R.raw.test1;
         //注意，用ijk模式播放raw视频，这个必须打开
-        //GSYVideoManager.instance().enableRawPlay(getApplicationContext());
+        ///GSYVideoManager.instance().enableRawPlay(getApplicationContext());
+
+        ///exo raw 支持
+        ///String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
 
         //断网自动重新链接，url前接上ijkhttphook:
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
