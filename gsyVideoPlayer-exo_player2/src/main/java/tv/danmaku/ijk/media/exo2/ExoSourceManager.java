@@ -23,9 +23,11 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
@@ -95,6 +97,27 @@ public class ExoSourceManager {
         mDataSource = dataSource;
         Uri contentUri = Uri.parse(dataSource);
         int contentType = inferContentType(dataSource, overrideExtension);
+
+
+        if("android.resource".equals(contentUri.getScheme())) {
+            DataSpec dataSpec = new DataSpec(contentUri);
+            final RawResourceDataSource rawResourceDataSource = new RawResourceDataSource(mAppContext);
+            try {
+                rawResourceDataSource.open(dataSpec);
+            } catch (RawResourceDataSource.RawResourceDataSourceException e) {
+                e.printStackTrace();
+            }
+            DataSource.Factory factory = new DataSource.Factory() {
+                @Override
+                public DataSource createDataSource() {
+                    return rawResourceDataSource;
+                }
+            };
+            ExtractorMediaSource extractorMediaSource = new ExtractorMediaSource(rawResourceDataSource.getUri(),
+                    factory, new DefaultExtractorsFactory(), null, null);
+            return  extractorMediaSource;
+        }
+
         switch (contentType) {
             case C.TYPE_SS:
                 mediaSource = new SsMediaSource.Factory(
