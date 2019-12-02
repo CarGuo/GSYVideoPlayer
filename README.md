@@ -193,6 +193,29 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 五、近期版本
 
+
+### 7.1.2(2019-12-02)
+
+* fix #2436 增加 exo 的 http timeout 
+```
+ExoSourceManager
+
+ public static void setHttpReadTimeout(int httpReadTimeout)
+ 
+ public static void setHttpConnectTimeout(int httpConnectTimeout)
+
+```
+* 优化视频尺寸显示计算 
+* 增加 exo 支持 raw 文件播放
+
+``` 
+String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
+```
+* 增加模拟下载共用缓存例子 DetailDownloadPlayer
+* 适配 android 10 的全屏
+* fix #2382、#2411、#2343、#2379、#2350、#2328
+
+
 ### 7.1.1(2019-10-12)
 
 * fix #2244、#2252(resolveFullVideoShow 不执行情况)、#2279、#2280
