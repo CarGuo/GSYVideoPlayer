@@ -84,7 +84,7 @@ implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.1.2'
 
 ```
 
-#### D、代码中的全局切换支持（更多请参看下方文档和demo）
+#### 代码中的全局切换支持（更多请参看下方文档和demo）
 
 ```
 
@@ -115,7 +115,11 @@ GSYVideoType.SCREEN_TYPE_4_3 = 2;
 GSYVideoType.SCREEN_TYPE_FULL = 4;
 //全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
 GSYVideoType.SCREEN_MATCH_FULL = -4;
-
+/***
+ * SCREEN_TYPE_CUSTOM 下自定义显示比例
+ * @param screenScaleRatio  高宽比，如 16：9
+ */
+public static void setScreenScaleRatio(float screenScaleRatio)
 
 
 //切换绘制模式
@@ -214,6 +218,11 @@ String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
 * 增加模拟下载共用缓存例子 DetailDownloadPlayer
 * 适配 android 10 的全屏
 * fix #2382、#2411、#2343、#2379、#2350、#2328
+* 增加设置自定义显示比例的支持
+
+``` 
+GSYVideoType.setScreenScaleRatio
+```
 
 
 ### 7.1.1(2019-10-12)

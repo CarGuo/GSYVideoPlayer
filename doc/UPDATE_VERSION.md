@@ -20,6 +20,11 @@ String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
 * 增加模拟下载共用缓存例子 DetailDownloadPlayer
 * 适配 android 10 的全屏
 * fix #2382、#2411、#2343、#2379、#2350、#2328
+* 增加设置自定义显示比例的支持
+
+``` 
+GSYVideoType.setScreenScaleRatio
+```
 
 ### 7.1.1(2019-10-12)
 
