@@ -2,11 +2,14 @@ package com.example.gsyvideoplayer.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
+
 import android.view.View;
 
+import com.example.gsyvideoplayer.AudioDetailPlayer;
 import com.example.gsyvideoplayer.AutoPlayRecyclerViewActivity;
 import com.example.gsyvideoplayer.DanmkuVideoActivity;
 import com.example.gsyvideoplayer.DetailADPlayer;
@@ -224,8 +227,6 @@ public class JumpUtils {
     }
 
 
-
-
     /**
      * 跳转到详情播放
      *
@@ -255,6 +256,7 @@ public class JumpUtils {
         Intent intent = new Intent(activity, DetailNormalActivityPlayer.class);
         activity.startActivity(intent);
     }
+
     /**
      * 跳转到详情播放
      *
@@ -262,6 +264,16 @@ public class JumpUtils {
      */
     public static void goToDetailDownloadActivity(Activity activity) {
         Intent intent = new Intent(activity, DetailDownloadPlayer.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳转到详情播放
+     *
+     * @param activity
+     */
+    public static void goToDetailAudioActivity(Activity activity) {
+        Intent intent = new Intent(activity, AudioDetailPlayer.class);
         activity.startActivity(intent);
     }
 
@@ -277,7 +289,6 @@ public class JumpUtils {
     }
 
 
-
     /**
      * 跳转到带广告的
      *
@@ -287,8 +298,6 @@ public class JumpUtils {
         Intent intent = new Intent(activity, DetailADPlayer2.class);
         activity.startActivity(intent);
     }
-
-
 
 
     /**
