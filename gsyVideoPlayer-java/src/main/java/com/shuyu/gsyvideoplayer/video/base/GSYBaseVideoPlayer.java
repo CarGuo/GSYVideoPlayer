@@ -81,6 +81,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     //旋转工具类
     protected OrientationUtils mOrientationUtils;
 
+    private boolean mIsOnlyRotateLand = false;
     //全屏返回监听，如果设置了，默认返回无效
     protected View.OnClickListener mBackFromFullScreenListener;
     protected Handler mInnerHandler = new Handler();
@@ -313,6 +314,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
         mOrientationUtils.setEnable(isRotateViewAuto());
         mOrientationUtils.setRotateWithSystem(mRotateWithSystem);
+        mOrientationUtils.setOnlyRotateLand(mIsOnlyRotateLand);
         gsyVideoPlayer.mOrientationUtils = mOrientationUtils;
 
         final boolean isVertical = isVerticalFullByVideoSize();
@@ -865,6 +867,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      */
     public void setRotateWithSystem(boolean rotateWithSystem) {
         this.mRotateWithSystem = rotateWithSystem;
+        if (mOrientationUtils != null) {
+            mOrientationUtils.setRotateWithSystem(rotateWithSystem);
+        }
     }
 
     /**
@@ -969,6 +974,20 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      */
     public void setNeedAutoAdaptation(boolean needAutoAdaptation) {
         isNeedAutoAdaptation = needAutoAdaptation;
+    }
+
+    public boolean isOnlyRotateLand() {
+        return mIsOnlyRotateLand;
+    }
+
+    /**
+     * 旋转时仅处理横屏
+     */
+    public void setOnlyRotateLand(boolean onlyRotateLand) {
+        this.mIsOnlyRotateLand = onlyRotateLand;
+        if (mOrientationUtils != null) {
+            mOrientationUtils.setOnlyRotateLand(mIsOnlyRotateLand);
+        }
     }
 
     /**

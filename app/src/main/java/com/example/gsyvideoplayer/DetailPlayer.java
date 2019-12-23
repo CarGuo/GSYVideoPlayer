@@ -97,6 +97,9 @@ public class DetailPlayer extends AppCompatActivity {
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
+        /**仅仅横屏旋转，不变直*/
+        orientationUtils.setOnlyRotateLand(true);
+
         Map<String, String> header = new HashMap<>();
         header.put("ee", "33");
         header.put("allowCrossProtocolRedirects", "true");
@@ -104,6 +107,8 @@ public class DetailPlayer extends AppCompatActivity {
         gsyVideoOption.setThumbImageView(imageView)
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
+                //仅仅横屏旋转，不变直
+                .setOnlyRotateLand(true)
                 .setLockLand(false)
                 .setAutoFullWithSize(false)
                 .setShowFullAnimation(false)
