@@ -125,6 +125,8 @@ public class GSYVideoOptionBuilder {
     // 是否需要覆盖拓展类型
     protected String mOverrideExtension;
 
+    private boolean mIsOnlyRotateLand = false;
+
     //是否自定义的缓冲文件路径
     protected File mCachePath;
 
@@ -539,6 +541,13 @@ public class GSYVideoOptionBuilder {
         return this;
     }
 
+
+    public GSYVideoOptionBuilder setOnlyRotateLand(boolean onlyRotateLand) {
+        this.mIsOnlyRotateLand = onlyRotateLand;
+        return this;
+    }
+
+
     /**
      * 在播放前才真正执行setup
      * 目前弃用，请使用正常setup
@@ -615,6 +624,7 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setOverrideExtension(mOverrideExtension);
         gsyVideoPlayer.setAutoFullWithSize(mAutoFullWithSize);
         gsyVideoPlayer.setRotateViewAuto(mRotateViewAuto);
+        gsyVideoPlayer.setOnlyRotateLand(mIsOnlyRotateLand);
         gsyVideoPlayer.setLockLand(mLockLand);
         gsyVideoPlayer.setSpeed(mSpeed, mSounchTouch);
         gsyVideoPlayer.setHideKey(mHideKey);
