@@ -365,6 +365,10 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         if (gsyVideoPlayer != null) {
             cloneParams(gsyVideoPlayer, this);
         }
+        if (mCurrentState != CURRENT_STATE_NORMAL
+                || mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
+            createNetWorkState();
+        }
         getGSYVideoManager().setListener(getGSYVideoManager().lastListener());
         getGSYVideoManager().setLastListener(null);
         setStateAndUi(mCurrentState);
