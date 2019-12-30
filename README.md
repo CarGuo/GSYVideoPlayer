@@ -36,8 +36,6 @@
 
 ### [--------------Demo APK 下载地址---------------](https://github.com/CarGuo/GSYVideoPlayer/releases)
 
-### 公众号 GSYTech
-
 ![公众号](http://img.cdn.guoshuyu.cn/WechatIMG3024.jpeg)
 
 ## 一、使用依赖
