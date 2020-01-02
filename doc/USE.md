@@ -5,7 +5,7 @@
 ```
 <activity
     android:name=".xxxxx"
-    android:configChanges="orientation|keyboardHidden|screenSize"
+    android:configChanges="keyboard|orientation|keyboardHidden|screenSize|uiMode"
     android:screenOrientation="portrait" />
 
 ```
