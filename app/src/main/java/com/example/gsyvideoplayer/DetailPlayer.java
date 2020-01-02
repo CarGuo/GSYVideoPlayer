@@ -98,7 +98,7 @@ public class DetailPlayer extends AppCompatActivity {
         orientationUtils.setEnable(false);
 
         /**仅仅横屏旋转，不变直*/
-        orientationUtils.setOnlyRotateLand(true);
+        //orientationUtils.setOnlyRotateLand(true);
 
         Map<String, String> header = new HashMap<>();
         header.put("ee", "33");
@@ -108,7 +108,7 @@ public class DetailPlayer extends AppCompatActivity {
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
                 //仅仅横屏旋转，不变直
-                .setOnlyRotateLand(true)
+                //.setOnlyRotateLand(true)
                 .setLockLand(false)
                 .setAutoFullWithSize(false)
                 .setShowFullAnimation(false)

@@ -50,7 +50,7 @@ public class SimpleDetailActivityMode1 extends GSYBaseActivityDetail<StandardGSY
                 .setCacheWithPlay(true)
                 .setVideoTitle("这里是一个竖直方向的视频")
                 .setIsTouchWiget(true)
-                .setAutoFullWithSize(true)
+                //.setAutoFullWithSize(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
                 .setShowFullAnimation(false)//打开动画
