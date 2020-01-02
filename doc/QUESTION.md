@@ -107,7 +107,7 @@ GSYVideoManager.instance().setOptionModelList(list);
 ```
 <activity
     android:name=".PlayActivity"
-    android:configChanges="keyboard|orientation|keyboardHidden|screenSize|uiMode"
+    android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
     android:screenOrientation="portrait" />
 ```
 
