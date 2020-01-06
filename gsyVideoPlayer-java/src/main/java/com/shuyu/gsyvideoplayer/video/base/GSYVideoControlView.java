@@ -1019,7 +1019,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected void onBrightnessSlide(float percent) {
         mBrightnessData = ((Activity) (mContext)).getWindow().getAttributes().screenBrightness;
         if (mBrightnessData <= 0.00f) {
-            mBrightnessData = 0.50f;
+            mBrightnessData = 0.00f;
         } else if (mBrightnessData < 0.01f) {
             mBrightnessData = 0.01f;
         }
