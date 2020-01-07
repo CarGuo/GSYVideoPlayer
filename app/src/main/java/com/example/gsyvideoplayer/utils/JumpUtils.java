@@ -38,6 +38,7 @@ import com.example.gsyvideoplayer.ScrollingActivity;
 import com.example.gsyvideoplayer.WebDetailActivity;
 import com.example.gsyvideoplayer.WindowActivity;
 import com.example.gsyvideoplayer.exo.DetailExoListPlayer;
+import com.example.gsyvideoplayer.exosubtitle.GSYExoSubTitleDetailPlayer;
 import com.example.gsyvideoplayer.switchplay.SwitchListVideoActivity;
 
 /**
@@ -264,6 +265,16 @@ public class JumpUtils {
      */
     public static void goToDetailDownloadActivity(Activity activity) {
         Intent intent = new Intent(activity, DetailDownloadPlayer.class);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 跳转到详情播放
+     *
+     * @param activity
+     */
+    public static void goToGSYExoSubTitleDetailPlayer(Activity activity) {
+        Intent intent = new Intent(activity, GSYExoSubTitleDetailPlayer.class);
         activity.startActivity(intent);
     }
 
