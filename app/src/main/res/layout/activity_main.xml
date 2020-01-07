@@ -220,7 +220,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="自定义Exo" />
-
+        <Button
+            android:id="@+id/detail_subtitle_activity"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="自定义Exo支持字幕" />
         <Button
             android:id="@+id/detail_audio_activity"
             android:layout_width="240dp"

@@ -315,6 +315,19 @@ VideoOptionModel videoOptionModel =
         GSYVideoManager.instance().setOptionModelList(list);
 ```
 
+#### 22、ijk 模式的 mkv 字幕
+
+出了选择 track 之外，还可以配置
+
+```
+VideoOptionModel videoOptionModel =
+ new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "subtitle", 1);
+List<VideoOptionModel> list = new ArrayList<>();
+list.add(videoOptionModel);
+GSYVideoManager.instance().setOptionModelList(list);
+```
+
+
 #### 更多配置
 
 更多配置可通过下方链接和图片参考配置

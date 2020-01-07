@@ -219,6 +219,12 @@
             android:theme="@style/Theme.AppCompat.Transitions"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".exosubtitle.GSYExoSubTitleDetailPlayer"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/Theme.AppCompat.Transitions"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
