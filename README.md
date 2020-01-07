@@ -18,6 +18,7 @@
 **播放**|**单例播放、多个同时播放、视频列表滑动自动播放、列表切换详情页面无缝播放。**
 **窗口**|**小窗口、多窗体下（包括桌面）的小窗口播放。**
 **广告**|**片头广告、跳过广告支持、中间插入广告功能。**
+**字幕**|**[exo2模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)。**
 **更多**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持；锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **自定义**|**可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
 
@@ -225,6 +226,7 @@ String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
 ``` 
 GSYVideoType.setScreenScaleRatio
 ```
+* 增加外挂字幕例子 [exo2模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)
 
 
 ### 7.1.1(2019-10-12)
