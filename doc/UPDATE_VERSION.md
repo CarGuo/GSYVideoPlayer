@@ -25,6 +25,10 @@ String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
 ``` 
 GSYVideoType.setScreenScaleRatio
 ```
+* 增加外挂字幕例子 [exo2模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)
+
+
+
 
 ### 7.1.1(2019-10-12)
 
