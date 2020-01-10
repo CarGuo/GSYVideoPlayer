@@ -3,6 +3,8 @@
 
 （ps 首页问题集锦和demo请先了解一下！）
 
+## 提问前建议先看看： https://mp.weixin.qq.com/s/HjSdmAsHuvixCH_EWdvk3Q
+
 ## 问题描述：
 
 XXXX发生了这样的问题！
