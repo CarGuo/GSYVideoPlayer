@@ -132,6 +132,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected boolean mPostProgress = false;
     protected boolean mPostDismiss = false;
+    protected boolean isShowDragProgressTextOnSeekBar = false;
 
     //播放按键
     protected View mStartButton;
@@ -570,10 +571,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (fromUser) {
-            int duration = getDuration();
-            mCurrentTimeTextView.setText(CommonUtil.stringForTime(progress * duration / 100));
-        }
+        showDragProgressTextOnSeekBar(fromUser, progress);
     }
 
     @Override
@@ -665,6 +663,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mShowVKey = false;
         mBrightness = false;
         mFirstTouch = true;
+    }
+
+    protected void showDragProgressTextOnSeekBar(boolean fromUser, int progress) {
+        if (fromUser && isShowDragProgressTextOnSeekBar) {
+            int duration = getDuration();
+            if (mCurrentTimeTextView != null)
+                mCurrentTimeTextView.setText(CommonUtil.stringForTime(progress * duration / 100));
+        }
     }
 
     protected void touchSurfaceMove(float deltaX, float deltaY, float y) {
@@ -1343,5 +1349,17 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     public void setGSYVideoProgressListener(GSYVideoProgressListener videoProgressListener) {
         this.mGSYVideoProgressListener = videoProgressListener;
+    }
+
+    public boolean isShowDragProgressTextOnSeekBar() {
+        return isShowDragProgressTextOnSeekBar;
+    }
+
+    /**
+     * 拖动进度条时，是否在 seekbar 开始部位显示拖动进度
+     * 默认 false
+     */
+    public void setShowDragProgressTextOnSeekBar(boolean showDragProgressTextOnSeekBar) {
+        isShowDragProgressTextOnSeekBar = showDragProgressTextOnSeekBar;
     }
 }
