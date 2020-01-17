@@ -113,6 +113,9 @@ public class GSYVideoOptionBuilder {
     //是否需要在利用window实现全屏幕的时候隐藏statusbar
     protected boolean mStatusBar = false;
 
+    //拖动进度条时，是否在 seekbar 开始部位显示拖动进度
+    protected boolean isShowDragProgressTextOnSeekBar = false;
+
     //播放的tag，防止错误，因为普通的url也可能重复
     protected String mPlayTag = "";
 
@@ -547,6 +550,10 @@ public class GSYVideoOptionBuilder {
         return this;
     }
 
+    public GSYVideoOptionBuilder setShowDragProgressTextOnSeekBar(boolean isShowDragProgressTextOnSeekBar) {
+        this.isShowDragProgressTextOnSeekBar = isShowDragProgressTextOnSeekBar;
+        return this;
+    }
 
     /**
      * 在播放前才真正执行setup
@@ -635,6 +642,7 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setStartAfterPrepared(mStartAfterPrepared);
         gsyVideoPlayer.setReleaseWhenLossAudio(mReleaseWhenLossAudio);
         gsyVideoPlayer.setFullHideActionBar(mActionBar);
+        gsyVideoPlayer.setShowDragProgressTextOnSeekBar(isShowDragProgressTextOnSeekBar);
         gsyVideoPlayer.setFullHideStatusBar(mStatusBar);
         if (mEnlargeImageRes > 0) {
             gsyVideoPlayer.setEnlargeImageRes(mEnlargeImageRes);
