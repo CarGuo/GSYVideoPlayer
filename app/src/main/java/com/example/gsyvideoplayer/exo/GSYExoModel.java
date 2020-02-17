@@ -15,10 +15,12 @@ import java.util.Map;
 public class GSYExoModel extends GSYModel {
 
     List<String> urls = new ArrayList<>();
+    int index = 0;
 
-    public GSYExoModel(List<String> urls, Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath, String overrideExtension) {
+    public GSYExoModel(List<String> urls, Map<String, String> mapHeadData, int index, boolean loop, float speed, boolean cache, File cachePath, String overrideExtension) {
         super("", mapHeadData, loop, speed, cache, cachePath, overrideExtension);
         this.urls = urls;
+        this.index = index;
     }
 
     public List<String> getUrls() {

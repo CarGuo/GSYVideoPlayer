@@ -43,7 +43,7 @@ public class GSYExoPlayerManager extends BasePlayerManager {
             mediaPlayer.setLooping(((GSYExoModel) msg.obj).isLooping());
             Debuger.printfError("###### " + ((GSYExoModel) msg.obj).getOverrideExtension());
             mediaPlayer.setOverrideExtension(((GSYExoModel) msg.obj).getOverrideExtension());
-            mediaPlayer.setDataSource(((GSYExoModel) msg.obj).getUrls(), ((GSYExoModel) msg.obj).getMapHeadData(), ((GSYExoModel) msg.obj).isCache());
+            mediaPlayer.setDataSource(((GSYExoModel) msg.obj).getUrls(), ((GSYExoModel) msg.obj).getMapHeadData(), ((GSYExoModel) msg.obj).index, ((GSYExoModel) msg.obj).isCache());
             //很遗憾，EXO2的setSpeed只能在播放前生效
             if (((GSYExoModel) msg.obj).getSpeed() != 1 && ((GSYExoModel) msg.obj).getSpeed() > 0) {
                 mediaPlayer.setSpeed(((GSYExoModel) msg.obj).getSpeed(), 1);
@@ -82,7 +82,7 @@ public class GSYExoPlayerManager extends BasePlayerManager {
 
     @Override
     public void setNeedMute(boolean needMute) {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             if (needMute) {
                 mediaPlayer.setVolume(0, 0);
             } else {
@@ -102,7 +102,7 @@ public class GSYExoPlayerManager extends BasePlayerManager {
 
     @Override
     public void release() {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             mediaPlayer.setSurface(null);
             mediaPlayer.release();
         }
