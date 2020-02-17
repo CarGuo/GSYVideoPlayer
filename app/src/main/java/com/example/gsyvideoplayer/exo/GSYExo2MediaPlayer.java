@@ -2,11 +2,17 @@ package com.example.gsyvideoplayer.exo;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.io.FileDescriptor;
@@ -14,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
+import tv.danmaku.ijk.media.exo2.demo.EventLogger;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
@@ -28,6 +35,8 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
     private final Timeline.Window window = new Timeline.Window();
 
     public static final int POSITION_DISCONTINUITY = 899;
+
+    private int playIndex = 0;
 
     public GSYExo2MediaPlayer(Context context) {
         super(context);
@@ -63,18 +72,21 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
         notifyOnInfo(POSITION_DISCONTINUITY, reason);
     }
 
-    public void setDataSource(List<String> uris, Map<String, String> headers, boolean cache) {
+    public void setDataSource(List<String> uris, Map<String, String> headers, int index, boolean cache) {
         mHeaders = headers;
         if (uris == null) {
             return;
         }
         ConcatenatingMediaSource concatenatedSource = new ConcatenatingMediaSource();
         for (String uri : uris) {
-            MediaSource mediaSource = mExoHelper.getMediaSource(uri, isPreview, cache, false, mCacheDir,  getOverrideExtension());
+            MediaSource mediaSource = mExoHelper.getMediaSource(uri, isPreview, cache, false, mCacheDir, getOverrideExtension());
             concatenatedSource.addMediaSource(mediaSource);
         }
+        playIndex = index;
         mMediaSource = concatenatedSource;
     }
+
+
 
     /**
      * 上一集
@@ -97,6 +109,49 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
         } else {
             mInternalPlayer.seekTo(0);
         }
+    }
+
+    @Override
+    protected void prepareAsyncInternal() {
+        new Handler(Looper.getMainLooper()).post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mTrackSelector == null) {
+                            mTrackSelector = new DefaultTrackSelector();
+                        }
+                        mEventLogger = new EventLogger(mTrackSelector);
+                        boolean preferExtensionDecoders = true;
+                        boolean useExtensionRenderers = true;//是否开启扩展
+                        @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = useExtensionRenderers
+                                ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+                                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+                                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
+                        if (mRendererFactory == null) {
+                            mRendererFactory = new DefaultRenderersFactory(mAppContext);
+                            mRendererFactory.setExtensionRendererMode(extensionRendererMode);
+                        }
+                        if (mLoadControl == null) {
+                            mLoadControl = new DefaultLoadControl();
+                        }
+                        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, mRendererFactory, mTrackSelector, mLoadControl, null, Looper.getMainLooper());
+                        mInternalPlayer.addListener(GSYExo2MediaPlayer.this);
+                        mInternalPlayer.addAnalyticsListener(GSYExo2MediaPlayer.this);
+                        mInternalPlayer.addListener(mEventLogger);
+                        if (mSpeedPlaybackParameters != null) {
+                            mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
+                        }
+                        if (mSurface != null)
+                            mInternalPlayer.setVideoSurface(mSurface);
+                        ///fix start index
+                        if (playIndex > 0) {
+                            mInternalPlayer.seekTo(playIndex, C.INDEX_UNSET);
+                        }
+                        mInternalPlayer.prepare(mMediaSource, false, false);
+                        mInternalPlayer.setPlayWhenReady(false);
+                    }
+                }
+        );
     }
 
     /**
@@ -123,6 +178,6 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
         if (mInternalPlayer == null) {
             return 0;
         }
-        return  mInternalPlayer.getCurrentWindowIndex();
+        return mInternalPlayer.getCurrentWindowIndex();
     }
 }
