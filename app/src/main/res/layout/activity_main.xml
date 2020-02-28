@@ -233,6 +233,12 @@
             android:layout_marginTop="20dp"
             android:text="音频" />
         <Button
+            android:id="@+id/change_core"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Ijk 内核" />
+        <Button
             android:id="@+id/clear_cache"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
