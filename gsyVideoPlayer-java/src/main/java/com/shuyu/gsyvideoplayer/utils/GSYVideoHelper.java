@@ -67,6 +67,10 @@ public class GSYVideoHelper {
      */
     private OrientationUtils mOrientationUtils;
     /**
+     * 可配置旋转 OrientationUtils
+     */
+    private OrientationOption mOrientationOption;
+    /**
      * 播放配置
      */
     private GSYVideoHelperBuilder mVideoOptionBuilder;
@@ -135,7 +139,7 @@ public class GSYVideoHelper {
         mGsyVideoPlayer.getFullscreenButton().setImageResource(mGsyVideoPlayer.getShrinkImageRes());
         mGsyVideoPlayer.getBackButton().setVisibility(View.VISIBLE);
         //设置旋转
-        mOrientationUtils = new OrientationUtils((Activity) mContext, mGsyVideoPlayer);
+        mOrientationUtils = new OrientationUtils((Activity) mContext, mGsyVideoPlayer, mOrientationOption);
         mOrientationUtils.setEnable(mVideoOptionBuilder.isRotateViewAuto());
         mGsyVideoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -516,6 +520,13 @@ public class GSYVideoHelper {
      */
     public void setFullViewContainer(ViewGroup fullViewContainer) {
         this.mFullViewContainer = fullViewContainer;
+    }
+
+    /**
+     * 可配置旋转 OrientationUtils
+     */
+    public void setOrientationOption(OrientationOption orientationOption) {
+        this.mOrientationOption = orientationOption;
     }
 
     /**
