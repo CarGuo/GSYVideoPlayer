@@ -1,5 +1,6 @@
 package com.shuyu.gsyvideoplayer.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
@@ -23,6 +24,7 @@ public class OrientationUtils {
     private Activity mActivity;
     private GSYBaseVideoPlayer mVideoPlayer;
     private OrientationEventListener mOrientationEventListener;
+    private OrientationOption mOrientationOption;
 
     private int mScreenType = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     private int mIsLand = LAND_TYPE_NULL;
@@ -43,14 +45,24 @@ public class OrientationUtils {
      * @param gsyVideoPlayer
      */
     public OrientationUtils(Activity activity, GSYBaseVideoPlayer gsyVideoPlayer) {
+        this(activity, gsyVideoPlayer, null);
+    }
+
+    public OrientationUtils(Activity activity, GSYBaseVideoPlayer gsyVideoPlayer, OrientationOption orientationOption) {
         this.mActivity = activity;
         this.mVideoPlayer = gsyVideoPlayer;
+        if (orientationOption == null) {
+            this.mOrientationOption = new OrientationOption();
+        } else {
+            this.mOrientationOption = orientationOption;
+        }
         initGravity(activity);
         init();
     }
 
     protected void init() {
         mOrientationEventListener = new OrientationEventListener(mActivity.getApplicationContext()) {
+            @SuppressLint("SourceLockedOrientationActivity")
             @Override
             public void onOrientationChanged(int rotation) {
                 boolean autoRotateOn = (Settings.System.getInt(mActivity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
@@ -66,7 +78,8 @@ public class OrientationUtils {
                     return;
                 }
                 // 设置竖屏
-                if (((rotation >= 0) && (rotation <= 30)) || (rotation >= 330)) {
+                if (((rotation >= 0) && (rotation <= mOrientationOption.getNormalPortraitAngleStart()))
+                        || (rotation >= mOrientationOption.getNormalPortraitAngleEnd())) {
                     if (mClick) {
                         if (mIsLand > LAND_TYPE_NULL && !mClickLand) {
                             return;
@@ -94,7 +107,8 @@ public class OrientationUtils {
                     }
                 }
                 // 设置横屏
-                else if (((rotation >= 230) && (rotation <= 310))) {
+                else if (((rotation >= mOrientationOption.getNormalLandAngleStart())
+                        && (rotation <= mOrientationOption.getNormalLandAngleEnd()))) {
                     if (mClick) {
                         if (!(mIsLand == LAND_TYPE_NORMAL) && !mClickPort) {
                             return;
@@ -116,7 +130,8 @@ public class OrientationUtils {
                     }
                 }
                 // 设置反向横屏
-                else if (rotation > 30 && rotation < 95) {
+                else if (rotation > mOrientationOption.getReverseLandAngleStart()
+                        && rotation < mOrientationOption.getReverseLandAngleEnd()) {
                     if (mClick) {
                         if (!(mIsLand == LAND_TYPE_REVERSE) && !mClickPort) {
                             return;
@@ -175,6 +190,7 @@ public class OrientationUtils {
     /**
      * 点击切换的逻辑，比如竖屏的时候点击了就是切换到横屏不会受屏幕的影响
      */
+    @SuppressLint("SourceLockedOrientationActivity")
     public void resolveByClick() {
         if (mIsLand == LAND_TYPE_NULL && mVideoPlayer != null && mVideoPlayer.isVerticalFullByVideoSize()) {
             return;
@@ -212,6 +228,7 @@ public class OrientationUtils {
     /**
      * 列表返回的样式判断。因为立即旋转会导致界面跳动的问题
      */
+    @SuppressLint("SourceLockedOrientationActivity")
     public int backToProtVideo() {
         if (mIsLand > LAND_TYPE_NULL) {
             mClick = true;
@@ -317,5 +334,13 @@ public class OrientationUtils {
 
     public void setIsPause(boolean isPause) {
         this.mIsPause = isPause;
+    }
+
+    public OrientationOption getOrientationOption() {
+        return mOrientationOption;
+    }
+
+    public void setOrientationOption(OrientationOption orientationOption) {
+        this.mOrientationOption = orientationOption;
     }
 }

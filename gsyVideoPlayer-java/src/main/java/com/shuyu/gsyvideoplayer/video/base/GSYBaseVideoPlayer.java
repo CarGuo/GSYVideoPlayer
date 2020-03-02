@@ -20,6 +20,7 @@ import androidx.transition.TransitionManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.OrientationOption;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.view.SmallVideoTouch;
 
@@ -311,7 +312,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         lp.gravity = Gravity.CENTER;
         gsyVideoPlayer.setLayoutParams(lp);
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
-        mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer);
+        mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer, getOrientationOption());
         mOrientationUtils.setEnable(isRotateViewAuto());
         mOrientationUtils.setRotateWithSystem(mRotateWithSystem);
         mOrientationUtils.setOnlyRotateLand(mIsOnlyRotateLand);
@@ -543,6 +544,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
     protected abstract int getSmallId();
 
+
     /************************* 开放接口 *************************/
 
     /**
@@ -590,6 +592,13 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             }
         }
 
+    }
+
+    /**
+     * 可配置旋转 OrientationUtils
+     */
+    public OrientationOption getOrientationOption() {
+        return null;
     }
 
     /**

@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.utils.OrientationOption;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.GSYADVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -23,7 +24,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     public void initVideo() {
         super.initVideo();
         //外部辅助的旋转，帮助全屏
-        mADOrientationUtils = new OrientationUtils(this, getGSYADVideoPlayer());
+        mADOrientationUtils = new OrientationUtils(this, getGSYADVideoPlayer(), getOrientationOption());
         //初始化不打开外部的旋转
         mADOrientationUtils.setEnable(false);
         if (getGSYADVideoPlayer().getFullscreenButton() != null) {
@@ -195,6 +196,13 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
             mADOrientationUtils.resolveByClick();
         }
         getGSYADVideoPlayer().startWindowFullscreen(GSYBaseADActivityDetail.this, hideActionBarWhenFull(), hideStatusBarWhenFull());
+    }
+
+    /**
+     * 可配置旋转 OrientationUtils
+     */
+    public OrientationOption getOrientationOption() {
+        return null;
     }
 
     public abstract R getGSYADVideoPlayer();
