@@ -251,6 +251,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mActionBar = from.mActionBar;
         to.mStatusBar = from.mStatusBar;
         to.mAutoFullWithSize = from.mAutoFullWithSize;
+        to.mOverrideExtension = from.mOverrideExtension;
         if (from.mSetUpLazy) {
             to.setUpLazy(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
             to.mUrl = from.mUrl;
