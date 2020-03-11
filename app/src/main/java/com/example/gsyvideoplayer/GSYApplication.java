@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer;
 import androidx.multidex.MultiDexApplication;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.ExoSourceManager;
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 

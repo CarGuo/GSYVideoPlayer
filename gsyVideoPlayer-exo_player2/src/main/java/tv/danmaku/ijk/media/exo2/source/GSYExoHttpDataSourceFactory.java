@@ -15,6 +15,7 @@
  */
 package tv.danmaku.ijk.media.exo2.source;
 
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource.Factory;
@@ -23,7 +24,7 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 import androidx.annotation.Nullable;
 
 /**
- A {@link Factory} that produces {@link GSYExoHttpDataSource} instances.
+ A {@link Factory} that produces {@link GSYDefaultHttpDataSource} instances.
  */
 public final class GSYExoHttpDataSourceFactory extends BaseFactory {
 
@@ -36,8 +37,8 @@ public final class GSYExoHttpDataSourceFactory extends BaseFactory {
 
     /**
      Constructs a GSYExoHttpDataSourceFactory. Sets {@link
-    GSYExoHttpDataSource#DEFAULT_CONNECT_TIMEOUT_MILLIS} as the connection timeout, {@link
-    GSYExoHttpDataSource#DEFAULT_READ_TIMEOUT_MILLIS} as the read timeout and disables
+    GSYDefaultHttpDataSource#DEFAULT_CONNECT_TIMEOUT_MILLIS} as the connection timeout, {@link
+    GSYDefaultHttpDataSource#DEFAULT_READ_TIMEOUT_MILLIS} as the read timeout and disables
      cross-protocol redirects.
 
      @param userAgent The User-Agent string that should be used.
@@ -48,8 +49,8 @@ public final class GSYExoHttpDataSourceFactory extends BaseFactory {
 
     /**
      Constructs a GSYExoHttpDataSourceFactory. Sets {@link
-    GSYExoHttpDataSource#DEFAULT_CONNECT_TIMEOUT_MILLIS} as the connection timeout, {@link
-    GSYExoHttpDataSource#DEFAULT_READ_TIMEOUT_MILLIS} as the read timeout and disables
+    GSYDefaultHttpDataSource#DEFAULT_CONNECT_TIMEOUT_MILLIS} as the connection timeout, {@link
+    GSYDefaultHttpDataSource#DEFAULT_READ_TIMEOUT_MILLIS} as the read timeout and disables
      cross-protocol redirects.
 
      @param userAgent The User-Agent string that should be used.
@@ -57,8 +58,8 @@ public final class GSYExoHttpDataSourceFactory extends BaseFactory {
      @see #GSYExoHttpDataSourceFactory(String, TransferListener, int, int, boolean)
      */
     public GSYExoHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener) {
-        this(userAgent, listener, GSYExoHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                GSYExoHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, false);
+        this(userAgent, listener, GSYDefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                GSYDefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, false);
     }
 
     /**
@@ -107,12 +108,11 @@ public final class GSYExoHttpDataSourceFactory extends BaseFactory {
     }
 
     @Override
-    protected GSYExoHttpDataSource createDataSourceInternal(
+    protected GSYDefaultHttpDataSource createDataSourceInternal(
             HttpDataSource.RequestProperties defaultRequestProperties) {
-        GSYExoHttpDataSource dataSource =
-                new GSYExoHttpDataSource(
+        GSYDefaultHttpDataSource dataSource =
+                new GSYDefaultHttpDataSource(
                         userAgent,
-                        /* contentTypePredicate= */ null,
                         connectTimeoutMillis,
                         readTimeoutMillis,
                         allowCrossProtocolRedirects,
