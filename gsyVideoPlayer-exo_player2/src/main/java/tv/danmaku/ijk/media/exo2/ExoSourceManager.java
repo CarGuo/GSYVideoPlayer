@@ -6,7 +6,7 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
-import tv.danmaku.ijk.media.exo2.source.GSYExoHttpDataSource;
+import tv.danmaku.ijk.media.exo2.source.GSYDefaultHttpDataSource;
 import tv.danmaku.ijk.media.exo2.source.GSYExoHttpDataSourceFactory;
 
 import android.text.TextUtils;
@@ -14,7 +14,6 @@ import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -312,13 +311,13 @@ public class ExoSourceManager {
      * 获取SourceFactory
      */
     private DataSource.Factory getDataSourceFactory(Context context, boolean preview) {
-        return new DefaultDataSourceFactory(context, preview ? null : new DefaultBandwidthMeter(),
+        return new DefaultDataSourceFactory(context, preview ? null : new DefaultBandwidthMeter.Builder(context).build(),
                 getHttpDataSourceFactory(context, preview));
     }
 
     private DataSource.Factory getHttpDataSourceFactory(Context context, boolean preview) {
-        int connectTimeout = GSYExoHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS;
-        int readTimeout = GSYExoHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS;
+        int connectTimeout = GSYDefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS;
+        int readTimeout = GSYDefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS;
         if (sHttpConnectTimeout > 0) {
             connectTimeout = sHttpConnectTimeout;
         }
