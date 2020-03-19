@@ -1,5 +1,16 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+## 7.1.3 (2020-03-19)
+
+* update exoplayer 2.11.3
+* fix #2588 setOverrideExtension 方法全屏失效问题
+* fix #2570 add OrientationOption 增加旋转灵敏度调节
+* add isShowDragProgressTextOnSeekBar 判断拖动进度条时，是否在 seekbar 开始部位显示拖动进度
+* exo 内核增加外挂字幕的支持 
+* fix #2456 and update from [1869#issuecomment-569615314](https://github.com/CarGuo/GSYVideoPlayer/issues/1869#issuecomment-569615314)
+* fix #2489 优化网络监听
+* fix #2480 修复屏幕旋转问题
+
 ### 7.1.2(2019-12-02)
 
 * fix #2436 增加 exo 的 http timeout 
