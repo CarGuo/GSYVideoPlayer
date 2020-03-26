@@ -1,9 +1,8 @@
 package com.danikula.videocache;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
-
-
 
 import java.io.File;
 
@@ -48,14 +47,19 @@ final class StorageUtils {
     private static File getCacheDirectory(Context context, boolean preferExternal) {
         File appCacheDir = null;
         String externalStorageState;
+
         try {
             externalStorageState = Environment.getExternalStorageState();
         } catch (NullPointerException e) { // (sh)it happens
             externalStorageState = "";
         }
+
         if (preferExternal && MEDIA_MOUNTED.equals(externalStorageState)) {
-            appCacheDir = getExternalCacheDir(context);
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                appCacheDir = getExternalCacheDir(context);
+            }
         }
+
         if (appCacheDir == null) {
             appCacheDir = context.getCacheDir();
         }
