@@ -37,6 +37,12 @@
 
 ### [--------------Demo APK 下载地址---------------](https://github.com/CarGuo/GSYVideoPlayer/releases)
 
+
+| 公众号   | 掘金     |  知乎    |  CSDN   |   简书   
+|---------|---------|--------- |---------|---------|
+| GSYTech  |  [点我](https://juejin.im/user/582aca2ba22b9d006b59ae68/posts)    |   [点我](https://www.zhihu.com/people/carguo)       |   [点我](https://blog.csdn.net/ZuoYueLiang)  |   [点我](https://www.jianshu.com/u/6e613846e1ea)  
+
+
 ![](http://img.cdn.guoshuyu.cn/WeChat-Code)
 
 ## 一、使用依赖
@@ -343,11 +349,6 @@ GSYVideoManager
 
 
 ## 非常感谢您的支持
-
-
-| 公众号   | 掘金     |  知乎    |  CSDN   |   简书   
-|---------|---------|--------- |---------|---------|
-| [点我](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg3NTA3MDIxOA==#wechat_redirect)  |  [点我](https://juejin.im/user/582aca2ba22b9d006b59ae68/posts)    |   [点我](https://www.zhihu.com/people/carguo)       |   [点我](https://blog.csdn.net/ZuoYueLiang)  |   [点我](https://www.jianshu.com/u/6e613846e1ea)  
 
 
 #### 撸码不易，如果对你有所帮助，欢迎您的赞赏
