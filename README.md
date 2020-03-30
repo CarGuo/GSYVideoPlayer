@@ -340,11 +340,25 @@ GSYVideoManager
 ![](https://ooo.0o0.ooo/2017/06/15/5941f343a39f5.png)
 
 
+
+
 ## 非常感谢您的支持
+
+
+| 公众号   | 掘金     |  知乎    |  CSDN   |   简书   
+|---------|---------|--------- |---------|---------|
+| [点我](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg3NTA3MDIxOA==#wechat_redirect)  |  [点我](https://juejin.im/user/582aca2ba22b9d006b59ae68/posts)    |   [点我](https://www.zhihu.com/people/carguo)       |   [点我](https://blog.csdn.net/ZuoYueLiang)  |   [点我](https://www.jianshu.com/u/6e613846e1ea)  
+
 
 #### 撸码不易，如果对你有所帮助，欢迎您的赞赏
 
 ![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/thanks.jpg)
+
+
+
+
+
+
 
 
 ## License
