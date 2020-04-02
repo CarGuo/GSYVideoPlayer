@@ -34,4 +34,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/post_media_height" />
 
+    <Button
+        android:id="@+id/open_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_player"
+        android:layout_margin="10dp"
+        android:text="open" />
+
 </RelativeLayout>
