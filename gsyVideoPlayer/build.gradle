@@ -44,7 +44,7 @@ dependencies {
     //api project(':gsyVideoPlayer-x86_64')
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
-    //api project(':gsyVideoPlayer-ex_so')
+    api project(':gsyVideoPlayer-ex_so')
 
     //api "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
@@ -57,7 +57,7 @@ dependencies {
     //api "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
-    api "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
+    //api "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
 
 }
 
