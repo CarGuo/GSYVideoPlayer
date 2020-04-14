@@ -341,6 +341,10 @@ list.add(videoOptionModel);
 GSYVideoManager.instance().setOptionModelList(list);
 ```
 
+#### 23、封面到播放过程的黑屏问题
+
+https://github.com/CarGuo/GSYVideoPlayer/issues/2347#issuecomment-565701916
+
 
 #### 更多配置
 
