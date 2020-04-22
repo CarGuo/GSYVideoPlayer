@@ -19,10 +19,10 @@ public class GSYVideoType {
     //18:9
     public final static int SCREEN_TYPE_18_9 = 6;
 
-    //全屏裁减显示，为了显示正常 CoverImageView 建议使用FrameLayout作为父布局
+    //全屏裁减显示，为了显示正常 surface_container 和 CoverImageView 建议使用 FrameLayout 作为父布局
     public final static int SCREEN_TYPE_FULL = 4;
 
-    //全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
+    //全屏拉伸显示，使用这个属性时，surface_container 建议使用 FrameLayout
     public final static int SCREEN_MATCH_FULL = -4;
 
     //自定义比例，需要设置 sScreenScaleRatio
