@@ -84,6 +84,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         danmakuVideoPlayer.setLockLand(false);
         danmakuVideoPlayer.setShowFullAnimation(false);
         danmakuVideoPlayer.setNeedLockFull(true);
+        danmakuVideoPlayer.setReleaseWhenLossAudio(false);
 
         //detailPlayer.setOpenPreView(true);
         danmakuVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
