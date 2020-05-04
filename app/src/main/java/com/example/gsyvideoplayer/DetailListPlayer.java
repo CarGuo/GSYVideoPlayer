@@ -132,7 +132,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
         detailPlayer.getBackButton().setVisibility(View.VISIBLE);
     }
 
-    private GSYVideoPlayer getCurPlay() {
+    private GSYVideoPlayer getDetailPlayer() {
         if (detailPlayer.getFullWindowPlayer() != null) {
             return detailPlayer.getFullWindowPlayer();
         }
