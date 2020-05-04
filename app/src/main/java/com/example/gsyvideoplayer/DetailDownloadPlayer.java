@@ -248,7 +248,7 @@ public class DetailDownloadPlayer extends AppCompatActivity {
         detailPlayer.getBackButton().setVisibility(View.GONE);
     }
 
-    private GSYVideoPlayer getCurPlay() {
+    private GSYVideoPlayer getDetailPlayer() {
         if (detailPlayer.getFullWindowPlayer() != null) {
             return detailPlayer.getFullWindowPlayer();
         }
