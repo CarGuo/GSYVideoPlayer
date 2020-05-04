@@ -218,7 +218,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         danmakuVideoPlayer.getBackButton().setVisibility(View.GONE);
     }
 
-    private GSYVideoPlayer getCurPlay() {
+    private GSYVideoPlayer getDanmukuPlayer() {
         if (danmakuVideoPlayer.getFullWindowPlayer() != null) {
             return  danmakuVideoPlayer.getFullWindowPlayer();
         }
