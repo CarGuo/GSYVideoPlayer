@@ -436,6 +436,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             }
             return super.onSingleTapConfirmed(e);
         }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            super.onLongPress(e);
+            touchLongPress(e);
+        }
     });
 
     /**
@@ -787,6 +793,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             return;
         }
         clickStartIcon();
+    }
+
+    /**
+     * 长按
+     */
+    protected void touchLongPress(MotionEvent e) {
     }
 
     /**
