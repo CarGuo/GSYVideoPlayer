@@ -1,5 +1,17 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+## 7.1.4 (2020-05-14)
+
+* fix #2719 support Exo User-Agent
+* fix #2559
+* update ex_so lib
+* fix proxy cache support Android Q
+* proxy cache skip ssl error
+* add ProxyCacheManager support DEFAULT_MAX_SIZE
+* add ProxyCacheManager FileNameGenerator support custom cache file name
+* add touchLongPress Api
+
+
 ## 7.1.3 (2020-03-19)
 
 * update exoplayer 2.11.3
