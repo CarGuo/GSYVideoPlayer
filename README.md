@@ -1,5 +1,5 @@
 
-![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/home_logo.png)
+![](./img/home_logo.png)
 
 ## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)（兼容系统MediaPlayer与EXOPlayer2），实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
@@ -54,7 +54,7 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:7.1.3'
+implementation 'com.shuyu:GSYVideoPlayer:7.1.4'
 
 ```
 
@@ -181,28 +181,28 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 ## 四、运行效果
 
 * ### 1、打开一个播放(旋转、镜像、填充)
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/11.gif" width="240px" height="426px"/>
+<img src="./img/11.gif" width="240px" height="426px"/>
 
 * ### 2、列表/详情模式(动画、旋转、小窗体)
 
 <div>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/22.gif" width="240px" height="426px"/>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/33.gif" width="240px" height="426px"/>
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/44.gif" width="240px" height="426px"/>
+<img src="./img/22.gif" width="240px" height="426px"/>
+<img src="./img/33.gif" width="240px" height="426px"/>
+<img src="./img/44.gif" width="240px" height="426px"/>
 </div>
 
 * ### 3、弹幕
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/55.gif" width="240px" height="426px"/>
+<img src="./img/55.gif" width="240px" height="426px"/>
 
 * ### 4、滤镜和GL动画
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/09.gif"/>
+<img src="./img/09.gif"/>
 
 * ### 6、背景铺满模糊播放
 
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/99.png" width="426px" height="240px"/>
+<img src="./img/99.png" width="426px" height="240px"/>
 
 * ### 7、进度条小窗口预览
-<img src="https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/07.gif" height="240px"/>
+<img src="./img/07.gif" height="240px"/>
 
 ## 五、近期版本
 
@@ -363,7 +363,7 @@ GSYVideoManager
 
 #### 撸码不易，如果对你有所帮助，欢迎您的赞赏
 
-![](https://github.com/CarGuo/GSYVideoPlayer/blob/master/img/thanks.jpg)
+![](./img/thanks.jpg)
 
 
 
