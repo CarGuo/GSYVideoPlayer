@@ -284,6 +284,9 @@ public class DetailPlayer extends AppCompatActivity {
         //注意，用ijk模式播放raw视频，这个必须打开
         GSYVideoManager.instance().enableRawPlay(getApplicationContext());
 
+        ///exo 播放 raw
+        //String url = "rawresource://" + getPackageName() + "/" + R.raw.test;
+
         ///exo raw 支持
         //String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
 
