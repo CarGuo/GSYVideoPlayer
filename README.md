@@ -367,7 +367,9 @@ GSYVideoManager
 
 
 
+### GSY新书：[《Flutter开发实战详解》](https://item.jd.com/12883054.html)上架啦
 
+[![](http://img.cdn.guoshuyu.cn/WechatIMG65.jpeg)](https://item.jd.com/12883054.html)
 
 
 
