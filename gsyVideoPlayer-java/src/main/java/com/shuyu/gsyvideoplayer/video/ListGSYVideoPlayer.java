@@ -100,7 +100,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         mMapHeadData = mapHeadData;
         GSYVideoModel gsyVideoModel = url.get(position);
         boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, cachePath, gsyVideoModel.getTitle(), changeState);
-        if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+        if (!TextUtils.isEmpty(gsyVideoModel.getTitle()) ) {
             mTitleTextView.setText(gsyVideoModel.getTitle());
         }
         return set;
@@ -122,7 +122,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         if (gsyBaseVideoPlayer != null) {
             ListGSYVideoPlayer listGSYVideoPlayer = (ListGSYVideoPlayer) gsyBaseVideoPlayer;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
-            if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+            if (!TextUtils.isEmpty(gsyVideoModel.getTitle()) && mTitleTextView != null) {
                 listGSYVideoPlayer.mTitleTextView.setText(gsyVideoModel.getTitle());
             }
         }
