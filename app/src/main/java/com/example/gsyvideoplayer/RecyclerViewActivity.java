@@ -80,7 +80,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
                         //是否全屏
                         if(!GSYVideoManager.isFullState(RecyclerViewActivity.this)) {
                             GSYVideoManager.releaseAllVideos();
-                            recyclerNormalAdapter.notifyDataSetChanged();
+                            recyclerNormalAdapter.notifyItemChanged(position);
                         }
                     }
                 }

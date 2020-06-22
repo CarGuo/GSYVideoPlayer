@@ -116,7 +116,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
             }
         });
 
-        gsyVideoPlayer.loadCoverImage(url, R.mipmap.xxx2);
+        gsyVideoPlayer.loadCoverImageBy(R.mipmap.xxx2, R.mipmap.xxx2);
     }
 
     /**
