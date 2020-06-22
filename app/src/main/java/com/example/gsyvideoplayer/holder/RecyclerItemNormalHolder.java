@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -29,7 +30,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
     protected Context context = null;
 
     @BindView(R.id.video_item_player)
-    StandardGSYVideoPlayer gsyVideoPlayer;
+    SampleCoverVideo gsyVideoPlayer;
 
     ImageView imageView;
 
@@ -45,17 +46,6 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
 
     public void onBind(final int position, VideoModel videoModel) {
 
-        //增加封面
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        if (position % 2 == 0) {
-            imageView.setImageResource(R.mipmap.xxx1);
-        } else {
-            imageView.setImageResource(R.mipmap.xxx2);
-        }
-        if (imageView.getParent() != null) {
-            ViewGroup viewGroup = (ViewGroup) imageView.getParent();
-            viewGroup.removeView(imageView);
-        }
         String url;
         String title;
         if (position % 2 == 0) {
@@ -74,7 +64,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         //gsyVideoPlayer.initUIState();
         gsyVideoOptionBuilder
                 .setIsTouchWiget(false)
-                .setThumbImageView(imageView)
+                //.setThumbImageView(imageView)
                 .setUrl(url)
                 .setVideoTitle(title)
                 .setCacheWithPlay(false)
@@ -125,6 +115,8 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
                 resolveFullBtn(gsyVideoPlayer);
             }
         });
+
+        gsyVideoPlayer.loadCoverImage(url, R.mipmap.xxx2);
     }
 
     /**
