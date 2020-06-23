@@ -363,7 +363,7 @@ GSYVideoManager
 
 #### 撸码不易，如果对你有所帮助，欢迎您的赞赏
 
-![](./img/thanks.jpg)
+![](http://img.cdn.guoshuyu.cn/thanks.jpg)
 
 
 
