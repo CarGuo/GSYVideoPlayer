@@ -518,7 +518,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     protected boolean isLockLandByAutoFullSize() {
         boolean isLockLand = mLockLand;
         if (isAutoFullWithSize()) {
-            isLockLand = true;
+            isLockLand = isVerticalVideo();
         }
         return isLockLand;
     }
