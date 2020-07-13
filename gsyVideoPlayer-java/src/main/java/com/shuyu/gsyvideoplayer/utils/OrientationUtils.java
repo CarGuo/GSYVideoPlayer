@@ -2,6 +2,7 @@ package com.shuyu.gsyvideoplayer.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.provider.Settings;
@@ -9,6 +10,8 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+
+import java.lang.ref.WeakReference;
 
 /**
  * 处理屏幕旋转的的逻辑
@@ -21,7 +24,7 @@ public class OrientationUtils {
     private static final int LAND_TYPE_NORMAL = 1;
     private static final int LAND_TYPE_REVERSE = 2;
 
-    private Activity mActivity;
+    private WeakReference<Activity> mActivity;
     private GSYBaseVideoPlayer mVideoPlayer;
     private OrientationEventListener mOrientationEventListener;
     private OrientationOption mOrientationOption;
@@ -49,7 +52,7 @@ public class OrientationUtils {
     }
 
     public OrientationUtils(Activity activity, GSYBaseVideoPlayer gsyVideoPlayer, OrientationOption orientationOption) {
-        this.mActivity = activity;
+        this.mActivity = new WeakReference(activity);
         this.mVideoPlayer = gsyVideoPlayer;
         if (orientationOption == null) {
             this.mOrientationOption = new OrientationOption();
@@ -61,11 +64,16 @@ public class OrientationUtils {
     }
 
     protected void init() {
-        mOrientationEventListener = new OrientationEventListener(mActivity.getApplicationContext()) {
+        final Activity activity = mActivity.get();
+        if(activity == null) {
+            return;
+        }
+        final Context context = activity.getApplicationContext();
+        mOrientationEventListener = new OrientationEventListener(context) {
             @SuppressLint("SourceLockedOrientationActivity")
             @Override
             public void onOrientationChanged(int rotation) {
-                boolean autoRotateOn = (Settings.System.getInt(mActivity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
+                boolean autoRotateOn = (Settings.System.getInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
                 if (!autoRotateOn && mRotateWithSystem) {
                     if (!mIsOnlyRotateLand || getIsLand() == LAND_TYPE_NULL) {
                         return;
@@ -176,8 +184,12 @@ public class OrientationUtils {
     }
 
     private void setRequestedOrientation(int requestedOrientation) {
+        final Activity activity = mActivity.get();
+        if(activity == null) {
+            return;
+        }
         try {
-            mActivity.setRequestedOrientation(requestedOrientation);
+            activity.setRequestedOrientation(requestedOrientation);
         } catch (IllegalStateException exception) {
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O || Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1) {
                 Debuger.printfError("OrientationUtils", exception);
@@ -196,8 +208,13 @@ public class OrientationUtils {
             return;
         }
         mClick = true;
+
+        final Activity activity = mActivity.get();
+        if(activity == null) {
+            return;
+        }
         if (mIsLand == LAND_TYPE_NULL) {
-            int request = mActivity.getRequestedOrientation();
+            int request = activity.getRequestedOrientation();
             if (request == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
                 mScreenType = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
             } else {
