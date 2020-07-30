@@ -39,6 +39,11 @@ public interface IPlayerManager {
     void setNeedMute(boolean needMute);
 
     /**
+     * 单独设置 setVolume ，和 setNeedMute 互斥 float 0.0 - 1.0
+     */
+    void setVolume(float left, float right);
+
+    /**
      * 释放渲染
      */
     void releaseSurface();
