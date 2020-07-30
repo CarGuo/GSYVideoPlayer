@@ -105,6 +105,13 @@ public class SystemPlayerManager extends BasePlayerManager {
     }
 
     @Override
+    public void setVolume(float left, float right) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(left, right);
+        }
+    }
+
+    @Override
     public void releaseSurface() {
         if (surface != null) {
             //surface.release();
