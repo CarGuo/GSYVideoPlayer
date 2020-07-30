@@ -1,5 +1,13 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+## 7.1.5 (2020-07-30)
+
+* fix #2625 add WeakReference<Activity>
+* fix auto full issue
+* fix #2813、#2753、#2766
+
+
 ## 7.1.4 (2020-05-14)
 
 * fix #2719 support Exo User-Agent
