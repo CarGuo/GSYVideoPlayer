@@ -54,24 +54,24 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:7.1.4'
+implementation 'com.shuyu:GSYVideoPlayer:7.1.5'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:7.1.4'
+implementation 'com.shuyu:gsyVideoPlayer-java:7.1.5'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.4'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.5'
 
 //根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:7.1.4'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:7.1.4'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:7.1.4'
-implementation 'com.shuyu:gsyVideoPlayer-x64:7.1.4'
-implementation 'com.shuyu:gsyVideoPlayer-x86:7.1.4'
+implementation 'com.shuyu:gsyVideoPlayer-armv5:7.1.5'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:7.1.5'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:7.1.5'
+implementation 'com.shuyu:gsyVideoPlayer-x64:7.1.5'
+implementation 'com.shuyu:gsyVideoPlayer-x86:7.1.5'
 
 ```
 
@@ -81,13 +81,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:7.1.4'
+implementation 'com.shuyu:gsyVideoPlayer-java:7.1.5'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.4'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.5'
 
 //更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.1.4'
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.1.5'
 
 ```
 
@@ -206,6 +206,13 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 五、近期版本
 
+## 7.1.5 (2020-07-30)
+
+* fix #2625 add WeakReference<Activity>
+* fix auto full issue
+* fix #2813、#2753、#2766
+
+
 ## 7.1.4 (2020-05-14)
 
 * fix #2719 support Exo User-Agent
@@ -217,82 +224,6 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 * add ProxyCacheManager FileNameGenerator support custom cache file name
 * add touchLongPress Api
 
-
-## 7.1.3 (2020-03-19)
-
-* update exoplayer 2.11.3
-* fix #2588 setOverrideExtension 方法全屏失效问题
-* fix #2570 add OrientationOption 增加旋转灵敏度调节
-* add isShowDragProgressTextOnSeekBar 判断拖动进度条时，是否在 seekbar 开始部位显示拖动进度
-* exo 内核增加外挂字幕的支持 
-* fix #2456 and update from [1869#issuecomment-569615314](https://github.com/CarGuo/GSYVideoPlayer/issues/1869#issuecomment-569615314)
-* fix #2489 优化网络监听
-* fix #2480 修复屏幕旋转问题
-
-
-### 7.1.2(2019-12-02)
-
-* fix #2436 增加 exo 的 http timeout 
-```
-ExoSourceManager
-
- public static void setHttpReadTimeout(int httpReadTimeout)
- 
- public static void setHttpConnectTimeout(int httpConnectTimeout)
-
-```
-* 优化视频尺寸显示计算 
-* 增加 exo 支持 raw 文件播放
-
-``` 
-String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
-```
-* 增加模拟下载共用缓存例子 DetailDownloadPlayer
-* 适配 android 10 的全屏
-* fix #2382、#2411、#2343、#2379、#2350、#2328
-* 增加设置自定义显示比例的支持
-
-``` 
-GSYVideoType.setScreenScaleRatio
-```
-* 增加外挂字幕例子 [exo2模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)
-
-
-### 7.1.1(2019-10-12)
-
-* fix #2244、#2252(resolveFullVideoShow 不执行情况)、#2279、#2280
-* fix #2303(去除 TimerTask)、#2306（某些机型退到后台返回不显示）
-* 增加 setNeedAutoAdaptation
-```
-    /**
-     * 是否需要适配在竖屏横屏时，由于刘海屏或者打孔屏占据空间，导致标题显示被遮盖的问题
-     *
-     * @param needAutoAdaptation 默认false
-     */
-    public void setNeedAutoAdaptation(boolean needAutoAdaptation)
-```
-
-### 7.1.0(2019-09-01)
-
-* update ExoPlayer to 2.10.4
-* 添加沉浸式支持
-* 增加 IPlayerInitSuccessListener 播放器初始化成果回调
-```
-GSYVideoManager
-    .instance()
-    .setPlayerInitSuccessListener(new IPlayerInitSuccessListener() {
-        ///播放器初始化成果回调，可用于播放前的自定义设置
-        @Override
-        public void onPlayerInitSuccess(IMediaPlayer player, GSYModel model) {
-            if (player instanceof IjkExo2MediaPlayer) {
-                ((IjkExo2MediaPlayer) player).setTrackSelector(new DefaultTrackSelector());
-                ((IjkExo2MediaPlayer) player).setLoadControl(new DefaultLoadControl());
-            }
-        }
-    });
-```
-* fix #2142
-* 增加硬解码不花屏幕 [RecyclerView3Activity](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/RecyclerView3Activity.java)
 
 
 ### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
