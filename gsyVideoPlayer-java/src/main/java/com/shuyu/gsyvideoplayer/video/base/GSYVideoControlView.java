@@ -25,6 +25,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shuyu.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.listener.GSYStateUiListener;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -172,6 +173,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     //点击锁屏的回调
     protected LockClickListener mLockClickListener;
+
+    protected GSYStateUiListener mGsyStateUiListener;
 
     protected GSYVideoProgressListener mGSYVideoProgressListener;
 
@@ -361,6 +364,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 break;
         }
         resolveUIState(state);
+        if (mGsyStateUiListener != null) {
+            mGsyStateUiListener.onStateChanged(state);
+        }
     }
 
 
@@ -1373,5 +1379,16 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     public void setShowDragProgressTextOnSeekBar(boolean showDragProgressTextOnSeekBar) {
         isShowDragProgressTextOnSeekBar = showDragProgressTextOnSeekBar;
+    }
+
+    /***
+     * 状态监听
+     */
+    public GSYStateUiListener getGSYStateUiListener() {
+        return mGsyStateUiListener;
+    }
+
+    public void setGSYStateUiListener(GSYStateUiListener gsyStateUiListener) {
+        this.mGsyStateUiListener = gsyStateUiListener;
     }
 }
