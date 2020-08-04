@@ -124,6 +124,7 @@ public class SystemPlayerManager extends BasePlayerManager {
         if (mediaPlayer != null) {
             release = true;
             mediaPlayer.release();
+            mediaPlayer = null;
         }
         lastTotalRxBytes = 0;
         lastTimeStamp = 0;
