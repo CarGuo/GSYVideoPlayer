@@ -183,6 +183,7 @@ public class IjkPlayerManager extends BasePlayerManager {
     public void release() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 

@@ -131,6 +131,7 @@ public class Exo2PlayerManager extends BasePlayerManager {
         if (mediaPlayer != null) {
             mediaPlayer.setSurface(null);
             mediaPlayer.release();
+            mediaPlayer = null;
         }
         if (dummySurface != null) {
             dummySurface.release();
