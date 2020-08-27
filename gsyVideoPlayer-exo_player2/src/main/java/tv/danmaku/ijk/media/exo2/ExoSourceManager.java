@@ -6,9 +6,6 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
-import tv.danmaku.ijk.media.exo2.source.GSYDefaultHttpDataSource;
-import tv.danmaku.ijk.media.exo2.source.GSYExoHttpDataSourceFactory;
-
 import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;
@@ -26,7 +23,9 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
@@ -57,7 +56,9 @@ public class ExoSourceManager {
     private static Cache mCache;
     /**
      * 忽律Https证书校验
+     * @deprecated 如果需要忽略证书，请直接使用 ExoMediaSourceInterceptListener 的 getHttpDataSourceFactory
      */
+    @Deprecated
     private static boolean sSkipSSLChain = false;
 
     private static int sHttpReadTimeout = -1;
@@ -259,7 +260,11 @@ public class ExoSourceManager {
         return isCached;
     }
 
-
+    /**
+     * 忽律Https证书校验
+     * @deprecated 如果需要忽略证书，请直接使用 ExoMediaSourceInterceptListener 的 getHttpDataSourceFactory
+     */
+    @Deprecated
     public static boolean isSkipSSLChain() {
         return sSkipSSLChain;
     }
@@ -268,7 +273,9 @@ public class ExoSourceManager {
      * 设置https忽略证书
      *
      * @param skipSSLChain true时是hulve
+     * @deprecated 如果需要忽略证书，请直接使用 ExoMediaSourceInterceptListener 的 getHttpDataSourceFactory
      */
+    @Deprecated
     public static void setSkipSSLChain(boolean skipSSLChain) {
         sSkipSSLChain = skipSSLChain;
     }
@@ -322,8 +329,8 @@ public class ExoSourceManager {
         if (uerAgent == null) {
             uerAgent = Util.getUserAgent(context, TAG);
         }
-        int connectTimeout = GSYDefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS;
-        int readTimeout = GSYDefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS;
+        int connectTimeout = DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS;
+        int readTimeout = DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS;
         if (sHttpConnectTimeout > 0) {
             connectTimeout = sHttpConnectTimeout;
         }
@@ -334,20 +341,16 @@ public class ExoSourceManager {
         if (mMapHeadData != null && mMapHeadData.size() > 0) {
             allowCrossProtocolRedirects = "true".equals(mMapHeadData.get("allowCrossProtocolRedirects"));
         }
-        if (sSkipSSLChain) {
-            GSYExoHttpDataSourceFactory dataSourceFactory = new GSYExoHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
+        HttpDataSource.BaseFactory dataSourceFactory;
+        if (sExoMediaSourceInterceptListener != null) {
+            dataSourceFactory = sExoMediaSourceInterceptListener.getHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
                     connectTimeout,
                     readTimeout, allowCrossProtocolRedirects);
-            if (mMapHeadData != null && mMapHeadData.size() > 0) {
-                for (Map.Entry<String, String> header : mMapHeadData.entrySet()) {
-                    dataSourceFactory.getDefaultRequestProperties().set(header.getKey(), header.getValue());
-                }
-            }
-            return dataSourceFactory;
+        } else {
+            dataSourceFactory = new DefaultHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
+                    connectTimeout,
+                    readTimeout, allowCrossProtocolRedirects);
         }
-        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
-                connectTimeout,
-                readTimeout, allowCrossProtocolRedirects);
         if (mMapHeadData != null && mMapHeadData.size() > 0) {
             for (Map.Entry<String, String> header : mMapHeadData.entrySet()) {
                 dataSourceFactory.getDefaultRequestProperties().set(header.getKey(), header.getValue());
