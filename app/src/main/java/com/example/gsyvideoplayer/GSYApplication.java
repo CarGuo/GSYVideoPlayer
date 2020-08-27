@@ -9,7 +9,7 @@ import tv.danmaku.ijk.media.exo2.ExoSourceManager;
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
-import com.example.gsyvideoplayer.source.GSYExoHttpDataSourceFactory;
+import com.example.gsyvideoplayer.exosource.GSYExoHttpDataSourceFactory;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
