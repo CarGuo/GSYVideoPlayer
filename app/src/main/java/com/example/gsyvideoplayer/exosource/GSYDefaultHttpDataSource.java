@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.gsyvideoplayer.source;
+package com.example.gsyvideoplayer.exosource;
 
 import android.net.Uri;
 import android.text.TextUtils;
