@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.danmaku.ijk.media.exo2.source;
+package com.example.gsyvideoplayer.source;
 
 import android.net.Uri;
 import android.text.TextUtils;
