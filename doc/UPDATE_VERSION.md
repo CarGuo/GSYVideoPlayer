@@ -1,5 +1,34 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+## 7.1.6 (2020-09-08)
+
+* fix #2922 deprecated SkipSSLChain ，support api custom dataSource
+* 因为忽略证书会导致一些 Google Play 的审核问题所以改为自定义支持
+* 如果需要使用 SkipSSLChain ，可以参考 demo 里面的 exosource
+* 另外通过 getHttpDataSourceFactory 也可以自定义需要的 HttpDataSource 逻辑
+
+```
+ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
+    @Override
+    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+        //如果返回 null，就使用默认的
+        return null;
+    }
+
+    /**
+     * 通过自定义的 HttpDataSource ，可以设置自签证书或者忽略证书
+     * demo 里的 GSYExoHttpDataSourceFactory 使用的是忽略证书
+     * */
+    @Override
+    public HttpDataSource.BaseFactory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+        //如果返回 null，就使用默认的
+        return new GSYExoHttpDataSourceFactory(userAgent, listener,
+                connectTimeoutMillis,
+                readTimeoutMillis, allowCrossProtocolRedirects);
+    }
+});
+```
+
 
 ## 7.1.5 (2020-07-30)
 
