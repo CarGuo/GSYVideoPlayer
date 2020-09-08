@@ -54,24 +54,24 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:7.1.5'
+implementation 'com.shuyu:GSYVideoPlayer:7.1.6'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:7.1.5'
+implementation 'com.shuyu:gsyVideoPlayer-java:7.1.6'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.5'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.6'
 
 //根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:7.1.5'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:7.1.5'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:7.1.5'
-implementation 'com.shuyu:gsyVideoPlayer-x64:7.1.5'
-implementation 'com.shuyu:gsyVideoPlayer-x86:7.1.5'
+implementation 'com.shuyu:gsyVideoPlayer-armv5:7.1.6'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:7.1.6'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:7.1.6'
+implementation 'com.shuyu:gsyVideoPlayer-x64:7.1.6'
+implementation 'com.shuyu:gsyVideoPlayer-x86:7.1.6'
 
 ```
 
@@ -81,13 +81,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:7.1.5'
+implementation 'com.shuyu:gsyVideoPlayer-java:7.1.6'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.5'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.6'
 
 //更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.1.5'
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.1.6'
 
 ```
 
@@ -205,6 +205,37 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 <img src="./img/07.gif" height="240px"/>
 
 ## 五、近期版本
+
+
+## 7.1.6 (2020-09-08)
+
+* fix #2922 deprecated SkipSSLChain ，support api custom dataSource
+* 因为忽略证书会导致一些 Google Play 的审核问题所以改为自定义支持
+* 如果需要使用 SkipSSLChain ，可以参考 demo 里面的 exosource
+* 另外通过 getHttpDataSourceFactory 也可以自定义需要的 HttpDataSource 逻辑
+
+```
+ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
+    @Override
+    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+        //如果返回 null，就使用默认的
+        return null;
+    }
+
+    /**
+     * 通过自定义的 HttpDataSource ，可以设置自签证书或者忽略证书
+     * demo 里的 GSYExoHttpDataSourceFactory 使用的是忽略证书
+     * */
+    @Override
+    public HttpDataSource.BaseFactory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+        //如果返回 null，就使用默认的
+        return new GSYExoHttpDataSourceFactory(userAgent, listener,
+                connectTimeoutMillis,
+                readTimeoutMillis, allowCrossProtocolRedirects);
+    }
+});
+```
+
 
 ## 7.1.5 (2020-07-30)
 
