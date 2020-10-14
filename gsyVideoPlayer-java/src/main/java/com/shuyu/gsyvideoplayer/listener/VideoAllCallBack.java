@@ -39,6 +39,9 @@ public interface VideoAllCallBack {
     //播放完了，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
     void onAutoComplete(String url, Object... objects);
 
+    //非正常播放完了，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
+    void onComplete(String url, Object... objects);
+
     //进去全屏，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
     void onEnterFullscreen(String url, Object... objects);
 
