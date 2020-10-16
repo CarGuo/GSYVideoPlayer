@@ -82,6 +82,7 @@ dependencies {
     implementation viewDependencies.glideProcessor
     implementation androidDependencies.support_v4
     implementation androidDependencies.design
+    implementation androidDependencies.viewpager2
 
     implementation project(':gsyVideoPlayer')
 
