@@ -35,6 +35,7 @@ import com.example.gsyvideoplayer.RecyclerView2Activity;
 import com.example.gsyvideoplayer.RecyclerView3Activity;
 import com.example.gsyvideoplayer.RecyclerViewActivity;
 import com.example.gsyvideoplayer.ScrollingActivity;
+import com.example.gsyvideoplayer.ViewPager2Activity;
 import com.example.gsyvideoplayer.WebDetailActivity;
 import com.example.gsyvideoplayer.WindowActivity;
 import com.example.gsyvideoplayer.exo.DetailExoListPlayer;
@@ -287,7 +288,15 @@ public class JumpUtils {
         Intent intent = new Intent(activity, AudioDetailPlayer.class);
         activity.startActivity(intent);
     }
-
+    /**
+     * 跳转到ViewPager详情播放
+     *
+     * @param activity
+     */
+    public static void goToViewPager2Activity(Activity activity) {
+        Intent intent = new Intent(activity, ViewPager2Activity.class);
+        activity.startActivity(intent);
+    }
 
     /**
      * 跳转到详情播放

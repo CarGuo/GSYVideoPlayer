@@ -47,6 +47,7 @@ ext {
             appcompat_v7: "androidx.appcompat:appcompat:${supportLibraryVersion}",
             support_v4  : "androidx.legacy:legacy-support-v4:${otherVersion}",
             design      : "com.google.android.material:material:${otherVersion}",
+            viewpager2      : "androidx.viewpager2:viewpager2:${otherVersion}",
     ]
 
     viewDependencies = [

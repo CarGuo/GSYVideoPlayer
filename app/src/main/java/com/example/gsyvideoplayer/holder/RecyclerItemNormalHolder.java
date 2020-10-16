@@ -49,7 +49,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         String url;
         String title;
         if (position % 2 == 0) {
-            url = "https://res.exexm.com/cw_145225549855002";
+            url = "https://pointshow.oss-cn-hangzhou.aliyuncs.com/McTk51586843620689.mp4";
             title = "这是title";
         } else {
             url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
@@ -97,7 +97,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
                     public void onEnterFullscreen(String url, Object... objects) {
                         super.onEnterFullscreen(url, objects);
                         GSYVideoManager.instance().setNeedMute(false);
-                        gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String)objects[0]);
+                        gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
                     }
                 }).build(gsyVideoPlayer);
 
@@ -126,4 +126,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         standardGSYVideoPlayer.startWindowFullscreen(context, true, true);
     }
 
+    public  SampleCoverVideo getPlayer() {
+        return gsyVideoPlayer;
+    }
 }
