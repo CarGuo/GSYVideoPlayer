@@ -346,6 +346,10 @@ GSYVideoManager.instance().setOptionModelList(list);
 https://github.com/CarGuo/GSYVideoPlayer/issues/2347#issuecomment-565701916
 
 
+### 24、其他问题
+
+https://github.com/CarGuo/GSYVideoPlayer/issues/2997#issuecomment-711480841
+
 #### 更多配置
 
 更多配置可通过下方链接和图片参考配置
