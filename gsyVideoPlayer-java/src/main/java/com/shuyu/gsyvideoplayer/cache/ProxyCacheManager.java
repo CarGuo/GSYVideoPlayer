@@ -180,6 +180,7 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
      */
     public HttpProxyCacheServer newProxy(Context context) {
         return new HttpProxyCacheServer.Builder(context.getApplicationContext())
+                .maxCacheSize(DEFAULT_MAX_SIZE)
                 .headerInjector(userAgentHeadersInjector).build();
     }
 
