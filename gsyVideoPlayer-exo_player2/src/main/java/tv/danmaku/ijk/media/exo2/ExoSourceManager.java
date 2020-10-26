@@ -30,8 +30,9 @@ import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheKeyFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheSpan;
-import com.google.android.exoplayer2.upstream.cache.CacheUtil;
+import com.google.android.exoplayer2.upstream.cache.CacheWriter;
 import com.google.android.exoplayer2.upstream.cache.ContentMetadata;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
@@ -40,6 +41,8 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.File;
 import java.util.Map;
 import java.util.NavigableSet;
+
+import static com.google.android.exoplayer2.upstream.cache.CacheKeyFactory.DEFAULT;
 
 /**
  * Created by guoshuyu on 2018/5/18.
@@ -56,6 +59,7 @@ public class ExoSourceManager {
     private static Cache mCache;
     /**
      * 忽律Https证书校验
+     *
      * @deprecated 如果需要忽略证书，请直接使用 ExoMediaSourceInterceptListener 的 getHttpDataSourceFactory
      */
     @Deprecated
@@ -238,18 +242,36 @@ public class ExoSourceManager {
             Cache cache = getCacheSingleInstance(context, cacheDir);
             if (!TextUtils.isEmpty(url)) {
                 if (cache != null) {
-                    CacheUtil.remove(cache, CacheUtil.generateKey(Uri.parse(url)));
+                    removeCache(cache, url);
                 }
             } else {
                 if (cache != null) {
                     for (String key : cache.getKeys()) {
-                        CacheUtil.remove(cache, key);
+                        removeCache(cache, key);
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static void removeCache(Cache cache, String url) {
+        NavigableSet<CacheSpan> cachedSpans = cache.getCachedSpans(buildCacheKey(url));
+        for (CacheSpan cachedSpan : cachedSpans) {
+            try {
+                cache.removeSpan(cachedSpan);
+            } catch (Exception e) {
+                // Do nothing.
+            }
+        }
+    }
+
+    public static String buildCacheKey(String url) {
+        DataSpec dataSpec = new DataSpec(Uri.parse(url));
+        String key = CacheKeyFactory.DEFAULT.buildCacheKey(dataSpec);
+        return key;
     }
 
     public static boolean cachePreView(Context context, File cacheDir, String url) {
@@ -262,6 +284,7 @@ public class ExoSourceManager {
 
     /**
      * 忽律Https证书校验
+     *
      * @deprecated 如果需要忽略证书，请直接使用 ExoMediaSourceInterceptListener 的 getHttpDataSourceFactory
      */
     @Deprecated
@@ -367,7 +390,7 @@ public class ExoSourceManager {
     private static boolean resolveCacheState(Cache cache, String url) {
         boolean isCache = true;
         if (!TextUtils.isEmpty(url)) {
-            String key = CacheUtil.generateKey(Uri.parse(url));
+            String key = buildCacheKey(url);
             if (!TextUtils.isEmpty(key)) {
                 NavigableSet<CacheSpan> cachedSpans = cache.getCachedSpans(key);
                 if (cachedSpans.size() == 0) {
