@@ -527,7 +527,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         if (isLastReportedPlayWhenReady != playWhenReady || lastReportedPlaybackState != playbackState) {
             int buffer = 0;
             if(mInternalPlayer != null) {
-                buffer =  mInternalPlayer.getBufferedPercentage()
+                buffer =  mInternalPlayer.getBufferedPercentage();
             }
             if (isBuffering) {
                 switch (playbackState) {
