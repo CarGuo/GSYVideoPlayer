@@ -1,5 +1,12 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+## 7.1.7 (2020-10-26)
+
+* update support exoplayer 2.12.1
+* fix #3016、[#3009](https://github.com/CarGuo/GSYVideoPlayer/issues/3009)
+
+
 ## 7.1.6 (2020-09-08)
 
 * fix #2922 deprecated SkipSSLChain ，support api custom dataSource
