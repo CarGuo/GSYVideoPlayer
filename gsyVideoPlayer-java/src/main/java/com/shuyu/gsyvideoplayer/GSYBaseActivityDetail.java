@@ -238,6 +238,11 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
 
     }
 
+    @Override
+    public void onComplete(String url, Object... objects) {
+
+    }
+
     public boolean hideActionBarWhenFull() {
         return true;
     }

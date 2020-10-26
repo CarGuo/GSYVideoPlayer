@@ -170,6 +170,11 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
 
     }
 
+    @Override
+    public void onComplete(String url, Object... objects) {
+
+    }
+
     protected boolean isADStarted() {
         return getGSYADVideoPlayer().getCurrentPlayer().getCurrentState() >= 0 &&
                 getGSYADVideoPlayer().getCurrentPlayer().getCurrentState() != GSYVideoView.CURRENT_STATE_NORMAL

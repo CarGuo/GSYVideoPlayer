@@ -139,4 +139,9 @@ public class SampleListener implements VideoAllCallBack {
     public void onClickBlankFullscreen(String url, Object... objects) {
 
     }
+
+    @Override
+    public void onComplete(String url, Object... objects) {
+
+    }
 }
