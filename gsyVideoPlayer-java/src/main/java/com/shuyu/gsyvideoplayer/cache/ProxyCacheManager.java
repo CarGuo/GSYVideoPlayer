@@ -26,6 +26,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 public class ProxyCacheManager implements ICacheManager, CacheListener {
 
     public static int DEFAULT_MAX_SIZE = 512 * 1024 * 1024;
+    public static int DEFAULT_MAX_COUNT = -1;
 
     //视频代理
     protected HttpProxyCacheServer proxy;
@@ -162,7 +163,11 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
         }
         HttpProxyCacheServer.Builder builder = new HttpProxyCacheServer.Builder(context);
         builder.cacheDirectory(file);
-        builder.maxCacheSize(DEFAULT_MAX_SIZE);
+        if (DEFAULT_MAX_COUNT > 0) {
+            builder.maxCacheFilesCount(DEFAULT_MAX_COUNT);
+        } else {
+            builder.maxCacheSize(DEFAULT_MAX_SIZE);
+        }
         builder.headerInjector(userAgentHeadersInjector);
         if (fileNameGenerator != null) {
             builder.fileNameGenerator(fileNameGenerator);
@@ -179,9 +184,16 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
      * 创建缓存代理服务
      */
     public HttpProxyCacheServer newProxy(Context context) {
-        return new HttpProxyCacheServer.Builder(context.getApplicationContext())
-                .maxCacheSize(DEFAULT_MAX_SIZE)
-                .headerInjector(userAgentHeadersInjector).build();
+        HttpProxyCacheServer.Builder builder = new HttpProxyCacheServer
+                .Builder(context.getApplicationContext())
+                .headerInjector(userAgentHeadersInjector);
+        if (DEFAULT_MAX_COUNT > 0) {
+            builder.maxCacheFilesCount(DEFAULT_MAX_COUNT);
+        } else {
+            builder.maxCacheSize(DEFAULT_MAX_SIZE);
+        }
+        return builder.build();
+
     }
 
 
