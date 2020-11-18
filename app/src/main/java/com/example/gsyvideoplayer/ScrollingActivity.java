@@ -85,7 +85,7 @@ public class ScrollingActivity extends AppCompatActivity {
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
                         super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(true);
+                        orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
                         isPlay = true;
                         root.removeView(fab);
                     }

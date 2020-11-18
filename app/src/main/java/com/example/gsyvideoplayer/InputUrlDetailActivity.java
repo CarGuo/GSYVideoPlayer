@@ -85,7 +85,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
                     public void onPrepared(String url, Object... objects) {
                         super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(true);
+                        orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
                         isPlay = true;
                     }
 
