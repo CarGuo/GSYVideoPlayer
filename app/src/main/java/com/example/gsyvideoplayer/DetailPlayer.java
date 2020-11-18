@@ -149,8 +149,9 @@ public class DetailPlayer extends AppCompatActivity {
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
                         super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(true);
+                        orientationUtils.setEnable(needRotateSystem());
                         isPlay = true;
+
 
                         //设置 seek 的临近帧。
                         if (detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
@@ -270,7 +271,7 @@ public class DetailPlayer extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+            detailPlayer.onConfigurationChanged(this, newConfig, needRotateSystem() ? orientationUtils : null, true, true);
         }
     }
 
@@ -323,7 +324,8 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://video1.dgtle.com/backend%2F2020%2F3%2F0%2F%E6%88%91%E6%B2%A1%E6%9C%89%E7%BB%99%E4%B8%80%E5%8A%A08Pro%E5%81%9A%E8%AF%84%E6%B5%8B_%E5%8D%B4%E5%B8%A6%E7%9D%80%E5%AE%83%E6%BC%82%E6%B5%81.mp4_1080.mp4";
         //String url = "http://yongtaizx.xyz/20191230/t2Axgh3k/index.m3u8";
         //String url = "http://123.56.109.212:8035/users/bfe52074fba74247853caa764b522731/films/orig/aa4c3451-0468-452a-a189-bd064a1963e5-鹿鼎记下.mp4";
-        String url = "https://pointshow.oss-cn-hangzhou.aliyuncs.com/McTk51586843620689.mp4";
+        //String url = "http://static.hnyequ.cn/yequ_iOS/4940735da1227890e6a261937223e0d2_828x1472.mp4";
+        String url = "https://tx.hls.huya.com/src/78941969-2579769454-11080025436149776384-3144993630-10057-A-0-1-imgplus_2000.m3u8?wsSecret=3e6b5903368d02d0c591a57a07940cca&wsTime=5f4ca52f&u=0&seqid=15987721445850596&ctype=tars_mobile&fs=bgct&sphdcdn=al_7-tx_3-js_3-ws_7-bd_2-hw_2&sphdDC=huya&sphd=264_*&t=103";
         //String url = "http://pointshow.oss-cn-hangzhou.aliyuncs.com/transcode/ORIGINAL/Mnbc61586842828593.mp4";
         //ssl error
         //String url =  "https://file.shftz.cn:8443/filesystem/download/10/2019/3/26/ce2c7c66-e9eb-42be-adf6-f9008385ea8c.mov/play";
@@ -388,5 +390,9 @@ public class DetailPlayer extends AppCompatActivity {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("video/*");
         startActivityForResult(intent, READ_REQUEST_CODE);
+    }
+
+    private boolean needRotateSystem() {
+        return false;
     }
 }
