@@ -150,7 +150,7 @@ public class DetailPlayer extends AppCompatActivity {
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
                         super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(needRotateSystem());
+                        orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
                         isPlay = true;
 
 
@@ -391,9 +391,5 @@ public class DetailPlayer extends AppCompatActivity {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("video/*");
         startActivityForResult(intent, READ_REQUEST_CODE);
-    }
-
-    private boolean needRotateSystem() {
-        return false;
     }
 }
