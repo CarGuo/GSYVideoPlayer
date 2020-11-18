@@ -137,10 +137,10 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     public void onConfigurationChanged(Configuration newConfig) {
         //如果旋转了就全屏
         boolean backUpIsPlay = isPlay;
-        if (!isPause && getGSYADVideoPlayer().getVisibility() == View.VISIBLE && isNeedRotateWithSystem()) {
+        if (!isPause && getGSYADVideoPlayer().getVisibility() == View.VISIBLE) {
             if (isADStarted()) {
                 isPlay = false;
-                getGSYADVideoPlayer().getCurrentPlayer().onConfigurationChanged(this, newConfig, mADOrientationUtils, hideActionBarWhenFull(), hideStatusBarWhenFull());
+                getGSYADVideoPlayer().getCurrentPlayer().onConfigurationChanged(this, newConfig, isNeedRotateWithSystem() ? mADOrientationUtils : null, hideActionBarWhenFull(), hideStatusBarWhenFull());
             }
         }
         super.onConfigurationChanged(newConfig);
