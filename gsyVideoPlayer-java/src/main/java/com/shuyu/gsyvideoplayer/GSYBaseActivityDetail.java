@@ -111,11 +111,14 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
             orientationUtils.releaseListener();
     }
 
+    /**
+     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
-        if (isPlay && !isPause) {
+        if (isPlay && !isPause && isNeedRotateWithSystem()) {
             getGSYVideoPlayer().onConfigurationChanged(this, newConfig, orientationUtils, hideActionBarWhenFull(), hideStatusBarWhenFull());
         }
     }
@@ -256,6 +259,13 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
      */
     public OrientationOption getOrientationOption() {
         return null;
+    }
+
+    /**
+     * 可配置是否需要重力旋转
+     */
+    public boolean isNeedRotateWithSystem() {
+        return true;
     }
 
     /**
