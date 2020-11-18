@@ -140,7 +140,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
         if (!isPause && getGSYADVideoPlayer().getVisibility() == View.VISIBLE) {
             if (isADStarted()) {
                 isPlay = false;
-                getGSYADVideoPlayer().getCurrentPlayer().onConfigurationChanged(this, newConfig, isNeedRotateWithSystem() ? mADOrientationUtils : null, hideActionBarWhenFull(), hideStatusBarWhenFull());
+                getGSYADVideoPlayer().getCurrentPlayer().onConfigurationChanged(this, newConfig, mADOrientationUtils, hideActionBarWhenFull(), hideStatusBarWhenFull());
             }
         }
         super.onConfigurationChanged(newConfig);
