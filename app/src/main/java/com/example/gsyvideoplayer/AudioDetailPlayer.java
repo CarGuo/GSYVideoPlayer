@@ -192,6 +192,9 @@ public class AudioDetailPlayer extends AppCompatActivity {
     }
 
 
+    /**
+     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
