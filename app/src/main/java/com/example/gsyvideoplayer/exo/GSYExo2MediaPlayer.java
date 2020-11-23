@@ -8,7 +8,7 @@ import android.os.Looper;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -134,7 +134,11 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
                         if (mLoadControl == null) {
                             mLoadControl = new DefaultLoadControl();
                         }
-                        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, mRendererFactory, mTrackSelector, mLoadControl, null, Looper.getMainLooper());
+                        mInternalPlayer = new SimpleExoPlayer.Builder(mAppContext, mRendererFactory)
+                                .setLooper(Looper.getMainLooper())
+                                .setTrackSelector(mTrackSelector)
+                                .setLoadControl(mLoadControl).build();
+
                         mInternalPlayer.addListener(GSYExo2MediaPlayer.this);
                         mInternalPlayer.addAnalyticsListener(GSYExo2MediaPlayer.this);
                         mInternalPlayer.addListener(mEventLogger);
