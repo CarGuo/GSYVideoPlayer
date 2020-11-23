@@ -326,7 +326,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://yongtaizx.xyz/20191230/t2Axgh3k/index.m3u8";
         //String url = "http://123.56.109.212:8035/users/bfe52074fba74247853caa764b522731/films/orig/aa4c3451-0468-452a-a189-bd064a1963e5-鹿鼎记下.mp4";
         //String url = "http://static.hnyequ.cn/yequ_iOS/4940735da1227890e6a261937223e0d2_828x1472.mp4";
-        String url = "https://tx.hls.huya.com/src/78941969-2579769454-11080025436149776384-3144993630-10057-A-0-1-imgplus_2000.m3u8?wsSecret=3e6b5903368d02d0c591a57a07940cca&wsTime=5f4ca52f&u=0&seqid=15987721445850596&ctype=tars_mobile&fs=bgct&sphdcdn=al_7-tx_3-js_3-ws_7-bd_2-hw_2&sphdDC=huya&sphd=264_*&t=103";
+        String url = "http://39.104.119.42/elevator-1.0/api/downFile?path=demo.ogv";
         //String url = "http://pointshow.oss-cn-hangzhou.aliyuncs.com/transcode/ORIGINAL/Mnbc61586842828593.mp4";
         //ssl error
         //String url =  "https://file.shftz.cn:8443/filesystem/download/10/2019/3/26/ce2c7c66-e9eb-42be-adf6-f9008385ea8c.mov/play";
