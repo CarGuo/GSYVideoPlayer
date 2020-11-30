@@ -116,7 +116,7 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
                 //orientationUtils.setEnable(true);
-                orientationUtils.setEnable(false);
+                orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
                 isPlay = true;
             }
 
@@ -198,6 +198,9 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);

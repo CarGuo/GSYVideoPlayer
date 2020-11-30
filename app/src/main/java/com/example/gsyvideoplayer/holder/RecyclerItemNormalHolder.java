@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -29,7 +30,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
     protected Context context = null;
 
     @BindView(R.id.video_item_player)
-    StandardGSYVideoPlayer gsyVideoPlayer;
+    SampleCoverVideo gsyVideoPlayer;
 
     ImageView imageView;
 
@@ -45,21 +46,10 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
 
     public void onBind(final int position, VideoModel videoModel) {
 
-        //增加封面
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        if (position % 2 == 0) {
-            imageView.setImageResource(R.mipmap.xxx1);
-        } else {
-            imageView.setImageResource(R.mipmap.xxx2);
-        }
-        if (imageView.getParent() != null) {
-            ViewGroup viewGroup = (ViewGroup) imageView.getParent();
-            viewGroup.removeView(imageView);
-        }
         String url;
         String title;
         if (position % 2 == 0) {
-            url = "https://res.exexm.com/cw_145225549855002";
+            url = "https://pointshow.oss-cn-hangzhou.aliyuncs.com/McTk51586843620689.mp4";
             title = "这是title";
         } else {
             url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
@@ -74,7 +64,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         //gsyVideoPlayer.initUIState();
         gsyVideoOptionBuilder
                 .setIsTouchWiget(false)
-                .setThumbImageView(imageView)
+                //.setThumbImageView(imageView)
                 .setUrl(url)
                 .setVideoTitle(title)
                 .setCacheWithPlay(false)
@@ -107,7 +97,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
                     public void onEnterFullscreen(String url, Object... objects) {
                         super.onEnterFullscreen(url, objects);
                         GSYVideoManager.instance().setNeedMute(false);
-                        gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String)objects[0]);
+                        gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
                     }
                 }).build(gsyVideoPlayer);
 
@@ -125,6 +115,8 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
                 resolveFullBtn(gsyVideoPlayer);
             }
         });
+
+        gsyVideoPlayer.loadCoverImageBy(R.mipmap.xxx2, R.mipmap.xxx2);
     }
 
     /**
@@ -134,4 +126,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         standardGSYVideoPlayer.startWindowFullscreen(context, true, true);
     }
 
+    public  SampleCoverVideo getPlayer() {
+        return gsyVideoPlayer;
+    }
 }

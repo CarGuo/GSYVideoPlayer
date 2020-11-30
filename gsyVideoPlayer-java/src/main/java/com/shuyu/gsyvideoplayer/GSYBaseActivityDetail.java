@@ -111,6 +111,9 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
             orientationUtils.releaseListener();
     }
 
+    /**
+     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -235,6 +238,11 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
 
     @Override
     public void onClickBlankFullscreen(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onComplete(String url, Object... objects) {
 
     }
 

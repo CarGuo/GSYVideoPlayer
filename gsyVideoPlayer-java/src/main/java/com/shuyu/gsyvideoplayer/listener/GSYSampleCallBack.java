@@ -138,4 +138,10 @@ public class GSYSampleCallBack implements VideoAllCallBack {
     public void onClickBlankFullscreen(String url, Object... objects) {
 
     }
+
+    //非正常播放完了,比如新的播放旧的释放，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
+    @Override
+    public void onComplete(String url, Object... objects) {
+
+    }
 }

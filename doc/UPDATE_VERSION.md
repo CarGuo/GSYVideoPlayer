@@ -1,5 +1,61 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+## 7.1.8 (2020-10-26)
+
+* update support exoplayer 2.12.1
+* fix #3016、[#3009](https://github.com/CarGuo/GSYVideoPlayer/issues/3009)
+
+
+## 7.1.6 (2020-09-08)
+
+* fix #2922 deprecated SkipSSLChain ，support api custom dataSource
+* 因为忽略证书会导致一些 Google Play 的审核问题所以改为自定义支持
+* 如果需要使用 SkipSSLChain ，可以参考 demo 里面的 exosource
+* 另外通过 getHttpDataSourceFactory 也可以自定义需要的 HttpDataSource 逻辑
+
+```
+ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
+    @Override
+    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+        //如果返回 null，就使用默认的
+        return null;
+    }
+
+    /**
+     * 通过自定义的 HttpDataSource ，可以设置自签证书或者忽略证书
+     * demo 里的 GSYExoHttpDataSourceFactory 使用的是忽略证书
+     * */
+    @Override
+    public HttpDataSource.BaseFactory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+        //如果返回 null，就使用默认的
+        return new GSYExoHttpDataSourceFactory(userAgent, listener,
+                connectTimeoutMillis,
+                readTimeoutMillis, allowCrossProtocolRedirects);
+    }
+});
+```
+
+
+## 7.1.5 (2020-07-30)
+
+* fix #2625 add WeakReference<Activity>
+* fix auto full issue
+* fix #2813、#2753、#2766
+
+
+## 7.1.4 (2020-05-14)
+
+* fix #2719 support Exo User-Agent
+* fix #2559
+* update ex_so lib
+* fix proxy cache support Android Q
+* proxy cache skip ssl error
+* add ProxyCacheManager support DEFAULT_MAX_SIZE
+* add ProxyCacheManager FileNameGenerator support custom cache file name
+* add touchLongPress Api
+
+
 ## 7.1.3 (2020-03-19)
 
 * update exoplayer 2.11.3

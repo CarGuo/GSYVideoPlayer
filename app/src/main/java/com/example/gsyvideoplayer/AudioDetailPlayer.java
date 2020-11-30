@@ -86,7 +86,7 @@ public class AudioDetailPlayer extends AppCompatActivity {
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
                         super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(true);
+                        orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
                         isPlay = true;
 
                         //设置 seek 的临近帧。
@@ -192,6 +192,9 @@ public class AudioDetailPlayer extends AppCompatActivity {
     }
 
 
+    /**
+     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);

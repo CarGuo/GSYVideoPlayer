@@ -84,6 +84,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         danmakuVideoPlayer.setLockLand(false);
         danmakuVideoPlayer.setShowFullAnimation(false);
         danmakuVideoPlayer.setNeedLockFull(true);
+        danmakuVideoPlayer.setReleaseWhenLossAudio(false);
 
         //detailPlayer.setOpenPreView(true);
         danmakuVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
@@ -102,7 +103,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
-                orientationUtils.setEnable(true);
+                orientationUtils.setEnable(danmakuVideoPlayer.isRotateWithSystem());
                 isPlay = true;
                 getDanmu();
             }
@@ -180,6 +181,9 @@ public class DanmkuVideoActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);

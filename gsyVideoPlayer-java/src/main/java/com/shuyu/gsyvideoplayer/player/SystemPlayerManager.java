@@ -38,6 +38,8 @@ public class SystemPlayerManager extends BasePlayerManager {
 
     private long lastTimeStamp = 0;
 
+    private boolean isPlaying = false;
+
     @Override
     public IMediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -76,6 +78,9 @@ public class SystemPlayerManager extends BasePlayerManager {
             if (mediaPlayer != null && holder.isValid() && !release) {
                 mediaPlayer.setSurface(holder);
             }
+            if (!isPlaying) {
+                pause();
+            }
         }
     }
 
@@ -100,6 +105,13 @@ public class SystemPlayerManager extends BasePlayerManager {
     }
 
     @Override
+    public void setVolume(float left, float right) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(left, right);
+        }
+    }
+
+    @Override
     public void releaseSurface() {
         if (surface != null) {
             //surface.release();
@@ -112,6 +124,7 @@ public class SystemPlayerManager extends BasePlayerManager {
         if (mediaPlayer != null) {
             release = true;
             mediaPlayer.release();
+            mediaPlayer = null;
         }
         lastTotalRxBytes = 0;
         lastTimeStamp = 0;
@@ -140,6 +153,7 @@ public class SystemPlayerManager extends BasePlayerManager {
     public void start() {
         if (mediaPlayer != null) {
             mediaPlayer.start();
+            isPlaying = true;
         }
     }
 
@@ -147,6 +161,7 @@ public class SystemPlayerManager extends BasePlayerManager {
     public void stop() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
+            isPlaying = false;
         }
     }
 
@@ -154,6 +169,7 @@ public class SystemPlayerManager extends BasePlayerManager {
     public void pause() {
         if (mediaPlayer != null) {
             mediaPlayer.pause();
+            isPlaying = false;
         }
     }
 
@@ -238,7 +254,7 @@ public class SystemPlayerManager extends BasePlayerManager {
                 } else {
                     Debuger.printfError(" not support setSpeed");
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

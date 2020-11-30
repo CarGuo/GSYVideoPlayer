@@ -111,6 +111,12 @@ public class Exo2PlayerManager extends BasePlayerManager {
         }
     }
 
+    @Override
+    public void setVolume(float left, float right) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(left, right);
+        }
+    }
 
     @Override
     public void releaseSurface() {
@@ -125,6 +131,7 @@ public class Exo2PlayerManager extends BasePlayerManager {
         if (mediaPlayer != null) {
             mediaPlayer.setSurface(null);
             mediaPlayer.release();
+            mediaPlayer = null;
         }
         if (dummySurface != null) {
             dummySurface.release();

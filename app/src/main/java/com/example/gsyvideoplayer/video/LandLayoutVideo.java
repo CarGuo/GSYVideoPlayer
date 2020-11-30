@@ -126,4 +126,22 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
     public void setLinkScroll(boolean linkScroll) {
         isLinkScroll = linkScroll;
     }
+
+
+    /**
+     * 定义结束后的显示
+     */
+    @Override
+    protected void changeUiToCompleteClear() {
+        super.changeUiToCompleteClear();
+        setTextAndProgress(0, true);
+        //changeUiToNormal();
+    }
+
+    @Override
+    protected void changeUiToCompleteShow() {
+        super.changeUiToCompleteShow();
+        setTextAndProgress(0, true);
+        //changeUiToNormal();
+    }
 }

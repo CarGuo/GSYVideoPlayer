@@ -16,7 +16,6 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -48,8 +47,8 @@ import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
 
 /**
- Created by guoshuyu on 2018/1/10.
- Exo
+ * Created by guoshuyu on 2018/1/10.
+ * Exo
  */
 public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.EventListener, AnalyticsListener {
 
@@ -77,23 +76,23 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     protected boolean isBuffering = false;
     protected boolean isLooping = false;
     /**
-     是否带上header
+     * 是否带上header
      */
     protected boolean isPreview = false;
     /**
-     是否开启缓存
+     * 是否开启缓存
      */
     protected boolean isCache = false;
     /**
-     dataSource等的帮组类
+     * dataSource等的帮组类
      */
     protected ExoSourceManager mExoHelper;
     /**
-     缓存目录，可以为空
+     * 缓存目录，可以为空
      */
     protected File mCacheDir;
     /**
-     类型覆盖
+     * 类型覆盖
      */
     private String mOverrideExtension;
 
@@ -360,7 +359,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                         if (mLoadControl == null) {
                             mLoadControl = new DefaultLoadControl();
                         }
-                        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, mRendererFactory, mTrackSelector, mLoadControl, null, Looper.getMainLooper());
+                        mInternalPlayer = new SimpleExoPlayer.Builder(mAppContext, mRendererFactory)
+                                .setLooper(Looper.getMainLooper())
+                                .setTrackSelector(mTrackSelector)
+                                .setLoadControl(mLoadControl).build();
                         mInternalPlayer.addListener(IjkExo2MediaPlayer.this);
                         mInternalPlayer.addAnalyticsListener(IjkExo2MediaPlayer.this);
                         mInternalPlayer.addListener(mEventLogger);
@@ -390,10 +392,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     /**
-     是否需要带上header
-     setDataSource之前生效
-
-     @param preview
+     * 是否需要带上header
+     * setDataSource之前生效
+     *
+     * @param preview
      */
     public void setPreview(boolean preview) {
         isPreview = preview;
@@ -409,7 +411,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
 
     /**
-     设置seek 的临近帧。
+     * 设置seek 的临近帧。
      **/
     public void setSeekParameter(@Nullable SeekParameters seekParameters) {
         mInternalPlayer.setSeekParameters(seekParameters);
@@ -417,10 +419,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
 
     /**
-     是否开启cache
-     setDataSource之前生效
-
-     @param cache
+     * 是否开启cache
+     * setDataSource之前生效
+     *
+     * @param cache
      */
     public void setCache(boolean cache) {
         isCache = cache;
@@ -431,10 +433,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     /**
-     cache文件的目录
-     setDataSource之前生效
-
-     @param cacheDir
+     * cache文件的目录
+     * setDataSource之前生效
+     *
+     * @param cacheDir
      */
     public void setCacheDir(File cacheDir) {
         this.mCacheDir = cacheDir;
@@ -453,10 +455,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     /**
-     倍速播放
-
-     @param speed 倍速播放，默认为1
-     @param pitch 音量缩放，默认为1，修改会导致声音变调
+     * 倍速播放
+     *
+     * @param speed 倍速播放，默认为1
+     * @param pitch 音量缩放，默认为1，修改会导致声音变调
      */
     public void setSpeed(@Size(min = 0) float speed, @Size(min = 0) float pitch) {
         PlaybackParameters playbackParameters = new PlaybackParameters(speed, pitch);
@@ -523,11 +525,15 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         //缓冲时顺序为：STATE_BUFFERING -》STATE_READY
         //Log.e(TAG, "onPlayerStateChanged: playWhenReady = " + playWhenReady + ", playbackState = " + playbackState);
         if (isLastReportedPlayWhenReady != playWhenReady || lastReportedPlaybackState != playbackState) {
+            int buffer = 0;
+            if(mInternalPlayer != null) {
+                buffer =  mInternalPlayer.getBufferedPercentage();
+            }
             if (isBuffering) {
                 switch (playbackState) {
                     case Player.STATE_ENDED:
                     case Player.STATE_READY:
-                        notifyOnInfo(IMediaPlayer.MEDIA_INFO_BUFFERING_END, mInternalPlayer.getBufferedPercentage());
+                        notifyOnInfo(IMediaPlayer.MEDIA_INFO_BUFFERING_END, buffer);
                         isBuffering = false;
                         break;
                 }
@@ -544,7 +550,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
             switch (playbackState) {
                 case Player.STATE_BUFFERING:
-                    notifyOnInfo(IMediaPlayer.MEDIA_INFO_BUFFERING_START, mInternalPlayer.getBufferedPercentage());
+                    notifyOnInfo(IMediaPlayer.MEDIA_INFO_BUFFERING_START, buffer);
                     isBuffering = true;
                     break;
                 case Player.STATE_READY:
@@ -645,51 +651,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     @Override
     public void onTracksChanged(EventTime eventTime, TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    @Override
-    public void onLoadStarted(EventTime eventTime, MediaSourceEventListener.LoadEventInfo loadEventInfo, MediaSourceEventListener.MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onLoadCompleted(EventTime eventTime, MediaSourceEventListener.LoadEventInfo loadEventInfo, MediaSourceEventListener.MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onLoadCanceled(EventTime eventTime, MediaSourceEventListener.LoadEventInfo loadEventInfo, MediaSourceEventListener.MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onLoadError(EventTime eventTime, MediaSourceEventListener.LoadEventInfo loadEventInfo, MediaSourceEventListener.MediaLoadData mediaLoadData, IOException error, boolean wasCanceled) {
-
-    }
-
-    @Override
-    public void onDownstreamFormatChanged(EventTime eventTime, MediaSourceEventListener.MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onUpstreamDiscarded(EventTime eventTime, MediaSourceEventListener.MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onMediaPeriodCreated(EventTime eventTime) {
-
-    }
-
-    @Override
-    public void onMediaPeriodReleased(EventTime eventTime) {
-
-    }
-
-    @Override
-    public void onReadingStarted(EventTime eventTime) {
 
     }
 

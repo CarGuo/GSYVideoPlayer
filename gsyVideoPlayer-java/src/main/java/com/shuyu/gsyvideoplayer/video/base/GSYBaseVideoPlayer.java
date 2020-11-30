@@ -68,6 +68,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     protected boolean mLockLand = false;
 
     //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
+    //这个标志为和 mLockLand 冲突，需要和 OrientationUtils  使用
     protected boolean mAutoFullWithSize = false;
 
     //是否需要竖屏全屏的时候判断状态栏
@@ -518,7 +519,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     protected boolean isLockLandByAutoFullSize() {
         boolean isLockLand = mLockLand;
         if (isAutoFullWithSize()) {
-            isLockLand = true;
+            isLockLand = isVerticalVideo();
         }
         return isLockLand;
     }

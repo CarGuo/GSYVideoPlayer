@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.SeekBar;
 
 import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
@@ -220,6 +221,95 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
     public void setExoCache(boolean exoCache) {
         this.mExoCache = exoCache;
     }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+            if (isIfCurrentIsFullscreen()) {
+                Debuger.printfLog("onClickSeekbarFullscreen");
+                mVideoAllCallBack.onClickSeekbarFullscreen(mOriginUrl, mTitle, this);
+            } else {
+                Debuger.printfLog("onClickSeekbar");
+                mVideoAllCallBack.onClickSeekbar(mOriginUrl, mTitle, this);
+            }
+        }
+        if (getGSYVideoManager() != null && mHadPlay) {
+            /**增加这个可以实现拖动后重新播放*/
+            if(!isInPlayingState()) {
+                setStateAndUi(CURRENT_STATE_PLAYING);
+                addTextureView();
+            }
+            try {
+                int time = seekBar.getProgress() * getDuration() / 100;
+                getGSYVideoManager().seekTo(time);
+            } catch (Exception e) {
+                Debuger.printfWarning(e.toString());
+            }
+        }
+        mHadSeekTouch = false;
+    }
+
+    @Override
+    public void onAutoCompletion() {
+        setStateAndUi(CURRENT_STATE_AUTO_COMPLETE);
+
+        mSaveChangeViewTIme = 0;
+        mCurrentPosition = 0;
+
+        if (mTextureViewContainer.getChildCount() > 0) {
+            mTextureViewContainer.removeAllViews();
+        }
+
+        if (!mIfCurrentIsFullscreen)
+            getGSYVideoManager().setLastListener(null);
+        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        if (mContext instanceof Activity) {
+            try {
+                ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        releaseNetWorkState();
+
+        if (mVideoAllCallBack != null && isCurrentMediaListener()) {
+            Debuger.printfLog("onAutoComplete");
+            mVideoAllCallBack.onAutoComplete(mOriginUrl, mTitle, this);
+        }
+    }
+
+    @Override
+    public void onCompletion() {
+        //make me normal first
+        setStateAndUi(CURRENT_STATE_NORMAL);
+
+        mSaveChangeViewTIme = 0;
+        mCurrentPosition = 0;
+
+        if (mTextureViewContainer.getChildCount() > 0) {
+            mTextureViewContainer.removeAllViews();
+        }
+
+        if (!mIfCurrentIsFullscreen) {
+            getGSYVideoManager().setListener(null);
+            getGSYVideoManager().setLastListener(null);
+        }
+        getGSYVideoManager().setCurrentVideoHeight(0);
+        getGSYVideoManager().setCurrentVideoWidth(0);
+
+        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        if (mContext instanceof Activity) {
+            try {
+                ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        releaseNetWorkState();
+    }
+
+
 
     /**********以下重载GSYVideoPlayer的GSYVideoViewBridge相关实现***********/
 

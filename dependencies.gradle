@@ -33,9 +33,9 @@ ext {
 
     imageLoader = '4.9.0'
 
-    gsyVideoVersion = '7.1.3'
+    gsyVideoVersion = '7.1.8'
 
-    exo_player2 = '2.11.3'
+    exo_player2 = '2.12.1'
 
     permissionsdispatcher = '4.3.0'
 
@@ -47,6 +47,7 @@ ext {
             appcompat_v7: "androidx.appcompat:appcompat:${supportLibraryVersion}",
             support_v4  : "androidx.legacy:legacy-support-v4:${otherVersion}",
             design      : "com.google.android.material:material:${otherVersion}",
+            viewpager2      : "androidx.viewpager2:viewpager2:${otherVersion}",
     ]
 
     viewDependencies = [

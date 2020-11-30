@@ -100,7 +100,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         mMapHeadData = mapHeadData;
         GSYVideoModel gsyVideoModel = url.get(position);
         boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, cachePath, gsyVideoModel.getTitle(), changeState);
-        if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+        if (!TextUtils.isEmpty(gsyVideoModel.getTitle()) && mTitleTextView != null ) {
             mTitleTextView.setText(gsyVideoModel.getTitle());
         }
         return set;
@@ -122,7 +122,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         if (gsyBaseVideoPlayer != null) {
             ListGSYVideoPlayer listGSYVideoPlayer = (ListGSYVideoPlayer) gsyBaseVideoPlayer;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
-            if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+            if (!TextUtils.isEmpty(gsyVideoModel.getTitle()) && mTitleTextView != null) {
                 listGSYVideoPlayer.mTitleTextView.setText(gsyVideoModel.getTitle());
             }
         }
@@ -134,7 +134,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         if (gsyVideoPlayer != null) {
             ListGSYVideoPlayer listGSYVideoPlayer = (ListGSYVideoPlayer) gsyVideoPlayer;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
-            if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+            if (!TextUtils.isEmpty(gsyVideoModel.getTitle()) && mTitleTextView != null) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
             }
         }
@@ -207,7 +207,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
             mSaveChangeViewTIme = 0;
             setUp(mUriList, mCache, mPlayPosition, null, mMapHeadData, false);
-            if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
+            if (!TextUtils.isEmpty(gsyVideoModel.getTitle()) && mTitleTextView != null) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
             }
             startPlayLogic();

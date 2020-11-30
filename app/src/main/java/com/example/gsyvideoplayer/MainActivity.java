@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick({R.id.open_btn, R.id.list_btn, R.id.list_btn_2, R.id.list_detail, R.id.clear_cache, R.id.recycler, R.id.recycler_2, R.id.list_detail_list, R.id.web_detail, R.id.danmaku_video, R.id.fragment_video,
             R.id.more_type, R.id.input_type, R.id.open_btn_empty, R.id.open_control, R.id.open_filter, R.id.open_btn_pick, R.id.open_btn_auto, R.id.open_scroll, R.id.open_window, R.id.open_btn_ad,
             R.id.open_btn_multi, R.id.open_btn_ad2, R.id.open_list_ad, R.id.open_custom_exo, R.id.open_simple, R.id.open_switch, R.id.media_codec, R.id.detail_normal_activity,
-            R.id.detail_download_activity, R.id.detail_audio_activity, R.id.detail_subtitle_activity, R.id.change_core})
+            R.id.detail_download_activity, R.id.detail_audio_activity, R.id.detail_subtitle_activity, R.id.change_core, R.id.view_pager2_activity})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.open_simple:
@@ -183,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.detail_audio_activity:
                 JumpUtils.goToDetailAudioActivity(this);
+                break;
+            case R.id.view_pager2_activity:
+                JumpUtils.goToViewPager2Activity(this);
                 break;
             case R.id.change_core:
                 i += 1;

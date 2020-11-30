@@ -92,9 +92,10 @@ public class SimpleListVideoModeAdapter extends BaseAdapter {
         });
         //防止错位设置
         holder.gsyVideoPlayer.setPlayTag(TAG);
+        holder.gsyVideoPlayer.setLockLand(true);
         holder.gsyVideoPlayer.setPlayPosition(position);
-        //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
-        holder.gsyVideoPlayer.setAutoFullWithSize(true);
+        //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，这个标志为和 setLockLand 冲突，需要和 orientationUtils 使用
+        holder.gsyVideoPlayer.setAutoFullWithSize(false);
         //音频焦点冲突时是否释放
         holder.gsyVideoPlayer.setReleaseWhenLossAudio(false);
         //全屏动画

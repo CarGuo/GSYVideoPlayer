@@ -1,14 +1,22 @@
 package com.example.gsyvideoplayer;
 
+import androidx.annotation.Nullable;
 import androidx.multidex.MultiDexApplication;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
 import tv.danmaku.ijk.media.exo2.ExoSourceManager;
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
+import com.example.gsyvideoplayer.exosource.GSYExoHttpDataSourceFactory;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.TransferListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
@@ -17,6 +25,8 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.squareup.leakcanary.LeakCanary;
+
+import java.io.File;
 
 import static com.google.android.exoplayer2.util.Util.inferContentType;
 
@@ -34,7 +44,7 @@ public class GSYApplication extends MultiDexApplication {
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
+        //LeakCanary.install(this);
 
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();
@@ -61,18 +71,25 @@ public class GSYApplication extends MultiDexApplication {
 
         //IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
-        /*ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
+        ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
             @Override
             public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
-                Uri contentUri = Uri.parse(dataSource);
-                int contentType = inferContentType(dataSource);
-                switch (contentType) {
-                    case C.TYPE_HLS:
-                        return new HlsMediaSource.Factory(CustomSourceTag.getDataSourceFactory(GSYApplication.this.getApplicationContext(), preview)).createMediaSource(contentUri);
-                }
+                //如果返回 null，就使用默认的
                 return null;
             }
-        });*/
+
+            /**
+             * 通过自定义的 HttpDataSource ，可以设置自签证书或者忽略证书
+             * demo 里的 GSYExoHttpDataSourceFactory 使用的是忽略证书
+             * */
+            @Override
+            public HttpDataSource.BaseFactory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+                //如果返回 null，就使用默认的
+                return new GSYExoHttpDataSourceFactory(userAgent, listener,
+                        connectTimeoutMillis,
+                        readTimeoutMillis, allowCrossProtocolRedirects);
+            }
+        });
 
         /*GSYVideoManager.instance().setPlayerInitSuccessListener(new IPlayerInitSuccessListener() {
             ///播放器初始化成果回调

@@ -114,7 +114,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
      */
     @Override
     public boolean getDetailOrientationRotateAuto() {
-        return true;
+        return false;
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.view.Surface;
 
@@ -16,6 +17,7 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.RawDataSourceProvider;
 
+import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +27,14 @@ import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
- IJKPLayer
- Created by guoshuyu on 2018/1/11.
+ * IJKPLayer
+ * Created by guoshuyu on 2018/1/11.
  */
 
 public class IjkPlayerManager extends BasePlayerManager {
 
     /**
-     log level
+     * log level
      */
     private static int logLevel = IjkMediaPlayer.IJK_LOG_DEFAULT;
 
@@ -82,6 +84,15 @@ public class IjkPlayerManager extends BasePlayerManager {
                     if (uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
                         RawDataSourceProvider rawDataSourceProvider = RawDataSourceProvider.create(context, uri);
                         mediaPlayer.setDataSource(rawDataSourceProvider);
+                    } else if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+                        ParcelFileDescriptor descriptor;
+                        try {
+                            descriptor = context.getContentResolver().openFileDescriptor(uri, "r");
+                            FileDescriptor fileDescriptor = descriptor.getFileDescriptor();
+                            mediaPlayer.setDataSource(fileDescriptor);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         mediaPlayer.setDataSource(url, gsyModel.getMapHeadData());
                     }
@@ -153,6 +164,12 @@ public class IjkPlayerManager extends BasePlayerManager {
         }
     }
 
+    @Override
+    public void setVolume(float left, float right) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(left, right);
+        }
+    }
 
     @Override
     public void releaseSurface() {
@@ -166,6 +183,7 @@ public class IjkPlayerManager extends BasePlayerManager {
     public void release() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 

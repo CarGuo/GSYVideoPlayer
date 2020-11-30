@@ -9,9 +9,11 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.Surface;
@@ -29,6 +31,7 @@ import com.shuyu.gsyvideoplayer.utils.NetInfoModule;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
 
 /**
@@ -300,7 +303,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 开始播放逻辑
      */
     protected void startButtonLogic() {
-        if (mVideoAllCallBack != null && mCurrentState == CURRENT_STATE_NORMAL) {
+        if (mVideoAllCallBack != null && (mCurrentState == CURRENT_STATE_NORMAL
+                || mCurrentState == CURRENT_STATE_AUTO_COMPLETE)) {
             Debuger.printfLog("onClickStartIcon");
             mVideoAllCallBack.onClickStartIcon(mOriginUrl, mTitle, this);
         } else if (mVideoAllCallBack != null) {
@@ -622,6 +626,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             Debuger.printfLog("onAutoComplete");
             mVideoAllCallBack.onAutoComplete(mOriginUrl, mTitle, this);
         }
+        mHadPlay = false;
     }
 
     @Override
@@ -654,6 +659,12 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         releaseNetWorkState();
 
+        if (mVideoAllCallBack != null) {
+            Debuger.printfLog("onComplete");
+            mVideoAllCallBack.onComplete(mOriginUrl, mTitle, this);
+        }
+
+        mHadPlay = false;
     }
 
     @Override
@@ -1144,6 +1155,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
     /**
      * 是否需要覆盖拓展类型，目前只针对exoPlayer内核模式有效
+     *
      * @param overrideExtension 比如传入 m3u8,mp4,avi 等类型
      */
     public void setOverrideExtension(String overrideExtension) {

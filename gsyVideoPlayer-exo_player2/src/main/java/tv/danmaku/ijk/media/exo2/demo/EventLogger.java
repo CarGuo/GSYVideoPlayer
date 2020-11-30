@@ -29,7 +29,6 @@ import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
-import com.google.android.exoplayer2.drm.DefaultDrmSessionEventListener;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.MetadataOutput;
 import com.google.android.exoplayer2.metadata.emsg.EventMessage;
@@ -56,8 +55,7 @@ import java.util.Locale;
 
 
 public final class EventLogger implements Player.EventListener, MetadataOutput,
-        AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener,
-        DefaultDrmSessionEventListener {
+        AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener{
 
     private static final String TAG = "EventLogger";
     private static final int MAX_TIMELINE_ITEM_LINES = 3;
@@ -230,12 +228,6 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
         Log.d(TAG, "audioDisabled [" + getSessionTimeString() + "]");
     }
 
-    @Override
-    public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-        printInternalError("audioTrackUnderrun [" + bufferSize + ", " + bufferSizeMs + ", "
-                + elapsedSinceLastFeedMs + "]", null);
-    }
-
     // VideoRendererEventListener
 
     @Override
@@ -276,28 +268,6 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
         Log.d(TAG, "renderedFirstFrame [" + surface + "]");
     }
 
-    // DefaultDrmSessionEventListener
-
-    @Override
-    public void onDrmSessionManagerError(Exception e) {
-        printInternalError("drmSessionManagerError", e);
-    }
-
-    @Override
-    public void onDrmKeysRestored() {
-        Log.d(TAG, "drmKeysRestored [" + getSessionTimeString() + "]");
-    }
-
-    @Override
-    public void onDrmKeysRemoved() {
-        Log.d(TAG, "drmKeysRemoved [" + getSessionTimeString() + "]");
-    }
-
-    @Override
-    public void onDrmKeysLoaded() {
-        Log.d(TAG, "drmKeysLoaded [" + getSessionTimeString() + "]");
-    }
-
     //MediaSourceEventListener
 
     @Override
@@ -321,51 +291,6 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
             Log.d(TAG, "  ...");
         }
         Log.d(TAG, "]");
-    }
-
-    @Override
-    public void onMediaPeriodCreated(int windowIndex, MediaSource.MediaPeriodId mediaPeriodId) {
-
-    }
-
-    @Override
-    public void onMediaPeriodReleased(int windowIndex, MediaSource.MediaPeriodId mediaPeriodId) {
-
-    }
-
-    @Override
-    public void onLoadStarted(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onLoadCompleted(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onLoadCanceled(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onLoadError(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData, IOException error, boolean wasCanceled) {
-        printInternalError("loadError", error);
-    }
-
-    @Override
-    public void onReadingStarted(int windowIndex, MediaSource.MediaPeriodId mediaPeriodId) {
-
-    }
-
-    @Override
-    public void onUpstreamDiscarded(int windowIndex, MediaSource.MediaPeriodId mediaPeriodId, MediaLoadData mediaLoadData) {
-
-    }
-
-    @Override
-    public void onDownstreamFormatChanged(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId, MediaLoadData mediaLoadData) {
-
     }
 
     // Internal methods
