@@ -54,24 +54,24 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:7.1.8'
+implementation 'com.shuyu:GSYVideoPlayer:8.0.0'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:7.1.8'
+implementation 'com.shuyu:gsyVideoPlayer-java:8.0.0'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.8'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:8.0.0'
 
 //根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:7.1.8'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:7.1.8'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:7.1.8'
-implementation 'com.shuyu:gsyVideoPlayer-x64:7.1.8'
-implementation 'com.shuyu:gsyVideoPlayer-x86:7.1.8'
+implementation 'com.shuyu:gsyVideoPlayer-armv5:8.0.0'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.0.0'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:8.0.0'
+implementation 'com.shuyu:gsyVideoPlayer-x64:8.0.0'
+implementation 'com.shuyu:gsyVideoPlayer-x86:8.0.0'
 
 ```
 
@@ -81,13 +81,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:7.1.8'
+implementation 'com.shuyu:gsyVideoPlayer-java:8.0.0'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.8'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:8.0.0'
 
 //更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.1.8'
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:8.0.0'
 
 ```
 
@@ -206,6 +206,12 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 五、近期版本
 
+
+## 8.0.0 (2020-12-01)
+
+* fix #3040 CommonUtil 获取网络信息空指针异常
+* update ijk to FFMPEG 4.0
+
 ## 7.1.8 (2020-10-26)
 
 * update support exoplayer 2.12.1
@@ -240,27 +246,6 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
     }
 });
 ```
-
-
-## 7.1.5 (2020-07-30)
-
-* fix #2625 add WeakReference<Activity>
-* fix auto full issue
-* fix #2813、#2753、#2766
-
-
-## 7.1.4 (2020-05-14)
-
-* fix #2719 support Exo User-Agent
-* fix #2559
-* update ex_so lib
-* fix proxy cache support Android Q
-* proxy cache skip ssl error
-* add ProxyCacheManager support DEFAULT_MAX_SIZE
-* add ProxyCacheManager FileNameGenerator support custom cache file name
-* add touchLongPress Api
-
-
 
 ### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
 
