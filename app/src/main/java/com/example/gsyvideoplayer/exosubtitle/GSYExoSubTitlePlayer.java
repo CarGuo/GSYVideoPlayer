@@ -45,7 +45,7 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
                     @Override
                     public void run() {
                         if (mTrackSelector == null) {
-                            mTrackSelector = new DefaultTrackSelector();
+                            mTrackSelector = new DefaultTrackSelector(mAppContext);
                         }
                         mEventLogger = new EventLogger(mTrackSelector);
                         boolean preferExtensionDecoders = true;
@@ -81,8 +81,8 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
                             MediaSource textMediaSource = getTextSource(Uri.parse(mSubTitile));
                             mMediaSource = new MergingMediaSource(mMediaSource, textMediaSource);
                         }
-
-                        mInternalPlayer.prepare(mMediaSource);
+                        mInternalPlayer.setMediaSource(mMediaSource);
+                        mInternalPlayer.prepare();
                         mInternalPlayer.setPlayWhenReady(false);
                     }
                 }
