@@ -117,7 +117,7 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
                     @Override
                     public void run() {
                         if (mTrackSelector == null) {
-                            mTrackSelector = new DefaultTrackSelector();
+                            mTrackSelector = new DefaultTrackSelector(mAppContext);
                         }
                         mEventLogger = new EventLogger(mTrackSelector);
                         boolean preferExtensionDecoders = true;
@@ -150,7 +150,8 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
                         if (playIndex > 0) {
                             mInternalPlayer.seekTo(playIndex, C.INDEX_UNSET);
                         }
-                        mInternalPlayer.prepare(mMediaSource, false, false);
+                        mInternalPlayer.setMediaSource(mMediaSource, false);
+                        mInternalPlayer.prepare();
                         mInternalPlayer.setPlayWhenReady(false);
                     }
                 }
