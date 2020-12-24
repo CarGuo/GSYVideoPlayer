@@ -93,7 +93,7 @@ public class DetailPlayer extends AppCompatActivity {
 
 
         /***************rtsp 配置****************/
-        VideoOptionModel videoOptionModel =
+        /*VideoOptionModel videoOptionModel =
                 new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);
         List<VideoOptionModel> list = new ArrayList<>();
         list.add(videoOptionModel);
@@ -111,7 +111,7 @@ public class DetailPlayer extends AppCompatActivity {
         list.add(videoOptionMode14);
         list.add(videoOptionMode15);
         list.add(videoOptionMode17);
-        GSYVideoManager.instance().setOptionModelList(list);
+        GSYVideoManager.instance().setOptionModelList(list);*/
         /***************rtsp 配置****************/
 
         /// ijk rtmp
@@ -343,7 +343,8 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://39.104.119.42/elevator-1.0/api/downFile?path=demo.ogv";
         //String url = "http://pointshow.oss-cn-hangzhou.aliyuncs.com/transcode/ORIGINAL/Mnbc61586842828593.mp4";
         //ssl error
-        String url =  "https://file.shftz.cn:8443/filesystem/download/10/2019/3/26/ce2c7c66-e9eb-42be-adf6-f9008385ea8c.mov/play";
+        //String url =  "http://qlqfj2ujf.hn-bkt.clouddn.com/aijianji-fuwupeixunshipin_index.m3u8";
+        String url =  "http://chuangqiyun.oss-cn-shenzhen.aliyuncs.com/2020-12-08/tMjWe78t82.mp4";
         //String url =  "https://us-4.wl-cdn.com/hls/20200225/fde4f8ef394731f38d68fe6d601cfd56/index.m3u8";
         //String url =  "https://cdn61.ytbbs.tv/cn/tv/55550/55550-1/play.m3u8?md5=v4sI4lWlo4XojzeAjgBGaQ&expires=1521204012&token=55550";
         //String url =  "http://1253492636.vod2.myqcloud.com/2e5fc148vodgzp1253492636/d08af82d4564972819086152830/plHZZoSkje0A.mp4";
@@ -355,7 +356,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://api.ciguang.tv/avideo/play?num=02-041-0491&type=flv&v=1&client=android";
         //String url = "http://video.7k.cn/app_video/20171213/276d8195/v.m3u8.mp4";
         //String url = "http://103.233.191.21/riak/riak-bucket/6469ac502e813a4c1df7c99f364e70c1.mp4";
-        //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+        //String url = "http://7xjmzj.com1.z0.glb.cl ouddn.com/20171026175005_JObCxCE2.mp4";
         //String url = "https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8";
         //String url = "http://cdn.tiaobatiaoba.com/Upload/square/2017-11-02/1509585140_1279.mp4";
 
