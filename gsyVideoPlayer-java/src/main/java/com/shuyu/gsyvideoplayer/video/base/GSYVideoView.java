@@ -1088,6 +1088,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 是否需要加载显示暂停的cover图片
      * 打开状态下，暂停退到后台，再回到前台不会显示黑屏，但可以对某些机型有概率出现OOM
      * 关闭情况下，暂停退到后台，再回到前台显示黑屏
+     * 目前某些特定情况可能会出现切换视频时黑屏：
+     * https://github.com/CarGuo/GSYVideoPlayer/issues/1757#issuecomment-751981100
      *
      * @param showPauseCover 默认true
      */
