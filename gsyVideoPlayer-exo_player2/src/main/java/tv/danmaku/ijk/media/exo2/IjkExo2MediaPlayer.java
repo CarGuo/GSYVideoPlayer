@@ -338,7 +338,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     protected void prepareAsyncInternal() {
-        new Handler(Looper.getMainLooper()).post(
+        new Handler(Looper.myLooper()).post(
                 new Runnable() {
                     @Override
                     public void run() {
@@ -360,7 +360,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                             mLoadControl = new DefaultLoadControl();
                         }
                         mInternalPlayer = new SimpleExoPlayer.Builder(mAppContext, mRendererFactory)
-                                .setLooper(Looper.getMainLooper())
+                                .setLooper(Looper.myLooper())
                                 .setTrackSelector(mTrackSelector)
                                 .setLoadControl(mLoadControl).build();
                         mInternalPlayer.addListener(IjkExo2MediaPlayer.this);

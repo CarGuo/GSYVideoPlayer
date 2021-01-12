@@ -36,7 +36,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //api project(':gsyVideoPlayer-java')
-    //api project(':gsyVideoPlayer-exo_player2')
+    api project(':gsyVideoPlayer-exo_player2')
     //api project(':gsyVideoPlayer-armv5')
     //api project(':gsyVideoPlayer-armv7a')
     //api project(':gsyVideoPlayer-armv64')
@@ -49,7 +49,7 @@ dependencies {
     //api "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
     api "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
-    api "com.shuyu:GSYVideoPlayer-exo2:$gsyVideoVersion"
+    //api "com.shuyu:GSYVideoPlayer-exo2:$gsyVideoVersion"
     //api "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
     //api "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
     //api "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
