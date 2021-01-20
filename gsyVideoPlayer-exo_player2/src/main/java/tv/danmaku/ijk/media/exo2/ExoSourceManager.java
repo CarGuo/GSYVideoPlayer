@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.LoopingMediaSource;
@@ -32,17 +34,18 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheKeyFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheSpan;
-import com.google.android.exoplayer2.upstream.cache.CacheWriter;
 import com.google.android.exoplayer2.upstream.cache.ContentMetadata;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Map;
 import java.util.NavigableSet;
 
-import static com.google.android.exoplayer2.upstream.cache.CacheKeyFactory.DEFAULT;
+import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
 
 /**
  * Created by guoshuyu on 2018/5/18.
@@ -108,6 +111,7 @@ public class ExoSourceManager {
         }
         mDataSource = dataSource;
         Uri contentUri = Uri.parse(dataSource);
+        MediaItem mediaItem = MediaItem.fromUri(contentUri);
         int contentType = inferContentType(dataSource, overrideExtension);
 
         String uerAgent = null;
@@ -129,7 +133,7 @@ public class ExoSourceManager {
                 }
             };
             return new ProgressiveMediaSource.Factory(
-                    factory).createMediaSource(contentUri);
+                    factory).createMediaSource(mediaItem);
 
         }
 
@@ -138,27 +142,27 @@ public class ExoSourceManager {
                 mediaSource = new SsMediaSource.Factory(
                         new DefaultSsChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)),
                         new DefaultDataSourceFactory(mAppContext, null,
-                                getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(contentUri);
+                                getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
                 break;
             case C.TYPE_DASH:
                 mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)),
                         new DefaultDataSourceFactory(mAppContext, null,
-                                getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(contentUri);
+                                getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
                 break;
             case C.TYPE_HLS:
-                mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)).createMediaSource(contentUri);
+                mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)).createMediaSource(mediaItem);
                 break;
             case TYPE_RTMP:
                 RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory(null);
                 mediaSource = new ProgressiveMediaSource.Factory(rtmpDataSourceFactory,
                         new DefaultExtractorsFactory())
-                        .createMediaSource(contentUri);
+                        .createMediaSource(mediaItem);
                 break;
             case C.TYPE_OTHER:
             default:
                 mediaSource = new ProgressiveMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable,
                         preview, cacheDir, uerAgent), new DefaultExtractorsFactory())
-                        .createMediaSource(contentUri);
+                        .createMediaSource(mediaItem);
                 break;
         }
         if (isLooping) {
