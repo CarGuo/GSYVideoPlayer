@@ -92,9 +92,14 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
     public MediaSource getTextSource(Uri subTitle) {
         //todo C.SELECTION_FLAG_AUTOSELECT language MimeTypes
         Format textFormat = new Format.Builder()
+                /// 其他的比如 text/x-ssa ，text/vtt，application/ttml+xml 等等
                 .setSampleMimeType(MimeTypes.APPLICATION_SUBRIP)
                 .setSelectionFlags(C.SELECTION_FLAG_FORCED)
-                .setLanguage("en").build();
+                /// 如果出现字幕不显示，可以通过修改这个语音去对应，
+                //  这个问题在内部的 selectTextTrack 时，TextTrackScore 通过 getFormatLanguageScore 方法判断语言获取匹配不上
+                //  就会不出现字幕
+                .setLanguage("en")
+                .build();
 
         MediaItem.Subtitle subtitle = new MediaItem.Subtitle(
                 subTitle, checkNotNull(textFormat.sampleMimeType), textFormat.language, textFormat.selectionFlags);
