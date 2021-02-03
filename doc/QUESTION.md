@@ -350,6 +350,18 @@ https://github.com/CarGuo/GSYVideoPlayer/issues/2347#issuecomment-565701916
 
 https://github.com/CarGuo/GSYVideoPlayer/issues/2997#issuecomment-711480841
 
+
+### 25、seek 后花屏、死循环 buffer 问题
+
+```
+invalid dts/pts combination 740157300
+```
+
+- dts没有值时，返回回去后，解码状态全部进行了reset，则送入的第一帧信息应该为关键帧，否则该帧需要参考其他帧，产生花屏。
+- dts时间戳有误，将出现dts转化为微秒后永远小于seek传入时间问题，则永远无法返回packet，导致seek僵死。
+- 判断packet是否为关键帧，忽略了该packet是否为视频，如果该packet为音频并且flag & AV_PKT_FLAG_KEY的结果为真，则将返回该packet并清空seek标准。后续读到的视频也有非关键帧的可能，从而导致花屏。
+
+
 #### 更多配置
 
 更多配置可通过下方链接和图片参考配置
