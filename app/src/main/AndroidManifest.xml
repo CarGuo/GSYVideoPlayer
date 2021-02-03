@@ -19,6 +19,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:allowNativeHeapPointerTagging="false"
         android:usesCleartextTraffic="true">
         <activity android:name=".ViewPager2Activity"></activity>
         <activity
