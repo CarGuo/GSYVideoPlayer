@@ -3,6 +3,7 @@ package com.shuyu.gsyvideoplayer.video;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -165,11 +166,11 @@ public class GSYSampleADVideoPlayer extends ListGSYVideoPlayer {
      * 广告期间不需要双击
      */
     @Override
-    protected void touchDoubleUp() {
+    protected void touchDoubleUp(MotionEvent e) {
         if (isAdModel) {
             return;
         }
-        super.touchDoubleUp();
+        super.touchDoubleUp(e);
     }
 
     /**

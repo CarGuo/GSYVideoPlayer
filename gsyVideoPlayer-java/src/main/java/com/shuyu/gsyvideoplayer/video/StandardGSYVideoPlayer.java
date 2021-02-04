@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -377,7 +378,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
      * 点击触摸显示和隐藏逻辑
      */
     @Override
-    protected void onClickUiToggle() {
+    protected void onClickUiToggle(MotionEvent e) {
         if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
             setViewShowState(mLockScreen, VISIBLE);
             return;
