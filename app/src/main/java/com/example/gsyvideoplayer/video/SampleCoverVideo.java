@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer.video;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -192,13 +193,13 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
     protected boolean byStartedClick;
 
     @Override
-    protected void onClickUiToggle() {
+    protected void onClickUiToggle(MotionEvent e) {
         if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
             setViewShowState(mLockScreen, VISIBLE);
             return;
         }
         byStartedClick = true;
-        super.onClickUiToggle();
+        super.onClickUiToggle(e);
 
     }
 

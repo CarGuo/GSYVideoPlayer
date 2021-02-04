@@ -2,6 +2,7 @@ package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -44,7 +45,7 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
     }
 
     @Override
-    protected void touchDoubleUp() {
+    protected void touchDoubleUp(MotionEvent e) {
         //super.touchDoubleUp();
         //不需要双击暂停
     }

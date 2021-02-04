@@ -788,7 +788,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             gsyVideoPlayer.addTextureView();
             //隐藏掉所有的弹出状态哟
-            gsyVideoPlayer.onClickUiToggle();
+            gsyVideoPlayer.onClickUiToggle(null);
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
             gsyVideoPlayer.setSmallVideoTextureView(new SmallVideoTouch(gsyVideoPlayer, marginLeft, marginTop));
 

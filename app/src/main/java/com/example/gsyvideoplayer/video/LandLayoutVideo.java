@@ -47,14 +47,14 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
                 gestureDetector = new GestureDetector(getContext().getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {
-                        touchDoubleUp();
+                        touchDoubleUp(e);
                         return super.onDoubleTap(e);
                     }
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
                         if (!mChangePosition && !mChangeVolume && !mBrightness) {
-                            onClickUiToggle();
+                            onClickUiToggle(e);
                         }
                         return super.onSingleTapConfirmed(e);
                     }

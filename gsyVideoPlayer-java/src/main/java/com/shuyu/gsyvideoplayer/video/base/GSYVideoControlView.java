@@ -409,7 +409,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 }
                 startPlayLogic();
             } else if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE) {
-                onClickUiToggle();
+                onClickUiToggle(null);
             }
         } else if (i == R.id.surface_container) {
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
@@ -431,14 +431,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected GestureDetector gestureDetector = new GestureDetector(getContext().getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            touchDoubleUp();
+            touchDoubleUp(e);
             return super.onDoubleTap(e);
         }
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (!mChangePosition && !mChangeVolume && !mBrightness) {
-                onClickUiToggle();
+                onClickUiToggle(e);
             }
             return super.onSingleTapConfirmed(e);
         }
@@ -461,7 +461,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         float y = event.getY();
 
         if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
-            onClickUiToggle();
+            onClickUiToggle(event);
             startDismissControlViewTimer();
             return true;
         }
@@ -794,7 +794,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      * 双击暂停/播放
      * 如果不需要，重载为空方法即可
      */
-    protected void touchDoubleUp() {
+    protected void touchDoubleUp(MotionEvent e) {
         if (!mHadPlay) {
             return;
         }
@@ -1118,7 +1118,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected abstract void dismissBrightnessDialog();
 
-    protected abstract void onClickUiToggle();
+    /**
+     * @param  e MotionEvent 存在 null 的情况，外部使用需要判空
+     *           null 时说明不是手动触发而是自动触发的
+     * */
+    protected abstract void onClickUiToggle(MotionEvent e);
 
     protected abstract void hideAllWidget();
 
