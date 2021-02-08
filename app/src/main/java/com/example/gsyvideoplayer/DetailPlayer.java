@@ -23,6 +23,7 @@ import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
@@ -84,10 +85,10 @@ public class DetailPlayer extends AppCompatActivity {
         //如果视频帧数太高导致卡画面不同步
         //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 30);
         //如果视频seek之后从头播放
-        //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
-        //list<VideoOptionModel> list = new ArrayList<>();
-        //list.add(videoOptionModel);
-        //GSYVideoManager.instance().setOptionModelList(list);
+//        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
+//        List<VideoOptionModel> list = new ArrayList<>();
+//        list.add(videoOptionModel);
+//        GSYVideoManager.instance().setOptionModelList(list);
 
         //GSYVideoManager.instance().setTimeOut(4000, true);
 
@@ -137,6 +138,9 @@ public class DetailPlayer extends AppCompatActivity {
 
         /**仅仅横屏旋转，不变直*/
         //orientationUtils.setOnlyRotateLand(true);
+
+        ProxyCacheManager.DEFAULT_MAX_SIZE = 1024 * 1024 * 1024 * 1024;
+        ProxyCacheManager.DEFAULT_MAX_COUNT = 8;
 
         Map<String, String> header = new HashMap<>();
         header.put("ee", "33");
@@ -320,7 +324,7 @@ public class DetailPlayer extends AppCompatActivity {
         //断网自动重新链接，url前接上ijkhttphook:
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
 
-        //String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
         //String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/out2.m3u8";
@@ -344,7 +348,9 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://pointshow.oss-cn-hangzhou.aliyuncs.com/transcode/ORIGINAL/Mnbc61586842828593.mp4";
         //ssl error
         //String url =  "http://qlqfj2ujf.hn-bkt.clouddn.com/aijianji-fuwupeixunshipin_index.m3u8";
-        String url =  "http://chuangqiyun.oss-cn-shenzhen.aliyuncs.com/2020-12-08/tMjWe78t82.mp4";
+        //String url =  "http://122.228.250.223/al.flv.huya.com/src/1394565191-1394565191-5989611887484993536-2789253838-10057-A-0-1-imgplus.flv?ali_dispatch_cold_stream=on&ali_redirect_ex_hot=0";
+        //String url =  "http://1258557277.vod2.myqcloud.com/204551f3vodcq1258557277/8cc724f05285890813366287037/playlist_eof.m3u8";
+        //String url =  "http://video.85tstss.com/record/live-nianhui-all_x264.mp4 ";
         //String url =  "https://ops-aiops.oss-cn-hongkong.aliyuncs.com/vod/6103_42349_nvrendesuipian2020H265_play.ts";
         //String url =  "https://us-4.wl-cdn.com/hls/20200225/fde4f8ef394731f38d68fe6d601cfd56/index.m3u8";
         //String url =  "https://cdn61.ytbbs.tv/cn/tv/55550/55550-1/play.m3u8?md5=v4sI4lWlo4XojzeAjgBGaQ&expires=1521204012&token=55550";
