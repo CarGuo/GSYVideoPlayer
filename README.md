@@ -19,6 +19,7 @@
 **窗口**|**小窗口、多窗体下（包括桌面）的小窗口播放。**
 **广告**|**片头广告、跳过广告支持、中间插入广告功能。**
 **字幕**|**[exo2模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)。**
+**dash**|**exo2 模式支持dash**
 **更多**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持；锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **自定义**|**可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
 
@@ -54,24 +55,24 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:8.0.0'
+implementation 'com.shuyu:GSYVideoPlayer:8.1.0'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:8.0.0'
+implementation 'com.shuyu:gsyVideoPlayer-java:8.1.0'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:8.0.0'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:8.1.0'
 
 //根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:8.0.0'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.0.0'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:8.0.0'
-implementation 'com.shuyu:gsyVideoPlayer-x64:8.0.0'
-implementation 'com.shuyu:gsyVideoPlayer-x86:8.0.0'
+implementation 'com.shuyu:gsyVideoPlayer-armv5:8.1.0'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.1.0'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:8.1.0'
+implementation 'com.shuyu:gsyVideoPlayer-x64:8.1.0'
+implementation 'com.shuyu:gsyVideoPlayer-x86:8.1.0'
 
 ```
 
@@ -81,13 +82,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:8.0.0'
+implementation 'com.shuyu:gsyVideoPlayer-java:8.1.0'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:8.0.0'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:8.1.0'
 
 //更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:8.0.0'
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:8.1.0'
 
 ```
 
@@ -205,6 +206,15 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 <img src="./img/07.gif" height="240px"/>
 
 ## 五、近期版本
+
+
+## 8.1.0 (2020-02-02)
+
+* fix  #3126 crash arm64 with Android11
+* update support #3128 pass MotionEvent
+* update target 30
+
+
 
 
 ## 8.0.0 (2020-12-01)
