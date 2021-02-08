@@ -69,26 +69,25 @@ allprojects {
 #### A、直接引入
 ```
 //完整版引入
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.0'
+implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.0'
 
 ```
+
 
 #### B、添加java和你想要的so支持：
 
 ```
 
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.0'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.0'
 
-
-//是否需要ExoPlayer模式
 implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.0'
 
-//根据你的需求
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.0'
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.0'
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.1.0'
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.0'
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.0'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.1.0'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.0'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.0'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.0'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-base:v8.1.0'
+
 
 ```
 
@@ -98,6 +97,7 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 方法引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
+
 implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.0'
 
 implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.0'
