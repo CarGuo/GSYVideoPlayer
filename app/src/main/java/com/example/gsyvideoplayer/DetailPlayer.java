@@ -139,8 +139,8 @@ public class DetailPlayer extends AppCompatActivity {
         /**仅仅横屏旋转，不变直*/
         //orientationUtils.setOnlyRotateLand(true);
 
-        ProxyCacheManager.DEFAULT_MAX_SIZE = 1024 * 1024 * 1024 * 1024;
-        ProxyCacheManager.DEFAULT_MAX_COUNT = 8;
+        //ProxyCacheManager.DEFAULT_MAX_SIZE = 1024 * 1024 * 1024 * 1024;
+        //ProxyCacheManager.DEFAULT_MAX_COUNT = 8;
 
         Map<String, String> header = new HashMap<>();
         header.put("ee", "33");
