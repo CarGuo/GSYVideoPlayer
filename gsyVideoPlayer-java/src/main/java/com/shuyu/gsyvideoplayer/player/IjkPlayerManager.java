@@ -20,11 +20,14 @@ import com.shuyu.gsyvideoplayer.utils.RawDataSourceProvider;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
+import tv.danmaku.ijk.media.player.IjkMediaMeta;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
 /**
  * IJKPLayer
@@ -296,6 +299,33 @@ public class IjkPlayerManager extends BasePlayerManager {
     @Override
     public boolean isSurfaceSupportLockCanvas() {
         return true;
+    }
+
+
+    public IjkTrackInfo[] getTrackInfo() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getTrackInfo();
+        }
+        return null;
+    }
+
+    public int getSelectedTrack(int trackType) {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getSelectedTrack(trackType);
+        }
+        return -1;
+    }
+
+    public void selectTrack(int track) {
+        if (mediaPlayer != null) {
+            mediaPlayer.selectTrack(track);
+        }
+    }
+
+    public void deselectTrack(int track) {
+        if (mediaPlayer != null) {
+            mediaPlayer.deselectTrack(track);
+        }
     }
 
     private void initIJKOption(IjkMediaPlayer ijkMediaPlayer, List<VideoOptionModel> optionModelList) {
