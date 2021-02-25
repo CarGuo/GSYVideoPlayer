@@ -1,7 +1,7 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
-## 8.0.1 (2020-02-02)
+## 8.1.0 (2020-02-02)
 
 * fix  #3126 crash arm64 with Android11 
 * update support #3128 pass MotionEvent 
