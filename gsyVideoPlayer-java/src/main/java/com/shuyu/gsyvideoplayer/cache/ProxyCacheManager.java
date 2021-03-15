@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.TrustManager;
+
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
@@ -43,6 +46,10 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
     private ICacheManager.ICacheAvailableListener cacheAvailableListener;
 
     protected ProxyCacheUserAgentHeadersInjector userAgentHeadersInjector = new ProxyCacheUserAgentHeadersInjector();
+
+    private HostnameVerifier v;
+
+    private TrustManager[] trustAllCerts;
 
     /**
      * 单例管理器
@@ -169,6 +176,8 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
             builder.maxCacheSize(DEFAULT_MAX_SIZE);
         }
         builder.headerInjector(userAgentHeadersInjector);
+        builder.hostnameVerifier(v);
+        builder.trustAllCerts(trustAllCerts);
         if (fileNameGenerator != null) {
             builder.fileNameGenerator(fileNameGenerator);
         }
@@ -192,6 +201,8 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
         } else {
             builder.maxCacheSize(DEFAULT_MAX_SIZE);
         }
+        builder.hostnameVerifier(v);
+        builder.trustAllCerts(trustAllCerts);
         return builder.build();
 
     }
@@ -244,5 +255,21 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
 
     public static void clearFileNameGenerator() {
         ProxyCacheManager.fileNameGenerator = null;
+    }
+
+    public HostnameVerifier getHostnameVerifier() {
+        return v;
+    }
+
+    public void setHostnameVerifier(HostnameVerifier v) {
+        this.v = v;
+    }
+
+    public TrustManager[] getTrustAllCerts() {
+        return trustAllCerts;
+    }
+
+    public void setTrustAllCerts(TrustManager[] trustAllCerts) {
+        this.trustAllCerts = trustAllCerts;
     }
 }

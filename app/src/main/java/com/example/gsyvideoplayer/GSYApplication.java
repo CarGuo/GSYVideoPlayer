@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
 import com.shuyu.gsyvideoplayer.player.IPlayerInitSuccessListener;
@@ -27,11 +28,17 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import static com.google.android.exoplayer2.util.Util.inferContentType;
 
 /**
- Created by shuyu on 2016/11/11.
+ * Created by shuyu on 2016/11/11.
  */
 
 public class GSYApplication extends MultiDexApplication {
@@ -71,6 +78,8 @@ public class GSYApplication extends MultiDexApplication {
 
         //IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
+        GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
+
         ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
             @Override
             public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
@@ -101,6 +110,30 @@ public class GSYApplication extends MultiDexApplication {
                 }
             }
         });*/
+
+        ProxyCacheManager.instance().setHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
+        final TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                    }
+
+                    @Override
+                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                    }
+
+                    @Override
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+                }
+        };
+        ProxyCacheManager.instance().setTrustAllCerts(trustAllCerts);
 
 
     }
