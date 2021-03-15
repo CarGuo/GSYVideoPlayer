@@ -45,21 +45,25 @@ public class HttpUrlSource implements Source {
     private static final int MAX_REDIRECTS = 5;
     private final SourceInfoStorage sourceInfoStorage;
     private final HeaderInjector headerInjector;
+    private final HostnameVerifier v;
+    private final TrustManager[] trustAllCerts;
     private SourceInfo sourceInfo;
     private HttpURLConnection connection;
     private InputStream inputStream;
 
-    public HttpUrlSource(String url) {
-        this(url, SourceInfoStorageFactory.newEmptySourceInfoStorage());
+    public HttpUrlSource(String url, HostnameVerifier v, TrustManager[] trustAllCerts) {
+        this(url, SourceInfoStorageFactory.newEmptySourceInfoStorage(), v, trustAllCerts);
     }
 
-    public HttpUrlSource(String url, SourceInfoStorage sourceInfoStorage) {
-        this(url, sourceInfoStorage, new EmptyHeadersInjector());
+    public HttpUrlSource(String url, SourceInfoStorage sourceInfoStorage, HostnameVerifier v, TrustManager[] trustAllCerts) {
+        this(url, sourceInfoStorage, new EmptyHeadersInjector(), v, trustAllCerts);
     }
 
-    public HttpUrlSource(String url, SourceInfoStorage sourceInfoStorage, HeaderInjector headerInjector) {
+    public HttpUrlSource(String url, SourceInfoStorage sourceInfoStorage, HeaderInjector headerInjector, HostnameVerifier v, TrustManager[] trustAllCerts) {
         this.sourceInfoStorage = checkNotNull(sourceInfoStorage);
         this.headerInjector = checkNotNull(headerInjector);
+        this.v = v;
+        this.trustAllCerts = trustAllCerts;
         SourceInfo sourceInfo = sourceInfoStorage.get(url);
         this.sourceInfo = sourceInfo != null ? sourceInfo :
                 new SourceInfo(url, Integer.MIN_VALUE, ProxyCacheUtils.getSupposablyMime(url));
@@ -69,6 +73,8 @@ public class HttpUrlSource implements Source {
         this.sourceInfo = source.sourceInfo;
         this.sourceInfoStorage = source.sourceInfoStorage;
         this.headerInjector = source.headerInjector;
+        this.trustAllCerts = source.trustAllCerts;
+        this.v = source.v;
     }
 
     @Override
@@ -163,32 +169,9 @@ public class HttpUrlSource implements Source {
         int redirectCount = 0;
         String url = this.sourceInfo.url;
         do {
-            if (url.startsWith("https")) {
-                /**去除证书限制**/
+            if (url.startsWith("https") && v != null && trustAllCerts != null) {
                 connection = (HttpURLConnection) new URL(url).openConnection();
-                ((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                });
-                // Create a trust manager that does not validate certificate chains
-                final TrustManager[] trustAllCerts = new TrustManager[]{
-                        new X509TrustManager() {
-                            @Override
-                            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                            }
-
-                            @Override
-                            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                            }
-
-                            @Override
-                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                return null;
-                            }
-                        }
-                };
+                ((HttpsURLConnection) connection).setHostnameVerifier(v);
                 // Install the all-trusting trust manager
                 final SSLContext sslContext;
                 try {
@@ -197,18 +180,12 @@ public class HttpUrlSource implements Source {
                     // Create an ssl socket factory with our all-trusting manager
                     final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
                     ((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
-                    ((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
-                        @Override
-                        public boolean verify(String hostname, SSLSession session) {
-                            return true;
-                        }
-                    });
+                    ((HttpsURLConnection) connection).setHostnameVerifier(v);
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 } catch (KeyManagementException e) {
                     e.printStackTrace();
                 }
-                /**去除证书限制**/
             } else {
                 connection = (HttpURLConnection) new URL(url).openConnection();
             }

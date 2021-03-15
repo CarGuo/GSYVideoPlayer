@@ -151,7 +151,7 @@
         <activity
             android:name=".simple.SimplePlayer"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Full" />
         <activity
             android:name=".simple.SimpleDetailActivityMode1"
