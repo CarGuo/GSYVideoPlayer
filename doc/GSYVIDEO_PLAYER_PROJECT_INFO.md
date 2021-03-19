@@ -53,10 +53,19 @@
 例如Demo中： [ListMultiVideoActivity](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/ListMultiVideoActivity.java) 、[CustomManager](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/video/manager/CustomManager.java) 、[MultiSampleVideo](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/video/MultiSampleVideo.java)  就演示了如何通过自定义Manager实现，多个播放内核同时播放的效果。
 
 
-### 4、整套的自定义demo
+
+### 4、全屏和非全屏是通过重构 View 来实现的，主要参数有 `cloneParams` \ `resolveFullVideoShow` 、 `startWindowFullscreen` 等方法的实现，另外外部获取记得水涌 player.getCurrentPlayer() 获取区分
+
+
+### 5、整套的自定义demo
 
 [演示整套自定义的Demo](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exo)
 
 
-#### 5、还无法解决(｀・ω・´)，那就提个issue吧！
+
+#### 6、还无法解决(｀・ω・´)，那就提个issue吧！
+
+
+
+
 
