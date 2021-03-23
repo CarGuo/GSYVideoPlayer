@@ -128,7 +128,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
         }
         Log.d(TAG, "Tracks [");
         // Log tracks associated to renderers.
-        for (int rendererIndex = 0; rendererIndex < mappedTrackInfo.length; rendererIndex++) {
+        for (int rendererIndex = 0; rendererIndex < mappedTrackInfo.getRendererCount(); rendererIndex++) {
             TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(rendererIndex);
             TrackSelection trackSelection = trackSelections.get(rendererIndex);
             if (rendererTrackGroups.length > 0) {
@@ -140,11 +140,11 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
                     Log.d(TAG, "    Group:" + groupIndex + ", adaptive_supported=" + adaptiveSupport + " [");
                     for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
                         String status = getTrackStatusString(trackSelection, trackGroup, trackIndex);
-                        String formatSupport = getFormatSupportString(
+                        /*String formatSupport = getFormatSupportString(
                                 mappedTrackInfo.getTrackFormatSupport(rendererIndex, groupIndex, trackIndex));
                         Log.d(TAG, "      " + status + " Track:" + trackIndex + ", "
                                 + Format.toLogString(trackGroup.getFormat(trackIndex))
-                                + ", supported=" + formatSupport);
+                                + ", supported=" + formatSupport);*/
                     }
                     Log.d(TAG, "    ]");
                 }
@@ -164,7 +164,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
             }
         }
         // Log tracks not associated with a renderer.
-        TrackGroupArray unassociatedTrackGroups = mappedTrackInfo.getUnassociatedTrackGroups();
+        TrackGroupArray unassociatedTrackGroups = mappedTrackInfo.getUnmappedTrackGroups();
         if (unassociatedTrackGroups.length > 0) {
             Log.d(TAG, "  Renderer:None [");
             for (int groupIndex = 0; groupIndex < unassociatedTrackGroups.length; groupIndex++) {
@@ -204,11 +204,6 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     @Override
     public void onAudioEnabled(DecoderCounters counters) {
         Log.d(TAG, "audioEnabled [" + getSessionTimeString() + "]");
-    }
-
-    @Override
-    public void onAudioSessionId(int audioSessionId) {
-        Log.d(TAG, "audioSessionId [" + audioSessionId + "]");
     }
 
     @Override
