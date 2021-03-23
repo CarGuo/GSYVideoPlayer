@@ -78,7 +78,7 @@ public class GSYApplication extends MultiDexApplication {
 
         //IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
 
-        GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
+        //GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
 
         ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
             @Override
