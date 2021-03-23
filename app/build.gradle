@@ -74,6 +74,7 @@ dependencies {
     annotationProcessor viewDependencies.apt_butterKnife
     implementation viewDependencies.butterKnife
     implementation androidDependencies.recyclerView
+    implementation androidDependencies.core
     implementation viewDependencies.DanmakuFlameMaster
     implementation viewDependencies.ndkbitmap_armv7a
     implementation viewDependencies.ndkbitmap_armv5

@@ -685,11 +685,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     @Override
-    public void onAudioSessionId(EventTime eventTime, int audioSessionId) {
-        this.audioSessionId = audioSessionId;
-    }
-
-    @Override
     public void onAudioUnderrun(EventTime eventTime, int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
 
     }
