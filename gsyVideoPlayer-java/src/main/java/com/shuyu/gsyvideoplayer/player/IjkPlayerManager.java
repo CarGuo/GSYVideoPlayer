@@ -84,10 +84,10 @@ public class IjkPlayerManager extends BasePlayerManager {
             } else {
                 if (!TextUtils.isEmpty(url)) {
                     Uri uri = Uri.parse(url);
-                    if (uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
+                    if (uri != null && uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
                         RawDataSourceProvider rawDataSourceProvider = RawDataSourceProvider.create(context, uri);
                         mediaPlayer.setDataSource(rawDataSourceProvider);
-                    } else if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+                    } else if (uri != null && uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                         ParcelFileDescriptor descriptor;
                         try {
                             descriptor = context.getContentResolver().openFileDescriptor(uri, "r");
