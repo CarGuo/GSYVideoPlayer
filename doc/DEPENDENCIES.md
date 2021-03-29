@@ -10,24 +10,24 @@
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:8.1.1'
+implementation 'com.shuyu:GSYVideoPlayer:8.1.2'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:8.1.1'
+implementation 'com.shuyu:gsyVideoPlayer-java:8.1.2'
 
 //是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:8.1.1'
+implementation 'com.shuyu:GSYVideoPlayer-exo2:8.1.2'
 
 //根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:8.1.1'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.1.1'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:8.1.1'
-implementation 'com.shuyu:gsyVideoPlayer-x64:8.1.1'
-implementation 'com.shuyu:gsyVideoPlayer-x86:8.1.1'
+implementation 'com.shuyu:gsyVideoPlayer-armv5:8.1.2'
+implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.1.2'
+implementation 'com.shuyu:gsyVideoPlayer-arm64:8.1.2'
+implementation 'com.shuyu:gsyVideoPlayer-x64:8.1.2'
+implementation 'com.shuyu:gsyVideoPlayer-x86:8.1.2'
 
 ```
 
@@ -37,13 +37,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:8.1.1'
+implementation 'com.shuyu:gsyVideoPlayer-java:8.1.2'
 
 //是否需要ExoPlayer模式
-implementatcon 'com.shuyu:GSYVideoPlayer-exo2:8.1.1'
+implementatcon 'com.shuyu:GSYVideoPlayer-exo2:8.1.2'
 
 //更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:8.1.1'
+implementation 'com.shuyu:gsyVideoPlayer-ex_so:8.1.2'
 
 ```
 
@@ -69,7 +69,7 @@ allprojects {
 #### A、直接引入
 ```
 //完整版引入
-implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.1'
+implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.2'
 
 ```
 
@@ -78,15 +78,15 @@ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.1'
 
 ```
 
-implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.1'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.2'
 
-implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.1'
+implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.2'
 
-implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.1.1'
-implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.1'
-implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.1'
-implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.1'
-implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-base:v8.1.1'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.1.2'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.2'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.2'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.2'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-base:v8.1.2'
 
 
 ```
@@ -98,8 +98,8 @@ C 方法引入的so支持mpeg编码和其他补充协议，但是so包相对变�
  
 ```
 
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.1'
+implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.2'
 
-implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.1'
+implementatcon 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.2'
 
 ```

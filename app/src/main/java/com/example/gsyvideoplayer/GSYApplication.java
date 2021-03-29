@@ -111,7 +111,7 @@ public class GSYApplication extends MultiDexApplication {
             }
         });*/
 
-        ProxyCacheManager.instance().setHostnameVerifier(new HostnameVerifier() {
+        /*ProxyCacheManager.instance().setHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
                 return true;
@@ -133,7 +133,7 @@ public class GSYApplication extends MultiDexApplication {
                     }
                 }
         };
-        ProxyCacheManager.instance().setTrustAllCerts(trustAllCerts);
+        ProxyCacheManager.instance().setTrustAllCerts(trustAllCerts);*/
 
 
     }

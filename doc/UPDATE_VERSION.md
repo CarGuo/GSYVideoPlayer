@@ -1,7 +1,14 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
-## 8.1.0 (2020-03-15)
+## 8.1.2 (2020-03-29)
+
+* update support  exo_player2 = '2.13.2'
+* ijk uri.getScheme #3194
+* fix error cache server when HostnameVerifier &  TrustManager null
+
+
+## 8.1.1 (2020-03-15)
 
 * #3174 fix HostnameVerifier for google play
 
