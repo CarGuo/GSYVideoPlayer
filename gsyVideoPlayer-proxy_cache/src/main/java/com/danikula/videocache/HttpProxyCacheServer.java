@@ -440,13 +440,13 @@ public class HttpProxyCacheServer {
 
 
         public Builder hostnameVerifier(HostnameVerifier v) {
-            this.v = checkNotNull(v);
+            this.v = v;
             return this;
         }
 
 
         public Builder trustAllCerts(TrustManager[] trustAllCerts) {
-            this.trustAllCerts = checkNotNull(trustAllCerts);
+            this.trustAllCerts = trustAllCerts;
             return this;
         }
 
