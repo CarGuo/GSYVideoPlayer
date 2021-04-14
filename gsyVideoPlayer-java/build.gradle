@@ -38,7 +38,7 @@ dependencies {
 
     def viewDependencies = rootProject.ext.viewDependencies
     api viewDependencies.ijkplayer_java
-    api viewDependencies.ijkplayer_exo
+    //api viewDependencies.ijkplayer_exo
     api viewDependencies.transitionseverywhere
     api project(':gsyVideoPlayer-proxy_cache')
     api project(':gsyVideoPlayer-base')
