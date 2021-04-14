@@ -61,4 +61,4 @@ dependencies {
 
 }
 
-apply from: './bintray.gradle'
+//apply from: './bintray.gradle'

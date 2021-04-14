@@ -20,7 +20,7 @@ ext {
 
     butterKnifeVersion = '10.1.0'
 
-    ijkplayer = '0.8.8'
+    CarGuoIjk = '1.0.0'
 
     DanmakuFlameMaster = '0.9.25'
     DanmakuFlameMasterSo = '0.9.21'
@@ -54,13 +54,7 @@ ext {
     viewDependencies = [
             butterKnife          : "com.jakewharton:butterknife:${butterKnifeVersion}",
             apt_butterKnife      : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
-            ijkplayer_java       : "tv.danmaku.ijk.media:ijkplayer-java:${ijkplayer}",
-            ijkplayer_armv7a     : "tv.danmaku.ijk.media:ijkplayer-armv7a:${ijkplayer}",
-            ijkplayer_armv5      : "tv.danmaku.ijk.media:ijkplayer-armv5:${ijkplayer}",
-            ijkplayer_arm64      : "tv.danmaku.ijk.media:ijkplayer-arm64:${ijkplayer}",
-            ijkplayer_x86_64     : "tv.danmaku.ijk.media:ijkplayer-x86_64:${ijkplayer}",
-            ijkplayer_x86        : "tv.danmaku.ijk.media:ijkplayer-x86:${ijkplayer}",
-            ijkplayer_exo        : "tv.danmaku.ijk.media:ijkplayer-exo:${ijkplayer}",
+            ijkplayer_java       : "com.github.CarGuo:GSYIjkJava:${CarGuoIjk}",
             transitionseverywhere: "com.andkulikov:transitionseverywhere:${transitionseverywhere}",
             DanmakuFlameMaster   : "com.github.ctiao:DanmakuFlameMaster:${DanmakuFlameMaster}",
             ndkbitmap_armv7a     : "com.github.ctiao:ndkbitmap-armv7a:${DanmakuFlameMasterSo}",
