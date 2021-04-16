@@ -46,33 +46,46 @@
 
 ## 一、使用依赖
 
-#### 7.0版本使用了anndroidx，support版本请看6.x.x，请查看：[--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
+#### 7.0 版本开始使用了anndroidx，support版本请看6.x.x，请查看：[--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
 
-### 1、JCenter 引入方法（推荐）
+
+### 1、Jitpack 引入方法（推荐， JCenter 即将关闭）
+
+
+#### First、在project下的build.gradle添加
+
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+}
+```
 
 **你可以选择下面三种的其中一种，在module下的build.gradle添加。**
 
 #### A、直接引入
 ```
-//完整版引入
-implementation 'com.shuyu:GSYVideoPlayer:8.1.2'
+ //完整版引入
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.3-jitpack'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:8.1.2'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.3-jitpack'
 
-//是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:8.1.2'
+ //是否需要ExoPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-exo_player2:v8.1.3-jitpack'
 
-//根据你的需求ijk模式的so
-implementation 'com.shuyu:gsyVideoPlayer-armv5:8.1.2'
-implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.1.2'
-implementation 'com.shuyu:gsyVideoPlayer-arm64:8.1.2'
-implementation 'com.shuyu:gsyVideoPlayer-x64:8.1.2'
-implementation 'com.shuyu:gsyVideoPlayer-x86:8.1.2'
+ //根据你的需求ijk模式的so
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv64:v8.1.3-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.3-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.3-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.3-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86_64:v8.1.3-jitpack'
 
 ```
 
@@ -82,13 +95,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  
 ```
-implementation 'com.shuyu:gsyVideoPlayer-java:8.1.2'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.3-jitpack'
 
-//是否需要ExoPlayer模式
-implementation 'com.shuyu:GSYVideoPlayer-exo2:8.1.2'
+ //是否需要ExoPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-exo_player2:v8.1.3-jitpack'
 
-//更多ijk的编码支持
-implementation 'com.shuyu:gsyVideoPlayer-ex_so:8.1.2'
+ //更多ijk的编码支持
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.3-jitpack'
 
 ```
 
@@ -207,14 +220,15 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 五、近期版本
 
+### v8.1.3-jitpack(2020-04-16)
+
+* move jitpack
 
 ## 8.1.2 (2020-03-29)
 
 * update support  exo_player2 = '2.13.2'
 * ijk uri.getScheme #3194
 * fix error cache server when HostnameVerifier &  TrustManager null
-
-
 
 ## 8.1.1 (2020-03-15)
 
@@ -227,48 +241,6 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 * update support #3128 pass MotionEvent
 * update target 30
 
-
-
-
-## 8.0.0 (2020-12-01)
-
-* fix #3040 CommonUtil 获取网络信息空指针异常
-* update ijk to FFMPEG 4.0
-
-## 7.1.8 (2020-10-26)
-
-* update support exoplayer 2.12.1
-* fix #3016、[#3009](https://github.com/CarGuo/GSYVideoPlayer/issues/3009)
-
-
-## 7.1.6 (2020-09-08)
-
-* fix #2922 deprecated SkipSSLChain ，support api custom dataSource
-* 因为忽略证书会导致一些 Google Play 的审核问题所以改为自定义支持
-* 如果需要使用 SkipSSLChain ，可以参考 demo 里面的 exosource
-* 另外通过 getHttpDataSourceFactory 也可以自定义需要的 HttpDataSource 逻辑
-
-```
-ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
-    @Override
-    public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
-        //如果返回 null，就使用默认的
-        return null;
-    }
-
-    /**
-     * 通过自定义的 HttpDataSource ，可以设置自签证书或者忽略证书
-     * demo 里的 GSYExoHttpDataSourceFactory 使用的是忽略证书
-     * */
-    @Override
-    public HttpDataSource.BaseFactory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
-        //如果返回 null，就使用默认的
-        return new GSYExoHttpDataSourceFactory(userAgent, listener,
-                connectTimeoutMillis,
-                readTimeoutMillis, allowCrossProtocolRedirects);
-    }
-});
-```
 
 ### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
 
