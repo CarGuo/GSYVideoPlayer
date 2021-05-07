@@ -31,21 +31,17 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheKeyFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheSpan;
 import com.google.android.exoplayer2.upstream.cache.ContentMetadata;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
-import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.Map;
 import java.util.NavigableSet;
 
-import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
 
 /**
  * Created by guoshuyu on 2018/5/18.
@@ -150,7 +146,9 @@ public class ExoSourceManager {
                                 getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
                 break;
             case C.TYPE_HLS:
-                mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)).createMediaSource(mediaItem);
+                mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent))
+                        .setAllowChunklessPreparation(true)
+                        .createMediaSource(mediaItem);
                 break;
             case TYPE_RTMP:
                 RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory(null);
@@ -338,7 +336,9 @@ public class ExoSourceManager {
             Cache cache = getCacheSingleInstance(context, cacheDir);
             if (cache != null) {
                 isCached = resolveCacheState(cache, mDataSource);
-                return new CacheDataSourceFactory(cache, getDataSourceFactory(context, preview, uerAgent), CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+                CacheDataSource.Factory factory = new CacheDataSource.Factory();
+                return factory.
+                        setCache(cache).setCacheReadDataSourceFactory(getDataSourceFactory(context, preview, uerAgent)).setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
             }
         }
         return getDataSourceFactory(context, preview, uerAgent);
