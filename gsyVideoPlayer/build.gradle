@@ -28,5 +28,3 @@ dependencies {
     //api "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
 
 }
-
-//apply from: './bintray.gradle'

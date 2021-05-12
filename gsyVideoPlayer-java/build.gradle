@@ -13,5 +13,3 @@ dependencies {
     //api "com.shuyu:gsyVideoPlayer-base:$gsyVideoVersion"
     //api "com.shuyu:gsyvideoplayer-androidvideocache:$gsyVideoVersion"
 }
-
-//apply from: './bintray.gradle'
