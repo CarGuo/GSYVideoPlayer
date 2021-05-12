@@ -5,5 +5,3 @@ apply from: "${rootDir.path}/gradle/base.gradle"
 dependencies {
     api viewDependencies.ijkplayer_java
 }
-
-//apply from: './bintray.gradle'

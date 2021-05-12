@@ -8,5 +8,3 @@ dependencies {
     api project(':gsyVideoPlayer-base')
     //api "com.shuyu:gsyVideoPlayer-base:$gsyVideoVersion"
 }
-
-//apply from: './bintray.gradle'
