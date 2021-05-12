@@ -1,0 +1,19 @@
+def PROJ_VERSION = "8.1.2"
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 30
+        versionCode 21
+        versionName PROJ_VERSION
+    }
+    productFlavors.all {
+        it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+}
