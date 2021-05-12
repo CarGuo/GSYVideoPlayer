@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 apply from: "${rootDir.path}/gradle/base.gradle"
 
 dependencies {
-    implementation androidDependencies.appcompat_v7
+    implementation androidDependencies.appCompat
 
     api viewDependencies.ijkplayer_java
     //api viewDependencies.ijkplayer_exo
