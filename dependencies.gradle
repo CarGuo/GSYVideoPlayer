@@ -1,22 +1,12 @@
-allprojects {
-    repositories {
-        maven { url 'https://maven.google.com' }
-        google()
-        jcenter()
-        maven { url 'https://jitpack.io' }
-    }
-}
-
 ext {
     //Android
-    androidBuildToolsVersion = "30.0.1"
+    androidBuildToolsVersion = "30.0.3"
     androidMinSdkVersion = 19
     androidTargetSdkVersion = 30
     androidCompileSdkVersion = 30
 
     supportLibraryVersion = '1.1.0'
     otherVersion = '1.0.0'
-
 
     butterKnifeVersion = '10.1.0'
 
@@ -25,19 +15,19 @@ ext {
     DanmakuFlameMaster = '0.9.25'
     DanmakuFlameMasterSo = '0.9.21'
 
-    transitionseverywhere = '2.0.0-beta01'
+    transitionseverywhere = '2.1.0'
 
     floatWindow = '1.0.6'
 
-    leakcanary = '1.6.3'
+    leakcanary = '2.7'
 
-    imageLoader = '4.9.0'
+    imageLoader = '4.12.0'
 
     gsyVideoVersion = '8.1.2'
 
     exo_player2 = '2.13.2'
 
-    permissionsdispatcher = '4.3.0'
+    permissionsdispatcher = '4.8.0'
 
     okhttp = '3.2.0'
     okhttpUtil = '2.6.2'
@@ -72,7 +62,6 @@ ext {
     dataDependencies = [
             videocache                    : "com.shuyu:gsyvideoplayer-androidvideocache:${gsyVideoVersion}",
             leakcanary                    : "com.squareup.leakcanary:leakcanary-android:${leakcanary}",
-            leakcanary_no_op              : "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanary}",
             okhttpUtil                    : "com.squareup.okhttp3:okhttp:${okhttp}",
             okhttp                        : "com.zhy:okhttputils:${okhttpUtil}",
 
