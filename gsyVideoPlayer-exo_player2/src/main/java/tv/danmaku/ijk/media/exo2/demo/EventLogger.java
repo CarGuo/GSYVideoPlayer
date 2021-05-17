@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Surface;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -125,12 +126,12 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     }
 
     @Override
-    public void onPlayerError(ExoPlaybackException e) {
+    public void onPlayerError(@NonNull ExoPlaybackException e) {
         Log.e(TAG, "playerFailed [" + getSessionTimeString() + "]", e);
     }
 
     @Override
-    public void onTracksChanged(TrackGroupArray ignored, TrackSelectionArray trackSelections) {
+    public void onTracksChanged(@NonNull TrackGroupArray ignored, @NonNull TrackSelectionArray trackSelections) {
         MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
         if (mappedTrackInfo == null) {
             Log.d(TAG, "Tracks []");
@@ -203,7 +204,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     // MetadataOutput
 
     @Override
-    public void onMetadata(Metadata metadata) {
+    public void onMetadata(@NonNull Metadata metadata) {
         Log.d(TAG, "onMetadata [");
         printMetadata(metadata, "  ");
         Log.d(TAG, "]");
@@ -279,7 +280,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     //MediaSourceEventListener
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+    public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
         int periodCount = timeline.getPeriodCount();
         int windowCount = timeline.getWindowCount();
         Log.d(TAG, "sourceInfo [periodCount=" + periodCount + ", windowCount=" + windowCount);

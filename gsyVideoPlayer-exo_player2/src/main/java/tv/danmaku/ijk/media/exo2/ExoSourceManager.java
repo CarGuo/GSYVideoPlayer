@@ -123,6 +123,7 @@ public class ExoSourceManager {
                 e.printStackTrace();
             }
             DataSource.Factory factory = new DataSource.Factory() {
+                @NonNull
                 @Override
                 public DataSource createDataSource() {
                     return rawResourceDataSource;
