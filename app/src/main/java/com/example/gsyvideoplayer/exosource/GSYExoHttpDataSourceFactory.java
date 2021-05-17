@@ -15,12 +15,13 @@
  */
 package com.example.gsyvideoplayer.exosource;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource.Factory;
 import com.google.android.exoplayer2.upstream.TransferListener;
-
-import androidx.annotation.Nullable;
 
 /**
  A {@link Factory} that produces {@link GSYDefaultHttpDataSource} instances.
@@ -108,7 +109,7 @@ public final class GSYExoHttpDataSourceFactory extends BaseFactory {
 
     @Override
     protected GSYDefaultHttpDataSource createDataSourceInternal(
-            HttpDataSource.RequestProperties defaultRequestProperties) {
+            @NonNull HttpDataSource.RequestProperties defaultRequestProperties) {
         GSYDefaultHttpDataSource dataSource =
                 new GSYDefaultHttpDataSource(
                         userAgent,

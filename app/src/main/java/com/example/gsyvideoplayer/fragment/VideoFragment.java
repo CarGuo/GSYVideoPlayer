@@ -2,10 +2,14 @@ package com.example.gsyvideoplayer.fragment;
 
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
@@ -17,8 +21,6 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -66,12 +68,12 @@ public class VideoFragment extends Fragment {
             int firstVisibleItem, lastVisibleItem;
 
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
@@ -96,10 +98,7 @@ public class VideoFragment extends Fragment {
     }
 
     public boolean onBackPressed() {
-        if (GSYVideoManager.backFromWindowFull(getActivity())) {
-            return true;
-        }
-        return false;
+        return GSYVideoManager.backFromWindowFull(getActivity());
     }
 
     @Override

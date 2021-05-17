@@ -3,6 +3,8 @@ package com.shuyu.gsyvideoplayer;
 import android.content.res.Configuration;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationOption;
@@ -134,7 +136,7 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
      * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         //如果旋转了就全屏
         boolean backUpIsPlay = isPlay;
         if (!isPause && getGSYADVideoPlayer().getVisibility() == View.VISIBLE) {
