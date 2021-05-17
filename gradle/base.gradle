@@ -16,4 +16,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    implementation androidDependencies.annotation
 }
