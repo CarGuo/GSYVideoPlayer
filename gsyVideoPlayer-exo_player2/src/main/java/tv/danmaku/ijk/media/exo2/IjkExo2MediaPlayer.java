@@ -5,12 +5,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Surface;
+import android.view.SurfaceHolder;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.Size;
-
-import android.view.Surface;
-import android.view.SurfaceHolder;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -27,7 +26,6 @@ import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
@@ -35,7 +33,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -704,8 +701,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     @Override
-    public void onRenderedFirstFrame(EventTime eventTime, Surface surface) {
-
+    public void onRenderedFirstFrame(EventTime eventTime, Object output, long renderTimeMs) {
     }
 
     @Override
