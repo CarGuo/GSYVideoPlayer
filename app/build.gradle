@@ -5,8 +5,6 @@ apply from: "${rootDir.path}/gradle/base.gradle"
 android {
     defaultConfig {
         applicationId "com.example.gsyvideoplayer"
-        versionCode 6
-        versionName "5.0.0"
         multiDexEnabled true
 
         javaCompileOptions {
@@ -32,10 +30,6 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.releaseConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        debug {
-            minifyEnabled false
         }
     }
 
