@@ -1,14 +1,22 @@
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+    compileSdkVersion globalConfiguration.androidCompileSdkVersion
+    buildToolsVersion globalConfiguration.androidBuildToolsVersion
+
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 30
+        minSdkVersion globalConfiguration.androidMinSdkVersion
+        targetSdkVersion globalConfiguration.androidTargetSdkVersion
         versionCode 21
         versionName PROJ_VERSION
     }
     buildTypes.all {
         it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 }
 
