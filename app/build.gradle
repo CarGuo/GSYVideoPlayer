@@ -1,22 +1,13 @@
 apply plugin: 'com.android.application'
 
+apply from: "${rootDir.path}/gradle/base.gradle"
 
 android {
-
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-    compileSdkVersion globalConfiguration.androidCompileSdkVersion
-    buildToolsVersion globalConfiguration.androidBuildToolsVersion
-
     defaultConfig {
         applicationId "com.example.gsyvideoplayer"
-
-        multiDexEnabled true
-
-        minSdkVersion globalConfiguration.androidMinSdkVersion
-        targetSdkVersion globalConfiguration.androidTargetSdkVersion
-
         versionCode 6
         versionName "5.0.0"
+        multiDexEnabled true
 
         javaCompileOptions {
             annotationProcessorOptions.includeCompileClasspath = true
@@ -25,9 +16,7 @@ android {
             //设置支持的SO库架构
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
         }
-
     }
-
 
     signingConfigs {
         releaseConfig {
@@ -39,7 +28,6 @@ android {
     }
 
     buildTypes {
-
         release {
             minifyEnabled false
             signingConfig signingConfigs.releaseConfig
@@ -48,39 +36,23 @@ android {
 
         debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
-
-    compileOptions { targetCompatibility JavaVersion.VERSION_1_8 }
 
     lintOptions {
         abortOnError false
     }
-
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    def viewDependencies = rootProject.ext.viewDependencies
-    def androidDependencies = rootProject.ext.androidDependencies
-    def dataDependencies = rootProject.ext.dataDependencies
+
     annotationProcessor viewDependencies.apt_butterKnife
     implementation viewDependencies.butterKnife
     implementation androidDependencies.recyclerView
     implementation androidDependencies.core
     implementation viewDependencies.DanmakuFlameMaster
-    implementation viewDependencies.ndkbitmap_armv7a
-    implementation viewDependencies.ndkbitmap_armv5
-    implementation viewDependencies.ndkbitmap_x86
+    implementation viewDependencies.ndkBitmap
     implementation viewDependencies.glide
-    implementation viewDependencies.glideProcessor
     implementation androidDependencies.support_v4
     implementation androidDependencies.design
     implementation androidDependencies.viewpager2
@@ -125,6 +97,4 @@ dependencies {
 
 
     debugImplementation dataDependencies.leakcanary
-    releaseImplementation dataDependencies.leakcanary_no_op
-
 }
