@@ -3,13 +3,12 @@ package tv.danmaku.ijk.media.exo2;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
-
-import androidx.annotation.Nullable;
-
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -39,6 +38,7 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NavigableSet;
 
@@ -53,7 +53,7 @@ public class ExoSourceManager {
 
     private static final long DEFAULT_MAX_SIZE = 512 * 1024 * 1024;
 
-    public static final int TYPE_RTMP = 4;
+    public static final int TYPE_RTMP = 100;
 
     private static Cache mCache;
     /**
@@ -69,11 +69,11 @@ public class ExoSourceManager {
     private static int sHttpConnectTimeout = -1;
 
 
-    private static boolean s = false;
+    private static final boolean s = false;
 
-    private Context mAppContext;
+    private final Context mAppContext;
 
-    private Map<String, String> mMapHeadData;
+    private final Map<String, String> mMapHeadData;
 
     private String mDataSource;
 
@@ -188,8 +188,8 @@ public class ExoSourceManager {
 
     @SuppressLint("WrongConstant")
     @C.ContentType
-    public static int inferContentType(String fileName, @Nullable String overrideExtension) {
-        fileName = Util.toLowerInvariant(fileName);
+    public static int inferContentType(@NonNull String fileName, @Nullable String overrideExtension) {
+        fileName = fileName.toLowerCase(Locale.US);
         if (fileName.startsWith("rtmp:")) {
             return TYPE_RTMP;
         } else {

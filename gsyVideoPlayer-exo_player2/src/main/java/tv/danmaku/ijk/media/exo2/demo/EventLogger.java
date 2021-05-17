@@ -16,9 +16,10 @@
 package tv.danmaku.ijk.media.exo2.demo;
 
 import android.os.SystemClock;
-import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.Surface;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -39,7 +40,6 @@ import com.google.android.exoplayer2.metadata.id3.Id3Frame;
 import com.google.android.exoplayer2.metadata.id3.PrivFrame;
 import com.google.android.exoplayer2.metadata.id3.TextInformationFrame;
 import com.google.android.exoplayer2.metadata.id3.UrlLinkFrame;
-import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -48,14 +48,14 @@ import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedT
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.google.android.exoplayer2.video.VideoSize;
 
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
 
 public final class EventLogger implements Player.EventListener, MetadataOutput,
-        AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener{
+        AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener {
 
     private static final String TAG = "EventLogger";
     private static final int MAX_TIMELINE_ITEM_LINES = 3;
@@ -103,9 +103,19 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
         Log.d(TAG, "shuffleModeEnabled [" + shuffleModeEnabled + "]");
     }
 
-    @Override
-    public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
-        Log.d(TAG, "positionDiscontinuity [" + getDiscontinuityReasonString(reason) + "]");
+    private static String getDiscontinuityReasonString(@Player.DiscontinuityReason int reason) {
+        switch (reason) {
+            case Player.DISCONTINUITY_REASON_AUTO_TRANSITION:
+                return "AUTO_TRANSITION";
+            case Player.DISCONTINUITY_REASON_SEEK:
+                return "SEEK";
+            case Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT:
+                return "SEEK_ADJUSTMENT";
+            case Player.DISCONTINUITY_REASON_INTERNAL:
+                return "INTERNAL";
+            default:
+                return "?";
+        }
     }
 
     @Override
@@ -253,14 +263,17 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     }
 
     @Override
-    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
-                                   float pixelWidthHeightRatio) {
-        Log.d(TAG, "videoSizeChanged [" + width + ", " + height + "]");
+    public void onPositionDiscontinuity(
+            @NonNull Player.PositionInfo oldPosition,
+            @NonNull Player.PositionInfo newPosition,
+            @Player.DiscontinuityReason int reason
+    ) {
+        Log.d(TAG, "positionDiscontinuity [" + getDiscontinuityReasonString(reason) + "]");
     }
 
     @Override
-    public void onRenderedFirstFrame(Surface surface) {
-        Log.d(TAG, "renderedFirstFrame [" + surface + "]");
+    public void onVideoSizeChanged(VideoSize videoSize) {
+        Log.d(TAG, "videoSizeChanged [" + videoSize.width + ", " + videoSize.height + "]");
     }
 
     //MediaSourceEventListener
@@ -409,18 +422,10 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
         }
     }
 
-    private static String getDiscontinuityReasonString(@Player.DiscontinuityReason int reason) {
-        switch (reason) {
-            case Player.DISCONTINUITY_REASON_PERIOD_TRANSITION:
-                return "PERIOD_TRANSITION";
-            case Player.DISCONTINUITY_REASON_SEEK:
-                return "SEEK";
-            case Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT:
-                return "SEEK_ADJUSTMENT";
-            case Player.DISCONTINUITY_REASON_INTERNAL:
-                return "INTERNAL";
-            default:
-                return "?";
+    @Override
+    public void onRenderedFirstFrame(Object output, long renderTimeMs) {
+        if (output instanceof Surface) {
+            Log.d(TAG, "renderedFirstFrame [" + (Surface) output + "]");
         }
     }
 }
