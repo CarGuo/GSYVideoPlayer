@@ -35,7 +35,7 @@ ext {
 
     gsyVideoVersion = '8.1.2'
 
-    exo_player2 = '2.13.2'
+    exo_player2 = '2.14.0'
 
     permissionsdispatcher = '4.3.0'
 

@@ -37,6 +37,7 @@ import com.google.android.exoplayer2.upstream.cache.ContentMetadata;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
+import com.google.common.base.Ascii;
 
 import java.io.File;
 import java.util.Map;
@@ -53,7 +54,7 @@ public class ExoSourceManager {
 
     private static final long DEFAULT_MAX_SIZE = 512 * 1024 * 1024;
 
-    public static final int TYPE_RTMP = 4;
+    public static final int TYPE_RTMP = 14;
 
     private static Cache mCache;
     /**
@@ -189,7 +190,7 @@ public class ExoSourceManager {
     @SuppressLint("WrongConstant")
     @C.ContentType
     public static int inferContentType(String fileName, @Nullable String overrideExtension) {
-        fileName = Util.toLowerInvariant(fileName);
+        fileName = Ascii.toLowerCase(fileName);
         if (fileName.startsWith("rtmp:")) {
             return TYPE_RTMP;
         } else {
