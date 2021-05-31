@@ -786,7 +786,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             standardGSYVideoPlayer.setDialogProgressBar(mDialogProgressBarDrawable);
         }
 
-        if (mDialogProgressHighLightColor >= 0 && mDialogProgressNormalColor >= 0) {
+        if (mDialogProgressHighLightColor != -11 && mDialogProgressNormalColor != -11) {
             standardGSYVideoPlayer.setDialogProgressColor(mDialogProgressHighLightColor, mDialogProgressNormalColor);
         }
     }
