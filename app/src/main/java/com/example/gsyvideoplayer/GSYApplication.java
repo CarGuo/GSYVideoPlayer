@@ -3,41 +3,15 @@ package com.example.gsyvideoplayer;
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDexApplication;
 
-import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
-import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
-import tv.danmaku.ijk.media.exo2.ExoSourceManager;
-import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
-import tv.danmaku.ijk.media.player.IMediaPlayer;
-
 import com.example.gsyvideoplayer.exosource.GSYExoHttpDataSourceFactory;
-import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
-import com.shuyu.gsyvideoplayer.model.GSYModel;
-import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
-import com.shuyu.gsyvideoplayer.player.IPlayerInitSuccessListener;
-import com.shuyu.gsyvideoplayer.player.PlayerFactory;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
-import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
-import java.security.cert.CertificateException;
-import java.util.Map;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import static com.google.android.exoplayer2.util.Util.inferContentType;
+import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
+import tv.danmaku.ijk.media.exo2.ExoSourceManager;
 
 /**
  * Created by shuyu on 2016/11/11.
