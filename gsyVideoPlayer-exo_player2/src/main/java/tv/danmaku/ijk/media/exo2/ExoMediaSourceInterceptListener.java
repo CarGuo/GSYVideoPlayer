@@ -3,10 +3,12 @@ package tv.danmaku.ijk.media.exo2;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * 设置 ExoPlayer 的 MediaSource 创建拦截
@@ -28,10 +30,11 @@ public interface ExoMediaSourceInterceptListener {
     /**
      * @return 返回不为空时，使用返回的自定义 HttpDataSource
      */
-    HttpDataSource.BaseFactory getHttpDataSourceFactory(
+    DataSource.Factory getHttpDataSourceFactory(
             String userAgent,
             @Nullable TransferListener listener,
             int connectTimeoutMillis,
             int readTimeoutMillis,
+            Map<String, String> mapHeadData,
             boolean allowCrossProtocolRedirects);
 }
