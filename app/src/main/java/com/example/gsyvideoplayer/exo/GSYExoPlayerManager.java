@@ -116,17 +116,19 @@ public class GSYExoPlayerManager extends BasePlayerManager {
             final IjkExo2MediaPlayer mm = mediaPlayer;
             /// todo 测试异步，可能会收到警告
             /// todo Player is accessed on the wrong thread. See https://exoplayer.dev/issues/player-accessed-on-wrong-thread
-//            new Thread(
-//                    new Runnable() {
-//                        @Override
-//                        public void run() {
-                           mm.setSurface(null);
-                           mm.release();
-//
-//                        }
-//
-//                    }
-//            ).start();
+            /*new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            mm.setSurface(null);
+                            mm.release();
+
+                        }
+
+                    }
+            ).start();*/
+            mm.setSurface(null);
+            mm.release();
             mediaPlayer = null;
         }
         if (dummySurface != null) {
