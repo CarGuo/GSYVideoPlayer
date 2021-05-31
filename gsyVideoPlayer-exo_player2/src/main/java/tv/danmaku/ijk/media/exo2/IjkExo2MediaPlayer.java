@@ -16,27 +16,26 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.video.VideoSize;
 
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.demo.EventLogger;
@@ -45,6 +44,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.MediaInfo;
 import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
+import static com.google.android.exoplayer2.Player.DISCONTINUITY_REASON_SEEK;
 import static com.google.android.exoplayer2.Player.REPEAT_MODE_ALL;
 
 
@@ -52,8 +52,7 @@ import static com.google.android.exoplayer2.Player.REPEAT_MODE_ALL;
  * Created by guoshuyu on 2018/1/10.
  * Exo
  */
-public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.EventListener, AnalyticsListener {
-
+public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Listener, AnalyticsListener {
 
     public static int ON_POSITION_DISCOUNTINUITY = 2702;
 
@@ -286,6 +285,16 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     @Override
+    public void onCues(List<Cue> cues) {
+
+    }
+
+    @Override
+    public void onMetadata(Metadata metadata) {
+
+    }
+
+    @Override
     public void setLooping(boolean looping) {
         isLooping = looping;
     }
@@ -371,7 +380,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                         if (mSpeedPlaybackParameters != null) {
                             mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
                         }
-                        if(isLooping) {
+                        if (isLooping) {
                             mInternalPlayer.setRepeatMode(REPEAT_MODE_ALL);
                         }
                         if (mSurface != null)
@@ -399,8 +408,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     /**
      * 是否需要带上header
      * setDataSource之前生效
-     *
-     * @param preview
      */
     public void setPreview(boolean preview) {
         isPreview = preview;
@@ -426,8 +433,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     /**
      * 是否开启cache
      * setDataSource之前生效
-     *
-     * @param cache
      */
     public void setCache(boolean cache) {
         isCache = cache;
@@ -440,8 +445,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     /**
      * cache文件的目录
      * setDataSource之前生效
-     *
-     * @param cacheDir
      */
     public void setCacheDir(File cacheDir) {
         this.mCacheDir = cacheDir;
@@ -484,12 +487,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
         return mInternalPlayer.getBufferedPercentage();
     }
 
-
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-
-    }
-
     public MappingTrackSelector getTrackSelector() {
         return mTrackSelector;
     }
@@ -520,19 +517,24 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     @Override
-    public void onLoadingChanged(boolean isLoading) {
+    public void onIsLoadingChanged(boolean isLoading) {
 
     }
 
     @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+    public void onPlaybackStateChanged(int state) {
+        onPlayWhenReadyChanged(isLastReportedPlayWhenReady, state);
+    }
+
+    @Override
+    public void onPlayWhenReadyChanged(boolean playWhenReady, int playbackState) {
         //重新播放状态顺序为：STATE_IDLE -》STATE_BUFFERING -》STATE_READY
         //缓冲时顺序为：STATE_BUFFERING -》STATE_READY
         //Log.e(TAG, "onPlayerStateChanged: playWhenReady = " + playWhenReady + ", playbackState = " + playbackState);
         if (isLastReportedPlayWhenReady != playWhenReady || lastReportedPlaybackState != playbackState) {
             int buffer = 0;
-            if(mInternalPlayer != null) {
-                buffer =  mInternalPlayer.getBufferedPercentage();
+            if (mInternalPlayer != null) {
+                buffer = mInternalPlayer.getBufferedPercentage();
             }
             if (isBuffering) {
                 switch (playbackState) {
@@ -587,8 +589,11 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     @Override
-    public void onPositionDiscontinuity(int reason) {
-
+    public void onPositionDiscontinuity(Player.PositionInfo oldPosition, Player.PositionInfo newPosition, int reason) {
+        notifyOnInfo(ON_POSITION_DISCOUNTINUITY, reason);
+        if (reason == DISCONTINUITY_REASON_SEEK) {
+            notifyOnSeekComplete();
+        }
     }
 
     @Override
@@ -596,16 +601,11 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     }
 
-    @Override
-    public void onSeekProcessed() {
-        notifyOnSeekComplete();
-    }
-
     /////////////////////////////////////AudioRendererEventListener/////////////////////////////////////////////
 
 
     @Override
-    public void onPlayerStateChanged(EventTime eventTime, boolean playWhenReady, int playbackState) {
+    public void onPlayWhenReadyChanged(EventTime eventTime, boolean playWhenReady, int playbackState) {
 
     }
 
@@ -614,20 +614,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
 
     }
 
-    @Override
-    public void onPositionDiscontinuity(EventTime eventTime, int reason) {
-        notifyOnInfo(ON_POSITION_DISCOUNTINUITY, reason);
-    }
-
-    @Override
-    public void onSeekStarted(EventTime eventTime) {
-
-    }
-
-    @Override
-    public void onSeekProcessed(EventTime eventTime) {
-
-    }
 
     @Override
     public void onPlaybackParametersChanged(EventTime eventTime, PlaybackParameters playbackParameters) {
@@ -645,7 +631,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     @Override
-    public void onLoadingChanged(EventTime eventTime, boolean isLoading) {
+    public void onIsLoadingChanged(EventTime eventTime, boolean isLoading) {
 
     }
 
@@ -670,22 +656,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     @Override
-    public void onDecoderEnabled(EventTime eventTime, int trackType, DecoderCounters decoderCounters) {
-
-    }
-
-    @Override
-    public void onDecoderInitialized(EventTime eventTime, int trackType, String decoderName, long initializationDurationMs) {
-
-    }
-
-    @Override
-    public void onDecoderInputFormatChanged(EventTime eventTime, int trackType, Format format) {
-
-    }
-
-    @Override
-    public void onDecoderDisabled(EventTime eventTime, int trackType, DecoderCounters decoderCounters) {
+    public void onAudioDisabled(EventTime eventTime, DecoderCounters counters) {
         audioSessionId = C.AUDIO_SESSION_ID_UNSET;
     }
 
@@ -700,12 +671,12 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
     }
 
     @Override
-    public void onVideoSizeChanged(EventTime eventTime, int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-        mVideoWidth = (int) (width * pixelWidthHeightRatio);
-        mVideoHeight = height;
-        notifyOnVideoSizeChanged((int) (width * pixelWidthHeightRatio), height, 1, 1);
-        if (unappliedRotationDegrees > 0)
-            notifyOnInfo(IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED, unappliedRotationDegrees);
+    public void onVideoSizeChanged(EventTime eventTime, VideoSize videoSize) {
+        mVideoWidth = (int) (videoSize.width * videoSize.pixelWidthHeightRatio);
+        mVideoHeight = videoSize.height;
+        notifyOnVideoSizeChanged((int) (videoSize.width * videoSize.pixelWidthHeightRatio), videoSize.height, 1, 1);
+        if (videoSize.unappliedRotationDegrees > 0)
+            notifyOnInfo(IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED, videoSize.unappliedRotationDegrees);
     }
 
 

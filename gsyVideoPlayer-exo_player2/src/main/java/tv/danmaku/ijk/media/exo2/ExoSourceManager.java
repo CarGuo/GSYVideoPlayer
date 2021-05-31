@@ -9,11 +9,10 @@ import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
@@ -26,8 +25,6 @@ import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
@@ -69,9 +66,6 @@ public class ExoSourceManager {
 
     private static int sHttpConnectTimeout = -1;
 
-
-    private static boolean s = false;
-
     private Context mAppContext;
 
     private Map<String, String> mMapHeadData;
@@ -79,6 +73,7 @@ public class ExoSourceManager {
     private String mDataSource;
 
     private static ExoMediaSourceInterceptListener sExoMediaSourceInterceptListener;
+    private static DatabaseProvider sDatabaseProvider;
 
     private boolean isCached = false;
 
@@ -212,7 +207,7 @@ public class ExoSourceManager {
             String path = dirs + File.separator + "exo";
             boolean isLocked = SimpleCache.isCacheFolderLocked(new File(path));
             if (!isLocked) {
-                mCache = new SimpleCache(new File(path), new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE));
+                mCache = new SimpleCache(new File(path), new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE), sDatabaseProvider);
             }
         }
         return mCache;
@@ -232,10 +227,6 @@ public class ExoSourceManager {
 
     /**
      * Cache需要release之后才能clear
-     *
-     * @param context
-     * @param cacheDir
-     * @param url
      */
     public static void clearCache(Context context, File cacheDir, String url) {
         try {
@@ -326,6 +317,14 @@ public class ExoSourceManager {
         ExoSourceManager.sHttpConnectTimeout = httpConnectTimeout;
     }
 
+    public static DatabaseProvider getDatabaseProvider() {
+        return sDatabaseProvider;
+    }
+
+    public static void setDatabaseProvider(DatabaseProvider databaseProvider) {
+        ExoSourceManager.sDatabaseProvider = databaseProvider;
+    }
+
     /**
      * 获取SourceFactory，是否带Cache
      */
@@ -378,9 +377,7 @@ public class ExoSourceManager {
                     .setReadTimeoutMs(readTimeout)
                     .setTransferListener(preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build());
             if (mMapHeadData != null && mMapHeadData.size() > 0) {
-                for (Map.Entry<String, String> header : mMapHeadData.entrySet()) {
-                    ((DefaultHttpDataSource.Factory) dataSourceFactory).setDefaultRequestProperties(mMapHeadData);
-                }
+                ((DefaultHttpDataSource.Factory) dataSourceFactory).setDefaultRequestProperties(mMapHeadData);
             }
         }
         return dataSourceFactory;
@@ -388,8 +385,6 @@ public class ExoSourceManager {
 
     /**
      * 根据缓存块判断是否缓存成功
-     *
-     * @param cache
      */
     private static boolean resolveCacheState(Cache cache, String url) {
         boolean isCache = true;

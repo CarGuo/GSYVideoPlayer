@@ -17,10 +17,7 @@ package tv.danmaku.ijk.media.exo2.demo;
 
 import android.os.SystemClock;
 
-import androidx.annotation.Nullable;
-
 import android.util.Log;
-import android.view.Surface;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -29,8 +26,10 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
+import com.google.android.exoplayer2.decoder.DecoderReuseEvaluation;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.MetadataOutput;
 import com.google.android.exoplayer2.metadata.emsg.EventMessage;
@@ -41,10 +40,10 @@ import com.google.android.exoplayer2.metadata.id3.Id3Frame;
 import com.google.android.exoplayer2.metadata.id3.PrivFrame;
 import com.google.android.exoplayer2.metadata.id3.TextInformationFrame;
 import com.google.android.exoplayer2.metadata.id3.UrlLinkFrame;
-import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -52,12 +51,12 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.android.exoplayer2.video.VideoSize;
 
-import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 
-public final class EventLogger implements Player.EventListener, MetadataOutput,
+public final class EventLogger implements Player.Listener, MetadataOutput,
         AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener {
 
     private static final String TAG = "EventLogger";
@@ -83,15 +82,28 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
         startTimeMs = SystemClock.elapsedRealtime();
     }
 
+
     // Player.EventListener
 
+
     @Override
-    public void onLoadingChanged(boolean isLoading) {
+    public void onCues(List<Cue> cues) {
+
+    }
+
+    @Override
+    public void onIsLoadingChanged(boolean isLoading) {
         Log.d(TAG, "loading [" + isLoading + "]");
     }
 
     @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int state) {
+    public void onPlaybackStateChanged(@Player.State int state) {
+        Log.d(TAG, "state [" + getSessionTimeString()  + ", "
+                + getStateString(state) + "]");
+    }
+
+    @Override
+    public void onPlayWhenReadyChanged(boolean playWhenReady, int state) {
         Log.d(TAG, "state [" + getSessionTimeString() + ", " + playWhenReady + ", "
                 + getStateString(state) + "]");
     }
@@ -107,7 +119,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     }
 
     @Override
-    public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
+    public void onPositionDiscontinuity(Player.PositionInfo oldPosition, Player.PositionInfo newPosition, @Player.DiscontinuityReason int reason) {
         Log.d(TAG, "positionDiscontinuity [" + getDiscontinuityReasonString(reason) + "]");
     }
 
@@ -176,7 +188,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
                 for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
                     String status = getTrackStatusString(false);
                     String formatSupport = getFormatSupportString(
-                            RendererCapabilities.FORMAT_UNSUPPORTED_TYPE);
+                            C.FORMAT_UNSUPPORTED_TYPE);
                     Log.d(TAG, "      " + status + " Track:" + trackIndex + ", "
                             + Format.toLogString(trackGroup.getFormat(trackIndex))
                             + ", supported=" + formatSupport);
@@ -186,11 +198,6 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
             Log.d(TAG, "  ]");
         }
         Log.d(TAG, "]");
-    }
-
-    @Override
-    public void onSeekProcessed() {
-        Log.d(TAG, "seekProcessed");
     }
 
     // MetadataOutput
@@ -216,7 +223,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     }
 
     @Override
-    public void onAudioInputFormatChanged(Format format) {
+    public void onAudioInputFormatChanged(Format format, DecoderReuseEvaluation decoderReuseEvaluation) {
         Log.d(TAG, "audioFormatChanged [" + getSessionTimeString() + ", " + Format.toLogString(format)
                 + "]");
     }
@@ -240,7 +247,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     }
 
     @Override
-    public void onVideoInputFormatChanged(Format format) {
+    public void onVideoInputFormatChanged(Format format, DecoderReuseEvaluation decoderReuseEvaluation) {
         Log.d(TAG, "videoFormatChanged [" + getSessionTimeString() + ", " + Format.toLogString(format)
                 + "]");
     }
@@ -267,34 +274,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
 
     //MediaSourceEventListener
 
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-        int periodCount = timeline.getPeriodCount();
-        int windowCount = timeline.getWindowCount();
-        Log.d(TAG, "sourceInfo [periodCount=" + periodCount + ", windowCount=" + windowCount);
-        for (int i = 0; i < Math.min(periodCount, MAX_TIMELINE_ITEM_LINES); i++) {
-            timeline.getPeriod(i, period);
-            Log.d(TAG, "  " + "period [" + getTimeString(period.getDurationMs()) + "]");
-        }
-        if (periodCount > MAX_TIMELINE_ITEM_LINES) {
-            Log.d(TAG, "  ...");
-        }
-        for (int i = 0; i < Math.min(windowCount, MAX_TIMELINE_ITEM_LINES); i++) {
-            timeline.getWindow(i, window);
-            Log.d(TAG, "  " + "window [" + getTimeString(window.getDurationMs()) + ", "
-                    + window.isSeekable + ", " + window.isDynamic + "]");
-        }
-        if (windowCount > MAX_TIMELINE_ITEM_LINES) {
-            Log.d(TAG, "  ...");
-        }
-        Log.d(TAG, "]");
-    }
-
     // Internal methods
-
-    private void printInternalError(String type, Exception e) {
-        Log.e(TAG, "internalError [" + getSessionTimeString() + ", " + type + "]", e);
-    }
 
     private void printMetadata(Metadata metadata, String prefix) {
         for (int i = 0; i < metadata.length(); i++) {
@@ -357,15 +337,15 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
 
     private static String getFormatSupportString(int formatSupport) {
         switch (formatSupport) {
-            case RendererCapabilities.FORMAT_HANDLED:
+            case C.FORMAT_HANDLED:
                 return "YES";
-            case RendererCapabilities.FORMAT_EXCEEDS_CAPABILITIES:
+            case C.FORMAT_EXCEEDS_CAPABILITIES:
                 return "NO_EXCEEDS_CAPABILITIES";
-            case RendererCapabilities.FORMAT_UNSUPPORTED_DRM:
+            case C.FORMAT_UNSUPPORTED_DRM:
                 return "NO_UNSUPPORTED_DRM";
-            case RendererCapabilities.FORMAT_UNSUPPORTED_SUBTYPE:
+            case C.FORMAT_UNSUPPORTED_SUBTYPE:
                 return "NO_UNSUPPORTED_TYPE";
-            case RendererCapabilities.FORMAT_UNSUPPORTED_TYPE:
+            case C.FORMAT_UNSUPPORTED_TYPE:
                 return "NO";
             default:
                 return "?";
