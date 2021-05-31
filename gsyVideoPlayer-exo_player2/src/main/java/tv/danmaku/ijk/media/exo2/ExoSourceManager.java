@@ -369,19 +369,21 @@ public class ExoSourceManager {
         if (mMapHeadData != null && mMapHeadData.size() > 0) {
             allowCrossProtocolRedirects = "true".equals(mMapHeadData.get("allowCrossProtocolRedirects"));
         }
-        HttpDataSource.BaseFactory dataSourceFactory;
+        DataSource.Factory dataSourceFactory;
         if (sExoMediaSourceInterceptListener != null) {
             dataSourceFactory = sExoMediaSourceInterceptListener.getHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
                     connectTimeout,
-                    readTimeout, allowCrossProtocolRedirects);
+                    readTimeout, mMapHeadData, allowCrossProtocolRedirects);
         } else {
-            dataSourceFactory = new DefaultHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
-                    connectTimeout,
-                    readTimeout, allowCrossProtocolRedirects);
-        }
-        if (mMapHeadData != null && mMapHeadData.size() > 0) {
-            for (Map.Entry<String, String> header : mMapHeadData.entrySet()) {
-                dataSourceFactory.getDefaultRequestProperties().set(header.getKey(), header.getValue());
+            dataSourceFactory = new DefaultHttpDataSource.Factory()
+                    .setAllowCrossProtocolRedirects(allowCrossProtocolRedirects)
+                    .setConnectTimeoutMs(connectTimeout)
+                    .setReadTimeoutMs(readTimeout)
+                    .setTransferListener(preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build());
+            if (mMapHeadData != null && mMapHeadData.size() > 0) {
+                for (Map.Entry<String, String> header : mMapHeadData.entrySet()) {
+                    ((DefaultHttpDataSource.Factory) dataSourceFactory).setDefaultRequestProperties(mMapHeadData);
+                }
             }
         }
         return dataSourceFactory;

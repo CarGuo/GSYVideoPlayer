@@ -14,6 +14,7 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
@@ -29,6 +30,7 @@ import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
 import java.security.cert.CertificateException;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
@@ -92,11 +94,14 @@ public class GSYApplication extends MultiDexApplication {
              * demo 里的 GSYExoHttpDataSourceFactory 使用的是忽略证书
              * */
             @Override
-            public HttpDataSource.BaseFactory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+            public DataSource.Factory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis,
+                                                               Map<String, String> mapHeadData, boolean allowCrossProtocolRedirects) {
                 //如果返回 null，就使用默认的
-                return new GSYExoHttpDataSourceFactory(userAgent, listener,
+                GSYExoHttpDataSourceFactory factory = new GSYExoHttpDataSourceFactory(userAgent, listener,
                         connectTimeoutMillis,
                         readTimeoutMillis, allowCrossProtocolRedirects);
+                factory.setDefaultRequestProperties(mapHeadData);
+                return factory;
             }
         });
 
