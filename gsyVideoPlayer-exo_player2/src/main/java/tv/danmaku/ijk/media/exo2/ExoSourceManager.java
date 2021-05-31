@@ -164,9 +164,6 @@ public class ExoSourceManager {
                         .createMediaSource(mediaItem);
                 break;
         }
-        if (isLooping) {
-            return new LoopingMediaSource(mediaSource);
-        }
         return mediaSource;
     }
 

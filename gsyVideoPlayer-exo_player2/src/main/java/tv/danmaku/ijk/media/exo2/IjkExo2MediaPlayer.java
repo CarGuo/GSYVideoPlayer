@@ -45,6 +45,8 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.MediaInfo;
 import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
+import static com.google.android.exoplayer2.Player.REPEAT_MODE_ALL;
+
 
 /**
  * Created by guoshuyu on 2018/1/10.
@@ -368,6 +370,9 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
                         mInternalPlayer.addListener(mEventLogger);
                         if (mSpeedPlaybackParameters != null) {
                             mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
+                        }
+                        if(isLooping) {
+                            mInternalPlayer.setRepeatMode(REPEAT_MODE_ALL);
                         }
                         if (mSurface != null)
                             mInternalPlayer.setVideoSurface(mSurface);
