@@ -11,17 +11,19 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.SingleSampleMediaSource;
+import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.util.MimeTypes;
-import com.google.android.exoplayer2.util.Util;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
+
+import java.util.List;
 
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.exo2.demo.EventLogger;
@@ -37,6 +39,18 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
         super(context);
     }
 
+
+    @Override
+    public void onCues(List<Cue> cues) {
+        super.onCues(cues);
+        /// 这里
+    }
+
+    @Override
+    public void onMetadata(Metadata metadata) {
+        super.onMetadata(metadata);
+        /// 这里
+    }
 
     @Override
     protected void prepareAsyncInternal() {
@@ -104,10 +118,11 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
         MediaItem.Subtitle subtitle = new MediaItem.Subtitle(
                 subTitle, checkNotNull(textFormat.sampleMimeType), textFormat.language, textFormat.selectionFlags);
 
-        DefaultHttpDataSourceFactory factory = new DefaultHttpDataSourceFactory(Util.getUserAgent(mAppContext,
-                "GSYExoSubTitlePlayer"), new DefaultBandwidthMeter.Builder(mAppContext).build(),
-                50000,
-                50000, true);
+        DefaultHttpDataSource.Factory  factory = new DefaultHttpDataSource.Factory()
+                .setAllowCrossProtocolRedirects(true)
+                .setConnectTimeoutMs(50000)
+                .setReadTimeoutMs(50000)
+                .setTransferListener( new DefaultBandwidthMeter.Builder(mAppContext).build());
 
         MediaSource textMediaSource = new SingleSampleMediaSource.Factory(new DefaultDataSourceFactory(mAppContext, null,
                 factory))
