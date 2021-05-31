@@ -9,7 +9,9 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
 
 import java.io.File;
+import java.util.Map;
 
+import leakcanary.LeakCanary;
 import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
 import tv.danmaku.ijk.media.exo2.ExoSourceManager;
 
@@ -22,11 +24,11 @@ public class GSYApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
-        }
+        }*/
         //LeakCanary.install(this);
 
         //GSYVideoType.enableMediaCodec();

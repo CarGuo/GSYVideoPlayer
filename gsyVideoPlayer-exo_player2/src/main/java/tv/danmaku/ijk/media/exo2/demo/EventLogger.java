@@ -26,7 +26,6 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.decoder.DecoderReuseEvaluation;
@@ -270,6 +269,11 @@ public final class EventLogger implements Player.Listener, MetadataOutput,
     @Override
     public void onRenderedFirstFrame(Object output, long renderTimeMs) {
         Log.d(TAG, "renderedFirstFrame [" + output + "]");
+    }
+
+    @Override
+    public void onSkipSilenceEnabledChanged(boolean skipSilenceEnabled) {
+
     }
 
     //MediaSourceEventListener
