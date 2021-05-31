@@ -6,6 +6,7 @@
 * update exoplayer 2.14.0
 * 修复已知问题
 * #3241
+* #3275
 * ExoSoucrcManager 增加 `setDatabaseProvider` 方法
 * 修改 ExoMediaSourceInterceptListener
 
