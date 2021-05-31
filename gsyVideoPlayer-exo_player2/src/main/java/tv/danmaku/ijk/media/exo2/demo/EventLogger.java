@@ -16,7 +16,9 @@
 package tv.danmaku.ijk.media.exo2.demo;
 
 import android.os.SystemClock;
+
 import androidx.annotation.Nullable;
+
 import android.util.Log;
 import android.view.Surface;
 
@@ -48,6 +50,7 @@ import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedT
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.google.android.exoplayer2.video.VideoSize;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -55,7 +58,7 @@ import java.util.Locale;
 
 
 public final class EventLogger implements Player.EventListener, MetadataOutput,
-        AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener{
+        AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener {
 
     private static final String TAG = "EventLogger";
     private static final int MAX_TIMELINE_ITEM_LINES = 3;
@@ -253,14 +256,13 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
     }
 
     @Override
-    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
-                                   float pixelWidthHeightRatio) {
-        Log.d(TAG, "videoSizeChanged [" + width + ", " + height + "]");
+    public void onVideoSizeChanged(VideoSize videoSize) {
+        Log.d(TAG, "videoSizeChanged [" + videoSize.width + ", " + videoSize.height + "]");
     }
 
     @Override
-    public void onRenderedFirstFrame(Surface surface) {
-        Log.d(TAG, "renderedFirstFrame [" + surface + "]");
+    public void onRenderedFirstFrame(Object output, long renderTimeMs) {
+        Log.d(TAG, "renderedFirstFrame [" + output + "]");
     }
 
     //MediaSourceEventListener
@@ -411,7 +413,7 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
 
     private static String getDiscontinuityReasonString(@Player.DiscontinuityReason int reason) {
         switch (reason) {
-            case Player.DISCONTINUITY_REASON_PERIOD_TRANSITION:
+            case Player.DISCONTINUITY_REASON_AUTO_TRANSITION:
                 return "PERIOD_TRANSITION";
             case Player.DISCONTINUITY_REASON_SEEK:
                 return "SEEK";
@@ -419,6 +421,8 @@ public final class EventLogger implements Player.EventListener, MetadataOutput,
                 return "SEEK_ADJUSTMENT";
             case Player.DISCONTINUITY_REASON_INTERNAL:
                 return "INTERNAL";
+            case Player.DISCONTINUITY_REASON_REMOVE:
+            case Player.DISCONTINUITY_REASON_SKIP:
             default:
                 return "?";
         }

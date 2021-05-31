@@ -703,8 +703,9 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Ev
             notifyOnInfo(IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED, unappliedRotationDegrees);
     }
 
+
     @Override
-    public void onRenderedFirstFrame(EventTime eventTime, Surface surface) {
+    public void onRenderedFirstFrame(EventTime eventTime, Object output, long renderTimeMs) {
 
     }
 
