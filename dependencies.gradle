@@ -24,12 +24,12 @@ ext {
 
     gsyVideoVersion = '8.1.2'
 
-    exo_player2 = '2.14.0'
+    exo_player2 = '2.14.1'
 
     permissionsdispatcher = '4.8.0'
 
     androidDependencies = [
-            recyclerView: "androidx.recyclerview:recyclerview:1.2.0",
+            recyclerView: "androidx.recyclerview:recyclerview:1.2.1",
             appCompat   : "androidx.appcompat:appcompat:1.3.0",
             support_v4  : "androidx.legacy:legacy-support-v4:${otherVersion}",
             design      : "com.google.android.material:material:1.3.0",
