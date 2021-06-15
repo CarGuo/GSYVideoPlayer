@@ -20,4 +20,4 @@ jobs:
           distribution: 'adopt'
           java-version: 11
       - name: Build
-        run: ./gradlew --parallel app:assembleRelease
+        run: chmod +x ./gradlew & ./gradlew --parallel app:assembleRelease
