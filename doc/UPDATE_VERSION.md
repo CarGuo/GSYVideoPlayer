@@ -1,6 +1,41 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
+### 8.1.3
+
+* update exoplayer 2.14.0
+* 修复已知问题
+* #3241
+* #3275
+* ExoSoucrcManager 增加 `setDatabaseProvider` 方法
+* 修改 ExoMediaSourceInterceptListener
+
+```
+       ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
+            @Override
+            public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
+                //如果返回 null，就使用默认的
+                return null;
+            }
+
+            /**
+             * 通过自定义的 HttpDataSource ，可以设置自签证书或者忽略证书
+             * demo 里的 GSYExoHttpDataSourceFactory 使用的是忽略证书
+             * */
+            @Override
+            public DataSource.Factory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis,
+                                                               Map<String, String> mapHeadData, boolean allowCrossProtocolRedirects) {
+                //如果返回 null，就使用默认的
+                GSYExoHttpDataSourceFactory factory = new GSYExoHttpDataSourceFactory(userAgent, listener,
+                        connectTimeoutMillis,
+                        readTimeoutMillis, allowCrossProtocolRedirects);
+                factory.setDefaultRequestProperties(mapHeadData);
+                return factory;
+            }
+        });
+```
+
+
 ## 8.1.2 (2020-03-29)
 
 * update support  exo_player2 = '2.13.2'

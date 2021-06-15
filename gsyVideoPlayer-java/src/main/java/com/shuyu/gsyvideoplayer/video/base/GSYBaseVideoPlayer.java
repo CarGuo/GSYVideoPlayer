@@ -250,6 +250,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mPauseBeforePrepared = from.mPauseBeforePrepared;
         to.mReleaseWhenLossAudio = from.mReleaseWhenLossAudio;
         to.mVideoAllCallBack = from.mVideoAllCallBack;
+        to.mRotateViewAuto = from.mRotateViewAuto;
         to.mActionBar = from.mActionBar;
         to.mStatusBar = from.mStatusBar;
         to.mAutoFullWithSize = from.mAutoFullWithSize;

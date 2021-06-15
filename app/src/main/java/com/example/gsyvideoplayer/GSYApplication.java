@@ -5,10 +5,11 @@ import androidx.multidex.MultiDexApplication;
 
 import com.example.gsyvideoplayer.exosource.GSYExoHttpDataSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
 
 import java.io.File;
+import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
 import tv.danmaku.ijk.media.exo2.ExoSourceManager;
@@ -22,6 +23,12 @@ public class GSYApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }*/
+        //LeakCanary.install(this);
 
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();
@@ -62,11 +69,14 @@ public class GSYApplication extends MultiDexApplication {
              * demo 里的 GSYExoHttpDataSourceFactory 使用的是忽略证书
              * */
             @Override
-            public HttpDataSource.BaseFactory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+            public DataSource.Factory getHttpDataSourceFactory(String userAgent, @Nullable TransferListener listener, int connectTimeoutMillis, int readTimeoutMillis,
+                                                               Map<String, String> mapHeadData, boolean allowCrossProtocolRedirects) {
                 //如果返回 null，就使用默认的
-                return new GSYExoHttpDataSourceFactory(userAgent, listener,
+                GSYExoHttpDataSourceFactory factory = new GSYExoHttpDataSourceFactory(userAgent, listener,
                         connectTimeoutMillis,
                         readTimeoutMillis, allowCrossProtocolRedirects);
+                factory.setDefaultRequestProperties(mapHeadData);
+                return factory;
             }
         });
 
