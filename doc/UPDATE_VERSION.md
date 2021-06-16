@@ -1,6 +1,13 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
+### v8.1.4-jitpack(2020-06-16)
+
+* update #3294 fix StorageUtils
+* update fix #3275
+* update exo '2.14.0'
+* update fix #3241 
+
 ### 8.1.3
 
 * update exoplayer 2.14.0
