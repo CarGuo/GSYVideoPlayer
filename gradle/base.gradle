@@ -10,9 +10,9 @@ android {
         versionCode 21
         versionName PROJ_VERSION
     }
-    buildTypes.all {
+   /* buildTypes.all {
         it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
-    }
+    }*/
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
