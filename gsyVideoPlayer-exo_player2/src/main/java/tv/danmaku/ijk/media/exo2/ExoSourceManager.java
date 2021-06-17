@@ -367,7 +367,7 @@ public class ExoSourceManager {
         if (mMapHeadData != null && mMapHeadData.size() > 0) {
             allowCrossProtocolRedirects = "true".equals(mMapHeadData.get("allowCrossProtocolRedirects"));
         }
-        DataSource.Factory dataSourceFactory;
+        DataSource.Factory dataSourceFactory = null;
         if (sExoMediaSourceInterceptListener != null) {
             dataSourceFactory = sExoMediaSourceInterceptListener.getHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
                     connectTimeout,
