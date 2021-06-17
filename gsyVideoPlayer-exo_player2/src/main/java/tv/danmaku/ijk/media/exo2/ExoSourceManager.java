@@ -334,8 +334,10 @@ public class ExoSourceManager {
             if (cache != null) {
                 isCached = resolveCacheState(cache, mDataSource);
                 CacheDataSource.Factory factory = new CacheDataSource.Factory();
-                return factory.
-                        setCache(cache).setCacheReadDataSourceFactory(getDataSourceFactory(context, preview, uerAgent)).setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+                return factory.setCache(cache)
+                        .setCacheReadDataSourceFactory(getDataSourceFactory(context, preview, uerAgent))
+                        .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+                        .setUpstreamDataSourceFactory(getHttpDataSourceFactory(context, preview, uerAgent));
             }
         }
         return getDataSourceFactory(context, preview, uerAgent);
@@ -370,7 +372,8 @@ public class ExoSourceManager {
             dataSourceFactory = sExoMediaSourceInterceptListener.getHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
                     connectTimeout,
                     readTimeout, mMapHeadData, allowCrossProtocolRedirects);
-        } else {
+        } 
+        if (dataSourceFactory == null) {
             dataSourceFactory = new DefaultHttpDataSource.Factory()
                     .setAllowCrossProtocolRedirects(allowCrossProtocolRedirects)
                     .setConnectTimeoutMs(connectTimeout)
