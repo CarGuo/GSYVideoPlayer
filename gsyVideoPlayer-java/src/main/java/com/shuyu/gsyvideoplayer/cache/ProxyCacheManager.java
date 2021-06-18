@@ -10,7 +10,7 @@ import com.danikula.videocache.file.FileNameGenerator;
 import com.danikula.videocache.file.Md5FileNameGenerator;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
-import com.shuyu.gsyvideoplayer.utils.StorageUtils;
+import com.danikula.videocache.StorageUtils;
 
 import java.io.File;
 import java.io.IOException;
