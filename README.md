@@ -282,6 +282,7 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
     *** get*();
     void set*(***);
     public <init>(android.content.Context);
+    public <init>(android.content.Context, java.lang.Boolean);
     public <init>(android.content.Context, android.util.AttributeSet);
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
