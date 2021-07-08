@@ -1,5 +1,7 @@
 package com.danikula.videocache;
 
+import androidx.annotation.NonNull;
+
 /**
  * Stores source's info.
  *
@@ -17,6 +19,7 @@ public class SourceInfo {
         this.mime = mime;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SourceInfo{" +

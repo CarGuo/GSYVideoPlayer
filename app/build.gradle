@@ -5,8 +5,6 @@ apply from: "${rootDir.path}/gradle/base.gradle"
 android {
     defaultConfig {
         applicationId "com.example.gsyvideoplayer"
-        versionCode 6
-        versionName "5.0.0"
         multiDexEnabled true
 
         javaCompileOptions {
@@ -15,12 +13,6 @@ android {
         ndk {
             //设置支持的SO库架构
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
-        }
-    }
-    android {
-        compileOptions {
-            sourceCompatibility 1.8
-            targetCompatibility 1.8
         }
     }
 
@@ -34,14 +26,14 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            signingConfig signingConfigs.releaseConfig
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
         debug {
             minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+        }
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.releaseConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -51,15 +43,12 @@ android {
 }
 
 dependencies {
-
-    annotationProcessor viewDependencies.apt_butterKnife
-    implementation viewDependencies.butterKnife
+    implementation androidDependencies.appCompat
     implementation androidDependencies.recyclerView
     implementation androidDependencies.core
     implementation viewDependencies.DanmakuFlameMaster
     implementation viewDependencies.ndkBitmap
     implementation viewDependencies.glide
-    implementation androidDependencies.support_v4
     implementation androidDependencies.design
     implementation androidDependencies.viewpager2
 
@@ -82,11 +71,11 @@ dependencies {
     implementation dataDependencies.okhttpUtil
     implementation dataDependencies.okhttp
 
-    implementation(dataDependencies.permissionsdispatcher) {
-        // if you don't use android.app.Fragment you can exclude support for them
-        exclude module: "support-v13"
-    }
+    implementation(dataDependencies.permissionsdispatcher)
     annotationProcessor dataDependencies.permissionsdispatcherProcessor
+
+    implementation viewDependencies.butterKnife
+    annotationProcessor viewDependencies.apt_butterKnife
 
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"

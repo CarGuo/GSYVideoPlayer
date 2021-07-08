@@ -3,13 +3,15 @@ package com.example.gsyvideoplayer;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.transition.Explode;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -108,7 +110,7 @@ public class ListVideoActivity extends AppCompatActivity {
 
     /********************************为了支持重力旋转********************************/
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (listNormalAdapter != null && listNormalAdapter.getListNeedAutoLand() && !isPause) {
             listNormalAdapter.onConfigurationChanged(this, newConfig);

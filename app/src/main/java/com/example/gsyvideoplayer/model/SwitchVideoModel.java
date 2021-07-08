@@ -1,5 +1,7 @@
 package com.example.gsyvideoplayer.model;
 
+import androidx.annotation.NonNull;
+
 /**
  * Created by shuyu on 2016/12/7.
  */
@@ -29,6 +31,7 @@ public class SwitchVideoModel {
         this.name = name;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return this.name;
