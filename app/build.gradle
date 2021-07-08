@@ -16,6 +16,13 @@ android {
         }
     }
 
+    android {
+        compileOptions {
+            sourceCompatibility 1.8
+            targetCompatibility 1.8
+        }
+    }
+
     signingConfigs {
         releaseConfig {
             storeFile file("../debug.jks")
@@ -40,6 +47,8 @@ android {
     lintOptions {
         abortOnError false
     }
+
+
 }
 
 dependencies {
