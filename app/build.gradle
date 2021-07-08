@@ -43,12 +43,12 @@ android {
 }
 
 dependencies {
+    implementation androidDependencies.appCompat
     implementation androidDependencies.recyclerView
     implementation androidDependencies.core
     implementation viewDependencies.DanmakuFlameMaster
     implementation viewDependencies.ndkBitmap
     implementation viewDependencies.glide
-    implementation androidDependencies.support_v4
     implementation androidDependencies.design
     implementation androidDependencies.viewpager2
 
@@ -71,10 +71,7 @@ dependencies {
     implementation dataDependencies.okhttpUtil
     implementation dataDependencies.okhttp
 
-    implementation(dataDependencies.permissionsdispatcher) {
-        // if you don't use android.app.Fragment you can exclude support for them
-        exclude module: "support-v13"
-    }
+    implementation(dataDependencies.permissionsdispatcher)
     annotationProcessor dataDependencies.permissionsdispatcherProcessor
 
     implementation viewDependencies.butterKnife
