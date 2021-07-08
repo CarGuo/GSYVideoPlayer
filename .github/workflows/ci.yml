@@ -1,12 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - '*'
-    tags:
-      - '*'
-  pull_request:
+on: [ push, pull_request ]
 
 jobs:
   build:
@@ -19,5 +13,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
       - name: Build
-        run: chmod +x ./gradlew & ./gradlew --parallel app:assembleRelease
+        run: ./gradlew --parallel app:assembleRelease
