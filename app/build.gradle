@@ -15,12 +15,6 @@ android {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
         }
     }
-    android {
-        compileOptions {
-            sourceCompatibility 1.8
-            targetCompatibility 1.8
-        }
-    }
 
     signingConfigs {
         releaseConfig {
@@ -32,8 +26,12 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+        }
+        release {
+            minifyEnabled true
             signingConfig signingConfigs.releaseConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -45,9 +43,6 @@ android {
 }
 
 dependencies {
-
-    annotationProcessor viewDependencies.apt_butterKnife
-    implementation viewDependencies.butterKnife
     implementation androidDependencies.recyclerView
     implementation androidDependencies.core
     implementation viewDependencies.DanmakuFlameMaster
@@ -81,6 +76,9 @@ dependencies {
         exclude module: "support-v13"
     }
     annotationProcessor dataDependencies.permissionsdispatcherProcessor
+
+    implementation viewDependencies.butterKnife
+    annotationProcessor viewDependencies.apt_butterKnife
 
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
