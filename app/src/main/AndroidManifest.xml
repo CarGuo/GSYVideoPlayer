@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme"
         android:allowNativeHeapPointerTagging="false"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ViewPager2Activity"></activity>
+        <activity android:name=".ViewPager2Activity" />
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

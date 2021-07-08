@@ -31,7 +31,6 @@ ext {
     androidDependencies = [
             recyclerView: "androidx.recyclerview:recyclerview:1.2.1",
             appCompat   : "androidx.appcompat:appcompat:1.3.0",
-            support_v4  : "androidx.legacy:legacy-support-v4:${otherVersion}",
             design      : "com.google.android.material:material:1.4.0",
             viewpager2  : "androidx.viewpager2:viewpager2:${otherVersion}",
             core        : "androidx.core:core:1.6.0",
