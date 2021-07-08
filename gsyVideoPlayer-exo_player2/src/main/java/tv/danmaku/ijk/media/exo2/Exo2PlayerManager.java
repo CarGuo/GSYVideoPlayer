@@ -15,6 +15,7 @@ import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
+
 import java.util.List;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -160,7 +161,6 @@ public class Exo2PlayerManager extends BasePlayerManager {
 
     @Override
     public void setSpeedPlaying(float speed, boolean soundTouch) {
-
     }
 
 

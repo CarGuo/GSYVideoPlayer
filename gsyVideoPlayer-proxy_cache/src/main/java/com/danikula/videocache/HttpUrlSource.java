@@ -1,12 +1,21 @@
 package com.danikula.videocache;
 
+import static com.danikula.videocache.Preconditions.checkNotNull;
+import static com.danikula.videocache.ProxyCacheUtils.DEFAULT_BUFFER_SIZE;
+import static java.net.HttpURLConnection.HTTP_MOVED_PERM;
+import static java.net.HttpURLConnection.HTTP_MOVED_TEMP;
+import static java.net.HttpURLConnection.HTTP_OK;
+import static java.net.HttpURLConnection.HTTP_PARTIAL;
+import static java.net.HttpURLConnection.HTTP_SEE_OTHER;
+
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import com.danikula.videocache.headers.EmptyHeadersInjector;
 import com.danikula.videocache.headers.HeaderInjector;
 import com.danikula.videocache.sourcestorage.SourceInfoStorage;
 import com.danikula.videocache.sourcestorage.SourceInfoStorageFactory;
-
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -16,24 +25,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import static com.danikula.videocache.Preconditions.checkNotNull;
-import static com.danikula.videocache.ProxyCacheUtils.DEFAULT_BUFFER_SIZE;
-import static java.net.HttpURLConnection.HTTP_MOVED_PERM;
-import static java.net.HttpURLConnection.HTTP_MOVED_TEMP;
-import static java.net.HttpURLConnection.HTTP_OK;
-import static java.net.HttpURLConnection.HTTP_PARTIAL;
-import static java.net.HttpURLConnection.HTTP_SEE_OTHER;
 
 /**
  * {@link Source} that uses http resource as source for {@link ProxyCache}.
@@ -233,6 +231,7 @@ public class HttpUrlSource implements Source {
         return sourceInfo.url;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "HttpUrlSource{sourceInfo='" + sourceInfo + "}";

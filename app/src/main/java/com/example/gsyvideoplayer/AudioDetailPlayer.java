@@ -3,14 +3,13 @@ package com.example.gsyvideoplayer;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import com.example.gsyvideoplayer.video.AudioSampleVideo;
-import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.google.android.exoplayer2.SeekParameters;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -196,7 +195,7 @@ public class AudioDetailPlayer extends AppCompatActivity {
      * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {

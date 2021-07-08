@@ -3,12 +3,14 @@ package com.example.gsyvideoplayer;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
@@ -16,9 +18,9 @@ import com.example.gsyvideoplayer.view.CustomInputDialog;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -184,7 +186,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
      * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {

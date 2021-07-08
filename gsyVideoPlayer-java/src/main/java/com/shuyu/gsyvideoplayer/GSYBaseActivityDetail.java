@@ -4,13 +4,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationOption;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 详情模式播放页面基础类
@@ -115,7 +116,7 @@ public abstract class GSYBaseActivityDetail<T extends GSYBaseVideoPlayer> extend
      * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {

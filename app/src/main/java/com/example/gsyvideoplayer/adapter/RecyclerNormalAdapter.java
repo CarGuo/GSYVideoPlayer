@@ -5,13 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
 
 import java.util.List;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by guoshuyu on 2017/1/9.
@@ -28,8 +29,9 @@ public class RecyclerNormalAdapter extends RecyclerView.Adapter {
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                       int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.list_video_item_normal, parent, false);
         final RecyclerView.ViewHolder holder = new RecyclerItemNormalHolder(context, v);
@@ -38,7 +40,7 @@ public class RecyclerNormalAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         RecyclerItemNormalHolder recyclerItemViewHolder = (RecyclerItemNormalHolder) holder;
         recyclerItemViewHolder.setRecyclerBaseAdapter(this);
         recyclerItemViewHolder.onBind(position, itemDataList.get(position));
