@@ -8,9 +8,9 @@ android {
         versionCode 21
         versionName PROJ_VERSION
     }
-//    buildTypes.all {
-//        it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
-//    }
+    buildTypes.all {
+        it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
+    }
 }
 
 dependencies {
