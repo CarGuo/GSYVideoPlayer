@@ -27,5 +27,4 @@ dependencies {
 
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
     //api "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
-
 }
