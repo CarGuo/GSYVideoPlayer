@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Explode;
+import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
 import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
+import com.example.gsyvideoplayer.databinding.ActivityRecyclerViewBinding;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.example.gsyvideoplayer.utils.ScrollCalculatorHelper;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -22,18 +24,11 @@ import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * 类似微博视频，滑动到具体位置自动播放
  */
 public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
 
-
-    @BindView(R.id.list_item_recycler)
-    RecyclerView videoList;
 
     LinearLayoutManager linearLayoutManager;
 
@@ -45,6 +40,8 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
 
     ScrollCalculatorHelper scrollCalculatorHelper;
 
+    ActivityRecyclerViewBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 设置一个exit transition
@@ -54,8 +51,12 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
             getWindow().setExitTransition(new Explode());
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recycler_view);
-        ButterKnife.bind(this);
+
+        binding = ActivityRecyclerViewBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
 
         resolveData();
 
@@ -68,10 +69,10 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
 
         final RecyclerNormalAdapter recyclerNormalAdapter = new RecyclerNormalAdapter(this, dataList);
         linearLayoutManager = new LinearLayoutManager(this);
-        videoList.setLayoutManager(linearLayoutManager);
-        videoList.setAdapter(recyclerNormalAdapter);
+        binding.listItemRecycler.setLayoutManager(linearLayoutManager);
+        binding.listItemRecycler.setAdapter(recyclerNormalAdapter);
 
-        videoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.listItemRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             int firstVisibleItem, lastVisibleItem;
 

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
+import com.example.gsyvideoplayer.databinding.ActivityDetailExoSubtitlePlayerBinding;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -16,9 +17,6 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by guoshuyu on 2017/1/9.
  */
@@ -27,9 +25,8 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
 
     public final static String TAG = "RecyclerView2List";
 
-    protected Context context = null;
+    protected Context context;
 
-    @BindView(R.id.video_item_player)
     SampleCoverVideo gsyVideoPlayer;
 
     ImageView imageView;
@@ -39,7 +36,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
     public RecyclerItemNormalHolder(Context context, View v) {
         super(v);
         this.context = context;
-        ButterKnife.bind(this, v);
+        gsyVideoPlayer = v.findViewById(R.id.video_item_player);
         imageView = new ImageView(context);
         gsyVideoOptionBuilder = new GSYVideoOptionBuilder();
     }
@@ -63,43 +60,43 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         //防止错位，离开释放
         //gsyVideoPlayer.initUIState();
         gsyVideoOptionBuilder
-                .setIsTouchWiget(false)
-                //.setThumbImageView(imageView)
-                .setUrl(url)
-                .setVideoTitle(title)
-                .setCacheWithPlay(false)
-                .setRotateViewAuto(true)
-                .setLockLand(true)
-                .setPlayTag(TAG)
-                .setMapHeadData(header)
-                .setShowFullAnimation(true)
-                .setNeedLockFull(true)
-                .setPlayPosition(position)
-                .setVideoAllCallBack(new GSYSampleCallBack() {
-                    @Override
-                    public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
-                        if (!gsyVideoPlayer.isIfCurrentIsFullscreen()) {
-                            //静音
-                            GSYVideoManager.instance().setNeedMute(true);
-                        }
-
-                    }
-
-                    @Override
-                    public void onQuitFullscreen(String url, Object... objects) {
-                        super.onQuitFullscreen(url, objects);
-                        //全屏不静音
+            .setIsTouchWiget(false)
+            //.setThumbImageView(imageView)
+            .setUrl(url)
+            .setVideoTitle(title)
+            .setCacheWithPlay(false)
+            .setRotateViewAuto(true)
+            .setLockLand(true)
+            .setPlayTag(TAG)
+            .setMapHeadData(header)
+            .setShowFullAnimation(true)
+            .setNeedLockFull(true)
+            .setPlayPosition(position)
+            .setVideoAllCallBack(new GSYSampleCallBack() {
+                @Override
+                public void onPrepared(String url, Object... objects) {
+                    super.onPrepared(url, objects);
+                    if (!gsyVideoPlayer.isIfCurrentIsFullscreen()) {
+                        //静音
                         GSYVideoManager.instance().setNeedMute(true);
                     }
 
-                    @Override
-                    public void onEnterFullscreen(String url, Object... objects) {
-                        super.onEnterFullscreen(url, objects);
-                        GSYVideoManager.instance().setNeedMute(false);
-                        gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
-                    }
-                }).build(gsyVideoPlayer);
+                }
+
+                @Override
+                public void onQuitFullscreen(String url, Object... objects) {
+                    super.onQuitFullscreen(url, objects);
+                    //全屏不静音
+                    GSYVideoManager.instance().setNeedMute(true);
+                }
+
+                @Override
+                public void onEnterFullscreen(String url, Object... objects) {
+                    super.onEnterFullscreen(url, objects);
+                    GSYVideoManager.instance().setNeedMute(false);
+                    gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
+                }
+            }).build(gsyVideoPlayer);
 
 
         //增加title
@@ -126,7 +123,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         standardGSYVideoPlayer.startWindowFullscreen(context, true, true);
     }
 
-    public  SampleCoverVideo getPlayer() {
+    public SampleCoverVideo getPlayer() {
         return gsyVideoPlayer;
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Explode;
+import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
+import com.example.gsyvideoplayer.databinding.ActivityRecyclerView2Binding;
 import com.example.gsyvideoplayer.holder.RecyclerItemViewHolder;
 import com.example.gsyvideoplayer.mediacodec.MediaCodecVideo;
 import com.example.gsyvideoplayer.model.VideoModel;
@@ -27,8 +29,6 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * MediaCodec
@@ -38,12 +38,6 @@ import butterknife.ButterKnife;
  * 没有适配小窗口切换的，请悉知
  */
 public class RecyclerView3Activity extends AppCompatActivity {
-
-    @BindView(R.id.list_item_recycler)
-    RecyclerView listItemRecycler;
-
-    @BindView(R.id.video_full_container)
-    FrameLayout videoFullContainer;
 
     LinearLayoutManager linearLayoutManager;
 
@@ -58,6 +52,7 @@ public class RecyclerView3Activity extends AppCompatActivity {
     int lastVisibleItem;
 
     int firstVisibleItem;
+    ActivityRecyclerView2Binding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +64,18 @@ public class RecyclerView3Activity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recycler_view2);
-        ButterKnife.bind(this);
+
+
+        binding = ActivityRecyclerView2Binding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
+
 
         initView();
 
-        listItemRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.listItemRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -141,16 +142,16 @@ public class RecyclerView3Activity extends AppCompatActivity {
 
     private void initView() {
         linearLayoutManager = new LinearLayoutManager(this);
-        listItemRecycler.setLayoutManager(linearLayoutManager);
+        binding.listItemRecycler.setLayoutManager(linearLayoutManager);
 
         resolveData();
 
         recyclerBaseAdapter = new RecyclerBaseAdapter(this, dataList);
-        listItemRecycler.setAdapter(recyclerBaseAdapter);
+        binding.listItemRecycler.setAdapter(recyclerBaseAdapter);
 
 
         smallVideoHelper = new GSYVideoHelper(this, new MediaCodecVideo(this));
-        smallVideoHelper.setFullViewContainer(videoFullContainer);
+        smallVideoHelper.setFullViewContainer(binding.videoFullContainer);
 
         //配置
         gsySmallVideoHelperBuilder = new GSYVideoHelper.GSYVideoHelperBuilder();

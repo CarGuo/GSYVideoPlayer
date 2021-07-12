@@ -17,9 +17,9 @@ import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.gsyvideoplayer.databinding.ActivityDetailControlBinding;
 import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.utils.JumpUtils;
-import com.example.gsyvideoplayer.video.SampleControlVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
@@ -33,8 +33,6 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -52,34 +50,6 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
-    @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
-
-    @BindView(R.id.detail_player)
-    SampleControlVideo detailPlayer;
-
-    @BindView(R.id.activity_detail_player)
-    RelativeLayout activityDetailPlayer;
-
-    @BindView(R.id.change_speed)
-    Button changeSpeed;
-
-
-    @BindView(R.id.jump)
-    Button jump;
-
-    @BindView(R.id.shot)
-    Button shot;
-
-    @BindView(R.id.start_gif)
-    Button startGif;
-
-    @BindView(R.id.stop_gif)
-    Button stopGif;
-
-    @BindView(R.id.loadingView)
-    View loadingView;
-
     private final String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
     //private String url = "http://livecdn1.news.cn/Live_MajorEvent01Phone/manifest.m3u8";
     //private String url = "https://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/8908d124aa839d0d3fa9593855ef5957.m3u8";
@@ -89,12 +59,18 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     private GifCreateHelper mGifCreateHelper;
 
     private float speed = 1;
+    private ActivityDetailControlBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_control);
-        ButterKnife.bind(this);
+
+        binding = ActivityDetailControlBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
+
 
         resolveNormalVideoUI();
 
@@ -102,7 +78,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
 
         initGifHelper();
 
-        detailPlayer.setLockClickListener(new LockClickListener() {
+        binding.detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
             public void onClick(View view, boolean lock) {
                 //if (orientationUtils != null) {
@@ -112,7 +88,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
             }
         });
 
-        changeSpeed.setOnClickListener(new View.OnClickListener() {
+        binding.changeSpeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resolveTypeUI();
@@ -128,7 +104,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         list.add(videoOptionModel);
         GSYVideoManager.instance().setOptionModelList(list);*/
 
-        jump.setOnClickListener(new View.OnClickListener() {
+        binding.jump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JumpUtils.gotoControl(DetailControlActivity.this);
@@ -136,7 +112,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
             }
         });
 
-        shot.setOnClickListener(new View.OnClickListener() {
+        binding.shot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DetailControlActivityPermissionsDispatcher.shotImageWithPermissionCheck(DetailControlActivity.this, v);
@@ -144,21 +120,21 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         });
 
 
-        startGif.setOnClickListener(new View.OnClickListener() {
+        binding.startGif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DetailControlActivityPermissionsDispatcher.startGifWithPermissionCheck(DetailControlActivity.this);
             }
         });
 
-        stopGif.setOnClickListener(new View.OnClickListener() {
+        binding.stopGif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stopGif();
             }
         });
 
-        loadingView.setOnClickListener(new View.OnClickListener() {
+        binding.loadingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //do nothing
@@ -168,7 +144,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
 
     @Override
     public StandardGSYVideoPlayer getGSYVideoPlayer() {
-        return detailPlayer;
+        return binding.detailPlayer;
     }
 
     @Override
@@ -245,14 +221,14 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     /*******************************竖屏全屏结束************************************/
 
     private void initGifHelper() {
-        mGifCreateHelper = new GifCreateHelper(detailPlayer, new GSYVideoGifSaveListener() {
+        mGifCreateHelper = new GifCreateHelper(binding.detailPlayer, new GSYVideoGifSaveListener() {
             @Override
             public void result(boolean success, File file) {
-                detailPlayer.post(new Runnable() {
+                binding.detailPlayer.post(new Runnable() {
                     @Override
                     public void run() {
-                        loadingView.setVisibility(View.GONE);
-                        Toast.makeText(detailPlayer.getContext(), "创建成功", Toast.LENGTH_LONG).show();
+                        binding.loadingView.setVisibility(View.GONE);
+                        Toast.makeText(binding.detailPlayer.getContext(), "创建成功", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -279,7 +255,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
      * 生成gif
      */
     void stopGif() {
-        loadingView.setVisibility(View.VISIBLE);
+        binding.loadingView.setVisibility(View.VISIBLE);
         mGifCreateHelper.stopGif(new File(FileUtils.getPath(), "GSY-Z-" + System.currentTimeMillis() + ".gif"));
     }
 
@@ -319,7 +295,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void shotImage(final View v) {
         //获取截图
-        detailPlayer.taskShotPic(new GSYVideoShotListener() {
+        binding.detailPlayer.taskShotPic(new GSYVideoShotListener() {
             @Override
             public void getBitmap(Bitmap bitmap) {
                 if (bitmap != null) {
@@ -358,8 +334,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
 
     private void resolveNormalVideoUI() {
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getBackButton().setVisibility(View.GONE);
+        binding.detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        binding.detailPlayer.getBackButton().setVisibility(View.GONE);
     }
 
     /**
@@ -378,13 +354,13 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         } else if (speed == 0.25f) {
             speed = 1;
         }
-        changeSpeed.setText("播放速度：" + speed);
-        detailPlayer.setSpeedPlaying(speed, true);
+        binding.changeSpeed.setText("播放速度：" + speed);
+        binding.detailPlayer.setSpeedPlaying(speed, true);
     }
 
 
     private void showToast(final String tip) {
-        detailPlayer.post(new Runnable() {
+        binding.detailPlayer.post(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(DetailControlActivity.this, tip, Toast.LENGTH_LONG).show();

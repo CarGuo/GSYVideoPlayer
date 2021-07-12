@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.gsyvideoplayer.adapter.ViewPagerAdapter;
+import com.example.gsyvideoplayer.databinding.ActivityViewPager2Binding;
 import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -15,13 +16,8 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class ViewPager2Activity extends AppCompatActivity {
-
-    @BindView(R.id.view_pager2)
-    ViewPager2 viewPager2;
+    ActivityViewPager2Binding binding;
 
     List<VideoModel> dataList = new ArrayList<>();
 
@@ -30,13 +26,19 @@ public class ViewPager2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_pager2);
-        ButterKnife.bind(this);
+
+
+        binding = ActivityViewPager2Binding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
+
         resolveData();
         viewPagerAdapter = new ViewPagerAdapter(this, dataList);
-        viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-        viewPager2.setAdapter(viewPagerAdapter);
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+        binding.viewPager2.setAdapter(viewPagerAdapter);
+        binding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -51,7 +53,7 @@ public class ViewPager2Activity extends AppCompatActivity {
                 }
             }
         });
-        viewPager2.post(new Runnable() {
+        binding.viewPager2.post(new Runnable() {
             @Override
             public void run() {
                 playPosition(0);
@@ -95,7 +97,7 @@ public class ViewPager2Activity extends AppCompatActivity {
     }
 
     private void playPosition(int position) {
-        RecyclerView.ViewHolder viewHolder = ((RecyclerView) viewPager2.getChildAt(0)).findViewHolderForAdapterPosition(position);
+        RecyclerView.ViewHolder viewHolder = ((RecyclerView) binding.viewPager2.getChildAt(0)).findViewHolderForAdapterPosition(position);
         if (viewHolder != null) {
             RecyclerItemNormalHolder recyclerItemNormalHolder = (RecyclerItemNormalHolder) viewHolder;
             recyclerItemNormalHolder.getPlayer().startPlayLogic();

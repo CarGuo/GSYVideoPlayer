@@ -1,11 +1,14 @@
 package com.example.gsyvideoplayer;
 
 import android.os.Bundle;
+
 import androidx.core.widget.NestedScrollView;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.gsyvideoplayer.databinding.ActivityDeatilListPlayerBinding;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -16,9 +19,6 @@ import com.shuyu.gsyvideoplayer.video.ListGSYVideoPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Activity可以继承GSYBaseActivityDetail实现详情模式的页面
  * 或者参考DetailPlayer、DetailListPlayer实现
@@ -27,21 +27,17 @@ import butterknife.ButterKnife;
 
 public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
-
-    @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
-    @BindView(R.id.detail_player)
-    ListGSYVideoPlayer detailPlayer;
-    @BindView(R.id.activity_detail_player)
-    RelativeLayout activityDetailPlayer;
-    @BindView(R.id.next)
-    View next;
+    ActivityDeatilListPlayerBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deatil_list_player);
-        ButterKnife.bind(this);
+
+        binding = ActivityDeatilListPlayerBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
 
         //普通模式
         initVideo();
@@ -52,27 +48,27 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题2"));
         urls.add(new GSYVideoModel("https://res.exexm.com/cw_145225549855002", "标题3"));
         urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题4"));
-        detailPlayer.setUp(urls, true, 0);
+        binding.detailPlayer.setUp(urls, true, 0);
 
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.mipmap.xxx1);
-        detailPlayer.setThumbImageView(imageView);
+        binding.detailPlayer.setThumbImageView(imageView);
 
         resolveNormalVideoUI();
 
-        detailPlayer.setIsTouchWiget(true);
+        binding.detailPlayer.setIsTouchWiget(true);
         //关闭自动旋转
-        detailPlayer.setRotateViewAuto(false);
-        detailPlayer.setLockLand(false);
-        detailPlayer.setShowFullAnimation(false);
+        binding.detailPlayer.setRotateViewAuto(false);
+        binding.detailPlayer.setLockLand(false);
+        binding.detailPlayer.setShowFullAnimation(false);
         //detailPlayer.setNeedLockFull(true);
-        detailPlayer.setAutoFullWithSize(false);
+        binding.detailPlayer.setAutoFullWithSize(false);
 
-        detailPlayer.setVideoAllCallBack(this);
+        binding.detailPlayer.setVideoAllCallBack(this);
 
-        detailPlayer.setLockClickListener(new LockClickListener() {
+        binding.detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
             public void onClick(View view, boolean lock) {
                 if (orientationUtils != null) {
@@ -82,10 +78,10 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
             }
         });
 
-        next.setOnClickListener(new View.OnClickListener() {
+        binding.next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ListGSYVideoPlayer) detailPlayer.getCurrentPlayer()).playNext();
+                ((ListGSYVideoPlayer) binding.detailPlayer.getCurrentPlayer()).playNext();
             }
         });
 
@@ -93,7 +89,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
 
     @Override
     public ListGSYVideoPlayer getGSYVideoPlayer() {
-        return detailPlayer;
+        return binding.detailPlayer;
     }
 
     @Override
@@ -128,15 +124,15 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
 
     private void resolveNormalVideoUI() {
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-        detailPlayer.getBackButton().setVisibility(View.VISIBLE);
+        binding.detailPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+        binding.detailPlayer.getBackButton().setVisibility(View.VISIBLE);
     }
 
     private GSYVideoPlayer getCurPlay() {
-        if (detailPlayer.getFullWindowPlayer() != null) {
-            return detailPlayer.getFullWindowPlayer();
+        if (binding.detailPlayer.getFullWindowPlayer() != null) {
+            return binding.detailPlayer.getFullWindowPlayer();
         }
-        return detailPlayer;
+        return binding.detailPlayer;
     }
 
 

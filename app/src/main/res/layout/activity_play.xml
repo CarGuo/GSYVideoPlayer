@@ -5,17 +5,11 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+
+    <com.example.gsyvideoplayer.video.SampleVideo
+        android:id="@+id/video_player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.example.gsyvideoplayer.video.SampleVideo
-            android:id="@+id/video_player"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

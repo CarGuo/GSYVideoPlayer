@@ -2,16 +2,16 @@ package com.example.gsyvideoplayer;
 
 import android.graphics.Point;
 import android.os.Bundle;
+
 import androidx.core.widget.NestedScrollView;
+
 import android.view.View;
 import android.webkit.WebSettings;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.gsyvideoplayer.video.PreViewGSYVideoPlayer;
-import com.example.gsyvideoplayer.view.ScrollWebView;
+import com.example.gsyvideoplayer.databinding.ActivityWebDetailBinding;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -19,33 +19,25 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by shuyu on 2016/12/26.
  */
 
 public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
-    @BindView(R.id.scroll_webView)
-    ScrollWebView webView;
-    @BindView(R.id.web_player)
-    PreViewGSYVideoPlayer webPlayer;
-    @BindView(R.id.web_top_layout)
-    NestedScrollView webTopLayout;
-    @BindView(R.id.web_top_layout_video)
-    RelativeLayout webTopLayoutVideo;
 
     private boolean isSmall;
 
     private int backupRendType;
+    private ActivityWebDetailBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_detail);
-        ButterKnife.bind(this);
+
+        binding = ActivityWebDetailBinding.inflate(getLayoutInflater());
+        View rootView = binding.getRoot();
+        setContentView(rootView);
 
         backupRendType = GSYVideoType.getRenderType();
 
@@ -57,35 +49,35 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
         initVideoBuilderMode();
 
 
-        webPlayer.setLockClickListener(new LockClickListener() {
+        binding.webPlayer.setLockClickListener(new LockClickListener() {
             @Override
             public void onClick(View view, boolean lock) {
                 if (orientationUtils != null) {
                     //配合下方的onConfigurationChanged
                     orientationUtils.setEnable(!lock);
-                    webPlayer.getCurrentPlayer().setRotateViewAuto(!lock);
+                    binding.webPlayer.getCurrentPlayer().setRotateViewAuto(!lock);
                 }
             }
         });
 
 
-        WebSettings settings = webView.getSettings();
+        WebSettings settings = binding.scrollWebView.getSettings();
         settings.setJavaScriptEnabled(true);
-        webView.loadUrl("https://www.baidu.com");
+        binding.scrollWebView.loadUrl("https://www.baidu.com");
 
 
         orientationUtils.setRotateWithSystem(false);
 
-        webTopLayout.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        binding.webTopLayout.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (!webPlayer.isIfCurrentIsFullscreen() && scrollY >= 0 && isPlay) {
-                    if (scrollY > webPlayer.getHeight()) {
+                if (!binding.webPlayer.isIfCurrentIsFullscreen() && scrollY >= 0 && isPlay) {
+                    if (scrollY > binding.webPlayer.getHeight()) {
                         //如果是小窗口就不需要处理
                         if (!isSmall) {
                             isSmall = true;
                             int size = CommonUtil.dip2px(WebDetailActivity.this, 150);
-                            webPlayer.showSmallVideo(new Point(size, size), true, true);
+                            binding.webPlayer.showSmallVideo(new Point(size, size), true, true);
                             orientationUtils.setEnable(false);
                         }
                     } else {
@@ -93,15 +85,15 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
                             isSmall = false;
                             orientationUtils.setEnable(true);
                             //必须
-                            webTopLayoutVideo.postDelayed(new Runnable() {
+                            binding.webTopLayoutVideo.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    webPlayer.hideSmallVideo();
+                                    binding.webPlayer.hideSmallVideo();
                                 }
                             }, 50);
                         }
                     }
-                    webTopLayoutVideo.setTranslationY((scrollY <= webTopLayoutVideo.getHeight()) ? -scrollY : -webTopLayoutVideo.getHeight());
+                    binding.webTopLayoutVideo.setTranslationY((scrollY <= binding.webTopLayoutVideo.getHeight()) ? -scrollY : -binding.webTopLayoutVideo.getHeight());
                 }
             }
         });
@@ -117,7 +109,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
 
     @Override
     public StandardGSYVideoPlayer getGSYVideoPlayer() {
-        return webPlayer;
+        return binding.webPlayer;
     }
 
     @Override
@@ -128,16 +120,16 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
         ImageView imageView = new ImageView(this);
         loadCover(imageView, url);
         return new GSYVideoOptionBuilder()
-                .setThumbImageView(imageView)
-                .setUrl(url)
-                .setCacheWithPlay(false)
-                .setRotateWithSystem(false)
-                .setVideoTitle("测试视频")
-                .setIsTouchWiget(true)
-                .setRotateViewAuto(false)
-                .setLockLand(false)
-                .setShowFullAnimation(false)
-                .setNeedLockFull(true);
+            .setThumbImageView(imageView)
+            .setUrl(url)
+            .setCacheWithPlay(false)
+            .setRotateWithSystem(false)
+            .setVideoTitle("测试视频")
+            .setIsTouchWiget(true)
+            .setRotateViewAuto(false)
+            .setLockLand(false)
+            .setShowFullAnimation(false)
+            .setNeedLockFull(true);
     }
 
     @Override
@@ -147,6 +139,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
 
     /**
      * 是否启动旋转横屏，true表示启动
+     *
      * @return true
      */
     @Override
@@ -160,20 +153,20 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
         imageView.setImageResource(R.mipmap.xxx1);
 
         Glide.with(this.getApplicationContext())
-                .setDefaultRequestOptions(
-                        new RequestOptions()
-                                .frame(3000000)
-                                .centerCrop()
-                                .error(R.mipmap.xxx2)
-                                .placeholder(R.mipmap.xxx1))
-                .load(url)
-                .into(imageView);
+            .setDefaultRequestOptions(
+                new RequestOptions()
+                    .frame(3000000)
+                    .centerCrop()
+                    .error(R.mipmap.xxx2)
+                    .placeholder(R.mipmap.xxx1))
+            .load(url)
+            .into(imageView);
     }
 
 
     private void resolveNormalVideoUI() {
         //增加title
-        webPlayer.getTitleTextView().setVisibility(View.GONE);
-        webPlayer.getBackButton().setVisibility(View.GONE);
+        binding.webPlayer.getTitleTextView().setVisibility(View.GONE);
+        binding.webPlayer.getBackButton().setVisibility(View.GONE);
     }
 }

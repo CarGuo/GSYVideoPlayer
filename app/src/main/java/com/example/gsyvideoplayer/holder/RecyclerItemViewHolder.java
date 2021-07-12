@@ -9,8 +9,6 @@ import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by GUO on 2015/12/3.
@@ -19,12 +17,10 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
 
     public final static String TAG = "RecyclerView2List";
 
-    protected Context context = null;
+    protected Context context ;
 
-    @BindView(R.id.list_item_container)
     FrameLayout listItemContainer;
 
-    @BindView(R.id.list_item_btn)
     ImageView listItemBtn;
 
     ImageView imageView;
@@ -36,7 +32,8 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
     public RecyclerItemViewHolder(Context context, View v) {
         super(v);
         this.context = context;
-        ButterKnife.bind(this, v);
+        listItemContainer = v.findViewById(R.id.list_item_container);
+        listItemBtn = v.findViewById(R.id.list_item_btn);
         imageView = new ImageView(context);
     }
 

@@ -8,11 +8,14 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
+
 import android.transition.Transition;
 import android.view.View;
 import android.widget.ImageView;
 
 
+import com.example.gsyvideoplayer.databinding.ActivityListVideoBinding;
+import com.example.gsyvideoplayer.databinding.ActivityPlayBinding;
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.video.SampleVideo;
@@ -21,10 +24,6 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * 单独的视频播放页面
  * Created by shuyu on 2016/11/11.
@@ -33,21 +32,23 @@ public class PlayActivity extends AppCompatActivity {
 
     public final static String IMG_TRANSITION = "IMG_TRANSITION";
     public final static String TRANSITION = "TRANSITION";
-
-    @BindView(R.id.video_player)
-    SampleVideo videoPlayer;
-
     OrientationUtils orientationUtils;
 
     private boolean isTransition;
 
     private Transition transition;
+    private ActivityPlayBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play);
-        ButterKnife.bind(this);
+
+        binding = ActivityPlayBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
+
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         init();
     }
@@ -72,28 +73,28 @@ public class PlayActivity extends AppCompatActivity {
         list.add(switchVideoModel);
         list.add(switchVideoModel2);
 
-        videoPlayer.setUp(list, true, "测试视频");
+        binding.videoPlayer.setUp(list, true, "测试视频");
 
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.mipmap.xxx1);
-        videoPlayer.setThumbImageView(imageView);
+        binding.videoPlayer.setThumbImageView(imageView);
 
         //增加title
-        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+        binding.videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
         //videoPlayer.setShowPauseCover(false);
 
         //videoPlayer.setSpeed(2f);
 
         //设置返回键
-        videoPlayer.getBackButton().setVisibility(View.VISIBLE);
+        binding.videoPlayer.getBackButton().setVisibility(View.VISIBLE);
 
         //设置旋转
-        orientationUtils = new OrientationUtils(this, videoPlayer);
+        orientationUtils = new OrientationUtils(this, binding.videoPlayer);
 
         //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        binding.videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 orientationUtils.resolveByClick();
@@ -104,14 +105,14 @@ public class PlayActivity extends AppCompatActivity {
         //videoPlayer.setDialogVolumeProgressBar(getResources().getDrawable(R.drawable.video_new_volume_progress_bg));
         //videoPlayer.setDialogProgressBar(getResources().getDrawable(R.drawable.video_new_progress));
         //videoPlayer.setBottomShowProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_seekbar_progress),
-                //getResources().getDrawable(R.drawable.video_new_seekbar_thumb));
+        //getResources().getDrawable(R.drawable.video_new_seekbar_thumb));
         //videoPlayer.setDialogProgressColor(getResources().getColor(R.color.colorAccent), -11);
 
         //是否可以滑动调整
-        videoPlayer.setIsTouchWiget(true);
+        binding.videoPlayer.setIsTouchWiget(true);
 
         //设置返回按键功能
-        videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+        binding.videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -126,13 +127,13 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        videoPlayer.onVideoPause();
+        binding.videoPlayer.onVideoPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        videoPlayer.onVideoResume();
+        binding.videoPlayer.onVideoResume();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -147,11 +148,11 @@ public class PlayActivity extends AppCompatActivity {
     public void onBackPressed() {
         //先返回正常状态
         if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            videoPlayer.getFullscreenButton().performClick();
+            binding.videoPlayer.getFullscreenButton().performClick();
             return;
         }
         //释放所有
-        videoPlayer.setVideoAllCallBack(null);
+        binding.videoPlayer.setVideoAllCallBack(null);
         GSYVideoManager.releaseAllVideos();
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onBackPressed();
@@ -170,11 +171,11 @@ public class PlayActivity extends AppCompatActivity {
     private void initTransition() {
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             postponeEnterTransition();
-            ViewCompat.setTransitionName(videoPlayer, IMG_TRANSITION);
+            ViewCompat.setTransitionName(binding.videoPlayer, IMG_TRANSITION);
             addTransitionListener();
             startPostponedEnterTransition();
         } else {
-            videoPlayer.startPlayLogic();
+            binding.videoPlayer.startPlayLogic();
         }
     }
 
@@ -182,11 +183,11 @@ public class PlayActivity extends AppCompatActivity {
     private boolean addTransitionListener() {
         transition = getWindow().getSharedElementEnterTransition();
         if (transition != null) {
-            transition.addListener(new OnTransitionListener(){
+            transition.addListener(new OnTransitionListener() {
                 @Override
                 public void onTransitionEnd(Transition transition) {
                     super.onTransitionEnd(transition);
-                    videoPlayer.startPlayLogic();
+                    binding.videoPlayer.startPlayLogic();
                     transition.removeListener(this);
                 }
             });

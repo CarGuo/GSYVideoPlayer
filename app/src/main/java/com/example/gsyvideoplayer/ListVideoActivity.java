@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Explode;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
@@ -14,21 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gsyvideoplayer.adapter.ListNormalAdapter;
+import com.example.gsyvideoplayer.databinding.ActivityListVideo2Binding;
+import com.example.gsyvideoplayer.databinding.ActivityListVideoBinding;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ListVideoActivity extends AppCompatActivity {
 
-    @BindView(R.id.video_list)
-    ListView videoList;
-    @BindView(R.id.activity_list_video)
-    RelativeLayout activityListVideo;
 
     ListNormalAdapter listNormalAdapter;
 
     private boolean isPause;
+    private ActivityListVideoBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +37,18 @@ public class ListVideoActivity extends AppCompatActivity {
             getWindow().setExitTransition(new Explode());
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_video);
-        ButterKnife.bind(this);
+
+
+        binding = ActivityListVideoBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
 
         listNormalAdapter = new ListNormalAdapter(this);
-        videoList.setAdapter(listNormalAdapter);
+        binding.videoList.setAdapter(listNormalAdapter);
 
-        videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
+        binding.videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }

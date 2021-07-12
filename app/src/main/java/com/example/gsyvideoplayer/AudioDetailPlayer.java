@@ -3,13 +3,11 @@ package com.example.gsyvideoplayer;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 
-import com.example.gsyvideoplayer.video.AudioSampleVideo;
+import com.example.gsyvideoplayer.databinding.ActivityDetailAudioPlayerBinding;
 import com.google.android.exoplayer2.SeekParameters;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -23,45 +21,35 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 
 public class AudioDetailPlayer extends AppCompatActivity {
-
-    @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
-
-    //推荐使用StandardGSYVideoPlayer，功能一致
-    //CustomGSYVideoPlayer部分功能处于试验阶段
-    @BindView(R.id.detail_player)
-    AudioSampleVideo detailPlayer;
-
-    @BindView(R.id.activity_detail_player)
-    RelativeLayout activityDetailPlayer;
 
     private boolean isPlay;
     private boolean isPause;
 
     private OrientationUtils orientationUtils;
 
+    ActivityDetailAudioPlayerBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_audio_player);
-        ButterKnife.bind(this);
+        binding = ActivityDetailAudioPlayerBinding.inflate(getLayoutInflater());
+
+        setContentView(binding.getRoot());
 
         String url = getUrl();
 
         resolveNormalVideoUI();
 
         //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
+        orientationUtils = new OrientationUtils(this, binding.detailPlayer);
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
-        detailPlayer.loadCoverImage("", R.drawable.lololo);
+        binding.detailPlayer.loadCoverImage("", R.drawable.lololo);
 
         Map<String, String> header = new HashMap<>();
         header.put("ee", "33");
@@ -85,12 +73,12 @@ public class AudioDetailPlayer extends AppCompatActivity {
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
                         super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
+                        orientationUtils.setEnable(binding.detailPlayer.isRotateWithSystem());
                         isPlay = true;
 
                         //设置 seek 的临近帧。
-                        if (detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
-                            ((Exo2PlayerManager) detailPlayer.getGSYVideoManager().getPlayer()).setSeekParameter(SeekParameters.NEXT_SYNC);
+                        if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                            ((Exo2PlayerManager) binding.detailPlayer.getGSYVideoManager().getPlayer()).setSeekParameter(SeekParameters.NEXT_SYNC);
                             Debuger.printfError("***** setSeekParameter **** ");
                         }
                     }
@@ -137,16 +125,16 @@ public class AudioDetailPlayer extends AppCompatActivity {
                         Debuger.printfLog(" progress " + progress + " secProgress " + secProgress + " currentPosition " + currentPosition + " duration " + duration);
                     }
                 })
-                .build(detailPlayer);
+                .build(binding.detailPlayer);
 
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        binding.detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //直接横屏
                 orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(AudioDetailPlayer.this, true, true);
+                binding.detailPlayer.startWindowFullscreen(AudioDetailPlayer.this, true, true);
             }
         });
     }
@@ -199,22 +187,22 @@ public class AudioDetailPlayer extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+            binding.detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
         }
     }
 
 
     private void resolveNormalVideoUI() {
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getBackButton().setVisibility(View.GONE);
+        binding.detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        binding.detailPlayer.getBackButton().setVisibility(View.GONE);
     }
 
     private GSYVideoPlayer getCurPlay() {
-        if (detailPlayer.getFullWindowPlayer() != null) {
-            return detailPlayer.getFullWindowPlayer();
+        if (binding.detailPlayer.getFullWindowPlayer() != null) {
+            return binding.detailPlayer.getFullWindowPlayer();
         }
-        return detailPlayer;
+        return binding.detailPlayer;
     }
 
 

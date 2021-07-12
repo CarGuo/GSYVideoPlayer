@@ -5,16 +5,14 @@ import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.gsyvideoplayer.databinding.ActivityDetailMoreTypeBinding;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
-import com.example.gsyvideoplayer.video.SampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -25,25 +23,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by guoshuyu on 2017/6/18.
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
  */
 
 public class DetailMoreTypeActivity extends AppCompatActivity {
-    @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
-
-    //推荐使用StandardGSYVideoPlayer，功能一致
-    //CustomGSYVideoPlayer部分功能处于试验阶段
-    @BindView(R.id.detail_player)
-    SampleVideo detailPlayer;
-
-    @BindView(R.id.activity_detail_player)
-    RelativeLayout activityDetailPlayer;
 
     private boolean isPlay;
     private boolean isPause;
@@ -55,11 +40,16 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
 
     private ImageView coverImageView;
 
+    private ActivityDetailMoreTypeBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_more_type);
-        ButterKnife.bind(this);
+        binding = ActivityDetailMoreTypeBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
 
         String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String source1 = "https://res.exexm.com/cw_145225549855002";
@@ -74,51 +64,51 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         list.add(switchVideoModel);
         list.add(switchVideoModel2);
 
-        detailPlayer.setUp(list, true, "");
+        binding.detailPlayer.setUp(list, true, "");
 
         //增加封面
         coverImageView = new ImageView(this);
         coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         //coverImageView.setImageResource(R.mipmap.xxx1);
-        detailPlayer.setThumbImageView(coverImageView);
+        binding.detailPlayer.setThumbImageView(coverImageView);
 
         resolveNormalVideoUI();
 
         //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
+        orientationUtils = new OrientationUtils(this, binding.detailPlayer);
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
-        detailPlayer.setIsTouchWiget(true);
+        binding.detailPlayer.setIsTouchWiget(true);
         //detailPlayer.setIsTouchWigetFull(false);
         //关闭自动旋转
-        detailPlayer.setRotateViewAuto(false);
-        detailPlayer.setLockLand(false);
+        binding.detailPlayer.setRotateViewAuto(false);
+        binding.detailPlayer.setLockLand(false);
 
         //打开  实现竖屏全屏动画
-        detailPlayer.setShowFullAnimation(true);
+        binding.detailPlayer.setShowFullAnimation(true);
 
-        detailPlayer.setNeedLockFull(true);
-        detailPlayer.setSeekRatio(1);
+        binding.detailPlayer.setNeedLockFull(true);
+        binding.detailPlayer.setSeekRatio(1);
         //detailPlayer.setOpenPreView(false);
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        binding.detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //屏蔽，实现竖屏全屏
                 //orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(DetailMoreTypeActivity.this, true, true);
+                binding.detailPlayer.startWindowFullscreen(DetailMoreTypeActivity.this, true, true);
             }
         });
 
-        detailPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
+        binding.detailPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
                 //orientationUtils.setEnable(true);
-                orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
+                orientationUtils.setEnable(binding.detailPlayer.isRotateWithSystem());
                 isPlay = true;
             }
 
@@ -137,18 +127,18 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
                 super.onQuitFullscreen(url, objects);
                 //屏蔽，实现竖屏全屏
                 //if (orientationUtils != null) {
-                    //orientationUtils.backToProtVideo();
+                //orientationUtils.backToProtVideo();
                 //}
             }
         });
 
-        detailPlayer.setLockClickListener(new LockClickListener() {
+        binding.detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
             public void onClick(View view, boolean lock) {
                 //屏蔽，实现竖屏全屏
                 //if (orientationUtils != null) {
-                    //配合下方的onConfigurationChanged
-                    //orientationUtils.setEnable(!lock);
+                //配合下方的onConfigurationChanged
+                //orientationUtils.setEnable(!lock);
                 //}
             }
         });
@@ -208,26 +198,25 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+            binding.detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
         }
         //竖屏全屏
         orientationUtils.setEnable(false);
     }
 
 
-
     private GSYVideoPlayer getCurPlay() {
-        if (detailPlayer.getFullWindowPlayer() != null) {
-            return  detailPlayer.getFullWindowPlayer();
+        if (binding.detailPlayer.getFullWindowPlayer() != null) {
+            return binding.detailPlayer.getFullWindowPlayer();
         }
-        return detailPlayer;
+        return binding.detailPlayer;
     }
 
 
     private void resolveNormalVideoUI() {
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getBackButton().setVisibility(View.GONE);
+        binding.detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        binding.detailPlayer.getBackButton().setVisibility(View.GONE);
     }
 
 
@@ -266,14 +255,14 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
 
         //可以参考Glide，内部也是封装了MediaMetadataRetriever
         Glide.with(this.getApplicationContext())
-                .setDefaultRequestOptions(
-                        new RequestOptions()
-                                .frame(1000000)
-                                .centerCrop()
-                                .error(R.mipmap.xxx2)
-                                .placeholder(R.mipmap.xxx1))
-                .load(url)
-                .into(coverImageView);
+            .setDefaultRequestOptions(
+                new RequestOptions()
+                    .frame(1000000)
+                    .centerCrop()
+                    .error(R.mipmap.xxx2)
+                    .placeholder(R.mipmap.xxx1))
+            .load(url)
+            .into(coverImageView);
     }
 
     public MediaMetadataRetriever getMediaMetadataRetriever(String url) {

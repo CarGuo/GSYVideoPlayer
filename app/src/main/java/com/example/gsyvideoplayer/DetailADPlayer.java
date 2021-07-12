@@ -1,12 +1,9 @@
 package com.example.gsyvideoplayer;
 
 import android.os.Bundle;
-import androidx.core.widget.NestedScrollView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-
-
+import com.example.gsyvideoplayer.databinding.ActivityDetailAdPlayerBinding;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -16,25 +13,21 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 public class DetailADPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
-
-    @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
-    @BindView(R.id.ad_player)
-    GSYSampleADVideoPlayer detailPlayer;
-    @BindView(R.id.activity_detail_player)
-    RelativeLayout activityDetailPlayer;
+    ActivityDetailAdPlayerBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_ad_player);
-        ButterKnife.bind(this);
+
+        binding = ActivityDetailAdPlayerBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
 
         //普通模式
         initVideo();
@@ -53,26 +46,26 @@ public class DetailADPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
         urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4",
                 "正文2标题", GSYSampleADVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
 
-        detailPlayer.setAdUp(urls, true, 0);
+        binding.adPlayer.setAdUp(urls, true, 0);
 
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.mipmap.xxx1);
-        detailPlayer.setThumbImageView(imageView);
+        binding.adPlayer.setThumbImageView(imageView);
 
         resolveNormalVideoUI();
 
-        detailPlayer.setIsTouchWiget(true);
+        binding.adPlayer.setIsTouchWiget(true);
         //关闭自动旋转
-        detailPlayer.setRotateViewAuto(false);
-        detailPlayer.setLockLand(false);
-        detailPlayer.setShowFullAnimation(false);
-        detailPlayer.setNeedLockFull(true);
+        binding.adPlayer.setRotateViewAuto(false);
+        binding.adPlayer.setLockLand(false);
+        binding.adPlayer.setShowFullAnimation(false);
+        binding.adPlayer.setNeedLockFull(true);
 
-        detailPlayer.setVideoAllCallBack(this);
+        binding.adPlayer.setVideoAllCallBack(this);
 
-        detailPlayer.setLockClickListener(new LockClickListener() {
+        binding.adPlayer.setLockClickListener(new LockClickListener() {
             @Override
             public void onClick(View view, boolean lock) {
                 if (orientationUtils != null) {
@@ -86,7 +79,7 @@ public class DetailADPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
     @Override
     public ListGSYVideoPlayer getGSYVideoPlayer() {
-        return detailPlayer;
+        return binding.adPlayer;
     }
 
     @Override
@@ -121,8 +114,8 @@ public class DetailADPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
     private void resolveNormalVideoUI() {
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-        detailPlayer.getBackButton().setVisibility(View.VISIBLE);
+        binding.adPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+        binding.adPlayer.getBackButton().setVisibility(View.VISIBLE);
     }
 }
 
