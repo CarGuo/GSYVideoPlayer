@@ -1,3 +1,4 @@
 apply plugin: 'com.android.library'
 
 apply from: "${rootDir.path}/gradle/base.gradle"
+apply from: "${rootDir.path}/gradle/publish.gradle"

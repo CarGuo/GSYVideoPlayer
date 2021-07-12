@@ -3,6 +3,21 @@ name: CI
 on: [ push, pull_request ]
 
 jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 11
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Publish artifacts
+        run: ./gradlew publishToMavenLocal
+
   build:
     name: Build
     runs-on: ubuntu-latest
