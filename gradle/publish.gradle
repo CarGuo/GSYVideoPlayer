@@ -1,0 +1,38 @@
+apply plugin: "maven-publish"
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                group = PROJ_GROUP
+                artifactId = PROJ_ARTIFACTID
+                version = PROJ_VERSION
+
+                pom {
+                    name = PROJ_NAME
+                    description = PROJ_DESCRIPTION
+                    url = PROJ_VCSURL
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = DEVELOPER_ID
+                            name = DEVELOPER_NAME
+                        }
+                    }
+                    scm {
+                        connection = PROJ_ISSUETRACKERURL
+                        developerConnection = PROJ_VCSURL
+                        url = PROJ_WEBSITEURL
+                    }
+                }
+            }
+        }
+    }
+}
