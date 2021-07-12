@@ -96,7 +96,6 @@
         android:background="#A0000000">
 
         <ProgressBar
-            android:id="@+id/loading"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="50dp"
             android:layout_height="50dp"

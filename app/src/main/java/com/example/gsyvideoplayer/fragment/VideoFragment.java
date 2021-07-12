@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
 import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
+import com.example.gsyvideoplayer.databinding.ActivityPlayPickBinding;
+import com.example.gsyvideoplayer.databinding.FragmentVideoBinding;
 import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -21,14 +23,8 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class VideoFragment extends Fragment {
-
-
-    @BindView(R.id.list_item_recycler)
-    RecyclerView videoList;
 
     LinearLayoutManager linearLayoutManager;
 
@@ -54,16 +50,17 @@ public class VideoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video, container, false);
 
-        ButterKnife.bind(this, view);
+
+        RecyclerView listItemRecycler = view.findViewById(R.id.list_item_recycler);
 
         resolveData();
 
         final RecyclerNormalAdapter recyclerNormalAdapter = new RecyclerNormalAdapter(getActivity(), dataList);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        videoList.setLayoutManager(linearLayoutManager);
-        videoList.setAdapter(recyclerNormalAdapter);
+        listItemRecycler.setLayoutManager(linearLayoutManager);
+        listItemRecycler.setAdapter(recyclerNormalAdapter);
 
-        videoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        listItemRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             int firstVisibleItem, lastVisibleItem;
 
@@ -83,9 +80,9 @@ public class VideoFragment extends Fragment {
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
                     if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
-                            && (position < firstVisibleItem || position > lastVisibleItem)) {
+                        && (position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果滑出去了上面和下面就是否，和今日头条一样
-                        if(!GSYVideoManager.isFullState(getActivity())) {
+                        if (!GSYVideoManager.isFullState(getActivity())) {
                             GSYVideoManager.releaseAllVideos();
                             recyclerNormalAdapter.notifyDataSetChanged();
                         }

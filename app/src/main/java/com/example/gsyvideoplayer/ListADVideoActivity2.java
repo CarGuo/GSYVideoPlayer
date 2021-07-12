@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import com.example.gsyvideoplayer.databinding.ActivityListVideoBinding;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.example.gsyvideoplayer.video.RequestListADVideoPlayer;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
@@ -25,18 +26,15 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * 带广告播放列表，支持中间插入广告模式
  */
 public class ListADVideoActivity2 extends AppCompatActivity {
 
-    @BindView(R.id.video_list)
-    ListView videoList;
 
     ListADNormalAdapter listADNormalAdapter;
+
+    ActivityListVideoBinding binding;
 
 
     @Override
@@ -48,13 +46,17 @@ public class ListADVideoActivity2 extends AppCompatActivity {
             getWindow().setExitTransition(new Explode());
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_video);
-        ButterKnife.bind(this);
+
+        binding = ActivityListVideoBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
 
         listADNormalAdapter = new ListADNormalAdapter(this);
-        videoList.setAdapter(listADNormalAdapter);
+        binding.videoList.setAdapter(listADNormalAdapter);
 
-        videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
+        binding.videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }

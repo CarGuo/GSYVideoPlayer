@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
+import com.example.gsyvideoplayer.databinding.ActivityEmptyBinding;
+import com.example.gsyvideoplayer.databinding.ActivityInputUrlDetailBinding;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.example.gsyvideoplayer.view.CustomInputDialog;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -22,25 +24,7 @@ import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class InputUrlDetailActivity extends AppCompatActivity {
-
-    @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
-
-    //推荐使用StandardGSYVideoPlayer，功能一致
-    //CustomGSYVideoPlayer部分功能处于试验阶段
-    @BindView(R.id.detail_player)
-    LandLayoutVideo detailPlayer;
-
-    @BindView(R.id.activity_detail_player)
-    RelativeLayout activityDetailPlayer;
-
-    @BindView(R.id.inputUrl)
-    Button inputUrl;
-
 
     private boolean isPlay;
     private boolean isPause;
@@ -51,11 +35,17 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
     private GSYVideoOptionBuilder gsyVideoOptionBuilder;
 
+    private ActivityInputUrlDetailBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_input_url_detail);
-        ButterKnife.bind(this);
+
+        binding = ActivityInputUrlDetailBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
 
         url = "https://res.exexm.com/cw_145225549855002";
 
@@ -67,7 +57,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
         resolveNormalVideoUI();
 
         //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
+        orientationUtils = new OrientationUtils(this, binding.detailPlayer);
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
@@ -87,7 +77,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
                     public void onPrepared(String url, Object... objects) {
                         super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
+                        orientationUtils.setEnable(binding.detailPlayer.isRotateWithSystem());
                         isPlay = true;
                     }
 
@@ -99,20 +89,20 @@ public class InputUrlDetailActivity extends AppCompatActivity {
                         }
                     }
                 });
-        gsyVideoOptionBuilder.build(detailPlayer);
+        gsyVideoOptionBuilder.build(binding.detailPlayer);
 
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        binding.detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //直接横屏
                 orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(InputUrlDetailActivity.this, true, true);
+                binding.detailPlayer.startWindowFullscreen(InputUrlDetailActivity.this, true, true);
             }
         });
 
-        detailPlayer.setLockClickListener(new LockClickListener() {
+        binding.detailPlayer.setLockClickListener(new LockClickListener() {
             @Override
             public void onClick(View view, boolean lock) {
                 if (orientationUtils != null) {
@@ -122,7 +112,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
             }
         });
 
-        inputUrl.setOnClickListener(new View.OnClickListener() {
+        binding.inputUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showInputDialog();
@@ -131,7 +121,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
 
 
-        detailPlayer.postDelayed(new Runnable() {
+        binding.detailPlayer.postDelayed(new Runnable() {
             @Override
             public void run() {
                 ImageView testImage = findViewById(R.id.test_image_view);
@@ -183,43 +173,43 @@ public class InputUrlDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     * orientationUtils 和  binding.detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
      */
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+            binding.detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
         }
     }
 
     private GSYVideoPlayer getCurPlay() {
-        if (detailPlayer.getFullWindowPlayer() != null) {
-            return  detailPlayer.getFullWindowPlayer();
+        if (binding.detailPlayer.getFullWindowPlayer() != null) {
+            return  binding.detailPlayer.getFullWindowPlayer();
         }
-        return detailPlayer;
+        return binding.detailPlayer;
     }
 
     private void playVideo() {
-        detailPlayer.release();
+        binding.detailPlayer.release();
         gsyVideoOptionBuilder.setUrl(url)
                 .setCacheWithPlay(cache)
                 .setVideoTitle("测试视频")
-                .build(detailPlayer);
-        gsyVideoOptionBuilder.build(detailPlayer);
-        detailPlayer.postDelayed(new Runnable() {
+                .build(binding.detailPlayer);
+        gsyVideoOptionBuilder.build(binding.detailPlayer);
+        binding.detailPlayer.postDelayed(new Runnable() {
             @Override
             public void run() {
-                detailPlayer.startPlayLogic();
+                binding.detailPlayer.startPlayLogic();
             }
         }, 1000);
     }
 
     private void resolveNormalVideoUI() {
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getBackButton().setVisibility(View.GONE);
+        binding.detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        binding.detailPlayer.getBackButton().setVisibility(View.GONE);
     }
 
 

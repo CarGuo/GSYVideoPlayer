@@ -38,8 +38,6 @@ ext {
     ]
 
     viewDependencies = [
-            butterKnife          : "com.jakewharton:butterknife:${butterKnifeVersion}",
-            apt_butterKnife      : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
             ijkplayer_java       : "com.github.CarGuo:GSYIjkJava:${CarGuoIjk}",
             transitionseverywhere: "com.andkulikov:transitionseverywhere:${transitionseverywhere}",
             DanmakuFlameMaster   : "com.github.ctiao:DanmakuFlameMaster:${DanmakuFlameMaster}",

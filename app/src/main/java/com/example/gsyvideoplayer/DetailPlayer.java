@@ -9,16 +9,13 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 
-import com.example.gsyvideoplayer.video.LandLayoutVideo;
+import com.example.gsyvideoplayer.databinding.ActivityDetailPlayerBinding;
 import com.google.android.exoplayer2.SeekParameters;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -32,26 +29,11 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 
 public class DetailPlayer extends AppCompatActivity {
 
-    @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
-
-    //推荐使用StandardGSYVideoPlayer，功能一致
-    //CustomGSYVideoPlayer部分功能处于试验阶段
-    @BindView(R.id.detail_player)
-    LandLayoutVideo detailPlayer;
-
-    @BindView(R.id.activity_detail_player)
-    RelativeLayout activityDetailPlayer;
-
-    @BindView(R.id.open_btn)
-    Button button;
 
 
     private boolean isPlay;
@@ -59,17 +41,23 @@ public class DetailPlayer extends AppCompatActivity {
 
     private OrientationUtils orientationUtils;
 
+    private ActivityDetailPlayerBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_player);
-        ButterKnife.bind(this);
+
+        binding = ActivityDetailPlayerBinding.inflate(getLayoutInflater());
+
+        View rootView = binding.getRoot();
+        setContentView(rootView);
+
 
         String url = getUrl();
 
-        //detailPlayer.setUp(url, false, null, "测试视频");
-        //detailPlayer.setLooping(true);
-        //detailPlayer.setShowPauseCover(false);
+        //binding.detailPlayer.setUp(url, false, null, "测试视频");
+        //binding.detailPlayer.setLooping(true);
+        //binding.detailPlayer.setShowPauseCover(false);
 
         //如果视频帧数太高导致卡画面不同步
         //VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 30);
@@ -116,12 +104,12 @@ public class DetailPlayer extends AppCompatActivity {
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.mipmap.xxx1);
 
-        //detailPlayer.setThumbImageView(imageView);
+        //binding.detailPlayer.setThumbImageView(imageView);
 
         resolveNormalVideoUI();
 
         //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
+        orientationUtils = new OrientationUtils(this, binding.detailPlayer);
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
@@ -157,13 +145,13 @@ public class DetailPlayer extends AppCompatActivity {
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
                         super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
+                        orientationUtils.setEnable(binding.detailPlayer.isRotateWithSystem());
                         isPlay = true;
 
 
                         //设置 seek 的临近帧。
-                        if (detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
-                            ((Exo2PlayerManager) detailPlayer.getGSYVideoManager().getPlayer()).setSeekParameter(SeekParameters.NEXT_SYNC);
+                        if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                            ((Exo2PlayerManager) binding.detailPlayer.getGSYVideoManager().getPlayer()).setSeekParameter(SeekParameters.NEXT_SYNC);
                             Debuger.printfError("***** setSeekParameter **** ");
                         }
                     }
@@ -210,20 +198,20 @@ public class DetailPlayer extends AppCompatActivity {
                         Debuger.printfLog(" progress " + progress + " secProgress " + secProgress + " currentPosition " + currentPosition + " duration " + duration);
                     }
                 })
-                .build(detailPlayer);
+                .build(binding.detailPlayer);
 
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        binding.detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //直接横屏
                 orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
+                binding.detailPlayer.startWindowFullscreen(DetailPlayer.this, true, true);
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        binding.openBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fileSearch();
@@ -272,29 +260,29 @@ public class DetailPlayer extends AppCompatActivity {
 
 
     /**
-     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     * orientationUtils 和  binding.detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
      */
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+            binding.detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
         }
     }
 
 
     private void resolveNormalVideoUI() {
         //增加title
-        detailPlayer.getTitleTextView().setVisibility(View.GONE);
-        detailPlayer.getBackButton().setVisibility(View.GONE);
+        binding.detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        binding.detailPlayer.getBackButton().setVisibility(View.GONE);
     }
 
     private GSYVideoPlayer getCurPlay() {
-        if (detailPlayer.getFullWindowPlayer() != null) {
-            return detailPlayer.getFullWindowPlayer();
+        if (binding.detailPlayer.getFullWindowPlayer() != null) {
+            return binding.detailPlayer.getFullWindowPlayer();
         }
-        return detailPlayer;
+        return binding.detailPlayer;
     }
 
 
@@ -390,8 +378,8 @@ public class DetailPlayer extends AppCompatActivity {
             if (cursor.moveToFirst()) {
                 int index = cursor.getColumnIndex(MediaStore.Video.Media.DATA);
                 if (index > -1) {
-                    detailPlayer.setUp(uri.toString(), false, "File");
-                    detailPlayer.startPlayLogic();
+                    binding.detailPlayer.setUp(uri.toString(), false, "File");
+                    binding.detailPlayer.startPlayLogic();
                 }
             }
             cursor.close();

@@ -13,6 +13,10 @@ android {
         }
     }
 
+    viewBinding {
+        enabled = true
+    }
+
     signingConfigs {
         releaseConfig {
             storeFile file("../debug.jks")
@@ -70,9 +74,6 @@ dependencies {
 
     implementation(dataDependencies.permissionsdispatcher)
     annotationProcessor dataDependencies.permissionsdispatcherProcessor
-
-    implementation viewDependencies.butterKnife
-    annotationProcessor viewDependencies.apt_butterKnife
 
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
