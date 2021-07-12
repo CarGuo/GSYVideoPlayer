@@ -47,7 +47,7 @@ dependencies {
     implementation androidDependencies.appCompat
     implementation androidDependencies.recyclerView
     implementation androidDependencies.core
-    implementation viewDependencies.DanmakuFlameMaster
+    implementation viewDependencies.danmakuFlameMaster
     implementation viewDependencies.ndkBitmap
     implementation viewDependencies.glide
     implementation androidDependencies.design
@@ -72,8 +72,8 @@ dependencies {
     implementation dataDependencies.okhttpUtil
     implementation dataDependencies.okhttp
 
-    implementation(dataDependencies.permissionsdispatcher)
-    annotationProcessor dataDependencies.permissionsdispatcherProcessor
+    implementation(dataDependencies.permissionsDispatcher)
+    annotationProcessor dataDependencies.permissionsDispatcherProcessor
 
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
