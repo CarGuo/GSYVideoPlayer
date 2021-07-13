@@ -3,5 +3,5 @@ apply plugin: 'com.android.library'
 apply from: "${rootDir.path}/gradle/base.gradle"
 
 dependencies {
-    api viewDependencies.ijkplayer_java
+    api viewDependencies.ijkplayer
 }
