@@ -1,9 +1,9 @@
 package com.danikula.videocache;
 
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static com.danikula.videocache.Preconditions.checkNotNull;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Proxy for {@link Source} with caching support ({@link Cache}).

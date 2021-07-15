@@ -67,9 +67,9 @@ class GetRequest {
     @Override
     public String toString() {
         return "GetRequest{" +
-                "rangeOffset=" + rangeOffset +
-                ", partial=" + partial +
-                ", uri='" + uri + '\'' +
-                '}';
+            "rangeOffset=" + rangeOffset +
+            ", partial=" + partial +
+            ", uri='" + uri + '\'' +
+            '}';
     }
 }
