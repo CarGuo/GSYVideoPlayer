@@ -64,7 +64,7 @@ public class HttpUrlSource implements Source {
         this.trustAllCerts = trustAllCerts;
         SourceInfo sourceInfo = sourceInfoStorage.get(url);
         this.sourceInfo = sourceInfo != null ? sourceInfo :
-                new SourceInfo(url, Integer.MIN_VALUE, ProxyCacheUtils.getSupposablyMime(url));
+            new SourceInfo(url, Integer.MIN_VALUE, ProxyCacheUtils.getSupposablyMime(url));
     }
 
     public HttpUrlSource(HttpUrlSource source) {
@@ -100,7 +100,7 @@ public class HttpUrlSource implements Source {
     private long readSourceAvailableBytes(HttpURLConnection connection, long offset, int responseCode) throws IOException {
         long contentLength = getContentLength(connection);
         return responseCode == HTTP_OK ? contentLength
-                : responseCode == HTTP_PARTIAL ? contentLength + offset : sourceInfo.length;
+            : responseCode == HTTP_PARTIAL ? contentLength + offset : sourceInfo.length;
     }
 
     private long getContentLength(HttpURLConnection connection) {
@@ -115,14 +115,14 @@ public class HttpUrlSource implements Source {
                 connection.disconnect();
             } catch (NullPointerException | IllegalArgumentException e) {
                 String message = "Wait... but why? WTF!? " +
-                        "Really shouldn't happen any more after fixing https://github.com/danikula/AndroidVideoCache/issues/43. " +
-                        "If you read it on your device log, please, notify me danikula@gmail.com or create issue here " +
-                        "https://github.com/danikula/AndroidVideoCache/issues.";
+                    "Really shouldn't happen any more after fixing https://github.com/danikula/AndroidVideoCache/issues/43. " +
+                    "If you read it on your device log, please, notify me danikula@gmail.com or create issue here " +
+                    "https://github.com/danikula/AndroidVideoCache/issues.";
                 throw new RuntimeException(message, e);
             } catch (ArrayIndexOutOfBoundsException e) {
                 HttpProxyCacheDebuger.printfError("Error closing connection correctly. Should happen only on Android L. " +
-                        "If anybody know how to fix it, please visit https://github.com/danikula/AndroidVideoCache/issues/88. " +
-                        "Until good solution is not know, just ignore this issue :(", e);
+                    "If anybody know how to fix it, please visit https://github.com/danikula/AndroidVideoCache/issues/88. " +
+                    "Until good solution is not know, just ignore this issue :(", e);
             }
         }
     }
@@ -179,9 +179,7 @@ public class HttpUrlSource implements Source {
                     final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
                     ((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
                     ((HttpsURLConnection) connection).setHostnameVerifier(v);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (KeyManagementException e) {
+                } catch (NoSuchAlgorithmException | KeyManagementException e) {
                     e.printStackTrace();
                 }
             } else {
