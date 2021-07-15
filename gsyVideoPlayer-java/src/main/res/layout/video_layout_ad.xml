@@ -28,8 +28,8 @@
             android:max="100"
             android:maxHeight="4dp"
             android:minHeight="4dp"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp" />
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
 
         <ImageView
             android:id="@+id/fullscreen"
@@ -62,13 +62,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/video_jump_btn_bg"
-        android:paddingBottom="4dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="4dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="4dp"
         android:text="@string/jump_ad"
         android:textColor="#FFFFFF"
         android:visibility="gone" />
@@ -81,10 +81,10 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/video_jump_btn_bg"
-        android:paddingBottom="4dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="4dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="4dp"
         android:text="00"
         android:textColor="#FFFFFF"
         android:visibility="gone" />

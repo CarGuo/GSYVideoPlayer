@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
     <style name="video_style_dialog_progress" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
@@ -25,7 +24,5 @@
         <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:minWidth">1dp</item>
     </style>
-
-
 
 </resources>
