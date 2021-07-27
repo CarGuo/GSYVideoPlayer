@@ -13,8 +13,6 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
       - name: Publish artifacts
         run: ./gradlew publishToMavenLocal
 
@@ -28,7 +26,5 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
       - name: Build
         run: ./gradlew --parallel app:assembleRelease
