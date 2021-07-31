@@ -1,12 +1,10 @@
 android {
-    compileSdkVersion androidCompileSdkVersion
+    compileSdk androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidTargetSdkVersion
-        versionCode 21
-        versionName PROJ_VERSION
+        minSdk androidMinSdkVersion
+        targetSdk androidTargetSdkVersion
     }
     buildTypes.all {
         it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""

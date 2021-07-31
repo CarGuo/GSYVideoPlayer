@@ -5,6 +5,9 @@ apply from: "${rootDir.path}/gradle/base.gradle"
 android {
     defaultConfig {
         applicationId "com.example.gsyvideoplayer"
+        versionCode 21
+        versionName PROJ_VERSION
+
         multiDexEnabled true
 
         ndk {
