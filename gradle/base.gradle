@@ -1,10 +1,10 @@
 android {
-    compileSdk androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdk 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdk androidMinSdkVersion
-        targetSdk androidTargetSdkVersion
+        minSdk 19
+        targetSdk 30
     }
     buildTypes.all {
         it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
