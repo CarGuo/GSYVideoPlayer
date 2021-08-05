@@ -1,8 +1,10 @@
 package com.danikula.videocache;
 
+import static com.danikula.videocache.Preconditions.checkArgument;
+import static com.danikula.videocache.Preconditions.checkNotNull;
+
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
-
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -12,9 +14,6 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-
-import static com.danikula.videocache.Preconditions.checkArgument;
-import static com.danikula.videocache.Preconditions.checkNotNull;
 
 /**
  * Just simple utils.
@@ -85,7 +84,7 @@ public class ProxyCacheUtils {
     }
 
     private static String bytesToHexString(byte[] bytes) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {
             sb.append(String.format("%02x", b));
         }

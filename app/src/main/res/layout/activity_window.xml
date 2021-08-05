@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:textSize="15sp"
-        android:text="返回到桌面，或者点击跳转其他页面均可以存在，demo这里在返回主页Main的时候销毁，因为不想和DEMO中其他页面冲突" />
+        android:text="返回到桌面，或者点击跳转其他页面均可以存在，demo这里在返回主页Main的时候销毁，因为不想和DEMO中其他页面冲突"
+        android:textSize="15sp" />
 
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.danikula.videocache;
 
+import static com.danikula.videocache.Preconditions.checkNotNull;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -13,8 +15,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.danikula.videocache.Preconditions.checkNotNull;
-
 /**
  * Client for {@link HttpProxyCacheServer}
  *
@@ -24,10 +24,10 @@ final class HttpProxyCacheServerClients {
 
     private final AtomicInteger clientsCount = new AtomicInteger(0);
     private final String url;
-    private volatile HttpProxyCache proxyCache;
     private final List<CacheListener> listeners = new CopyOnWriteArrayList<>();
     private final CacheListener uiCacheListener;
     private final Config config;
+    private volatile HttpProxyCache proxyCache;
 
     public HttpProxyCacheServerClients(String url, Config config) {
         this.url = checkNotNull(url);

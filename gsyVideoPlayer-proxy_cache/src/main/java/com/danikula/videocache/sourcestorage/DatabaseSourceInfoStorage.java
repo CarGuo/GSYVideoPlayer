@@ -1,5 +1,8 @@
 package com.danikula.videocache.sourcestorage;
 
+import static com.danikula.videocache.Preconditions.checkAllNotNull;
+import static com.danikula.videocache.Preconditions.checkNotNull;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,9 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.danikula.videocache.SourceInfo;
-
-import static com.danikula.videocache.Preconditions.checkAllNotNull;
-import static com.danikula.videocache.Preconditions.checkNotNull;
 
 /**
  * Database based {@link SourceInfoStorage}.
@@ -25,12 +25,12 @@ class DatabaseSourceInfoStorage extends SQLiteOpenHelper implements SourceInfoSt
     private static final String COLUMN_MIME = "mime";
     private static final String[] ALL_COLUMNS = new String[]{COLUMN_ID, COLUMN_URL, COLUMN_LENGTH, COLUMN_MIME};
     private static final String CREATE_SQL =
-            "CREATE TABLE " + TABLE + " (" +
-                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                    COLUMN_URL + " TEXT NOT NULL," +
-                    COLUMN_MIME + " TEXT," +
-                    COLUMN_LENGTH + " INTEGER" +
-                    ");";
+        "CREATE TABLE " + TABLE + " (" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+            COLUMN_URL + " TEXT NOT NULL," +
+            COLUMN_MIME + " TEXT," +
+            COLUMN_LENGTH + " INTEGER" +
+            ");";
 
     DatabaseSourceInfoStorage(Context context) {
         super(context, "AndroidVideoCache.db", null, 1);
@@ -51,14 +51,8 @@ class DatabaseSourceInfoStorage extends SQLiteOpenHelper implements SourceInfoSt
     @Override
     public SourceInfo get(String url) {
         checkNotNull(url);
-        Cursor cursor = null;
-        try {
-            cursor = getReadableDatabase().query(TABLE, ALL_COLUMNS, COLUMN_URL + "=?", new String[]{url}, null, null, null);
+        try (Cursor cursor = getReadableDatabase().query(TABLE, ALL_COLUMNS, COLUMN_URL + "=?", new String[]{url}, null, null, null)) {
             return cursor == null || !cursor.moveToFirst() ? null : convert(cursor);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
         }
     }
 
@@ -82,9 +76,9 @@ class DatabaseSourceInfoStorage extends SQLiteOpenHelper implements SourceInfoSt
 
     private SourceInfo convert(Cursor cursor) {
         return new SourceInfo(
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URL)),
-                cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_LENGTH)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MIME))
+            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URL)),
+            cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_LENGTH)),
+            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MIME))
         );
     }
 

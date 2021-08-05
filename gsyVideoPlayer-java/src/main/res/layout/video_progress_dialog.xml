@@ -53,15 +53,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="4dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
                 android:max="100"
                 android:progressDrawable="@drawable/video_dialog_progress" />
         </LinearLayout>
 
     </RelativeLayout>
-
 
 </RelativeLayout>
