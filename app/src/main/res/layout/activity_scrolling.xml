@@ -25,8 +25,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_collapseMode="parallax"
-                android:fitsSystemWindows="true">
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax">
 
                 <com.example.gsyvideoplayer.video.LandLayoutVideo
                     android:id="@+id/detail_player"

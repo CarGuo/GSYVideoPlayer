@@ -1,5 +1,8 @@
 package com.danikula.videocache;
 
+import static com.danikula.videocache.Preconditions.checkAllNotNull;
+import static com.danikula.videocache.Preconditions.checkNotNull;
+
 import android.content.Context;
 import android.net.Uri;
 
@@ -28,9 +31,6 @@ import java.util.concurrent.Executors;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.TrustManager;
-
-import static com.danikula.videocache.Preconditions.checkAllNotNull;
-import static com.danikula.videocache.Preconditions.checkNotNull;
 
 /**
  * Simple lightweight proxy server with file caching support that handles HTTP requests.
@@ -346,7 +346,7 @@ public class HttpProxyCacheServer {
         private File cacheRoot;
         private FileNameGenerator fileNameGenerator;
         private DiskUsage diskUsage;
-        private SourceInfoStorage sourceInfoStorage;
+        private final SourceInfoStorage sourceInfoStorage;
         private HeaderInjector headerInjector;
         private HostnameVerifier v;
         private TrustManager[] trustAllCerts;
