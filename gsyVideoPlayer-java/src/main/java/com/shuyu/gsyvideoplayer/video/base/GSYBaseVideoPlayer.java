@@ -896,7 +896,12 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      */
     @SuppressWarnings("ResourceType")
     public GSYVideoPlayer getFullWindowPlayer() {
-        ViewGroup vp = (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
+        Activity activity = CommonUtil.scanForActivity(getContext());
+        if (activity == null) {
+            return null;
+        }
+        ViewGroup vp = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+
         final View full = vp.findViewById(getFullId());
         GSYVideoPlayer gsyVideoPlayer = null;
         if (full != null) {
