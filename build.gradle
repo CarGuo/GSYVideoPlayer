@@ -1,12 +1,12 @@
 buildscript {
-    apply from: 'dependencies.gradle'
+    apply from: "dependencies.gradle"
 
     repositories {
         google()
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
+        classpath "com.android.tools.build:gradle:7.0.0"
     }
 }
 
@@ -16,7 +16,7 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://maven.aliyun.com/repository/public" }
-        maven { url 'https://jitpack.io' }
+        maven { url "https://jitpack.io" }
     }
 }
 

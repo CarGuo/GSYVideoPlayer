@@ -1,8 +1,8 @@
 ext {
-    danmakuFlameMasterSoVersion = '0.9.24'
-    glideVersion = '4.12.0'
-    exoPlayerVersion = '2.14.2'
-    permissionsDispatcherVersion = '4.8.0'
+    danmakuFlameMasterSoVersion = "0.9.24"
+    glideVersion = "4.12.0"
+    exoPlayerVersion = "2.14.2"
+    permissionsDispatcherVersion = "4.8.0"
 
     androidDependencies = [
         recyclerView: "androidx.recyclerview:recyclerview:1.2.1",

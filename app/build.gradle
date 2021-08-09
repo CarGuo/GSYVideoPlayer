@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: "com.android.application"
 
 apply from: "$rootDir/gradle/base.gradle"
 
@@ -12,7 +12,7 @@ android {
 
         ndk {
             //设置支持的SO库架构
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
+            abiFilters "armeabi", "armeabi-v7a", "x86"
         }
     }
 
@@ -37,7 +37,7 @@ android {
         release {
             minifyEnabled true
             signingConfig signingConfigs.releaseConfig
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
 
@@ -56,32 +56,32 @@ dependencies {
     implementation androidDependencies.design
     implementation androidDependencies.viewpager2
 
-    implementation project(':gsyVideoPlayer')
+    implementation project(":gsyVideoPlayer")
     //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:8.1.3-beta"
-    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.3-jitpack'
+    //implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.3-jitpack"
 
-    //implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    //implementation "androidx.vectordrawable:vectordrawable-animated:1.1.0"
 
-//    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.3-jitpack'
-//    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv64:v8.1.3-jitpack'
-//    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.3-jitpack'
-//    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.3-jitpack'
-//    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.3-jitpack'
-//    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86_64:v8.1.3-jitpack'
-//    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.3-jitpack'
-//    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-exo_player2:v8.1.3-jitpack'
+//    implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.3-jitpack"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv64:v8.1.3-jitpack"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.3-jitpack"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.3-jitpack"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.3-jitpack"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86_64:v8.1.3-jitpack"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.3-jitpack"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-exo_player2:v8.1.3-jitpack"
 
 
     implementation dataDependencies.okhttpUtil
     implementation dataDependencies.okhttp
 
-    implementation(dataDependencies.permissionsDispatcher)
+    implementation dataDependencies.permissionsDispatcher
     annotationProcessor dataDependencies.permissionsDispatcherProcessor
 
     //jcenter
     //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
 
-    //implementation "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion'
+    //implementation "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
 
     //implementation "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
     //implementation "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"

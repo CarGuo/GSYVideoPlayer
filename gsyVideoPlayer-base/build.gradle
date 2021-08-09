@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
 
 apply from: "$rootDir/gradle/base.gradle"
 

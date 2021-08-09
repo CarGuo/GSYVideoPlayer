@@ -1,9 +1,9 @@
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
 
 apply from: "$rootDir/gradle/base.gradle"
 apply from: "$rootDir/gradle/publish.gradle"
 
 dependencies {
     api viewDependencies.exoPlayer2
-    api project(':gsyVideoPlayer-base')
+    api project(":gsyVideoPlayer-base")
 }

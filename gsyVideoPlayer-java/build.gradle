@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
 
 apply from: "$rootDir/gradle/base.gradle"
 apply from: "$rootDir/gradle/publish.gradle"
@@ -8,6 +8,6 @@ dependencies {
 
     api viewDependencies.ijkplayer
     api viewDependencies.transitionsEverywhere
-    api project(':gsyVideoPlayer-proxy_cache')
-    api project(':gsyVideoPlayer-base')
+    api project(":gsyVideoPlayer-proxy_cache")
+    api project(":gsyVideoPlayer-base")
 }
