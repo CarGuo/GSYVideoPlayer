@@ -1,3 +1,1 @@
-apply plugin: "com.android.library"
-
-apply from: "$rootDir/gradle/base.gradle"
+apply from: "$rootDir/gradle/lib.gradle"
