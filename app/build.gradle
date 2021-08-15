@@ -21,8 +21,8 @@ android {
     }
 
     signingConfigs {
-        releaseConfig {
-            storeFile file("../debug.jks")
+        release {
+            storeFile file("../release.jks")
             storePassword "123456"
             keyAlias "debug"
             keyPassword "123456"
@@ -32,11 +32,11 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            signingConfig signingConfigs.releaseConfig
+            signingConfig signingConfigs.release
         }
         release {
             minifyEnabled true
-            signingConfig signingConfigs.releaseConfig
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
