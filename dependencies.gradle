@@ -13,6 +13,12 @@ ext {
         annotation  : "androidx.annotation:annotation:1.2.0"
     ]
 
+    testDependencies = [
+        junit       : "junit:junit:4.13.2",
+        runner      : "androidx.test:runner:1.4.0",
+        espressoCore: "androidx.test.espresso:espresso-core:3.4.0"
+    ]
+
     viewDependencies = [
         ijkplayer            : "com.github.CarGuo:GSYIjkJava:1.0.0",
         transitionsEverywhere: "com.andkulikov:transitionseverywhere:2.1.0",
@@ -33,7 +39,6 @@ ext {
             "com.google.android.exoplayer:extension-rtmp:${exoPlayerVersion}"
         ]
     ]
-
 
     dataDependencies = [
         leakcanary                    : "com.squareup.leakcanary:leakcanary-android:2.7",

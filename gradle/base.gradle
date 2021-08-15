@@ -5,6 +5,7 @@ android {
     defaultConfig {
         minSdk 19
         targetSdk 30
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes.all {
         it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
@@ -14,4 +15,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     implementation androidDependencies.annotation
+
+    testImplementation testDependencies.junit
+    androidTestImplementation testDependencies.runner
+    androidTestImplementation testDependencies.espressoCore
 }
