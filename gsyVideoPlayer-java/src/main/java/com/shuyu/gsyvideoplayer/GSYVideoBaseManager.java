@@ -210,9 +210,6 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         GSYModel fb = new GSYModel(url, mapHeadData, loop, speed, cache, cachePath, overrideExtension);
         msg.obj = fb;
         sendMessage(msg);
-        if (needTimeOutOther) {
-            startTimeOutBuffer();
-        }
     }
 
     @Override
@@ -565,6 +562,9 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             switch (msg.what) {
                 case HANDLER_PREPARE:
                     initVideo(msg);
+                    if (needTimeOutOther) {
+                        startTimeOutBuffer();
+                    }
                     break;
                 case HANDLER_SETDISPLAY:
                     break;

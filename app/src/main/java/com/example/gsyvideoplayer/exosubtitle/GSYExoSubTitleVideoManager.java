@@ -56,9 +56,6 @@ public class GSYExoSubTitleVideoManager extends GSYVideoBaseManager {
         msg.what = HANDLER_PREPARE;
         msg.obj = new GSYExoSubTitleModel(url, subTitle, textOutput, mapHeadData, loop, speed, cache, cachePath, overrideExtension);
         sendMessage(msg);
-        if (needTimeOutOther) {
-            startTimeOutBuffer();
-        }
     }
 
 
