@@ -59,9 +59,6 @@ public class GSYExoVideoManager extends GSYVideoBaseManager {
         msg.what = HANDLER_PREPARE;
         msg.obj = new GSYExoModel(urls, mapHeadData, index, loop, speed, cache, cachePath, overrideExtension);
         sendMessage(msg);
-        if (needTimeOutOther) {
-            startTimeOutBuffer();
-        }
     }
 
 
