@@ -24,6 +24,6 @@ public class Md5FileNameGenerator implements FileNameGenerator {
         int dotIndex = url.lastIndexOf('.');
         int slashIndex = url.lastIndexOf('/');
         return dotIndex != -1 && dotIndex > slashIndex && dotIndex + 2 + MAX_EXTENSION_LENGTH > url.length() ?
-                url.substring(dotIndex + 1, url.length()) : "";
+            url.substring(dotIndex + 1) : "";
     }
 }

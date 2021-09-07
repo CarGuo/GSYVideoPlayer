@@ -92,10 +92,11 @@
         android:id="@+id/loadingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="#A0000000">
+        android:background="#A0000000"
+        android:visibility="gone">
 
         <ProgressBar
+            android:id="@+id/loadingBar"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -105,7 +106,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/loading"
+            android:layout_below="@+id/loadingBar"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="15dp"

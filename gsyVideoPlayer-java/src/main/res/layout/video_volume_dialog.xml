@@ -30,8 +30,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:src="@drawable/video_volume_icon" />
         </LinearLayout>
     </RelativeLayout>

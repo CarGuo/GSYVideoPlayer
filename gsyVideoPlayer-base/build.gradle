@@ -1,5 +1,7 @@
 apply from: "$rootDir/gradle/lib.gradle"
 
+apply from: "$rootDir/gradle/publish.gradle"
+
 dependencies {
     api viewDependencies.ijkplayer
 }

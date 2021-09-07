@@ -19,8 +19,8 @@
         android:layout_below="@+id/loading"
         android:layout_centerInParent="true"
         android:layout_marginTop="15dp"
-        android:textColor="#FFFFFF"
         android:text="切换中，请稍后"
+        android:textColor="#FFFFFF"
         android:textSize="18sp" />
 
 </RelativeLayout>

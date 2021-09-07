@@ -1,12 +1,12 @@
 package com.danikula.videocache;
 
+import static android.os.Environment.MEDIA_MOUNTED;
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 
 import java.io.File;
-
-import static android.os.Environment.MEDIA_MOUNTED;
 
 /**
  * Provides application storage paths
@@ -16,7 +16,7 @@ import static android.os.Environment.MEDIA_MOUNTED;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-public  class StorageUtils {
+public class StorageUtils {
 
     private static final String INDIVIDUAL_DIR_NAME = "video-cache";
 
