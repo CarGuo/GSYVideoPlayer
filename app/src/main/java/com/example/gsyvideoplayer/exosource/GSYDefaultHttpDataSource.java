@@ -27,7 +27,6 @@ import androidx.annotation.VisibleForTesting;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
-import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.upstream.BaseDataSource;
 import com.google.android.exoplayer2.upstream.DataSourceException;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -365,11 +364,11 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             }
             closeConnectionQuietly();
             InvalidResponseCodeException exception =
-                new InvalidResponseCodeException(
-                    responseCode, responseMessage, null, headers, dataSpec, errorResponseBody);
+                    new InvalidResponseCodeException(
+                            responseCode, responseMessage, headers, dataSpec, errorResponseBody);
 
             if (responseCode == 416) {
-                exception.initCause(new DataSourceException(PlaybackException.ERROR_CODE_IO_READ_POSITION_OUT_OF_RANGE));
+                exception.initCause(new DataSourceException(DataSourceException.POSITION_OUT_OF_RANGE));
             }
             throw exception;
         }
