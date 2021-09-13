@@ -168,7 +168,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //封面父布局
     protected RelativeLayout mThumbImageViewLayout;
 
-    //底部进度调
+    //底部进度条
     protected ProgressBar mBottomProgressBar;
 
     //点击锁屏的回调
