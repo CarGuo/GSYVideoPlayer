@@ -71,6 +71,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     //这个标志为和 mLockLand 冲突，需要和 OrientationUtils  使用
     protected boolean mAutoFullWithSize = false;
 
+    //是否需要初始化内部 OrientationUtils
+    protected boolean mNeedOrientationUtils = true;
+
     //是否需要竖屏全屏的时候判断状态栏
     protected boolean isNeedAutoAdaptation = false;
 
@@ -204,7 +207,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             int statusBarH = getStatusBarHeight(context);
             int actionBerH = getActionBarHeight((Activity) context);
             boolean isTranslucent = ((WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS & ((Activity) context).getWindow().getAttributes().flags)
-                    == WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                == WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             Debuger.printfLog("*************isTranslucent*************** " + isTranslucent);
             if (statusBar && !isTranslucent) {
                 mListItemRect[1] = mListItemRect[1] - statusBarH;
@@ -255,6 +258,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mStatusBar = from.mStatusBar;
         to.mAutoFullWithSize = from.mAutoFullWithSize;
         to.mOverrideExtension = from.mOverrideExtension;
+        to.mNeedOrientationUtils = from.mNeedOrientationUtils;
         if (from.mSetUpLazy) {
             to.setUpLazy(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
             to.mUrl = from.mUrl;
@@ -272,7 +276,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      */
     private void pauseFullCoverLogic() {
         if (mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE && mTextureView != null
-                && (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) && mShowPauseCover) {
+            && (mFullPauseBitmap == null || mFullPauseBitmap.isRecycled()) && mShowPauseCover) {
             try {
                 initCover();
             } catch (Exception e) {
@@ -288,10 +292,10 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     private void pauseFullBackCoverLogic(GSYBaseVideoPlayer gsyVideoPlayer) {
         //如果是暂停状态
         if (gsyVideoPlayer.mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE
-                && gsyVideoPlayer.mTextureView != null && mShowPauseCover) {
+            && gsyVideoPlayer.mTextureView != null && mShowPauseCover) {
             //全屏的位图还在，说明没播放，直接用原来的
             if (gsyVideoPlayer.mFullPauseBitmap != null
-                    && !gsyVideoPlayer.mFullPauseBitmap.isRecycled() && mShowPauseCover) {
+                && !gsyVideoPlayer.mFullPauseBitmap.isRecycled() && mShowPauseCover) {
                 mFullPauseBitmap = gsyVideoPlayer.mFullPauseBitmap;
             } else if (mShowPauseCover) {
                 //不在了说明已经播放过，还是暂停的话，我们拿回来就好
@@ -316,11 +320,13 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         lp.gravity = Gravity.CENTER;
         gsyVideoPlayer.setLayoutParams(lp);
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
-        mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer, getOrientationOption());
-        mOrientationUtils.setEnable(isRotateViewAuto());
-        mOrientationUtils.setRotateWithSystem(mRotateWithSystem);
-        mOrientationUtils.setOnlyRotateLand(mIsOnlyRotateLand);
-        gsyVideoPlayer.mOrientationUtils = mOrientationUtils;
+        if (mNeedOrientationUtils) {
+            mOrientationUtils = new OrientationUtils((Activity) context, gsyVideoPlayer, getOrientationOption());
+            mOrientationUtils.setEnable(isRotateViewAuto());
+            mOrientationUtils.setRotateWithSystem(mRotateWithSystem);
+            mOrientationUtils.setOnlyRotateLand(mIsOnlyRotateLand);
+            gsyVideoPlayer.mOrientationUtils = mOrientationUtils;
+        }
 
         final boolean isVertical = isVerticalFullByVideoSize();
         final boolean isLockLand = isLockLandByAutoFullSize();
@@ -331,6 +337,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 public void run() {
                     //autoFull模式下，非横屏视频视频不横屏，并且不自动旋转
                     if (!isVertical && isLockLand && mOrientationUtils != null && mOrientationUtils.getIsLand() != 1) {
+                        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                         mOrientationUtils.resolveByClick();
                     }
                     gsyVideoPlayer.setVisibility(VISIBLE);
@@ -339,6 +347,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             }, 300);
         } else {
             if (!isVertical && isLockLand && mOrientationUtils != null) {
+                // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                 mOrientationUtils.resolveByClick();
             }
             gsyVideoPlayer.setVisibility(VISIBLE);
@@ -371,7 +381,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             cloneParams(gsyVideoPlayer, this);
         }
         if (mCurrentState != CURRENT_STATE_NORMAL
-                || mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
+            || mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
             createNetWorkState();
         }
         getGSYVideoManager().setListener(getGSYVideoManager().lastListener());
@@ -404,6 +414,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         }
         mIfCurrentIsFullscreen = false;
         int delay = 0;
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
         if (mOrientationUtils != null) {
             delay = mOrientationUtils.backToProtVideo();
             mOrientationUtils.setEnable(false);
@@ -479,9 +491,9 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         public void run() {
             GSYVideoPlayer gsyVideoPlayer = getFullWindowPlayer();
             if (gsyVideoPlayer != null
-                    && gsyVideoPlayer.mCurrentState != mCurrentState) {
+                && gsyVideoPlayer.mCurrentState != mCurrentState) {
                 if (gsyVideoPlayer.mCurrentState == CURRENT_STATE_PLAYING_BUFFERING_START
-                        && mCurrentState != CURRENT_STATE_PREPAREING) {
+                    && mCurrentState != CURRENT_STATE_PREPAREING) {
                     gsyVideoPlayer.setStateAndUi(mCurrentState);
                 }
             }
@@ -535,6 +547,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             boolean isV = isVerticalFullByVideoSize();
             Debuger.printfLog("GSYVideoBase onPrepared isVerticalFullByVideoSize " + isV);
             if (isV) {
+                // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                 if (mOrientationUtils != null) {
                     mOrientationUtils.backToProtVideo();
                     //处理在未开始播放的时候点击全屏
@@ -990,6 +1004,20 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     }
 
     /**
+     * 是否需要旋转的 OrientationUtils
+     *
+     * @param need 默认 true
+     */
+    public void setNeedOrientationUtils(boolean need) {
+        this.mNeedOrientationUtils = need;
+    }
+
+
+    public boolean isNeedOrientationUtils() {
+        return mNeedOrientationUtils;
+    }
+
+    /**
      * 是否需要适配在竖屏横屏时，由于刘海屏或者打孔屏占据空间，导致标题显示被遮盖的问题
      *
      * @param needAutoAdaptation 默认false
@@ -1022,7 +1050,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         if (gsyVideoPlayer != null) {
             //判断是否自动选择；判断是否是竖直的视频；判断是否隐藏状态栏
             if (isNeedAutoAdaptation &&
-                    isAutoFullWithSize() && isVerticalVideo() && isFullHideStatusBar()) {
+                isAutoFullWithSize() && isVerticalVideo() && isFullHideStatusBar()) {
                 mInnerHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

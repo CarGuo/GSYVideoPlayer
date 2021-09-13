@@ -97,6 +97,8 @@ public class PlayActivity extends AppCompatActivity {
         binding.videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                 orientationUtils.resolveByClick();
             }
         });

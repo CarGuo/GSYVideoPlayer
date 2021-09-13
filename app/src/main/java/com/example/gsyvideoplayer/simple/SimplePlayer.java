@@ -11,7 +11,9 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
-
+/**
+ * 横屏不旋转的 Demo
+ */
 public class SimplePlayer extends AppCompatActivity {
 
     StandardGSYVideoPlayer videoPlayer;
@@ -46,6 +48,8 @@ public class SimplePlayer extends AppCompatActivity {
         videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                 orientationUtils.resolveByClick();
             }
         });
@@ -58,6 +62,11 @@ public class SimplePlayer extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+
+        ///不需要屏幕旋转
+        videoPlayer.setNeedOrientationUtils(false);
+
         videoPlayer.startPlayLogic();
     }
 
@@ -84,11 +93,11 @@ public class SimplePlayer extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //先返回正常状态
-        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            videoPlayer.getFullscreenButton().performClick();
-            return;
-        }
+///       不需要回归竖屏
+//        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+//            videoPlayer.getFullscreenButton().performClick();
+//            return;
+//        }
         //释放所有
         videoPlayer.setVideoAllCallBack(null);
         super.onBackPressed();

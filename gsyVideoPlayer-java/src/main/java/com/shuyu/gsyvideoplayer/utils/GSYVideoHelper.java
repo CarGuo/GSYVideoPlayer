@@ -228,6 +228,8 @@ public class GSYVideoHelper {
      * 处理正常逻辑
      */
     private void resolveToNormal() {
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
         int delay = mOrientationUtils.backToProtVideo();
         if (!mVideoOptionBuilder.isShowFullAnimation()) {
             delay = 0;
@@ -271,6 +273,9 @@ public class GSYVideoHelper {
      */
     private void resolveMaterialToNormal(final GSYVideoPlayer gsyVideoPlayer) {
         if (mVideoOptionBuilder.isShowFullAnimation() && mFullViewContainer instanceof FrameLayout) {
+
+            // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+            // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
             int delay = mOrientationUtils.backToProtVideo();
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -310,6 +315,8 @@ public class GSYVideoHelper {
                             if (mFullViewContainer != null) {
                                 mFullViewContainer.setBackgroundColor(Color.BLACK);
                             }
+                            // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                            // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                             mOrientationUtils.resolveByClick();
                         }
                     }
@@ -319,6 +326,8 @@ public class GSYVideoHelper {
                     if (mFullViewContainer != null) {
                         mFullViewContainer.setBackgroundColor(Color.BLACK);
                     }
+                    // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                    // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                     mOrientationUtils.resolveByClick();
                 }
             }
