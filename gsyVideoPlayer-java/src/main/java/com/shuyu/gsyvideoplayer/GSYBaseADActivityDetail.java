@@ -77,6 +77,8 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
                     @Override
                     public void onQuitFullscreen(String url, Object... objects) {
                         //退出全屏逻辑
+                        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                         if (mADOrientationUtils != null) {
                             mADOrientationUtils.backToProtVideo();
                         }
@@ -96,6 +98,8 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
     public void showFull() {
         if (orientationUtils.getIsLand() != 1) {
             //直接横屏
+            // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+            // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
             orientationUtils.resolveByClick();
         }
         getGSYVideoPlayer().startWindowFullscreen(this, hideActionBarWhenFull(), hideStatusBarWhenFull());
@@ -204,6 +208,8 @@ public abstract class GSYBaseADActivityDetail<T extends GSYBaseVideoPlayer, R ex
      */
     public void showADFull() {
         if (mADOrientationUtils.getIsLand() != 1) {
+            // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+            // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
             mADOrientationUtils.resolveByClick();
         }
         getGSYADVideoPlayer().startWindowFullscreen(GSYBaseADActivityDetail.this, hideActionBarWhenFull(), hideStatusBarWhenFull());

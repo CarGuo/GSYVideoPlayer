@@ -126,6 +126,8 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
         }
         mIfCurrentIsFullscreen = false;
         int delay = 0;
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
         if (mOrientationUtils != null) {
             delay = mOrientationUtils.backToProtVideo();
             mOrientationUtils.setEnable(false);

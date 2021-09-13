@@ -105,6 +105,8 @@ public class AudioSampleVideo extends StandardGSYVideoPlayer {
         mIfCurrentIsFullscreen = false;
         int delay = 0;
         if (mOrientationUtils != null) {
+            // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+            // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
             delay = mOrientationUtils.backToProtVideo();
             mOrientationUtils.setEnable(false);
             if (mOrientationUtils != null) {
