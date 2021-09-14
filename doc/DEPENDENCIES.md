@@ -18,24 +18,24 @@ allprojects {
 #### A、直接引入
 ```
  //完整版引入
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.6-jitpack'
 
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:v8.1.6-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-exo_player2:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo_player2:v8.1.6-jitpack'
 
  //根据你的需求ijk模式的so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv64:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86_64:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv64:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv7a:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv5:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86_64:v8.1.6-jitpack'
 
 ```
 
@@ -45,13 +45,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:v8.1.6-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-exo_player2:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo_player2:v8.1.6-jitpack'
 
  //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-ex_so:v8.1.6-jitpack'
 
 ```
 
