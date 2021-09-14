@@ -272,6 +272,8 @@ public class ListVideoUtil {
      * 处理正常逻辑
      */
     private void resolveToNormal() {
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
         int delay = orientationUtils.backToProtVideo();
         handler.postDelayed(new Runnable() {
             @Override
@@ -306,6 +308,8 @@ public class ListVideoUtil {
      */
     private void resolveMaterialToNormal(final GSYVideoPlayer gsyVideoPlayer) {
         if (showFullAnimation && fullViewContainer instanceof FrameLayout) {
+            // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+            // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
             int delay = orientationUtils.backToProtVideo();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -340,6 +344,8 @@ public class ListVideoUtil {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                    // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                     if (orientationUtils.getIsLand() != 1) {
                         orientationUtils.resolveByClick();
                     }

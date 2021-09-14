@@ -119,6 +119,9 @@ public class DetailDownloadPlayer extends AppCompatActivity {
                     super.onQuitFullscreen(url, objects);
                     Debuger.printfError("***** onQuitFullscreen **** " + objects[0]);//title
                     Debuger.printfError("***** onQuitFullscreen **** " + objects[1]);//当前非全屏player
+
+                    // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                    // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                     if (orientationUtils != null) {
                         orientationUtils.backToProtVideo();
                     }
@@ -145,6 +148,8 @@ public class DetailDownloadPlayer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //直接横屏
+                // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                 orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
@@ -177,6 +182,8 @@ public class DetailDownloadPlayer extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
         if (orientationUtils != null) {
             orientationUtils.backToProtVideo();
         }

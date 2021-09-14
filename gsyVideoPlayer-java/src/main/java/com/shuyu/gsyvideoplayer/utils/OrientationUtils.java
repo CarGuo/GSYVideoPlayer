@@ -201,6 +201,8 @@ public class OrientationUtils {
 
     /**
      * 点击切换的逻辑，比如竖屏的时候点击了就是切换到横屏不会受屏幕的影响
+     *
+     * ！！！如果不需要旋转屏幕，可以不调用！！！
      */
     @SuppressLint("SourceLockedOrientationActivity")
     public void resolveByClick() {

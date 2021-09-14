@@ -18,6 +18,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 /**
  * 简单详情实现模式2
+ * 横屏不旋转的 Demo
  */
 public class SimpleDetailActivityMode2 extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
     private boolean isPlay;
     private boolean isPause;
 
-    private OrientationUtils orientationUtils;
+    //private OrientationUtils orientationUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,52 +49,58 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
         detailPlayer.getBackButton().setVisibility(View.GONE);
 
         //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
+        //orientationUtils = new OrientationUtils(this, detailPlayer);
         //初始化不打开外部的旋转
-        orientationUtils.setEnable(false);
+        // orientationUtils.setEnable(false);
 
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setThumbImageView(imageView)
-                .setIsTouchWiget(true)
-                .setRotateViewAuto(false)
-                .setLockLand(false)
-                .setAutoFullWithSize(false)
-                .setShowFullAnimation(false)
-                .setNeedLockFull(true)
-                .setUrl(url)
-                .setCacheWithPlay(false)
-                .setVideoTitle("测试视频")
-                .setVideoAllCallBack(new GSYSampleCallBack() {
-                    @Override
-                    public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
-                        //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
-                        isPlay = true;
-                    }
+            .setIsTouchWiget(true)
+            .setRotateViewAuto(false)
+            .setLockLand(false)
+            .setAutoFullWithSize(false)
+            .setShowFullAnimation(false)
+            .setNeedLockFull(true)
+            .setUrl(url)
+            .setCacheWithPlay(false)
+            .setVideoTitle("测试视频")
+            ///不需要旋转
+            .setNeedOrientationUtils(false)
+            .setVideoAllCallBack(new GSYSampleCallBack() {
+                @Override
+                public void onPrepared(String url, Object... objects) {
+                    super.onPrepared(url, objects);
+                    //开始播放了才能旋转和全屏
+                    //orientationUtils.setEnable(detailPlayer.isRotateWithSystem());
+                    isPlay = true;
+                }
 
-                    @Override
-                    public void onQuitFullscreen(String url, Object... objects) {
-                        super.onQuitFullscreen(url, objects);
-                        if (orientationUtils != null) {
-                            orientationUtils.backToProtVideo();
-                        }
-                    }
-                }).setLockClickListener(new LockClickListener() {
-                    @Override
-                    public void onClick(View view, boolean lock) {
-                        if (orientationUtils != null) {
-                            //配合下方的onConfigurationChanged
-                            orientationUtils.setEnable(!lock);
-                        }
-                    }
-                }).build(detailPlayer);
+                @Override
+                public void onQuitFullscreen(String url, Object... objects) {
+                    super.onQuitFullscreen(url, objects);
+                    // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                    // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+//                        if (orientationUtils != null) {
+//                            orientationUtils.backToProtVideo();
+//                        }
+                }
+            }).setLockClickListener(new LockClickListener() {
+            @Override
+            public void onClick(View view, boolean lock) {
+//                        if (orientationUtils != null) {
+//                            //配合下方的onConfigurationChanged
+//                            orientationUtils.setEnable(!lock);
+//                        }
+            }
+        }).build(detailPlayer);
 
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //直接横屏
-                orientationUtils.resolveByClick();
+                // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+                // orientationUtils.resolveByClick();
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
                 detailPlayer.startWindowFullscreen(SimpleDetailActivityMode2.this, true, true);
             }
@@ -102,9 +109,11 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+//        if (orientationUtils != null) {
+//            orientationUtils.backToProtVideo();
+//        }
         if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
@@ -132,8 +141,8 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
         if (isPlay) {
             detailPlayer.getCurrentPlayer().release();
         }
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
+//        if (orientationUtils != null)
+//            orientationUtils.releaseListener();
     }
 
 
@@ -144,9 +153,9 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
-        if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
-        }
+//        if (isPlay && !isPause) {
+//            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+//        }
     }
 
 }

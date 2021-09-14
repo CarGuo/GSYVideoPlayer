@@ -57,8 +57,8 @@ dependencies {
     implementation androidDependencies.viewpager2
 
     implementation project(":gsyVideoPlayer")
-    //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:8.1.3-beta"
-    //implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.3-jitpack"
+    //implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5"
+    //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.6-jitpack"
 
     //implementation "androidx.vectordrawable:vectordrawable-animated:1.1.0"
 

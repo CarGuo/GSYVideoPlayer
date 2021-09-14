@@ -73,6 +73,8 @@ public class SwitchDetailActivity extends AppCompatActivity {
                     @Override
                     public void onQuitFullscreen(String url, Object... objects) {
                         super.onQuitFullscreen(url, objects);
+                        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                         if (orientationUtils != null) {
                             orientationUtils.backToProtVideo();
                         }
@@ -83,6 +85,8 @@ public class SwitchDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //直接横屏
+                // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
                 orientationUtils.resolveByClick();
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
                 detailPlayer.startWindowFullscreen(SwitchDetailActivity.this, true, true);
@@ -98,6 +102,8 @@ public class SwitchDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
         if (orientationUtils != null) {
             orientationUtils.backToProtVideo();
         }

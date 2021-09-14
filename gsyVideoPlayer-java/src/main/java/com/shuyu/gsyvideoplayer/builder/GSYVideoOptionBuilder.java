@@ -170,6 +170,8 @@ public class GSYVideoOptionBuilder {
     //进度回调
     protected GSYVideoProgressListener mGSYVideoProgressListener;
 
+    //是否需要初始化内部 OrientationUtils
+    protected boolean mNeedOrientationUtils = true;
 
     /**
      * 是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
@@ -588,6 +590,18 @@ public class GSYVideoOptionBuilder {
         return this;
     }
 
+
+    /**
+     * 是否需要旋转的 OrientationUtils
+     *
+     * @param need 默认 true
+     */
+    public GSYVideoOptionBuilder setNeedOrientationUtils(boolean need) {
+        this.mNeedOrientationUtils = need;
+        return this;
+    }
+
+
     public void build(StandardGSYVideoPlayer gsyVideoPlayer) {
         if (mBottomShowProgressDrawable != null && mBottomShowProgressThumbDrawable != null) {
             gsyVideoPlayer.setBottomShowProgressBarDrawable(mBottomShowProgressDrawable, mBottomShowProgressThumbDrawable);
@@ -634,6 +648,9 @@ public class GSYVideoOptionBuilder {
         }
 
         gsyVideoPlayer.setShowFullAnimation(mShowFullAnimation);
+
+        gsyVideoPlayer.setNeedOrientationUtils(mNeedOrientationUtils);
+
         gsyVideoPlayer.setLooping(mLooping);
         if (mVideoAllCallBack != null) {
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
