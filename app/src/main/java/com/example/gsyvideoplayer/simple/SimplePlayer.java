@@ -50,7 +50,8 @@ public class SimplePlayer extends AppCompatActivity {
             public void onClick(View v) {
                 // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
                 // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-                orientationUtils.resolveByClick();
+                //orientationUtils.resolveByClick();
+                finish();
             }
         });
         //是否可以滑动调整
