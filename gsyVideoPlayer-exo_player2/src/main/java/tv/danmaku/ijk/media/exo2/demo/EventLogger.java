@@ -16,12 +16,13 @@
 package tv.danmaku.ijk.media.exo2.demo;
 
 import android.os.SystemClock;
-
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RendererCapabilities;
@@ -129,8 +130,8 @@ public final class EventLogger implements Player.Listener, MetadataOutput,
     }
 
     @Override
-    public void onPlayerError(ExoPlaybackException e) {
-        Log.e(TAG, "playerFailed [" + getSessionTimeString() + "]", e);
+    public void onPlayerError(@NonNull PlaybackException error) {
+        Log.e(TAG, "playerFailed [" + getSessionTimeString() + "]", error);
     }
 
     @Override
