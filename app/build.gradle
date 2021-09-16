@@ -57,39 +57,22 @@ dependencies {
     implementation androidDependencies.viewpager2
 
     implementation project(":gsyVideoPlayer")
-    //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.5"
-    //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.6-jitpack"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:$gsyVideoVersion"
 
-    //implementation "androidx.vectordrawable:vectordrawable-animated:1.1.0"
-
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:v8.1.3-jitpack"
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv64:v8.1.3-jitpack"
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv7a:v8.1.3-jitpack"
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv5:v8.1.3-jitpack"
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86:v8.1.3-jitpack"
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86_64:v8.1.3-jitpack"
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-ex_so:v8.1.3-jitpack"
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo_player2:v8.1.3-jitpack"
-
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:$gsyVideoVersion"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv64:$gsyVideoVersion"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv7a:$gsyVideoVersion"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv5:$gsyVideoVersion"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86:$gsyVideoVersion"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86_64:$gsyVideoVersion"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-ex_so:$gsyVideoVersion"
+//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo_player2:$gsyVideoVersion"
 
     implementation dataDependencies.okhttpUtil
     implementation dataDependencies.okhttp
 
     implementation dataDependencies.permissionsDispatcher
     annotationProcessor dataDependencies.permissionsDispatcherProcessor
-    //jcenter
-    //implementation "com.shuyu:GSYVideoPlayer:$gsyVideoVersion"
-
-    //implementation "com.shuyu:gsyVideoPlayer-java:$gsyVideoVersion"
-
-    //implementation "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
-    //implementation "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
-    //implementation "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
-    //implementation "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
-    //implementation "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
-
-    //implementation "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
-
 
     debugImplementation dataDependencies.leakcanary
 }
