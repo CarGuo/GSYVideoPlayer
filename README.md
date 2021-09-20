@@ -17,8 +17,8 @@
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.1.6-jitpack'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.6-jitpack'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x64:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.6-jitpack'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
