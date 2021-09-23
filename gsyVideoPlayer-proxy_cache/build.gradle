@@ -5,6 +5,6 @@ apply from: "$rootDir/gradle/publish.gradle"
 android {
     buildFeatures.buildConfig = true
     buildTypes.all {
-        it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
+        it.buildConfigField "String", "LIBRARY_VERSION", "\". Version: $PROJ_VERSION\""
     }
 }
