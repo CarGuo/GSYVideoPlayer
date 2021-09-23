@@ -7,9 +7,7 @@ android {
         targetSdk 30
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes.all {
-        it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
-    }
+    buildFeatures.buildConfig = false
 }
 
 dependencies {
