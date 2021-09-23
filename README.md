@@ -1,92 +1,24 @@
 
-![](./img/home_logo.png)
-
-## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)（兼容系统MediaPlayer与EXOPlayer2），实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
-
-> ## [如果克隆太慢或者图片看不到，可尝试从码云地址下载](https://gitee.com/CarGuo/GSYVideoPlayer)
-
-类型 | 功能
--------- | ---
-**缓存**|**边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)；ExoPlayer使用SimpleCache。**
-**协议**|**h263\4\5、Https、concat、rtsp、hls、rtmp、crypto、mpeg等等。[（ijk模式格式支持）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DECODERS.md)**
-**滤镜**|**简单滤镜（马赛克、黑白、色彩过滤、高斯、模糊、模糊等等20多种）、动画、（水印、画面多重播放等）。**
-**帧图**|**视频第一帧、视频帧截图功能，视频生成gif功能。**
-**播放**|**列表播放、列表连续播放、重力旋转与手动旋转、视频本身rotation旋转属性、快播和慢播、网络视频加载速度。**
-**画面**|**调整显示比例:默认、16:9、4:3、填充；播放时旋转画面角度（0,90,180,270）；镜像旋转。**
-**内核**|**IJKPlayer、EXOPlayer、MediaPlayer切换、自定义内核**
-**布局**|**全屏与非全屏两套布局切换、没有任何操作控件的纯播放支持、弹幕功能、继承自定义任何布局。**
-**播放**|**单例播放、多个同时播放、视频列表滑动自动播放、列表切换详情页面无缝播放。**
-**窗口**|**小窗口、多窗体下（包括桌面）的小窗口播放。**
-**广告**|**片头广告、跳过广告支持、中间插入广告功能。**
-**字幕**|**[exo2模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)。**
-**dash**|**exo2 模式支持dash**
-**更多**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持；锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
-**自定义**|**可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
-
-[ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer-java/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer-java/_latestVersion)
-[![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
-[ ![Download](https://api.bintray.com/packages/carguo/GSYVideoPlayer/gsyVideoPlayer/images/download.svg) ](https://bintray.com/carguo/GSYVideoPlayer/gsyVideoPlayer/_latestVersion)
-[![Build Status](https://travis-ci.org/CarGuo/GSYVideoPlayer.svg?branch=master)](https://travis-ci.org/CarGuo/GSYVideoPlayer)
-
-[]()
-[![GitHub stars](https://img.shields.io/github/stars/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/network)
-[![GitHub issues](https://img.shields.io/github/issues/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/issues)
-[![GitHub license](https://img.shields.io/github/license/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/blob/master/LICENSE)
-
-
-| 公众号   | 掘金     |  知乎    |  CSDN   |   简书
-|---------|---------|--------- |---------|---------|
-| GSYTech  |  [点我](https://juejin.im/user/582aca2ba22b9d006b59ae68/posts)    |   [点我](https://www.zhihu.com/people/carguo)       |   [点我](https://blog.csdn.net/ZuoYueLiang)  |   [点我](https://www.jianshu.com/u/6e613846e1ea)
-
-
-![](http://img.cdn.guoshuyu.cn/WeChat-Code)
-
-### [--------------Demo APK 下载地址---------------](https://github.com/CarGuo/GSYVideoPlayer/releases)
-
-## 一、使用依赖
-
-#### 7.0 版本开始使用了anndroidx，support版本请看6.x.x，请查看：[--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
-
-
-### 1、Jitpack 引入方法（推荐， JCenter 即将关闭）
-
-
-#### First、在project下的build.gradle添加
-
-```
-allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
-}
-```
-
-**你可以选择下面三种的其中一种，在module下的build.gradle添加。**
-
 #### A、直接引入
 ```
  //完整版引入
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.6-jitpack'
-
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:v8.1.6-jitpack'
+ implementation 'com.github.carguo.GSYvideoplayer:gsyVideoPlayer-java:v8.1.6-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo_player2:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.6-jitpack'
 
  //根据你的需求ijk模式的so
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv64:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv7a:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv5:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86:v8.1.6-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86_64:v8.1.6-jitpack'
-
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.6-jitpack'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
@@ -95,13 +27,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.6-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo_player2:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.6-jitpack'
 
  //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-ex_so:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.6-jitpack'
 
 ```
 
