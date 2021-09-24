@@ -13,6 +13,10 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
+      - uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle/wrapper/gradle-wrapper.properties', '**/buildSrc/src/main/kotlin/**.kt') }}
       - name: Publish artifacts
         run: ./gradlew publishToMavenLocal
 
@@ -26,5 +30,9 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
+      - uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle/wrapper/gradle-wrapper.properties', '**/buildSrc/src/main/kotlin/**.kt') }}
       - name: Build
         run: ./gradlew --parallel app:assembleRelease
