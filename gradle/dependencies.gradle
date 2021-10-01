@@ -43,7 +43,7 @@ ext {
 
     dataDependencies = [
         leakcanary                    : "com.squareup.leakcanary:leakcanary-android:2.7",
-        okhttp                        : "com.squareup.okhttp3:okhttp:4.9.1",
+        okhttp                        : "com.squareup.okhttp3:okhttp:4.9.2",
         okhttpUtil                    : "com.zhy:okhttputils:2.6.2",
 
         permissionsDispatcher         : "org.permissionsdispatcher:permissionsdispatcher:${permissionsDispatcherVersion}",
