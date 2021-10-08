@@ -8,10 +8,12 @@ android:
   - android-30
   - extra-android-support
   - extra-android-m2repository
+env:
+  global:
+    - JAVA_OPTS='-XX:+IgnoreUnrecognizedVMOptions --add-modules java.xml.bind'
 before_install:
 - chmod +x gradlew
-before_script:
-- mkdir "$ANDROID_HOME/licenses" || true
+- yes | sdkmanager "platforms;android-30"
 script:
 - cd app
 - "../gradlew assembleRelease"
