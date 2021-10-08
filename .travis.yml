@@ -1,5 +1,6 @@
+os: linux
 language: android
-jdk: oraclejdk11
+jdk: openjdk11
 android:
   components:
   - platform-tools
@@ -10,10 +11,18 @@ android:
   - extra-android-m2repository
 env:
   global:
-    - JAVA_OPTS='-XX:+IgnoreUnrecognizedVMOptions --add-modules java.xml.bind'
+    - TARGET_VERSION=30
+    - ANDROID_BUILD_TOOLS_VERSION=30.0.2
+    - ANDROID_HOME=~/android-sdk
+
 before_install:
 - chmod +x gradlew
-- yes | sdkmanager "platforms;android-30"
+- touch $HOME/.android/repositories.cfg
+- wget "https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip" -O commandlinetools.zip
+- unzip commandlinetools.zip -d $ANDROID_HOME/
+- yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platforms;android-${TARGET_VERSION}" --sdk_root=$ANDROID_HOME
+- yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" --sdk_root=$ANDROID_HOME
+
 script:
 - cd app
 - "../gradlew assembleRelease"
