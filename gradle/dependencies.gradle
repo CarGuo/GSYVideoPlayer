@@ -1,14 +1,9 @@
 ext {
-    //Android
-    androidBuildToolsVersion = "30.0.3"
-    androidMinSdkVersion = 19
-    androidTargetSdkVersion = 30
-    androidCompileSdkVersion = 30
-
-    danmakuFlameMasterSoVersion = '0.9.24'
-    glideVersion = '4.12.0'
-    exoPlayerVersion = '2.15.0'
-    permissionsDispatcherVersion = '4.8.0'
+    gsyVideoVersion = "v8.1.6-jitpack"
+    danmakuFlameMasterSoVersion = "0.9.24"
+    glideVersion = "4.12.0"
+    exoPlayerVersion = "2.15.1"
+    permissionsDispatcherVersion = "4.8.0"
 
     androidDependencies = [
         recyclerView: "androidx.recyclerview:recyclerview:1.2.1",
@@ -17,6 +12,12 @@ ext {
         viewpager2  : "androidx.viewpager2:viewpager2:1.0.0",
         core        : "androidx.core:core:1.6.0",
         annotation  : "androidx.annotation:annotation:1.2.0"
+    ]
+
+    testDependencies = [
+        junit       : "junit:junit:4.13.2",
+        runner      : "androidx.test:runner:1.4.0",
+        espressoCore: "androidx.test.espresso:espresso-core:3.4.0"
     ]
 
     viewDependencies = [
@@ -40,10 +41,9 @@ ext {
         ]
     ]
 
-
     dataDependencies = [
         leakcanary                    : "com.squareup.leakcanary:leakcanary-android:2.7",
-        okhttp                        : "com.squareup.okhttp3:okhttp:4.9.1",
+        okhttp                        : "com.squareup.okhttp3:okhttp:4.9.2",
         okhttpUtil                    : "com.zhy:okhttputils:2.6.2",
 
         permissionsDispatcher         : "org.permissionsdispatcher:permissionsdispatcher:${permissionsDispatcherVersion}",

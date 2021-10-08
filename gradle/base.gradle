@@ -1,19 +1,20 @@
 android {
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdk 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidTargetSdkVersion
-        versionCode 21
-        versionName PROJ_VERSION
+        minSdk 19
+        targetSdk 30
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes.all {
-        it.buildConfigField "String", "VERSION_NAME", "\"${PROJ_VERSION}\""
-    }
+    buildFeatures.buildConfig = false
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     implementation androidDependencies.annotation
+
+    testImplementation testDependencies.junit
+    androidTestImplementation testDependencies.runner
+    androidTestImplementation testDependencies.espressoCore
 }
