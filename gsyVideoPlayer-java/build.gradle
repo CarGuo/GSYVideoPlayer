@@ -1,13 +1,12 @@
-apply plugin: 'com.android.library'
+apply from: "$rootDir/gradle/lib.gradle"
 
-apply from: "${rootDir.path}/gradle/base.gradle"
-apply from: "${rootDir.path}/gradle/publish.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
 
 dependencies {
     implementation androidDependencies.appCompat
 
     api viewDependencies.ijkplayer
     api viewDependencies.transitionsEverywhere
-    api project(':gsyVideoPlayer-proxy_cache')
-    api project(':gsyVideoPlayer-base')
+    api project(":gsyVideoPlayer-proxy_cache")
+    api project(":gsyVideoPlayer-base")
 }

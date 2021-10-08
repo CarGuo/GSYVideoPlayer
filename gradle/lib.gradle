@@ -1,0 +1,9 @@
+apply plugin: "com.android.library"
+
+apply from: "$rootDir/gradle/base.gradle"
+
+android {
+    defaultConfig {
+        consumerProguardFiles "consumer-rules.pro"
+    }
+}

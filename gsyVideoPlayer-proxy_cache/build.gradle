@@ -1,4 +1,10 @@
-apply plugin: 'com.android.library'
+apply from: "$rootDir/gradle/lib.gradle"
 
-apply from: "${rootDir.path}/gradle/base.gradle"
-apply from: "${rootDir.path}/gradle/publish.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+
+android {
+    buildFeatures.buildConfig = true
+    buildTypes.all {
+        it.buildConfigField "String", "LIBRARY_VERSION", "\". Version: $PROJ_VERSION\""
+    }
+}
