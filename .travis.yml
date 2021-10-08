@@ -10,7 +10,8 @@ android:
   - extra-android-m2repository
 before_install:
 - chmod +x gradlew
-- yes | sdkmanager "platforms;android-30"
+before_script:
+- mkdir "$ANDROID_HOME/licenses" || true
 script:
 - cd app
 - "../gradlew assembleRelease"
