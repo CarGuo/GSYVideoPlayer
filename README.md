@@ -63,16 +63,6 @@ allprojects {
 
 **你可以选择下面三种的其中一种，在module下的build.gradle添加。**
 
-com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.6-jitpack
-com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.6-jitpack
-com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.6-jitpack
-com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.6-jitpack
-com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.1.6-jitpack
-
-com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.6-jitpack
-com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.6-jitpack
-com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.6-jitpack
-
 #### A、直接引入
 ```
  //完整版引入
