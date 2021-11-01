@@ -1,9 +1,9 @@
 ext {
     gsyVideoVersion = "v8.1.6-jitpack"
-    danmakuFlameMasterSoVersion = "0.9.24"
+    danmakuFlameMasterSoVersion = "0.9.25"
     glideVersion = "4.12.0"
     exoPlayerVersion = "2.15.1"
-    permissionsDispatcherVersion = "4.8.0"
+    permissionsDispatcherVersion = "4.9.1"
 
     androidDependencies = [
         recyclerView: "androidx.recyclerview:recyclerview:1.2.1",
@@ -23,13 +23,13 @@ ext {
     viewDependencies = [
         ijkplayer            : "com.github.CarGuo:GSYIjkJava:1.0.0",
         transitionsEverywhere: "com.andkulikov:transitionseverywhere:2.1.0",
-        danmakuFlameMaster   : "com.github.ctiao:DanmakuFlameMaster:0.9.25",
+        danmakuFlameMaster   : "com.github.CarGuo.DanmakuFlameMaster:DanmakuFlameMaster:${danmakuFlameMasterSoVersion}",
         floatWindow          : "com.github.yhaolpz:FloatWindow:1.0.6",
 
         ndkBitmap            : [
-            "com.github.ctiao:ndkbitmap-armv7a:${danmakuFlameMasterSoVersion}",
-            "com.github.ctiao:ndkbitmap-armv5:${danmakuFlameMasterSoVersion}",
-            "com.github.ctiao:ndkbitmap-x86:${danmakuFlameMasterSoVersion}",
+            "com.github.CarGuo.DanmakuFlameMaster:ndkbitmap-armv7a:${danmakuFlameMasterSoVersion}",
+            "com.github.CarGuo.DanmakuFlameMaster:ndkbitmap-x86:${danmakuFlameMasterSoVersion}",
+            "com.github.CarGuo.DanmakuFlameMaster:ndkbitmap-armv5:${danmakuFlameMasterSoVersion}",
         ],
         glide                : [
             "com.github.bumptech.glide:glide:${glideVersion}",
@@ -46,7 +46,8 @@ ext {
         okhttp                        : "com.squareup.okhttp3:okhttp:4.9.2",
         okhttpUtil                    : "com.zhy:okhttputils:2.6.2",
 
-        permissionsDispatcher         : "org.permissionsdispatcher:permissionsdispatcher:${permissionsDispatcherVersion}",
-        permissionsDispatcherProcessor: "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionsDispatcherVersion}",
+        permissionsDispatcher         : "com.github.permissions-dispatcher:permissionsdispatcher:${permissionsDispatcherVersion}",
+        permissionsDispatcherProcessor: "com.github.permissions-dispatcher:permissionsdispatcher-processor:${permissionsDispatcherVersion}",
+
     ]
 }
