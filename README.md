@@ -91,13 +91,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.7-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.7-jitpack'
 
  //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.6-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.7-jitpack'
 
 ```
 
@@ -216,6 +216,10 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 五、近期版本
 
+### v8.1.7-jitpack(2020-11-12)
+
+* update something
+
 ### v8.1.6-jitpack(2020-09-13)
 
 * 增加支持横屏幕全屏和竖屏变化，屏幕不旋转，[SimpleActivity](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleActivity.java) [SimpleDetailActivityMode2](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
@@ -223,35 +227,6 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 * 增加针对某些dataBinding的场景， 当context detach activity被回收会出现。
 * exo player 2.14.2
 * fix DataSource error
-
-
-### v8.1.5-jitpack(2020-06-16)
-
-* update #3294 fix StorageUtils
-* update fix #3275
-* update exo '2.14.0'
-* update fix #3241
-
-### v8.1.3-jitpack(2020-04-16)
-
-* move jitpack
-
-## 8.1.2 (2020-03-29)
-
-* update support  exo_player2 = '2.13.2'
-* ijk uri.getScheme #3194
-* fix error cache server when HostnameVerifier &  TrustManager null
-
-## 8.1.1 (2020-03-15)
-
-* #3174 fix HostnameVerifier for google play
-
-
-## 8.1.0 (2020-02-02)
-
-* fix  #3126 crash arm64 with Android11
-* update support #3128 pass MotionEvent
-* update target 30
 
 
 ### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
