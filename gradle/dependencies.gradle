@@ -1,5 +1,5 @@
 ext {
-    gsyVideoVersion = "v8.1.6-jitpack"
+    gsyVideoVersion = "v8.1.7-release-jitpack"
     danmakuFlameMasterSoVersion = "0.9.25"
     glideVersion = "4.12.0"
     exoPlayerVersion = "2.15.1"
