@@ -1,0 +1,129 @@
+#
+#This config uses in all of my live projects. As example, here https://github.com/dmitriy-chernysh/covid-19-tracker-android
+#
+version: 2.1
+
+config_android: &config_android
+  docker:
+    - image: circleci/android:api-30
+  working_directory:  ~/code
+  environment:
+    JAVA_TOOL_OPTIONS: "-Xmx4096m"
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process"
+    TERM: dumb
+
+update_sdk: &update_sdk
+  run:
+    name: Update SDK
+    command: |
+      yes | sdkmanager --licenses || true
+      sdkmanager "platform-tools" "platforms;android-30"
+restore_cache: &restore_cache
+  restore_cache:
+    key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+fix_permissions: &fix_permissions
+  run:
+    name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+    command: sudo chmod +x ./gradlew
+
+update_dependencies: &update_dependencies
+  run:
+    name: Download Dependencies
+    command: ./gradlew dependencies
+
+update_cache: &update_cache
+  save_cache:
+    paths:
+      - ~/.gradle/caches
+      - ~/.gradle/wrapper
+    key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+deploy_to_dropbox: &deploy_to_dropbox
+  deploy:
+    name: Deploy to DropBox
+    command: ./ci-deploy-dropbox.sh
+
+deploy_to_testfairy: &deploy_to_testfairy
+  deploy:
+    name: Deploy to TestFairy
+    command: ./ci-deploy-testfairy.sh
+
+cache_docker: &cache_docker
+  setup_remote_docker:
+    docker_layer_caching: true
+
+filter_master_only: &filter_master_only
+  filters:
+    branches:
+      only: master
+
+filter_tag_version_only: &filter_tag_version_only
+  filters:
+    tags:
+      only: /^v.*/
+    branches:
+      ignore: /.*/
+
+jobs:
+  run_tests:
+    <<: *config_android
+    steps:
+      - <<: *update_sdk
+      - checkout
+      # Docker caching is not available in free plans
+      #- <<: *cache_docker
+      - <<: *restore_cache
+      - <<: *fix_permissions
+      - <<: *update_dependencies
+      - <<: *update_cache
+      - run:
+          name: Run Tests
+          command: ./gradlew testProductionDebug
+      - run:
+          name: Save test results (html page, see Artifacts)
+          command: |
+            mkdir -p test-results/html/
+            find . -type d -regex ".*/*reports/tests" -exec cp -avr {} test-results/html/ \;
+          when: always
+      - run:
+          name: Save test results (xml results, see Tests)
+          command: |
+            mkdir -p test-results/xml/
+            find . -type f -regex ".*/*test-results/.*xml" -exec cp {} test-results/xml/ \;
+          when: always
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: reports/
+
+  build_n_deploy_release:
+    <<: *config_android
+    steps:
+      - checkout
+      - run:
+          name: Assemble release build
+          command: ./gradlew clean assembleProductionRelease --no-daemon --stacktrace
+      - store_artifacts:
+          path: app/build/outputs/apk/
+          destination: apks/
+      - <<: *deploy_to_dropbox
+      - <<: *deploy_to_testfairy
+
+
+workflows:
+  version: 2
+
+  # run tests on every commits
+  run-tests-only:
+    jobs:
+      - run_tests
+
+  # build release and deploy on tags and not branches
+  buid-n-deploy:
+    jobs:
+      - build_n_deploy_release:
+          <<: *filter_tag_version_only
+
+  # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
