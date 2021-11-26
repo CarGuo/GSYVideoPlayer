@@ -1,6 +1,3 @@
-#
-#This config uses in all of my live projects. As example, here https://github.com/dmitriy-chernysh/covid-19-tracker-android
-#
 version: 2.1
 
 config_android: &config_android
@@ -103,7 +100,7 @@ jobs:
       - checkout
       - run:
           name: Assemble release build
-          command: ./gradlew clean assembleProductionRelease --no-daemon --stacktrace
+          command: ./gradlew assembleRelease
       - store_artifacts:
           path: app/build/outputs/apk/
           destination: apks/
