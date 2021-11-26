@@ -1,6 +1,6 @@
 version: 2.1
 
-orbs:
+rbs:
   github-release: h-matsuo/github-release@0.1.1
 
 config_android: &config_android
