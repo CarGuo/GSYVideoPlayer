@@ -6,7 +6,7 @@ version: 2.1
 config_android: &config_android
   docker:
     - image: circleci/android:api-30
-  working_directory:  ~/app
+  working_directory:  /app
   environment:
     JAVA_TOOL_OPTIONS: "-Xmx4096m"
     GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process"
