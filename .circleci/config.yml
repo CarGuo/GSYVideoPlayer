@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  github-release: h-matsuo/github-release@0.1.1
+
 config_android: &config_android
   docker:
     - image: circleci/android:api-30
@@ -104,6 +107,11 @@ jobs:
       - store_artifacts:
           path: app/build/outputs/apk/
           destination: apks/
+      - github-release/create:
+          tag: vX.Y.Z
+          title: Version vX.Y.Z
+          description: This release is version vX.Y.Z .
+          file-path: ./artifacts/file
       #- <<: *deploy_to_dropbox
       #- <<: *deploy_to_testfairy
 
