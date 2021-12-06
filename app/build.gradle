@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 
 apply from: "$rootDir/gradle/base.gradle"
+apply from: "../gradle/exported.gradle"
 
 android {
     defaultConfig {
@@ -12,7 +13,7 @@ android {
 
         ndk {
             //设置支持的SO库架构
-            abiFilters "armeabi", "armeabi-v7a", "x86"
+            abiFilters "arm64-v8a", "armeabi-v7a", "x86"
         }
     }
 
