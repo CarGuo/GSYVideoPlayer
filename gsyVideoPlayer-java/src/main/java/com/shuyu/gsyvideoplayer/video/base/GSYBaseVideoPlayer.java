@@ -606,7 +606,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 backFromFull(activity);
             }
             if (orientationUtils != null) {
-                orientationUtils.setEnable(true);
+                orientationUtils.setEnable(isRotateWithSystem());
             }
         }
 
