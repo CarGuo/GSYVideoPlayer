@@ -129,7 +129,7 @@ public class DetailPlayer extends AppCompatActivity {
                 .setRotateViewAuto(false)
                 //仅仅横屏旋转，不变直
                 //.setOnlyRotateLand(true)
-                .setRotateWithSystem(true)
+                .setRotateWithSystem(false)
                 .setLockLand(true)
                 .setAutoFullWithSize(true)
                 .setShowFullAnimation(false)
