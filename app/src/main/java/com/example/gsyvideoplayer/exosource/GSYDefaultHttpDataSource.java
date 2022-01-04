@@ -15,10 +15,12 @@
  */
 package com.example.gsyvideoplayer.exosource;
 
+import static com.google.android.exoplayer2.ExoPlayerLibraryInfo.VERSION_SLASHY;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -98,7 +100,7 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
     private static final int HTTP_STATUS_PERMANENT_REDIRECT = 308;
     private static final long MAX_BYTES_TO_DRAIN = 2048;
     private static final Pattern CONTENT_RANGE_HEADER =
-            Pattern.compile("^bytes (\\d+)-(\\d+)/(\\d+)$");
+        Pattern.compile("^bytes (\\d+)-(\\d+)/(\\d+)$");
     private static final AtomicReference<byte[]> skipBufferReference = new AtomicReference<>();
 
     private final boolean allowCrossProtocolRedirects;
@@ -131,9 +133,9 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
      */
     public GSYDefaultHttpDataSource() {
         this(
-                ExoPlayerLibraryInfo.DEFAULT_USER_AGENT,
-                DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                DEFAULT_READ_TIMEOUT_MILLIS);
+            VERSION_SLASHY + " (Linux;Android " + Build.VERSION.RELEASE + ") " + VERSION_SLASHY,
+            DEFAULT_CONNECT_TIMEOUT_MILLIS,
+            DEFAULT_READ_TIMEOUT_MILLIS);
     }
 
     /**
@@ -156,11 +158,11 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
      */
     public GSYDefaultHttpDataSource(String userAgent, int connectTimeoutMillis, int readTimeoutMillis) {
         this(
-                userAgent,
-                connectTimeoutMillis,
-                readTimeoutMillis,
-                /* allowCrossProtocolRedirects= */ false,
-                /* defaultRequestProperties= */ null);
+            userAgent,
+            connectTimeoutMillis,
+            readTimeoutMillis,
+            /* allowCrossProtocolRedirects= */ false,
+            /* defaultRequestProperties= */ null);
     }
 
     /**
@@ -178,11 +180,11 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
      *                                    headers or {@code null} if not required.
      */
     public GSYDefaultHttpDataSource(
-            String userAgent,
-            int connectTimeoutMillis,
-            int readTimeoutMillis,
-            boolean allowCrossProtocolRedirects,
-            @Nullable RequestProperties defaultRequestProperties) {
+        String userAgent,
+        int connectTimeoutMillis,
+        int readTimeoutMillis,
+        boolean allowCrossProtocolRedirects,
+        @Nullable RequestProperties defaultRequestProperties) {
         super(/* isNetwork= */ true);
         this.userAgent = Assertions.checkNotEmpty(userAgent);
         this.requestProperties = new RequestProperties();
@@ -206,10 +208,10 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
     @Deprecated
     public GSYDefaultHttpDataSource(String userAgent, @Nullable Predicate<String> contentTypePredicate) {
         this(
-                userAgent,
-                contentTypePredicate,
-                DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                DEFAULT_READ_TIMEOUT_MILLIS);
+            userAgent,
+            contentTypePredicate,
+            DEFAULT_CONNECT_TIMEOUT_MILLIS,
+            DEFAULT_READ_TIMEOUT_MILLIS);
     }
 
     /**
@@ -229,17 +231,17 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
     @SuppressWarnings("deprecation")
     @Deprecated
     public GSYDefaultHttpDataSource(
-            String userAgent,
-            @Nullable Predicate<String> contentTypePredicate,
-            int connectTimeoutMillis,
-            int readTimeoutMillis) {
+        String userAgent,
+        @Nullable Predicate<String> contentTypePredicate,
+        int connectTimeoutMillis,
+        int readTimeoutMillis) {
         this(
-                userAgent,
-                contentTypePredicate,
-                connectTimeoutMillis,
-                readTimeoutMillis,
-                /* allowCrossProtocolRedirects= */ false,
-                /* defaultRequestProperties= */ null);
+            userAgent,
+            contentTypePredicate,
+            connectTimeoutMillis,
+            readTimeoutMillis,
+            /* allowCrossProtocolRedirects= */ false,
+            /* defaultRequestProperties= */ null);
     }
 
     /**
@@ -263,12 +265,12 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
      */
     @Deprecated
     public GSYDefaultHttpDataSource(
-            String userAgent,
-            @Nullable Predicate<String> contentTypePredicate,
-            int connectTimeoutMillis,
-            int readTimeoutMillis,
-            boolean allowCrossProtocolRedirects,
-            @Nullable RequestProperties defaultRequestProperties) {
+        String userAgent,
+        @Nullable Predicate<String> contentTypePredicate,
+        int connectTimeoutMillis,
+        int readTimeoutMillis,
+        boolean allowCrossProtocolRedirects,
+        @Nullable RequestProperties defaultRequestProperties) {
         super(/* isNetwork= */ true);
         this.userAgent = Assertions.checkNotEmpty(userAgent);
         this.contentTypePredicate = contentTypePredicate;
@@ -290,7 +292,6 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
         this.contentTypePredicate = contentTypePredicate;
     }
 
-    @Nullable
     @Override
     public Uri getUri() {
         return connection == null ? null : Uri.parse(connection.getURL().toString());
@@ -337,8 +338,9 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
         try {
             connection = makeConnection(dataSpec);
         } catch (IOException e) {
-            throw new HttpDataSourceException(
-                    "Unable to connect", e, dataSpec, HttpDataSourceException.TYPE_OPEN);
+            throw new HttpDataSourceException("Unable to connect", e, dataSpec,
+                PlaybackException.ERROR_CODE_IO_UNSPECIFIED, HttpDataSourceException.TYPE_OPEN);
+
         }
 
         String responseMessage;
@@ -347,8 +349,8 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             responseMessage = connection.getResponseMessage();
         } catch (IOException e) {
             closeConnectionQuietly();
-            throw new HttpDataSourceException(
-                    "Unable to connect", e, dataSpec, HttpDataSourceException.TYPE_OPEN);
+            throw new HttpDataSourceException("Unable to connect", e, dataSpec,
+                PlaybackException.ERROR_CODE_IO_UNSPECIFIED, HttpDataSourceException.TYPE_OPEN);
         }
 
         // Check for a valid response code.
@@ -358,10 +360,10 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             byte[] errorResponseBody;
             try {
                 errorResponseBody =
-                        errorStream != null ? Util.toByteArray(errorStream) : Util.EMPTY_BYTE_ARRAY;
+                    errorStream != null ? Util.toByteArray(errorStream) : Util.EMPTY_BYTE_ARRAY;
             } catch (IOException e) {
-                throw new HttpDataSourceException(
-                        "Error reading non-2xx response body", e, dataSpec, HttpDataSourceException.TYPE_OPEN);
+                throw new HttpDataSourceException("Error reading non-2xx response body", e, dataSpec,
+                    PlaybackException.ERROR_CODE_IO_UNSPECIFIED, HttpDataSourceException.TYPE_OPEN);
             }
             closeConnectionQuietly();
             InvalidResponseCodeException exception =
@@ -394,7 +396,7 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             } else {
                 long contentLength = getContentLength(connection);
                 bytesToRead = contentLength != C.LENGTH_UNSET ? (contentLength - bytesToSkip)
-                        : C.LENGTH_UNSET;
+                    : C.LENGTH_UNSET;
             }
         } else {
             // Gzip is enabled. If the server opts to use gzip then the content length in the response
@@ -410,7 +412,8 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             }
         } catch (IOException e) {
             closeConnectionQuietly();
-            throw new HttpDataSourceException(e, dataSpec, HttpDataSourceException.TYPE_OPEN);
+            throw new HttpDataSourceException(e, dataSpec,
+                PlaybackException.ERROR_CODE_IO_UNSPECIFIED, HttpDataSourceException.TYPE_OPEN);
         }
 
         opened = true;
@@ -425,7 +428,8 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             skipInternal();
             return readInternal(buffer, offset, readLength);
         } catch (IOException e) {
-            throw new HttpDataSourceException(e, dataSpec, HttpDataSourceException.TYPE_READ);
+            throw new HttpDataSourceException(e, dataSpec,
+                PlaybackException.ERROR_CODE_IO_UNSPECIFIED, HttpDataSourceException.TYPE_READ);
         }
     }
 
@@ -437,7 +441,8 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    throw new HttpDataSourceException(e, dataSpec, HttpDataSourceException.TYPE_CLOSE);
+                    throw new HttpDataSourceException(e, dataSpec,
+                        PlaybackException.ERROR_CODE_IO_UNSPECIFIED, HttpDataSourceException.TYPE_CLOSE);
                 }
             }
         } finally {
@@ -507,14 +512,14 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             // HttpURLConnection disallows cross-protocol redirects, but otherwise performs redirection
             // automatically. This is the behavior we want, so use it.
             return makeConnection(
-                    url,
-                    httpMethod,
-                    httpBody,
-                    position,
-                    length,
-                    allowGzip,
-                    /* followRedirects= */ true,
-                    dataSpec.httpRequestHeaders);
+                url,
+                httpMethod,
+                httpBody,
+                position,
+                length,
+                allowGzip,
+                /* followRedirects= */ true,
+                dataSpec.httpRequestHeaders);
         }
 
 
@@ -522,31 +527,31 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
         int redirectCount = 0;
         while (redirectCount++ <= MAX_REDIRECTS) {
             HttpURLConnection connection =
-                    makeConnection(
-                            url,
-                            httpMethod,
-                            httpBody,
-                            position,
-                            length,
-                            allowGzip,
-                            /* followRedirects= */ false,
-                            dataSpec.httpRequestHeaders);
+                makeConnection(
+                    url,
+                    httpMethod,
+                    httpBody,
+                    position,
+                    length,
+                    allowGzip,
+                    /* followRedirects= */ false,
+                    dataSpec.httpRequestHeaders);
             int responseCode = connection.getResponseCode();
             String location = connection.getHeaderField("Location");
             if ((httpMethod == DataSpec.HTTP_METHOD_GET || httpMethod == DataSpec.HTTP_METHOD_HEAD)
-                    && (responseCode == HttpURLConnection.HTTP_MULT_CHOICE
-                    || responseCode == HttpURLConnection.HTTP_MOVED_PERM
-                    || responseCode == HttpURLConnection.HTTP_MOVED_TEMP
-                    || responseCode == HttpURLConnection.HTTP_SEE_OTHER
-                    || responseCode == HTTP_STATUS_TEMPORARY_REDIRECT
-                    || responseCode == HTTP_STATUS_PERMANENT_REDIRECT)) {
+                && (responseCode == HttpURLConnection.HTTP_MULT_CHOICE
+                || responseCode == HttpURLConnection.HTTP_MOVED_PERM
+                || responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+                || responseCode == HttpURLConnection.HTTP_SEE_OTHER
+                || responseCode == HTTP_STATUS_TEMPORARY_REDIRECT
+                || responseCode == HTTP_STATUS_PERMANENT_REDIRECT)) {
                 connection.disconnect();
                 url = handleRedirect(url, location);
             } else if (httpMethod == DataSpec.HTTP_METHOD_POST
-                    && (responseCode == HttpURLConnection.HTTP_MULT_CHOICE
-                    || responseCode == HttpURLConnection.HTTP_MOVED_PERM
-                    || responseCode == HttpURLConnection.HTTP_MOVED_TEMP
-                    || responseCode == HttpURLConnection.HTTP_SEE_OTHER)) {
+                && (responseCode == HttpURLConnection.HTTP_MULT_CHOICE
+                || responseCode == HttpURLConnection.HTTP_MOVED_PERM
+                || responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+                || responseCode == HttpURLConnection.HTTP_SEE_OTHER)) {
                 // POST request follows the redirect and is transformed into a GET request.
                 connection.disconnect();
                 httpMethod = DataSpec.HTTP_METHOD_GET;
@@ -574,15 +579,15 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
      * @param requestParameters parameters (HTTP headers) to include in request.
      */
     private HttpURLConnection makeConnection(
-            URL url,
-            @HttpMethod int httpMethod,
-            @Nullable byte[] httpBody,
-            long position,
-            long length,
-            boolean allowGzip,
-            boolean followRedirects,
-            Map<String, String> requestParameters)
-            throws IOException {
+        URL url,
+        @HttpMethod int httpMethod,
+        @Nullable byte[] httpBody,
+        long position,
+        long length,
+        boolean allowGzip,
+        boolean followRedirects,
+        Map<String, String> requestParameters)
+        throws IOException {
         HttpURLConnection connection;
         if (url.getProtocol().endsWith("https")) {
             /**去除证书限制**/
@@ -595,20 +600,20 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             });
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[]{
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return null;
-                        }
+                new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
                     }
+
+                    @Override
+                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                    }
+
+                    @Override
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+                }
             };
             // Install the all-trusting trust manager
             final SSLContext sslContext;
@@ -732,7 +737,7 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             if (matcher.find()) {
                 try {
                     long contentLengthFromRange =
-                            Long.parseLong(matcher.group(2)) - Long.parseLong(matcher.group(1)) + 1;
+                        Long.parseLong(matcher.group(2)) - Long.parseLong(matcher.group(1)) + 1;
                     if (contentLength < 0) {
                         // Some proxy servers strip the Content-Length header. Fall back to the length
                         // calculated here in this case.
@@ -743,7 +748,7 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
                         // change one of them to reduce the size of a request, but it is unlikely anybody would
                         // increase it.
                         Log.w(TAG, "Inconsistent headers [" + contentLengthHeader + "] [" + contentRangeHeader
-                                + "]");
+                            + "]");
                         contentLength = max(contentLength, contentLengthFromRange);
                     }
                 } catch (NumberFormatException e) {
@@ -860,8 +865,8 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
             }
             String className = inputStream.getClass().getName();
             if ("com.android.okhttp.internal.http.HttpTransport$ChunkedInputStream".equals(className)
-                    || "com.android.okhttp.internal.http.HttpTransport$FixedLengthInputStream"
-                    .equals(className)) {
+                || "com.android.okhttp.internal.http.HttpTransport$FixedLengthInputStream"
+                .equals(className)) {
                 Class<?> superclass = inputStream.getClass().getSuperclass();
                 Method unexpectedEndOfInput = superclass.getDeclaredMethod("unexpectedEndOfInput");
                 unexpectedEndOfInput.setAccessible(true);

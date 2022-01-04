@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -33,7 +34,7 @@ import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
 public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
 
     private String mSubTitile;
-    private TextOutput mTextOutput;
+    private Player.Listener mTextOutput;
 
     public GSYExoSubTitlePlayer(Context context) {
         super(context);
@@ -82,7 +83,7 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
                         mInternalPlayer.addListener(GSYExoSubTitlePlayer.this);
                         mInternalPlayer.addAnalyticsListener(GSYExoSubTitlePlayer.this);
                         if (mTextOutput != null) {
-                            mInternalPlayer.addTextOutput(mTextOutput);
+                            mInternalPlayer.addListener(mTextOutput);
                         }
                         mInternalPlayer.addListener(mEventLogger);
                         if (mSpeedPlaybackParameters != null) {
@@ -140,23 +141,23 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
         this.mSubTitile = subTitile;
     }
 
-    public TextOutput getTextOutput() {
+    public Player.Listener getTextOutput() {
         return mTextOutput;
     }
 
-    public void setTextOutput(TextOutput textOutput) {
+    public void setTextOutput(Player.Listener textOutput) {
         this.mTextOutput = textOutput;
     }
 
-    public void addTextOutputPlaying(TextOutput textOutput) {
+    public void addTextOutputPlaying(Player.Listener textOutput) {
         if (mInternalPlayer != null) {
-            mInternalPlayer.addTextOutput(textOutput);
+            mInternalPlayer.addListener(textOutput);
         }
     }
 
-    public void removeTextOutput(TextOutput textOutput) {
+    public void removeTextOutput(Player.Listener textOutput) {
         if (mInternalPlayer != null) {
-            mInternalPlayer.removeTextOutput(textOutput);
+            mInternalPlayer.removeListener(textOutput);
         }
     }
 

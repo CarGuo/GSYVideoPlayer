@@ -9,6 +9,7 @@ import android.view.Surface;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.video.DummySurface;
@@ -261,13 +262,13 @@ public class GSYExoSubTitlePlayerManager extends BasePlayerManager {
         return false;
     }
 
-    public void addTextOutputPlaying(TextOutput textOutput) {
+    public void addTextOutputPlaying(Player.Listener textOutput) {
         if(mediaPlayer != null) {
             mediaPlayer.addTextOutputPlaying(textOutput);
         }
     }
 
-    public void removeTextOutput(TextOutput textOutput) {
+    public void removeTextOutput(Player.Listener textOutput) {
         if(mediaPlayer != null) {
             mediaPlayer.removeTextOutput(textOutput);
         }

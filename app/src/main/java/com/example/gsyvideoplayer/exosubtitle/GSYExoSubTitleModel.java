@@ -1,5 +1,6 @@
 package com.example.gsyvideoplayer.exosubtitle;
 
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.text.TextOutput;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 
@@ -16,9 +17,9 @@ import java.util.Map;
 public class GSYExoSubTitleModel extends GSYModel {
 
     private String subTitle;
-    private TextOutput textOutput;
+    private Player.Listener textOutput;
 
-    public GSYExoSubTitleModel(String url, String subTitle, TextOutput textOutput, Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath, String overrideExtension) {
+    public GSYExoSubTitleModel(String url, String subTitle, Player.Listener textOutput, Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath, String overrideExtension) {
         super(url, mapHeadData, loop, speed, cache, cachePath, overrideExtension);
         this.subTitle = subTitle;
         this.textOutput = textOutput;
@@ -32,11 +33,11 @@ public class GSYExoSubTitleModel extends GSYModel {
         this.subTitle = subTitle;
     }
 
-    public TextOutput getTextOutput() {
+    public Player.Listener getTextOutput() {
         return textOutput;
     }
 
-    public void setTextOutput(TextOutput textOutput) {
+    public void setTextOutput(Player.Listener textOutput) {
         this.textOutput = textOutput;
     }
 }

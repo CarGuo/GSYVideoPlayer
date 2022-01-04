@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.text.TextOutput;
 import com.shuyu.gsyvideoplayer.GSYVideoBaseManager;
 import com.shuyu.gsyvideoplayer.player.IPlayerManager;
@@ -51,7 +52,7 @@ public class GSYExoSubTitleVideoManager extends GSYVideoBaseManager {
         return playerManager;
     }
 
-    public void prepare(String url, String subTitle, TextOutput textOutput, Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath, String overrideExtension) {
+    public void prepare(String url, String subTitle, Player.Listener textOutput, Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath, String overrideExtension) {
         Message msg = new Message();
         msg.what = HANDLER_PREPARE;
         msg.obj = new GSYExoSubTitleModel(url, subTitle, textOutput, mapHeadData, loop, speed, cache, cachePath, overrideExtension);
