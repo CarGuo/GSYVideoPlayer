@@ -24,7 +24,7 @@ allprojects {
 #### B、添加java和你想要的so支持：
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:v8.1.8-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.8-release-jitpack'
 
  //是否需要ExoPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.8-release-jitpack'

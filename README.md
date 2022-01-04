@@ -74,7 +74,7 @@ allprojects {
 #### B、添加java和你想要的so支持：
 
 ```
- implementation 'com.github.carguo.GSYvideoplayer:gsyVideoPlayer-java:v8.1.8-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.8-release-jitpack'
 
  //是否需要ExoPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.8-release-jitpack'
@@ -166,7 +166,7 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 二、其他推荐
 
-### * 我所在的技术社区：[掘金](https://juejin.cn/user/817692379985752/posts) 
+### * 我所在的技术社区：[掘金](https://juejin.cn/user/817692379985752/posts)
 ### * QQ群，有兴趣的欢迎（平时吹水吐槽多，因为人数饱和，就是日常瞎扯）：174815284 。
 ### * [Flutter Github客户端](https://github.com/CarGuo/gsy_github_app_flutter) 、[React Native Github客户端](https://github.com/CarGuo/GSYGithubAPP) 、 [Weex Github客户端](https://github.com/CarGuo/GSYGithubAPPWeex) 、 [原生 Kotlin Github客户端](https://github.com/CarGuo/GSYGithubAPPKotlin)
 ### * [RxFFmpeg Android 的音视频编辑工具](https://github.com/microshow/RxFFmpeg)
