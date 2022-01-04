@@ -8,7 +8,8 @@ import android.os.Looper;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -21,7 +22,6 @@ import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 import tv.danmaku.ijk.media.exo2.demo.EventLogger;
-import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * 自定义exo player，实现不同于库的exo 无缝切换效果
@@ -67,8 +67,8 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
     }
 
     @Override
-    public void onPositionDiscontinuity(int reason) {
-        super.onPositionDiscontinuity(reason);
+    public void onPositionDiscontinuity(Player.PositionInfo oldPosition, Player.PositionInfo newPosition, @Player.DiscontinuityReason int reason) {
+        super.onPositionDiscontinuity(oldPosition, newPosition, reason);
         notifyOnInfo(POSITION_DISCONTINUITY, reason);
     }
 
@@ -98,12 +98,12 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
         if (timeline.isEmpty()) {
             return;
         }
-        int windowIndex = mInternalPlayer.getCurrentWindowIndex();
+        int windowIndex = mInternalPlayer.getCurrentMediaItemIndex();
         timeline.getWindow(windowIndex, window);
-        int previousWindowIndex = mInternalPlayer.getPreviousWindowIndex();
+        int previousWindowIndex = mInternalPlayer.getPreviousMediaItemIndex();
         if (previousWindowIndex != C.INDEX_UNSET
-                && (mInternalPlayer.getCurrentPosition() <= MAX_POSITION_FOR_SEEK_TO_PREVIOUS
-                || (window.isDynamic && !window.isSeekable))) {
+            && (mInternalPlayer.getCurrentPosition() <= MAX_POSITION_FOR_SEEK_TO_PREVIOUS
+            || (window.isDynamic && !window.isSeekable))) {
             mInternalPlayer.seekTo(previousWindowIndex, C.TIME_UNSET);
         } else {
             mInternalPlayer.seekTo(0);
@@ -113,48 +113,48 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
     @Override
     protected void prepareAsyncInternal() {
         new Handler(Looper.getMainLooper()).post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mTrackSelector == null) {
-                            mTrackSelector = new DefaultTrackSelector(mAppContext);
-                        }
-                        mEventLogger = new EventLogger(mTrackSelector);
-                        boolean preferExtensionDecoders = true;
-                        boolean useExtensionRenderers = true;//是否开启扩展
-                        @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = useExtensionRenderers
-                                ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
-                                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
-                                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
-                        if (mRendererFactory == null) {
-                            mRendererFactory = new DefaultRenderersFactory(mAppContext);
-                            mRendererFactory.setExtensionRendererMode(extensionRendererMode);
-                        }
-                        if (mLoadControl == null) {
-                            mLoadControl = new DefaultLoadControl();
-                        }
-                        mInternalPlayer = new SimpleExoPlayer.Builder(mAppContext, mRendererFactory)
-                                .setLooper(Looper.getMainLooper())
-                                .setTrackSelector(mTrackSelector)
-                                .setLoadControl(mLoadControl).build();
-
-                        mInternalPlayer.addListener(GSYExo2MediaPlayer.this);
-                        mInternalPlayer.addAnalyticsListener(GSYExo2MediaPlayer.this);
-                        mInternalPlayer.addListener(mEventLogger);
-                        if (mSpeedPlaybackParameters != null) {
-                            mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
-                        }
-                        if (mSurface != null)
-                            mInternalPlayer.setVideoSurface(mSurface);
-                        ///fix start index
-                        if (playIndex > 0) {
-                            mInternalPlayer.seekTo(playIndex, C.INDEX_UNSET);
-                        }
-                        mInternalPlayer.setMediaSource(mMediaSource, false);
-                        mInternalPlayer.prepare();
-                        mInternalPlayer.setPlayWhenReady(false);
+            new Runnable() {
+                @Override
+                public void run() {
+                    if (mTrackSelector == null) {
+                        mTrackSelector = new DefaultTrackSelector(mAppContext);
                     }
+                    mEventLogger = new EventLogger(mTrackSelector);
+                    boolean preferExtensionDecoders = true;
+                    boolean useExtensionRenderers = true;//是否开启扩展
+                    @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = useExtensionRenderers
+                        ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+                        : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+                        : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
+                    if (mRendererFactory == null) {
+                        mRendererFactory = new DefaultRenderersFactory(mAppContext);
+                        mRendererFactory.setExtensionRendererMode(extensionRendererMode);
+                    }
+                    if (mLoadControl == null) {
+                        mLoadControl = new DefaultLoadControl();
+                    }
+                    mInternalPlayer = new ExoPlayer.Builder(mAppContext, mRendererFactory)
+                        .setLooper(Looper.getMainLooper())
+                        .setTrackSelector(mTrackSelector)
+                        .setLoadControl(mLoadControl).build();
+
+                    mInternalPlayer.addListener(GSYExo2MediaPlayer.this);
+                    mInternalPlayer.addAnalyticsListener(GSYExo2MediaPlayer.this);
+                    mInternalPlayer.addListener(mEventLogger);
+                    if (mSpeedPlaybackParameters != null) {
+                        mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
+                    }
+                    if (mSurface != null)
+                        mInternalPlayer.setVideoSurface(mSurface);
+                    ///fix start index
+                    if (playIndex > 0) {
+                        mInternalPlayer.seekTo(playIndex, C.INDEX_UNSET);
+                    }
+                    mInternalPlayer.setMediaSource(mMediaSource, false);
+                    mInternalPlayer.prepare();
+                    mInternalPlayer.setPlayWhenReady(false);
                 }
+            }
         );
     }
 
@@ -169,8 +169,8 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
         if (timeline.isEmpty()) {
             return;
         }
-        int windowIndex = mInternalPlayer.getCurrentWindowIndex();
-        int nextWindowIndex = mInternalPlayer.getNextWindowIndex();
+        int windowIndex = mInternalPlayer.getCurrentMediaItemIndex();
+        int nextWindowIndex = mInternalPlayer.getNextMediaItemIndex();
         if (nextWindowIndex != C.INDEX_UNSET) {
             mInternalPlayer.seekTo(nextWindowIndex, C.TIME_UNSET);
         } else if (timeline.getWindow(windowIndex, window).isDynamic) {
@@ -182,6 +182,6 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
         if (mInternalPlayer == null) {
             return 0;
         }
-        return mInternalPlayer.getCurrentWindowIndex();
+        return mInternalPlayer.getCurrentMediaItemIndex();
     }
 }

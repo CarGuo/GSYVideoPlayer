@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.TracksInfo;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.decoder.DecoderReuseEvaluation;
@@ -132,6 +133,12 @@ public final class EventLogger implements Player.Listener, MetadataOutput,
     @Override
     public void onPlayerError(@NonNull PlaybackException error) {
         Log.e(TAG, "playerFailed [" + getSessionTimeString() + "]", error);
+    }
+
+
+    @Override
+    public void onTracksInfoChanged(@NonNull TracksInfo tracksInfo) {
+
     }
 
     @Override

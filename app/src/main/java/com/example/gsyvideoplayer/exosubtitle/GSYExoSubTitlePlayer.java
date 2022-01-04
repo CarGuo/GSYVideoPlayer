@@ -8,19 +8,18 @@ import android.os.Looper;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.text.Cue;
-import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.util.MimeTypes;
 
@@ -76,7 +75,7 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
                         if (mLoadControl == null) {
                             mLoadControl = new DefaultLoadControl();
                         }
-                        mInternalPlayer = new SimpleExoPlayer.Builder(mAppContext, mRendererFactory)
+                        mInternalPlayer = new ExoPlayer.Builder(mAppContext, mRendererFactory)
                                 .setLooper(Looper.getMainLooper())
                                 .setTrackSelector(mTrackSelector)
                                 .setLoadControl(mLoadControl).build();
@@ -116,8 +115,10 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
                 .setLanguage("en")
                 .build();
 
-        MediaItem.Subtitle subtitle = new MediaItem.Subtitle(
-                subTitle, checkNotNull(textFormat.sampleMimeType), textFormat.language, textFormat.selectionFlags);
+        MediaItem.SubtitleConfiguration  subtitle = new MediaItem.SubtitleConfiguration.Builder(subTitle)
+            .setMimeType(checkNotNull(textFormat.sampleMimeType))
+            .setLanguage( textFormat.language)
+            .setSelectionFlags(textFormat.selectionFlags).build();
 
         DefaultHttpDataSource.Factory  factory = new DefaultHttpDataSource.Factory()
                 .setAllowCrossProtocolRedirects(true)
@@ -125,7 +126,7 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
                 .setReadTimeoutMs(50000)
                 .setTransferListener( new DefaultBandwidthMeter.Builder(mAppContext).build());
 
-        MediaSource textMediaSource = new SingleSampleMediaSource.Factory(new DefaultDataSourceFactory(mAppContext, null,
+        MediaSource textMediaSource = new SingleSampleMediaSource.Factory(new DefaultDataSource.Factory(mAppContext,
                 factory))
                 .createMediaSource(subtitle, C.TIME_UNSET);
         return textMediaSource;

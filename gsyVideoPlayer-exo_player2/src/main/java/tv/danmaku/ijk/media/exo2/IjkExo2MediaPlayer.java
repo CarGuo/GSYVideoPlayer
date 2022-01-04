@@ -18,12 +18,13 @@ import androidx.annotation.Size;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.TracksInfo;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.metadata.Metadata;
@@ -59,7 +60,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
     private static final String TAG = "IjkExo2MediaPlayer";
 
     protected Context mAppContext;
-    protected SimpleExoPlayer mInternalPlayer;
+    protected ExoPlayer mInternalPlayer;
     protected EventLogger mEventLogger;
     protected DefaultRenderersFactory mRendererFactory;
     protected MediaSource mMediaSource;
@@ -370,7 +371,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
                         if (mLoadControl == null) {
                             mLoadControl = new DefaultLoadControl();
                         }
-                        mInternalPlayer = new SimpleExoPlayer.Builder(mAppContext, mRendererFactory)
+                        mInternalPlayer = new ExoPlayer.Builder(mAppContext, mRendererFactory)
                                 .setLooper(Looper.myLooper())
                                 .setTrackSelector(mTrackSelector)
                                 .setLoadControl(mLoadControl).build();
@@ -512,7 +513,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
     }
 
     @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+    public void onTracksInfoChanged(@NonNull TracksInfo tracksInfo) {
 
     }
 
@@ -632,11 +633,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     @Override
     public void onIsLoadingChanged(EventTime eventTime, boolean isLoading) {
-
-    }
-
-    @Override
-    public void onTracksChanged(EventTime eventTime, TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
 
     }
 

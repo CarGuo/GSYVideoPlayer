@@ -11,7 +11,7 @@ import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.database.DatabaseProvider;
-import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
+import com.google.android.exoplayer2.ext.rtmp.RtmpDataSource;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -23,7 +23,7 @@ import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
@@ -125,38 +125,38 @@ public class ExoSourceManager {
                 }
             };
             return new ProgressiveMediaSource.Factory(
-                    factory).createMediaSource(mediaItem);
+                factory).createMediaSource(mediaItem);
 
         }
 
         switch (contentType) {
             case C.TYPE_SS:
                 mediaSource = new SsMediaSource.Factory(
-                        new DefaultSsChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)),
-                        new DefaultDataSourceFactory(mAppContext, null,
-                                getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
+                    new DefaultSsChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)),
+                    new DefaultDataSource.Factory(mAppContext,
+                        getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
                 break;
             case C.TYPE_DASH:
                 mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)),
-                        new DefaultDataSourceFactory(mAppContext, null,
-                                getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
+                    new DefaultDataSource.Factory(mAppContext,
+                        getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
                 break;
             case C.TYPE_HLS:
                 mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent))
-                        .setAllowChunklessPreparation(true)
-                        .createMediaSource(mediaItem);
+                    .setAllowChunklessPreparation(true)
+                    .createMediaSource(mediaItem);
                 break;
             case TYPE_RTMP:
-                RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory(null);
+                RtmpDataSource.Factory rtmpDataSourceFactory = new RtmpDataSource.Factory();
                 mediaSource = new ProgressiveMediaSource.Factory(rtmpDataSourceFactory,
-                        new DefaultExtractorsFactory())
-                        .createMediaSource(mediaItem);
+                    new DefaultExtractorsFactory())
+                    .createMediaSource(mediaItem);
                 break;
             case C.TYPE_OTHER:
             default:
                 mediaSource = new ProgressiveMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable,
-                        preview, cacheDir, uerAgent), new DefaultExtractorsFactory())
-                        .createMediaSource(mediaItem);
+                    preview, cacheDir, uerAgent), new DefaultExtractorsFactory())
+                    .createMediaSource(mediaItem);
                 break;
         }
         return mediaSource;
@@ -335,9 +335,9 @@ public class ExoSourceManager {
                 isCached = resolveCacheState(cache, mDataSource);
                 CacheDataSource.Factory factory = new CacheDataSource.Factory();
                 return factory.setCache(cache)
-                        .setCacheReadDataSourceFactory(getDataSourceFactory(context, preview, uerAgent))
-                        .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
-                        .setUpstreamDataSourceFactory(getHttpDataSourceFactory(context, preview, uerAgent));
+                    .setCacheReadDataSourceFactory(getDataSourceFactory(context, preview, uerAgent))
+                    .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+                    .setUpstreamDataSourceFactory(getHttpDataSourceFactory(context, preview, uerAgent));
             }
         }
         return getDataSourceFactory(context, preview, uerAgent);
@@ -347,8 +347,12 @@ public class ExoSourceManager {
      * 获取SourceFactory
      */
     private DataSource.Factory getDataSourceFactory(Context context, boolean preview, String uerAgent) {
-        return new DefaultDataSourceFactory(context, preview ? null : new DefaultBandwidthMeter.Builder(context).build(),
-                getHttpDataSourceFactory(context, preview, uerAgent));
+        DefaultDataSource.Factory factory = new DefaultDataSource.Factory(context,
+            getHttpDataSourceFactory(context, preview, uerAgent));
+        if (preview) {
+            factory.setTransferListener(new DefaultBandwidthMeter.Builder(context).build());
+        }
+        return factory;
     }
 
     private DataSource.Factory getHttpDataSourceFactory(Context context, boolean preview, String uerAgent) {
@@ -370,15 +374,15 @@ public class ExoSourceManager {
         DataSource.Factory dataSourceFactory = null;
         if (sExoMediaSourceInterceptListener != null) {
             dataSourceFactory = sExoMediaSourceInterceptListener.getHttpDataSourceFactory(uerAgent, preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build(),
-                    connectTimeout,
-                    readTimeout, mMapHeadData, allowCrossProtocolRedirects);
-        } 
+                connectTimeout,
+                readTimeout, mMapHeadData, allowCrossProtocolRedirects);
+        }
         if (dataSourceFactory == null) {
             dataSourceFactory = new DefaultHttpDataSource.Factory()
-                    .setAllowCrossProtocolRedirects(allowCrossProtocolRedirects)
-                    .setConnectTimeoutMs(connectTimeout)
-                    .setReadTimeoutMs(readTimeout)
-                    .setTransferListener(preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build());
+                .setAllowCrossProtocolRedirects(allowCrossProtocolRedirects)
+                .setConnectTimeoutMs(connectTimeout)
+                .setReadTimeoutMs(readTimeout)
+                .setTransferListener(preview ? null : new DefaultBandwidthMeter.Builder(mAppContext).build());
             if (mMapHeadData != null && mMapHeadData.size() > 0) {
                 ((DefaultHttpDataSource.Factory) dataSourceFactory).setDefaultRequestProperties(mMapHeadData);
             }
