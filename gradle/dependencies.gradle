@@ -37,7 +37,8 @@ ext {
         ],
         exoPlayer2           : [
             "com.google.android.exoplayer:exoplayer:${exoPlayerVersion}",
-            "com.google.android.exoplayer:extension-rtmp:${exoPlayerVersion}"
+            "com.google.android.exoplayer:extension-rtmp:${exoPlayerVersion}",
+            "com.google.android.exoplayer:exoplayer-rtsp:${exoPlayerVersion}"
         ]
     ]
 

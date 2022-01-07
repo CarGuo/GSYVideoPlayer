@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.rtsp.RtspMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -65,6 +66,8 @@ public class ExoSourceManager {
     private static int sHttpReadTimeout = -1;
 
     private static int sHttpConnectTimeout = -1;
+
+    private static boolean isForceRtspTcp = true;
 
     private Context mAppContext;
 
@@ -136,6 +139,19 @@ public class ExoSourceManager {
                     new DefaultDataSource.Factory(mAppContext,
                         getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
                 break;
+
+            case C.TYPE_RTSP:
+                RtspMediaSource.Factory rtspFactory = new RtspMediaSource.Factory();
+                if (uerAgent != null) {
+                    rtspFactory.setUserAgent(uerAgent);
+                }
+                if (sHttpConnectTimeout > 0) {
+                    rtspFactory.setTimeoutMs(sHttpConnectTimeout);
+                }
+                rtspFactory.setForceUseRtpTcp(isForceRtspTcp);
+                mediaSource = rtspFactory.createMediaSource(mediaItem);
+                break;
+
             case C.TYPE_DASH:
                 mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)),
                     new DefaultDataSource.Factory(mAppContext,
@@ -323,6 +339,14 @@ public class ExoSourceManager {
 
     public static void setDatabaseProvider(DatabaseProvider databaseProvider) {
         ExoSourceManager.sDatabaseProvider = databaseProvider;
+    }
+
+    public static boolean isForceRtspTcp() {
+        return isForceRtspTcp;
+    }
+
+    public static void setForceRtspTcp(boolean isForceRtspTcp) {
+        ExoSourceManager.isForceRtspTcp = isForceRtspTcp;
     }
 
     /**

@@ -85,7 +85,18 @@ public class GSYApplication extends MultiDexApplication {
             @Override
             public void onPlayerInitSuccess(IMediaPlayer player, GSYModel model) {
                 if (player instanceof IjkExo2MediaPlayer) {
+
+                    /// 自定义你的
                     ((IjkExo2MediaPlayer) player).setTrackSelector(new DefaultTrackSelector());
+
+
+//                     DefaultTrackSelector.Parameters parameters = trackSelector.buildUponParameters()
+//                        .setMaxVideoBitrate(LO_BITRATE)
+//                        .setForceHighestSupportedBitrate(true)
+//                        .build();
+//                    trackSelector.setParameters(parameters);
+
+
                     ((IjkExo2MediaPlayer) player).setLoadControl(new DefaultLoadControl());
                 }
             }
