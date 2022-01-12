@@ -87,6 +87,9 @@ public class GSYVideoOptionBuilder {
     //旋转使能后是否跟随系统设置
     protected boolean mRotateWithSystem = true;
 
+    //播放错误时，是否点击触发重试
+    protected boolean mSurfaceErrorPlay = true;
+
     //边播放边缓存
     protected boolean mCacheWithPlay;
 
@@ -438,6 +441,15 @@ public class GSYVideoOptionBuilder {
 
 
     /**
+     * 播放错误时，是否点击触发重试
+     */
+    public GSYVideoOptionBuilder setSurfaceErrorPlay(boolean surfaceErrorPlay) {
+        this.mSurfaceErrorPlay = surfaceErrorPlay;
+        return this;
+    }
+
+
+    /**
      * 进度回调
      */
     public GSYVideoOptionBuilder setGSYVideoProgressListener(GSYVideoProgressListener videoProgressListener) {
@@ -652,6 +664,7 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setNeedOrientationUtils(mNeedOrientationUtils);
 
         gsyVideoPlayer.setLooping(mLooping);
+        gsyVideoPlayer.setSurfaceErrorPlay(mSurfaceErrorPlay);
         if (mVideoAllCallBack != null) {
             gsyVideoPlayer.setVideoAllCallBack(mVideoAllCallBack);
         }

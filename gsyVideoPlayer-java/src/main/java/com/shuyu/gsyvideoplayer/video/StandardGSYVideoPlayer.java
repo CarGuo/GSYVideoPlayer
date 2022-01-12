@@ -383,7 +383,16 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             setViewShowState(mLockScreen, VISIBLE);
             return;
         }
-        if (mCurrentState == CURRENT_STATE_PREPAREING) {
+
+        if (mIfCurrentIsFullscreen && !mSurfaceErrorPlay && mCurrentState == CURRENT_STATE_ERROR) {
+            if (mBottomContainer != null) {
+                if (mBottomContainer.getVisibility() == View.VISIBLE) {
+                    changeUiToPlayingClear();
+                } else {
+                    changeUiToPlayingShow();
+                }
+            }
+        } else if (mCurrentState == CURRENT_STATE_PREPAREING) {
             if (mBottomContainer != null) {
                 if (mBottomContainer.getVisibility() == View.VISIBLE) {
                     changeUiToPrepareingClear();
@@ -775,7 +784,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
         if (mBottomShowProgressDrawable != null && mBottomShowProgressThumbDrawable != null) {
             standardGSYVideoPlayer.setBottomShowProgressBarDrawable(mBottomShowProgressDrawable,
-                    mBottomShowProgressThumbDrawable);
+                mBottomShowProgressThumbDrawable);
         }
 
         if (mVolumeProgressDrawable != null) {

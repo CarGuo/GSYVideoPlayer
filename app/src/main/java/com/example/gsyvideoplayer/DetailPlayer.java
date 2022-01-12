@@ -137,6 +137,7 @@ public class DetailPlayer extends AppCompatActivity {
                 .setUrl(url)
                 .setMapHeadData(header)
                 .setCacheWithPlay(false)
+                .setSurfaceErrorPlay(false)
                 .setVideoTitle("测试视频")
                 .setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override

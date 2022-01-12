@@ -53,7 +53,9 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
-                        if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                        if (!mChangePosition && !mChangeVolume && !mBrightness
+                            && mCurrentState != CURRENT_STATE_ERROR
+                        ) {
                             onClickUiToggle(e);
                         }
                         return super.onSingleTapConfirmed(e);
@@ -80,7 +82,7 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
     @Override
     protected void updateStartImage() {
         if (mIfCurrentIsFullscreen) {
-            if(mStartButton instanceof  ImageView) {
+            if (mStartButton instanceof ImageView) {
                 ImageView imageView = (ImageView) mStartButton;
                 if (mCurrentState == CURRENT_STATE_PLAYING) {
                     imageView.setImageResource(R.drawable.video_click_pause_selector);
@@ -97,7 +99,7 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
     @Override
     public int getEnlargeImageRes() {
-            return R.drawable.custom_enlarge;
+        return R.drawable.custom_enlarge;
     }
 
     @Override
@@ -116,7 +118,7 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
     @Override
     protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
-        LandLayoutVideo landLayoutVideo = (LandLayoutVideo)gsyVideoPlayer;
+        LandLayoutVideo landLayoutVideo = (LandLayoutVideo) gsyVideoPlayer;
         landLayoutVideo.dismissProgressDialog();
         landLayoutVideo.dismissVolumeDialog();
         landLayoutVideo.dismissBrightnessDialog();

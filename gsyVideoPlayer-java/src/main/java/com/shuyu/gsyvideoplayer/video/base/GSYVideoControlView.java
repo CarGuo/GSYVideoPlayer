@@ -119,6 +119,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //是否点击封面播放
     protected boolean mThumbPlay;
 
+    //播放错误时，是否点击触发重试
+    protected boolean mSurfaceErrorPlay = true;
+
     //锁定屏幕点击
     protected boolean mLockCurScreen;
 
@@ -388,6 +391,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (i == R.id.start) {
             clickStartIcon();
         } else if (i == R.id.surface_container && mCurrentState == CURRENT_STATE_ERROR) {
+            if (!mSurfaceErrorPlay) {
+                onClickUiToggle(null);
+                return;
+            }
             if (mVideoAllCallBack != null) {
                 Debuger.printfLog("onClickStartError");
                 mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, this);
@@ -1277,6 +1284,16 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         this.mThumbPlay = thumbPlay;
     }
 
+    public boolean isSurfaceErrorPlay() {
+        return mSurfaceErrorPlay;
+    }
+
+    /**
+     * 播放错误时，是否点击触发重试
+     */
+    public void setSurfaceErrorPlay(boolean surfaceErrorPlay) {
+        this.mSurfaceErrorPlay = surfaceErrorPlay;
+    }
 
     public boolean isHideKey() {
         return mHideKey;
