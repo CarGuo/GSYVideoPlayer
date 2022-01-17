@@ -198,7 +198,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
 
     private void getDanmu() {
         //下载demo然后设置
-        OkHttpUtils.get().url(TextUtils.concat("http://xingyuyou.com/Public/app/barragefile/","608","barrage.txt").toString())
+        OkHttpUtils.get().url("https://comment.bilibili.com/205245882.xml")
                 .build()
                 .execute(new FileCallBack(getApplication().getCacheDir().getAbsolutePath(), "barrage.txt")//
                 {
