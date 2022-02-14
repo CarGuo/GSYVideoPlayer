@@ -1,7 +1,10 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### v8.1.9-release-jitpack(2022-02-14)
+* fix #3496
+* exo support rtsp
 
-### v8.1.6-jitpack(2020-09-13)
+### v8.1.6-jitpack(2021-09-13)
 
 * 增加支持横屏幕全屏和竖屏变化，屏幕不旋转，[SimpleActivity](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleActivity.java) [SimpleDetailActivityMode2](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
 * 修复设置了超时，重试后失效的问题
@@ -9,7 +12,7 @@
 * exo player 2.14.2
 * fix DataSource error
 
-### v8.1.4-jitpack(2020-06-16)
+### v8.1.4-jitpack(2021-06-16)
 
 * update #3294 fix StorageUtils
 * update fix #3275
@@ -51,18 +54,18 @@
 ```
 
 
-## 8.1.2 (2020-03-29)
+## 8.1.2 (2021-03-29)
 
 * update support  exo_player2 = '2.13.2'
 * ijk uri.getScheme #3194
 * fix error cache server when HostnameVerifier &  TrustManager null
 
 
-## 8.1.1 (2020-03-15)
+## 8.1.1 (2021-03-15)
 
 * #3174 fix HostnameVerifier for google play
 
-## 8.1.0 (2020-02-02)
+## 8.1.0 (2021-02-02)
 
 * fix  #3126 crash arm64 with Android11
 * update support #3128 pass MotionEvent
