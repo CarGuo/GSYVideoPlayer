@@ -55,11 +55,11 @@
 
 ```
 allprojects {
-	repositories {
+    repositories {
 		...
-		maven { url 'https://jitpack.io' }
+        maven { url 'https://jitpack.io' }
         maven { url "https://maven.aliyun.com/repository/public" }
-	}
+    }
 }
 ```
 
@@ -186,6 +186,9 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 编码格式|**[--- IJK so文件配置格式说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DECODERS.md)**
 编译自定义SO|**[--- IJKPlayer编译自定义SO - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/BUILD_SO.md)**
 版本更新说明|**[--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)**
+compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/3514)**
+
+
 
 
 ![框架图](./img/StructureChart2.jpg)
