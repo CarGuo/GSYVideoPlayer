@@ -41,7 +41,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 11
+          java-version: 17
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: publishToMavenLocal
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 11
+          java-version: 17
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: --parallel app:assembleRelease
@@ -70,7 +70,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 11
+          java-version: 17
       - name: Build APK
         uses: gradle/gradle-build-action@v2
         with:
