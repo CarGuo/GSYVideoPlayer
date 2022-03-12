@@ -42,12 +42,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 11
-      - uses: actions/cache@v2
+      - uses: gradle/gradle-build-action@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle/wrapper/gradle-wrapper.properties', '**/buildSrc/src/main/kotlin/**.kt') }}
-      - name: Publish artifacts
-        run: ./gradlew publishToMavenLocal
+          arguments: publishToMavenLocal
 
   build:
     name: Build
@@ -58,12 +55,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 11
-      - uses: actions/cache@v2
+      - uses: gradle/gradle-build-action@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle/wrapper/gradle-wrapper.properties', '**/buildSrc/src/main/kotlin/**.kt') }}
-      - name: Build
-        run: ./gradlew --parallel app:assembleRelease
+          arguments: --parallel app:assembleRelease
 
   apk:
     name: Generate APK
@@ -78,7 +72,9 @@ jobs:
           distribution: 'zulu'
           java-version: 11
       - name: Build APK
-        run: ./gradlew --parallel app:assembleRelease
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: app:assembleRelease
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
