@@ -1,0 +1,60 @@
+
+//托管测试 gradle ，用于提供修改用户自行检查 Android 12 因为 exported 的构建问题
+//输出有问题的 Manifest 第三方文件目录和组建名称
+
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        //println("=============== ${variant.getBuildType().name.toUpperCase()} ===============")
+        //println("=============== ${variant.getFlavorName()} ===============")
+        def vn
+        if (variant.getFlavorName() != null && variant.getFlavorName() != "") {
+            vn = variant.name;
+        } else {
+            if (variant.getBuildType().name == "release") {
+                vn = "Release"
+            } else {
+                vn = "Debug"
+            }
+        }
+        def taskName = "process${vn}MainManifest";
+        try {
+            println("=============== taskName ${taskName} ===============")
+            project.getTasks().getByName(taskName)
+        } catch (Exception e) {
+            return
+        }
+        ///你的自定义名字
+        project.getTasks().getByName(taskName).doFirst {
+            //def method = it.getClass().getMethods()
+            it.getManifests().getFiles().each {
+                if (it.exists() && it.canRead()) {
+                    def manifestFile = it
+                    def exportedTag = "android:exported"
+                    def nameTag = "android:name"
+                    ///这里第二个参数是 false ，所以 namespace 是展开的，所以下面不能用 androidSpace，而是用 nameTag
+                    def xml = new XmlParser(false, false).parse(manifestFile)
+                    if (xml.application != null && xml.application.size() > 0) {
+                        def nodes = xml.application[0].'*'.findAll {
+                            //挑选要修改的节点，没有指定的 exported 的才需要增加
+                            //如果 exportedTag 拿不到可以尝试 it.attribute(androidSpace.exported)
+                            (it.name() == 'activity' || it.name() == 'receiver' || it.name() == 'service') && it.attribute(exportedTag) == null
+
+                        }
+                        if (nodes.application != null && nodes.application.size() > 0) {
+                            nodes.each {
+                                def t = it
+                                it.each {
+                                    if (it.name() == "intent-filter") {
+                                        println("$manifestFile \n .....................${t.attributes().get(nameTag)}......................")
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
+}

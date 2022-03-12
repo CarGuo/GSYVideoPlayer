@@ -1,7 +1,6 @@
-/**
- * 修改 Android 12 因为 exported 的构建问题，主要用于演示
- */
 
+//托管测试 gradle ，用于提供修改用户处理 AGP 4.1 及下版本 Android 12 因为 exported 的构建问题
+//输出有问题的 Manifest 第三方文件目录和组建名称
 android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
         def processManifest = output.getProcessManifestProvider().get()
