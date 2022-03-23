@@ -102,9 +102,13 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
     @Override
     public void clearCache(Context context, File cachePath, String url) {
         if (TextUtils.isEmpty(url)) {
-            String path = StorageUtils.getIndividualCacheDirectory
+            if (cachePath == null) {
+                String path = StorageUtils.getIndividualCacheDirectory
                     (context.getApplicationContext()).getAbsolutePath();
-            FileUtils.deleteFiles(new File(path));
+                FileUtils.deleteFiles(new File(path));
+            } else {
+                FileUtils.deleteFiles(cachePath);
+            }
         } else {
             FileNameGenerator md5FileNameGenerator = new Md5FileNameGenerator();
             if (ProxyCacheManager.fileNameGenerator != null) {
@@ -118,11 +122,11 @@ public class ProxyCacheManager implements ICacheManager, CacheListener {
                 CommonUtil.deleteFile(path);
             } else {
                 String pathTmp = StorageUtils.getIndividualCacheDirectory
-                        (context.getApplicationContext()).getAbsolutePath()
-                        + File.separator + name + ".download";
+                    (context.getApplicationContext()).getAbsolutePath()
+                    + File.separator + name + ".download";
                 String path = StorageUtils.getIndividualCacheDirectory
-                        (context.getApplicationContext()).getAbsolutePath()
-                        + File.separator + name;
+                    (context.getApplicationContext()).getAbsolutePath()
+                    + File.separator + name;
                 CommonUtil.deleteFile(pathTmp);
                 CommonUtil.deleteFile(path);
             }
