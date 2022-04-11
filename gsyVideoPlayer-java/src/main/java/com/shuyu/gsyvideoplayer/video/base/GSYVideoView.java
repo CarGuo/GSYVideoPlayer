@@ -747,7 +747,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             Debuger.printfError("Play Error " + mUrl);
             mUrl = mOriginUrl;
             getGSYVideoManager().clearCache(mContext, mCachePath, mOriginUrl);
-        } else if (mUrl.contains("127.0.0.1")) {
+        } else if (mUrl != null && mUrl.contains("127.0.0.1")) {
             getGSYVideoManager().clearCache(getContext(), mCachePath, mOriginUrl);
         }
 
