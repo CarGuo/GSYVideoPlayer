@@ -557,7 +557,7 @@ public class ListVideoUtil {
     /**
      * 获取当前总时长
      */
-    public int getDuration() {
+    public long getDuration() {
         return gsyVideoPlayer.getDuration();
     }
 
@@ -604,7 +604,7 @@ public class ListVideoUtil {
     /**
      * 获取当前播放进度
      */
-    public int getCurrentPositionWhenPlaying() {
+    public long getCurrentPositionWhenPlaying() {
         return gsyVideoPlayer.getCurrentPositionWhenPlaying();
     }
 

@@ -756,18 +756,18 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     /**
      * 获取当前播放进度
      */
-    public int getCurrentPositionWhenPlaying() {
-        int position = 0;
+    public long getCurrentPositionWhenPlaying() {
+        long position = 0;
         if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
             try {
-                position = (int) getGSYVideoManager().getCurrentPosition();
+                position =  getGSYVideoManager().getCurrentPosition();
             } catch (Exception e) {
                 e.printStackTrace();
                 return position;
             }
         }
         if (position == 0 && mCurrentPosition > 0) {
-            return (int) mCurrentPosition;
+            return  mCurrentPosition;
         }
         return position;
     }
@@ -775,10 +775,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     /**
      * 获取当前总时长
      */
-    public int getDuration() {
-        int duration = 0;
+    public long getDuration() {
+        long duration = 0;
         try {
-            duration = (int) getGSYVideoManager().getDuration();
+            duration =  getGSYVideoManager().getDuration();
         } catch (Exception e) {
             e.printStackTrace();
             return duration;

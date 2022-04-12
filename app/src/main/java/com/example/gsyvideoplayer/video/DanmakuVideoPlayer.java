@@ -135,7 +135,7 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
     @Override
     public void onSeekComplete() {
         super.onSeekComplete();
-        int time = mProgressBar.getProgress() * getDuration() / 100;
+        long time = mProgressBar.getProgress() * getDuration() / 100;
         //如果已经初始化过的，直接seek到对于位置
         if (mHadPlay && getDanmakuView() != null && getDanmakuView().isPrepared()) {
             resolveDanmakuSeek(this, time);

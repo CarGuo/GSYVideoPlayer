@@ -53,11 +53,11 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
         detailPlayer.setReleaseWhenLossAudio(false);
 
         detailPlayer.setGSYVideoProgressListener(new GSYVideoProgressListener() {
-            private int preSecond = 0;
+            private long preSecond = 0;
             @Override
-            public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
+            public void onProgress(long progress, long secProgress, long currentPosition, long duration) {
                 //在5秒的时候弹出中间广告
-                int currentSecond = currentPosition / 1000;
+                long currentSecond = currentPosition / 1000;
                 if (currentSecond == 5 && currentSecond != preSecond) {
                     detailPlayer.getCurrentPlayer().onVideoPause();
                     getGSYADVideoOptionBuilder().setUrl(urlAd2).build(adPlayer);

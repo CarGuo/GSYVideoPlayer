@@ -138,7 +138,7 @@ public class DetailDownloadPlayer extends AppCompatActivity {
             })
             .setGSYVideoProgressListener(new GSYVideoProgressListener() {
                 @Override
-                public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
+                public void onProgress(long progress, long secProgress, long currentPosition, long duration) {
                     Debuger.printfLog(" progress " + progress + " secProgress " + secProgress + " currentPosition " + currentPosition + " duration " + duration);
                 }
             })

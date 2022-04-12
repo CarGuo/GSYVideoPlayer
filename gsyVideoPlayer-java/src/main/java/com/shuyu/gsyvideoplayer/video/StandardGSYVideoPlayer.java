@@ -172,7 +172,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
      */
     @Override
     @SuppressWarnings("ResourceType")
-    protected void showProgressDialog(float deltaX, String seekTime, int seekTimePosition, String totalTime, int totalTimeDuration) {
+    protected void showProgressDialog(float deltaX, String seekTime, long seekTimePosition, String totalTime, long totalTimeDuration) {
         if (mProgressDialog == null) {
             View localView = LayoutInflater.from(getActivityContext()).inflate(getProgressDialogLayoutId(), null);
             if (localView.findViewById(getProgressDialogProgressId()) instanceof ProgressBar) {
@@ -223,7 +223,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
         if (totalTimeDuration > 0)
             if (mDialogProgressBar != null) {
-                mDialogProgressBar.setProgress(seekTimePosition * 100 / totalTimeDuration);
+                mDialogProgressBar.setProgress((int)(seekTimePosition * 100 / totalTimeDuration));
             }
         if (deltaX > 0) {
             if (mDialogIcon != null) {

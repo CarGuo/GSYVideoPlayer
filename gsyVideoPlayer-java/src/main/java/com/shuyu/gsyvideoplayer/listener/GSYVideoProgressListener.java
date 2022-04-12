@@ -11,5 +11,5 @@ public interface GSYVideoProgressListener {
      * @param currentPosition 当前播放位置（暂停后再播放可能会有跳动）
      * @param duration 总时长
      */
-    void onProgress(int progress, int secProgress, int currentPosition, int duration);
+    void onProgress(long progress, long secProgress, long currentPosition, long duration);
 }

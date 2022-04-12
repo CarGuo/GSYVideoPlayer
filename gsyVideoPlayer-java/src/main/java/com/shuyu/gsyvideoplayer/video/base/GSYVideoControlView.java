@@ -48,7 +48,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
 
     //手指放下的位置
-    protected int mDownPosition;
+    protected long mDownPosition;
 
     //手势调节音量的大小
     protected int mGestureDownVolume;
@@ -57,7 +57,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected int mThreshold = 80;
 
     //手动改变滑动的位置
-    protected int mSeekTimePosition;
+    protected long mSeekTimePosition;
 
     //手动滑动的起始偏移位置
     protected int mSeekEndOffset;
@@ -614,7 +614,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         }
         if (getGSYVideoManager() != null && mHadPlay) {
             try {
-                int time = seekBar.getProgress() * getDuration() / 100;
+                long time = seekBar.getProgress() * getDuration() / 100;
                 getGSYVideoManager().seekTo(time);
             } catch (Exception e) {
                 Debuger.printfWarning(e.toString());
@@ -686,7 +686,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected void showDragProgressTextOnSeekBar(boolean fromUser, int progress) {
         if (fromUser && isShowDragProgressTextOnSeekBar) {
-            int duration = getDuration();
+            long duration = getDuration();
             if (mCurrentTimeTextView != null)
                 mCurrentTimeTextView.setText(CommonUtil.stringForTime(progress * duration / 100));
         }
@@ -700,7 +700,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             curHeight = CommonUtil.getCurrentScreenLand((Activity) getActivityContext()) ? mScreenWidth : mScreenHeight;
         }
         if (mChangePosition) {
-            int totalTimeDuration = getDuration();
+            long totalTimeDuration = getDuration();
             mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / curWidth) / mSeekRatio);
             if (mSeekTimePosition > totalTimeDuration)
                 mSeekTimePosition = totalTimeDuration;
@@ -759,10 +759,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected void touchSurfaceUp() {
         if (mChangePosition) {
-            int duration = getDuration();
-            int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
+            long duration = getDuration();
+            long progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
             if (mBottomProgressBar != null)
-                mBottomProgressBar.setProgress(progress);
+                mBottomProgressBar.setProgress((int)progress);
         }
 
         mTouchingProgressBar = false;
@@ -775,10 +775,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            int duration = getDuration();
-            int progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
+            long duration = getDuration();
+            long progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
             if (mProgressBar != null) {
-                mProgressBar.setProgress(progress);
+                mProgressBar.setProgress((int)progress);
             }
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 Debuger.printfLog("onTouchScreenSeekPosition");
@@ -938,13 +938,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
     protected void setTextAndProgress(int secProgress, boolean forceChange) {
-        int position = getCurrentPositionWhenPlaying();
-        int duration = getDuration();
-        int progress = position * 100 / (duration == 0 ? 1 : duration);
+        long position = getCurrentPositionWhenPlaying();
+        long duration = getDuration();
+        long progress = position * 100 / (duration == 0 ? 1 : duration);
         setProgressAndTime(progress, secProgress, position, duration, forceChange);
     }
 
-    protected void setProgressAndTime(int progress, int secProgress, int currentTime, int totalTime, boolean forceChange) {
+    protected void setProgressAndTime(long progress, long secProgress, long currentTime, long totalTime, boolean forceChange) {
 
         if (mGSYVideoProgressListener != null && mCurrentState == CURRENT_STATE_PLAYING) {
             mGSYVideoProgressListener.onProgress(progress, secProgress, currentTime, totalTime);
@@ -957,7 +957,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             return;
         }
         if (!mTouchingProgressBar) {
-            if (progress != 0 || forceChange) mProgressBar.setProgress(progress);
+            if (progress != 0 || forceChange) mProgressBar.setProgress((int)progress);
         }
         if (getGSYVideoManager().getBufferedPercentage() > 0) {
             secProgress = getGSYVideoManager().getBufferedPercentage();
@@ -969,20 +969,20 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
 
         if (mBottomProgressBar != null) {
-            if (progress != 0 || forceChange) mBottomProgressBar.setProgress(progress);
+            if (progress != 0 || forceChange) mBottomProgressBar.setProgress((int)progress);
             setSecondaryProgress(secProgress);
         }
     }
 
-    protected void setSecondaryProgress(int secProgress) {
+    protected void setSecondaryProgress(long secProgress) {
         if (mProgressBar != null) {
             if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
-                mProgressBar.setSecondaryProgress(secProgress);
+                mProgressBar.setSecondaryProgress((int)secProgress);
             }
         }
         if (mBottomProgressBar != null) {
             if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
-                mBottomProgressBar.setSecondaryProgress(secProgress);
+                mBottomProgressBar.setSecondaryProgress((int)secProgress);
             }
         }
     }
@@ -1112,8 +1112,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected abstract void showWifiDialog();
 
     protected abstract void showProgressDialog(float deltaX,
-                                               String seekTime, int seekTimePosition,
-                                               String totalTime, int totalTimeDuration);
+                                               String seekTime, long seekTimePosition,
+                                               String totalTime, long totalTimeDuration);
 
     protected abstract void dismissProgressDialog();
 
