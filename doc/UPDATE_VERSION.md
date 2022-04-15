@@ -1,5 +1,11 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### v8.2.0-release-jitpack (2022-04-15)
+* fix #3542 break change progress time int 2 long
+* fix #3546
+* fix #3531 clearCache custom path
+* update exoplayer  sdk 2.17.1
+
 ### v8.1.9-release-jitpack(2022-02-14)
 * fix #3496
 * exo support rtsp

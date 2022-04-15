@@ -68,23 +68,23 @@ allprojects {
 #### A、直接引入
 ```
  //完整版引入
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.9-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.2.0-release-jitpack'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.9-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.2.0-release-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.9-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.2.0-release-jitpack'
 
  //根据你的需求ijk模式的so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.1.9-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.9-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.9-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.9-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.9-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.2.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.2.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.2.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.2.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.2.0-release-jitpack'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
@@ -93,13 +93,13 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.1.9-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.2.0-release-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.1.9-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.2.0-release-jitpack'
 
  //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.1.9-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.2.0-release-jitpack'
 
 ```
 
@@ -221,29 +221,18 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 
 ## 五、近期版本
 
+
+### v8.2.0-release-jitpack (2022-04-15)
+* fix #3542 break change progress time int 2 long
+* fix #3546
+* fix #3531 clearCache custom path
+* update exoplayer  sdk 2.17.1
+
+
 ### v8.1.9-release-jitpack(2022-02-14)
 * fix #3496
 * exo support rtsp
 
-### v8.1.8-release-jitpack(2021-11-12)
-
-* fix #3484 orientation
-* update gradle
-* Update dependencies (#3450)
-
-* update something
-
-### v8.1.7-release-jitpack(2021-11-12)
-
-* update something
-
-### v8.1.6-jitpack(2021-09-13)
-
-* 增加支持横屏幕全屏和竖屏变化，屏幕不旋转，[SimpleActivity](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleActivity.java) [SimpleDetailActivityMode2](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
-* 修复设置了超时，重试后失效的问题
-* 增加针对某些dataBinding的场景， 当context detach activity被回收会出现。
-* exo player 2.14.2
-* fix DataSource error
 
 
 ### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
