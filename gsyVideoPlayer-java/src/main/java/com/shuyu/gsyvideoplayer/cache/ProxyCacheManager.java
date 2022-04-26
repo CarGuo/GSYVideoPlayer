@@ -28,7 +28,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 public class ProxyCacheManager implements ICacheManager, CacheListener {
 
-    public static int DEFAULT_MAX_SIZE = 512 * 1024 * 1024;
+    public static long DEFAULT_MAX_SIZE = 512 * 1024 * 1024;
     public static int DEFAULT_MAX_COUNT = -1;
 
     //视频代理
