@@ -11,6 +11,7 @@ ext {
         design      : "com.google.android.material:material:1.4.0",
         viewpager2  : "androidx.viewpager2:viewpager2:1.0.0",
         core        : "androidx.core:core:1.7.0",
+        transition  : "androidx.transition:transition:1.4.1",
         annotation  : "androidx.annotation:annotation:1.3.0"
     ]
 
@@ -22,7 +23,6 @@ ext {
 
     viewDependencies = [
         ijkplayer            : "com.github.CarGuo:GSYIjkJava:1.0.0",
-        transitionsEverywhere: "com.andkulikov:transitionseverywhere:2.1.0",
         danmakuFlameMaster   : "com.github.CarGuo.DanmakuFlameMaster:DanmakuFlameMaster:${danmakuFlameMasterSoVersion}",
         floatWindow          : "com.github.yhaolpz:FloatWindow:1.0.6",
 
