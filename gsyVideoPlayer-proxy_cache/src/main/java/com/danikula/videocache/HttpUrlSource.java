@@ -187,7 +187,16 @@ public class HttpUrlSource implements Source {
             }
             injectCustomHeaders(connection, url);
             if (offset > 0) {
-                connection.setRequestProperty("Range", "bytes=" + offset + "-");
+                if (offset > Integer.MAX_VALUE) {
+                    String ofs = String.valueOf(offset);
+                    long ofr = offset;
+                    if (ofs.contains(".")) {
+                        ofr = Long.valueOf(ofs.substring(0, ofs.indexOf(".")));
+                    }
+                    connection.setRequestProperty("Range", "bytes=" + ofr + "-");
+                } else {
+                    connection.setRequestProperty("Range", "bytes=" + (int)offset + "-");
+                }
             }
             if (timeout > 0) {
                 connection.setConnectTimeout(timeout);

@@ -362,6 +362,8 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
         //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
+        //String url = " String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        //String source1 = "http://video.cdn.aizys.com/zzx3.9g.mkv";//long
         return url;
     }
 
