@@ -9,4 +9,5 @@ include ":app",
     ":gsyVideoPlayer-ex_so",
     ":gsyVideoPlayer-proxy_cache",
     ":gsyVideoPlayer-exo_player2",
-    ":gsyVideoPlayer-base"
+    ":gsyVideoPlayer-base",
+    ":gsyVideoPlayer-aliplay"

@@ -486,6 +486,11 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected void changeUiToPlayingShow() {
         Debuger.printfLog("changeUiToPlayingShow");
 
+        if (mLockCurScreen && mNeedLockFull) {
+            setViewShowState(mLockScreen, VISIBLE);
+            return;
+        }
+
         setViewShowState(mTopContainer, VISIBLE);
         setViewShowState(mBottomContainer, VISIBLE);
         setViewShowState(mStartButton, VISIBLE);
@@ -503,7 +508,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void changeUiToPauseShow() {
         Debuger.printfLog("changeUiToPauseShow");
-
+        if (mLockCurScreen && mNeedLockFull) {
+            setViewShowState(mLockScreen, VISIBLE);
+            return;
+        }
         setViewShowState(mTopContainer, VISIBLE);
         setViewShowState(mBottomContainer, VISIBLE);
         setViewShowState(mStartButton, VISIBLE);

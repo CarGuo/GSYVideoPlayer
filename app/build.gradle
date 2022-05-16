@@ -58,6 +58,7 @@ dependencies {
     implementation androidDependencies.viewpager2
 
     implementation project(":gsyVideoPlayer")
+    implementation project(":gsyVideoPlayer-aliplay")
 //    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:$gsyVideoVersion"
 
 //    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:$gsyVideoVersion"
