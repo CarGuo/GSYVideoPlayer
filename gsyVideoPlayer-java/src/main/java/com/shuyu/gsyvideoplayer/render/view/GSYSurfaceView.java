@@ -2,8 +2,17 @@ package com.shuyu.gsyvideoplayer.render.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.AttributeSet;
+import android.view.PixelCopy;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -15,6 +24,7 @@ import com.shuyu.gsyvideoplayer.render.GSYRenderView;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewBaseRender;
 import com.shuyu.gsyvideoplayer.render.view.listener.IGSYSurfaceListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.MeasureHelper;
 
 import java.io.File;
@@ -101,14 +111,21 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
     @Override
     public Bitmap initCover() {
-        Debuger.printfLog(getClass().getSimpleName() + " not support initCover now");
-        return null;
+        Bitmap bitmap = Bitmap.createBitmap(
+            getSizeW(), getSizeH(), Bitmap.Config.RGB_565);
+        return bitmap;
+
     }
 
+    /**
+     * 暂停时初始化位图
+     */
     @Override
     public Bitmap initCoverHigh() {
-        Debuger.printfLog(getClass().getSimpleName() + " not support initCoverHigh now");
-        return null;
+        Bitmap bitmap = Bitmap.createBitmap(
+            getSizeW(), getSizeH(), Bitmap.Config.ARGB_8888);
+        return bitmap;
+
     }
 
     /**
@@ -117,7 +134,32 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      * @param shotHigh 是否需要高清的
      */
     public void taskShotPic(GSYVideoShotListener gsyVideoShotListener, boolean shotHigh) {
-        Debuger.printfLog(getClass().getSimpleName() + " not support taskShotPic now");
+        Bitmap bitmap;
+        if (shotHigh) {
+            bitmap = initCoverHigh();
+        } else {
+            bitmap = initCover();
+        }
+        try {
+            HandlerThread handlerThread = new HandlerThread("PixelCopier");
+            handlerThread.start();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                PixelCopy.request(this, bitmap, new PixelCopy.OnPixelCopyFinishedListener() {
+                    @Override
+                    public void onPixelCopyFinished(int copyResult) {
+                        if (copyResult == PixelCopy.SUCCESS) {
+                            gsyVideoShotListener.getBitmap(bitmap);
+                        }
+                        handlerThread.quitSafely();
+                    }
+                }, new Handler());
+            } else {
+                Debuger.printfLog(getClass().getSimpleName() +
+                    " Build.VERSION.SDK_INT < Build.VERSION_CODES.N not support taskShotPic now");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -126,7 +168,7 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      * @param high 是否需要高清的
      */
     public void saveFrame(final File file, final boolean high, final GSYVideoShotSaveListener gsyVideoShotSaveListener) {
-        Debuger.printfLog(getClass().getSimpleName() + " not support saveFrame now");
+        Debuger.printfLog(getClass().getSimpleName() + " not support saveFrame now, use taskShotPic");
     }
 
     @Override
