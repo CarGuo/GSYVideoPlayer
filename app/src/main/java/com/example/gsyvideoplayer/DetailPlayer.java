@@ -16,7 +16,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailPlayerBinding;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.SeekParameters;
+import com.google.android.exoplayer2.source.TrackGroup;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionOverrides;
+import com.google.android.exoplayer2.trackselection.TrackSelectionParameters;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -30,10 +37,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 
 
 public class DetailPlayer extends AppCompatActivity {
-
 
 
     private boolean isPlay;
@@ -125,84 +132,102 @@ public class DetailPlayer extends AppCompatActivity {
         header.put("User-Agent", "GSY");
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setThumbImageView(imageView)
-                .setIsTouchWiget(true)
-                .setRotateViewAuto(false)
-                //仅仅横屏旋转，不变直
-                //.setOnlyRotateLand(true)
-                .setRotateWithSystem(false)
-                .setLockLand(true)
-                .setAutoFullWithSize(true)
-                .setShowFullAnimation(false)
-                .setNeedLockFull(true)
-                .setUrl(url)
-                .setMapHeadData(header)
-                .setCacheWithPlay(false)
-                .setSurfaceErrorPlay(false)
-                .setVideoTitle("测试视频")
-                .setVideoAllCallBack(new GSYSampleCallBack() {
-                    @Override
-                    public void onPrepared(String url, Object... objects) {
-                        Debuger.printfError("***** onPrepared **** " + objects[0]);
-                        Debuger.printfError("***** onPrepared **** " + objects[1]);
-                        super.onPrepared(url, objects);
-                        //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(binding.detailPlayer.isRotateWithSystem());
-                        isPlay = true;
+            .setIsTouchWiget(true)
+            .setRotateViewAuto(false)
+            //仅仅横屏旋转，不变直
+            //.setOnlyRotateLand(true)
+            .setRotateWithSystem(false)
+            .setLockLand(true)
+            .setAutoFullWithSize(true)
+            .setShowFullAnimation(false)
+            .setNeedLockFull(true)
+            .setUrl(url)
+            .setMapHeadData(header)
+            .setCacheWithPlay(false)
+            .setSurfaceErrorPlay(false)
+            .setVideoTitle("测试视频")
+            .setVideoAllCallBack(new GSYSampleCallBack() {
+                @Override
+                public void onPrepared(String url, Object... objects) {
+                    Debuger.printfError("***** onPrepared **** " + objects[0]);
+                    Debuger.printfError("***** onPrepared **** " + objects[1]);
+                    super.onPrepared(url, objects);
+                    //开始播放了才能旋转和全屏
+                    orientationUtils.setEnable(binding.detailPlayer.isRotateWithSystem());
+                    isPlay = true;
 
 
-                        //设置 seek 的临近帧。
-                        if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
-                            ((Exo2PlayerManager) binding.detailPlayer.getGSYVideoManager().getPlayer()).setSeekParameter(SeekParameters.NEXT_SYNC);
-                            Debuger.printfError("***** setSeekParameter **** ");
+                    //设置 seek 的临近帧。
+                    if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                        ((Exo2PlayerManager) binding.detailPlayer.getGSYVideoManager().getPlayer()).setSeekParameter(SeekParameters.NEXT_SYNC);
+                        Debuger.printfError("***** setSeekParameter **** ");
+                    }
+
+
+                    //设置 seek 的临近帧。
+                    if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                        IjkExo2MediaPlayer player = ((IjkExo2MediaPlayer) binding.detailPlayer.getGSYVideoManager().getPlayer().getMediaPlayer());
+                        MappingTrackSelector.MappedTrackInfo mappedTrackInfo = player.getTrackSelector().getCurrentMappedTrackInfo();
+                        if (mappedTrackInfo != null) {
+                            for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
+                                TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(i);
+                                if (C.TRACK_TYPE_AUDIO == mappedTrackInfo.getRendererType(i)) { //判断是否是音轨
+                                    for (int j = 0; j < rendererTrackGroups.length; j++) {
+                                        TrackGroup trackGroup = rendererTrackGroups.get(j);
+                                        Debuger.printfError("####### " + trackGroup.getFormat(0).toString() + " #######");
+                                    }
+                                }
+                            }
                         }
                     }
+                }
 
-                    @Override
-                    public void onEnterFullscreen(String url, Object... objects) {
-                        super.onEnterFullscreen(url, objects);
-                        Debuger.printfError("***** onEnterFullscreen **** " + objects[0]);//title
-                        Debuger.printfError("***** onEnterFullscreen **** " + objects[1]);//当前全屏player
-                    }
+                @Override
+                public void onEnterFullscreen(String url, Object... objects) {
+                    super.onEnterFullscreen(url, objects);
+                    Debuger.printfError("***** onEnterFullscreen **** " + objects[0]);//title
+                    Debuger.printfError("***** onEnterFullscreen **** " + objects[1]);//当前全屏player
+                }
 
-                    @Override
-                    public void onAutoComplete(String url, Object... objects) {
-                        super.onAutoComplete(url, objects);
-                    }
+                @Override
+                public void onAutoComplete(String url, Object... objects) {
+                    super.onAutoComplete(url, objects);
+                }
 
-                    @Override
-                    public void onClickStartError(String url, Object... objects) {
-                        super.onClickStartError(url, objects);
-                    }
+                @Override
+                public void onClickStartError(String url, Object... objects) {
+                    super.onClickStartError(url, objects);
+                }
 
-                    @Override
-                    public void onQuitFullscreen(String url, Object... objects) {
-                        super.onQuitFullscreen(url, objects);
-                        Debuger.printfError("***** onQuitFullscreen **** " + objects[0]);//title
-                        Debuger.printfError("***** onQuitFullscreen **** " + objects[1]);//当前非全屏player
+                @Override
+                public void onQuitFullscreen(String url, Object... objects) {
+                    super.onQuitFullscreen(url, objects);
+                    Debuger.printfError("***** onQuitFullscreen **** " + objects[0]);//title
+                    Debuger.printfError("***** onQuitFullscreen **** " + objects[1]);//当前非全屏player
 
-                        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
-                        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-                        if (orientationUtils != null) {
-                            orientationUtils.backToProtVideo();
-                        }
+                    // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                    // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+                    if (orientationUtils != null) {
+                        orientationUtils.backToProtVideo();
                     }
-                })
-                .setLockClickListener(new LockClickListener() {
-                    @Override
-                    public void onClick(View view, boolean lock) {
-                        if (orientationUtils != null) {
-                            //配合下方的onConfigurationChanged
-                            orientationUtils.setEnable(!lock);
-                        }
+                }
+            })
+            .setLockClickListener(new LockClickListener() {
+                @Override
+                public void onClick(View view, boolean lock) {
+                    if (orientationUtils != null) {
+                        //配合下方的onConfigurationChanged
+                        orientationUtils.setEnable(!lock);
                     }
-                })
-                .setGSYVideoProgressListener(new GSYVideoProgressListener() {
-                    @Override
-                    public void onProgress(long progress, long secProgress, long currentPosition, long duration) {
-                        Debuger.printfLog(" progress " + progress + " secProgress " + secProgress + " currentPosition " + currentPosition + " duration " + duration);
-                    }
-                })
-                .build(binding.detailPlayer);
+                }
+            })
+            .setGSYVideoProgressListener(new GSYVideoProgressListener() {
+                @Override
+                public void onProgress(long progress, long secProgress, long currentPosition, long duration) {
+                    Debuger.printfLog(" progress " + progress + " secProgress " + secProgress + " currentPosition " + currentPosition + " duration " + duration);
+                }
+            })
+            .build(binding.detailPlayer);
 
         binding.detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,10 +242,47 @@ public class DetailPlayer extends AppCompatActivity {
             }
         });
 
+
         binding.openBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 fileSearch();
+            }
+        });
+
+        ///exo 切换音轨
+        binding.change.setOnClickListener(new View.OnClickListener() {
+            int index = 0;
+            @Override
+            public void onClick(View view) {
+                if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                    IjkExo2MediaPlayer player = ((IjkExo2MediaPlayer) binding.detailPlayer.getGSYVideoManager().getPlayer().getMediaPlayer());
+                    TrackSelector trackSelector = player.getTrackSelector();
+                    MappingTrackSelector.MappedTrackInfo mappedTrackInfo = player.getTrackSelector().getCurrentMappedTrackInfo();
+
+                    if (mappedTrackInfo != null) {
+                        for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
+                            TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(i);
+                            if (C.TRACK_TYPE_AUDIO == mappedTrackInfo.getRendererType(i)) { //判断是否是音轨
+                                if (index == 0) {
+                                    index = 1;
+                                } else {
+                                    index = 0;
+                                }
+                                TrackGroup trackGroup = rendererTrackGroups.get(index);
+                                TrackSelectionParameters parameters = trackSelector.getParameters().buildUpon()
+                                    .setForceHighestSupportedBitrate(true)
+                                    .setTrackSelectionOverrides(
+                                        new TrackSelectionOverrides.Builder().addOverride(
+                                            new TrackSelectionOverrides.TrackSelectionOverride(trackGroup)
+                                        ).build()
+                                    ).build();
+                                trackSelector.setParameters(parameters);
+                            }
+                        }
+                    }
+                }
             }
         });
     }
@@ -309,7 +371,7 @@ public class DetailPlayer extends AppCompatActivity {
         //断网自动重新链接，url前接上ijkhttphook:
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
 
-        String url = "https://cos.icxl.xyz/c03328206d894477a3f8c9767a4de5649342908.mov";
+        //String url = "https://cos.icxl.xyz/c03328206d894477a3f8c9767a4de5649342908.mov";
         //String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
         //String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/out2.m3u8";
@@ -363,7 +425,8 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
         //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
         //String url = " String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        //String source1 = "http://video.cdn.aizys.com/zzx3.9g.mkv";//long
+        //String url = "http://video.cdn.aizys.com/zzx3.9g.mkv";//long
+        String url = "https://aliyuncdnsaascloud.xjhktv.com/video/A%20Lin%2B%E5%80%AA%E5%AD%90%E5%86%88-%E4%B8%8D%E5%B1%91%E5%AE%8C%E7%BE%8E%5B%E5%9B%BD%5D%5B1080P%5D.mp4";//long
         return url;
     }
 
@@ -382,8 +445,8 @@ public class DetailPlayer extends AppCompatActivity {
     private void getPathForSearch(Uri uri) {
         String[] selectionArgs = new String[]{DocumentsContract.getDocumentId(uri).split(":")[1]};
         Cursor cursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                null, MediaStore.Images.Media._ID + "=?",
-                selectionArgs, null);
+            null, MediaStore.Images.Media._ID + "=?",
+            selectionArgs, null);
         if (null != cursor) {
             if (cursor.moveToFirst()) {
                 int index = cursor.getColumnIndex(MediaStore.Video.Media.DATA);

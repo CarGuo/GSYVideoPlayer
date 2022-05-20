@@ -41,5 +41,13 @@
         android:layout_below="@id/detail_player"
         android:layout_margin="10dp"
         android:text="open" />
+    <Button
+        android:id="@+id/change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/open_btn"
+        android:layout_margin="10dp"
+        android:text="exo track" />
+
 
 </RelativeLayout>
