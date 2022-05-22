@@ -16,16 +16,16 @@ import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.RawDataSourceProvider;
+import com.shuyu.gsyvideoplayer.utils.StreamDataSourceProvider;
 
+import java.io.BufferedInputStream;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkLibLoader;
-import tv.danmaku.ijk.media.player.IjkMediaMeta;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
@@ -68,6 +68,7 @@ public class IjkPlayerManager extends BasePlayerManager {
 
         GSYModel gsyModel = (GSYModel) msg.obj;
         String url = gsyModel.getUrl();
+        BufferedInputStream videoBufferedInputStream = gsyModel.getVideoBufferedInputStream();
 
 
         try {
@@ -99,6 +100,8 @@ public class IjkPlayerManager extends BasePlayerManager {
                     } else {
                         mediaPlayer.setDataSource(url, gsyModel.getMapHeadData());
                     }
+                } else if (videoBufferedInputStream != null) {
+                    mediaPlayer.setDataSource(new StreamDataSourceProvider(videoBufferedInputStream));
                 } else {
                     mediaPlayer.setDataSource(url, gsyModel.getMapHeadData());
                 }

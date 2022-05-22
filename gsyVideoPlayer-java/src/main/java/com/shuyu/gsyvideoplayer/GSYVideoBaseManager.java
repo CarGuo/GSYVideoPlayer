@@ -5,11 +5,10 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-
-import androidx.annotation.Nullable;
-
 import android.text.TextUtils;
 import android.view.Surface;
+
+import androidx.annotation.Nullable;
 
 import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
@@ -23,6 +22,7 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoViewBridge;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -209,6 +209,23 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         msg.what = HANDLER_PREPARE;
         GSYModel fb = new GSYModel(url, mapHeadData, loop, speed, cache, cachePath, overrideExtension);
         msg.obj = fb;
+        sendMessage(msg);
+    }
+
+
+    @Override
+    public void prepare(final BufferedInputStream videoBufferedInputStream, final Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath) {
+        prepare(videoBufferedInputStream, mapHeadData, loop, speed, cache, cachePath, null);
+    }
+
+    @Override
+    public void prepare(final BufferedInputStream videoBufferedInputStream, final Map<String, String> mapHeadData, boolean loop, float speed, boolean cache, File cachePath, String overrideExtension) {
+        if (videoBufferedInputStream == null) {
+            return;
+        }
+        Message msg = new Message();
+        msg.what = HANDLER_PREPARE;
+        msg.obj = new GSYModel(videoBufferedInputStream, mapHeadData, loop, speed, cache, cachePath, null);
         sendMessage(msg);
     }
 
