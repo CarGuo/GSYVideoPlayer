@@ -71,7 +71,6 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         setContentView(rootView);
 
 
-
         resolveNormalVideoUI();
 
         initVideoBuilderMode();
@@ -153,16 +152,16 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         ImageView imageView = new ImageView(this);
         loadCover(imageView, url);
         return new GSYVideoOptionBuilder()
-                .setThumbImageView(imageView)
-                .setUrl(url)
-                .setCacheWithPlay(true)
-                .setVideoTitle(" ")
-                .setIsTouchWiget(true)
-                .setRotateViewAuto(false)
-                .setLockLand(false)
-                .setShowFullAnimation(true)//打开动画
-                .setNeedLockFull(true)
-                .setSeekRatio(1);
+            .setThumbImageView(imageView)
+            .setUrl(url)
+            .setCacheWithPlay(true)
+            .setVideoTitle(" ")
+            .setIsTouchWiget(true)
+            .setRotateViewAuto(false)
+            .setLockLand(false)
+            .setShowFullAnimation(true)//打开动画
+            .setNeedLockFull(true)
+            .setSeekRatio(1);
     }
 
     @Override
@@ -262,20 +261,20 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showRationaleForCamera(final PermissionRequest request) {
         new AlertDialog.Builder(this)
-                .setMessage("快给我权限")
-                .setPositiveButton("允许", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        request.proceed();
-                    }
-                })
-                .setNegativeButton("拒绝", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        request.cancel();
-                    }
-                })
-                .show();
+            .setMessage("快给我权限")
+            .setPositiveButton("允许", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    request.proceed();
+                }
+            })
+            .setNegativeButton("拒绝", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    request.cancel();
+                }
+            })
+            .show();
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -300,7 +299,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
             public void getBitmap(Bitmap bitmap) {
                 if (bitmap != null) {
                     try {
-                        CommonUtil.saveBitmap(bitmap);
+                        CommonUtil.saveBitmap(DetailControlActivity.this, bitmap);
                     } catch (FileNotFoundException e) {
                         showToast("save fail ");
                         e.printStackTrace();
@@ -322,14 +321,14 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
         imageView.setImageResource(R.mipmap.xxx1);
 
         Glide.with(this.getApplicationContext())
-                .setDefaultRequestOptions(
-                        new RequestOptions()
-                                .frame(3000000)
-                                .centerCrop()
-                                .error(R.mipmap.xxx2)
-                                .placeholder(R.mipmap.xxx1))
-                .load(url)
-                .into(imageView);
+            .setDefaultRequestOptions(
+                new RequestOptions()
+                    .frame(3000000)
+                    .centerCrop()
+                    .error(R.mipmap.xxx2)
+                    .placeholder(R.mipmap.xxx1))
+            .load(url)
+            .into(imageView);
     }
 
     private void resolveNormalVideoUI() {

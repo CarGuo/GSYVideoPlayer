@@ -120,7 +120,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
         View rootView = binding.getRoot();
         setContentView(rootView);
 
-        Log.e("@@@@@@@", "####" +binding.detailPlayer );
+        Log.e("@@@@@@@", "####" + binding.detailPlayer);
         backupRendType = GSYVideoType.getRenderType();
 
         //设置为GL播放模式，才能支持滤镜，注意此设置是全局的
@@ -292,7 +292,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
             public void getBitmap(Bitmap bitmap) {
                 if (bitmap != null) {
                     try {
-                        CommonUtil.saveBitmap(bitmap);
+                        CommonUtil.saveBitmap(DetailFilterActivity.this, bitmap);
                     } catch (FileNotFoundException e) {
                         showToast("save fail ");
                         e.printStackTrace();
