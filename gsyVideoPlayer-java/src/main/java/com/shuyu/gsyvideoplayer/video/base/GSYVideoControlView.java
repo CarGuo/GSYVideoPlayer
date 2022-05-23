@@ -702,6 +702,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mChangePosition) {
             long totalTimeDuration = getDuration();
             mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / curWidth) / mSeekRatio);
+            if(mSeekTimePosition < 0) {
+                mSeekTimePosition = 0;
+            }
             if (mSeekTimePosition > totalTimeDuration)
                 mSeekTimePosition = totalTimeDuration;
             String seekTime = CommonUtil.stringForTime(mSeekTimePosition);
@@ -771,6 +774,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         dismissBrightnessDialog();
         if (mChangePosition && getGSYVideoManager() != null && (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE)) {
             try {
+//                如果是 m3u8 可能会需要这个
+//                if(mSeekTimePosition == 0) {
+//                    mSeekTimePosition = 1;
+//                }
                 getGSYVideoManager().seekTo(mSeekTimePosition);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -29,15 +29,19 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 
 public class DetailPlayer extends AppCompatActivity {
@@ -98,6 +102,12 @@ public class DetailPlayer extends AppCompatActivity {
         list.add(videoOptionMode17);
         GSYVideoManager.instance().setOptionModelList(list);*/
         /***************rtsp 配置****************/
+
+
+        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
+        List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel);
+        GSYVideoManager.instance().setOptionModelList(list);
 
         /// ijk rtmp
        /*VideoOptionModel videoOptionModel =
@@ -373,6 +383,7 @@ public class DetailPlayer extends AppCompatActivity {
 
         //String url = "https://cos.icxl.xyz/c03328206d894477a3f8c9767a4de5649342908.mov";
         //String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        String url = "https://video.xintujing.cn/d0f2f304vodtranscq1251091601/e27f66955285890796832323682/v.f230.m3u8";
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
         //String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/out2.m3u8";
         //String url = "http://223.110.243.138/PLTV/2510088/224/3221227177/index.m3u8";
@@ -426,7 +437,8 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
         //String url = " String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://video.cdn.aizys.com/zzx3.9g.mkv";//long
-        String url = "https://aliyuncdnsaascloud.xjhktv.com/video/A%20Lin%2B%E5%80%AA%E5%AD%90%E5%86%88-%E4%B8%8D%E5%B1%91%E5%AE%8C%E7%BE%8E%5B%E5%9B%BD%5D%5B1080P%5D.mp4";//long
+        //String url = "rtsp://admin:wh123456@112.44.163.248:554/h264/ch01/main/av_stream";//long
+        //String url = "https://aliyuncdnsaascloud.xjhktv.com/video/A%20Lin%2B%E5%80%AA%E5%AD%90%E5%86%88-%E4%B8%8D%E5%B1%91%E5%AE%8C%E7%BE%8E%5B%E5%9B%BD%5D%5B1080P%5D.mp4";//long
         return url;
     }
 
