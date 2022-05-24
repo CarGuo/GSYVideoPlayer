@@ -1,7 +1,7 @@
 
 ![](./img/home_logo.png)
 
-## 基于[IJKPlayer](https://github.com/Bilibili/ijkplayer)（兼容系统MediaPlayer与EXOPlayer2），实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
+## 支持 [IJKPlayer](https://github.com/Bilibili/ijkplayer) EXOPlayer2、MediaPlayer、AliPlayer，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
 > ## [如果克隆太慢或者图片看不到，可尝试从码云地址下载](https://gitee.com/CarGuo/GSYVideoPlayer)
 
@@ -13,13 +13,14 @@
 **帧图**|**视频第一帧、视频帧截图功能，视频生成gif功能。**
 **播放**|**列表播放、列表连续播放、重力旋转与手动旋转、视频本身rotation旋转属性、快播和慢播、网络视频加载速度。**
 **画面**|**调整显示比例:默认、16:9、4:3、填充；播放时旋转画面角度（0,90,180,270）；镜像旋转。**
-**内核**|**IJKPlayer、EXOPlayer、MediaPlayer切换、自定义内核**
+**内核**|**IJKPlayer、EXOPlayer、MediaPlayer、AliPlayer切换、自定义内核**
 **布局**|**全屏与非全屏两套布局切换、没有任何操作控件的纯播放支持、弹幕功能、继承自定义任何布局。**
 **播放**|**单例播放、多个同时播放、视频列表滑动自动播放、列表切换详情页面无缝播放。**
 **窗口**|**小窗口、多窗体下（包括桌面）的小窗口播放。**
 **广告**|**片头广告、跳过广告支持、中间插入广告功能。**
 **字幕**|**[exo2模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)。**
 **dash**|**exo2 模式支持dash**
+**stream**|**支持元数据播放**
 **更多**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持；锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **自定义**|**可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
 
