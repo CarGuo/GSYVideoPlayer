@@ -70,6 +70,10 @@ allprojects {
 ```
  //完整版引入
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.3.0-release-jitpack'
+
+
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.0-release-jitpack'
 ```
 
 #### B、添加java和你想要的so支持：
@@ -80,8 +84,8 @@ allprojects {
  //是否需要ExoPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.0-release-jitpack'
 
- //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.0-release-jitpack'
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.0-release-jitpack'
 
  //根据你的需求ijk模式的so
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.3.0-release-jitpack'
@@ -102,8 +106,8 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  //是否需要ExoPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.0-release-jitpack'
 
- //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.0-release-jitpack'
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.0-release-jitpack'
 
  //更多ijk的编码支持
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.3.0-release-jitpack'
@@ -120,6 +124,8 @@ PlayerFactory.setPlayManager(Exo2PlayerManager.class);
 PlayerFactory.setPlayManager(SystemPlayerManager.class);
 //ijk内核，默认模式
 PlayerFactory.setPlayManager(IjkPlayerManager.class);
+//aliplay 内核，默认模式
+PlayerFactory.setPlayManager(AliPlayerManager.class);
 
 
 //exo缓存模式，支持m3u8，只支持exo

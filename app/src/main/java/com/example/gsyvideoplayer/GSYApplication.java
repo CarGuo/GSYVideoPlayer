@@ -42,7 +42,7 @@ public class GSYApplication extends MultiDexApplication {
 
         //PlayerFactory.setPlayManager(SystemPlayerManager.class);//系统模式
         //PlayerFactory.setPlayManager(IjkPlayerManager.class);//ijk模式
-        //PlayerFactory.setPlayManager(AliPlayerManager.class);//ijk模式
+        //PlayerFactory.setPlayManager(AliPlayerManager.class);//aliplay模式
 
         //CacheFactory.setCacheManager(ExoPlayerCacheManager.class);//exo缓存模式，支持m3u8，只支持exo
         //CacheFactory.setCacheManager(ProxyCacheManager.class);//代理缓存模式，支持所有模式，不支持m3u8等

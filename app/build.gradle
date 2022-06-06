@@ -59,7 +59,10 @@ dependencies {
 
     implementation project(":gsyVideoPlayer")
     implementation project(":gsyVideoPlayer-aliplay")
-//    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:$gsyVideoVersion"
+    //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:$gsyVideoVersion"
+
+    //是否需要AliPlayer模式
+    //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:$gsyVideoVersion"
 
 //    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:$gsyVideoVersion"
 //    implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-armv64:$gsyVideoVersion"

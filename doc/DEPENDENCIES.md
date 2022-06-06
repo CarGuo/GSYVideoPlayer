@@ -16,9 +16,15 @@ allprojects {
 }
 ```
 
+
+#### A、直接引入
 ```
  //完整版引入
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.7-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.3.0-release-jitpack'
+
+
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.0-release-jitpack'
 ```
 
 #### B、添加java和你想要的so支持：
@@ -36,10 +42,9 @@ allprojects {
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.3.0-release-jitpack'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.3.0-release-jitpack'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.3.0-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x86:v8.3.0-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-x64:v8.3.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.3.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.3.0-release-jitpack'
 ```
-
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
 
@@ -47,7 +52,7 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-java:v8.3.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.3.0-release-jitpack'
 
  //是否需要ExoPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.0-release-jitpack'
