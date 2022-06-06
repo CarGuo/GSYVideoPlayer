@@ -1,5 +1,16 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+### v8.3.0-release-jitpack (2022-06-06)
+* fix #3559 ProxyCacheManager
+* remove dependencies: transitionsEverywhere
+* fix #3568 HttpProxyCache &  HttpUrlSource
+* support AliPlayer
+* surfaceView 支持截图
+* fix #3580
+* feat(Media DataSource): Video playback data source supports data input stream.(Currently only IJK kernel is supported) (#3582)
+
+
 ### v8.2.0-release-jitpack (2022-04-15)
 * fix #3542 break change progress time int 2 long
 * fix #3546
