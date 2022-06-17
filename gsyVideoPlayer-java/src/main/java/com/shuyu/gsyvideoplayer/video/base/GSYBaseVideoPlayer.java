@@ -205,8 +205,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         getLocationOnScreen(mListItemRect);
         if (context instanceof Activity) {
             int statusBarH = getStatusBarHeight(context);
-            int actionBerH = getActionBarHeight(CommonUtil.getAppCompActivity(context));
-            boolean isTranslucent = ((WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS & CommonUtil.getAppCompActivity(context).getWindow().getAttributes().flags)
+            int actionBerH = getActionBarHeight(CommonUtil.getActivityNestWrapper(context));
+            boolean isTranslucent = ((WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS & CommonUtil.getActivityNestWrapper(context).getWindow().getAttributes().flags)
                 == WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             Debuger.printfLog("*************isTranslucent*************** " + isTranslucent);
             if (statusBar && !isTranslucent) {
@@ -631,7 +631,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     public GSYBaseVideoPlayer startWindowFullscreen(final Context context, final boolean actionBar, final boolean statusBar) {
 
 
-        mSystemUiVisibility = CommonUtil.getAppCompActivity(context).getWindow().getDecorView().getSystemUiVisibility();
+        mSystemUiVisibility = CommonUtil.getActivityNestWrapper(context).getWindow().getDecorView().getSystemUiVisibility();
 
         hideSupportActionBar(context, actionBar, statusBar);
 

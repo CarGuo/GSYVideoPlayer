@@ -183,7 +183,7 @@ public class ListVideoUtil {
      * 处理全屏逻辑
      */
     private void resolveToFull() {
-        systemUiVisibility = CommonUtil.getAppCompActivity(context).getWindow().getDecorView().getSystemUiVisibility();
+        systemUiVisibility = CommonUtil.getActivityNestWrapper(context).getWindow().getDecorView().getSystemUiVisibility();
         CommonUtil.hideSupportActionBar(context, hideActionBar, hideStatusBar);
         if (hideKey) {
             hideNavKey(context);
@@ -365,7 +365,7 @@ public class ListVideoUtil {
     private void saveLocationStatus(Context context, boolean statusBar, boolean actionBar) {
         listParent.getLocationOnScreen(listItemRect);
         int statusBarH = getStatusBarHeight(context);
-        int actionBerH = getActionBarHeight(CommonUtil.getAppCompActivity(context));
+        int actionBerH = getActionBarHeight(CommonUtil.getActivityNestWrapper(context));
         if (statusBar) {
             listItemRect[1] = listItemRect[1] - statusBarH;
         }
