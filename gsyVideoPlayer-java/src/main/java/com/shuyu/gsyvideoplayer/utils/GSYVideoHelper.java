@@ -346,7 +346,7 @@ public class GSYVideoHelper {
     private void saveLocationStatus(Context context, boolean statusBar, boolean actionBar) {
         mParent.getLocationOnScreen(mNormalItemRect);
         int statusBarH = getStatusBarHeight(context);
-        int actionBerH = getActionBarHeight((Activity) context);
+        int actionBerH = getActionBarHeight(CommonUtil.getAppCompActivity(context));
         if (statusBar) {
             mNormalItemRect[1] = mNormalItemRect[1] - statusBarH;
         }

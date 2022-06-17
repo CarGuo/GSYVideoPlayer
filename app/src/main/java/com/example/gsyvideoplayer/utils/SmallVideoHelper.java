@@ -121,7 +121,7 @@ public class SmallVideoHelper {
      * 处理全屏逻辑
      */
     private void resolveToFull() {
-        systemUiVisibility = ((Activity) context).getWindow().getDecorView().getSystemUiVisibility();
+        systemUiVisibility = CommonUtil.getAppCompActivity(context).getWindow().getDecorView().getSystemUiVisibility();
         CommonUtil.hideSupportActionBar(context, gsyVideoOptionBuilder.isHideActionBar(), gsyVideoOptionBuilder.isHideStatusBar());
         if (gsyVideoOptionBuilder.isHideKey()) {
             hideNavKey(context);
@@ -341,7 +341,7 @@ public class SmallVideoHelper {
     private void saveLocationStatus(Context context, boolean statusBar, boolean actionBar) {
         listParent.getLocationOnScreen(listItemRect);
         int statusBarH = getStatusBarHeight(context);
-        int actionBerH = getActionBarHeight((Activity) context);
+        int actionBerH = getActionBarHeight(CommonUtil.getAppCompActivity(context));
         if (statusBar) {
             listItemRect[1] = listItemRect[1] - statusBarH;
         }
