@@ -313,6 +313,8 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     @Override
     public int getAudioSessionId() {
+        if (mInternalPlayer != null)
+          return  mInternalPlayer.getAudioSessionId();
         return audioSessionId;
     }
 
