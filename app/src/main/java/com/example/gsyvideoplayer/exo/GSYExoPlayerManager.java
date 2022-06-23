@@ -5,7 +5,7 @@ import android.media.AudioManager;
 import android.os.Message;
 import android.view.Surface;
 
-import com.google.android.exoplayer2.video.DummySurface;
+import com.google.android.exoplayer2.video.PlaceholderSurface;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
@@ -26,7 +26,7 @@ public class GSYExoPlayerManager extends BasePlayerManager {
 
     private Surface surface;
 
-    private DummySurface dummySurface;
+    private PlaceholderSurface dummySurface;
 
     @Override
     public IMediaPlayer getMediaPlayer() {
@@ -38,7 +38,7 @@ public class GSYExoPlayerManager extends BasePlayerManager {
         mediaPlayer = new GSYExo2MediaPlayer(context);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         if (dummySurface == null) {
-            dummySurface = DummySurface.newInstanceV17(context, false);
+            dummySurface = PlaceholderSurface.newInstanceV17(context, false);
         }
         try {
             mediaPlayer.setLooping(((GSYExoModel) msg.obj).isLooping());

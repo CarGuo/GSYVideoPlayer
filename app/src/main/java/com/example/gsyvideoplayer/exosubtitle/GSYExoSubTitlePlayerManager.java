@@ -11,13 +11,10 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
-import com.google.android.exoplayer2.text.TextOutput;
-import com.google.android.exoplayer2.video.DummySurface;
+import com.google.android.exoplayer2.video.PlaceholderSurface;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
-import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.util.List;
 
@@ -35,7 +32,7 @@ public class GSYExoSubTitlePlayerManager extends BasePlayerManager {
 
     private Surface surface;
 
-    private DummySurface dummySurface;
+    private PlaceholderSurface dummySurface;
 
     private long lastTotalRxBytes = 0;
 
@@ -52,7 +49,7 @@ public class GSYExoSubTitlePlayerManager extends BasePlayerManager {
         mediaPlayer = new GSYExoSubTitlePlayer(context);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         if (dummySurface == null) {
-            dummySurface = DummySurface.newInstanceV17(context, false);
+            dummySurface = PlaceholderSurface.newInstanceV17(context, false);
         }
         //使用自己的cache模式
         GSYExoSubTitleModel gsyModel = (GSYExoSubTitleModel) msg.obj;

@@ -10,7 +10,7 @@ import android.view.Surface;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.SeekParameters;
-import com.google.android.exoplayer2.video.DummySurface;
+import com.google.android.exoplayer2.video.PlaceholderSurface;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
@@ -33,7 +33,7 @@ public class Exo2PlayerManager extends BasePlayerManager {
 
     private Surface surface;
 
-    private DummySurface dummySurface;
+    private PlaceholderSurface dummySurface;
 
     private long lastTotalRxBytes = 0;
 
@@ -50,7 +50,7 @@ public class Exo2PlayerManager extends BasePlayerManager {
         mediaPlayer = new IjkExo2MediaPlayer(context);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         if (dummySurface == null) {
-            dummySurface = DummySurface.newInstanceV17(context, false);
+            dummySurface = PlaceholderSurface.newInstanceV17(context, false);
         }
         //使用自己的cache模式
         GSYModel gsyModel = (GSYModel) msg.obj;

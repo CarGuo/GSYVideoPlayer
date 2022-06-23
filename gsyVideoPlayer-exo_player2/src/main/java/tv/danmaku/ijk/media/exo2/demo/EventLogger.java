@@ -27,7 +27,7 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.TracksInfo;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.decoder.DecoderReuseEvaluation;
@@ -136,75 +136,71 @@ public final class EventLogger implements Player.Listener, MetadataOutput,
     }
 
 
-    @Override
-    public void onTracksInfoChanged(@NonNull TracksInfo tracksInfo) {
-
-    }
 
     @Override
-    public void onTracksChanged(TrackGroupArray ignored, TrackSelectionArray trackSelections) {
-        MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
-        if (mappedTrackInfo == null) {
-            Log.d(TAG, "Tracks []");
-            return;
-        }
-        Log.d(TAG, "Tracks [");
-        // Log tracks associated to renderers.
-        for (int rendererIndex = 0; rendererIndex < mappedTrackInfo.getRendererCount(); rendererIndex++) {
-            TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(rendererIndex);
-            TrackSelection trackSelection = trackSelections.get(rendererIndex);
-            if (rendererTrackGroups.length > 0) {
-                Log.d(TAG, "  Renderer:" + rendererIndex + " [");
-                for (int groupIndex = 0; groupIndex < rendererTrackGroups.length; groupIndex++) {
-                    TrackGroup trackGroup = rendererTrackGroups.get(groupIndex);
-                    String adaptiveSupport = getAdaptiveSupportString(trackGroup.length,
-                            mappedTrackInfo.getAdaptiveSupport(rendererIndex, groupIndex, false));
-                    Log.d(TAG, "    Group:" + groupIndex + ", adaptive_supported=" + adaptiveSupport + " [");
-                    for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                        String status = getTrackStatusString(trackSelection, trackGroup, trackIndex);
-                        /*String formatSupport = getFormatSupportString(
-                                mappedTrackInfo.getTrackFormatSupport(rendererIndex, groupIndex, trackIndex));
-                        Log.d(TAG, "      " + status + " Track:" + trackIndex + ", "
-                                + Format.toLogString(trackGroup.getFormat(trackIndex))
-                                + ", supported=" + formatSupport);*/
-                    }
-                    Log.d(TAG, "    ]");
-                }
-                // Log metadata for at most one of the tracks selected for the renderer.
-                if (trackSelection != null) {
-                    for (int selectionIndex = 0; selectionIndex < trackSelection.length(); selectionIndex++) {
-                        Metadata metadata = trackSelection.getFormat(selectionIndex).metadata;
-                        if (metadata != null) {
-                            Log.d(TAG, "    Metadata [");
-                            printMetadata(metadata, "      ");
-                            Log.d(TAG, "    ]");
-                            break;
-                        }
-                    }
-                }
-                Log.d(TAG, "  ]");
-            }
-        }
-        // Log tracks not associated with a renderer.
-        TrackGroupArray unassociatedTrackGroups = mappedTrackInfo.getUnmappedTrackGroups();
-        if (unassociatedTrackGroups.length > 0) {
-            Log.d(TAG, "  Renderer:None [");
-            for (int groupIndex = 0; groupIndex < unassociatedTrackGroups.length; groupIndex++) {
-                Log.d(TAG, "    Group:" + groupIndex + " [");
-                TrackGroup trackGroup = unassociatedTrackGroups.get(groupIndex);
-                for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                    String status = getTrackStatusString(false);
-                    String formatSupport = getFormatSupportString(
-                            C.FORMAT_UNSUPPORTED_TYPE);
-                    Log.d(TAG, "      " + status + " Track:" + trackIndex + ", "
-                            + Format.toLogString(trackGroup.getFormat(trackIndex))
-                            + ", supported=" + formatSupport);
-                }
-                Log.d(TAG, "    ]");
-            }
-            Log.d(TAG, "  ]");
-        }
-        Log.d(TAG, "]");
+    public void onTracksChanged(@NonNull Tracks tracks) {
+//        MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
+//        if (mappedTrackInfo == null) {
+//            Log.d(TAG, "Tracks []");
+//            return;
+//        }
+//        Log.d(TAG, "Tracks [");
+//        // Log tracks associated to renderers.
+//        for (int rendererIndex = 0; rendererIndex < mappedTrackInfo.getRendererCount(); rendererIndex++) {
+//            TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(rendererIndex);
+//            Tracks.Group trackSelection = tracks.getGroups().get(rendererIndex);
+//            if (rendererTrackGroups.length > 0) {
+//                Log.d(TAG, "  Renderer:" + rendererIndex + " [");
+//                for (int groupIndex = 0; groupIndex < rendererTrackGroups.length; groupIndex++) {
+//                    TrackGroup trackGroup = rendererTrackGroups.get(groupIndex);
+//                    String adaptiveSupport = getAdaptiveSupportString(trackGroup.length,
+//                            mappedTrackInfo.getAdaptiveSupport(rendererIndex, groupIndex, false));
+//                    Log.d(TAG, "    Group:" + groupIndex + ", adaptive_supported=" + adaptiveSupport + " [");
+//                    for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
+//                        //String status = getTrackStatusString(trackSelection., trackGroup, trackIndex);
+//                        /*String formatSupport = getFormatSupportString(
+//                                mappedTrackInfo.getTrackFormatSupport(rendererIndex, groupIndex, trackIndex));
+//                        Log.d(TAG, "      " + status + " Track:" + trackIndex + ", "
+//                                + Format.toLogString(trackGroup.getFormat(trackIndex))
+//                                + ", supported=" + formatSupport);*/
+//                    }
+//                    Log.d(TAG, "    ]");
+//                }
+//                // Log metadata for at most one of the tracks selected for the renderer.
+//                if (trackSelection != null) {
+//                    for (int selectionIndex = 0; selectionIndex < trackSelection.getMediaTrackGroup().length; selectionIndex++) {
+//                        Metadata metadata = trackSelection.getMediaTrackGroup().getFormat(selectionIndex).metadata;
+//                        if (metadata != null) {
+//                            Log.d(TAG, "    Metadata [");
+//                            printMetadata(metadata, "      ");
+//                            Log.d(TAG, "    ]");
+//                            break;
+//                        }
+//                    }
+//                }
+//                Log.d(TAG, "  ]");
+//            }
+//        }
+//        // Log tracks not associated with a renderer.
+//        TrackGroupArray unassociatedTrackGroups = mappedTrackInfo.getUnmappedTrackGroups();
+//        if (unassociatedTrackGroups.length > 0) {
+//            Log.d(TAG, "  Renderer:None [");
+//            for (int groupIndex = 0; groupIndex < unassociatedTrackGroups.length; groupIndex++) {
+//                Log.d(TAG, "    Group:" + groupIndex + " [");
+//                TrackGroup trackGroup = unassociatedTrackGroups.get(groupIndex);
+//                for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
+//                    String status = getTrackStatusString(false);
+//                    String formatSupport = getFormatSupportString(
+//                            C.FORMAT_UNSUPPORTED_TYPE);
+//                    Log.d(TAG, "      " + status + " Track:" + trackIndex + ", "
+//                            + Format.toLogString(trackGroup.getFormat(trackIndex))
+//                            + ", supported=" + formatSupport);
+//                }
+//                Log.d(TAG, "    ]");
+//            }
+//            Log.d(TAG, "  ]");
+//        }
+//        Log.d(TAG, "]");
     }
 
     // MetadataOutput

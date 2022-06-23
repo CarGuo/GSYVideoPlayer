@@ -24,7 +24,6 @@ import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
-import com.google.android.exoplayer2.TracksInfo;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.metadata.Metadata;
@@ -512,11 +511,6 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     public void setRendererFactory(DefaultRenderersFactory rendererFactory) {
         this.mRendererFactory = rendererFactory;
-    }
-
-    @Override
-    public void onTracksInfoChanged(@NonNull TracksInfo tracksInfo) {
-
     }
 
     @Override

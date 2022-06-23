@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.example.gsyvideoplayer.R;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.text.CueGroup;
 import com.google.android.exoplayer2.ui.CaptionStyleCompat;
 import com.google.android.exoplayer2.ui.SubtitleView;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -20,7 +22,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.HashMap;
 
-public class GSYExoSubTitleVideoView extends NormalGSYVideoPlayer {
+public class GSYExoSubTitleVideoView extends NormalGSYVideoPlayer implements Player.Listener {
 
     private SubtitleView mSubtitleView;
     private String mSubTitle;
@@ -75,10 +77,17 @@ public class GSYExoSubTitleVideoView extends NormalGSYVideoPlayer {
         }
         mBackUpPlayingBufferState = -1;
 
-        getGSYVideoManager().prepare(mUrl, mSubTitle, mSubtitleView, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mCache, mCachePath, mOverrideExtension);
+        getGSYVideoManager().prepare(mUrl, mSubTitle, this, (mMapHeadData == null) ? new HashMap<String, String>() : mMapHeadData, mLooping, mSpeed, mCache, mCachePath, mOverrideExtension);
         setStateAndUi(CURRENT_STATE_PREPAREING);
     }
 
+
+    @Override
+    public void onCues(CueGroup cueGroup) {
+        if (mSubtitleView != null) {
+            mSubtitleView.setCues(cueGroup.cues);
+        }
+    }
 
     public String getSubTitle() {
         return mSubTitle;
@@ -97,7 +106,7 @@ public class GSYExoSubTitleVideoView extends NormalGSYVideoPlayer {
         GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
         GSYExoSubTitleVideoView gsyExoSubTitleVideoView = (GSYExoSubTitleVideoView) gsyBaseVideoPlayer;
         ((GSYExoSubTitlePlayerManager) GSYExoSubTitleVideoManager.instance().getPlayer())
-                .addTextOutputPlaying(gsyExoSubTitleVideoView.mSubtitleView);
+            .addTextOutputPlaying(gsyExoSubTitleVideoView);
 
         return gsyBaseVideoPlayer;
     }
@@ -107,7 +116,7 @@ public class GSYExoSubTitleVideoView extends NormalGSYVideoPlayer {
         super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
         GSYExoSubTitleVideoView gsyExoSubTitleVideoView = (GSYExoSubTitleVideoView) gsyVideoPlayer;
         ((GSYExoSubTitlePlayerManager) GSYExoSubTitleVideoManager.instance().getPlayer())
-                .removeTextOutput(gsyExoSubTitleVideoView.mSubtitleView);
+            .removeTextOutput(gsyExoSubTitleVideoView);
 
     }
 

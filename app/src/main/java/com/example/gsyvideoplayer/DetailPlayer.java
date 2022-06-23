@@ -21,9 +21,11 @@ import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionOverrides;
+import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
 import com.google.android.exoplayer2.trackselection.TrackSelectionParameters;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.RawResourceDataSource;
+import com.google.common.collect.ImmutableList;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -264,6 +266,7 @@ public class DetailPlayer extends AppCompatActivity {
         ///exo 切换音轨
         binding.change.setOnClickListener(new View.OnClickListener() {
             int index = 0;
+
             @Override
             public void onClick(View view) {
                 if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
@@ -280,14 +283,13 @@ public class DetailPlayer extends AppCompatActivity {
                                 } else {
                                     index = 0;
                                 }
+                                if(rendererTrackGroups.length <= 1) {
+                                    return;
+                                }
                                 TrackGroup trackGroup = rendererTrackGroups.get(index);
                                 TrackSelectionParameters parameters = trackSelector.getParameters().buildUpon()
                                     .setForceHighestSupportedBitrate(true)
-                                    .setTrackSelectionOverrides(
-                                        new TrackSelectionOverrides.Builder().addOverride(
-                                            new TrackSelectionOverrides.TrackSelectionOverride(trackGroup)
-                                        ).build()
-                                    ).build();
+                                    .setOverrideForType(new TrackSelectionOverride(trackGroup, 0)).build();
                                 trackSelector.setParameters(parameters);
                             }
                         }
@@ -438,7 +440,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = " String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://video.cdn.aizys.com/zzx3.9g.mkv";//long
         //String url = "rtsp://admin:wh123456@112.44.163.248:554/h264/ch01/main/av_stream";//long
-        //String url = "https://aliyuncdnsaascloud.xjhktv.com/video/A%20Lin%2B%E5%80%AA%E5%AD%90%E5%86%88-%E4%B8%8D%E5%B1%91%E5%AE%8C%E7%BE%8E%5B%E5%9B%BD%5D%5B1080P%5D.mp4";//long
+        //String url = "https://aliyuncdnsaascloud.xjhktv.com/video/A%20Lin%2B%E5%80%AA%E5%AD%90%E5%86%88-%E4%B8%8D%E5%B1%91%E5%AE%8C%E7%BE%8E%5B%E5%9B%BD%5D%5B1080P%5D.mp4";//track
         return url;
     }
 
