@@ -86,7 +86,7 @@ public class CommonUtil {
     public static int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = context.getResources()
-                .getIdentifier("status_bar_height", "dimen", "android");
+            .getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
@@ -124,14 +124,14 @@ public class CommonUtil {
             if (context instanceof FragmentActivity) {
                 FragmentActivity fragmentActivity = (FragmentActivity) context;
                 fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
             } else if (context instanceof Activity) {
                 Activity activity = (Activity) context;
                 activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
             } else {
                 CommonUtil.getActivityNestWrapper(context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
         }
     }
@@ -163,25 +163,28 @@ public class CommonUtil {
     }
 
     public static void hideNavKey(Context context) {
+        if (CommonUtil.getActivityNestWrapper(context) == null) {
+            return;
+        }
         if (Build.VERSION.SDK_INT >= 29) {
             //       设置屏幕始终在前面，不然点击鼠标，重新出现虚拟按键
             CommonUtil.getActivityNestWrapper(context).getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
-                            // bar
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
+                    // bar
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //       设置屏幕始终在前面，不然点击鼠标，重新出现虚拟按键
             CommonUtil.getActivityNestWrapper(context).getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
-                            // bar
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
+                    // bar
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
         } else {
             CommonUtil.getActivityNestWrapper(context).getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
             );
         }
     }
@@ -300,7 +303,7 @@ public class CommonUtil {
 
     public static boolean getCurrentScreenLand(Activity context) {
         return context.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_90 ||
-                context.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_270;
+            context.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_270;
 
     }
 }

@@ -1100,12 +1100,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             if (mCurrentState != CURRENT_STATE_NORMAL
                     && mCurrentState != CURRENT_STATE_ERROR
                     && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
-                if (getActivityContext() != null) {
-                    hideAllWidget();
-                    setViewShowState(mLockScreen, GONE);
-                    if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
-                        hideNavKey(mContext);
-                    }
+                hideAllWidget();
+                setViewShowState(mLockScreen, GONE);
+                if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
+                    hideNavKey(mContext);
                 }
                 if (mPostDismiss) {
                     postDelayed(this, mDismissControlTime);
