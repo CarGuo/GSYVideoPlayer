@@ -1,6 +1,10 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
+### v8.3.1-release-jitpack (2022-06-23)
+* fix #3609
+* fix #3600
+
 ### v8.3.0-release-jitpack (2022-06-06)
 * fix #3559 ProxyCacheManager
 * remove dependencies: transitionsEverywhere
