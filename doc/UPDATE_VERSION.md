@@ -1,5 +1,8 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### v8.3.2-release-jitpack (2022-06-24)
+* update exo 2.18.0
+* fix #3608 兼容副屏幕
 
 ### v8.3.1-release-jitpack (2022-06-23)
 * fix #3609
