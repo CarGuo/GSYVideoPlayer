@@ -133,14 +133,14 @@ public class ExoSourceManager {
         }
 
         switch (contentType) {
-            case C.TYPE_SS:
+            case C.CONTENT_TYPE_SS:
                 mediaSource = new SsMediaSource.Factory(
                     new DefaultSsChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)),
                     new DefaultDataSource.Factory(mAppContext,
                         getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
                 break;
 
-            case C.TYPE_RTSP:
+            case C.CONTENT_TYPE_RTSP:
                 RtspMediaSource.Factory rtspFactory = new RtspMediaSource.Factory();
                 if (uerAgent != null) {
                     rtspFactory.setUserAgent(uerAgent);
@@ -152,12 +152,12 @@ public class ExoSourceManager {
                 mediaSource = rtspFactory.createMediaSource(mediaItem);
                 break;
 
-            case C.TYPE_DASH:
+            case C.CONTENT_TYPE_DASH:
                 mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent)),
                     new DefaultDataSource.Factory(mAppContext,
                         getHttpDataSourceFactory(mAppContext, preview, uerAgent))).createMediaSource(mediaItem);
                 break;
-            case C.TYPE_HLS:
+            case C.CONTENT_TYPE_HLS:
                 mediaSource = new HlsMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable, preview, cacheDir, uerAgent))
                     .setAllowChunklessPreparation(true)
                     .createMediaSource(mediaItem);
@@ -168,7 +168,7 @@ public class ExoSourceManager {
                     new DefaultExtractorsFactory())
                     .createMediaSource(mediaItem);
                 break;
-            case C.TYPE_OTHER:
+            case C.CONTENT_TYPE_OTHER:
             default:
                 mediaSource = new ProgressiveMediaSource.Factory(getDataSourceFactoryCache(mAppContext, cacheEnable,
                     preview, cacheDir, uerAgent), new DefaultExtractorsFactory())
