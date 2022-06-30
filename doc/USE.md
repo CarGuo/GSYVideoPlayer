@@ -187,9 +187,9 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
 
             }
         });
-        
+
         smallVideoHelper.setGsyVideoOptionBuilder(gsySmallVideoHelperBuilder);
-        
+
         videoList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -460,22 +460,23 @@ public void onConfigurationChanged(Configuration newConfig) {
 （以下设置全局生效哦）
 
 #### 切换内核
-``` 
-//PlayerFactory.setPlayManager(new Exo2PlayerManager());//EXO模式
-//PlayerFactory.setPlayManager(new SystemPlayerManager());//系统模式
-//PlayerFactory.setPlayManager(new IjkPlayerManager());//ijk模式
+```
+PlayerFactory.setPlayManager(Exo2PlayerManager.class);//EXO模式
+PlayerFactory.setPlayManager(SystemPlayerManager.class);//系统模式
+PlayerFactory.setPlayManager(IjkPlayerManager.class);//ijk模式
+PlayerFactory.setPlayManager(AliPlayerManager.class);//aliplay 内核模式
 ```
 
 #### 调整代码结构，CacheFactory 更方便自定义，默认 ProxyCacheManager。
 
-``` 
+```
 //CacheFactory.setCacheManager(new ExoPlayerCacheManager());//exo缓存模式，支持m3u8，只支持exo
 //CacheFactory.setCacheManager(new ProxyCacheManager());//代理缓存模式，支持所有模式，不支持m3u8等
 ```
 
 #### 增加 ExoMediaSourceInterceptListener，方便 Exo 模式下使用自定义的 MediaSource。
 
-``` 
+```
 ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
            /**
             * @param dataSource  链接
@@ -497,21 +498,21 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 #### 切换比例
 
 ```
- 
+
 //默认显示比例
 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
-    
-//16:9 
+
+//16:9
 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9);
 
 //全屏裁减显示，为了显示正常 CoverImageView 建议使用FrameLayout作为父布局
 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
 
 //全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
-GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL); 
+GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
 
  //4:3
-GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3); 
+GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3);
 
 ```
 
