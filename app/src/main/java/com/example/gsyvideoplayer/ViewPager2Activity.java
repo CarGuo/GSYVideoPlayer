@@ -47,7 +47,7 @@ public class ViewPager2Activity extends AppCompatActivity {
                 if (playPosition >= 0) {
                     //对应的播放列表TAG
                     if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
-                            && (position != playPosition)) {
+                        && (position != playPosition)) {
                         playPosition(position);
                     }
                 }
@@ -96,12 +96,19 @@ public class ViewPager2Activity extends AppCompatActivity {
             viewPagerAdapter.notifyDataSetChanged();
     }
 
+
     private void playPosition(int position) {
-        RecyclerView.ViewHolder viewHolder = ((RecyclerView) binding.viewPager2.getChildAt(0)).findViewHolderForAdapterPosition(position);
-        if (viewHolder != null) {
-            RecyclerItemNormalHolder recyclerItemNormalHolder = (RecyclerItemNormalHolder) viewHolder;
-            recyclerItemNormalHolder.getPlayer().startPlayLogic();
-        }
+        binding.viewPager2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RecyclerView.ViewHolder viewHolder = ((RecyclerView) binding.
+                    viewPager2.getChildAt(0)).findViewHolderForAdapterPosition(position);
+                if (viewHolder != null) {
+                    RecyclerItemNormalHolder recyclerItemNormalHolder = (RecyclerItemNormalHolder) viewHolder;
+                    recyclerItemNormalHolder.getPlayer().startPlayLogic();
+                }
+            }
+        }, 300);
     }
 }
 
