@@ -315,6 +315,9 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 ![](https://ooo.0o0.ooo/2017/06/15/5941f343a39f5.png)
 
 
+## Star History Chart
+[![Star History Chart](https://api.star-history.com/svg?repos=CarGuo/GSYVideoPlayer&type=Date)](https://star-history.com/#CarGuo/GSYVideoPlayer&Date)
+
 
 
 ## 非常感谢您的支持
@@ -323,14 +326,6 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 #### 撸码不易，如果对你有所帮助，欢迎您的赞赏
 
 ![](http://img.cdn.guoshuyu.cn/thanks.jpg)
-
-
-
-### GSY新书：[《Flutter开发实战详解》](https://item.jd.com/12883054.html)上架啦：[京东](https://item.jd.com/12883054.html) / [当当](http://product.dangdang.com/28558519.html)
-
-[![](http://img.cdn.guoshuyu.cn/WechatIMG65.jpeg)](https://item.jd.com/12883054.html)
-
-
 
 
 ## License
