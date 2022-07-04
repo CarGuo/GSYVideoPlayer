@@ -665,7 +665,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     private Runnable mTimeOutRunnable = new Runnable() {
         @Override
         public void run() {
-            if (listener != null) {
+            if (listener() != null) {
                 Debuger.printfError("time out for error listener");
                 listener().onError(BUFFER_TIME_OUT_ERROR, BUFFER_TIME_OUT_ERROR);
             }
