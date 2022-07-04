@@ -19,10 +19,12 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
@@ -117,6 +119,25 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
         }
         return 0;
     }
+
+
+    public Format getVideoFormat() {
+        if (mInternalPlayer != null) {
+            return mInternalPlayer.getVideoFormat();
+        }
+        return null;
+    }
+
+
+    public Renderer getVideoRenderer() {
+        if (mInternalPlayer != null) {
+            return mInternalPlayer.getRenderer(getVideoRendererIndex());
+        }
+        return null;
+    }
+
+
+
 
     @Override
     public void setDisplay(SurfaceHolder sh) {
