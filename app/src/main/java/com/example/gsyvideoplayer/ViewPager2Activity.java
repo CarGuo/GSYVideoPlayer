@@ -48,6 +48,7 @@ public class ViewPager2Activity extends AppCompatActivity {
                     //对应的播放列表TAG
                     if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
                         && (position != playPosition)) {
+                        GSYVideoManager.releaseAllVideos();
                         playPosition(position);
                     }
                 }
@@ -108,7 +109,7 @@ public class ViewPager2Activity extends AppCompatActivity {
                     recyclerItemNormalHolder.getPlayer().startPlayLogic();
                 }
             }
-        }, 300);
+        }, 50);
     }
 }
 
