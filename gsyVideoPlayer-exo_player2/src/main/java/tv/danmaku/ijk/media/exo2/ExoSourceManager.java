@@ -21,6 +21,7 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.rtsp.RtspMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
+import com.google.android.exoplayer2.upstream.AssetDataSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -130,6 +131,22 @@ public class ExoSourceManager {
             return new ProgressiveMediaSource.Factory(
                 factory).createMediaSource(mediaItem);
 
+        } else if ("assets".equals(contentUri.getScheme())) {
+            DataSpec dataSpec = new DataSpec(contentUri);
+            final AssetDataSource rawResourceDataSource = new AssetDataSource(mAppContext);
+            try {
+                rawResourceDataSource.open(dataSpec);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            DataSource.Factory factory = new DataSource.Factory() {
+                @Override
+                public DataSource createDataSource() {
+                    return rawResourceDataSource;
+                }
+            };
+            return new ProgressiveMediaSource.Factory(
+                factory).createMediaSource(mediaItem);
         }
 
         switch (contentType) {

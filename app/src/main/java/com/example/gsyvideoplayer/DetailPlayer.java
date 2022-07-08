@@ -378,7 +378,12 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "rawresource://" + getPackageName() + "/" + R.raw.test;
 
         ///exo raw 支持
-        //String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
+
+
+
+        ///exo raw 支持
+        ///String url =  "assets:///test1.mp4";
+
 
         //断网自动重新链接，url前接上ijkhttphook:
         //String url = "ijkhttphook:https://res.exexm.com/cw_145225549855002";
