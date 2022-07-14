@@ -1,5 +1,12 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+### v8.3.3-release-jitpack (2022-07-14)
+* ijk 增加支持 assets 播放支持
+* fix #3625
+* fix #3615
+
+
 ### v8.3.2-release-jitpack (2022-06-24)
 * update exo 2.18.0
 * fix #3608 兼容副屏幕
