@@ -85,7 +85,8 @@ public class IjkPlayerManager extends BasePlayerManager {
             } else {
                 if (!TextUtils.isEmpty(url)) {
                     Uri uri = Uri.parse(url);
-                    if (uri != null && uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
+                    if (uri != null && uri.getScheme() != null && (uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                        || uri.getScheme().equals("assets"))) {
                         RawDataSourceProvider rawDataSourceProvider = RawDataSourceProvider.create(context, uri);
                         mediaPlayer.setDataSource(rawDataSourceProvider);
                     } else if (uri != null && uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
@@ -145,7 +146,7 @@ public class IjkPlayerManager extends BasePlayerManager {
             }
             if (soundTouch) {
                 VideoOptionModel videoOptionModel =
-                        new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", 1);
+                    new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "soundtouch", 1);
                 List<VideoOptionModel> list = getOptionModelList();
                 if (list != null) {
                     list.add(videoOptionModel);
@@ -336,10 +337,10 @@ public class IjkPlayerManager extends BasePlayerManager {
             for (VideoOptionModel videoOptionModel : optionModelList) {
                 if (videoOptionModel.getValueType() == VideoOptionModel.VALUE_TYPE_INT) {
                     ijkMediaPlayer.setOption(videoOptionModel.getCategory(),
-                            videoOptionModel.getName(), videoOptionModel.getValueInt());
+                        videoOptionModel.getName(), videoOptionModel.getValueInt());
                 } else {
                     ijkMediaPlayer.setOption(videoOptionModel.getCategory(),
-                            videoOptionModel.getName(), videoOptionModel.getValueString());
+                        videoOptionModel.getName(), videoOptionModel.getValueString());
                 }
             }
         }

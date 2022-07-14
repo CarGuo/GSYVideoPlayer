@@ -15,7 +15,7 @@ import tv.danmaku.ijk.media.player.misc.IMediaDataSource;
 public class RawDataSourceProvider implements IMediaDataSource {
     private AssetFileDescriptor mDescriptor;
 
-    private byte[]  mMediaBytes;
+    private byte[] mMediaBytes;
 
     public RawDataSourceProvider(AssetFileDescriptor descriptor) {
         this.mDescriptor = descriptor;
@@ -23,17 +23,17 @@ public class RawDataSourceProvider implements IMediaDataSource {
 
     @Override
     public int readAt(long position, byte[] buffer, int offset, int size) throws IOException {
-        if(position + 1 >= mMediaBytes.length){
+        if (position + 1 >= mMediaBytes.length) {
             return -1;
         }
 
         int length;
-        if(position + size < mMediaBytes.length){
+        if (position + size < mMediaBytes.length) {
             length = size;
-        }else{
+        } else {
             length = (int) (mMediaBytes.length - position);
-            if(length > buffer.length)
-                length = buffer.length ;
+            if (length > buffer.length)
+                length = buffer.length;
 
             length--;
         }
@@ -44,8 +44,8 @@ public class RawDataSourceProvider implements IMediaDataSource {
 
     @Override
     public long getSize() throws IOException {
-        long length  = mDescriptor.getLength();
-        if(mMediaBytes == null){
+        long length = mDescriptor.getLength();
+        if (mMediaBytes == null) {
             InputStream inputStream = mDescriptor.createInputStream();
             mMediaBytes = readBytes(inputStream);
         }
@@ -56,7 +56,7 @@ public class RawDataSourceProvider implements IMediaDataSource {
 
     @Override
     public void close() throws IOException {
-        if(mDescriptor != null)
+        if (mDescriptor != null)
             mDescriptor.close();
 
         mDescriptor = null;
@@ -77,12 +77,16 @@ public class RawDataSourceProvider implements IMediaDataSource {
         return byteBuffer.toByteArray();
     }
 
-    public static RawDataSourceProvider create(Context context, Uri uri){
+    public static RawDataSourceProvider create(Context context, Uri uri) {
         try {
-            AssetFileDescriptor fileDescriptor = context.getApplicationContext().getContentResolver().openAssetFileDescriptor(uri, "r");
-            return new RawDataSourceProvider(fileDescriptor);
-
-        } catch (FileNotFoundException e) {
+            if (uri.getScheme().equals("assets")) {
+                AssetFileDescriptor fileDescriptor = context.getApplicationContext().getResources().getAssets().openFd(uri.getPathSegments().get(0));
+                return new RawDataSourceProvider(fileDescriptor);
+            } else {
+                AssetFileDescriptor fileDescriptor = context.getApplicationContext().getContentResolver().openAssetFileDescriptor(uri, "r");
+                return new RawDataSourceProvider(fileDescriptor);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
