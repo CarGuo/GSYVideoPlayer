@@ -189,11 +189,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                 try {
                     RectF rectF = new RectF(0, 0, mTextureView.getWidth(), mTextureView.getHeight());
                     Canvas canvas;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        canvas = mSurface.lockHardwareCanvas();
-                    } else {
-                        canvas = mSurface.lockCanvas(new Rect(0, 0, mTextureView.getWidth(), mTextureView.getHeight()));
-                    }
+
+                    canvas = mSurface.lockCanvas(new Rect(0, 0, mTextureView.getWidth(), mTextureView.getHeight()));
+
                     if (canvas != null) {
                         canvas.drawBitmap(mFullPauseBitmap, null, rectF, null);
                         mSurface.unlockCanvasAndPost(canvas);
