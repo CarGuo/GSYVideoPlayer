@@ -301,7 +301,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             } else if (mShowPauseCover) {
                 //不在了说明已经播放过，还是暂停的话，我们拿回来就好
                 try {
-                    initCover();
+                    gsyVideoPlayer.initCover();
                 } catch (Exception e) {
                     e.printStackTrace();
                     mFullPauseBitmap = null;
