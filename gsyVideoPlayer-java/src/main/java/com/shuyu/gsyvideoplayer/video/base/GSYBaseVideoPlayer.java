@@ -260,6 +260,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mAutoFullWithSize = from.mAutoFullWithSize;
         to.mOverrideExtension = from.mOverrideExtension;
         to.mNeedOrientationUtils = from.mNeedOrientationUtils;
+        to.onAudioFocusChangeListener = from.onAudioFocusChangeListener;
         if (from.mSetUpLazy) {
             to.setUpLazy(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
             to.mUrl = from.mUrl;
