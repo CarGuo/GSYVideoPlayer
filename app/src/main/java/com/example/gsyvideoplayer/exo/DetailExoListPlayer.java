@@ -43,7 +43,7 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
 
         urls.add(new GSYVideoModel("http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4", "标题1"));
         urls.add(new GSYVideoModel("https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8", "标题3"));
-        urls.add(new GSYVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4", "标题2"));
+        urls.add(new GSYVideoModel("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", "标题2"));
         //binding.detailPlayer.setUp(urls, 1);
         binding.detailPlayer.setUp(urls, 0);
 

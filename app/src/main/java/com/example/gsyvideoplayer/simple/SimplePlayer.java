@@ -30,7 +30,7 @@ public class SimplePlayer extends AppCompatActivity {
     private void init() {
         videoPlayer =  (StandardGSYVideoPlayer)findViewById(R.id.video_player);
 
-        String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        String source1 = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
         videoPlayer.setUp(source1, true, "测试视频");
 
         //增加封面

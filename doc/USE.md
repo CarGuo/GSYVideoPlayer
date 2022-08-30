@@ -250,7 +250,7 @@ holder.playerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 notifyDataSetChanged();
                 smallVideoHelper.setPlayPositionAndTag(position, TAG);
-                final String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+                final String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
                 gsySmallVideoHelperBuilder.setVideoTitle("title " + position)
                         .setUrl(url);
                 smallVideoHelper.startPlay();

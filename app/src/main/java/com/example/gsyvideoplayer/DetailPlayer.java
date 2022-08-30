@@ -390,6 +390,7 @@ public class DetailPlayer extends AppCompatActivity {
 
         //String url = "https://cos.icxl.xyz/c03328206d894477a3f8c9767a4de5649342908.mov";
         //String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        //String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"; // new mp4
         //String url = "https://video.xintujing.cn/d0f2f304vodtranscq1251091601/e27f66955285890796832323682/v.f230.m3u8";
         String url = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
         //String url = "http://las-tech.org.cn/kwai/las-test_ld500d.flv";//flv 直播

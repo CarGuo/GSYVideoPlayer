@@ -239,6 +239,6 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
 
 
     private String getUrl() {
-        return "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        return "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     }
 }

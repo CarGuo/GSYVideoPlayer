@@ -163,7 +163,7 @@ public class ListADVideoActivity extends AppCompatActivity {
             }
 
 
-            final String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+            final String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
             final String urlAD = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
 
             //多个播放时必须在setUpLazy、setUp和getGSYVideoManager()等前面设置

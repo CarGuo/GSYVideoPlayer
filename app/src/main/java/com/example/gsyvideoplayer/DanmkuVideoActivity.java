@@ -56,7 +56,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         binding.danmakuPlayer.setEnlargeImageRes(R.drawable.custom_enlarge);
 
         //String url = "https://res.exexm.com/cw_145225549855002";
-        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
         //String url = "https://res.exexm.com/cw_145225549855002";
         binding.danmakuPlayer.setUp(url, true, null, "测试视频");
 
