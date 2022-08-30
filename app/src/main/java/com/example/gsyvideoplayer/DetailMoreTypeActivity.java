@@ -51,12 +51,12 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         setContentView(rootView);
 
 
-        String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        String source1 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear1/prog_index.m3u8";
         //String source1 = "https://res.exexm.com/cw_145225549855002";
         String name = "普通";
         SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
 
-        String source2 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4";
+        String source2 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
         String name2 = "清晰";
         SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
 
@@ -64,7 +64,7 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         list.add(switchVideoModel);
         list.add(switchVideoModel2);
 
-        binding.detailPlayer.setUp(list, true, "");
+        binding.detailPlayer.setUp(list, false, "");
 
         //增加封面
         coverImageView = new ImageView(this);

@@ -390,7 +390,9 @@ public class DetailPlayer extends AppCompatActivity {
 
         //String url = "https://cos.icxl.xyz/c03328206d894477a3f8c9767a4de5649342908.mov";
         //String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        String url = "https://video.xintujing.cn/d0f2f304vodtranscq1251091601/e27f66955285890796832323682/v.f230.m3u8";
+        //String url = "https://video.xintujing.cn/d0f2f304vodtranscq1251091601/e27f66955285890796832323682/v.f230.m3u8";
+        String url = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        //String url = "http://las-tech.org.cn/kwai/las-test_ld500d.flv";//flv 直播
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
         //String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/out2.m3u8";
         //String url = "http://223.110.243.138/PLTV/2510088/224/3221227177/index.m3u8";
@@ -408,9 +410,9 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://video1.dgtle.com/backend%2F2020%2F3%2F0%2F%E6%88%91%E6%B2%A1%E6%9C%89%E7%BB%99%E4%B8%80%E5%8A%A08Pro%E5%81%9A%E8%AF%84%E6%B5%8B_%E5%8D%B4%E5%B8%A6%E7%9D%80%E5%AE%83%E6%BC%82%E6%B5%81.mp4_1080.mp4";
         //String url = "http://yongtaizx.xyz/20191230/t2Axgh3k/index.m3u8";
         //String url = "http://123.56.109.212:8035/users/bfe52074fba74247853caa764b522731/films/orig/aa4c3451-0468-452a-a189-bd064a1963e5-鹿鼎记下.mp4";
-        //String url = "http://static.hnyequ.cn/yequ_iOS/4940735da1227890e6a261937223e0d2_828x1472.mp4";
+        //String url = "http://static.hnyequ.cn/yequ_iOS/4940735da1227890e6a261937223e0d2_828x1472.mp4"; // 竖
         //String url = "http://39.104.119.42/elevator-1.0/api/downFile?path=demo.ogv";
-        //String url = "http://pointshow.oss-cn-hangzhou.aliyuncs.com/transcode/ORIGINAL/Mnbc61586842828593.mp4";
+        //String url = "http://pointshow.oss-cn-hangzhou.aliyuncs.com/transcode/ORIGINAL/Mnbc61586842828593.mp4";// 竖
         //ssl error
         //String url =  "http://qlqfj2ujf.hn-bkt.clouddn.com/aijianji-fuwupeixunshipin_index.m3u8";
         //String url =  "http://122.228.250.223/al.flv.huya.com/src/1394565191-1394565191-5989611887484993536-2789253838-10057-A-0-1-imgplus.flv?ali_dispatch_cold_stream=on&ali_redirect_ex_hot=0";
