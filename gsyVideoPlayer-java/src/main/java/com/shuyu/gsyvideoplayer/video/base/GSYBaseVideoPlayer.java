@@ -260,6 +260,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mAutoFullWithSize = from.mAutoFullWithSize;
         to.mOverrideExtension = from.mOverrideExtension;
         to.mNeedOrientationUtils = from.mNeedOrientationUtils;
+        to.onAudioFocusChangeListener = from.onAudioFocusChangeListener;
         if (from.mSetUpLazy) {
             to.setUpLazy(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
             to.mUrl = from.mUrl;
@@ -301,7 +302,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             } else if (mShowPauseCover) {
                 //不在了说明已经播放过，还是暂停的话，我们拿回来就好
                 try {
-                    initCover();
+                    gsyVideoPlayer.initCover();
                 } catch (Exception e) {
                     e.printStackTrace();
                     mFullPauseBitmap = null;
