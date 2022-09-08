@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 
 public class NetworkUtils {
@@ -40,7 +41,7 @@ public class NetworkUtils {
      * @param context 上下文
      */
     public static void openWirelessSettings(Context context) {
-        if (android.os.Build.VERSION.SDK_INT > 10) {
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
             context.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
         } else {
             context.startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
@@ -54,7 +55,7 @@ public class NetworkUtils {
      * @return NetworkInfo
      */
     private static NetworkInfo getActiveNetworkInfo(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
+        ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo();
     }
@@ -100,7 +101,7 @@ public class NetworkUtils {
      * @return true: 连接<br>false: 未连接
      */
     public static boolean isWifiConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
+        ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm != null && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
     }
@@ -113,7 +114,7 @@ public class NetworkUtils {
      * @return 移动网络运营商名称
      */
     public static String getNetworkOperatorName(Context context) {
-        TelephonyManager tm = (TelephonyManager) context
+        TelephonyManager tm = (TelephonyManager) context.getApplicationContext()
                 .getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getNetworkOperatorName() : null;
     }
@@ -131,7 +132,7 @@ public class NetworkUtils {
      * </ul>
      */
     public static int getPhoneType(Context context) {
-        TelephonyManager tm = (TelephonyManager) context
+        TelephonyManager tm = (TelephonyManager) context.getApplicationContext()
                 .getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getPhoneType() : -1;
     }
