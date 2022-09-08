@@ -126,6 +126,9 @@ public class MediaCodecTextureView extends TextureView implements TextureView.Su
      */
     @Override
     public Bitmap initCover() {
+        if (getSizeW() <= 0 || getSizeH() <= 0) {
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(
                 getSizeW(), getSizeH(), Bitmap.Config.RGB_565);
         return getBitmap(bitmap);
@@ -137,6 +140,9 @@ public class MediaCodecTextureView extends TextureView implements TextureView.Su
      */
     @Override
     public Bitmap initCoverHigh() {
+        if (getSizeW() <= 0 || getSizeH() <= 0) {
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(
                 getSizeW(), getSizeH(), Bitmap.Config.ARGB_8888);
         return getBitmap(bitmap);

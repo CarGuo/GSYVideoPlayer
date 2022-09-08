@@ -111,6 +111,9 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
     @Override
     public Bitmap initCover() {
+        if (getSizeW() <= 0 || getSizeH() <= 0) {
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(
             getSizeW(), getSizeH(), Bitmap.Config.RGB_565);
         return bitmap;
@@ -122,6 +125,9 @@ public class GSYSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
      */
     @Override
     public Bitmap initCoverHigh() {
+        if (getSizeW() <= 0 || getSizeH() <= 0) {
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(
             getSizeW(), getSizeH(), Bitmap.Config.ARGB_8888);
         return bitmap;

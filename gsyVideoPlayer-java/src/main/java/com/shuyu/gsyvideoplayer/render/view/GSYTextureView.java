@@ -133,8 +133,11 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
      */
     @Override
     public Bitmap initCover() {
+        if (getSizeW() <= 0 || getSizeH() <= 0) {
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(
-                getSizeW(), getSizeH(), Bitmap.Config.RGB_565);
+            getSizeW(), getSizeH(), Bitmap.Config.RGB_565);
         return getBitmap(bitmap);
 
     }
@@ -144,8 +147,11 @@ public class GSYTextureView extends TextureView implements TextureView.SurfaceTe
      */
     @Override
     public Bitmap initCoverHigh() {
+        if (getSizeW() <= 0 || getSizeH() <= 0) {
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(
-                getSizeW(), getSizeH(), Bitmap.Config.ARGB_8888);
+            getSizeW(), getSizeH(), Bitmap.Config.ARGB_8888);
         return getBitmap(bitmap);
 
     }
