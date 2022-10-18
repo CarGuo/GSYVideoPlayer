@@ -203,13 +203,11 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
                 mDialogSeekTime.setTextColor(mDialogProgressHighLightColor);
             }
             WindowManager.LayoutParams localLayoutParams = mProgressDialog.getWindow().getAttributes();
-            localLayoutParams.gravity = Gravity.TOP;
+            localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             localLayoutParams.width = getWidth();
             localLayoutParams.height = getHeight();
-            int location[] = new int[2];
-            getLocationOnScreen(location);
-            localLayoutParams.x = location[0];
-            localLayoutParams.y = location[1];
+            localLayoutParams.x = getLeft();
+            localLayoutParams.y = getTop();
             mProgressDialog.getWindow().setAttributes(localLayoutParams);
         }
         if (!mProgressDialog.isShowing()) {
@@ -265,13 +263,11 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             mVolumeDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             mVolumeDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             WindowManager.LayoutParams localLayoutParams = mVolumeDialog.getWindow().getAttributes();
-            localLayoutParams.gravity = Gravity.TOP | Gravity.START;
+            localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             localLayoutParams.width = getWidth();
             localLayoutParams.height = getHeight();
-            int location[] = new int[2];
-            getLocationOnScreen(location);
-            localLayoutParams.x = location[0];
-            localLayoutParams.y = location[1];
+            localLayoutParams.x = getLeft();
+            localLayoutParams.y = getTop();
             mVolumeDialog.getWindow().setAttributes(localLayoutParams);
         }
         if (!mVolumeDialog.isShowing()) {
@@ -309,13 +305,11 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
             mBrightnessDialog.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
             mBrightnessDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             WindowManager.LayoutParams localLayoutParams = mBrightnessDialog.getWindow().getAttributes();
-            localLayoutParams.gravity = Gravity.TOP | Gravity.END;
+            localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             localLayoutParams.width = getWidth();
             localLayoutParams.height = getHeight();
-            int location[] = new int[2];
-            getLocationOnScreen(location);
-            localLayoutParams.x = location[0];
-            localLayoutParams.y = location[1];
+            localLayoutParams.x = getLeft();
+            localLayoutParams.y = getTop();
             mBrightnessDialog.getWindow().setAttributes(localLayoutParams);
         }
         if (!mBrightnessDialog.isShowing()) {
