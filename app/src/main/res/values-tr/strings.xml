@@ -1,0 +1,132 @@
+<resources>
+    <string name="app_name">GSYVideoOynatıcı</string>
+
+    <string name="detail_text">Stephen gönderirim, Asstep gönderirim, Stephen gönderirim, Asstep gönderirim, As gönderirim
+        Stephen'ı Asstephen'i evime göndermesi için gönderdim.
+        Stephen gönderirim, Astiffens gönderirim, Stephen gönderirim
+        Fensa yeri Stephen'ı Astiffensa'yı yer göndermesi için gönderiyorum Fen, Astiffenssa'yı gönderiyor Yer Stephen'ı Asstephansa'yı göndermesi için gönderiyorum
+        Yerel dağılım, yerel fen Asstephan'ı göndermek, yerel Stephen'ı göndermek Asstephan'ı, yerel dağılım, yerel fen Asstephan'ı göndermek, dağılım
+        dağılın yeri fen, astiffany'yi göndermektir, yeri dağıtmak için steph'i oraya dağıtmak için gönderirim
+        Asstephen'i gönder, yapalım, yapalım
+        Asstephen'i gönder, Stephen'ı gönderiyorum, Asstephan'ı gönderiyorum, Asstep'i gönderiyorum, Stephen'ı gönderiyorum ve Stephen'ı gönderiyorum.
+        Fensa, yerin olduğu yerdir Fen, gönderilecek yer, Stephen'a gönderdiğim yer, gönderilecek yer
+        Stephen'ı Asstephen'i evime göndermesi için gönderdim.
+        Stephen gönderirim, Astiffens gönderirim, Stephen gönderirim
+        Fensa yeri Stephen'ı Astiffensa'yı yer göndermesi için gönderiyorum Fen, Astiffenssa'yı gönderiyor Yer Stephen'ı Asstephansa'yı göndermesi için gönderiyorum
+        Yerel dağılım, yerel fen Asstephan'ı göndermek, yerel Stephen'ı göndermek Asstephan'ı, yerel dağılım, yerel fen Asstephan'ı göndermek, dağılım
+        dağılın yeri fen, astiffany'yi göndermektir, yeri dağıtmak için steph'i oraya dağıtmak için gönderirim
+        Asstephen'i gönder, yapalım, yapalım
+        Asstephen'i gönder, Stephen'ı gönderiyorum, Asstephan'ı gönderiyorum, Asstep'i gönderiyorum, Stephen'ı gönderiyorum ve Stephen'ı gönderiyorum.
+        Fensa, yerin olduğu yerdir Fen, gönderilecek yer, Stephen'a gönderdiğim yer, gönderilecek yer
+        Stephen'ı Asstephen'i evime göndermesi için gönderdim.
+        Stephen gönderirim, Astiffens gönderirim, Stephen gönderirim
+        Fensa yeri Stephen'ı Astiffensa'yı yer göndermesi için gönderiyorum Fen, Astiffenssa'yı gönderiyor Yer Stephen'ı Asstephansa'yı göndermesi için gönderiyorum
+        Yerel dağılım, yerel fen Asstephan'ı göndermek, yerel Stephen'ı göndermek Asstephan'ı, yerel dağılım, yerel fen Asstephan'ı göndermek, dağılım
+        dağılın yeri fen, astiffany'yi göndermektir, yeri dağıtmak için steph'i oraya dağıtmak için gönderirim
+        Asstephen'i gönder, yapalım, yapalım
+        Asstephen'i gönder, Stephen'ı gönderiyorum, Asstephan'ı gönderiyorum, Asstep'i gönderiyorum, Stephen'ı gönderiyorum ve Stephen'ı gönderiyorum.
+        Fensa, yerin olduğu yerdir Fen, gönderilecek yer, Stephen'a gönderdiğim yer, gönderilecek yer
+        Stephen'ı Asstephen'i evime göndermesi için gönderdim.
+        Stephen gönderirim, Astiffens gönderirim, Stephen gönderirim
+        Fensa yeri Stephen'ı Astiffensa'yı yer göndermesi için gönderiyorum Fen, Astiffenssa'yı gönderiyor Yer Stephen'ı Asstephansa'yı göndermesi için gönderiyorum
+        Yerel dağılım, yerel fen Asstephan'ı göndermek, yerel Stephen'ı göndermek Asstephan'ı, yerel dağılım, yerel fen Asstephan'ı göndermek, dağılım
+        dağılın yeri fen, astiffany'yi göndermektir, yeri dağıtmak için steph'i oraya dağıtmak için gönderirim
+        Asstephen'i gönder, yapalım, yapalım
+        Asstephen'i gönder, Stephen'ı gönderiyorum, Asstephen'i gönderiyorum, Asstep'i gönderiyorum, Stephen'ı gönderiyorum ve Stephen'ı gönderiyorum.
+        Fensa, yerin olduğu yerdir Fen, gönderilecek yer, Stephen'a gönderdiğim yer, gönderilecek yer
+        Finn'in AsStephen'i göndereceği yeri serpin Stephen, yeri AsStefan'a gönderecek.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Merhaba boş parça</string>
+    <string name="title_activity_scrolling">KaydırmaEtkinliği</string>
+    <string name="large_text">
+        "Malzeme metafordur.\n\n"
+
+        "Maddi bir metafor, rasyonelleştirilmiş bir uzayın ve bir hareket sisteminin birleştirici teorisidir."
+        "Malzeme, kağıt ve mürekkep çalışmasından esinlenerek dokunsal gerçekliğe dayanmaktadır, ancak yine de"
+        "teknolojik olarak gelişmiş ve hayal gücüne ve sihire açık.\n"
+        "Malzemenin yüzeyleri ve kenarları, gerçekliğe dayanan görsel ipuçları sağlar."
+        "Tanıdık dokunsal özelliklerin kullanılması, kullanıcıların kolaylıkları hızlı bir şekilde anlamalarına yardımcı olur. Yine de"
+        "Malzemenin esnekliği, fiziksel olanın yerini alan yeni olanaklar yaratır"
+        "dünya, fizik kurallarını çiğnemeden.\n"
+        "Işık, yüzey ve hareketin temelleri, nesnelerin nasıl hareket ettiğini aktarmanın anahtarıdır."
+        "Etkileşimde bulunun ve uzayda ve birbiriyle ilişkili olarak var olun. Gerçekçi aydınlatma gösterileri"
+        "dikiş yapar, alanı böler ve hareketli parçaları gösterir.\n\n"
+
+        "Cesur, grafik, kasıtlı.\n\n"
+
+        "Baskı tabanlı tasarım tipografisinin temel öğeleri, ızgaralar, boşluk, ölçek, renk, "
+        "ve görüntülerin kullanımı, görsel tedavilere rehberlik eder. Bu öğeler, sizi memnun etmekten çok daha fazlasını yapar"
+        "göz. Hiyerarşi, anlam ve odak yaratırlar. Kasıtlı renk seçimleri, uçtan uca"
+        "Görüntüler, büyük ölçekli tipografi ve kasıtlı beyaz boşluk, cesur ve grafik bir görüntü oluşturur"
+        "kullanıcıyı deneyime çeken arayüz.\n"
+        "Kullanıcı eylemlerine yapılan vurgu, temel işlevselliği hemen görünür kılar ve "
+        "kullanıcı için yol noktaları.\n\n"
+
+        "Hareket anlam sağlar.\n\n"
+
+        "Hareket, kullanıcıyı ana hareket ettirici olarak kabul eder ve güçlendirir. Birincil kullanıcı eylemleri "
+        "hareketi başlatan ve tüm tasarımı dönüştüren bükülme noktaları.\n"
+        "Tüm işlemler tek bir ortamda gerçekleşir. Nesneler kullanıcıya gösterilmeden sunulur"
+        "Dönüştürürken ve yeniden düzenlerken bile deneyimin sürekliliğini bozmak.\n"
+        "Hareket anlamlı ve uygundur, dikkati odaklamaya ve sürekliliği sağlamaya hizmet eder."
+        "Geri bildirimler ince ama net. Geçişler verimli ancak tutarlı.\n\n"
+
+        "3D dünya.\n\n"
+
+        "Maddi ortam, tüm nesnelerin x, y ve z'ye sahip olduğu anlamına gelen 3B bir alandır"
+        "boyutlar. z ekseni, " ile ekran düzlemine dik olarak hizalanır.
+        "izleyiciye doğru uzanan pozitif z ekseni. Her malzeme yaprağı tek bir yer kaplar"
+        "z ekseni boyunca konumlanır ve standart 1 dp kalınlığa sahiptir.\n"
+        "Web'de, z ekseni perspektif için değil katmanlama için kullanılır. 3D dünyası "
+        "y eksenini manipüle ederek öykünür.\n\n"
+
+        "Işık ve gölge.\n\n"
+
+        "Maddi ortam içinde, sanal ışıklar sahneyi aydınlatır. Anahtar ışıklar yaratır"
+        "yönlü gölgeler, ortam ışığı ise tüm açılardan yumuşak gölgeler oluşturur.\n"
+        "Maddi ortamdaki gölgeler bu iki ışık kaynağı tarafından oluşturulur. Android'de "
+        "gelişme, ışık kaynakları malzeme tabakaları tarafından engellendiğinde gölgeler oluşur"
+        "z ekseni boyunca çeşitli konumlar. Web'de gölgeler, "
+        "yalnızca y ekseni. Aşağıdaki örnekte 6dp yüksekliğindeki kart gösterilmektedir.\n\n"
+
+        "Dinlenme yüksekliği.\n\n"
+
+        "Boyutu ne olursa olsun tüm maddi nesnelerin bir dinlenme yüksekliği veya varsayılan yüksekliği vardır"
+        "bu değişmez. Bir nesne yükselti değiştirirse, dinlenme konumuna geri dönmelidir"
+        "mümkün olan en kısa sürede yükselme.\n\n"
+
+        "Bileşen yükseltmeleri.\n\n"
+
+        "Bir bileşen türü için dinlenme yüksekliği, uygulamalar arasında tutarlıdır (ör. FAB yüksekliği "
+        "bir uygulamada 6dp'den başka bir uygulamada 16dp'ye kadar değişmez).\n"
+        "Bileşenler, derinliğe bağlı olarak platformlar arasında farklı dinlenme yüksekliklerine sahip olabilir"
+        "çevreden (ör. TV, mobil veya masaüstünden daha fazla derinliğe sahiptir).\n\n"
+
+        "Duyarlı yükseklik ve dinamik yükseklik ofsetleri.\n\n"
+
+        "Bazı bileşen türleri duyarlı yükseltmeye sahiptir, yani yanıt olarak yüksekliği değiştirirler"
+        "kullanıcı girdisine (ör. normal, odaklanmış ve basılmış) veya sistem olaylarına. Bu yükseklikler"
+        "değişiklikler, dinamik yükseklik ofsetleri kullanılarak tutarlı bir şekilde uygulanır.\n"
+        "Dinamik yükseklik ofsetleri, bir bileşenin göreli olarak hareket ettiği hedef yüksekliğidir"
+        "bileşenin bekleme durumuna. Yükseklik değişikliklerinin tutarlı olmasını sağlarlar"
+        "eylemler ve bileşen türleri arasında. Örneğin, preste kaldırılan tüm bileşenler "
+        "dinlenme yüksekliklerine göre aynı yükseklik değişimi.\n"
+        "Giriş olayı tamamlandığında veya iptal edildiğinde, bileşen dinlenme durumuna geri dönecektir"
+        "yükseklik.\n\n"
+
+        "Yükseklik girişiminden kaçınılıyor.\n\n"
+
+        "Duyarlı yükseltmelere sahip bileşenler, aralarında hareket ederken diğer bileşenlerle karşılaşabilir"
+        "Dinlenme yükseklikleri ve dinamik yükseklik ofsetleri. Çünkü malzeme geçemez"
+        "Diğer malzemeler aracılığıyla, bileşenler birbirine herhangi bir şekilde müdahale etmekten kaçınır, "
+        "ister bileşen bazında isterse tüm uygulama düzenini kullanarak olsun.\n"
+        "Bileşen düzeyinde, bileşenler etkileşime neden olmadan önce hareket edebilir veya kaldırılabilir."
+        "Örneğin, kayan bir eylem düğmesi (FAB), bir ekrandan önce kaybolabilir veya ekrandan çıkabilir "
+        "kullanıcı bir kart alır veya bir snackbar belirirse hareket edebilir.\n"
+        "Düzen düzeyinde, uygulama düzeninizi girişim fırsatlarını en aza indirecek şekilde tasarlayın."
+        "Örneğin, FAB'yi bir kart akışının bir tarafına yerleştirin, böylece FAB müdahale etmeyecek"
+        "bir kullanıcı kartlardan birini almaya çalıştığında.\n\n"
+    </string>
+    <string name="action_settings">Ayarlar</string>
+</resources>
