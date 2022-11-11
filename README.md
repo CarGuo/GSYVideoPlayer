@@ -73,7 +73,7 @@ allprojects {
 
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.4-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:8.3.4-release-jitpack'
 ```
 
 #### B、添加java和你想要的so支持：
@@ -85,7 +85,7 @@ allprojects {
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.4-release-jitpack'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.4-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:8.3.4-release-jitpack'
 
  //根据你的需求ijk模式的so
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.3.4-release-jitpack'
@@ -107,7 +107,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.4-release-jitpack'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.4-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:8.3.4-release-jitpack'
 
  //更多ijk的编码支持
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.3.4-release-jitpack'
