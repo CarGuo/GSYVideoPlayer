@@ -121,3 +121,5 @@ public static ** valueOf(java.lang.String);
 -dontwarn com.shuyu.gsyvideoplayer.utils.**
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
+-keep class com.google.android.exoplayer2.** {*;}
+-keep interface com.google.android.exoplayer2.**
