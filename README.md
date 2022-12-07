@@ -292,6 +292,8 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 -dontwarn com.shuyu.gsyvideoplayer.utils.**
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
+-keep class com.google.android.exoplayer2.** {*;}
+-keep interface com.google.android.exoplayer2.**
 
 -keep public class * extends android.view.View{
     *** get*();
