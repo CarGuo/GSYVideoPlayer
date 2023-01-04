@@ -1,5 +1,6 @@
 package com.example.gsyvideoplayer.utils.floatUtil;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.WindowManager;
@@ -65,7 +66,7 @@ class FloatToast extends FloatView {
         }
     }
 
-
+    @SuppressLint("SoonBlockedPrivateApi")
     private void initTN() {
         try {
             //todo android P test

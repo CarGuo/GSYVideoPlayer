@@ -57,22 +57,24 @@ class FloatPhone extends FloatView {
 
     @Override
     public void init() {
-        if (Util.hasPermission(mContext)) {
-            mLayoutParams.format = PixelFormat.RGBA_8888;
-            mWindowManager.addView(mView, mLayoutParams);
-        } else {
-            FloatActivity.request(mContext, new PermissionListener() {
-                @Override
-                public void onSuccess() {
-                    mLayoutParams.format = PixelFormat.RGBA_8888;
-                    mWindowManager.addView(mView, mLayoutParams);
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Util.hasPermission(mContext)) {
+                mLayoutParams.format = PixelFormat.RGBA_8888;
+                mWindowManager.addView(mView, mLayoutParams);
+            } else {
+                FloatActivity.request(mContext, new PermissionListener() {
+                    @Override
+                    public void onSuccess() {
+                        mLayoutParams.format = PixelFormat.RGBA_8888;
+                        mWindowManager.addView(mView, mLayoutParams);
+                    }
 
-                @Override
-                public void onFail() {
+                    @Override
+                    public void onFail() {
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 

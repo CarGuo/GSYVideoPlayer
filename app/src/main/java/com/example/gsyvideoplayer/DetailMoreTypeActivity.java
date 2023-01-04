@@ -19,6 +19,7 @@ import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -187,7 +188,11 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         if (orientationUtils != null)
             orientationUtils.releaseListener();
         if (mCoverMedia != null) {
-            mCoverMedia.release();
+            try {
+                mCoverMedia.release();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             mCoverMedia = null;
         }
     }

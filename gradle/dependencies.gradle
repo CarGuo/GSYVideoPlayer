@@ -2,7 +2,7 @@ ext {
     gsyVideoVersion = "v8.3.0-release-jitpack"
     danmakuFlameMasterSoVersion = "0.9.25"
     glideVersion = "4.12.0"
-    exoPlayerVersion = "2.18.1"
+    exoPlayerVersion = "2.18.2"
     permissionsDispatcherVersion = "4.9.1"
 
     androidDependencies = [
