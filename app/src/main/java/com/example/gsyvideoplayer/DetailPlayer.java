@@ -449,6 +449,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://video.cdn.aizys.com/zzx3.9g.mkv";//long
         //String url = "rtsp://admin:wh123456@112.44.163.248:554/h264/ch01/main/av_stream";//long
         //String url = "https://aliyuncdnsaascloud.xjhktv.com/video/A%20Lin%2B%E5%80%AA%E5%AD%90%E5%86%88-%E4%B8%8D%E5%B1%91%E5%AE%8C%E7%BE%8E%5B%E5%9B%BD%5D%5B1080P%5D.mp4";//track
+        //String url = "rtmp://pull.sportslive.top/ECOTIME/2022?auth_key=1672823664-0-0-3c01d7b2ba9772929e792d8a2a5fac82";
         return url;
     }
 
