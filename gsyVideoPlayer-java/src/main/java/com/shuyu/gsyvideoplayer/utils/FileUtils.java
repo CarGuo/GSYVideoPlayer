@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 public class FileUtils {
 
-    private static final String SD_PATH = Environment.getExternalStorageDirectory().getPath();
+    //private static final String SD_PATH = Environment.getExternalStorageDirectory().getPath();
 
     public static final String NAME = "GSYVideo";
 
@@ -20,7 +20,7 @@ public class FileUtils {
 
     public static String getAppPath(String name) {
         StringBuilder sb = new StringBuilder();
-        sb.append(SD_PATH);
+        sb.append(Environment.getExternalStoragePublicDirectory("Download").getAbsolutePath());
         sb.append(File.separator);
         sb.append(name);
         sb.append(File.separator);
