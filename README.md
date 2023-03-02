@@ -295,6 +295,9 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 -keep class com.google.android.exoplayer2.** {*;}
 -keep interface com.google.android.exoplayer2.**
 
+-keep class com.shuyu.alipay.** {*;}
+-keep interface com.shuyu.alipay.**
+
 -keep public class * extends android.view.View{
     *** get*();
     void set*(***);
