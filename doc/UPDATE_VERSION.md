@@ -1,5 +1,10 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### v8.3.5-release-jitpack (2023-03-15)
+* update exo 2.18.4
+* fix #3773
+* fix #3756
+* fix #3683
 
 ### v8.3.4-release-jitpack (2022-09-01)
 * update exo 2.18.1
