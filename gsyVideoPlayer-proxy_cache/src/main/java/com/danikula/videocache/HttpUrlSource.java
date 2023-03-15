@@ -116,7 +116,7 @@ public class HttpUrlSource implements Source {
             } catch (NullPointerException | IllegalArgumentException e) {
                 String message = "Wait... but why? WTF!? " +
                     "Really shouldn't happen any more after fixing https://github.com/danikula/AndroidVideoCache/issues/43. " +
-                    "If you read it on your device log, please, notify me danikula@gmail.com or create issue here " +
+                    "If you read it on your device log, please, notify me https://github.com/danikula or create issue here " +
                     "https://github.com/danikula/AndroidVideoCache/issues.";
                 throw new RuntimeException(message, e);
             } catch (ArrayIndexOutOfBoundsException e) {
