@@ -387,7 +387,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                 if (GSYVideoView.this.mReleaseWhenLossAudio) {
                     GSYVideoView.this.releaseVideos();
                 } else {
-                    GSYVideoView.this.onVideoPause();
+                    getGSYVideoManager().listener().onVideoPause();
                 }
 
             }
@@ -399,11 +399,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     protected void onLossTransientAudio() {
         try {
-            this.onVideoPause();
+            getGSYVideoManager().listener().onVideoPause();
         } catch (Exception var2) {
             var2.printStackTrace();
         }
-
     }
 
     /**
