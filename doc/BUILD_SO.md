@@ -25,8 +25,9 @@
   具体为：`export IJK_MAKE_FLAG=-j1`
 
 
+- 也许你还会需要 `sudo spctl --master-disable` 来 再 mac 上信任所有来源从而支持执行 
 
-也许你还会需要 `sudo spctl --master-disable`来再 mac 上信任所有来源从而支持执行 
+- 还有需要注意，需要 python2 执行环境，mac 默认 python3 的话可以直接下载一个 python2 的安装包安装就好了
 
 ##### 3、编译带HTTPS的so
 
