@@ -30,6 +30,7 @@
 - 还有需要注意，需要 python2 执行环境，mac 默认 python3 的话可以直接下载一个 python2 的安装包安装就好了
 
 - M1 机器可以参考 ： https://www.jianshu.com/p/22405a692c18 
+- 如果有出现 `awk` 过期的问题，去prebuilt/drawom-x86_64/bin 下把它删了就好
 
 ##### 3、编译带HTTPS的so
 
