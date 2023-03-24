@@ -186,11 +186,18 @@ value
 name 和 value 的可取值范围同 category 的值有关，故分类讨论。
 
 1) category 可取参数(IjkMediaPlayer.java)
+
+
+```
 public static final int OPT_CATEGORY_FORMAT = 1;
 public static final int OPT_CATEGORY_CODEC = 2;
 public static final int OPT_CATEGORY_SWS = 3;
 public static final int OPT_CATEGORY_PLAYER = 4;
+```
+
 2) category 值为 OPT_CATEGORY_FORMAT 时， name 和 value 取值(extra/ffmpeg/libavformat/options_table.h)
+
+```
 static const AVOption avformat_options[] = {
 {"avioflags", NULL, OFFSET(avio_flags), AV_OPT_TYPE_FLAGS, {.i64 = DEFAULT }, INT_MIN, INT_MAX, D|E, "avioflags"},
 {"direct", "reduce buffering", 0, AV_OPT_TYPE_CONST, {.i64 = AVIO_FLAG_DIRECT }, INT_MIN, INT_MAX, D|E, "avioflags"},
@@ -266,6 +273,7 @@ static const AVOption avformat_options[] = {
 {"max_streams", "maximum number of streams", OFFSET(max_streams), AV_OPT_TYPE_INT, { .i64 = 1000 }, 0, INT_MAX, D },
 {NULL},
 };
+```
 其中每一行含义是
 {name, help, offset, type, default_val, min, max, flags, unit}
 而我们只需关注加粗字体的内容即可。
@@ -275,6 +283,8 @@ static const AVOption avformat_options[] = {
 Java 方法只有两种，区别仅于 value 的类型。因 C 中所有非 String 类型被统一封装为 long 所致。
 
 3) category 值为 OPT_CATEGORY_CODEC 时， name 和 value 取值(extra/ffmpeg/libavcodec/options_table.h)
+
+```
 static const AVOption avcodec_options[] = {
 {"b", "set bitrate (in bits/s)", OFFSET(bit_rate), AV_OPT_TYPE_INT64, {.i64 = AV_CODEC_DEFAULT_BITRATE }, 0, INT64_MAX, A|V|E},
 {"ab", "set bitrate (in bits/s)", OFFSET(bit_rate), AV_OPT_TYPE_INT64, {.i64 = 128*1000 }, 0, INT_MAX, A|E},
@@ -816,9 +826,11 @@ static const AVOption avcodec_options[] = {
 {"allow_profile_mismatch", "attempt to decode anyway if HW accelerated decoder's supported profiles do not exactly match the stream", 0, AV_OPT_TYPE_CONST, {.i64 = AV_HWACCEL_FLAG_ALLOW_PROFILE_MISMATCH }, INT_MIN, INT_MAX, V | D, "hwaccel_flags"},
 {NULL},
 };
-解析同上。
+```
 
 4) category 值为 OPT_CATEGORY_SWS 时， name 和 value 取值(extra/ffmpeg/libswscale/options.c)
+
+```
 static const AVOption swscale_options[] = {
     { "sws_flags",       "scaler flags",                  OFFSET(flags),     AV_OPT_TYPE_FLAGS,  { .i64  = SWS_BICUBIC        }, 0,      UINT_MAX,        VE, "sws_flags" },
     { "fast_bilinear",   "fast bilinear",                 0,                 AV_OPT_TYPE_CONST,  { .i64  = SWS_FAST_BILINEAR  }, INT_MIN, INT_MAX,        VE, "sws_flags" },
@@ -869,9 +881,11 @@ static const AVOption swscale_options[] = {
 
     { NULL }
 };
-解析同上。
+```
 
 5) category 值为 OPT_CATEGORY_PLAYER 时， name 和 value 取值(ijkmedia/ijkplayer/ff_ffplay_options.h)
+
+```
 static const AVOption ffp_context_options[] = {
     // original options in ffplay.c
     // FFP_MERGE: x, y, s, fs
@@ -1024,5 +1038,4 @@ static const AVOption ffp_context_options[] = {
 
     { NULL }
 };
-
-
+```
