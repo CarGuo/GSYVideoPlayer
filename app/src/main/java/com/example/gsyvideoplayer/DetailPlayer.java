@@ -450,6 +450,8 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "rtsp://admin:wh123456@112.44.163.248:554/h264/ch01/main/av_stream";//long
         //String url = "https://aliyuncdnsaascloud.xjhktv.com/video/A%20Lin%2B%E5%80%AA%E5%AD%90%E5%86%88-%E4%B8%8D%E5%B1%91%E5%AE%8C%E7%BE%8E%5B%E5%9B%BD%5D%5B1080P%5D.mp4";//track
         //String url = "rtmp://pull.sportslive.top/ECOTIME/2022?auth_key=1672823664-0-0-3c01d7b2ba9772929e792d8a2a5fac82";
+        //String url = "http://t.grelighting.cn/m3u8/TVBYNUdCUXN5MDhQSXJYTTJtN3lMUVZtTGJ0dlZXOEk=.m3u8"; //伪装 png\bmp 的m3u8
+        //String url = "https://cdn.clicli.cc/static/103701-50881f3281e9a0f6c8b2c96230b922a4.m3u8"; //伪装 png 的m3u8
         return url;
     }
 
