@@ -15,7 +15,7 @@
 　
 如果作为一个win党，头顶青天，推荐把虚拟机搬出来了，一般装的是Ubuntu，加上VMtools，妥妥的，环境搭建我就不唠叨了，这里走起[《VMware安装Ubuntu教程，Linux下搭建Android开发环境》](http://blog.csdn.net/linchaolong/article/details/52802401)。家中常备，总有一天你会用得上。注意NDK r10e以上，虚拟机硬盘尽量选大一点，不然后面扩展容量又是一番功夫。
 　
-> **Mac 环境下编译也是完美，强烈推荐。（新版本 Mac 系统用旧版 ndk 会面临一些权限兼容问题，建议在设置上全部允许，弹出来的多点几次吧），建议用 `sudo spctl --master-disable` 来在 mac 上信任所有来源从而支持执行 **　
+> Mac 环境下编译也是完美，强烈推荐。（新版本 Mac 系统用旧版 ndk 会面临一些权限兼容问题，建议在设置上全部允许，弹出来的多点几次吧），**建议用 `sudo spctl --master-disable` 来在 mac 上信任所有来源从而支持执行。**　
 >
 >**ndk 版本必须是 `android-ndk-r13b` ，不要问为什么。**
 >**如果是新版 macOS，就用最低的 `android-ndk-r10e` 具体看你系统支持。**
