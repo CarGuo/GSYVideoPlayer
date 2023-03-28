@@ -29,7 +29,30 @@
 
 - 还有需要注意，需要 python2 执行环境，mac 默认 python3 的话可以直接下载一个 python2 的安装包安装就好了
 
-- M1 机器可以参考 ： https://www.jianshu.com/p/22405a692c18 
+- M1 机器可以参考 ： https://www.jianshu.com/p/22405a692c18 ， ：/Users/xxx/env/android-sdk/ndk/android-ndk-xxxx/ndk-build 
+  高版本：
+  ```
+    #!/bin/sh
+    DIR="$(cd "$(dirname "$0")" && pwd)"
+    $DIR/build/ndk-build "$@"
+
+    修改为：
+    #!/bin/sh
+    DIR="$(cd "$(dirname "$0")" && pwd)"
+    arch -x86_64 /bin/bash $DIR/build/ndk-build "$@"
+  ```
+  低版本
+  ```
+    HOST_ARCH=$(uname -m)
+    case $HOST_ARCH in
+        i?86) HOST_ARCH=x86;;
+        x86_64|amd64) HOST_ARCH=x86_64;;
+        *) echo "ERROR: Unknown host CPU architecture: $HOST_ARCH"
+           exit 1
+    esac
+    log "HOST_ARCH=$HOST_ARCH"
+    把 x86_64|amd64) 这里加一个，改成 x86_64|amd64|arm64)
+  ```
 - 如果有出现 `awk` 过期的问题，去prebuilt/drawom-x86_64/bin 下把它删了就好
 
 ##### 3、编译带HTTPS的so
