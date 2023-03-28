@@ -52,6 +52,8 @@
     把 x86_64|amd64) 这里加一个，改成 x86_64|amd64|arm64)
   ```
 - 如果有出现 `awk` 过期的问题，去prebuilt/drawom-x86_64/bin 下把它删了就好
+- 在mac OS系统上编译，如果出现 `yasm/nasm not found or too old. Use --disable-yasm for a crippled build.`，安装就好了: `brew install yasm`
+
 
 ##### 3、编译带HTTPS的so
 
