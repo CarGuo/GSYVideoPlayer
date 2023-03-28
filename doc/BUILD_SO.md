@@ -21,8 +21,8 @@
 >**如果是新版 macOS，就用最低的 `android-ndk-r10e` 具体看你系统支持。**
 
 - 引用[大佬问题](https://github.com/bilibili/ijkplayer/issues/5113#issuecomment-1288378800)分析：
-  “这两天又把Ijkplayer捡起来，在macOS Monterey上编译带openssl的Ijkplayer，也遇到了和帖主一样的问题。通过谷歌找到了这。经过仔细分析，发现造成这个问题的原因是libcrypto.a这个静态库里缺少了一些函数的实现。阅读编译失败时的输出内容，发现失败的时候会有两个创建libcrypto.a这个库的动作，两次挨着的，成功的时候只有一次创建的日志。猜测是make多线程的问题，两个线程都在创建静态库，导致有一个线程失败了。找到do-compile-openssl.sh里设置make线程数的地方，发现是由IJK_MAKE_FLAG这个变量传递的，再搜索“IJK_MAKE_FLAG”，找到了是在do-detect-env.sh这个脚本里设置的，在Darwin（也就是苹果）平台上是通过系统命令“sysctl -n machdep.cpu.thread_count”来获取并设置编译线程数的，这里强制改成1，问题不再出现，应该是解决了。究其根本原因，猜测是Ijkplayer使用的这个版本的openssl的make文件写得不够严谨，导致多线程编译是有风险的。”
-  具体为：`export IJK_MAKE_FLAG=-j1`
+  “这两天又把Ijkplayer捡起来，在macOS Monterey上编译带openssl的Ijkplayer，也遇到了和帖主一样的问题。通过谷歌找到了这。经过仔细分析，发现造成这个问题的原因是libcrypto.a这个静态库里缺少了一些函数的实现。阅读编译失败时的输出内容，发现失败的时候会有两个创建libcrypto.a这个库的动作，两次挨着的，成功的时候只有一次创建的日志。猜测是make多线程的问题，两个线程都在创建静态库，导致有一个线程失败了。找到do-compile-openssl.sh里设置make线程数的地方，发现是由IJK_MAKE_FLAG这个变量传递的，再搜索“IJK_MAKE_FLAG”，找到了是在do-detect-env.sh这个脚本里设置的，在Darwin（也就是苹果）平台上是通过系统命令“sysctl -n machdep.cpu.thread_count”来获取并设置编译线程数的，这里强制改成1，问题不再出现，应该是解决了。究其根本原因，猜测是Ijkplayer使用的这个版本的openssl的make文件写得不够严谨，导致多线程编译是有风险的。”<br/>
+  **具体为 ` android/contrib/tools/do-detect-env.sh` 下的 `IJK_MAKE_FLAG` 改为 ：`export IJK_MAKE_FLAG=-j1`**
 
 
 - 也许你还会需要 `sudo spctl --master-disable` 来 再 mac 上信任所有来源从而支持执行 
