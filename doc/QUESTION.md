@@ -203,7 +203,7 @@ mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "infbuf", 1);  // 无
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "analyzemaxduration", 100L);
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "probesize", 10240L);
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "flush_packets", 1L);
-//  关闭播放器缓冲，这个必须关闭，否则会出现播放一段时间后，一直卡主，控制台打印 FFP_MSG_BUFFERING_START 
+//  关闭播放器缓冲，这个必须关闭，否则会出现播放一段时间后，一直卡主，控制台打印 FFP_MSG_BUFFERING_START
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 0L);
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1L);
 ```
@@ -361,6 +361,13 @@ invalid dts/pts combination 740157300
 - dts时间戳有误，将出现dts转化为微秒后永远小于seek传入时间问题，则永远无法返回packet，导致seek僵死。
 - 判断packet是否为关键帧，忽略了该packet是否为视频，如果该packet为音频并且flag & AV_PKT_FLAG_KEY的结果为真，则将返回该packet并清空seek标准。后续读到的视频也有非关键帧的可能，从而导致花屏。
 
+### 26、增加 ijk 代理支持
+```java
+VideoOptionModel videoOptionModel2 = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http_proxy", "http://192.168.0.116:8888 ");
+List<VideoOptionModel> list = new ArrayList<>();
+list.add(videoOptionModel2);
+GSYVideoManager.instance().setOptionModelList(list);
+```
 
 #### 更多配置
 
