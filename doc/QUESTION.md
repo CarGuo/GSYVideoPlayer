@@ -369,6 +369,31 @@ list.add(videoOptionModel2);
 GSYVideoManager.instance().setOptionModelList(list);
 ```
 
+### 27、ijk 出现切换音轨失败问题 [#3790](https://github.com/CarGuo/GSYVideoPlayer/issues/3790)
+
+```java
+        VideoOptionModel videoOptionModel2 = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "min-frames", 25);
+        List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel2);
+        GSYVideoManager.instance().setOptionModelList(list);
+```
+
+```java
+       binding.change.setOnClickListener(new View.OnClickListener() {
+            int index = 0;
+
+            @Override
+            public void onClick(View view) {
+                IjkMediaPlayer player =  ((IjkMediaPlayer)((IjkPlayerManager)binding.detailPlayer.getGSYVideoManager().getPlayer() ).getMediaPlayer());
+                player.selectTrack(1);
+            }
+        });
+```
+
+
+
+
+
 #### 更多配置
 
 更多配置可通过下方链接和图片参考配置
