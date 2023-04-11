@@ -172,8 +172,11 @@ https://github.com/CarGuo/GSYVideoPlayer/issues/252
 ```
 VideoOptionModel videoOptionModel =
         new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "protocol_whitelist", crypto,file,http,https,tcp,tls,udp);
+VideoOptionModel videoOptionModel2 =
+        new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "allowed_extensions", ALL);
 List<VideoOptionModel> list = new ArrayList<>();
 list.add(videoOptionModel);
+list.add(videoOptionModel2);
 GSYVideoManager.instance().setOptionModelList(list);
 ```
 #### 17、rtsp连接有问题
@@ -390,6 +393,7 @@ GSYVideoManager.instance().setOptionModelList(list);
         });
 ```
 
+## 28、
 
 
 
