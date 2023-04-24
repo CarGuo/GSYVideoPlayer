@@ -181,7 +181,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
     }
 
 
-    private ViewGroup getViewGroup() {
+    protected ViewGroup getViewGroup() {
         return (ViewGroup) (CommonUtil.scanForActivity(getContext())).findViewById(Window.ID_ANDROID_CONTENT);
     }
 
