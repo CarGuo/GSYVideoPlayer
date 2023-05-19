@@ -128,6 +128,7 @@ public class DanmakuVideoPlayer extends StandardGSYVideoPlayer {
 
     @Override
     public void onCompletion() {
+        super.onCompletion();
         releaseDanmaku(this);
     }
 
