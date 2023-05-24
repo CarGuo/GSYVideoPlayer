@@ -45,6 +45,7 @@ android {
     lintOptions {
         abortOnError false
     }
+    namespace 'com.example.gsyvideoplayer'
 }
 
 dependencies {
@@ -56,6 +57,8 @@ dependencies {
     implementation viewDependencies.glide
     implementation androidDependencies.design
     implementation androidDependencies.viewpager2
+
+    implementation androidDependencies.multidex
 
     implementation project(":gsyVideoPlayer")
     implementation project(":gsyVideoPlayer-aliplay")

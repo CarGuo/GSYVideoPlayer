@@ -2,7 +2,7 @@ ext {
     gsyVideoVersion = "v8.3.0-release-jitpack"
     danmakuFlameMasterSoVersion = "0.9.25"
     glideVersion = "4.12.0"
-    exoPlayerVersion = "2.18.4"
+    exoPlayerVersion = "2.18.7"
     permissionsDispatcherVersion = "4.9.1"
 
     androidDependencies = [
@@ -12,7 +12,8 @@ ext {
         viewpager2  : "androidx.viewpager2:viewpager2:1.0.0",
         core        : "androidx.core:core:1.7.0",
         transition  : "androidx.transition:transition:1.4.1",
-        annotation  : "androidx.annotation:annotation:1.3.0"
+        annotation  : "androidx.annotation:annotation:1.3.0",
+        multidex  : "androidx.multidex:multidex:2.0.0"
     ]
 
     testDependencies = [

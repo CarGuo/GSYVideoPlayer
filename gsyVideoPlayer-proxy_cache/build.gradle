@@ -7,4 +7,5 @@ android {
     buildTypes.all {
         it.buildConfigField "String", "LIBRARY_VERSION", "\". Version: $PROJ_VERSION\""
     }
+    namespace 'shuyu.com.androidvideocache'
 }

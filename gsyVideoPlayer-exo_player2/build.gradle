@@ -1,6 +1,9 @@
 apply from: "$rootDir/gradle/lib.gradle"
 
 apply from: "$rootDir/gradle/publish.gradle"
+android {
+    namespace 'tv.danmaku.ijk.media.exo2'
+}
 
 dependencies {
     api viewDependencies.exoPlayer2
