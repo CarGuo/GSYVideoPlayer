@@ -23,6 +23,9 @@ import static tv.danmaku.ijk.media.exo2.ExoSourceManager.getHttpDataSourceFactor
 import android.content.Context;
 import android.net.Uri;
 
+import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
+import com.google.android.exoplayer2.offline.DownloadManager;
+import com.google.android.exoplayer2.offline.DownloadRequest;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
@@ -31,9 +34,14 @@ import com.google.android.exoplayer2.upstream.cache.CacheWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 ///https://github.com/google/ExoPlayer/issues/10831
 public class CacheHelper {
+
+    private static boolean init = false;
+
+    private static DownloadManager downloadManager;
 
     public CacheHelper() {
 
@@ -41,11 +49,19 @@ public class CacheHelper {
 
     protected CacheWriter cacheWriter;
 
+    /**
+     * 需要自己创建线程
+     * length 是需要提前缓存的长度
+     * */
     public void preCacheVideo(Context context, Uri uri, long length, CacheWriter.ProgressListener progressListener) throws IOException {
         preCacheVideo(context, uri, null, false, null, null, length, progressListener);
     }
 
 
+    /**
+     * 需要自己创建线程
+     * length 是需要提前缓存的长度
+     * */
     public void preCacheVideo(Context context, Uri uri, File cacheDir,
                               boolean preview, String uerAgent, Map<String, String> mapHeadData,
                               long length, CacheWriter.ProgressListener progressListener)
@@ -69,4 +85,49 @@ public class CacheHelper {
             cacheWriter.cancel();
         }
     }
+
+    public static synchronized DownloadManager getDownloadManager() throws Exception {
+        if (!init) {
+            throw new Exception("downloadManager never init");
+        }
+        return downloadManager;
+    }
+
+
+    public static synchronized void ensureDownloadManagerInitialized(Context context, File cacheDir, boolean preview, String uerAgent, Map<String, String> mapHeadData) {
+        init = true;
+        if (downloadManager == null) {
+            downloadManager =
+                new DownloadManager(
+                    context,
+                    ExoSourceManager.getDatabaseProvider() != null ? ExoSourceManager.getDatabaseProvider()
+                        : new StandaloneDatabaseProvider(context),
+                    getCacheSingleInstance(context, cacheDir),
+                    getHttpDataSourceFactory(context, preview, uerAgent, mapHeadData),
+                    Executors.newFixedThreadPool(/* nThreads= */ 6));
+        }
+    }
+
+    public static synchronized void download(String contentId, Uri contentUri) {
+        if (downloadManager != null) {
+            downloadManager.addDownload(
+                new DownloadRequest.Builder(contentId, contentUri).build());
+            downloadManager.resumeDownloads();
+        }
+    }
+
+    public static synchronized void pause() {
+        if (downloadManager != null) {
+            downloadManager.pauseDownloads();
+        }
+    }
+
+    public static synchronized void release() {
+        if (downloadManager != null) {
+            downloadManager.release();
+        }
+        downloadManager = null;
+        init = false;
+    }
+
 }

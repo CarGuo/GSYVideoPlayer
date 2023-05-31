@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.database.DatabaseProvider;
+import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSource;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -237,7 +238,8 @@ public class ExoSourceManager {
             mCachePath = dirs + File.separator + "exo";
             boolean isLocked = SimpleCache.isCacheFolderLocked(new File(mCachePath));
             if (!isLocked) {
-                mCache = new SimpleCache(new File(mCachePath), new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE), sDatabaseProvider);
+                mCache = new SimpleCache(new File(mCachePath), new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE)
+                    , sDatabaseProvider != null ? sDatabaseProvider : new StandaloneDatabaseProvider(context));
             }
         }
         return mCache;

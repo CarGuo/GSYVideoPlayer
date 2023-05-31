@@ -8,11 +8,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailDownloadPlayerBinding;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.SeekParameters;
+import com.google.android.exoplayer2.offline.Download;
+import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.upstream.cache.CacheWriter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -28,6 +31,10 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +48,7 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
     private boolean isPlay;
     private boolean isPause;
 
-    private CacheHelper cacheHelper = new CacheHelper();
+    //private CacheHelper cacheHelper = new CacheHelper();
     private OrientationUtils orientationUtils;
 
     private ActivityDetailDownloadPlayerBinding binding;
@@ -56,6 +63,7 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityDetailDownloadPlayerBinding.inflate(getLayoutInflater());
 
         if (!(CacheFactory.getCacheManager() instanceof ExoPlayerCacheManager)) {
@@ -230,6 +238,7 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
             getCurPlay().release();
         }
         stopDownload();
+        CacheHelper.release();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
     }
@@ -275,24 +284,60 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
             Toast.makeText(this, "只支持 Exo2PlayerManager 和 ExoPlayerCacheManager 模式", Toast.LENGTH_SHORT).show();
             return;
         }
-        new Thread(
-            () -> {
-                try {
-                    cacheHelper.preCacheVideo(getApplicationContext(), Uri.parse(url), cachePath,
-                        false, null, header, C.LENGTH_UNSET, new CacheWriter.ProgressListener() {
-                            @Override
-                            public void onProgress(long requestLength, long bytesCached, long newBytesCached) {
-                                Debuger.printfLog("#########", "requestLength " + requestLength + " bytesCached " + bytesCached + " newBytesCached  " + newBytesCached);
-                            }
-                        });
-                } catch (IOException e) {
-                   e.printStackTrace();
+
+
+        ////参考实现1
+//        new Thread(
+//            () -> {
+//                try {
+//                    cacheHelper.preCacheVideo(getApplicationContext(), Uri.parse(url), cachePath,
+//                        false, null, header, C.LENGTH_UNSET, new CacheWriter.ProgressListener() {
+//                            @Override
+//                            public void onProgress(long requestLength, long bytesCached, long newBytesCached) {
+//                                Debuger.printfLog("#########", "requestLength " + requestLength + " bytesCached " + bytesCached + " newBytesCached  " + newBytesCached);
+//                            }
+//                        });
+//                } catch (IOException e) {
+//                   e.printStackTrace();
+//                }
+//            }
+//        ).start();
+
+
+        ////参考实现2
+        CacheHelper.ensureDownloadManagerInitialized(getApplicationContext(), cachePath,
+            false, null, header);
+        try {
+            CacheHelper.getDownloadManager().addListener(new DownloadManager.Listener() {
+                @Override
+                public void onDownloadChanged(DownloadManager downloadManager, Download download, @Nullable Exception finalException) {
+                    Debuger.printfLog("#########", "download " + download.contentLength);
                 }
-            }
-        ).start();
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        CacheHelper.download(getMD5Str(url), Uri.parse(url));
     }
 
     private void stopDownload() {
-        cacheHelper.cancel();
+        //cacheHelper.cancel();
+        CacheHelper.pause();
+    }
+
+    public static String getMD5Str(String str) {
+        byte[] digest = null;
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("md5");
+            digest = md5.digest(str.getBytes("utf-8"));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        //16是表示转换为16进制数
+        String md5Str = new BigInteger(1, digest).toString(16);
+        return md5Str;
     }
 }
