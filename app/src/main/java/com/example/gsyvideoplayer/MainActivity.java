@@ -18,6 +18,8 @@ import com.example.gsyvideoplayer.databinding.ActivityMainBinding;
 import com.example.gsyvideoplayer.simple.SimpleActivity;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.cache.CacheFactory;
+import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
@@ -25,6 +27,7 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import permissions.dispatcher.PermissionUtils;
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     int i = 0;
+    int j = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.detailSubtitleActivity.setOnClickListener(this);
         binding.changeCore.setOnClickListener(this);
         binding.viewPager2Activity.setOnClickListener(this);
+        binding.changeCache.setOnClickListener(this);
+        binding.detailDownloadExoActivity.setOnClickListener(this);
 
 
         boolean hadPermission = PermissionUtils.hasSelfPermissions(this, permissions);
@@ -102,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Log.e("################# ","################# ");
+
         switch (view.getId()) {
             case R.id.open_simple:
                 //简单的播放
@@ -212,6 +218,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.detail_download_activity:
                 JumpUtils.goToDetailDownloadActivity(this);
                 break;
+            case R.id.detail_download_exo_activity:
+                JumpUtils.goToDetailDownloadExoActivity(this);
+                break;
             case R.id.detail_subtitle_activity:
                 JumpUtils.goToGSYExoSubTitleDetailPlayer(this);
                 break;
@@ -232,6 +241,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else if (i % 3 == 2) {
                     PlayerFactory.setPlayManager(SystemPlayerManager.class);
                     binding.changeCore.setText("系统 内核");
+                }
+                break;
+            case R.id.change_cache:
+                j += 1;
+                if (j % 2 == 0) {
+                    CacheFactory.setCacheManager(ProxyCacheManager.class);
+                    binding.changeCache.setText("Proxy 缓存");
+                } else {
+                    CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
+                    binding.changeCache.setText("EXO 特有缓存");
                 }
                 break;
             case R.id.clear_cache:

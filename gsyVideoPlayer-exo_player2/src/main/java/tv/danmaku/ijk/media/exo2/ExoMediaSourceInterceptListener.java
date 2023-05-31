@@ -3,9 +3,11 @@ package tv.danmaku.ijk.media.exo2;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.upstream.DataSink;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSink;
 
 import java.io.File;
 import java.util.Map;
@@ -28,7 +30,9 @@ public interface ExoMediaSourceInterceptListener {
 
 
     /**
-     * @return 返回不为空时，使用返回的自定义 HttpDataSource
+     * 一般用户自定义 http 忽略 ssl 证书之类的可用于自定义
+     * Demo 有对应例子
+     * @return 返回不为空时，使用返回的自定义 HttpDataSource，
      */
     DataSource.Factory getHttpDataSourceFactory(
             String userAgent,
@@ -37,4 +41,12 @@ public interface ExoMediaSourceInterceptListener {
             int readTimeoutMillis,
             Map<String, String> mapHeadData,
             boolean allowCrossProtocolRedirects);
+
+    /**
+     * 一般情况下返回 null 就可以了
+     * 如果 getMediaSource 不为 null ，此方法不会被调用
+     * 用于每次自定义自己的  {@link CacheDataSink}
+     * @return 返回不为空时，使用返回的自定义 Cache DataSink.Factory
+     */
+    DataSink.Factory cacheWriteDataSinkFactory(String CachePath, String url);
 }

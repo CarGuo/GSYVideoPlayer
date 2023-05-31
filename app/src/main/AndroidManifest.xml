@@ -201,6 +201,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Transitions" />
         <activity
+            android:name=".DetailDownloadExoPlayer"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Transitions" />
+        <activity
             android:name=".AudioDetailPlayer"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait"

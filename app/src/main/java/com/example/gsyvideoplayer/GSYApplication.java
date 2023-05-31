@@ -5,9 +5,11 @@ import androidx.multidex.MultiDexApplication;
 
 import com.example.gsyvideoplayer.exosource.GSYExoHttpDataSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.upstream.DataSink;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.shuyu.aliplay.AliPlayerManager;
+import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 
@@ -15,6 +17,7 @@ import java.io.File;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.exo2.ExoMediaSourceInterceptListener;
+import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager;
 import tv.danmaku.ijk.media.exo2.ExoSourceManager;
 
 /**
@@ -81,6 +84,11 @@ public class GSYApplication extends MultiDexApplication {
                         readTimeoutMillis, allowCrossProtocolRedirects);
                 factory.setDefaultRequestProperties(mapHeadData);
                 return factory;
+            }
+
+            @Override
+            public DataSink.Factory cacheWriteDataSinkFactory(String CachePath, String url) {
+                return null;
             }
         });
 

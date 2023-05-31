@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer;
 
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,51 +10,66 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.example.gsyvideoplayer.databinding.ActivityDetailDownloadPlayerBinding;
-import com.example.gsyvideoplayer.utils.MemoryCallBack;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.SeekParameters;
+import com.google.android.exoplayer2.upstream.cache.CacheWriter;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
-import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
+import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.request.RequestCall;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.Call;
+import tv.danmaku.ijk.media.exo2.CacheHelper;
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager;
 
 
-public class DetailDownloadPlayer extends AppCompatActivity {
+public class DetailDownloadExoPlayer extends AppCompatActivity {
 
     private boolean isPlay;
     private boolean isPause;
 
+    private CacheHelper cacheHelper = new CacheHelper();
     private OrientationUtils orientationUtils;
 
-    private HttpProxyCacheServer proxyCacheServer;
-    private RequestCall requestCall;
-
     private ActivityDetailDownloadPlayerBinding binding;
+
+    private File cachePath = new File(FileUtils.getTestPath());
+
+    private Map<String, String> header = new HashMap<>();
+
+
+    private String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDetailDownloadPlayerBinding.inflate(getLayoutInflater());
 
+        if (!(CacheFactory.getCacheManager() instanceof ExoPlayerCacheManager)) {
+            Toast.makeText(this, "只支持 Exo2PlayerManager 和 ExoPlayerCacheManager 模式", Toast.LENGTH_SHORT).show();
+
+        }
+        if (!(PlayerFactory.getPlayManager() instanceof Exo2PlayerManager)) {
+            Toast.makeText(this, "只支持 Exo2PlayerManager 和 ExoPlayerCacheManager 模式", Toast.LENGTH_SHORT).show();
+
+        }
+
+
         View rootView = binding.getRoot();
         setContentView(rootView);
-
-
-        String url = getUrl();
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -67,7 +83,6 @@ public class DetailDownloadPlayer extends AppCompatActivity {
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
 
-        Map<String, String> header = new HashMap<>();
         header.put("ee", "33");
         header.put("allowCrossProtocolRedirects", "true");
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
@@ -82,6 +97,7 @@ public class DetailDownloadPlayer extends AppCompatActivity {
             .setMapHeadData(header)
             .setCacheWithPlay(true)
             .setVideoTitle("测试视频")
+            .setCachePath(cachePath)
             .setVideoAllCallBack(new GSYSampleCallBack() {
                 @Override
                 public void onPrepared(String url, Object... objects) {
@@ -155,7 +171,7 @@ public class DetailDownloadPlayer extends AppCompatActivity {
                 orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                binding.detailPlayer.startWindowFullscreen(DetailDownloadPlayer.this, true, true);
+                binding.detailPlayer.startWindowFullscreen(DetailDownloadExoPlayer.this, true, true);
             }
         });
 
@@ -163,9 +179,7 @@ public class DetailDownloadPlayer extends AppCompatActivity {
         binding.startDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = proxyCacheServer.getProxyUrl(getUrl());
-                startDownload(url);
-
+                startDownload();
             }
         });
 
@@ -175,8 +189,6 @@ public class DetailDownloadPlayer extends AppCompatActivity {
                 stopDownload();
             }
         });
-
-        proxyCacheServer = ProxyCacheManager.instance().newProxy(getApplicationContext());
 
 
     }
@@ -250,41 +262,37 @@ public class DetailDownloadPlayer extends AppCompatActivity {
     }
 
 
-    private String getUrl() {
-
-        String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-
-        return url;
-    }
-
-    private void startDownload(String url) {
+    private void startDownload() {
         if (url == null || !url.startsWith("http")) {
             Toast.makeText(this, "URL 不是 Http 开头", Toast.LENGTH_SHORT).show();
             return;
         }
-        //下载demo然后设置
-        requestCall = OkHttpUtils.get().url(url)
-            .build();
-        requestCall.execute(new MemoryCallBack() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
+        if (!(CacheFactory.getCacheManager() instanceof ExoPlayerCacheManager)) {
+            Toast.makeText(this, "只支持 Exo2PlayerManager 和 ExoPlayerCacheManager 模式", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!(PlayerFactory.getPlayManager() instanceof Exo2PlayerManager)) {
+            Toast.makeText(this, "只支持 Exo2PlayerManager 和 ExoPlayerCacheManager 模式", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        new Thread(
+            () -> {
+                try {
+                    cacheHelper.preCacheVideo(getApplicationContext(), Uri.parse(url), cachePath,
+                        false, null, header, C.LENGTH_UNSET, new CacheWriter.ProgressListener() {
+                            @Override
+                            public void onProgress(long requestLength, long bytesCached, long newBytesCached) {
+                                Debuger.printfLog("#########", "requestLength " + requestLength + " bytesCached " + bytesCached + " newBytesCached  " + newBytesCached);
+                            }
+                        });
+                } catch (IOException e) {
+                   e.printStackTrace();
+                }
             }
-
-            @Override
-            public void onResponse(Boolean response, int id) {
-                stopDownload();
-            }
-
-        });
+        ).start();
     }
 
     private void stopDownload() {
-        if (requestCall != null) {
-            requestCall.cancel();
-            requestCall = null;
-        }
-        if (proxyCacheServer != null) {
-            proxyCacheServer.shutdown();
-        }
+        cacheHelper.cancel();
     }
 }
