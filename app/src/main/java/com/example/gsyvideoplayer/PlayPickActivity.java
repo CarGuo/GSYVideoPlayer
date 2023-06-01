@@ -11,11 +11,9 @@ import android.transition.Transition;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.gsyvideoplayer.databinding.ActivityPlayEmptyControlBinding;
 import com.example.gsyvideoplayer.databinding.ActivityPlayPickBinding;
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
-import com.example.gsyvideoplayer.video.SmartPickVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
@@ -147,7 +145,7 @@ public class PlayPickActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     finish();
-                    overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                    overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
                 }
             }, 500);
         }

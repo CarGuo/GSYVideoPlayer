@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
-import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewSimpleRender;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -42,7 +41,7 @@ public class GSYVideoGLViewCustomRender3 extends GSYVideoGLViewSimpleRender {
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         super.onSurfaceCreated(glUnused, config);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(mSurfaceView.getResources(), R.drawable.video_brightness_6_white_36dp);
+        Bitmap bitmap = BitmapFactory.decodeResource(mSurfaceView.getResources(), com.shuyu.gsyvideoplayer.R.drawable.video_brightness_6_white_36dp);
         //创建bitmap
         GLES20.glGenTextures(1, mTexturesBitmap, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexturesBitmap[0]);

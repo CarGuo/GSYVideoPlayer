@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 
-import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
@@ -201,15 +200,15 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivityContext());
-        builder.setMessage(getResources().getString(R.string.tips_not_wifi));
-        builder.setPositiveButton(getResources().getString(R.string.tips_not_wifi_confirm), new DialogInterface.OnClickListener() {
+        builder.setMessage(getResources().getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi));
+        builder.setPositiveButton(getResources().getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 startPlayLogic();
             }
         });
-        builder.setNegativeButton(getResources().getString(R.string.tips_not_wifi_cancel), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

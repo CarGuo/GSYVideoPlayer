@@ -31,7 +31,6 @@ import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
 import com.example.gsyvideoplayer.PlayEmptyControlActivity;
 import com.example.gsyvideoplayer.PlayPickActivity;
-import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.RecyclerView2Activity;
 import com.example.gsyvideoplayer.RecyclerView3Activity;
 import com.example.gsyvideoplayer.RecyclerViewActivity;
@@ -65,7 +64,7 @@ public class JumpUtils {
             ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
         } else {
             activity.startActivity(intent);
-            activity.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            activity.overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
         }
     }
 
@@ -85,7 +84,7 @@ public class JumpUtils {
             ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
         } else {
             activity.startActivity(intent);
-            activity.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            activity.overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
         }
     }
 
@@ -105,7 +104,7 @@ public class JumpUtils {
             ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
         } else {
             activity.startActivity(intent);
-            activity.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            activity.overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
         }
     }
 

@@ -86,7 +86,7 @@ public class PlayEmptyControlActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     finish();
-                    overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                    overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
                 }
             }, 500);
         }

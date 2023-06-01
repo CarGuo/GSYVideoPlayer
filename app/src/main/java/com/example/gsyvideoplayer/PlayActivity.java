@@ -14,11 +14,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 
-import com.example.gsyvideoplayer.databinding.ActivityListVideoBinding;
 import com.example.gsyvideoplayer.databinding.ActivityPlayBinding;
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
-import com.example.gsyvideoplayer.video.SampleVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
@@ -163,7 +161,7 @@ public class PlayActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     finish();
-                    overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                    overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
                 }
             }, 500);
         }

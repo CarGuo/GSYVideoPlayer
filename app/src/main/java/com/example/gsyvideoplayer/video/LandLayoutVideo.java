@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 /**
@@ -85,11 +83,11 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
             if (mStartButton instanceof ImageView) {
                 ImageView imageView = (ImageView) mStartButton;
                 if (mCurrentState == CURRENT_STATE_PLAYING) {
-                    imageView.setImageResource(R.drawable.video_click_pause_selector);
+                    imageView.setImageResource(com.shuyu.gsyvideoplayer.R.drawable.video_click_pause_selector);
                 } else if (mCurrentState == CURRENT_STATE_ERROR) {
-                    imageView.setImageResource(R.drawable.video_click_play_selector);
+                    imageView.setImageResource(com.shuyu.gsyvideoplayer.R.drawable.video_click_play_selector);
                 } else {
-                    imageView.setImageResource(R.drawable.video_click_play_selector);
+                    imageView.setImageResource(com.shuyu.gsyvideoplayer.R.drawable.video_click_play_selector);
                 }
             }
         } else {
