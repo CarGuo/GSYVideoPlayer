@@ -85,6 +85,12 @@ public static ** valueOf(java.lang.String);
     public void *(android.webkit.webView, jav.lang.String);
 }
 
+# OKHttp
+-dontwarn okhttp3.internal.platform.**
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
+
 
 # ButterKnife
 -keep class butterknife.** { *; }
@@ -105,6 +111,12 @@ public static ** valueOf(java.lang.String);
 }
 
 
+
+
+
+
+
+
 # 保留我们自定义控件（继承自View）不被混淆
 -keep public class * extends android.view.View{
     *** get*();
@@ -123,3 +135,13 @@ public static ** valueOf(java.lang.String);
 -dontwarn tv.danmaku.ijk.**
 -keep class com.google.android.exoplayer2.** {*;}
 -keep interface com.google.android.exoplayer2.**
+
+-keep class com.shuyu.alipay.** {*;}
+-keep interface com.shuyu.alipay.**
+
+-keep class com.alivc.**{*;}
+-keep class com.aliyun.**{*;}
+-keep class com.cicada.**{*;}
+-dontwarn com.alivc.**
+-dontwarn com.aliyun.**
+-dontwarn com.cicada.**
