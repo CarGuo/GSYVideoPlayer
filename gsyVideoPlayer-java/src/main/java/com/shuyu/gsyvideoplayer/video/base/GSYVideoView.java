@@ -691,7 +691,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             setStateAndUi(CURRENT_STATE_ERROR);
             deleteCacheFileWhenError();
             if (mVideoAllCallBack != null) {
-                mVideoAllCallBack.onPlayError(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onPlayError(mOriginUrl, mTitle, this, what, extra);
             }
         }
     }

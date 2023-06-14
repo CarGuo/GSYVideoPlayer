@@ -603,7 +603,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     @Override
     public void onPlayerError(@NonNull PlaybackException error) {
-        notifyOnError(IMediaPlayer.MEDIA_ERROR_UNKNOWN, IMediaPlayer.MEDIA_ERROR_UNKNOWN);
+        notifyOnError(error.errorCode, IMediaPlayer.MEDIA_ERROR_UNKNOWN);
     }
 
     @Override

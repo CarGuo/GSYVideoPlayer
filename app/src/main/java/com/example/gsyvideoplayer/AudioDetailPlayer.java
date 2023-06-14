@@ -222,6 +222,8 @@ public class AudioDetailPlayer extends AppCompatActivity {
         ///exo raw 支持
         //String url =  RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
 
+
+        //return "https://oss.nbs.cn/M00/22/E4/wKhkDmPZ1uSAJWFwAlYRLUW4gK0892.mp3";
         return url;
     }
 }

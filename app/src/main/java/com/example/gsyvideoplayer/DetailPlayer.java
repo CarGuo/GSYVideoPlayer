@@ -1,15 +1,19 @@
 package com.example.gsyvideoplayer;
 
+import static com.google.android.exoplayer2.PlaybackException.*;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailPlayerBinding;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -223,6 +228,125 @@ public class DetailPlayer extends AppCompatActivity {
                         orientationUtils.backToProtVideo();
                     }
                 }
+
+                @Override
+                public void onPlayError(String url, Object... objects) {
+                    super.onPlayError(url, objects);
+                    if (objects[2] != null && binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                        Debuger.printfError("#######################");
+                        int code = ((int) objects[2]);
+                        String errorStatus = "****";
+                        switch (code) {
+                            case ERROR_CODE_UNSPECIFIED:
+                                errorStatus = "ERROR_CODE_UNSPECIFIED";
+                                break;
+                            case ERROR_CODE_REMOTE_ERROR:
+                                errorStatus = "ERROR_CODE_REMOTE_ERROR";
+                                break;
+                            case ERROR_CODE_BEHIND_LIVE_WINDOW:
+                                errorStatus = "ERROR_CODE_BEHIND_LIVE_WINDOW";
+                                break;
+                            case ERROR_CODE_TIMEOUT:
+                                errorStatus = "ERROR_CODE_TIMEOUT";
+                                break;
+                            case ERROR_CODE_FAILED_RUNTIME_CHECK:
+                                errorStatus = "ERROR_CODE_FAILED_RUNTIME_CHECK";
+                                break;
+                            case ERROR_CODE_IO_UNSPECIFIED:
+                                errorStatus = "ERROR_CODE_IO_UNSPECIFIED";
+                                break;
+                            case ERROR_CODE_IO_NETWORK_CONNECTION_FAILED:
+                                errorStatus = "ERROR_CODE_IO_NETWORK_CONNECTION_FAILED";
+                                break;
+                            case ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT:
+                                errorStatus = "ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT";
+                                break;
+                            case ERROR_CODE_IO_INVALID_HTTP_CONTENT_TYPE:
+                                errorStatus = "ERROR_CODE_IO_INVALID_HTTP_CONTENT_TYPE";
+                                break;
+                            case ERROR_CODE_IO_BAD_HTTP_STATUS:
+                                errorStatus = "ERROR_CODE_IO_BAD_HTTP_STATUS";
+                                break;
+                            case ERROR_CODE_IO_FILE_NOT_FOUND:
+                                errorStatus = "ERROR_CODE_IO_FILE_NOT_FOUND";
+                                break;
+                            case ERROR_CODE_IO_NO_PERMISSION:
+                                errorStatus = "ERROR_CODE_IO_NO_PERMISSION";
+                                break;
+                            case ERROR_CODE_IO_CLEARTEXT_NOT_PERMITTED:
+                                errorStatus = "ERROR_CODE_IO_CLEARTEXT_NOT_PERMITTED";
+                                break;
+                            case ERROR_CODE_IO_READ_POSITION_OUT_OF_RANGE:
+                                errorStatus = "ERROR_CODE_IO_READ_POSITION_OUT_OF_RANGE";
+                                break;
+                            case ERROR_CODE_PARSING_CONTAINER_MALFORMED:
+                                errorStatus = "ERROR_CODE_PARSING_CONTAINER_MALFORMED";
+                                break;
+                            case ERROR_CODE_PARSING_MANIFEST_MALFORMED:
+                                errorStatus = "ERROR_CODE_PARSING_MANIFEST_MALFORMED";
+                                break;
+                            case ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED:
+                                errorStatus = "ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED";
+                                break;
+                            case ERROR_CODE_PARSING_MANIFEST_UNSUPPORTED:
+                                errorStatus = "ERROR_CODE_PARSING_MANIFEST_UNSUPPORTED";
+                                break;
+                            case ERROR_CODE_DECODER_INIT_FAILED:
+                                errorStatus = "ERROR_CODE_DECODER_INIT_FAILED";
+                                break;
+                            case ERROR_CODE_DECODER_QUERY_FAILED:
+                                errorStatus = "ERROR_CODE_DECODER_QUERY_FAILED";
+                                break;
+                            case ERROR_CODE_DECODING_FAILED:
+                                errorStatus = "ERROR_CODE_DECODING_FAILED";
+                                break;
+                            case ERROR_CODE_DECODING_FORMAT_EXCEEDS_CAPABILITIES:
+                                errorStatus = "ERROR_CODE_DECODING_FORMAT_EXCEEDS_CAPABILITIES";
+                                break;
+                            case ERROR_CODE_DECODING_FORMAT_UNSUPPORTED:
+                                errorStatus = "ERROR_CODE_DECODING_FORMAT_UNSUPPORTED";
+                                break;
+                            case ERROR_CODE_AUDIO_TRACK_INIT_FAILED:
+                                errorStatus = "ERROR_CODE_AUDIO_TRACK_INIT_FAILED";
+                                break;
+                            case ERROR_CODE_AUDIO_TRACK_WRITE_FAILED:
+                                errorStatus = "ERROR_CODE_AUDIO_TRACK_WRITE_FAILED";
+                                break;
+                            case ERROR_CODE_DRM_UNSPECIFIED:
+                                errorStatus = "ERROR_CODE_DRM_UNSPECIFIED";
+                                break;
+                            case ERROR_CODE_DRM_SCHEME_UNSUPPORTED:
+                                errorStatus = "ERROR_CODE_DRM_SCHEME_UNSUPPORTED";
+                                break;
+                            case ERROR_CODE_DRM_PROVISIONING_FAILED:
+                                errorStatus = "ERROR_CODE_DRM_PROVISIONING_FAILED";
+                                break;
+                            case ERROR_CODE_DRM_CONTENT_ERROR:
+                                errorStatus = "ERROR_CODE_DRM_CONTENT_ERROR";
+                                break;
+                            case ERROR_CODE_DRM_LICENSE_ACQUISITION_FAILED:
+                                errorStatus = "ERROR_CODE_DRM_LICENSE_ACQUISITION_FAILED";
+                                break;
+                            case ERROR_CODE_DRM_DISALLOWED_OPERATION:
+                                errorStatus = "ERROR_CODE_DRM_DISALLOWED_OPERATION";
+                                break;
+                            case ERROR_CODE_DRM_SYSTEM_ERROR:
+                                errorStatus = "ERROR_CODE_DRM_SYSTEM_ERROR";
+                                break;
+                            case ERROR_CODE_DRM_DEVICE_REVOKED:
+                                errorStatus = "ERROR_CODE_DRM_DEVICE_REVOKED";
+                                break;
+                            case ERROR_CODE_DRM_LICENSE_EXPIRED:
+                                errorStatus = "ERROR_CODE_DRM_LICENSE_EXPIRED";
+                                break;
+                            case CUSTOM_ERROR_CODE_BASE:
+                                errorStatus = "CUSTOM_ERROR_CODE_BASE";
+                                break;
+                        }
+                        Debuger.printfError(errorStatus);
+                        Debuger.printfError("#######################");
+                    }
+                }
             })
             .setLockClickListener(new LockClickListener() {
                 @Override
@@ -283,7 +407,7 @@ public class DetailPlayer extends AppCompatActivity {
                                 } else {
                                     index = 0;
                                 }
-                                if(rendererTrackGroups.length <= 1) {
+                                if (rendererTrackGroups.length <= 1) {
                                     return;
                                 }
                                 TrackGroup trackGroup = rendererTrackGroups.get(index);
@@ -380,7 +504,6 @@ public class DetailPlayer extends AppCompatActivity {
         ///exo raw 支持
 
 
-
         ///exo raw 支持
         ///String url =  "assets:///test1.mp4";
 
@@ -392,7 +515,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"; // new mp4
         //String url = "https://video.xintujing.cn/d0f2f304vodtranscq1251091601/e27f66955285890796832323682/v.f230.m3u8";
-        String url = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        String url = "http://devimages.-apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
         //String url = "http://las-tech.org.cn/kwai/las-test_ld500d.flv";//flv 直播
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
         //String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/out2.m3u8";
