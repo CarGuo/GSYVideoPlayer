@@ -17,16 +17,14 @@ package com.example.gsyvideoplayer.exosource;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.media3.datasource.HttpDataSource;
+import androidx.media3.datasource.TransferListener;
 
-import com.google.android.exoplayer2.upstream.HttpDataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
-import com.google.android.exoplayer2.upstream.HttpDataSource.Factory;
-import com.google.android.exoplayer2.upstream.TransferListener;
 
 /**
  A {@link Factory} that produces {@link GSYDefaultHttpDataSource} instances.
  */
-public final class GSYExoHttpDataSourceFactory extends BaseFactory {
+public final class GSYExoHttpDataSourceFactory extends HttpDataSource.BaseFactory {
 
     private final String userAgent;
     private final @Nullable

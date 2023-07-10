@@ -8,9 +8,9 @@ import android.os.Message;
 import android.view.Surface;
 
 import androidx.annotation.Nullable;
+import androidx.media3.exoplayer.SeekParameters;
+import androidx.media3.exoplayer.video.PlaceholderSurface;
 
-import com.google.android.exoplayer2.SeekParameters;
-import com.google.android.exoplayer2.video.PlaceholderSurface;
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;

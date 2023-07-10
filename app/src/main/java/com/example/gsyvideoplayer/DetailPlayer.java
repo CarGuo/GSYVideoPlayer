@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer;
 
-import static com.google.android.exoplayer2.PlaybackException.*;
+
+import static androidx.media3.common.PlaybackException.*;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,18 +19,16 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.media3.common.C;
+import androidx.media3.common.TrackGroup;
+import androidx.media3.common.TrackSelectionOverride;
+import androidx.media3.common.TrackSelectionParameters;
+import androidx.media3.exoplayer.SeekParameters;
+import androidx.media3.exoplayer.source.TrackGroupArray;
+import androidx.media3.exoplayer.trackselection.MappingTrackSelector;
+import androidx.media3.exoplayer.trackselection.TrackSelector;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailPlayerBinding;
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.SeekParameters;
-import com.google.android.exoplayer2.source.TrackGroup;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
-import com.google.android.exoplayer2.trackselection.TrackSelectionParameters;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.common.collect.ImmutableList;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -515,16 +514,10 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"; // new mp4
         //String url = "https://video.xintujing.cn/d0f2f304vodtranscq1251091601/e27f66955285890796832323682/v.f230.m3u8";
-        String url = "http://devimages.-apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        //String url = "https://teamcircle-test.s3.amazonaws.com/public/cbbe6181a0414339b8c20527741d3dd6.mp4";
         //String url = "http://las-tech.org.cn/kwai/las-test_ld500d.flv";//flv 直播
         //String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
-        //String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/out2.m3u8";
-        //String url = "http://223.110.243.138/PLTV/2510088/224/3221227177/index.m3u8";
-        //String url = "http://qiniu.carmmi.com/image/132451525666042.mp4";
-        //String url = "http://ucp.wn.sunmath.cn/file-upload/gYQJHxK9iNQKJeWyS/V80418-103803.mp4?rc_uid=7sCFCGoaF2iTc9vH9&rc_token=prJK-xGutKmy2LDQO-OZASjob0o1u_s3e5SgMHmgjtn";
-        //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
-        //String url = "file://"+ Environment.getExternalStorageDirectory().getPath() + "Download/132451525666042.mp4";
-
+        //String url = "http://hjq-1257036536.cos.ap-shanghai.myqcloud.com/m3u8/m1/oxcdes
         //String url =  "http://ipsimg-huabei2.speiyou.cn/010/video/other/20180427/40288b156241ec6301624243bdf7021e/40288b156290270d0162a3e7eb2e0726/1524814477/movie.mp4";
         //String url =  "http://ipsimg-huabei2.speiyou.cn/010/video/other/20180424/40288b156290270d0162a3db8cdd033e/40288b156290270d0162a3e8207f074f/e787a64c-f2d0-48fe-896d-246af05f111a.mp4";
 
@@ -568,6 +561,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
         //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
+        String url = "http://dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221226395/1.m3u8";//90度
         //String url = " String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://video.cdn.aizys.com/zzx3.9g.mkv";//long
         //String url = "rtsp://admin:wh123456@112.44.163.248:554/h264/ch01/main/av_stream";//long

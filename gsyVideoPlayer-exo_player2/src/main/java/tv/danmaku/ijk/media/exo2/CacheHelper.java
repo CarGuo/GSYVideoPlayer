@@ -23,13 +23,13 @@ import static tv.danmaku.ijk.media.exo2.ExoSourceManager.getHttpDataSourceFactor
 import android.content.Context;
 import android.net.Uri;
 
-import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
-import com.google.android.exoplayer2.offline.DownloadManager;
-import com.google.android.exoplayer2.offline.DownloadRequest;
-import com.google.android.exoplayer2.upstream.DataSpec;
-import com.google.android.exoplayer2.upstream.cache.Cache;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.upstream.cache.CacheWriter;
+import androidx.media3.database.StandaloneDatabaseProvider;
+import androidx.media3.datasource.DataSpec;
+import androidx.media3.datasource.cache.Cache;
+import androidx.media3.datasource.cache.CacheDataSource;
+import androidx.media3.datasource.cache.CacheWriter;
+import androidx.media3.exoplayer.offline.DownloadManager;
+import androidx.media3.exoplayer.offline.DownloadRequest;
 
 import java.io.File;
 import java.io.IOException;
