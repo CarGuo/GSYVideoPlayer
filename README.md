@@ -291,7 +291,7 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 }
 ```
 
-如果是阿里云播放器，可以参考它的文档（https://help.aliyun.com/document_detail/124711.html?spm=a2c4g.124711.0.0.7fa0125dkwUPoU），需要新增一些 keep 规则：
+如果是阿里云播放器，可以参考它的文档（ https://help.aliyun.com/document_detail/124711.html?spm=a2c4g.124711.0.0.7fa0125dkwUPoU ），需要新增一些 keep 规则：
 
 ```
 -keep class com.alivc.**{*;}
