@@ -243,18 +243,6 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 * fix  #3798
 
 
-### v8.3.5-release-jitpack (2023-03-15)
-* update exo 2.18.4
-* fix #3773
-* fix #3756
-* fix #3683
-
-### v8.3.4-release-jitpack (2022-09-01)
-* update exo 2.18.1
-* fix #3673
-* fix #3677
-* fix #3676
-
 
 ### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
 
