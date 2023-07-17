@@ -1,5 +1,14 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+###  v8.4.0-release-jitpack (2023-07-17)
+* update exoplayer to androidx media
+* fix #3824 with ExoPlaybackException
+* update aliyun sdk version
+* fix AGP8
+* support exoplayer file sink
+* fix  #3798
+
+
 ### v8.3.5-release-jitpack (2023-03-15)
 * update exo 2.18.4
 * fix #3773
