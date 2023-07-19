@@ -192,7 +192,7 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 文档 | 传送门
 -------- | ---
 **使用说明**|***[--- 简单使用，快速上手文档](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/USE.md)***
-**建议阅读**|***[--- 移动开发者必知的音视频基础知识](https://mp.weixin.qq.com/s/HjSdmAsHuvixCH_EWdvk3Q)***
+**建议阅读**|***[--- 移动开发者必知的音视频基础知识1](https://juejin.cn/post/7057132141875822622)、[--- 移动开发者必知的音视频基础知识2](https://mp.weixin.qq.com/s/HjSdmAsHuvixCH_EWdvk3Q)***
 **项目解析说明**|***[--- 项目解析说明、包含项目架构和解析](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/GSYVIDEO_PLAYER_PROJECT_INFO.md)***
 接口文档入口|**[--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)**
 **问题集锦入口**|***[--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/QUESTION.md)***
