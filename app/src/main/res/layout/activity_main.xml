@@ -130,6 +130,13 @@
 
 
         <Button
+            android:id="@+id/tv_play"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="TV机顶盒播放器" />
+
+        <Button
             android:id="@+id/web_detail"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
