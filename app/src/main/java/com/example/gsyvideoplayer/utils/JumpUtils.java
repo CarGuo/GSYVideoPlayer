@@ -31,6 +31,7 @@ import com.example.gsyvideoplayer.ListVideoActivity;
 import com.example.gsyvideoplayer.PlayActivity;
 import com.example.gsyvideoplayer.PlayEmptyControlActivity;
 import com.example.gsyvideoplayer.PlayPickActivity;
+import com.example.gsyvideoplayer.PlayTVActivity;
 import com.example.gsyvideoplayer.RecyclerView2Activity;
 import com.example.gsyvideoplayer.RecyclerView3Activity;
 import com.example.gsyvideoplayer.RecyclerViewActivity;
@@ -68,6 +69,25 @@ public class JumpUtils {
         }
     }
 
+    /**
+     * 跳转到视频播放
+     *
+     * @param activity
+     * @param view
+     */
+    public static void goToTVVideoPlayer(Activity activity, View view) {
+        Intent intent = new Intent(activity, PlayTVActivity.class);
+        intent.putExtra(PlayTVActivity.TRANSITION, true);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Pair pair = new Pair<>(view, PlayTVActivity.IMG_TRANSITION);
+            ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                activity, pair);
+            ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+        } else {
+            activity.startActivity(intent);
+            activity.overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
+        }
+    }
     /**
      * 跳转到视频播放
      *

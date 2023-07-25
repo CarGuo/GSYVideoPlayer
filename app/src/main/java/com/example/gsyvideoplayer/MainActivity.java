@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.viewPager2Activity.setOnClickListener(this);
         binding.changeCache.setOnClickListener(this);
         binding.detailDownloadExoActivity.setOnClickListener(this);
-
+        binding.tvPlay.setOnClickListener(this);
 
         boolean hadPermission = PermissionUtils.hasSelfPermissions(this, permissions);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hadPermission) {
@@ -258,6 +258,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 GSYVideoManager.instance().clearAllDefaultCache(MainActivity.this);
                 //String url = "https://res.exexm.com/cw_145225549855002";
                 //GSYVideoManager.clearDefaultCache(MainActivity.this, url);
+                break;
+            case R.id.tv_play:
+                JumpUtils.goToTVVideoPlayer(this,binding.tvPlay);
                 break;
         }
     }
