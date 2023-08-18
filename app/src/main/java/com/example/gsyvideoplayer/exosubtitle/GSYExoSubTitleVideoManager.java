@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.text.TextOutput;
 import com.shuyu.gsyvideoplayer.GSYVideoBaseManager;
 import com.shuyu.gsyvideoplayer.player.IPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -19,6 +17,8 @@ import java.io.File;
 import java.util.Map;
 
 import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
+
+import androidx.media3.common.Player;
 
 public class GSYExoSubTitleVideoManager extends GSYVideoBaseManager {
 

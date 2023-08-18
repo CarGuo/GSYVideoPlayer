@@ -1,13 +1,11 @@
 package tv.danmaku.ijk.media.exo2;
 
 import androidx.annotation.Nullable;
+import androidx.media3.datasource.DataSink;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.TransferListener;
+import androidx.media3.exoplayer.source.MediaSource;
 
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.upstream.DataSink;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
-import com.google.android.exoplayer2.upstream.TransferListener;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSink;
 
 import java.io.File;
 import java.util.Map;

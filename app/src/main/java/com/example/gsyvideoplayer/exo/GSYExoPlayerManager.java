@@ -5,7 +5,8 @@ import android.media.AudioManager;
 import android.os.Message;
 import android.view.Surface;
 
-import com.google.android.exoplayer2.video.PlaceholderSurface;
+import androidx.media3.exoplayer.video.PlaceholderSurface;
+
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.BasePlayerManager;

@@ -1,25 +1,25 @@
 
 ![](./img/home_logo.png)
 
-## 支持 [IJKPlayer](https://github.com/Bilibili/ijkplayer) EXOPlayer2、MediaPlayer、AliPlayer，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
+## 支持 [IJKPlayer](https://github.com/Bilibili/ijkplayer)、 Media3(EXOPlayer2)、MediaPlayer、AliPlayer，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
 > ## [如果克隆太慢或者图片看不到，可尝试从码云地址下载](https://gitee.com/CarGuo/GSYVideoPlayer)
 
 类型 | 功能
 -------- | ---
-**缓存**|**边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)；ExoPlayer使用SimpleCache。**
+**缓存**|**边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)；Media3(ExoPlayer)使用SimpleCache。**
 **协议**|**h263\4\5、Https、concat、rtsp、hls、rtmp、crypto、mpeg等等。[（ijk模式格式支持）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DECODERS.md)**
 **滤镜**|**简单滤镜（马赛克、黑白、色彩过滤、高斯、模糊、模糊等等20多种）、动画、（水印、画面多重播放等）。**
 **帧图**|**视频第一帧、视频帧截图功能，视频生成gif功能。**
 **播放**|**列表播放、列表连续播放、重力旋转与手动旋转、视频本身rotation旋转属性、快播和慢播、网络视频加载速度。**
 **画面**|**调整显示比例:默认、16:9、4:3、填充；播放时旋转画面角度（0,90,180,270）；镜像旋转。**
-**内核**|**IJKPlayer、EXOPlayer、MediaPlayer、AliPlayer切换、自定义内核**
+**内核**|**IJKPlayer、Media3(EXOPlayer)、MediaPlayer、AliPlayer切换、自定义内核**
 **布局**|**全屏与非全屏两套布局切换、没有任何操作控件的纯播放支持、弹幕功能、继承自定义任何布局。**
 **播放**|**单例播放、多个同时播放、视频列表滑动自动播放、列表切换详情页面无缝播放。**
 **窗口**|**小窗口、多窗体下（包括桌面）的小窗口播放。**
 **广告**|**片头广告、跳过广告支持、中间插入广告功能。**
-**字幕**|**[exo2模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)。**
-**dash**|**exo2 模式支持dash**
+**字幕**|**[media3(exo2)模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)。**
+**dash**|**media3(exo2) 模式支持dash**
 **stream**|**支持元数据播放**
 **更多**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持；锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **自定义**|**可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
@@ -46,7 +46,7 @@
 
 ## 一、使用依赖
 
-#### 7.0 版本开始使用了anndroidx，support版本请看6.x.x，请查看：[--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
+#### [--- 版本更新说明 --- ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
 
 
 ### 1、Jitpack 引入方法（推荐， JCenter 即将关闭）
@@ -69,30 +69,30 @@ allprojects {
 #### A、直接引入
 ```
  //完整版引入
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.4.0-release-jitpack'
 
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.4.0-release-jitpack'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.4.0-release-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.4.0-release-jitpack'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.4.0-release-jitpack'
 
  //根据你的需求ijk模式的so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.3.5-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.3.5-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.3.5-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.3.5-release-jitpack'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.4.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.4.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.4.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.4.0-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.4.0-release-jitpack'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
@@ -101,16 +101,16 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.4.0-release-jitpack'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.4.0-release-jitpack'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-aliplay:v8.4.0-release-jitpack'
 
  //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.3.5-release-jitpack'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v8.4.0-release-jitpack'
 
 ```
 
@@ -192,7 +192,7 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 文档 | 传送门
 -------- | ---
 **使用说明**|***[--- 简单使用，快速上手文档](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/USE.md)***
-**建议阅读**|***[--- 移动开发者必知的音视频基础知识](https://mp.weixin.qq.com/s/HjSdmAsHuvixCH_EWdvk3Q)***
+**建议阅读**|***[--- 移动开发者必知的音视频基础知识1](https://juejin.cn/post/7057132141875822622)、[--- 移动开发者必知的音视频基础知识2](https://mp.weixin.qq.com/s/HjSdmAsHuvixCH_EWdvk3Q)***
 **项目解析说明**|***[--- 项目解析说明、包含项目架构和解析](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/GSYVIDEO_PLAYER_PROJECT_INFO.md)***
 接口文档入口|**[--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)**
 **问题集锦入口**|***[--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/QUESTION.md)***
@@ -234,17 +234,14 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 
 ## 五、近期版本
 
-### v8.3.5-release-jitpack (2023-03-15)
-* update exo 2.18.4
-* fix #3773
-* fix #3756
-* fix #3683
+###  v8.4.0-release-jitpack (2023-07-17)
+* update exoplayer to androidx media
+* fix #3824 with ExoPlaybackException
+* update aliyun sdk version
+* fix AGP8
+* support exoplayer file sink
+* fix  #3798
 
-### v8.3.4-release-jitpack (2022-09-01)
-* update exo 2.18.1
-* fix #3673
-* fix #3677
-* fix #3676
 
 
 ### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
@@ -275,8 +272,8 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 -dontwarn com.shuyu.gsyvideoplayer.utils.**
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
--keep class com.google.android.exoplayer2.** {*;}
--keep interface com.google.android.exoplayer2.**
+-keep class androidx.media3.** {*;}
+-keep interface androidx.media3.**
 
 -keep class com.shuyu.alipay.** {*;}
 -keep interface com.shuyu.alipay.**
@@ -291,7 +288,7 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 }
 ```
 
-如果是阿里云播放器，可以参考它的文档（https://help.aliyun.com/document_detail/124711.html?spm=a2c4g.124711.0.0.7fa0125dkwUPoU），需要新增一些 keep 规则：
+如果是阿里云播放器，可以参考它的文档（ https://help.aliyun.com/document_detail/124711.html?spm=a2c4g.124711.0.0.7fa0125dkwUPoU ），需要新增一些 keep 规则：
 
 ```
 -keep class com.alivc.**{*;}

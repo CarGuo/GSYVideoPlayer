@@ -1,8 +1,9 @@
 package com.example.gsyvideoplayer.utils;
 
 
-import com.google.android.exoplayer2.upstream.DataSink;
-import com.google.android.exoplayer2.upstream.DataSpec;
+
+import androidx.media3.datasource.DataSink;
+import androidx.media3.datasource.DataSpec;
 
 import java.io.File;
 import java.io.FileOutputStream;

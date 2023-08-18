@@ -2,7 +2,7 @@ ext {
     gsyVideoVersion = "v8.3.0-release-jitpack"
     danmakuFlameMasterSoVersion = "0.9.25"
     glideVersion = "4.12.0"
-    exoPlayerVersion = "2.18.7"
+    mediaVersion = "1.1.0"
     permissionsDispatcherVersion = "4.9.1"
 
     androidDependencies = [
@@ -36,10 +36,17 @@ ext {
             "com.github.bumptech.glide:glide:${glideVersion}",
             "com.github.bumptech.glide:okhttp3-integration:$glideVersion"
         ],
-        exoPlayer2           : [
-            "com.google.android.exoplayer:exoplayer:${exoPlayerVersion}",
-            "com.google.android.exoplayer:extension-rtmp:${exoPlayerVersion}",
-            "com.google.android.exoplayer:exoplayer-rtsp:${exoPlayerVersion}"
+        media           : [
+            "androidx.media3:media3-exoplayer:${mediaVersion}",
+            "androidx.media3:media3-exoplayer-dash:${mediaVersion}",
+            "androidx.media3:media3-exoplayer-hls:${mediaVersion}",
+            "androidx.media3:media3-exoplayer-rtsp:${mediaVersion}",
+            "androidx.media3:media3-datasource-rtmp:${mediaVersion}",
+            "androidx.media3:media3-session:${mediaVersion}",
+            "androidx.media3:media3-extractor:${mediaVersion}",
+            "androidx.media3:media3-cast:${mediaVersion}",
+            "androidx.media3:media3-exoplayer-smoothstreaming:${mediaVersion}",
+            "androidx.media3:media3-ui:${mediaVersion}",
         ],
         aliplay:  [
             "com.aliyun.sdk.android:AliyunPlayer:5.5.6.0-full"

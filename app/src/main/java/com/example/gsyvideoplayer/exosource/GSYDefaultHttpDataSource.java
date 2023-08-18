@@ -15,7 +15,7 @@
  */
 package com.example.gsyvideoplayer.exosource;
 
-import static com.google.android.exoplayer2.ExoPlayerLibraryInfo.VERSION_SLASHY;
+import static androidx.media3.common.MediaLibraryInfo.VERSION_SLASHY;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -26,18 +26,15 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.upstream.BaseDataSource;
-import com.google.android.exoplayer2.upstream.DataSourceException;
-import com.google.android.exoplayer2.upstream.DataSpec;
-import com.google.android.exoplayer2.upstream.DataSpec.HttpMethod;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
-import com.google.android.exoplayer2.util.Assertions;
-import com.google.android.exoplayer2.util.Log;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.C;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.util.Assertions;
+import androidx.media3.common.util.Log;
+import androidx.media3.common.util.Util;
+import androidx.media3.datasource.BaseDataSource;
+import androidx.media3.datasource.DataSourceException;
+import androidx.media3.datasource.DataSpec;
+import androidx.media3.datasource.HttpDataSource;
 import com.google.common.base.Predicate;
 
 import java.io.EOFException;
@@ -502,7 +499,7 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
      */
     private HttpURLConnection makeConnection(DataSpec dataSpec) throws IOException {
         URL url = new URL(dataSpec.uri.toString());
-        @HttpMethod int httpMethod = dataSpec.httpMethod;
+        @DataSpec.HttpMethod int httpMethod = dataSpec.httpMethod;
         @Nullable byte[] httpBody = dataSpec.httpBody;
         long position = dataSpec.position;
         long length = dataSpec.length;
@@ -580,7 +577,7 @@ public class GSYDefaultHttpDataSource extends BaseDataSource implements HttpData
      */
     private HttpURLConnection makeConnection(
         URL url,
-        @HttpMethod int httpMethod,
+        @DataSpec.HttpMethod int httpMethod,
         @Nullable byte[] httpBody,
         long position,
         long length,

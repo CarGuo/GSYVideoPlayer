@@ -8,11 +8,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.media3.exoplayer.SeekParameters;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.example.gsyvideoplayer.databinding.ActivityDetailDownloadPlayerBinding;
 import com.example.gsyvideoplayer.utils.MemoryCallBack;
-import com.google.android.exoplayer2.SeekParameters;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;

@@ -243,7 +243,7 @@ public class TvVideoPlayer extends NormalGSYVideoPlayer {
         if (mSeekTimePosition >= getDuration() || isPlayComplete) {
             mHandler.sendEmptyMessageDelayed(CANCLE, 1500);
             mBottomContainer.setVisibility(GONE);
-        } else {
+        }  else {
             mChangePosition = true;
             touchSurfaceMove(moveX - pointX, 0, pointY);
             mBottomContainer.setVisibility(VISIBLE);

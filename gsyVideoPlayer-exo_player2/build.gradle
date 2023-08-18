@@ -6,6 +6,6 @@ android {
 }
 
 dependencies {
-    api viewDependencies.exoPlayer2
+    api viewDependencies.media
     api project(":gsyVideoPlayer-base")
 }

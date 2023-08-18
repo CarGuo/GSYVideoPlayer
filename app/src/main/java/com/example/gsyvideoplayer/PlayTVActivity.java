@@ -196,7 +196,7 @@ public class PlayTVActivity extends AppCompatActivity {
         }
         return false;
     }
-
+  
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         binding.videoPlayerTv.onKeyDown(keyCode,event);
