@@ -40,7 +40,7 @@
         <activity
             android:name=".PlayTVActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".ListVideoActivity"

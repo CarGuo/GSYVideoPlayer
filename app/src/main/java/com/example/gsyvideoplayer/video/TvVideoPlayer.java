@@ -27,16 +27,19 @@ public class TvVideoPlayer extends NormalGSYVideoPlayer {
     public TvVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
         initHandler();
+        getDisplay(context);
     }
 
     public TvVideoPlayer(Context context) {
         super(context);
         initHandler();
+        getDisplay(context);
     }
 
     public TvVideoPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         initHandler();
+        getDisplay(context);
     }
 
     private Handler mHandler;
@@ -163,14 +166,14 @@ public class TvVideoPlayer extends NormalGSYVideoPlayer {
                 onClickUi();
                 firstKeyDown();
                 mHandler.sendEmptyMessage(LEFT);
-                mHandler.sendEmptyMessageDelayed(CANCLE, 2500);
+                mHandler.sendEmptyMessageDelayed(CANCLE, 1500);
                 resetTime();
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 onClickUi();
                 firstKeyDown();
                 mHandler.sendEmptyMessage(RIGHT);
-                mHandler.sendEmptyMessageDelayed(CANCLE, 2500);
+                mHandler.sendEmptyMessageDelayed(CANCLE, 1500);
                 resetTime();
                 break;
             case KeyEvent.KEYCODE_DPAD_CENTER:
@@ -238,9 +241,10 @@ public class TvVideoPlayer extends NormalGSYVideoPlayer {
             }
         }
         if (mSeekTimePosition >= getDuration() || isPlayComplete) {
-            mHandler.sendEmptyMessageDelayed(CANCLE, 2500);
+            mHandler.sendEmptyMessageDelayed(CANCLE, 1500);
             mBottomContainer.setVisibility(GONE);
-        } else {
+        }  else {
+            mChangePosition = true;
             touchSurfaceMove(moveX - pointX, 0, pointY);
             mBottomContainer.setVisibility(VISIBLE);
             onProgressChanged(mProgressBar, (int) (mSeekTimePosition * 100 / getDuration()), true);
@@ -309,7 +313,7 @@ public class TvVideoPlayer extends NormalGSYVideoPlayer {
     //重置
     public void resetTime() {
         mHandler.removeMessages(CANCLE);
-        mHandler.sendEmptyMessageDelayed(CANCLE, 2500);
+        mHandler.sendEmptyMessageDelayed(CANCLE, 1500);
     }
 
     @Override
