@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Transition;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -196,4 +197,9 @@ public class PlayTVActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        binding.videoPlayerTv.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
+    }
 }
