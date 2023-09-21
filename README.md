@@ -1,7 +1,7 @@
 
 ![](./img/home_logo.png)
 
-## 支持 [IJKPlayer](https://github.com/Bilibili/ijkplayer)、 Media3(EXOPlayer2)、MediaPlayer、AliPlayer，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
+## 支持 [IJKPlayer](https://github.com/Bilibili/ijkplayer)、 [Media3(EXOPlayer2)](https://github.com/androidx/media)、MediaPlayer、AliPlayer，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
 > ## [如果克隆太慢或者图片看不到，可尝试从码云地址下载](https://gitee.com/CarGuo/GSYVideoPlayer)
 
