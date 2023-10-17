@@ -270,6 +270,8 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 -dontwarn com.shuyu.gsyvideoplayer.video.base.**
 -keep class com.shuyu.gsyvideoplayer.utils.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.utils.**
+-keep class com.shuyu.gsyvideoplayer.player.** {*;}
+-dontwarn com.shuyu.gsyvideoplayer.player.**
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
 -keep class androidx.media3.** {*;}

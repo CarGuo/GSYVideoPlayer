@@ -131,6 +131,8 @@ public static ** valueOf(java.lang.String);
 -dontwarn com.shuyu.gsyvideoplayer.video.base.**
 -keep class com.shuyu.gsyvideoplayer.utils.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.utils.**
+-keep class com.shuyu.gsyvideoplayer.player.** {*;}
+-dontwarn com.shuyu.gsyvideoplayer.player.**
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
 
