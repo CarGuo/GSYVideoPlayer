@@ -250,9 +250,6 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 * fix  #3798
 
 
-
-### 非 androidx 版本为 6.0.3 以下版本。更多兼容版本请查阅版本更新。
-
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)
 
 ## 六、关于Issues
