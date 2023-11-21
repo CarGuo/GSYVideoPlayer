@@ -158,6 +158,12 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         super.onAutoCompletion();
     }
 
+    @Override
+    protected void releaseVideos() {
+        /// fix https://github.com/CarGuo/GSYVideoPlayer/issues/3892
+        super.onCompletion();
+        super.releaseVideos();
+    }
 
     /**
      * 开始状态视频播放，prepare时不执行  addTextureView();
