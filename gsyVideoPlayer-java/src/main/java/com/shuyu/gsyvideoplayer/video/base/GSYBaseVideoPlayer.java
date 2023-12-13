@@ -231,6 +231,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mPlayTag = from.mPlayTag;
         to.mPlayPosition = from.mPlayPosition;
         to.mEffectFilter = from.mEffectFilter;
+        to.mCurrentPosition = from.mCurrentPosition;
         to.mFullPauseBitmap = from.mFullPauseBitmap;
         to.mNeedShowWifiTip = from.mNeedShowWifiTip;
         to.mShrinkImageRes = from.mShrinkImageRes;
