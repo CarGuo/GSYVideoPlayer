@@ -24,27 +24,32 @@ public interface ExoMediaSourceInterceptListener {
      * @param cacheDir    自定义缓存目录
      * @return 返回不为空时，使用返回的自定义mediaSource
      */
+    @Nullable
     MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir);
 
 
     /**
      * 一般用户自定义 http 忽略 ssl 证书之类的可用于自定义
      * Demo 有对应例子
+     *
      * @return 返回不为空时，使用返回的自定义 HttpDataSource，
      */
+    @Nullable
     DataSource.Factory getHttpDataSourceFactory(
-            String userAgent,
-            @Nullable TransferListener listener,
-            int connectTimeoutMillis,
-            int readTimeoutMillis,
-            Map<String, String> mapHeadData,
-            boolean allowCrossProtocolRedirects);
+        String userAgent,
+        @Nullable TransferListener listener,
+        int connectTimeoutMillis,
+        int readTimeoutMillis,
+        Map<String, String> mapHeadData,
+        boolean allowCrossProtocolRedirects);
 
     /**
      * 一般情况下返回 null 就可以了
      * 如果 getMediaSource 不为 null ，此方法不会被调用
      * 用于每次自定义自己的  {@link CacheDataSink}
+     *
      * @return 返回不为空时，使用返回的自定义 Cache DataSink.Factory
      */
+    @Nullable
     DataSink.Factory cacheWriteDataSinkFactory(String CachePath, String url);
 }
