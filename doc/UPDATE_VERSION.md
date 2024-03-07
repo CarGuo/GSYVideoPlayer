@@ -1,5 +1,19 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+###  v8.6.0-release-jitpack (2022-03-07)
+* update media 1.3.0
+* update exo source intercept listener
+* fix #3900
+
+
+###  v8.5.0-release-jitpack (2023-11-20)
+* update media 1.2.0 &  compileSdk 34
+* update exoplayer to androidx media
+* fix #3874
+* fix issues 3855 (#3856)
+* add #3843
+
+
 ###  v8.4.0-release-jitpack (2023-07-17)
 * update exoplayer to androidx media
 * fix #3824 with ExoPlaybackException
