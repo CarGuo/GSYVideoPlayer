@@ -1,6 +1,6 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-###  v8.6.0-release-jitpack (2022-03-07)
+###  v8.6.0-release-jitpack (2024-03-07)
 * update media 1.3.0
 * update exo source intercept listener
 * fix #3900
