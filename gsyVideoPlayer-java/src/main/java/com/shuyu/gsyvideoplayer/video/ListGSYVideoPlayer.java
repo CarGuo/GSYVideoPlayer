@@ -145,6 +145,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
     public void onCompletion() {
         releaseNetWorkState();
         if (mPlayPosition < (mUriList.size())) {
+            mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
             return;
         }
         super.onCompletion();
