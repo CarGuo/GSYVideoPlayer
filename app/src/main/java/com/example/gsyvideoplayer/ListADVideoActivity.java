@@ -164,7 +164,7 @@ public class ListADVideoActivity extends AppCompatActivity {
 
 
             final String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-            final String urlAD = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+            final String urlAD = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
 
             //多个播放时必须在setUpLazy、setUp和getGSYVideoManager()等前面设置
             holder.gsyVideoPlayer.setPlayTag(TAG);

@@ -40,8 +40,8 @@ public class RequestListADVideoPlayer extends ListADVideoPlayer {
                     //模拟请求失败
                     onError(0, 0);
                 } else {
-                    mOriginUrl = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
-                    mUrl = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+                    mOriginUrl = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+                    mUrl = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
                     mTitle = "ffff1";
                 }
                 mCache = false;
