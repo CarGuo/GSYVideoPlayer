@@ -89,9 +89,9 @@ public class SystemPlayerManager extends BasePlayerManager {
             if (mediaPlayer != null && holder.isValid() && !release) {
                 mediaPlayer.setSurface(holder);
             }
-            if (!isPlaying) {
-                pause();
-            }
+        }
+        if (!isPlaying) {
+            pause();
         }
     }
 
