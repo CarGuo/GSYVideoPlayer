@@ -90,6 +90,7 @@ public class SystemPlayerManager extends BasePlayerManager {
                 mediaPlayer.setSurface(holder);
             }
         }
+        /// 目前setSurface会导致暂时失效然后出现播放的情况，关联 #3649
         if (!isPlaying) {
             pause();
         }
