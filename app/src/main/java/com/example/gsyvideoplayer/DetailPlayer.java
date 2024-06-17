@@ -36,6 +36,8 @@ import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
+import com.shuyu.gsyvideoplayer.player.IPlayerManager;
+import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -147,22 +149,10 @@ public class DetailPlayer extends AppCompatActivity {
         header.put("allowCrossProtocolRedirects", "true");
         header.put("User-Agent", "GSY");
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
-        gsyVideoOption.setThumbImageView(imageView)
-            .setIsTouchWiget(true)
-            .setRotateViewAuto(false)
+        gsyVideoOption.setThumbImageView(imageView).setIsTouchWiget(true).setRotateViewAuto(false)
             //仅仅横屏旋转，不变直
             //.setOnlyRotateLand(true)
-            .setRotateWithSystem(false)
-            .setLockLand(true)
-            .setAutoFullWithSize(true)
-            .setShowFullAnimation(false)
-            .setNeedLockFull(true)
-            .setUrl(url)
-            .setMapHeadData(header)
-            .setCacheWithPlay(false)
-            .setSurfaceErrorPlay(false)
-            .setVideoTitle("测试视频")
-            .setVideoAllCallBack(new GSYSampleCallBack() {
+            .setRotateWithSystem(false).setLockLand(true).setAutoFullWithSize(true).setShowFullAnimation(false).setNeedLockFull(true).setUrl(url).setMapHeadData(header).setCacheWithPlay(false).setSurfaceErrorPlay(false).setVideoTitle("测试视频").setVideoAllCallBack(new GSYSampleCallBack() {
                 @Override
                 public void onPrepared(String url, Object... objects) {
                     Debuger.printfError("***** onPrepared **** " + objects[0]);
@@ -208,6 +198,19 @@ public class DetailPlayer extends AppCompatActivity {
                 @Override
                 public void onAutoComplete(String url, Object... objects) {
                     super.onAutoComplete(url, objects);
+                    IPlayerManager playerManager = binding.detailPlayer.getGSYVideoManager().getPlayer();
+                    if (playerManager instanceof SystemPlayerManager) {
+                        playerManager.release();
+                    }
+                }
+
+                @Override
+                public void onComplete(String url, Object... objects) {
+                    super.onComplete(url, objects);
+                    IPlayerManager playerManager = binding.detailPlayer.getGSYVideoManager().getPlayer();
+                    if (playerManager instanceof SystemPlayerManager) {
+                        playerManager.release();
+                    }
                 }
 
                 @Override
@@ -346,8 +349,7 @@ public class DetailPlayer extends AppCompatActivity {
                         Debuger.printfError("#######################");
                     }
                 }
-            })
-            .setLockClickListener(new LockClickListener() {
+            }).setLockClickListener(new LockClickListener() {
                 @Override
                 public void onClick(View view, boolean lock) {
                     if (orientationUtils != null) {
@@ -355,14 +357,12 @@ public class DetailPlayer extends AppCompatActivity {
                         orientationUtils.setEnable(!lock);
                     }
                 }
-            })
-            .setGSYVideoProgressListener(new GSYVideoProgressListener() {
+            }).setGSYVideoProgressListener(new GSYVideoProgressListener() {
                 @Override
                 public void onProgress(long progress, long secProgress, long currentPosition, long duration) {
                     Debuger.printfLog(" progress " + progress + " secProgress " + secProgress + " currentPosition " + currentPosition + " duration " + duration);
                 }
-            })
-            .build(binding.detailPlayer);
+            }).build(binding.detailPlayer);
 
         binding.detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -410,9 +410,7 @@ public class DetailPlayer extends AppCompatActivity {
                                     return;
                                 }
                                 TrackGroup trackGroup = rendererTrackGroups.get(index);
-                                TrackSelectionParameters parameters = trackSelector.getParameters().buildUpon()
-                                    .setForceHighestSupportedBitrate(true)
-                                    .setOverrideForType(new TrackSelectionOverride(trackGroup, 0)).build();
+                                TrackSelectionParameters parameters = trackSelector.getParameters().buildUpon().setForceHighestSupportedBitrate(true).setOverrideForType(new TrackSelectionOverride(trackGroup, 0)).build();
                                 trackSelector.setParameters(parameters);
                             }
                         }
@@ -459,8 +457,7 @@ public class DetailPlayer extends AppCompatActivity {
             getCurPlay().release();
         }
         //GSYPreViewManager.instance().releaseMediaPlayer();
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
+        if (orientationUtils != null) orientationUtils.releaseListener();
     }
 
 
@@ -586,9 +583,7 @@ public class DetailPlayer extends AppCompatActivity {
 
     private void getPathForSearch(Uri uri) {
         String[] selectionArgs = new String[]{DocumentsContract.getDocumentId(uri).split(":")[1]};
-        Cursor cursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-            null, MediaStore.Images.Media._ID + "=?",
-            selectionArgs, null);
+        Cursor cursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + "=?", selectionArgs, null);
         if (null != cursor) {
             if (cursor.moveToFirst()) {
                 int index = cursor.getColumnIndex(MediaStore.Video.Media.DATA);
