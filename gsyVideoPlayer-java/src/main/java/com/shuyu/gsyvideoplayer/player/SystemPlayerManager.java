@@ -13,6 +13,7 @@ import com.shuyu.gsyvideoplayer.cache.ICacheManager;
 import com.shuyu.gsyvideoplayer.model.GSYModel;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.placeholder.PlaceholderSurface;
 
 import java.util.List;
 
@@ -40,6 +41,9 @@ public class SystemPlayerManager extends BasePlayerManager {
 
     private boolean isPlaying = false;
 
+    private PlaceholderSurface dummySurface;
+
+
     @Override
     public IMediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -49,6 +53,9 @@ public class SystemPlayerManager extends BasePlayerManager {
     public void initVideoPlayer(Context context, Message msg, List<VideoOptionModel> optionModelList, ICacheManager cacheManager) {
         this.context = context.getApplicationContext();
         mediaPlayer = new AndroidMediaPlayer();
+        if (dummySurface == null) {
+            dummySurface = PlaceholderSurface.newInstanceV17(context, false);
+        }
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         release = false;
         GSYModel gsyModel = (GSYModel) msg.obj;
@@ -71,7 +78,11 @@ public class SystemPlayerManager extends BasePlayerManager {
     @Override
     public void showDisplay(Message msg) {
         if (msg.obj == null && mediaPlayer != null && !release) {
-            mediaPlayer.setSurface(null);
+            if (dummySurface != null) {
+                mediaPlayer.setSurface(dummySurface);
+            } else {
+                mediaPlayer.setSurface(null);
+            }
         } else if (msg.obj != null) {
             Surface holder = (Surface) msg.obj;
             surface = holder;
@@ -125,6 +136,10 @@ public class SystemPlayerManager extends BasePlayerManager {
             release = true;
             mediaPlayer.release();
             mediaPlayer = null;
+        }
+        if (dummySurface != null) {
+            dummySurface.release();
+            dummySurface = null;
         }
         lastTotalRxBytes = 0;
         lastTimeStamp = 0;
