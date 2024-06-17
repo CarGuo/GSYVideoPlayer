@@ -198,19 +198,19 @@ public class DetailPlayer extends AppCompatActivity {
                 @Override
                 public void onAutoComplete(String url, Object... objects) {
                     super.onAutoComplete(url, objects);
-                    IPlayerManager playerManager = binding.detailPlayer.getGSYVideoManager().getPlayer();
-                    if (playerManager instanceof SystemPlayerManager) {
-                        playerManager.release();
-                    }
+//                    IPlayerManager playerManager = binding.detailPlayer.getGSYVideoManager().getPlayer();
+//                    if (playerManager instanceof SystemPlayerManager) {
+//                        playerManager.release();
+//                    }
                 }
 
                 @Override
                 public void onComplete(String url, Object... objects) {
                     super.onComplete(url, objects);
-                    IPlayerManager playerManager = binding.detailPlayer.getGSYVideoManager().getPlayer();
-                    if (playerManager instanceof SystemPlayerManager) {
-                        playerManager.release();
-                    }
+//                    IPlayerManager playerManager = binding.detailPlayer.getGSYVideoManager().getPlayer();
+//                    if (playerManager instanceof SystemPlayerManager) {
+//                        playerManager.release();
+//                    }
                 }
 
                 @Override

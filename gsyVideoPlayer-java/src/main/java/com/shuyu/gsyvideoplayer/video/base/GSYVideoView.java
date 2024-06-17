@@ -1055,7 +1055,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 播放速度
      */
     public void setSpeed(float speed) {
-        setSpeed(speed, false);
+        setSpeed(speed, false, true);
     }
 
     /**
@@ -1065,9 +1065,20 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * @param soundTouch 是否对6.0下开启变速不变调
      */
     public void setSpeed(float speed, boolean soundTouch) {
+        setSpeed(speed, soundTouch, true);
+    }
+
+    /**
+     * 播放速度
+     *
+     * @param speed      速度
+     * @param soundTouch 是否对6.0下开启变速不变调
+     * @param workRightNow 是否立刻生效
+     */
+    public void setSpeed(float speed, boolean soundTouch, boolean workRightNow) {
         this.mSpeed = speed;
         this.mSoundTouch = soundTouch;
-        if (getGSYVideoManager() != null) {
+        if (getGSYVideoManager() != null && workRightNow) {
             getGSYVideoManager().setSpeed(speed, soundTouch);
         }
     }

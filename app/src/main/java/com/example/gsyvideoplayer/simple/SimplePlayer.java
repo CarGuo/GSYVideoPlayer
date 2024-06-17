@@ -30,7 +30,7 @@ public class SimplePlayer extends AppCompatActivity {
     private void init() {
         videoPlayer =  (StandardGSYVideoPlayer)findViewById(R.id.video_player);
 
-        String source1 = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        String source1 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
         videoPlayer.setUp(source1, true, "测试视频");
 
         //增加封面
@@ -50,8 +50,8 @@ public class SimplePlayer extends AppCompatActivity {
             public void onClick(View v) {
                 // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
                 // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-                //orientationUtils.resolveByClick();
-                finish();
+                orientationUtils.resolveByClick();
+                //finish();
             }
         });
         //是否可以滑动调整
