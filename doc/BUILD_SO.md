@@ -57,6 +57,47 @@
 - 在mac OS系统上编译，如果出现 `yasm/nasm not found or too old. Use --disable-yasm for a crippled build.`，安装就好了: `brew install yasm`
 
 
+# macOS 环境下新配置介绍:
+
+默认情况下，IJKPlayer 推荐的是 `android-ndk-r10e` ，这也是我用它做例子的原因，因为它够“古老”，而在现在的 macOS 上，如果你想使用  `android-ndk-r10e`  ，你「可能」需要：
+
+- 从网页下载，因为 Android Studio 的 SDK Manager 里不支持下载 r10 
+- 配置   `android-ndk-r10e`   到环境变量 `export ANDROID_NDK="$HOME/Library/Android/sdk/ndk/android-ndk-r10e"`
+- 修改编译脚本，` android/contrib/tools/do-detect-env.sh`  下的  `IJK_MAKE_FLAG`  改为 ：`export IJK_MAKE_FLAG=-j1` 
+- 执行  `sudo spctl --master-disable`  关闭 macOS 的安全检验，**在 mac 上信任所有来源从而支持执行。**　
+- 将 python 环境变为默认  python2
+- 如果出现 `awk` 过期的问题，去 `prebuilt/drawom-x86_64/bin` 下把它删了
+- 如果出现 `yasm/nasm not found or too old. Use --disable-yasm for a crippled build.`，安装  `brew install yasm` 
+- 如果 ndk-build 无法执行，可以修改  `./compile-ijk.sh`  为：
+```patch
+       case $SUB_CMD in
+         prof)
+-            $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
++           arch -x86_64 /bin/bash  $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
+         ;;
+         clean)
+-            $ANDROID_NDK/ndk-build clean
++           arch -x86_64 /bin/bash  $ANDROID_NDK/ndk-build clean
+         ;;
+         rebuild)
+-            $ANDROID_NDK/ndk-build clean
+-            $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
++           arch -x86_64 /bin/bash  $ANDROID_NDK/ndk-build clean
++           arch -x86_64 /bin/bash  $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
+         ;;
+         *)
+-            $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
++          arch -x86_64 /bin/bash   $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
+         ;;
+     esac
+ }
+
+```
+
+
+
+
+
 ##### 3、编译带HTTPS的so
 
 到了这里你就简单多了，因为是亲生的啊，这时候就是机械化流程啦(✿‿)。
