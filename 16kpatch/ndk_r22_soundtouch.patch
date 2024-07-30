@@ -1,0 +1,35 @@
+diff --git a/Android.mk b/Android.mk
+index d901211..a9a1e53 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -45,6 +45,7 @@ LOCAL_SRC_FILES += source/SoundTouch/PeakFinder.cpp
+ LOCAL_SRC_FILES += source/SoundTouch/SoundTouch.cpp
+ LOCAL_SRC_FILES += source/SoundTouch/mmx_optimized.cpp
+ LOCAL_SRC_FILES += ijksoundtouch_wrap.cpp
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
+ 
+ LOCAL_MODULE := ijksoundtouch
+ include $(BUILD_STATIC_LIBRARY)
+diff --git a/source/Android-lib/jni/Android.mk b/source/Android-lib/jni/Android.mk
+index f823b3e..83fa7fa 100644
+--- a/source/Android-lib/jni/Android.mk
++++ b/source/Android-lib/jni/Android.mk
+@@ -48,5 +48,6 @@ LOCAL_CFLAGS += -fvisibility=hidden -I ../../../include -fdata-sections -ffuncti
+ 
+ # Use ARM instruction set instead of Thumb for improved calculation performance in ARM CPUs	
+ LOCAL_ARM_MODE := arm
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
+ 
+ include $(BUILD_SHARED_LIBRARY)
+diff --git a/source/Android-lib/jni/Application.mk b/source/Android-lib/jni/Application.mk
+index 8ee39db..96e550b 100644
+--- a/source/Android-lib/jni/Application.mk
++++ b/source/Android-lib/jni/Application.mk
+@@ -5,6 +5,6 @@
+ 
+ APP_ABI := all #armeabi-v7a armeabi
+ APP_OPTIM := release
+-APP_STL := stlport_static
++APP_STL := c++_static
+ APP_CPPFLAGS := -fexceptions # -D SOUNDTOUCH_DISABLE_X86_OPTIMIZATIONS
+ 

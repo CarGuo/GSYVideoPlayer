@@ -22,6 +22,7 @@
 **字幕**|**[media3(exo2)模式下支持自定增加外挂字幕](https://github.com/CarGuo/GSYVideoPlayer/tree/master/app/src/main/java/com/example/gsyvideoplayer/exosubtitle)。**
 **dash**|**media3(exo2) 模式支持dash**
 **stream**|**支持元数据播放**
+**适配 16k**|**ex_so 适配 16K Page Size**
 **更多**|**暂停前后台切换不黑屏；调整不同清晰度的支持；无缝切换支持；锁定/解锁全屏点击功能；进度条小窗口预览（测试）。**
 **自定义**|**可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
 
@@ -96,7 +97,7 @@ allprojects {
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.6.0-release-jitpack'
 ```
 
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
+#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
 
 A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。

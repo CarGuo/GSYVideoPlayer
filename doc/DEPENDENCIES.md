@@ -46,7 +46,7 @@ allprojects {
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.6.0-release-jitpack'
 ```
 
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议）
+#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
 
 A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。

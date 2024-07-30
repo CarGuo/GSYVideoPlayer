@@ -1,0 +1,515 @@
+diff --git a/android/compile-ijk.sh b/android/compile-ijk.sh
+index 95062ea4..9b7a3af8 100755
+--- a/android/compile-ijk.sh
++++ b/android/compile-ijk.sh
+@@ -25,7 +25,7 @@ fi
+ REQUEST_TARGET=$1
+ REQUEST_SUB_CMD=$2
+ ACT_ABI_32="armv5 armv7a x86"
+-ACT_ABI_64="armv5 armv7a arm64 x86 x86_64"
++ACT_ABI_64="arm64"
+ ACT_ABI_ALL=$ACT_ABI_64
+ UNAME_S=$(uname -s)
+ 
+@@ -54,17 +54,17 @@ do_sub_cmd () {
+ 
+     case $SUB_CMD in
+         prof)
+-            $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
++             arch -x86_64 /bin/bash  $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
+         ;;
+         clean)
+-            $ANDROID_NDK/ndk-build clean
++             arch -x86_64 /bin/bash  $ANDROID_NDK/ndk-build clean
+         ;;
+         rebuild)
+-            $ANDROID_NDK/ndk-build clean
+-            $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
++            arch -x86_64 /bin/bash  $ANDROID_NDK/ndk-build clean
++            arch -x86_64 /bin/bash  $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
+         ;;
+         *)
+-            $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
++            arch -x86_64 /bin/bash   $ANDROID_NDK/ndk-build $FF_MAKEFLAGS
+         ;;
+     esac
+ }
+@@ -92,7 +92,7 @@ case "$REQUEST_TARGET" in
+     "")
+         do_ndk_build armv7a;
+     ;;
+-    armv5|armv7a|arm64|x86|x86_64)
++    arm64)
+         do_ndk_build $REQUEST_TARGET $REQUEST_SUB_CMD;
+     ;;
+     all32)
+@@ -115,7 +115,7 @@ case "$REQUEST_TARGET" in
+     ;;
+     *)
+         echo "Usage:"
+-        echo "  compile-ijk.sh armv5|armv7a|arm64|x86|x86_64"
++        echo "  compile-ijk.sh arm64"
+         echo "  compile-ijk.sh all|all32"
+         echo "  compile-ijk.sh all64"
+         echo "  compile-ijk.sh clean"
+diff --git a/android/contrib/tools/do-compile-ffmpeg.sh b/android/contrib/tools/do-compile-ffmpeg.sh
+index d6b3ba63..3bbe45f8 100755
+--- a/android/contrib/tools/do-compile-ffmpeg.sh
++++ b/android/contrib/tools/do-compile-ffmpeg.sh
+@@ -40,7 +40,7 @@ fi
+ 
+ 
+ FF_BUILD_ROOT=`pwd`
+-FF_ANDROID_PLATFORM=android-9
++FF_ANDROID_PLATFORM=android-16
+ 
+ 
+ FF_BUILD_NAME=
+@@ -55,7 +55,8 @@ FF_DEP_LIBSOXR_LIB=
+ FF_CFG_FLAGS=
+ 
+ FF_EXTRA_CFLAGS=
+-FF_EXTRA_LDFLAGS=
++FF_EXTRA_LDFLAGS="-Wl,-z,max-page-size=16384"
++FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS -Wl,-Bsymbolic"
+ FF_DEP_LIBS=
+ 
+ FF_MODULE_DIRS="compat libavcodec libavfilter libavformat libavutil libswresample libswscale"
+diff --git a/android/contrib/tools/do-compile-openssl.sh b/android/contrib/tools/do-compile-openssl.sh
+index 20e87949..880586f2 100644
+--- a/android/contrib/tools/do-compile-openssl.sh
++++ b/android/contrib/tools/do-compile-openssl.sh
+@@ -46,7 +46,7 @@ FF_CFG_FLAGS=
+ FF_PLATFORM_CFG_FLAGS=
+ 
+ FF_EXTRA_CFLAGS=
+-FF_EXTRA_LDFLAGS=
++FF_EXTRA_LDFLAGS="-Wl,-z,max-page-size=16384"
+ 
+ 
+ 
+diff --git a/android/contrib/tools/do-detect-env.sh b/android/contrib/tools/do-detect-env.sh
+index 36d64fdc..b6cf35b6 100644
+--- a/android/contrib/tools/do-detect-env.sh
++++ b/android/contrib/tools/do-detect-env.sh
+@@ -68,7 +68,7 @@ case "$IJK_NDK_REL" in
+         IJK_NDK_REL=$(grep -o '^Pkg\.Revision.*=[0-9]*.*' $ANDROID_NDK/source.properties 2>/dev/null | sed 's/[[:space:]]*//g' | cut -d "=" -f 2)
+         echo "IJK_NDK_REL=$IJK_NDK_REL"
+         case "$IJK_NDK_REL" in
+-            11*|12*|13*|14*)
++            11*|12*|13*|14*|15*|16*|21*|22*|25*|26*|27*)
+                 if test -d ${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.9
+                 then
+                     echo "NDKr$IJK_NDK_REL detected"
+@@ -88,7 +88,7 @@ esac
+ 
+ case "$UNAME_S" in
+     Darwin)
+-        export IJK_MAKE_FLAG=-j`sysctl -n machdep.cpu.thread_count`
++        export IJK_MAKE_FLAG=-j1
+     ;;
+     CYGWIN_NT-*)
+         IJK_WIN_TEMP="$(cygpath -am /tmp)"
+diff --git a/android/ijkplayer/ijkplayer-arm64/build.gradle b/android/ijkplayer/ijkplayer-arm64/build.gradle
+index a8cbe0cb..dd2b6666 100644
+--- a/android/ijkplayer/ijkplayer-arm64/build.gradle
++++ b/android/ijkplayer/ijkplayer-arm64/build.gradle
+@@ -21,6 +21,11 @@ android {
+         jniLibs.srcDirs 'src/main/libs'
+         jni.srcDirs = [] // This prevents the auto generation of Android.mk
+     }
++    packagingOptions {
++        jniLibs {
++            useLegacyPackaging true
++        }
++    }
+ }
+ 
+ dependencies {
+diff --git a/android/ijkplayer/ijkplayer-arm64/src/main/jni/Application.mk b/android/ijkplayer/ijkplayer-arm64/src/main/jni/Application.mk
+index 19189c34..73cc7868 100644
+--- a/android/ijkplayer/ijkplayer-arm64/src/main/jni/Application.mk
++++ b/android/ijkplayer/ijkplayer-arm64/src/main/jni/Application.mk
+@@ -20,13 +20,14 @@
+ APP_OPTIM := release
+ APP_PLATFORM := android-21
+ APP_ABI := arm64-v8a
+-NDK_TOOLCHAIN_VERSION=4.9
++#NDK_TOOLCHAIN_VERSION=4.9
+ APP_PIE := false
+ 
+-APP_STL := stlport_static
++APP_STL := c++_static
+ 
+ APP_CFLAGS := -O3 -Wall -pipe \
+     -ffast-math \
++    -U_FORTIFY_SOURCE  -D_FORTIFY_SOURCE=0 \
+     -fstrict-aliasing -Werror=strict-aliasing \
+-    -Wno-psabi -Wa,--noexecstack \
++    -Wa,--noexecstack \
+     -DANDROID -DNDEBUG
+diff --git a/config/module.sh b/config/module.sh
+deleted file mode 120000
+index 0f16f539..00000000
+--- a/config/module.sh
++++ /dev/null
+@@ -1 +0,0 @@
+-module-lite.sh
+\ No newline at end of file
+diff --git a/config/module.sh b/config/module.sh
+new file mode 100644
+index 00000000..bb494c73
+--- /dev/null
++++ b/config/module.sh
+@@ -0,0 +1,275 @@
++#! /usr/bin/env bash
++
++#--------------------
++# Standard options:
++export COMMON_FF_CFG_FLAGS=
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --prefix=PREFIX"
++
++# Licensing options:
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-gpl"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-version3"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-nonfree"
++
++# Configuration options:
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-static"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-shared"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-small"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-runtime-cpudetect"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-gray"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-swscale-alpha"
++
++# Program options:
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-programs"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-ffmpeg"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-ffplay"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-ffprobe"
++#export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-ffserver"
++
++# Documentation options:
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-doc"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-htmlpages"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-manpages"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-podpages"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-txtpages"
++
++# Component options:
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-avdevice"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-avcodec"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-avformat"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-avutil"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-swresample"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-swscale"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-postproc"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-avfilter"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-avresample"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-pthreads"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-w32threads"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-os2threads"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-network"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-dct"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-dwt"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-lsp"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-lzo"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-mdct"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-rdft"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-fft"
++
++# Hardware accelerators:
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-d3d11va"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-dxva2"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-vaapi"
++#export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-vda"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-vdpau"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-videotoolbox"
++
++# Individual component options:
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-everything"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-encoders"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-encoder=png"
++
++# ./configure --list-decoders
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-decoders"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=aac"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=aac_latm"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=flv"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=h264"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=mp3*"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=vp6f"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=flac"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=hevc"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=vp8"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=vp9"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=h263"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=h263i"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=h263p"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=mpeg4"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=mjpeg"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=ijk*"
++
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-hwaccels"
++
++# ./configure --list-muxers
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-muxers"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-muxer=mp4"
++
++# ./configure --list-demuxers
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-demuxers"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=aac"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=concat"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=data"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=flv"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=hls"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=live_flv"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=mov"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=mp3"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=mpegps"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=mpegts"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=mpegvideo"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=flac"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=hevc"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=webm_dash_manifest"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=mpeg4"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=rtp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=sdp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=rtsp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=mjpeg"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-demuxer=avi"
++
++# ./configure --list-parsers
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-parsers"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-parser=aac"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-parser=aac_latm"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-parser=h264"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-parser=flac"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-parser=hevc"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-parser=mpeg4"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-parser=mpeg4video"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-parser=mpegvideo"
++
++# ./configure --list-bsf
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-bsfs"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=chomp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=dca_core"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=dump_extradata"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=hevc_mp4toannexb"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=imx_dump_header"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=mjpeg2jpeg"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=mjpega_dump_header"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=mov2textsub"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=mp3_header_decompress"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=mpeg4_unpack_bframes"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=noise"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=remove_extradata"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=text2movsub"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=vp9_superframe"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bsf=eac3_core"
++
++# ./configure --list-protocols
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocols"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=async"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=bluray"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=concat"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=crypto"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=ffrtmpcrypt"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=ffrtmphttp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=gopher"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=icecast"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=librtmp*"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=libssh"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=md5"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=mmsh"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=mmst"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=rtmp*"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=rtmp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=rtmpt"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=rtp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=sctp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-protocol=srtp"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=subfile"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-protocol=unix"
++
++#
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-devices"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-filters"
++
++# External library support:
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-iconv"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-audiotoolbox"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-videotoolbox"
++
++# ...
++
++# Advanced options (experts only):
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --cross-prefix=${FF_CROSS_PREFIX}-"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-cross-compile"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --sysroot=PATH"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --sysinclude=PATH"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --target-os=TAGET_OS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --target-exec=CMD"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --target-path=DIR"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --toolchain=NAME"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --nm=NM"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --ar=AR"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --as=AS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --yasmexe=EXE"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --cc=CC"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --cxx=CXX"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --dep-cc=DEPCC"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --ld=LD"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --host-cc=HOSTCC"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --host-cflags=HCFLAGS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --host-cppflags=HCPPFLAGS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --host-ld=HOSTLD"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --host-ldflags=HLDFLAGS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --host-libs=HLIBS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --host-os=OS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --extra-cflags=ECFLAGS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --extra-cxxflags=ECFLAGS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --extra-ldflags=ELDFLAGS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --extra-libs=ELIBS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --extra-version=STRING"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --optflags=OPTFLAGS"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --build-suffix=SUFFIX"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --malloc-prefix=PREFIX"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --progs-suffix=SUFFIX"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --arch=ARCH"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --cpu=CPU"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-pic"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-sram"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-thumb"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-symver"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-hardcoded-tables"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-safe-bitstream-reader"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-memalign-hack"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-lto"
++
++# Optimization options (experts only):
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-asm"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-altivec"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-amd3dnow"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-amd3dnowext"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-mmx"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-mmxext"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-sse"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-sse2"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-sse3"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-ssse3"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-sse4"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-sse42"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-avx"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-fma4"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-armv5te"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-armv6"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-armv6t2"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-vfp"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-neon"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-vis"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-inline-asm"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-yasm"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-mips32r2"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-mipsdspr1"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-mipsdspr2"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-mipsfpu"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-fast-unaligned"
++
++# Developer options (useful when working on FFmpeg itself):
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-coverage"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-debug"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-debug=LEVEL"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-optimizations"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-extra-warnings"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-stripping"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --assert-level=level"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-memory-poisoning"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --valgrind=VALGRIND"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-ftrapv"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --samples=PATH"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-xmm-clobber-test"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-random"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-random"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-random=LIST"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-random=LIST"
++# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --random-seed=VALUE"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-linux-perf"
++export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-bzlib"
++
+diff --git a/ijkmedia/ijkj4a/Android.mk b/ijkmedia/ijkj4a/Android.mk
+index 37d2bee6..8136ae13 100644
+--- a/ijkmedia/ijkj4a/Android.mk
++++ b/ijkmedia/ijkj4a/Android.mk
+@@ -19,7 +19,7 @@
+ LOCAL_PATH := $(call my-dir)
+ 
+ include $(CLEAR_VARS)
+-LOCAL_CFLAGS += -std=c99
++#LOCAL_CFLAGS += -std=c99
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)
+ LOCAL_C_INCLUDES += $(realpath $(LOCAL_PATH))
+@@ -41,7 +41,7 @@ LOCAL_SRC_FILES += j4a/class/tv/danmaku/ijk/media/player/IjkMediaPlayer.c
+ 
+ LOCAL_SRC_FILES += j4au/class/android/media/AudioTrack.util.c
+ LOCAL_SRC_FILES += j4au/class/java/nio/ByteBuffer.util.c
+-
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
+ LOCAL_MODULE := ijkj4a
+ include $(BUILD_STATIC_LIBRARY)
+ 
+diff --git a/ijkmedia/ijkplayer/Android.mk b/ijkmedia/ijkplayer/Android.mk
+index 552c1142..a22569c8 100644
+--- a/ijkmedia/ijkplayer/Android.mk
++++ b/ijkmedia/ijkplayer/Android.mk
+@@ -26,7 +26,7 @@ include $(CLEAR_VARS)
+ ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+ LOCAL_CFLAGS += -mfloat-abi=soft
+ endif
+-LOCAL_CFLAGS += -std=c99
++#LOCAL_CFLAGS += -std=c99
+ LOCAL_LDLIBS += -llog -landroid
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)
+@@ -79,7 +79,7 @@ LOCAL_SRC_FILES += ijkavutil/ijkstl.cpp
+ 
+ LOCAL_SHARED_LIBRARIES := ijkffmpeg ijksdl
+ LOCAL_STATIC_LIBRARIES := android-ndk-profiler ijksoundtouch
+-
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
+ LOCAL_MODULE := ijkplayer
+ 
+ VERSION_SH  = $(LOCAL_PATH)/version.sh
+diff --git a/ijkmedia/ijksdl/Android.mk b/ijkmedia/ijksdl/Android.mk
+index 7574a951..553ea054 100644
+--- a/ijkmedia/ijksdl/Android.mk
++++ b/ijkmedia/ijksdl/Android.mk
+@@ -20,7 +20,7 @@
+ LOCAL_PATH := $(call my-dir)
+ 
+ include $(CLEAR_VARS)
+-LOCAL_CFLAGS += -std=c99
++#LOCAL_CFLAGS += -std=c99
+ LOCAL_LDLIBS += -llog -landroid -lOpenSLES -lEGL -lGLESv2
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)
+@@ -74,6 +74,7 @@ LOCAL_SRC_FILES += android/ijksdl_vout_overlay_android_mediacodec.c
+ 
+ LOCAL_SHARED_LIBRARIES := ijkffmpeg
+ LOCAL_STATIC_LIBRARIES := cpufeatures yuv_static ijkj4a
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
+ 
+ LOCAL_MODULE := ijksdl
+ include $(BUILD_SHARED_LIBRARY)
+diff --git a/ijkprof/android-ndk-profiler-dummy/jni/Android.mk b/ijkprof/android-ndk-profiler-dummy/jni/Android.mk
+index 4a6d00aa..d0aacc4d 100644
+--- a/ijkprof/android-ndk-profiler-dummy/jni/Android.mk
++++ b/ijkprof/android-ndk-profiler-dummy/jni/Android.mk
+@@ -23,5 +23,6 @@ include $(CLEAR_VARS)
+ 
+ LOCAL_MODULE    := android-ndk-profiler
+ LOCAL_SRC_FILES := prof.c
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
+ 
+ include $(BUILD_STATIC_LIBRARY)

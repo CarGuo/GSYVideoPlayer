@@ -1,0 +1,23 @@
+diff --git a/Android.mk b/Android.mk
+index 3690b179..1d2be682 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -55,6 +55,7 @@ endif
+ 
+ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
+ 
+ LOCAL_MODULE := libyuv_static
+ LOCAL_MODULE_TAGS := optional
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 43e79a03..5439885c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -128,3 +128,5 @@ endif()
+ install(TARGETS ${ly_lib_name} DESTINATION lib)
+ install(FILES ${ly_header_files} DESTINATION include/libyuv)
+ install(FILES ${ly_inc_dir}/libyuv.h DESTINATION include/)
++
++target_link_libraries(${ly_lib_name}  "-Wl,-z,max-page-size=16384")
+\ No newline at end of file
