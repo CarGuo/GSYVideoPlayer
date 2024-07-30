@@ -50,7 +50,7 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
-    private final String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    private final String url = "https://res.exexm.com/cw_145225549855002";
     //private String url = "http://livecdn1.news.cn/Live_MajorEvent01Phone/manifest.m3u8";
     //private String url = "https://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/8908d124aa839d0d3fa9593855ef5957.m3u8";
     //private String url2 = "http://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/3aca1a0db8db9418dcbc765848c8903e.m3u8";
