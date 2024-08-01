@@ -1,0 +1,27 @@
+diff --git a/Android.mk b/Android.mk
+index d901211..37a75c8 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -45,6 +45,8 @@ LOCAL_SRC_FILES += source/SoundTouch/PeakFinder.cpp
+ LOCAL_SRC_FILES += source/SoundTouch/SoundTouch.cpp
+ LOCAL_SRC_FILES += source/SoundTouch/mmx_optimized.cpp
+ LOCAL_SRC_FILES += ijksoundtouch_wrap.cpp
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=65536
++LOCAL_LDFLAGS += -Wl,-z,common-page-size=65536
+ 
+ LOCAL_MODULE := ijksoundtouch
+ include $(BUILD_STATIC_LIBRARY)
+diff --git a/source/Android-lib/jni/Android.mk b/source/Android-lib/jni/Android.mk
+index f823b3e..07e44aa 100644
+--- a/source/Android-lib/jni/Android.mk
++++ b/source/Android-lib/jni/Android.mk
+@@ -45,6 +45,9 @@ LOCAL_CFLAGS += -fvisibility=hidden -I ../../../include -fdata-sections -ffuncti
+ #LOCAL_CFLAGS += -fopenmp
+ #LOCAL_LDFLAGS += -fopenmp
+ 
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=65536
++LOCAL_LDFLAGS += -Wl,-z,common-page-size=65536
++
+ 
+ # Use ARM instruction set instead of Thumb for improved calculation performance in ARM CPUs	
+ LOCAL_ARM_MODE := arm

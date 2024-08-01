@@ -1,0 +1,13 @@
+diff --git a/Android.mk b/Android.mk
+index 3690b179..b5a2d1bc 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -55,6 +55,8 @@ endif
+ 
+ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=65536
++LOCAL_LDFLAGS += -Wl,-z,common-page-size=65536
+ 
+ LOCAL_MODULE := libyuv_static
+ LOCAL_MODULE_TAGS := optional
