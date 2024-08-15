@@ -387,7 +387,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                 if (GSYVideoView.this.mReleaseWhenLossAudio) {
                     GSYVideoView.this.releaseVideos();
                 } else {
-                    getGSYVideoManager().listener().onVideoPause();
+                    if(getGSYVideoManager().listener() != null)
+                        getGSYVideoManager().listener().onVideoPause();
                 }
 
             }
