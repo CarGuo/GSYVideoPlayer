@@ -342,12 +342,11 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 
 
 
-## 非常感谢您的支持
+## 温馨提示
+开源项目主要提供交流学习，并不提供技术支持，也不接商务合作，纯公益兴趣开源
 
 
-#### 撸码不易，如果对你有所帮助，欢迎您的赞赏
 
-![](http://img.cdn.guoshuyu.cn/thanks.jpg)
 
 
 ## License
