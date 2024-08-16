@@ -1,6 +1,6 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
-###  v9.0.0-release-jitpack (2024-03-07)
+###  v9.0.0-release-jitpack (2024-07-29)
 * ex_so support 16k page size
 * update media3 1.4.0
 * fix #4014
