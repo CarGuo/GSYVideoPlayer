@@ -54,6 +54,7 @@
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".DetailPlayer"
+            android:supportsPictureInPicture="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait" />
         <activity

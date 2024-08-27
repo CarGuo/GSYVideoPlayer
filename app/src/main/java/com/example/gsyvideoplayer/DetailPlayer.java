@@ -7,14 +7,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -386,6 +385,16 @@ public class DetailPlayer extends AppCompatActivity {
             }
         });
 
+        binding.pip.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    DetailPlayer.this.enterPictureInPictureMode();
+                }
+            }
+        });
+
         ///exo 切换音轨
         binding.change.setOnClickListener(new View.OnClickListener() {
             int index = 0;
@@ -438,9 +447,13 @@ public class DetailPlayer extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        getCurPlay().onVideoPause();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInPictureInPictureMode()) {
+            // Continue playback
+        } else {
+            getCurPlay().onVideoPause();
+            isPause = true;
+        }
         super.onPause();
-        isPause = true;
     }
 
     @Override
@@ -554,11 +567,11 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
         //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
         //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
-        //String url = "http://hls.ciguang.tv/hdtv/video.m3u8";
+        String url = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
         //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
-        String url = "https://media.w3.org/2010/05/sintel/trailer.mp4";//90度
+        //String url = "https://media.w3.org/2010/05/sintel/trailer.mp4";//90度
         //String url = " String source1 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //String url = "http://video.cdn.aizys.com/zzx3.9g.mkv";//long
         //String url = "rtsp://admin:wh123456@112.44.163.248:554/h264/ch01/main/av_stream";//long
