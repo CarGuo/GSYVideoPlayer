@@ -94,7 +94,23 @@
 
 ```
 
-#### 新版本 FFMpeg
+### 升级 r21
+
+想通过 r21 编译，对于 IJKPlayer ，理论上你会遇到以下问题：
+
+
+- tools/do-detect-env.sh 文件下增加你想支持的 ndk 版本：  11*|12*|13*|14*|15*|16*|21*|22*|25*|26*|27*)
+- Bad file descriptor error: invalid argument '-std=c99 ：此时你需要在所有 Android.mk  下将所有的 LOCAL_CFLAGS += -std=c99  去掉，因为 GCC 早在 r18 就被移除了
+- Invalid NDK_TOOLCHAIN_VERSION value: 4.9 ：同样是因为 GCC 已经移除，所以需要将 Application.mk   下的 NDK_TOOLCHAIN_VERSION=4.9 移除
+- APP_STL := stlport_static is not supported ：同样在 r18 的时候，stlport 也已经被移除，所以我们需要将 Application.mk  下的 APP_STL 修改为 APP_STL := c++_static ，采用 libc++ 实现
+- 从 r21开始 ndk-bundle/build/tools/make-standalone-toolchain.sh  中会调用 ndk-bundle/build/tools/make-standalone-toolchain.py ，所以需要把   tools/do-compile-ffmpeg.sh  下对应的 FF_ANDROID_PLATFORM 修改为   FF_ANDROID_PLATFORM=android-21  ，同理还是有    tools/do-compile-openssl.sh
+
+### 升级 r22
+
+升级到 r22 ，还需要添加 -WI,-Bsymbolic 来解决问题： `FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS -WI,-Bsymbolic"`
+
+
+### 新版本 FFMpeg
 
 - 升级之前，首先需要手动删除 contrib 下 openssl-arm64 文件
 - 然后修改 init-android-openssl 里的 git 链接和版本
@@ -102,6 +118,9 @@
 - 最后编译 ffmpeg 的时候，调整 configure 文件的 `check_lib openssl openssl/ssl.h OPENSSL_init_ssl -lssl -lcrypto`
 
 
+### 支持 16K 编译
+
+https://juejin.cn/post/7396306532671094793
 
 ##### 3、编译带HTTPS的so
 
