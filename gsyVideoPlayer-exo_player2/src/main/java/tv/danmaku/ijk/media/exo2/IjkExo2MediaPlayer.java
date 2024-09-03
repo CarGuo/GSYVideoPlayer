@@ -404,7 +404,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
                             mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
                         }
                         if (isLooping) {
-                            mInternalPlayer.setRepeatMode(REPEAT_MODE_ALL);
+                            mInternalPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
                         }
                         if (mSurface != null)
                             mInternalPlayer.setVideoSurface(mSurface);
