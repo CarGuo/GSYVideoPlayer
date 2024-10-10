@@ -39,7 +39,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: publishToMavenLocal
@@ -52,7 +52,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: app:assembleDebug
