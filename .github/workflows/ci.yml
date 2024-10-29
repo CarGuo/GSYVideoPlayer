@@ -33,7 +33,7 @@ on:
 
 jobs:
   publish:
-    name: Publish to MavenLocal
+    name: Publish to Github Packages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
