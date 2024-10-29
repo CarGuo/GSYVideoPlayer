@@ -4,3 +4,17 @@ apply from: "$rootDir/gradle/publish.gradle"
 android {
     namespace 'com.shuyu.gsyvideoplayer.x86_64'
 }
+
+
+publishing {
+    repositories {
+        maven {
+            name = "GSYVideoPlayer-x86_64"
+            url = "https://maven.pkg.github.com/CarGuo/GSYVideoPlayer"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}

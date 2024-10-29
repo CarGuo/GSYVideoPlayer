@@ -9,3 +9,17 @@ dependencies {
     api viewDependencies.media
     api project(":gsyVideoPlayer-base")
 }
+
+
+publishing {
+    repositories {
+        maven {
+            name = "GSYVideoPlayer-exoplayer2"
+            url = "https://maven.pkg.github.com/CarGuo/GSYVideoPlayer"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}

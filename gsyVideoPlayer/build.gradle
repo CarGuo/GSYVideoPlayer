@@ -28,3 +28,16 @@ dependencies {
 //    api "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-ex_so:$gsyVideoVersion"
 //    api "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo_player2:$gsyVideoVersion"
 }
+
+publishing {
+    repositories {
+        maven {
+            name = "GSYVideoPlayer"
+            url = "https://maven.pkg.github.com/CarGuo/GSYVideoPlayer"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}

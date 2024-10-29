@@ -41,8 +41,10 @@ jobs:
           distribution: 'zulu'
           java-version: 21
       - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: publishToMavenLocal
+      - name: Publish package
+        run: ./gradlew publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     name: Build
