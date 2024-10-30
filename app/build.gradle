@@ -60,8 +60,13 @@ dependencies {
 
     implementation androidDependencies.multidex
 
-    implementation project(":gsyVideoPlayer")
-    implementation project(":gsyVideoPlayer-aliplay")
+//    implementation project(":gsyVideoPlayer")
+//    implementation project(":gsyVideoPlayer-aliplay")
+
+    implementation 'com.shuyu:gsyvideoplayer:10.0.0'
+
+
+
     //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:$gsyVideoVersion"
 
     //是否需要AliPlayer模式
