@@ -1,5 +1,17 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+###  v10.0.0 (2024-11-01)
+- update media3 1.4.1
+- update FFMpeg 4.1.6
+- update openssl-1.1.1w
+- support 16k page size
+- fix #3999 & #3649
+- fix #4014
+- fix #4019
+- fix #4023
+- fix #4021
+- update AGP
+
 ###  v9.0.0-release-jitpack (2024-07-29)
 * ex_so support 16k page size
 * update media3 1.4.0
