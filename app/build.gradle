@@ -60,10 +60,10 @@ dependencies {
 
     implementation androidDependencies.multidex
 
-//    implementation project(":gsyVideoPlayer")
-//    implementation project(":gsyVideoPlayer-aliplay")
+    implementation project(":gsyVideoPlayer")
+    implementation project(":gsyVideoPlayer-aliplay")
 
-    implementation 'com.shuyu:gsyvideoplayer:10.0.0'
+    //implementation 'com.shuyu:gsyvideoplayer:10.0.0'
 
 
 
