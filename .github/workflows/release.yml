@@ -24,3 +24,21 @@ jobs:
         with:
           artifacts: "app/build/outputs/apk/release/app-release.apk"
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    name: Publish To Github Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: gradle/gradle-build-action@v2
+      - name: Publish Package
+        run: ./gradlew publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

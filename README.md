@@ -54,7 +54,73 @@
 #### [--- 版本更新说明 --- ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
 
 
-### 1、Jitpack 引入方法（推荐， JCenter 即将关闭）
+### 1、新增 Github Package 依赖方式
+
+**由于 Jitpack 经常存在历史包随机丢失问题，所以新增 Github Package 依赖方式，使用方式如下**：
+
+```
+allprojects {
+    repositories {
+		...
+        maven {url 'https://maven.pkg.github.com/CarGuo/GSYVideoPlayer'}
+        maven { url "https://maven.aliyun.com/repository/public" }
+    }
+}
+```
+
+
+**你可以选择下面三种的其中一种，在module下的build.gradle添加。**
+
+#### A、直接引入
+```
+ //完整版引入
+ implementation 'com.shuyu:gsyvideoplayer:9.1.0'
+
+
+ //是否需要AliPlayer模式
+ implementation 'com.shuyu.gsyvideoplayer-aliplay:9.1.0'
+```
+
+#### B、添加java和你想要的so支持：
+
+```
+ implementation 'com.shuyu.gsyvideoplayer-java:9.1.0'
+
+ //是否需要ExoPlayer模式
+ implementation 'com.shuyu.gsyvideoplayer-exo2:9.1.0'
+
+ //是否需要AliPlayer模式
+ implementation 'com.shuyu.gsyvideoplayer-aliplay:9.1.0'
+
+ //根据你的需求ijk模式的so
+ implementation 'com.shuyu.gsyvideoplayer-armv5:9.1.0'
+ implementation 'com.shuyu.gsyvideoplayer-armv7a:9.1.0'
+ implementation 'com.shuyu.gsyvideoplayer-arm64:9.1.0'
+ implementation 'com.shuyu.gsyvideoplayer-x86:9.1.0'
+ implementation 'com.shuyu.gsyvideoplayer-x64:9.1.0'
+```
+
+#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+
+A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
+C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+
+```
+ implementation 'com.shuyu.gsyvideoplayer-java:9.1.0'
+
+ //是否需要ExoPlayer模式
+ implementation 'com.shuyu.gsyvideoplayer-exo2:9.1.0'
+
+
+ //是否需要AliPlayer模式
+ implementation 'com.shuyu.gsyvideoplayer-aliplay:9.1.0'
+
+ //更多ijk的编码支持
+ implementation 'com.shuyu.gsyvideoplayer-ex_so:9.1.0'
+
+```
+
+### 2、Jitpack 引入方法（JCenter 已被官方关闭）
 
 
 #### First、在project下的build.gradle添加
