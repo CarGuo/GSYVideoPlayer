@@ -65,9 +65,9 @@
 allprojects {
     repositories {
 		...
-        maven { url 'https://maven.pkg.github.com/CarGuo/GSYVideoPlayer'}
         maven {
-            url "https://maven.aliyun.com/repository/public"
+            url 'https://maven.pkg.github.com/CarGuo/GSYVideoPlayer'
+
             // You can also use your own GitHub account and token
             // For convenience, I have provided a token for an infrequently used account here
             credentials {
@@ -76,6 +76,9 @@ allprojects {
                 // your github generate new token
                 password = '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'
             }
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/public"
         }
     }
 }
