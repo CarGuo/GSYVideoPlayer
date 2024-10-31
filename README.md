@@ -54,7 +54,76 @@
 #### [--- 版本更新说明 --- ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
 
 
-### 1、新增 Github Package 依赖方式
+### 1、Jitpack 引入方法
+
+⚠️**因为依赖方式 2 的原因，目前 jitpack 依赖路径名称有调整**
+
+#### First、在project下的build.gradle添加
+
+```
+allprojects {
+    repositories {
+		...
+        maven { url 'https://jitpack.io' }
+        maven { url "https://maven.aliyun.com/repository/public" }
+    }
+}
+```
+
+**你可以选择下面三种的其中一种，在module下的build.gradle添加。**
+
+
+#### A、直接引入
+```
+ //完整版引入
+
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v10.0.0'
+
+
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.0.0'
+```
+
+#### B、添加java和你想要的so支持：
+
+```
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v10.0.0'
+
+ //是否需要ExoPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v10.0.0'
+
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.0.0'
+
+ //根据你的需求ijk模式的so
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v10.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v10.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v10.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v10.0.0'
+ implementation 'ccom.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v10.0.0'
+```
+
+#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+
+A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
+C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+
+```
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v10.0.0'
+
+ //是否需要ExoPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v10.0.0'
+
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.0.0'
+
+ //更多ijk的编码支持
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v10.0.0'
+
+```
+
+
+### 2、新增 Github Package 依赖方式
 
 **由于 Jitpack 经常存在历史包随机丢失问题，所以新增 Github Package 依赖方式，使用方式如下**：
 
@@ -138,74 +207,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  implementation 'com.shuyu:gsyvideoplayer-ex_so:10.0.0'
 
 ```
-
-### 2、Jitpack 引入方法（JCenter 已被官方关闭）
-
-⚠️**因为依赖方式 1 的原因，目前 jitpack 依赖路径名称有调整**
-
-#### First、在project下的build.gradle添加
-
-```
-allprojects {
-    repositories {
-		...
-        maven { url 'https://jitpack.io' }
-        maven { url "https://maven.aliyun.com/repository/public" }
-    }
-}
-```
-
-**你可以选择下面三种的其中一种，在module下的build.gradle添加。**
-
-
-#### A、直接引入
-```
- //完整版引入
-
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v10.0.0'
-
-
- //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.0.0'
-```
-
-#### B、添加java和你想要的so支持：
-
-```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v10.0.0'
-
- //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v10.0.0'
-
- //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.0.0'
-
- //根据你的需求ijk模式的so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v10.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v10.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v10.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v10.0.0'
- implementation 'ccom.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v10.0.0'
-```
-
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
-
-A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
-C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
-
-```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v10.0.0'
-
- //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v10.0.0'
-
- //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.0.0'
-
- //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v10.0.0'
-
-```
+----------------------------------------------------------
 
 #### 代码中的全局切换支持（更多请参看下方文档和demo）
 
