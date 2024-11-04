@@ -166,7 +166,7 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
             }
         });
 
-        binding.detailPlayer.setSubTitle("http://img.cdn.guoshuyu.cn/subtitle2.srt");
+        binding.detailPlayer.setSubTitle("http://img.cdn.guoshuyu.cn/subtitle.srt");
     }
 
     @Override
@@ -239,6 +239,6 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
 
 
     private String getUrl() {
-        return "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        return "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
     }
 }

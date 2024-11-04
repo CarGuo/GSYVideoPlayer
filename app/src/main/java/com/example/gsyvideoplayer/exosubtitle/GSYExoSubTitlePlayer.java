@@ -19,6 +19,7 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.common.Metadata;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Player;
+import androidx.media3.common.TrackSelectionParameters;
 import androidx.media3.common.text.Cue;
 import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.datasource.DefaultHttpDataSource;
@@ -60,7 +61,10 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
                     @Override
                     public void run() {
                         if (mTrackSelector == null) {
-                            mTrackSelector = new DefaultTrackSelector(mAppContext);
+                            ///todo 这里设置  setSelectUndeterminedTextLanguage 无视语言选择
+                            mTrackSelector = new DefaultTrackSelector(mAppContext,
+                                new TrackSelectionParameters.Builder(mAppContext).
+                                    setSelectUndeterminedTextLanguage(true).build());
                         }
                         mEventLogger = new EventLogger(mTrackSelector);
                         boolean preferExtensionDecoders = true;
@@ -108,12 +112,12 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
         //todo C.SELECTION_FLAG_AUTOSELECT language MimeTypes
         Format textFormat = new Format.Builder()
                 /// 其他的比如 text/x-ssa ，text/vtt，application/ttml+xml 等等
-                .setSampleMimeType(MimeTypes.APPLICATION_SUBRIP)
+                .setSampleMimeType(MimeTypes.APPLICATION_MEDIA3_CUES)
                 .setSelectionFlags(C.SELECTION_FLAG_FORCED)
                 /// 如果出现字幕不显示，可以通过修改这个语音去对应，
                 //  这个问题在内部的 selectTextTrack 时，TextTrackScore 通过 getFormatLanguageScore 方法判断语言获取匹配不上
                 //  就会不出现字幕
-                .setLanguage("en")
+                .setLanguage("zh-cn")
                 .build();
 
         MediaItem.SubtitleConfiguration  subtitle = new MediaItem.SubtitleConfiguration.Builder(subTitle)
