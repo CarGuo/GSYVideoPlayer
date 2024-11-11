@@ -100,7 +100,7 @@ allprojects {
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v10.0.0'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v10.0.0'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v10.0.0'
- implementation 'ccom.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v10.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v10.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
