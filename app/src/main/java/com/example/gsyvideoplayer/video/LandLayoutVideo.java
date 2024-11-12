@@ -4,12 +4,15 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoControlView;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 /**
@@ -19,6 +22,8 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
     private boolean isLinkScroll = false;
+    ScaleGestureDetector scaleGestureDetector;
+    float scaleFactor;
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -51,9 +56,7 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
-                        if (!mChangePosition && !mChangeVolume && !mBrightness
-                            && mCurrentState != CURRENT_STATE_ERROR
-                        ) {
+                        if (!mChangePosition && !mChangeVolume && !mBrightness && mCurrentState != CURRENT_STATE_ERROR) {
                             onClickUiToggle(e);
                         }
                         return super.onSingleTapConfirmed(e);
@@ -64,8 +67,33 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
                         super.onLongPress(e);
                     }
                 });
+
+                scaleGestureDetector = new ScaleGestureDetector(getContext().getApplicationContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+
+                    @Override
+                    public boolean onScale(ScaleGestureDetector detector) {
+                        scaleFactor *= detector.getScaleFactor();
+                        scaleFactor = (scaleFactor < 1 ? 1 : scaleFactor); // prevent our view from becoming too small //
+                        scaleFactor = ((float)((int)(scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
+                        mTextureViewContainer.setScaleX(scaleFactor);
+                        mTextureViewContainer.setScaleY(scaleFactor);
+
+                        return true;
+                    }
+                });
+
             }
         });
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        //if (event.getPointerCount() > 1 && v.getId() == R.id.surface_container) {
+        if (event.getPointerCount() > 1) {
+            scaleGestureDetector.onTouchEvent(event);
+            return true;
+        }
+        return super.onTouch(v, event);
     }
 
     //这个必须配置最上面的构造才能生效
