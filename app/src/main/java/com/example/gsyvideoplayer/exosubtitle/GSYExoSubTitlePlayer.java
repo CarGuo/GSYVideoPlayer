@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
@@ -101,11 +102,32 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
                         if (mSurface != null)
                             mInternalPlayer.setVideoSurface(mSurface);
 
+
+                        ///其实如果你没什么特色需求，可以直接用下面这种方式
+//                        List<MediaItem.SubtitleConfiguration> list = new ArrayList<>();
+//                        if (mSubTitile != null) {
+//                            MediaItem.SubtitleConfiguration subtitle
+//                                = new MediaItem.SubtitleConfiguration.Builder(Uri.parse(mSubTitile))
+//                                .setMimeType(MimeTypes.APPLICATION_SUBRIP)
+//                                .setLanguage(null)
+//                                .setSelectionFlags(C.SELECTION_FLAG_FORCED)
+//                                .build();
+//                            list.add(subtitle);
+//                        }
+//                        MediaItem mediaItem = new MediaItem.Builder()
+//                            .setUri(mDataSource).
+//                            setSubtitleConfigurations(list).build();
+//                        mInternalPlayer.setMediaItem(mediaItem);
+
                         if (mSubTitile != null) {
                             MediaSource textMediaSource = getTextSource(Uri.parse(mSubTitile));
                             mMediaSource = new MergingMediaSource(mMediaSource, textMediaSource);
                         }
                         mInternalPlayer.setMediaSource(mMediaSource);
+
+
+
+
                         mInternalPlayer.prepare();
                         mInternalPlayer.setPlayWhenReady(false);
                     }

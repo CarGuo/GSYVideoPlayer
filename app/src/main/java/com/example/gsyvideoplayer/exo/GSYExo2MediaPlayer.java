@@ -12,6 +12,7 @@ import androidx.media3.exoplayer.DefaultLoadControl;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.ConcatenatingMediaSource;
+import androidx.media3.exoplayer.source.ConcatenatingMediaSource2;
 import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
 
@@ -84,6 +85,18 @@ public class GSYExo2MediaPlayer extends IjkExo2MediaPlayer {
         }
         playIndex = index;
         mMediaSource = concatenatedSource;
+
+
+        /// ConcatenatingMediaSource2 是把多个视频拼成一个播放，时间轴只有一个
+//        ConcatenatingMediaSource2.Builder mediaSourceBuilder =
+//            new ConcatenatingMediaSource2.Builder().useDefaultMediaSourceFactory(mAppContext);
+//
+//        for (String uri : uris) {
+//            MediaSource mediaSource = mExoHelper.getMediaSource(uri, isPreview, cache, false, mCacheDir, getOverrideExtension());
+//            mediaSourceBuilder.add(mediaSource, 0);
+//        }
+//        playIndex = index;
+//        mMediaSource = mediaSourceBuilder.build();
     }
 
 
