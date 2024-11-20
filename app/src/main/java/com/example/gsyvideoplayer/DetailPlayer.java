@@ -151,7 +151,17 @@ public class DetailPlayer extends AppCompatActivity {
         gsyVideoOption.setThumbImageView(imageView).setIsTouchWiget(true).setRotateViewAuto(false)
             //仅仅横屏旋转，不变直
             //.setOnlyRotateLand(true)
-            .setRotateWithSystem(false).setLockLand(true).setAutoFullWithSize(true).setShowFullAnimation(false).setNeedLockFull(true).setUrl(url).setMapHeadData(header).setCacheWithPlay(false).setSurfaceErrorPlay(false).setVideoTitle("测试视频").setVideoAllCallBack(new GSYSampleCallBack() {
+            .setRotateWithSystem(false)
+            .setLockLand(true)
+            .setAutoFullWithSize(true)
+            .setShowFullAnimation(false)
+            .setNeedLockFull(true)
+            .setUrl(url)
+            .setMapHeadData(header)
+            .setCacheWithPlay(false)
+            .setSurfaceErrorPlay(false)
+            .setVideoTitle("测试视频")
+            .setVideoAllCallBack(new GSYSampleCallBack() {
                 @Override
                 public void onPrepared(String url, Object... objects) {
                     Debuger.printfError("***** onPrepared **** " + objects[0]);
@@ -173,14 +183,21 @@ public class DetailPlayer extends AppCompatActivity {
                     if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
                         IjkExo2MediaPlayer player = ((IjkExo2MediaPlayer) binding.detailPlayer.getGSYVideoManager().getPlayer().getMediaPlayer());
                         MappingTrackSelector.MappedTrackInfo mappedTrackInfo = player.getTrackSelector().getCurrentMappedTrackInfo();
+                        boolean hadVideo = false;
                         if (mappedTrackInfo != null) {
                             for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
                                 TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(i);
                                 if (C.TRACK_TYPE_AUDIO == mappedTrackInfo.getRendererType(i)) { //判断是否是音轨
                                     for (int j = 0; j < rendererTrackGroups.length; j++) {
                                         TrackGroup trackGroup = rendererTrackGroups.get(j);
-                                        Debuger.printfError("####### " + trackGroup.getFormat(0).toString() + " #######");
+                                        Debuger.printfError("####### Audio " + trackGroup.getFormat(0).toString() + " #######");
                                     }
+                                } else if (C.TRACK_TYPE_VIDEO == mappedTrackInfo.getRendererType(i)) {
+                                    for (int j = 0; j < rendererTrackGroups.length; j++) {
+                                        TrackGroup trackGroup = rendererTrackGroups.get(j);
+                                        Debuger.printfError("####### Video " + trackGroup.getFormat(0).toString() + " #######");
+                                    }
+                                    hadVideo = true;
                                 }
                             }
                         }
@@ -567,7 +584,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
         //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
         //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
-        String url = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        String url = "https://d16n6tdp1xddz9.cloudfront.net/share_moment/2024/11/18/1731896623_1280x720_-928feaa800ce4f16b01417287578c009.mp4";
         //String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
         //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
