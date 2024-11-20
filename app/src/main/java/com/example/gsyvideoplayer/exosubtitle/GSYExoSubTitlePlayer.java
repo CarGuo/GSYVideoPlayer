@@ -28,9 +28,14 @@ import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.exoplayer.source.MergingMediaSource;
-import androidx.media3.exoplayer.source.SingleSampleMediaSource;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
+import androidx.media3.extractor.Extractor;
+import androidx.media3.extractor.ExtractorsFactory;
+import androidx.media3.extractor.text.DefaultSubtitleParserFactory;
+import androidx.media3.extractor.text.SubtitleExtractor;
+import androidx.media3.extractor.text.SubtitleParser;
 
 public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
 
@@ -110,31 +115,40 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
 
     public MediaSource getTextSource(Uri subTitle) {
         //todo C.SELECTION_FLAG_AUTOSELECT language MimeTypes
-        Format textFormat = new Format.Builder()
-                /// 其他的比如 text/x-ssa ，text/vtt，application/ttml+xml 等等
-                .setSampleMimeType(MimeTypes.APPLICATION_MEDIA3_CUES)
-                .setSelectionFlags(C.SELECTION_FLAG_FORCED)
-                /// 如果出现字幕不显示，可以通过修改这个语音去对应，
-                //  这个问题在内部的 selectTextTrack 时，TextTrackScore 通过 getFormatLanguageScore 方法判断语言获取匹配不上
-                //  就会不出现字幕
-                .setLanguage("zh-cn")
-                .build();
+        Format format = new Format.Builder()
+            /// 其他的比如 text/x-ssa ，text/vtt，application/ttml+xml 等等
+            .setSampleMimeType(MimeTypes.APPLICATION_SUBRIP)
+            .setSelectionFlags(C.SELECTION_FLAG_FORCED)
+            /// 如果出现字幕不显示，可以通过修改这个语音去对应，
+            //  这个问题在内部的 selectTextTrack 时，TextTrackScore 通过 getFormatLanguageScore 方法判断语言获取匹配不上
+            //  就会不出现字幕
+            .setLanguage(null)
+            .build();
 
-        MediaItem.SubtitleConfiguration  subtitle = new MediaItem.SubtitleConfiguration.Builder(subTitle)
-            .setMimeType(checkNotNull(textFormat.sampleMimeType))
-            .setLanguage( textFormat.language)
-            .setSelectionFlags(textFormat.selectionFlags).build();
+        MediaItem.SubtitleConfiguration subtitle = new MediaItem.SubtitleConfiguration.Builder(subTitle)
+            .setMimeType(checkNotNull(format.sampleMimeType))
+            .setLanguage(format.language)
+            .setSelectionFlags(format.selectionFlags).build();
 
-        DefaultHttpDataSource.Factory  factory = new DefaultHttpDataSource.Factory()
-                .setAllowCrossProtocolRedirects(true)
-                .setConnectTimeoutMs(50000)
-                .setReadTimeoutMs(50000)
-                .setTransferListener( new DefaultBandwidthMeter.Builder(mAppContext).build());
+        DefaultHttpDataSource.Factory factory = new DefaultHttpDataSource.Factory()
+            .setAllowCrossProtocolRedirects(true)
+            .setConnectTimeoutMs(50000)
+            .setReadTimeoutMs(50000)
+            .setTransferListener(new DefaultBandwidthMeter.Builder(mAppContext).build());
 
-        MediaSource textMediaSource = new SingleSampleMediaSource.Factory(new DefaultDataSource.Factory(mAppContext,
-                factory))
-                .createMediaSource(subtitle, C.TIME_UNSET);
-        return textMediaSource;
+        SubtitleParser.Factory subtitleParserFactory = new DefaultSubtitleParserFactory();
+
+        ExtractorsFactory extractorsFactory =
+            () ->
+                new Extractor[]{
+                    new SubtitleExtractor(subtitleParserFactory.create(format), format)
+                };
+        ProgressiveMediaSource.Factory progressiveMediaSourceFactory =
+            new ProgressiveMediaSource.Factory(new DefaultDataSource.Factory(mAppContext,
+                factory), extractorsFactory);
+
+        return  progressiveMediaSourceFactory.createMediaSource(
+            MediaItem.fromUri(subtitle.uri.toString()));
 
     }
 

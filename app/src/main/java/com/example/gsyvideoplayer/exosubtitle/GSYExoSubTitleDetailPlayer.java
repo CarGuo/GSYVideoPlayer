@@ -166,7 +166,7 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
             }
         });
 
-        binding.detailPlayer.setSubTitle("http://img.cdn.guoshuyu.cn/subtitle.srt");
+        binding.detailPlayer.setSubTitle("http://img.cdn.guoshuyu.cn/subtitle2.srt");
     }
 
     @Override
@@ -239,6 +239,6 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
 
 
     private String getUrl() {
-        return "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        return "https://pointshow.oss-cn-hangzhou.aliyuncs.com/McTk51586843620689.mp4";
     }
 }
