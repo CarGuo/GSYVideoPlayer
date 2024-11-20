@@ -137,6 +137,8 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
 
     public MediaSource getTextSource(Uri subTitle) {
         //todo C.SELECTION_FLAG_AUTOSELECT language MimeTypes
+        ///TODO 注意，如果原来视频有内嵌字幕，例如 M3U8 embedded caption
+        ///TODO 所以就算你加了外挂字幕，也需要再切换一次 track 才能看到外部字幕，具体看 GSYExoSubTitleDetailPlayer
         Format format = new Format.Builder()
             /// 其他的比如 text/x-ssa ，text/vtt，application/ttml+xml 等等
             .setSampleMimeType(MimeTypes.APPLICATION_SUBRIP)
