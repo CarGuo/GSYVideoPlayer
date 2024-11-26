@@ -1,9 +1,9 @@
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
-        minSdk 19
-        targetSdk 31
+        minSdk 21
+        targetSdk 33
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures.buildConfig = false
