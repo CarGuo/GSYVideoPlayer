@@ -22,6 +22,7 @@ import androidx.media3.common.Metadata;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.PlaybackParameters;
 import androidx.media3.common.Player;
+import androidx.media3.common.Tracks;
 import androidx.media3.common.VideoSize;
 import androidx.media3.common.text.Cue;
 import androidx.media3.exoplayer.DecoderCounters;
@@ -98,6 +99,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
      * 类型覆盖
      */
     private String mOverrideExtension;
+    /**
+     * 当然 track
+     * */
+    private Tracks mCurrentTracks;
 
     protected int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
 
@@ -301,6 +306,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
         }
         mSurface = null;
         mDataSource = null;
+        mCurrentTracks = null;
         mVideoWidth = 0;
         mVideoHeight = 0;
     }
@@ -485,6 +491,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
         return mExoHelper;
     }
 
+    public Tracks getCurrentTracks() {
+        return mCurrentTracks;
+    }
+
     /**
      * 倍速播放
      *
@@ -589,6 +599,11 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
         }
         isLastReportedPlayWhenReady = playWhenReady;
         lastReportedPlaybackState = playbackState;
+    }
+
+    @Override
+    public void onTracksChanged(Tracks tracks) {
+        mCurrentTracks = tracks;
     }
 
     @Override

@@ -50,6 +50,15 @@
         android:layout_margin="10dp"
         android:text="exo track" />
 
+
+    <Button
+        android:id="@+id/show_track"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/open_btn"
+        android:layout_margin="10dp"
+        android:text="show exo track" />
+
     <Button
         android:id="@+id/pip"
         android:layout_width="wrap_content"

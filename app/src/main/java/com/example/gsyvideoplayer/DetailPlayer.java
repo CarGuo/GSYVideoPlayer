@@ -4,6 +4,7 @@ package com.example.gsyvideoplayer;
 import static androidx.media3.common.PlaybackException.*;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -14,18 +15,22 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.C;
 import androidx.media3.common.TrackGroup;
 import androidx.media3.common.TrackSelectionOverride;
 import androidx.media3.common.TrackSelectionParameters;
+import androidx.media3.common.Tracks;
 import androidx.media3.exoplayer.SeekParameters;
 import androidx.media3.exoplayer.source.TrackGroupArray;
 import androidx.media3.exoplayer.trackselection.MappingTrackSelector;
 import androidx.media3.exoplayer.trackselection.TrackSelector;
+import androidx.media3.extractor.mp4.Track;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailPlayerBinding;
 import com.google.common.collect.ImmutableList;
@@ -151,17 +156,7 @@ public class DetailPlayer extends AppCompatActivity {
         gsyVideoOption.setThumbImageView(imageView).setIsTouchWiget(true).setRotateViewAuto(false)
             //仅仅横屏旋转，不变直
             //.setOnlyRotateLand(true)
-            .setRotateWithSystem(false)
-            .setLockLand(true)
-            .setAutoFullWithSize(true)
-            .setShowFullAnimation(false)
-            .setNeedLockFull(true)
-            .setUrl(url)
-            .setMapHeadData(header)
-            .setCacheWithPlay(false)
-            .setSurfaceErrorPlay(false)
-            .setVideoTitle("测试视频")
-            .setVideoAllCallBack(new GSYSampleCallBack() {
+            .setRotateWithSystem(false).setLockLand(true).setAutoFullWithSize(true).setShowFullAnimation(false).setNeedLockFull(true).setSeekOnStart(3000).setUrl(url).setMapHeadData(header).setCacheWithPlay(false).setSurfaceErrorPlay(false).setVideoTitle("测试视频").setVideoAllCallBack(new GSYSampleCallBack() {
                 @Override
                 public void onPrepared(String url, Object... objects) {
                     Debuger.printfError("***** onPrepared **** " + objects[0]);
@@ -189,14 +184,23 @@ public class DetailPlayer extends AppCompatActivity {
                                 if (C.TRACK_TYPE_AUDIO == mappedTrackInfo.getRendererType(i)) { //判断是否是音轨
                                     for (int j = 0; j < rendererTrackGroups.length; j++) {
                                         TrackGroup trackGroup = rendererTrackGroups.get(j);
-                                        Debuger.printfError("####### Audio " + trackGroup.getFormat(0).toString() + " #######");
+                                        for (int k = 0; k < trackGroup.length; k++) {
+                                            Debuger.printfError("####### Audio " + trackGroup.getFormat(k).toString() + " #######");
+                                        }
                                     }
                                 } else if (C.TRACK_TYPE_VIDEO == mappedTrackInfo.getRendererType(i)) {
                                     for (int j = 0; j < rendererTrackGroups.length; j++) {
                                         TrackGroup trackGroup = rendererTrackGroups.get(j);
-                                        Debuger.printfError("####### Video " + trackGroup.getFormat(0).toString() + " #######");
+                                        for (int k = 0; k < trackGroup.length; k++) {
+                                            Debuger.printfError("####### Video " + trackGroup.getFormat(k).toString() + " #######");
+                                        }
                                     }
                                     hadVideo = true;
+                                } else {
+                                    for (int j = 0; j < rendererTrackGroups.length; j++) {
+                                        TrackGroup trackGroup = rendererTrackGroups.get(j);
+                                        Debuger.printfError("####### Other " + trackGroup.getFormat(0).toString() + " #######");
+                                    }
                                 }
                             }
                         }
@@ -440,10 +444,36 @@ public class DetailPlayer extends AppCompatActivity {
                             }
                         }
                     }
+                } else {
+                    Toast.makeText(DetailPlayer.this, "当前不是 Exo 内核或者未播放", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        binding.showTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.detailPlayer.getGSYVideoManager().getPlayer() instanceof Exo2PlayerManager) {
+                    if (binding.detailPlayer.isInPlayingState()) {
+                        IjkExo2MediaPlayer player = ((IjkExo2MediaPlayer) binding.detailPlayer.getGSYVideoManager().getPlayer().getMediaPlayer());
+                        List<String> list = new ArrayList<>();
+                        Tracks track = player.getCurrentTracks();
+                        for (int i = 0; i < track.getGroups().size(); i++) {
+                            Tracks.Group group = track.getGroups().get(i);
+                            if (C.TRACK_TYPE_AUDIO == group.getType() || C.TRACK_TYPE_VIDEO == group.getType()) {
+                                for (int j = 0; j < group.getMediaTrackGroup().length; j++) {
+                                    list.add("- " + group.getMediaTrackGroup().getFormat(j) + "\n");
+                                }
+                            }
+                            showOption(list.toArray(new String[0]));
+                        }
+                    }
+                } else {
+                    Toast.makeText(DetailPlayer.this, "当前不是 Exo 内核或者未播放", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -502,6 +532,17 @@ public class DetailPlayer extends AppCompatActivity {
         }
     }
 
+    private void showOption(final String[] list) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("显示可切换轨道");
+        builder.setItems(list, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+    }
 
     private void resolveNormalVideoUI() {
         //增加title
@@ -583,7 +624,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
         //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
         //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
-        String url = "https://d16n6tdp1xddz9.cloudfront.net/share_moment/2024/11/18/1731896623_1280x720_-928feaa800ce4f16b01417287578c009.mp4";
+        String url = "https://flipfit-cdn.akamaized.net/flip_hls/6656423247ffe600199e8363-15125d/video_h1.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
         //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
