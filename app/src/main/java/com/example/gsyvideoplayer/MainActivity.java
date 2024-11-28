@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.detailSubtitleActivity.setOnClickListener(this);
         binding.changeCore.setOnClickListener(this);
         binding.viewPager2Activity.setOnClickListener(this);
+        binding.viewPagerDemoActivity.setOnClickListener(this);
         binding.changeCache.setOnClickListener(this);
         binding.detailDownloadExoActivity.setOnClickListener(this);
         binding.tvPlay.setOnClickListener(this);
@@ -229,6 +230,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.view_pager2_activity:
                 JumpUtils.goToViewPager2Activity(this);
+                break;
+            case R.id.view_pager_demo_activity:
+                JumpUtils.goToViewPagerDemoActivity(this);
                 break;
             case R.id.change_core:
                 i += 1;

@@ -93,6 +93,13 @@
             android:text="ViewPager2列表" />
 
         <Button
+            android:id="@+id/view_pager_demo_activity"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="ViewPager Demo" />
+
+        <Button
             android:id="@+id/recycler"
             android:layout_width="240dp"
             android:layout_height="wrap_content"

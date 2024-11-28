@@ -253,4 +253,8 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
         byStartedClick = true;
         super.onStartTrackingTouch(seekBar);
     }
+
+    public  Surface getCurrentSurface() {
+        return mSurface;
+    }
 }
