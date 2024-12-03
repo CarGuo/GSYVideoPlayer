@@ -42,7 +42,8 @@
 [![GitHub license](https://img.shields.io/github/license/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/blob/master/LICENSE)
 
 []()
-[![Star](https://gitcode.com/ZuoYueLiang/GSYVideoPlayer/star/badge.svg)](https://gitcode.com/ZuoYueLiang/GSYVideoPlayer/overview) 
+[![Star](https://gitcode.com/ZuoYueLiang/GSYVideoPlayer/star/badge.svg)](https://gitcode.com/ZuoYueLiang/GSYVideoPlayer/overview)
+![](https://img.shields.io/github/v/release/androidx/media?label=media)
 
 
 | 公众号   | 掘金     |  知乎    |  CSDN   |   简书
