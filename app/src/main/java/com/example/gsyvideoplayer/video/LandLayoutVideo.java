@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
+import android.opengl.Matrix;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -171,5 +172,17 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
         super.changeUiToCompleteShow();
         setTextAndProgress(0, true);
         //changeUiToNormal();
+    }
+
+
+    @Override
+    public void onInfo(int what, int extra) {
+        super.onInfo(what, extra);
+        if(mRotate != 0) {
+            float[] rotationMatrix = new float[16];
+            Matrix.setIdentityM(rotationMatrix, 0);
+            Matrix.rotateM(rotationMatrix, 0, -mRotate, 0, 0, 1);
+            setMatrixGL(rotationMatrix);
+        }
     }
 }
