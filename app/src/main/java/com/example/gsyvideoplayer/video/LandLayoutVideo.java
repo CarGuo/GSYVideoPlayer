@@ -11,9 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoControlView;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 /**
@@ -75,7 +74,7 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
                     public boolean onScale(ScaleGestureDetector detector) {
                         scaleFactor *= detector.getScaleFactor();
                         scaleFactor = (scaleFactor < 1 ? 1 : scaleFactor); // prevent our view from becoming too small //
-                        scaleFactor = ((float)((int)(scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
+                        scaleFactor = ((float) ((int) (scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
                         mTextureViewContainer.setScaleX(scaleFactor);
                         mTextureViewContainer.setScaleY(scaleFactor);
 
@@ -178,7 +177,7 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
     @Override
     public void onInfo(int what, int extra) {
         super.onInfo(what, extra);
-        if(mRotate != 0) {
+        if (mRotate != 0 && GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
             float[] rotationMatrix = new float[16];
             Matrix.setIdentityM(rotationMatrix, 0);
             Matrix.rotateM(rotationMatrix, 0, -mRotate, 0, 0, 1);
