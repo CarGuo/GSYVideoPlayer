@@ -1,4 +1,3 @@
-
 package tv.danmaku.ijk.media.exo2;
 
 
@@ -101,7 +100,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
     private String mOverrideExtension;
     /**
      * 当然 track
-     * */
+     */
     private Tracks mCurrentTracks;
 
     protected int audioSessionId = C.AUDIO_SESSION_ID_UNSET;
@@ -142,14 +141,10 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
     }
 
 
-
-
     @Override
     public void setDisplay(SurfaceHolder sh) {
-        if (sh == null)
-            setSurface(null);
-        else
-            setSurface(sh.getSurface());
+        if (sh == null) setSurface(null);
+        else setSurface(sh.getSurface());
     }
 
     @Override
@@ -203,22 +198,19 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     @Override
     public void start() throws IllegalStateException {
-        if (mInternalPlayer == null)
-            return;
+        if (mInternalPlayer == null) return;
         mInternalPlayer.setPlayWhenReady(true);
     }
 
     @Override
     public void stop() throws IllegalStateException {
-        if (mInternalPlayer == null)
-            return;
+        if (mInternalPlayer == null) return;
         mInternalPlayer.release();
     }
 
     @Override
     public void pause() throws IllegalStateException {
-        if (mInternalPlayer == null)
-            return;
+        if (mInternalPlayer == null) return;
         mInternalPlayer.setPlayWhenReady(false);
     }
 
@@ -250,8 +242,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     @Override
     public boolean isPlaying() {
-        if (mInternalPlayer == null)
-            return false;
+        if (mInternalPlayer == null) return false;
         int state = mInternalPlayer.getPlaybackState();
         switch (state) {
             case Player.STATE_BUFFERING:
@@ -266,22 +257,19 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     @Override
     public void seekTo(long msec) throws IllegalStateException {
-        if (mInternalPlayer == null)
-            return;
+        if (mInternalPlayer == null) return;
         mInternalPlayer.seekTo(msec);
     }
 
     @Override
     public long getCurrentPosition() {
-        if (mInternalPlayer == null)
-            return 0;
+        if (mInternalPlayer == null) return 0;
         return mInternalPlayer.getCurrentPosition();
     }
 
     @Override
     public long getDuration() {
-        if (mInternalPlayer == null)
-            return 0;
+        if (mInternalPlayer == null) return 0;
         return mInternalPlayer.getDuration();
     }
 
@@ -333,14 +321,12 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     @Override
     public void setVolume(float leftVolume, float rightVolume) {
-        if (mInternalPlayer != null)
-            mInternalPlayer.setVolume((leftVolume + rightVolume) / 2);
+        if (mInternalPlayer != null) mInternalPlayer.setVolume((leftVolume + rightVolume) / 2);
     }
 
     @Override
     public int getAudioSessionId() {
-        if (mInternalPlayer != null)
-          return  mInternalPlayer.getAudioSessionId();
+        if (mInternalPlayer != null) return mInternalPlayer.getAudioSessionId();
         return audioSessionId;
     }
 
@@ -378,48 +364,39 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
     }
 
     protected void prepareAsyncInternal() {
-        new Handler(Looper.myLooper()).post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mTrackSelector == null) {
-                            mTrackSelector = new DefaultTrackSelector(mAppContext);
-                        }
-                        mEventLogger = new EventLogger(mTrackSelector);
-                        boolean preferExtensionDecoders = true;
-                        boolean useExtensionRenderers = true;//是否开启扩展
-                        @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = useExtensionRenderers
-                                ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
-                                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
-                                : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
-                        if (mRendererFactory == null) {
-                            mRendererFactory = new DefaultRenderersFactory(mAppContext);
-                            mRendererFactory.setExtensionRendererMode(extensionRendererMode);
-                        }
-                        if (mLoadControl == null) {
-                            mLoadControl = new DefaultLoadControl();
-                        }
-                        mInternalPlayer = new ExoPlayer.Builder(mAppContext, mRendererFactory)
-                                .setLooper(Looper.myLooper())
-                                .setTrackSelector(mTrackSelector)
-                                .setLoadControl(mLoadControl).build();
-                        mInternalPlayer.addListener(IjkExo2MediaPlayer.this);
-                        mInternalPlayer.addAnalyticsListener(IjkExo2MediaPlayer.this);
-                        mInternalPlayer.addListener(mEventLogger);
-                        if (mSpeedPlaybackParameters != null) {
-                            mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
-                        }
-                        if (isLooping) {
-                            mInternalPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
-                        }
-                        if (mSurface != null)
-                            mInternalPlayer.setVideoSurface(mSurface);
-                        mInternalPlayer.setMediaSource(mMediaSource);
-                        mInternalPlayer.prepare();
-                        mInternalPlayer.setPlayWhenReady(false);
-                    }
+        new Handler(Looper.myLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (mTrackSelector == null) {
+                    mTrackSelector = new DefaultTrackSelector(mAppContext);
                 }
-        );
+                mEventLogger = new EventLogger(mTrackSelector);
+                boolean preferExtensionDecoders = true;
+                boolean useExtensionRenderers = true;//是否开启扩展
+                @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = useExtensionRenderers ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON) : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
+                if (mRendererFactory == null) {
+                    mRendererFactory = new DefaultRenderersFactory(mAppContext);
+                    mRendererFactory.setExtensionRendererMode(extensionRendererMode);
+                }
+                if (mLoadControl == null) {
+                    mLoadControl = new DefaultLoadControl();
+                }
+                mInternalPlayer = new ExoPlayer.Builder(mAppContext, mRendererFactory).setLooper(Looper.myLooper()).setTrackSelector(mTrackSelector).setLoadControl(mLoadControl).build();
+                mInternalPlayer.addListener(IjkExo2MediaPlayer.this);
+                mInternalPlayer.addAnalyticsListener(IjkExo2MediaPlayer.this);
+                mInternalPlayer.addListener(mEventLogger);
+                if (mSpeedPlaybackParameters != null) {
+                    mInternalPlayer.setPlaybackParameters(mSpeedPlaybackParameters);
+                }
+                if (isLooping) {
+                    mInternalPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+                }
+                if (mSurface != null) mInternalPlayer.setVideoSurface(mSurface);
+                mInternalPlayer.setMediaSource(mMediaSource);
+                mInternalPlayer.prepare();
+                mInternalPlayer.setPlayWhenReady(false);
+            }
+        });
     }
 
     public String getOverrideExtension() {
@@ -455,7 +432,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
      * 设置seek 的临近帧。
      **/
     public void setSeekParameter(@Nullable SeekParameters seekParameters) {
-        mInternalPlayer.setSeekParameters(seekParameters);
+        if (mInternalPlayer != null) mInternalPlayer.setSeekParameters(seekParameters);
     }
 
 
@@ -514,8 +491,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
     }
 
     public int getBufferedPercentage() {
-        if (mInternalPlayer == null)
-            return 0;
+        if (mInternalPlayer == null) return 0;
 
         return mInternalPlayer.getBufferedPercentage();
     }
