@@ -138,6 +138,7 @@ public class GSYExoSubTitlePlayerManager extends BasePlayerManager {
         if (mediaPlayer != null) {
             mediaPlayer.setSurface(null);
             mediaPlayer.release();
+            mediaPlayer = null;
         }
         if (dummySurface != null) {
             dummySurface.release();
