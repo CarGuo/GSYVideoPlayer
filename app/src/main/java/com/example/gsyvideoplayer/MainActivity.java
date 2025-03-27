@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.open_btn_pick:
                 //无缝切换
-                JumpUtils.goToVideoPickPlayer(this, binding.openBtn);
+                JumpUtils.goToVideoPickPlayer(this, binding.openBtnPick);
                 break;
             case R.id.open_btn_auto:
                 //列表自动播放
