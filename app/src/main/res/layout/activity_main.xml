@@ -37,6 +37,13 @@
             android:text="带控制DEMO" />
 
         <Button
+            android:id="@+id/transparent"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="透明" />
+
+        <Button
             android:id="@+id/open_btn_empty"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
@@ -135,7 +142,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Detail列表模式，切换下一集" />
-
 
         <Button
             android:id="@+id/tv_play"

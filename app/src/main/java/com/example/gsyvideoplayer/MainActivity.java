@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.changeCache.setOnClickListener(this);
         binding.detailDownloadExoActivity.setOnClickListener(this);
         binding.tvPlay.setOnClickListener(this);
+        binding.transparent.setOnClickListener(this);
 
         boolean hadPermission = PermissionUtils.hasSelfPermissions(this, permissions);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hadPermission) {
@@ -126,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.list_btn_2:
                 //支持全屏重力旋转的列表播放，滑动后不会被销毁
                 JumpUtils.goToVideoPlayer2(this);
+                break;
+            case R.id.transparent:
+                //支持全屏重力旋转的列表播放，滑动后不会被销毁
+                JumpUtils.gotoDetailTransparentActivity(this);
                 break;
             case R.id.recycler:
                 //recycler的demo
