@@ -15,6 +15,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.transition.TransitionManager;
 
 import com.shuyu.gsyvideoplayer.R;
@@ -1083,5 +1086,29 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
                 Debuger.printfLog("竖屏，系统将布局下移；y:" + location[1]);
             }
         }
+    }
+
+    public void setAdaptToEdgeToEdge(boolean enabled) {
+        if (enabled) {
+            adaptToEdgeToEdge();
+        } else {
+            resetPadding();
+        }
+    }
+
+    private void adaptToEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(this, new androidx.core.view.OnApplyWindowInsetsListener() {
+            @NonNull
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            }
+        });
+    }
+
+    private void resetPadding() {
+        setPadding(0, 0, 0, 0);
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <!-- 启用 Edge-to-Edge -->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+</resources>

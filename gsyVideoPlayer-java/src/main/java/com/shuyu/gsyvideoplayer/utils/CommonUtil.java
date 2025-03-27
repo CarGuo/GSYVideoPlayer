@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Surface;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 import java.io.File;
@@ -305,5 +306,14 @@ public class CommonUtil {
         return context.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_90 ||
             context.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_270;
 
+    }
+
+    public static boolean isEdgeToEdgeEnabled(Context context) {
+        Activity activity = getActivityContext(context);
+        Window window = activity.getWindow();
+        return window != null && (
+            (window.getAttributes().flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) != 0 ||
+                (window.getAttributes().flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) != 0
+        );
     }
 }
