@@ -1,5 +1,14 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+
+###  v10.1.0 (2025-04-01)
+- update media 1.6.0
+- fix #4078
+- link 4075 fix glsurface adapter video rotate info
+- 增加 exo 切换轨道
+- miniSdk 21 ，compileSdk 35
+
+
 ###  v10.0.0 (2024-11-01)
 - update media3 1.4.1
 - update FFMpeg 4.1.6
