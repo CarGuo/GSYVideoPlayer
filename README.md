@@ -306,6 +306,9 @@ compileSdk 太高|--- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/
 
 ![框架图](./img/StructureChart2.jpg)
 ![框架图2](./img/StructureChart3.jpg)
+![框架图3](./img/p1.png)
+![框架图4](./img/p3.png)
+![框架图5](./img/p2.png)
 
 ## 四、运行效果
 
