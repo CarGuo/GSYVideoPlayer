@@ -49,7 +49,7 @@ ext {
             "androidx.media3:media3-ui:${mediaVersion}",
         ],
         aliplay:  [
-            "com.aliyun.sdk.android:AliyunPlayer:5.5.6.0-full"
+            "com.aliyun.sdk.android:AliyunPlayer:7.2.0-full"
         ]
     ]
 
