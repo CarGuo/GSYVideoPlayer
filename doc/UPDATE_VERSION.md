@@ -1,6 +1,10 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
 
+### v10.2.0 (2025-06-03)
+- update media 1.7.1
+- update aliyun player
+
 ###  v10.1.0 (2025-04-01)
 - update media 1.6.0
 - fix #4078
