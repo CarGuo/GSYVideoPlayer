@@ -285,7 +285,7 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 ### * [Flutter Github客户端](https://github.com/CarGuo/gsy_github_app_flutter) 、[React Native Github客户端](https://github.com/CarGuo/GSYGithubAPP) 、 [Weex Github客户端](https://github.com/CarGuo/GSYGithubAPPWeex) 、 [原生 Kotlin Github客户端](https://github.com/CarGuo/GSYGithubAPPKotlin)
 ### * [RxFFmpeg Android 的音视频编辑工具](https://github.com/microshow/RxFFmpeg)
 ### * [oarplayer Rtmp播放器,基于MediaCodec与srs-librtmp,不依赖ffmpeg](https://github.com/qingkouwei/oarplayer)
-### * 鸿蒙版本[openharmony-tpc/GSYVideoPlayer](https://gitee.com/openharmony-tpc/openharmony_tpc_samples/tree/master/GSYVideoPlayer)
+### * 鸿蒙版本[openharmony-tpc/GSYVideoPlayer](https://gitcode.com/openharmony-tpc/openharmony_tpc_samples/tree/master/GSYVideoPlayer)
 
 
 ## 三、文档Wiki
