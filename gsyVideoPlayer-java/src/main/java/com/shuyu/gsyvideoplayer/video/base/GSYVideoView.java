@@ -387,7 +387,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                 if (GSYVideoView.this.mReleaseWhenLossAudio) {
                     GSYVideoView.this.releaseVideos();
                 } else {
-                    if(getGSYVideoManager().listener() != null)
+                    if (getGSYVideoManager().listener() != null)
                         getGSYVideoManager().listener().onVideoPause();
                 }
 
@@ -762,7 +762,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     public long getCurrentPositionWhenPlaying() {
         long position = 0;
-        if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE) {
+        if (mCurrentState == CURRENT_STATE_PLAYING || mCurrentState == CURRENT_STATE_PAUSE
+            || mCurrentState == CURRENT_STATE_PLAYING_BUFFERING_START) {
             try {
                 position = getGSYVideoManager().getCurrentPosition();
             } catch (Exception e) {
@@ -1072,8 +1073,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     /**
      * 播放速度
      *
-     * @param speed      速度
-     * @param soundTouch 是否对6.0下开启变速不变调
+     * @param speed        速度
+     * @param soundTouch   是否对6.0下开启变速不变调
      * @param workRightNow 是否立刻生效
      */
     public void setSpeed(float speed, boolean soundTouch, boolean workRightNow) {
