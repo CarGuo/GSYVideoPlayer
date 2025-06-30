@@ -149,7 +149,7 @@ allprojects {
                 // your github name
                 username = 'carsmallguo'
                 // your github generate new token
-                password = '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'
+                password = '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'
             }
         }
         maven {
