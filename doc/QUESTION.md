@@ -6,6 +6,8 @@
 
 **ijkplayer问题第三方总结 https://juejin.im/entry/5bc7e7d6e51d450e4f392088**
 
+
+
 #### 0、依赖不成功的，如果是jitpach的依赖，记得在project下的build.gradle文件jitpack的依赖。（已弃用jitpack）
 ```
 allprojects {
@@ -14,6 +16,8 @@ allprojects {
 		maven { url 'https://jitpack.io' }
 	}
 }
+
+> 如果找不到依赖，出现丢包，可以看：https://github.com/CarGuo/GSYVideoPlayer/issues/4144
 ```
 #### 1、导入项目不成功？
 
