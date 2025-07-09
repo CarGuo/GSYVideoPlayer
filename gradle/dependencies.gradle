@@ -23,7 +23,7 @@ ext {
     ]
 
     viewDependencies = [
-        ijkplayer            : "com.github.CarGuo:GSYIjkJava:1.0.0",
+        ijkplayer            : "com.github.CarGuo:GSYIjkJava:v1.0.0",
         danmakuFlameMaster   : "com.github.CarGuo.DanmakuFlameMaster:DanmakuFlameMaster:${danmakuFlameMasterSoVersion}",
         floatWindow          : "com.github.yhaolpz:FloatWindow:1.0.6",
 
