@@ -43,11 +43,11 @@ implementation 'io.github.carguo:gsyvideoplayer-aliplay:11.0.0'
  implementation 'io.github.carguo:gsyvideoplayer-aliplay:11.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-arm64:11.0.0'
- implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-armv7a:11.0.0'
- implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-armv5:11.0.0'
- implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-x86:11.0.0'
- implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-x64:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-arm64:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv7a:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv5:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x86:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x64:11.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
