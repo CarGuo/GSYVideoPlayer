@@ -55,7 +55,12 @@
 
 ## 一、使用依赖
 
-三种不同的依赖，依赖路径都不一样，注意区分。
+目前有三种托管方式：
+
+- MavenCentral : 11.0.0 版本以后才有，所有基类包都发布托管在这里
+- Github Package ： 9.1.0 版本开始才有， 但是 11.0.0 之前， GSYIjkJava 的基础依赖还是在托管在 jitpack
+- Jitpack IO ：依然会发布，但是存在托管平台随机丢包
+
 
 #### [--- 版本更新说明 --- ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
 
