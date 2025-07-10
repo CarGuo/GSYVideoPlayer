@@ -99,6 +99,7 @@ allprojects {
         maven {
             url "https://maven.aliyun.com/repository/public"
         }
+        mavenCentral()
     }
 }
 ```
@@ -174,6 +175,7 @@ allprojects {
 		//...
         maven { url 'https://jitpack.io' }
         maven { url "https://maven.aliyun.com/repository/public" }
+        mavenCentral()
     }
 }
 ```
