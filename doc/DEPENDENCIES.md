@@ -1,15 +1,17 @@
+三种不同的依赖，依赖路径都不一样，注意区分。
 
-### 1、Jitpack 引入方法
 
-⚠️**因为依赖方式 2 的原因，目前 jitpack 依赖路径名称有调整**
+### 1、mavenCentral 引用(推荐)
 
-#### First、在project下的build.gradle添加
+由于 jitpack 不断丢包，目前已迁移至 MavenCentral，使用方式如下：
 
-```
+#### First 添加
+
+```groovy
 allprojects {
     repositories {
-		...
-        maven { url 'https://jitpack.io' }
+        ///...
+        mavenCentral()
         maven { url "https://maven.aliyun.com/repository/public" }
     }
 }
@@ -17,35 +19,35 @@ allprojects {
 
 **你可以选择下面三种的其中一种，在module下的build.gradle添加。**
 
-
 #### A、直接引入
-```
+
+```groovy
  //完整版引入
 
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v10.2.0'
+implementation 'io.github.carguo:gsyvideoplayer:11.0.0'
 
 
- //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.2.0'
+//是否需要AliPlayer模式
+implementation 'io.github.carguo:gsyvideoplayer-aliplay:11.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
-```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v10.2.0'
+```groovy
+ implementation 'io.github.carguo:gsyvideoplayer-java:11.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v10.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:11.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:11.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v10.2.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v10.2.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v10.2.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v10.2.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v10.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-arm64:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-armv7a:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-armv5:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-x86:11.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer:gsyvideoplayer-x64:11.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
@@ -53,32 +55,30 @@ allprojects {
 A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
-```
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v10.2.0'
+```groovy
+ implementation 'io.github.carguo:gsyvideoplayer-java:11.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v10.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:11.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v10.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:11.0.0'
 
  //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v10.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-ex_so:11.0.0'
 
 ```
 
-
-### 2、新增 Github Package 依赖方式
+### 2、Github Package 依赖方式(推荐)
 
 **由于 Jitpack 经常存在历史包随机丢失问题，所以新增 Github Package 依赖方式，使用方式如下**：
 
 > 不过 github package 访问需要 token 去 access 比较麻烦，但是胜在稳定
 
-
-```
+```groovy
 allprojects {
     repositories {
-		...
+		//...
         maven {
             url 'https://maven.pkg.github.com/CarGuo/GSYVideoPlayer'
 
@@ -97,40 +97,44 @@ allprojects {
     }
 }
 ```
-- 生成自己 token 的方式可见：https://docs.github.com/zh/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
 
-> 理论上就是右上角头像 - Settings - Developer Settings - Personal access tokens -  tokens (classic) -  Generate new token（classic）- read:packages
+- 生成自己 token
+  的方式可见：https://docs.github.com/zh/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+
+> 理论上就是右上角头像 - Settings - Developer Settings - Personal access tokens - tokens (classic) -
+> Generate new token（classic）- read:packages
 > 记得过期时间选择永久
 
 **你可以选择下面三种的其中一种，在module下的build.gradle添加。**
 
 #### A、直接引入
-```
+
+```groovy
  //完整版引入
- implementation 'com.shuyu:gsyvideoplayer:10.1.0'
+ implementation 'com.shuyu:gsyvideoplayer:11.0.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:10.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:11.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
-```
- implementation 'com.shuyu:gsyvideoplayer-java:10.1.0'
+```groovy
+ implementation 'com.shuyu:gsyvideoplayer-java:11.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-exo2:10.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:11.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:10.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:11.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'com.shuyu:gsyvideoplayer-armv5:10.1.0'
- implementation 'com.shuyu:gsyvideoplayer-armv7a:10.1.0'
- implementation 'com.shuyu:gsyvideoplayer-arm64:10.1.0'
- implementation 'com.shuyu:gsyvideoplayer-x86:10.1.0'
- implementation 'com.shuyu:gsyvideoplayer-x64:10.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv5:11.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv7a:11.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-arm64:11.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-x86:11.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-x64:11.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
@@ -138,17 +142,85 @@ allprojects {
 A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
-```
- implementation 'com.shuyu:gsyvideoplayer-java:10.1.0'
+```groovy
+ implementation 'com.shuyu:gsyvideoplayer-java:11.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-exo2:10.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:11.0.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:10.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:11.0.0'
 
  //更多ijk的编码支持
- implementation 'com.shuyu:gsyvideoplayer-ex_so:10.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-ex_so:11.0.0'
+
+```
+
+### 3、Jitpack 引入方法（会继续发布，但不是很推荐）
+
+历史包可能会出现随机丢包，而且还不好补充，可见 [#4144](https://github.com/CarGuo/GSYVideoPlayer/issues/4144)：
+
+#### First、在project下的build.gradle添加
+
+```groovy
+allprojects {
+    repositories {
+		//...
+        maven { url 'https://jitpack.io' }
+        maven { url "https://maven.aliyun.com/repository/public" }
+    }
+}
+```
+
+**你可以选择下面三种的其中一种，在module下的build.gradle添加。**
+
+#### A、直接引入
+
+```groovy
+ //完整版引入
+
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v11.0.0'
+
+
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v11.0.0'
+```
+
+#### B、添加java和你想要的so支持：
+
+```groovy
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v11.0.0'
+
+ //是否需要ExoPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v11.0.0'
+
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v11.0.0'
+
+ //根据你的需求ijk模式的so
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v11.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v11.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v11.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v11.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v11.0.0'
+```
+
+#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+
+A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
+C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+
+```groovy
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v11.0.0'
+
+ //是否需要ExoPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v11.0.0'
+
+ //是否需要AliPlayer模式
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v11.0.0'
+
+ //更多ijk的编码支持
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v11.0.0'
 
 ```
