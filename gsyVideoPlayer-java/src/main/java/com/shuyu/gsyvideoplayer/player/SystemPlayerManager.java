@@ -70,13 +70,17 @@ public class SystemPlayerManager extends BasePlayerManager {
                 setSpeed(gsyModel.getSpeed());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            android.util.Log.e("SystemPlayerManager", "Error initializing video player", e);
         }
         initSuccess(gsyModel);
     }
 
     @Override
     public void showDisplay(Message msg) {
+        if (msg == null) {
+            return;
+        }
+        
         if (msg.obj == null && mediaPlayer != null && !release) {
             if (dummySurface != null) {
                 mediaPlayer.setSurface(dummySurface);
@@ -112,7 +116,7 @@ public class SystemPlayerManager extends BasePlayerManager {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            android.util.Log.e("SystemPlayerManager", "Error setting mute state", e);
         }
     }
 
@@ -126,7 +130,8 @@ public class SystemPlayerManager extends BasePlayerManager {
     @Override
     public void releaseSurface() {
         if (surface != null) {
-            //surface.release();
+            // Note: Surface release is handled by the surface creator
+            // Releasing here could cause issues if surface is still in use
             surface = null;
         }
     }
@@ -271,7 +276,7 @@ public class SystemPlayerManager extends BasePlayerManager {
                     Debuger.printfError(" not support setSpeed");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                android.util.Log.e("SystemPlayerManager", "Error setting playback speed", e);
             }
         }
     }
