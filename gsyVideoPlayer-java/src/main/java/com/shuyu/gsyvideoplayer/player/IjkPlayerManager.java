@@ -96,7 +96,7 @@ public class IjkPlayerManager extends BasePlayerManager {
                             FileDescriptor fileDescriptor = descriptor.getFileDescriptor();
                             mediaPlayer.setDataSource(fileDescriptor);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            android.util.Log.e("IjkPlayerManager", "Error opening content URI: " + uri, e);
                         }
                     } else {
                         mediaPlayer.setDataSource(url, gsyModel.getMapHeadData());
@@ -115,7 +115,7 @@ public class IjkPlayerManager extends BasePlayerManager {
             mediaPlayer.native_setLogLevel(logLevel);
             initIJKOption(mediaPlayer, optionModelList);
         } catch (IOException e) {
-            e.printStackTrace();
+            android.util.Log.e("IjkPlayerManager", "Error setting data source", e);
         }
 
         initSuccess(gsyModel);
@@ -123,9 +123,13 @@ public class IjkPlayerManager extends BasePlayerManager {
 
     @Override
     public void showDisplay(Message msg) {
+        if (msg == null) {
+            return;
+        }
+        
         if (msg.obj == null && mediaPlayer != null) {
             mediaPlayer.setSurface(null);
-        } else {
+        } else if (msg.obj != null) {
             Surface holder = (Surface) msg.obj;
             surface = holder;
             if (mediaPlayer != null && holder.isValid()) {
@@ -142,7 +146,7 @@ public class IjkPlayerManager extends BasePlayerManager {
                     mediaPlayer.setSpeed(speed);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                android.util.Log.e("IjkPlayerManager", "Error setting playback speed", e);
             }
             if (soundTouch) {
                 VideoOptionModel videoOptionModel =

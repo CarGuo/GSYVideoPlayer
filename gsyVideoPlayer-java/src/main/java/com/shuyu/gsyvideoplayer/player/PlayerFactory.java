@@ -6,22 +6,30 @@ package com.shuyu.gsyvideoplayer.player;
  */
 public class PlayerFactory {
 
-    private static Class<? extends IPlayerManager> sPlayerManager;
+    private static volatile Class<? extends IPlayerManager> sPlayerManager;
 
-    public static void setPlayManager(Class<? extends IPlayerManager> playManager) {
+    public static synchronized void setPlayManager(Class<? extends IPlayerManager> playManager) {
         sPlayerManager = playManager;
     }
 
     public static IPlayerManager getPlayManager() {
-        if (sPlayerManager == null) {
-            sPlayerManager = IjkPlayerManager.class;
+        Class<? extends IPlayerManager> localPlayerManager = sPlayerManager;
+        if (localPlayerManager == null) {
+            synchronized (PlayerFactory.class) {
+                localPlayerManager = sPlayerManager;
+                if (localPlayerManager == null) {
+                    sPlayerManager = localPlayerManager = IjkPlayerManager.class;
+                }
+            }
         }
         try {
-            return sPlayerManager.newInstance();
+            return localPlayerManager.newInstance();
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            android.util.Log.e("PlayerFactory", "Failed to instantiate player manager: " + localPlayerManager.getName(), e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            android.util.Log.e("PlayerFactory", "Illegal access to player manager: " + localPlayerManager.getName(), e);
+        } catch (Exception e) {
+            android.util.Log.e("PlayerFactory", "Unexpected error creating player manager: " + localPlayerManager.getName(), e);
         }
         return null;
     }
