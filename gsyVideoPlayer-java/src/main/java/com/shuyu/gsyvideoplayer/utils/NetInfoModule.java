@@ -80,8 +80,13 @@ public class NetInfoModule {
 
     private void unregisterReceiver() {
         if (mConnectivityBroadcastReceiver.isRegistered()) {
-            mContext.unregisterReceiver(mConnectivityBroadcastReceiver);
-            mConnectivityBroadcastReceiver.setRegistered(false);
+            try {
+                mContext.unregisterReceiver(mConnectivityBroadcastReceiver);
+            } catch (Exception e) {
+                android.util.Log.w("NetInfoModule", "Error unregistering broadcast receiver", e);
+            } finally {
+                mConnectivityBroadcastReceiver.setRegistered(false);
+            }
         }
     }
 
@@ -124,7 +129,7 @@ public class NetInfoModule {
      */
     private class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 
-        //TODO: Remove registered check when source of crash is found. t9846865
+        // Keep registered state to prevent crashes when unregistering
         private boolean isRegistered = false;
 
         public void setRegistered(boolean registered) {
@@ -137,8 +142,16 @@ public class NetInfoModule {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent == null || intent.getAction() == null) {
+                return;
+            }
+            
             if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                updateAndSendConnectionType();
+                try {
+                    updateAndSendConnectionType();
+                } catch (Exception e) {
+                    android.util.Log.e("NetInfoModule", "Error updating connection type", e);
+                }
             }
         }
     }

@@ -636,7 +636,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             mediaPlayer.prepareAsync();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            android.util.Log.e("GSYVideoBaseManager", "Error initializing video player", e);
         }
     }
 
