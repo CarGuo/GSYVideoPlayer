@@ -54,7 +54,7 @@ import java.util.Locale;
 
 
 public final class EventLogger implements Player.Listener, MetadataOutput,
-    AudioRendererEventListener, VideoRendererEventListener, MediaSourceEventListener {
+    AudioRendererEventListener, VideoRendererEventListener {
 
     private static final String TAG = "EventLogger";
     private static final int MAX_TIMELINE_ITEM_LINES = 3;
@@ -230,6 +230,11 @@ public final class EventLogger implements Player.Listener, MetadataOutput,
     @Override
     public void onAudioDisabled(DecoderCounters counters) {
         Log.d(TAG, "audioDisabled [" + getSessionTimeString() + "]");
+    }
+
+    @Override
+    public void onAudioSessionIdChanged(int audioSessionId) {
+        Log.d(TAG, "onAudioSessionIdChanged [" + getSessionTimeString() + ", audioSessionId=" + audioSessionId + "]");
     }
 
     // VideoRendererEventListener
