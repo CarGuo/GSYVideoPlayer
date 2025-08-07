@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.media.AudioManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -166,7 +165,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         getGSYVideoManager().setListener(this);
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);
-        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        // Audio focus is now handled by the base class GSYAudioFocusManager
         try {
             ((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } catch (Exception e) {
@@ -261,7 +260,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
 
         if (!mIfCurrentIsFullscreen)
             getGSYVideoManager().setLastListener(null);
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        // Audio focus is now handled by the base class GSYAudioFocusManager
         if (mContext instanceof Activity) {
             try {
                 ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -296,7 +295,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         getGSYVideoManager().setCurrentVideoHeight(0);
         getGSYVideoManager().setCurrentVideoWidth(0);
 
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        // Audio focus is now handled by the base class GSYAudioFocusManager
         if (mContext instanceof Activity) {
             try {
                 ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

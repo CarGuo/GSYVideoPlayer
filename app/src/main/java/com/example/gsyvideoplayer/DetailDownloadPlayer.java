@@ -252,7 +252,7 @@ public class DetailDownloadPlayer extends AppCompatActivity {
 
     private String getUrl() {
 
-        String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        String url = "https://www.w3schools.com/html/mov_bbb.mp4";
 
         return url;
     }

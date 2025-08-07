@@ -52,12 +52,12 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         setContentView(rootView);
 
 
-        String source1 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear1/prog_index.m3u8";
+        String source1 = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
         //String source1 = "https://res.exexm.com/cw_145225549855002";
         String name = "普通";
         SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
 
-        String source2 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        String source2 = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
         String name2 = "清晰";
         SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
 

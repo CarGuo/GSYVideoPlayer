@@ -27,6 +27,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.GSYAudioFocusManager;
 import com.shuyu.gsyvideoplayer.utils.NetInfoModule;
 
 import java.io.File;
@@ -40,7 +41,7 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.getTextSpeed;
  * Created by guoshuyu on 2017/8/2.
  */
 
-public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMediaPlayerListener {
+public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMediaPlayerListener, GSYAudioFocusManager.GSYAudioFocusListener {
 
     //正常
     public static final int CURRENT_STATE_NORMAL = 0;
@@ -123,8 +124,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     //是否播放器当失去音频焦点
     protected boolean mReleaseWhenLossAudio = true;
 
-    //音频焦点的监听
-    protected AudioManager mAudioManager;
+    //音频焦点管理器，优化内存泄漏问题
+    protected GSYAudioFocusManager mAudioFocusManager;
 
     //播放的tag，防止错误，因为普通的url也可能重复
     protected String mPlayTag = "";
@@ -279,7 +280,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             return;
         mScreenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
         mScreenHeight = mContext.getResources().getDisplayMetrics().heightPixels;
-        mAudioManager = (AudioManager) mContext.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        
+        // 初始化音频焦点管理器
+        initAudioFocusManager();
 
     }
 
@@ -300,6 +303,21 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             } else {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * 初始化音频焦点管理器
+     */
+    protected void initAudioFocusManager() {
+        try {
+            if (mAudioFocusManager == null) {
+                mAudioFocusManager = new GSYAudioFocusManager();
+            }
+            mAudioFocusManager.initialize(mContext, this);
+        } catch (Exception e) {
+            Debuger.printfError("Failed to initialize AudioFocusManager: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -336,7 +354,12 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         getGSYVideoManager().setListener(this);
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);
-        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        
+        // 请求音频焦点
+        if (mAudioFocusManager != null) {
+            mAudioFocusManager.requestAudioFocus();
+        }
+        
         try {
             if (mContext instanceof Activity) {
                 ((Activity) mContext).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -350,38 +373,18 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     }
 
     /**
-     * 监听是否有外部其他多媒体开始播放
-     */
-    protected AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-        @Override
-        public void onAudioFocusChange(int focusChange) {
-            switch (focusChange) {
-                case AudioManager.AUDIOFOCUS_GAIN:
-                    onGankAudio();
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS:
-                    onLossAudio();
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    onLossTransientAudio();
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                    onLossTransientCanDuck();
-                    break;
-            }
-        }
-    };
-
-    /**
      * 获得了Audio Focus
      */
-    protected void onGankAudio() {
+    @Override
+    public void onAudioFocusGain() {
+        // 可以在子类中重写此方法来处理获得音频焦点的逻辑
     }
 
     /**
      * 失去了Audio Focus，并将会持续很长的时间
      */
-    protected void onLossAudio() {
+    @Override
+    public void onAudioFocusLoss() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             public void run() {
                 if (GSYVideoView.this.mReleaseWhenLossAudio) {
@@ -390,7 +393,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     if (getGSYVideoManager().listener() != null)
                         getGSYVideoManager().listener().onVideoPause();
                 }
-
             }
         });
     }
@@ -398,9 +400,12 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     /**
      * 暂时失去Audio Focus，并会很快再次获得
      */
-    protected void onLossTransientAudio() {
+    @Override
+    public void onAudioFocusLossTransient() {
         try {
-            getGSYVideoManager().listener().onVideoPause();
+            if (getGSYVideoManager().listener() != null) {
+                getGSYVideoManager().listener().onVideoPause();
+            }
         } catch (Exception var2) {
             var2.printStackTrace();
         }
@@ -409,7 +414,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     /**
      * 暂时失去AudioFocus，但是可以继续播放，不过要在降低音量
      */
-    protected void onLossTransientCanDuck() {
+    @Override
+    public void onAudioFocusLossTransientCanDuck() {
+        // 可以在子类中重写此方法来处理降低音量的逻辑
     }
 
 
@@ -542,8 +549,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     }
                     getGSYVideoManager().start();
                     setStateAndUi(CURRENT_STATE_PLAYING);
-                    if (mAudioManager != null && !mReleaseWhenLossAudio) {
-                        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                    if (mAudioFocusManager != null && !mReleaseWhenLossAudio) {
+                        mAudioFocusManager.requestAudioFocus();
                     }
                     mCurrentPosition = 0;
                 }
@@ -616,7 +623,11 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         if (!mIfCurrentIsFullscreen)
             getGSYVideoManager().setLastListener(null);
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+            
+        // 安全地放弃音频焦点
+        if (mAudioFocusManager != null) {
+            mAudioFocusManager.abandonAudioFocus();
+        }
         if (mContext instanceof Activity) {
             try {
                 ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -652,7 +663,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         getGSYVideoManager().setCurrentVideoHeight(0);
         getGSYVideoManager().setCurrentVideoWidth(0);
 
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        // 安全地放弃音频焦点
+        if (mAudioFocusManager != null) {
+            mAudioFocusManager.abandonAudioFocus();
+        }
         if (mContext instanceof Activity) {
             try {
                 ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -800,6 +814,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             (System.currentTimeMillis() - mSaveChangeViewTIme) > CHANGE_DELAY_TIME) {
             releaseVideos();
         }
+        // 释放音频焦点管理器资源
+        releaseAudioFocusManager();
     }
 
     /**
@@ -1178,5 +1194,23 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     public void setOverrideExtension(String overrideExtension) {
         this.mOverrideExtension = overrideExtension;
+    }
+
+    /**
+     * 获取音频管理器，用于音量控制等操作
+     * @return AudioManager实例，可能为null
+     */
+    protected AudioManager getAudioManager() {
+        return mAudioFocusManager != null ? mAudioFocusManager.getAudioManager() : null;
+    }
+
+    /**
+     * 释放音频焦点管理器资源，防止内存泄漏
+     */
+    protected void releaseAudioFocusManager() {
+        if (mAudioFocusManager != null) {
+            mAudioFocusManager.release();
+            mAudioFocusManager = null;
+        }
     }
 }

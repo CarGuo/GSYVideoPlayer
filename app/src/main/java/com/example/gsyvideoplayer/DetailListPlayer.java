@@ -44,7 +44,7 @@ public class DetailListPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> 
 
         //String url = "http://baobab.wd jcdn.com/14564977406580.mp4";
         List<GSYVideoModel> urls = new ArrayList<>();
-        urls.add(new GSYVideoModel("http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8", "标题1"));
+        urls.add(new GSYVideoModel("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", "标题1"));
 //        urls.add(new GSYVideoModel("https://res.exexm.com/cw_145225549855002", "标题2"));
 //        urls.add(new GSYVideoModel("http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8", "标题3"));
 //        urls.add(new GSYVideoModel("https://res.exexm.com/cw_145225549855002", "标题4"));

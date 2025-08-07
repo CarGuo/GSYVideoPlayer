@@ -2,7 +2,6 @@ package com.example.gsyvideoplayer.video;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.media.AudioManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -53,23 +52,7 @@ public class MultiSampleVideo extends StandardGSYVideoPlayer {
                 (mCurrentState == -1 || mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR)) {
             mThumbImageViewLayout.setVisibility(VISIBLE);
         }
-        onAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-            @Override
-            public void onAudioFocusChange(int focusChange) {
-                switch (focusChange) {
-                    case AudioManager.AUDIOFOCUS_GAIN:
-                        break;
-                    case AudioManager.AUDIOFOCUS_LOSS:
-                        //todo 判断如果不是外界造成的就不处理
-                        break;
-                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                        //todo 判断如果不是外界造成的就不处理
-                        break;
-                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                        break;
-                }
-            }
-        };
+        // Audio focus is now handled by the base class GSYAudioFocusManager
     }
 
     @Override
@@ -103,6 +86,23 @@ public class MultiSampleVideo extends StandardGSYVideoPlayer {
     @Override
     public int getLayoutId() {
         return R.layout.video_layout_cover;
+    }
+
+    @Override
+    public void onAudioFocusGain() {
+
+    }
+
+    @Override
+    public void onAudioFocusLoss() {
+    }
+
+    @Override
+    public void onAudioFocusLossTransient() {
+    }
+
+    @Override
+    public void onAudioFocusLossTransientCanDuck() {
     }
 
     public void loadCoverImage(String url, int res) {

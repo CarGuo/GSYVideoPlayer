@@ -53,7 +53,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         initView();
 
-        String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        String url = "https://www.w3schools.com/html/mov_bbb.mp4";
 
         //增加封面
         ImageView imageView = new ImageView(this);

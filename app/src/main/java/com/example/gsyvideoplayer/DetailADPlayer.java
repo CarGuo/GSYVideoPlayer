@@ -34,16 +34,16 @@ public class DetailADPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
 
         ArrayList<GSYSampleADVideoPlayer.GSYADVideoModel> urls = new ArrayList<>();
         //广告1
-        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8",
+        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
                 "", GSYSampleADVideoPlayer.GSYADVideoModel.TYPE_AD));
         //正式内容1
-        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",
+        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("https://www.w3schools.com/html/mov_bbb.mp4",
                 "正文1标题", GSYSampleADVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
         //广告2
-        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8",
+        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
                 "", GSYSampleADVideoPlayer.GSYADVideoModel.TYPE_AD, true));
         //正式内容2
-        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",
+        urls.add(new GSYSampleADVideoPlayer.GSYADVideoModel("https://www.w3schools.com/html/mov_bbb.mp4",
                 "正文2标题", GSYSampleADVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
 
         binding.adPlayer.setAdUp(urls, true, 0);
@@ -118,4 +118,3 @@ public class DetailADPlayer extends GSYBaseActivityDetail<ListGSYVideoPlayer> {
         binding.adPlayer.getBackButton().setVisibility(View.VISIBLE);
     }
 }
-
