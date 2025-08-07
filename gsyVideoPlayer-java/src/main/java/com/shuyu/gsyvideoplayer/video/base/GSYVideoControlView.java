@@ -286,6 +286,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         Debuger.printfLog(GSYVideoControlView.this.hashCode() + "------------------------------ dismiss onDetachedFromWindow");
         cancelProgressTimer();
         cancelDismissControlViewTimer();
+        
+        // 释放音频焦点管理器资源
+        releaseAudioFocusManager();
     }
 
     @Override
@@ -328,8 +331,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     releasePauseCover();
                     mBufferPoint = 0;
                     mSaveChangeViewTIme = 0;
-                    if (mAudioManager != null) {
-                        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+                    if (mAudioFocusManager != null) {
+                        mAudioFocusManager.abandonAudioFocus();
                     }
                 }
                 releaseNetWorkState();
@@ -712,12 +715,15 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             showProgressDialog(deltaX, seekTime, mSeekTimePosition, totalTime, totalTimeDuration);
         } else if (mChangeVolume) {
             deltaY = -deltaY;
-            int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-            int deltaV = (int) (max * deltaY * 3 / curHeight);
-            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mGestureDownVolume + deltaV, 0);
-            int volumePercent = (int) (mGestureDownVolume * 100 / max + deltaY * 3 * 100 / curHeight);
+            AudioManager audioManager = getAudioManager();
+            if (audioManager != null) {
+                int max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                int deltaV = (int) (max * deltaY * 3 / curHeight);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mGestureDownVolume + deltaV, 0);
+                int volumePercent = (int) (mGestureDownVolume * 100 / max + deltaY * 3 * 100 / curHeight);
 
-            showVolumeDialog(-deltaY, volumePercent);
+                showVolumeDialog(-deltaY, volumePercent);
+            }
         } else if (mBrightness) {
             if (Math.abs(deltaY) > mThreshold) {
                 float percent = (-deltaY / curHeight);
@@ -752,7 +758,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 }
                 if (!mBrightness) {
                     mChangeVolume = noEnd;
-                    mGestureDownVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                    AudioManager audioManager = getAudioManager();
+                    if (audioManager != null) {
+                        mGestureDownVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                    }
                 }
                 mShowVKey = !noEnd;
             }
