@@ -252,7 +252,7 @@ public class DetailDownloadPlayer extends AppCompatActivity {
 
     private String getUrl() {
 
-        String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        String url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
         return url;
     }

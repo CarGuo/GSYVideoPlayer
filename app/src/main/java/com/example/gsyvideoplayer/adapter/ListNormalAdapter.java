@@ -82,8 +82,8 @@ public class ListNormalAdapter extends BaseAdapter {
 
 
         //final String url = "https://res.exexm.com/cw_145225549855002";
-        final String urlH = "https://test-haichi.oss-cn-hangzhou.aliyuncs.com/goods.core.base/VIDEO/4007067452261301700161221090_VIDEO?version=0";
-        final String urlV = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+        final String urlH = "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
+        final String urlV = "https://www.w3schools.com/html/mov_bbb.mp4";
         final String url = (position % 2 == 0) ? urlH : urlV;
         //final String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
 

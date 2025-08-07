@@ -92,7 +92,7 @@ public class ListVideoAdapter extends BaseAdapter {
                 //listVideoUtil.setLoop(true);
                 smallVideoHelper.setPlayPositionAndTag(position, TAG);
                 //final String url = "https://res.exexm.com/cw_145225549855002";
-                final String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                final String url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
                 gsySmallVideoHelperBuilder.setVideoTitle("title " + position)
                         .setUrl(url);
                 smallVideoHelper.startPlay();

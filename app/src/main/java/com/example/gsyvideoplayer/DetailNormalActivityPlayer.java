@@ -220,6 +220,6 @@ public class DetailNormalActivityPlayer extends Activity {
 
 
     private String getUrl() {
-        return "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     }
 }

@@ -68,8 +68,8 @@ public class SimpleListVideoModeAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final String urlH = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-        final String urlV = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        final String urlH = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+        final String urlV = "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
         final String url = (position % 2 == 0) ? urlH : urlV;
 
         if (position % 2 == 0) {

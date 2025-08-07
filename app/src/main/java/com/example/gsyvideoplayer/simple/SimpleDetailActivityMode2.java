@@ -37,7 +37,7 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
 
         detailPlayer = (StandardGSYVideoPlayer) findViewById(R.id.detail_player);
 
-        String url = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        String url = "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
 
         //增加封面
         ImageView imageView = new ImageView(this);

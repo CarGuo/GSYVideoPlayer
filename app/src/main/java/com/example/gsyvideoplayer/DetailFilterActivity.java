@@ -88,7 +88,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
 
     private float deep = 0.8f;
 
-    private String url = "https://res.exexm.com/cw_145225549855002";
+    private String url = "https://media.w3.org/2010/05/sintel/trailer_hd.mp4";
     //private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
 
     private Timer timer = new Timer();

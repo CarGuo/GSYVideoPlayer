@@ -30,7 +30,7 @@ public class SimplePlayer extends AppCompatActivity {
     private void init() {
         videoPlayer =  (StandardGSYVideoPlayer)findViewById(R.id.video_player);
 
-        String source1 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        String source1 = "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
         videoPlayer.setUp(source1, true, "测试视频");
 
         //增加封面
