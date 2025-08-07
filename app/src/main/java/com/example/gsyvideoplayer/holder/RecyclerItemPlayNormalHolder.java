@@ -44,10 +44,10 @@ public class RecyclerItemPlayNormalHolder extends RecyclerItemBaseHolder {
         String url;
         String title;
         if (position % 2 == 0) {
-            url = "https://pointshow.oss-cn-hangzhou.aliyuncs.com/McTk51586843620689.mp4";
+            url = "https://www.w3schools.com/html/mov_bbb.mp4";
             title = "这是title";
         } else {
-            url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+            url = "https://www.w3schools.com/html/mov_bbb.mp4";
             title = "哦？Title？";
         }
 

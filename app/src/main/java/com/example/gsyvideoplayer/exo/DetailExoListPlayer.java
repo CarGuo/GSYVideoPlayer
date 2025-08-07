@@ -41,9 +41,9 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
 
         List<GSYVideoModel> urls = new ArrayList<>();
 
-        urls.add(new GSYVideoModel("http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8", "标题1"));
-        urls.add(new GSYVideoModel("https://media6.smartstudy.com/ae/07/3997/2/dest.m3u8", "标题3"));
-        urls.add(new GSYVideoModel("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", "标题2"));
+        urls.add(new GSYVideoModel("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", "标题1"));
+        urls.add(new GSYVideoModel("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", "标题3"));
+        urls.add(new GSYVideoModel("https://www.w3schools.com/html/mov_bbb.mp4", "标题2"));
         //binding.detailPlayer.setUp(urls, 1);
         binding.detailPlayer.setUp(urls, 0);
 

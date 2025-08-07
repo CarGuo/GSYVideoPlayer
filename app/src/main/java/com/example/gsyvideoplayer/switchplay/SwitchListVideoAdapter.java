@@ -69,8 +69,8 @@ public class SwitchListVideoAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        final String urlH = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-        final String urlV = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        final String urlH = "https://www.w3schools.com/html/mov_bbb.mp4";
+        final String urlV = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
         final String url = (position % 2 == 0) ? urlH : urlV;
         final int coverId = (position % 2 == 0) ? R.mipmap.xxx1 : R.mipmap.xxx2;
 

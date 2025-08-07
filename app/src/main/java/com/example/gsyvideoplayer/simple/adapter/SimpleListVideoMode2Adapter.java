@@ -87,7 +87,7 @@ public class SimpleListVideoMode2Adapter extends BaseAdapter {
             public void onClick(View v) {
                 notifyDataSetChanged();
                 smallVideoHelper.setPlayPositionAndTag(position, TAG);
-                final String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                final String url = "https://www.w3schools.com/html/mov_bbb.mp4";
                 gsySmallVideoHelperBuilder.setVideoTitle("title " + position)
                         .setUrl(url);
                 smallVideoHelper.startPlay();

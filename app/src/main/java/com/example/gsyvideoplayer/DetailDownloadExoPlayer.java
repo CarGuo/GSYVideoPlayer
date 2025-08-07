@@ -56,7 +56,7 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
     private Map<String, String> header = new HashMap<>();
 
 
-    private String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    private String url = "https://www.w3schools.com/html/mov_bbb.mp4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
