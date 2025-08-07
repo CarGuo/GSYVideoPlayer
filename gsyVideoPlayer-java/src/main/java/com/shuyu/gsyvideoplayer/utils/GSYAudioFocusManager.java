@@ -19,6 +19,7 @@ public class GSYAudioFocusManager {
     private WeakReference<AudioManager> mAudioManagerRef;
     private WeakReference<GSYAudioFocusListener> mListenerRef;
     private boolean mHasAudioFocus = false;
+    private volatile boolean mIsReleased = false; // 标记是否已释放，避免重复操作
     
     /**
      * 音频焦点监听接口
@@ -55,9 +56,18 @@ public class GSYAudioFocusManager {
      * @param listener 音频焦点监听器
      */
     public void initialize(Context context, GSYAudioFocusListener listener) {
+        if (mIsReleased) {
+            Debuger.printfWarning(TAG + ": Cannot initialize after release, create a new instance");
+            return;
+        }
+        
         if (context == null) {
             Debuger.printfError(TAG + ": Context is null, cannot initialize AudioManager");
             return;
+        }
+        
+        if (listener == null) {
+            Debuger.printfWarning(TAG + ": Listener is null, audio focus events will not be handled");
         }
         
         try {
@@ -78,6 +88,11 @@ public class GSYAudioFocusManager {
      * @return 是否成功请求到音频焦点
      */
     public boolean requestAudioFocus() {
+        if (mIsReleased) {
+            Debuger.printfWarning(TAG + ": Cannot request audio focus after release");
+            return false;
+        }
+        
         AudioManager audioManager = mAudioManagerRef != null ? mAudioManagerRef.get() : null;
         if (audioManager == null) {
             Debuger.printfWarning(TAG + ": AudioManager is null, cannot request audio focus");
@@ -203,6 +218,10 @@ public class GSYAudioFocusManager {
      * 释放所有资源
      */
     public void release() {
+        if (mIsReleased) {
+            return; // 避免重复释放
+        }
+        
         abandonAudioFocus();
         
         if (mAudioManagerRef != null) {
@@ -215,6 +234,7 @@ public class GSYAudioFocusManager {
             mListenerRef = null;
         }
         
+        mIsReleased = true;
         Debuger.printfLog(TAG + ": AudioFocusManager released");
     }
     
@@ -223,6 +243,9 @@ public class GSYAudioFocusManager {
      * @return AudioManager实例，可能为null
      */
     public AudioManager getAudioManager() {
+        if (mIsReleased) {
+            return null;
+        }
         return mAudioManagerRef != null ? mAudioManagerRef.get() : null;
     }
 }

@@ -310,10 +310,15 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 初始化音频焦点管理器
      */
     protected void initAudioFocusManager() {
-        if (mAudioFocusManager == null) {
-            mAudioFocusManager = new GSYAudioFocusManager();
+        try {
+            if (mAudioFocusManager == null) {
+                mAudioFocusManager = new GSYAudioFocusManager();
+            }
+            mAudioFocusManager.initialize(mContext, this);
+        } catch (Exception e) {
+            Debuger.printfError("Failed to initialize AudioFocusManager: " + e.getMessage());
+            e.printStackTrace();
         }
-        mAudioFocusManager.initialize(mContext, this);
     }
 
     /**
@@ -809,6 +814,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             (System.currentTimeMillis() - mSaveChangeViewTIme) > CHANGE_DELAY_TIME) {
             releaseVideos();
         }
+        // 释放音频焦点管理器资源
+        releaseAudioFocusManager();
     }
 
     /**
