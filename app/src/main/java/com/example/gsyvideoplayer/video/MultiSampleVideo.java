@@ -88,6 +88,23 @@ public class MultiSampleVideo extends StandardGSYVideoPlayer {
         return R.layout.video_layout_cover;
     }
 
+    @Override
+    public void onAudioFocusGain() {
+
+    }
+
+    @Override
+    public void onAudioFocusLoss() {
+    }
+
+    @Override
+    public void onAudioFocusLossTransient() {
+    }
+
+    @Override
+    public void onAudioFocusLossTransientCanDuck() {
+    }
+
     public void loadCoverImage(String url, int res) {
         mCoverOriginUrl = url;
         mDefaultRes = res;
