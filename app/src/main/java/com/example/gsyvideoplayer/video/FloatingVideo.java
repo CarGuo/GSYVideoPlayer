@@ -4,7 +4,6 @@ package com.example.gsyvideoplayer.video;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.media.AudioManager;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -62,7 +61,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
             return;
         mScreenWidth = getActivityContext().getResources().getDisplayMetrics().widthPixels;
         mScreenHeight = getActivityContext().getResources().getDisplayMetrics().heightPixels;
-        mAudioManager = (AudioManager) getActivityContext().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        // AudioManager is now handled by the base class GSYAudioFocusManager
         mStartButton = findViewById(com.shuyu.gsyvideoplayer.R.id.start);
         mStartButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -86,7 +85,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
         getGSYVideoManager().setListener(this);
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);
-        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        // Audio focus is now handled by the base class GSYAudioFocusManager
         //((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBackUpPlayingBufferState = -1;
         getGSYVideoManager().prepare(mUrl, mMapHeadData, mLooping, mSpeed, mCache, mCachePath, null);
@@ -105,7 +104,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
 
         if (!mIfCurrentIsFullscreen)
             getGSYVideoManager().setLastListener(null);
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        // Audio focus is now handled by the base class GSYAudioFocusManager
         //((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         releaseNetWorkState();
@@ -134,7 +133,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
         getGSYVideoManager().setCurrentVideoHeight(0);
         getGSYVideoManager().setCurrentVideoWidth(0);
 
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        // Audio focus is now handled by the base class GSYAudioFocusManager
         //((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         releaseNetWorkState();

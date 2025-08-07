@@ -3,7 +3,6 @@ package com.example.gsyvideoplayer.exosubtitle;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.media.AudioManager;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -68,7 +67,7 @@ public class GSYExoSubTitleVideoView extends NormalGSYVideoPlayer implements Pla
         getGSYVideoManager().setListener(this);
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);
-        mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        // Audio focus is now handled by the base class GSYAudioFocusManager
         try {
             if (mContext instanceof Activity) {
                 ((Activity) mContext).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
