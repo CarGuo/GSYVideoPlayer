@@ -280,7 +280,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             return;
         mScreenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
         mScreenHeight = mContext.getResources().getDisplayMetrics().heightPixels;
-        
+
         // 初始化音频焦点管理器
         initAudioFocusManager();
 
@@ -354,12 +354,12 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         getGSYVideoManager().setListener(this);
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);
-        
+
         // 请求音频焦点
         if (mAudioFocusManager != null) {
             mAudioFocusManager.requestAudioFocus();
         }
-        
+
         try {
             if (mContext instanceof Activity) {
                 ((Activity) mContext).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -623,7 +623,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         if (!mIfCurrentIsFullscreen)
             getGSYVideoManager().setLastListener(null);
-            
+
         // 安全地放弃音频焦点
         if (mAudioFocusManager != null) {
             mAudioFocusManager.abandonAudioFocus();
@@ -1134,7 +1134,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     public void seekTo(long position) {
         try {
-            if (getGSYVideoManager() != null && position > 0) {
+            if (getGSYVideoManager() != null && position >= 0) {
                 getGSYVideoManager().seekTo(position);
             }
         } catch (Exception e) {
