@@ -263,7 +263,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 @Override
                 public void onClick(View v) {
                     if (mCurrentState == CURRENT_STATE_AUTO_COMPLETE ||
-                            mCurrentState == CURRENT_STATE_ERROR) {
+                        mCurrentState == CURRENT_STATE_ERROR) {
                         return;
                     }
                     lockTouchLogic();
@@ -286,7 +286,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         Debuger.printfLog(GSYVideoControlView.this.hashCode() + "------------------------------ dismiss onDetachedFromWindow");
         cancelProgressTimer();
         cancelDismissControlViewTimer();
-        
+
         // 释放音频焦点管理器资源
         releaseAudioFocusManager();
     }
@@ -318,7 +318,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected void setStateAndUi(int state) {
         mCurrentState = state;
         if ((state == CURRENT_STATE_NORMAL && isCurrentMediaListener())
-                || state == CURRENT_STATE_AUTO_COMPLETE || state == CURRENT_STATE_ERROR) {
+            || state == CURRENT_STATE_AUTO_COMPLETE || state == CURRENT_STATE_ERROR) {
             mHadPrepared = false;
         }
 
@@ -494,7 +494,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     float absDeltaY = Math.abs(deltaY);
 
                     if ((mIfCurrentIsFullscreen && mIsTouchWigetFull)
-                            || (mIsTouchWiget && !mIfCurrentIsFullscreen)) {
+                        || (mIsTouchWiget && !mIfCurrentIsFullscreen)) {
                         if (!mChangePosition && !mChangeVolume && !mBrightness) {
                             touchSurfaceMoveFullLogic(absDeltaX, absDeltaY);
                         }
@@ -618,6 +618,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (getGSYVideoManager() != null && mHadPlay) {
             try {
                 long time = seekBar.getProgress() * getDuration() / 100;
+                mCurrentPosition = time;
                 getGSYVideoManager().seekTo(time);
             } catch (Exception e) {
                 Debuger.printfWarning(e.toString());
@@ -667,10 +668,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected void prepareVideo() {
         if (mSetUpLazy) {
             super.setUp(mOriginUrl,
-                    mCache,
-                    mCachePath,
-                    mMapHeadData,
-                    mTitle);
+                mCache,
+                mCachePath,
+                mMapHeadData,
+                mTitle);
         }
         super.prepareVideo();
     }
@@ -705,7 +706,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mChangePosition) {
             long totalTimeDuration = getDuration();
             mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / curWidth) / mSeekRatio);
-            if(mSeekTimePosition < 0) {
+            if (mSeekTimePosition < 0) {
                 mSeekTimePosition = 0;
             }
             if (mSeekTimePosition > totalTimeDuration)
@@ -774,7 +775,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             long duration = getDuration();
             long progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
             if (mBottomProgressBar != null)
-                mBottomProgressBar.setProgress((int)progress);
+                mBottomProgressBar.setProgress((int) progress);
         }
 
         mTouchingProgressBar = false;
@@ -794,7 +795,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             long duration = getDuration();
             long progress = mSeekTimePosition * 100 / (duration == 0 ? 1 : duration);
             if (mProgressBar != null) {
-                mProgressBar.setProgress((int)progress);
+                mProgressBar.setProgress((int) progress);
             }
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 Debuger.printfLog("onTouchScreenSeekPosition");
@@ -973,7 +974,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             return;
         }
         if (!mTouchingProgressBar) {
-            if (progress != 0 || forceChange) mProgressBar.setProgress((int)progress);
+            if (progress >= 0 || forceChange) mProgressBar.setProgress((int) progress);
         }
         if (getGSYVideoManager().getBufferedPercentage() > 0) {
             secProgress = getGSYVideoManager().getBufferedPercentage();
@@ -985,7 +986,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             mCurrentTimeTextView.setText(CommonUtil.stringForTime(currentTime));
 
         if (mBottomProgressBar != null) {
-            if (progress != 0 || forceChange) mBottomProgressBar.setProgress((int)progress);
+            if (progress >= 0 || forceChange) mBottomProgressBar.setProgress((int) progress);
             setSecondaryProgress(secProgress);
         }
     }
@@ -993,12 +994,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected void setSecondaryProgress(long secProgress) {
         if (mProgressBar != null) {
             if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
-                mProgressBar.setSecondaryProgress((int)secProgress);
+                mProgressBar.setSecondaryProgress((int) secProgress);
             }
         }
         if (mBottomProgressBar != null) {
             if (secProgress != 0 && !getGSYVideoManager().isCacheFile()) {
-                mBottomProgressBar.setSecondaryProgress((int)secProgress);
+                mBottomProgressBar.setSecondaryProgress((int) secProgress);
             }
         }
     }
@@ -1088,7 +1089,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected boolean isShowNetConfirm() {
         return !mOriginUrl.startsWith("file") && !mOriginUrl.startsWith("android.resource") && !CommonUtil.isWifiConnected(getContext())
-                && mNeedShowWifiTip && !getGSYVideoManager().cachePreview(mContext.getApplicationContext(), mCachePath, mOriginUrl);
+            && mNeedShowWifiTip && !getGSYVideoManager().cachePreview(mContext.getApplicationContext(), mCachePath, mOriginUrl);
     }
 
     Runnable progressTask = new Runnable() {
@@ -1107,8 +1108,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         @Override
         public void run() {
             if (mCurrentState != CURRENT_STATE_NORMAL
-                    && mCurrentState != CURRENT_STATE_ERROR
-                    && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
+                && mCurrentState != CURRENT_STATE_ERROR
+                && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
                 hideAllWidget();
                 setViewShowState(mLockScreen, GONE);
                 if (mHideKey && mIfCurrentIsFullscreen && mShowVKey) {
@@ -1140,9 +1141,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected abstract void dismissBrightnessDialog();
 
     /**
-     * @param  e MotionEvent 存在 null 的情况，外部使用需要判空
-     *           null 时说明不是手动触发而是自动触发的
-     * */
+     * @param e MotionEvent 存在 null 的情况，外部使用需要判空
+     *          null 时说明不是手动触发而是自动触发的
+     */
     protected abstract void onClickUiToggle(MotionEvent e);
 
     protected abstract void hideAllWidget();
@@ -1176,7 +1177,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mTitle = title;
         mMapHeadData = mapHeadData;
         if (isCurrentMediaListener() &&
-                (System.currentTimeMillis() - mSaveChangeViewTIme) < CHANGE_DELAY_TIME)
+            (System.currentTimeMillis() - mSaveChangeViewTIme) < CHANGE_DELAY_TIME)
             return false;
         mUrl = "waiting";
         mCurrentState = CURRENT_STATE_NORMAL;
