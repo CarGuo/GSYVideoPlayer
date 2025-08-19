@@ -889,7 +889,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            setStateAndUi(CURRENT_STATE_PAUSE);
+            //setStateAndUi(CURRENT_STATE_PAUSE);
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
                     Debuger.printfLog("onClickStopFullscreen");
