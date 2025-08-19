@@ -184,4 +184,8 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
             setMatrixGL(rotationMatrix);
         }
     }
+
+    public void addPublicTextureView() {
+        addTextureView();
+    }
 }

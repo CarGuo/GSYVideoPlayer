@@ -158,6 +158,12 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
         }
     }
 
+    public void clearVideoSurface() {
+        if (mInternalPlayer != null) {
+            mInternalPlayer.clearVideoSurface();
+        }
+    }
+
 
     @Override
     public void setDataSource(Context context, Uri uri, Map<String, String> headers) {
@@ -610,7 +616,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     }
 
-    /////////////////////////////////////AudioRendererEventListener/////////////////////////////////////////////
+    /// //////////////////////////////////AudioRendererEventListener/////////////////////////////////////////////
 
 
     @Override
