@@ -113,6 +113,51 @@ public class Exo2PlayerManager extends BasePlayerManager {
         }
     }
 
+    /**
+     * Show video on specified surface with optimal buffer dimensions
+     * This method provides enhanced performance when SurfaceControl is available
+     * 
+     * @param surface Target surface to display video on (null to hide video)
+     * @param width Optimal width for buffer sizing (0 if hiding)
+     * @param height Optimal height for buffer sizing (0 if hiding)
+     */
+    public void showDisplayWithDimensions(Surface surface, int width, int height) {
+        if (mediaPlayer == null) {
+            return;
+        }
+        
+        if (surface == null) {
+            // Hide video efficiently with SurfaceControl
+            if (surfaceSwitcher != null) {
+                surfaceSwitcher.switchToSurfaceWithDimensions(null, 0, 0);
+            } else {
+                mediaPlayer.setSurface(dummySurface);
+            }
+            this.surface = null;
+        } else {
+            // Show video with optimal buffer sizing
+            if (surfaceSwitcher != null) {
+                surfaceSwitcher.switchToSurfaceWithDimensions(surface, width, height);
+            } else {
+                mediaPlayer.setSurface(surface);
+            }
+            this.surface = surface;
+        }
+    }
+
+    /**
+     * Control video visibility without changing the surface
+     * Useful for temporarily hiding video without interrupting playback
+     * 
+     * @param visible true to show video, false to hide video
+     */
+    public void setVideoVisibility(boolean visible) {
+        if (surfaceSwitcher != null) {
+            surfaceSwitcher.setVideoVisibility(visible);
+        }
+        // Note: Standard mode doesn't support visibility control
+    }
+
     @Override
     public void setSpeed(final float speed, final boolean soundTouch) {
         if (mediaPlayer != null) {
