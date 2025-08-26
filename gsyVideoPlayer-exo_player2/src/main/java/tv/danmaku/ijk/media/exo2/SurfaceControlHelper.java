@@ -66,9 +66,12 @@ public class SurfaceControlHelper {
             this.mediaPlayer = mediaPlayer;
             try {
                 this.transaction = new SurfaceControl.Transaction();
+                // Log when SurfaceControl is successfully initialized
+                android.util.Log.d("SurfaceControlHelper", "SurfaceControl.Transaction initialized successfully");
             } catch (Exception e) {
                 // If SurfaceControl fails to initialize, fall back to standard switching
                 this.usingSurfaceControl = false;
+                android.util.Log.w("SurfaceControlHelper", "Failed to initialize SurfaceControl, falling back to standard switching", e);
             }
         }
         
@@ -85,10 +88,12 @@ public class SurfaceControlHelper {
                             exoPlayer.setSurface(surface);
                             transaction.apply();
                         }
+                        android.util.Log.v("SurfaceControlHelper", "Surface switched using SurfaceControl.Transaction");
                         return;
                     } catch (Exception e) {
                         // If SurfaceControl operation fails, disable it and fallback
                         usingSurfaceControl = false;
+                        android.util.Log.w("SurfaceControlHelper", "SurfaceControl operation failed, disabling and falling back", e);
                         if (transaction != null) {
                             try {
                                 transaction.close();
@@ -100,6 +105,7 @@ public class SurfaceControlHelper {
                 
                 // Fallback to standard switching
                 exoPlayer.setSurface(surface);
+                android.util.Log.v("SurfaceControlHelper", "Surface switched using standard method");
             }
         }
         
@@ -128,6 +134,7 @@ public class SurfaceControlHelper {
         
         public StandardSurfaceSwitcher(Object mediaPlayer) {
             this.mediaPlayer = mediaPlayer;
+            android.util.Log.d("SurfaceControlHelper", "Using standard surface switching (API < 29)");
         }
         
         @Override
@@ -135,6 +142,7 @@ public class SurfaceControlHelper {
             if (mediaPlayer instanceof IjkExo2MediaPlayer) {
                 IjkExo2MediaPlayer exoPlayer = (IjkExo2MediaPlayer) mediaPlayer;
                 exoPlayer.setSurface(surface);
+                android.util.Log.v("SurfaceControlHelper", "Surface switched using standard method (compatibility mode)");
             }
         }
         
