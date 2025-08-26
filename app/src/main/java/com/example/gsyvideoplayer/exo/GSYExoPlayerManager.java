@@ -15,6 +15,7 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 import java.util.List;
 
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
+import tv.danmaku.ijk.media.exo2.SurfaceControlHelper;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
@@ -28,6 +29,8 @@ public class GSYExoPlayerManager extends BasePlayerManager {
     private Surface surface;
 
     private PlaceholderSurface dummySurface;
+    
+    private SurfaceControlHelper.SurfaceSwitcher surfaceSwitcher;
 
     @Override
     public IMediaPlayer getMediaPlayer() {
@@ -41,6 +44,13 @@ public class GSYExoPlayerManager extends BasePlayerManager {
         if (dummySurface == null) {
             dummySurface = PlaceholderSurface.newInstanceV17(context, false);
         }
+        
+        // Initialize SurfaceControl helper for improved surface switching
+        if (surfaceSwitcher != null) {
+            surfaceSwitcher.release();
+        }
+        surfaceSwitcher = SurfaceControlHelper.createSurfaceSwitcher(mediaPlayer);
+        
         try {
             mediaPlayer.setLooping(((GSYExoModel) msg.obj).isLooping());
             Debuger.printfError("###### " + ((GSYExoModel) msg.obj).getOverrideExtension());
@@ -60,12 +70,26 @@ public class GSYExoPlayerManager extends BasePlayerManager {
         if (mediaPlayer == null) {
             return;
         }
+        
         if (msg.obj == null) {
-            mediaPlayer.setSurface(dummySurface);
+            // Switch to dummy surface using SurfaceControl helper
+            if (surfaceSwitcher != null) {
+                surfaceSwitcher.switchToSurface(dummySurface);
+            } else {
+                // Fallback to standard method
+                mediaPlayer.setSurface(dummySurface);
+            }
         } else {
             Surface holder = (Surface) msg.obj;
             surface = holder;
-            mediaPlayer.setSurface(holder);
+            
+            // Switch to new surface using SurfaceControl helper
+            if (surfaceSwitcher != null) {
+                surfaceSwitcher.switchToSurface(holder);
+            } else {
+                // Fallback to standard method
+                mediaPlayer.setSurface(holder);
+            }
         }
     }
 
@@ -135,6 +159,12 @@ public class GSYExoPlayerManager extends BasePlayerManager {
         if (dummySurface != null) {
             dummySurface.release();
             dummySurface = null;
+        }
+        
+        // Release SurfaceControl helper resources
+        if (surfaceSwitcher != null) {
+            surfaceSwitcher.release();
+            surfaceSwitcher = null;
         }
     }
 
@@ -260,5 +290,13 @@ public class GSYExoPlayerManager extends BasePlayerManager {
     @Override
     public boolean isSurfaceSupportLockCanvas() {
         return false;
+    }
+
+    /**
+     * Check if SurfaceControl is being used for surface switching
+     * @return true if using SurfaceControl (API 29+), false if using standard switching
+     */
+    public boolean isUsingSurfaceControl() {
+        return surfaceSwitcher != null && surfaceSwitcher.isUsingSurfaceControl();
     }
 }

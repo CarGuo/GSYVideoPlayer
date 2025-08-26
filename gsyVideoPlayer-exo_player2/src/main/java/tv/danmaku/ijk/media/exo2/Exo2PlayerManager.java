@@ -34,6 +34,8 @@ public class Exo2PlayerManager extends BasePlayerManager {
     private Surface surface;
 
     private PlaceholderSurface dummySurface;
+    
+    private SurfaceControlHelper.SurfaceSwitcher surfaceSwitcher;
 
     private long lastTotalRxBytes = 0;
 
@@ -52,6 +54,13 @@ public class Exo2PlayerManager extends BasePlayerManager {
         if (dummySurface == null) {
             dummySurface = PlaceholderSurface.newInstance(context, false);
         }
+        
+        // Initialize SurfaceControl helper for improved surface switching
+        if (surfaceSwitcher != null) {
+            surfaceSwitcher.release();
+        }
+        surfaceSwitcher = SurfaceControlHelper.createSurfaceSwitcher(mediaPlayer);
+        
         //使用自己的cache模式
         GSYModel gsyModel = (GSYModel) msg.obj;
         try {
@@ -81,12 +90,26 @@ public class Exo2PlayerManager extends BasePlayerManager {
         if (mediaPlayer == null) {
             return;
         }
+        
         if (msg.obj == null) {
-            mediaPlayer.setSurface(dummySurface);
+            // Switch to dummy surface using SurfaceControl helper
+            if (surfaceSwitcher != null) {
+                surfaceSwitcher.switchToSurface(dummySurface);
+            } else {
+                // Fallback to standard method
+                mediaPlayer.setSurface(dummySurface);
+            }
         } else {
             Surface holder = (Surface) msg.obj;
             surface = holder;
-            mediaPlayer.setSurface(holder);
+            
+            // Switch to new surface using SurfaceControl helper
+            if (surfaceSwitcher != null) {
+                surfaceSwitcher.switchToSurface(holder);
+            } else {
+                // Fallback to standard method
+                mediaPlayer.setSurface(holder);
+            }
         }
     }
 
@@ -138,6 +161,13 @@ public class Exo2PlayerManager extends BasePlayerManager {
             dummySurface.release();
             dummySurface = null;
         }
+        
+        // Release SurfaceControl helper resources
+        if (surfaceSwitcher != null) {
+            surfaceSwitcher.release();
+            surfaceSwitcher = null;
+        }
+        
         lastTotalRxBytes = 0;
         lastTimeStamp = 0;
     }
@@ -253,6 +283,13 @@ public class Exo2PlayerManager extends BasePlayerManager {
         return false;
     }
 
+    /**
+     * Check if SurfaceControl is being used for surface switching
+     * @return true if using SurfaceControl (API 29+), false if using standard switching
+     */
+    public boolean isUsingSurfaceControl() {
+        return surfaceSwitcher != null && surfaceSwitcher.isUsingSurfaceControl();
+    }
 
     /**
      * 设置seek 的临近帧。
