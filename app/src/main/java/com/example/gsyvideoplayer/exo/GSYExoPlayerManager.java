@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer.exo;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
+import android.os.Looper;
 import android.os.Message;
 import android.view.Surface;
 import android.view.SurfaceControl;
@@ -289,6 +290,11 @@ public class GSYExoPlayerManager extends BasePlayerManager {
      */
     public void reparentSurface(Object playerView, SurfaceControl newParent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Ensure we're on the UI thread for SurfaceControl operations
+            if (Looper.getMainLooper() != Looper.myLooper()) {
+                android.util.Log.w("GSYExoPlayerManager", "SurfaceControl operations should be called on UI thread");
+            }
+            
             SurfaceControl surfaceControl = getSurfaceControl(playerView);
             if (surfaceControl != null) {
                 try {
