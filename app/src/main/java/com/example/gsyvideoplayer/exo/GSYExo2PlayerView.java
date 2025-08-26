@@ -384,29 +384,4 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         }
         return null;
     }
-
-    /**
-     * Test method to verify SurfaceControl functionality
-     * This demonstrates how to access and use SurfaceControl for reparenting
-     * 
-     * @return true if SurfaceControl is available and working, false otherwise
-     */
-    public boolean testSurfaceControlSupport() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (GSYVideoType.getRenderType() == GSYVideoType.SUFRACE) {
-                SurfaceControl surfaceControl = getSurfaceControl();
-                if (surfaceControl != null) {
-                    android.util.Log.i("GSYExo2PlayerView", "SurfaceControl available for reparenting operations");
-                    return true;
-                } else {
-                    android.util.Log.w("GSYExo2PlayerView", "SurfaceControl not available - surface may not be ready");
-                }
-            } else {
-                android.util.Log.i("GSYExo2PlayerView", "SurfaceControl requires GSYVideoType.SUFRACE render type");
-            }
-        } else {
-            android.util.Log.w("GSYExo2PlayerView", "SurfaceControl requires API 29+, current API: " + Build.VERSION.SDK_INT);
-        }
-        return false;
-    }
 }

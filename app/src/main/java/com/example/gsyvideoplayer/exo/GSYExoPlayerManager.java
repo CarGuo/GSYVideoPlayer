@@ -320,31 +320,4 @@ public class GSYExoPlayerManager extends BasePlayerManager {
     public boolean isSurfaceControlSupported() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
     }
-
-    /**
-     * Test method to demonstrate SurfaceControl reparenting functionality
-     * This shows how to use SurfaceControl for switching surfaces
-     * 
-     * @param playerView the GSYExo2PlayerView instance
-     * @return true if reparenting operations are supported, false otherwise
-     */
-    public boolean testSurfaceControlReparenting(Object playerView) {
-        if (!isSurfaceControlSupported()) {
-            android.util.Log.w("GSYExoPlayerManager", "SurfaceControl not supported on API " + Build.VERSION.SDK_INT);
-            return false;
-        }
-        
-        if (playerView instanceof com.example.gsyvideoplayer.exo.GSYExo2PlayerView) {
-            com.example.gsyvideoplayer.exo.GSYExo2PlayerView exoPlayerView = 
-                (com.example.gsyvideoplayer.exo.GSYExo2PlayerView) playerView;
-            
-            boolean hasSupport = exoPlayerView.testSurfaceControlSupport();
-            if (hasSupport) {
-                android.util.Log.i("GSYExoPlayerManager", "SurfaceControl reparenting functionality is available");
-                // Additional reparenting test could be added here
-                return true;
-            }
-        }
-        return false;
-    }
 }
