@@ -27,6 +27,12 @@ import java.util.Map;
 
 import static com.example.gsyvideoplayer.exo.GSYExo2MediaPlayer.POSITION_DISCONTINUITY;
 
+import android.os.Build;
+import android.view.SurfaceControl;
+import android.view.SurfaceView;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.render.view.GSYSurfaceView;
+
 
 /**
  * Created by guoshuyu on 2018/5/16.
@@ -354,5 +360,53 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
 
     public void nextUI() {
         resetProgressAndTime();
+    }
+
+    /**
+     * Get SurfaceControl for reparenting when using SurfaceView render type
+     * Requires API 29+ and GSYVideoType.SUFRACE render type
+     * 
+     * @return SurfaceControl if available, null otherwise
+     */
+    public SurfaceControl getSurfaceControl() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (GSYVideoType.getRenderType() == GSYVideoType.SUFRACE) {
+                // Get the render proxy and check if it's a GSYSurfaceView
+                if (getRenderProxy() != null && getRenderProxy().getShowView() instanceof GSYSurfaceView) {
+                    GSYSurfaceView surfaceView = (GSYSurfaceView) getRenderProxy().getShowView();
+                    try {
+                        return surfaceView.getSurfaceControl();
+                    } catch (Exception e) {
+                        android.util.Log.w("GSYExo2PlayerView", "Failed to get SurfaceControl", e);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Test method to verify SurfaceControl functionality
+     * This demonstrates how to access and use SurfaceControl for reparenting
+     * 
+     * @return true if SurfaceControl is available and working, false otherwise
+     */
+    public boolean testSurfaceControlSupport() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (GSYVideoType.getRenderType() == GSYVideoType.SUFRACE) {
+                SurfaceControl surfaceControl = getSurfaceControl();
+                if (surfaceControl != null) {
+                    android.util.Log.i("GSYExo2PlayerView", "SurfaceControl available for reparenting operations");
+                    return true;
+                } else {
+                    android.util.Log.w("GSYExo2PlayerView", "SurfaceControl not available - surface may not be ready");
+                }
+            } else {
+                android.util.Log.i("GSYExo2PlayerView", "SurfaceControl requires GSYVideoType.SUFRACE render type");
+            }
+        } else {
+            android.util.Log.w("GSYExo2PlayerView", "SurfaceControl requires API 29+, current API: " + Build.VERSION.SDK_INT);
+        }
+        return false;
     }
 }

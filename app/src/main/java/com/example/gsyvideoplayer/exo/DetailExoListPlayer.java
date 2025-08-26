@@ -7,6 +7,8 @@ import androidx.core.widget.NestedScrollView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.os.Build;
+import android.util.Log;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.databinding.ActivityDeatilExoListPlayerBinding;
@@ -86,6 +88,51 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
             }
         });
 
+        // Demo: Test SurfaceControl functionality when using SurfaceView
+        testSurfaceControlDemo();
+
+    }
+
+    /**
+     * Demonstration of SurfaceControl functionality for reparenting surfaces
+     * This method shows how to access SurfaceControl when using SurfaceView render type
+     */
+    private void testSurfaceControlDemo() {
+        Log.i("DetailExoListPlayer", "Testing SurfaceControl functionality...");
+        
+        // Test if SurfaceControl is supported on this API level
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Log.i("DetailExoListPlayer", "SurfaceControl is supported on API " + Build.VERSION.SDK_INT);
+            
+            // Test with the current player view (delayed to ensure initialization)
+            binding.detailPlayer.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Test the player view functionality directly
+                    GSYExo2PlayerView currentPlayer = (GSYExo2PlayerView) binding.detailPlayer.getCurrentPlayer();
+                    if (currentPlayer != null) {
+                        boolean hasSupport = currentPlayer.testSurfaceControlSupport();
+                        Log.i("DetailExoListPlayer", "SurfaceControl support test result: " + hasSupport);
+                        
+                        // Test getting SurfaceControl directly
+                        try {
+                            Object surfaceControl = currentPlayer.getSurfaceControl();
+                            if (surfaceControl != null) {
+                                Log.i("DetailExoListPlayer", "SurfaceControl obtained successfully for reparenting operations");
+                            } else {
+                                Log.w("DetailExoListPlayer", "SurfaceControl is null - may need SurfaceView render type or surface not ready");
+                            }
+                        } catch (Exception e) {
+                            Log.w("DetailExoListPlayer", "Error getting SurfaceControl: " + e.getMessage());
+                        }
+                    } else {
+                        Log.w("DetailExoListPlayer", "Current player is null");
+                    }
+                }
+            }, 2000); // Delay to ensure surface is ready
+        } else {
+            Log.w("DetailExoListPlayer", "SurfaceControl not supported on API " + Build.VERSION.SDK_INT + " (requires API 29+)");
+        }
     }
 
 

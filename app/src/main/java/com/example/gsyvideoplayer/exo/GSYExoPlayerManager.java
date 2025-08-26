@@ -2,8 +2,10 @@ package com.example.gsyvideoplayer.exo;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Message;
 import android.view.Surface;
+import android.view.SurfaceControl;
 
 import androidx.media3.exoplayer.video.PlaceholderSurface;
 
@@ -259,6 +261,84 @@ public class GSYExoPlayerManager extends BasePlayerManager {
 
     @Override
     public boolean isSurfaceSupportLockCanvas() {
+        return false;
+    }
+
+    /**
+     * Get SurfaceControl from the associated GSYExo2PlayerView for reparenting operations
+     * Requires API 29+ and SurfaceView render type
+     * 
+     * @param playerView the GSYExo2PlayerView instance
+     * @return SurfaceControl if available, null otherwise
+     */
+    public SurfaceControl getSurfaceControl(Object playerView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (playerView instanceof com.example.gsyvideoplayer.exo.GSYExo2PlayerView) {
+                return ((com.example.gsyvideoplayer.exo.GSYExo2PlayerView) playerView).getSurfaceControl();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Reparent surface to a new parent using SurfaceControl
+     * Requires API 29+
+     * 
+     * @param playerView the GSYExo2PlayerView instance
+     * @param newParent the new parent SurfaceControl, null to detach
+     */
+    public void reparentSurface(Object playerView, SurfaceControl newParent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            SurfaceControl surfaceControl = getSurfaceControl(playerView);
+            if (surfaceControl != null) {
+                try {
+                    SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
+                    if (newParent != null) {
+                        transaction.reparent(surfaceControl, newParent);
+                    } else {
+                        transaction.reparent(surfaceControl, null);
+                    }
+                    transaction.apply();
+                } catch (Exception e) {
+                    android.util.Log.w("GSYExoPlayerManager", "Failed to reparent surface", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if SurfaceControl functionality is supported
+     * 
+     * @return true if SurfaceControl is supported (API 29+), false otherwise
+     */
+    public boolean isSurfaceControlSupported() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+    }
+
+    /**
+     * Test method to demonstrate SurfaceControl reparenting functionality
+     * This shows how to use SurfaceControl for switching surfaces
+     * 
+     * @param playerView the GSYExo2PlayerView instance
+     * @return true if reparenting operations are supported, false otherwise
+     */
+    public boolean testSurfaceControlReparenting(Object playerView) {
+        if (!isSurfaceControlSupported()) {
+            android.util.Log.w("GSYExoPlayerManager", "SurfaceControl not supported on API " + Build.VERSION.SDK_INT);
+            return false;
+        }
+        
+        if (playerView instanceof com.example.gsyvideoplayer.exo.GSYExo2PlayerView) {
+            com.example.gsyvideoplayer.exo.GSYExo2PlayerView exoPlayerView = 
+                (com.example.gsyvideoplayer.exo.GSYExo2PlayerView) playerView;
+            
+            boolean hasSupport = exoPlayerView.testSurfaceControlSupport();
+            if (hasSupport) {
+                android.util.Log.i("GSYExoPlayerManager", "SurfaceControl reparenting functionality is available");
+                // Additional reparenting test could be added here
+                return true;
+            }
+        }
         return false;
     }
 }
