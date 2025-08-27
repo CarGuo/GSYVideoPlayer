@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -233,7 +235,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
         }
         if (getGSYVideoManager() != null && mHadPlay) {
             /**增加这个可以实现拖动后重新播放*/
-            if(!isInPlayingState()) {
+            if (!isInPlayingState()) {
                 setStateAndUi(CURRENT_STATE_PLAYING);
                 addTextureView();
             }
@@ -258,8 +260,7 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
             mTextureViewContainer.removeAllViews();
         }
 
-        if (!mIfCurrentIsFullscreen)
-            getGSYVideoManager().setLastListener(null);
+        if (!mIfCurrentIsFullscreen) getGSYVideoManager().setLastListener(null);
         // Audio focus is now handled by the base class GSYAudioFocusManager
         if (mContext instanceof Activity) {
             try {
@@ -308,7 +309,6 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
     }
 
 
-
     /**********以下重载GSYVideoPlayer的GSYVideoViewBridge相关实现***********/
 
     @Override
@@ -354,5 +354,18 @@ public class GSYExo2PlayerView extends StandardGSYVideoPlayer {
 
     public void nextUI() {
         resetProgressAndTime();
+    }
+
+
+    @Override
+    protected void setDisplay(Surface surface) {
+        if (surface != null && mTextureView.getShowView() instanceof SurfaceView) {
+            SurfaceView surfaceView = ((SurfaceView) mTextureView.getShowView());
+            ((GSYExoVideoManager) getGSYVideoManager()).setDisplayNew(surfaceView);
+        } else if (surface != null) {
+            getGSYVideoManager().setDisplay(surface);
+        } else {
+            ((GSYExoVideoManager) getGSYVideoManager()).setDisplayNew(null);
+        }
     }
 }

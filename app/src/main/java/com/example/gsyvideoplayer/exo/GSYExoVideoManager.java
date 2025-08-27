@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -70,6 +71,16 @@ public class GSYExoVideoManager extends GSYVideoBaseManager {
             return;
         }
         ((GSYExoPlayerManager)playerManager).previous();
+    }
+
+
+    public void setDisplayNew (Object holder) {
+        Message msg = new Message();
+        msg.what = HANDLER_SETDISPLAY;
+        msg.obj = holder;
+        if (playerManager != null) {
+            playerManager.showDisplay(msg);
+        }
     }
 
     /**

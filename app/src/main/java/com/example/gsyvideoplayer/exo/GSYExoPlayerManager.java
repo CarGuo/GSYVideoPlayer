@@ -2,9 +2,13 @@ package com.example.gsyvideoplayer.exo;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Message;
 import android.view.Surface;
+import android.view.SurfaceControl;
+import android.view.SurfaceView;
 
+import androidx.annotation.RequiresApi;
 import androidx.media3.exoplayer.video.PlaceholderSurface;
 
 import com.shuyu.gsyvideoplayer.cache.ICacheManager;
@@ -22,12 +26,15 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  * 自定义player管理器，装载自定义exo player，实现无缝切换效果
  */
 public class GSYExoPlayerManager extends BasePlayerManager {
+    private static final String SURFACE_CONTROL_NAME = "surfacedemo";
 
     private GSYExo2MediaPlayer mediaPlayer;
 
     private Surface surface;
 
     private PlaceholderSurface dummySurface;
+    private SurfaceControl surfaceControl;
+    private Surface videoSurface;
 
     @Override
     public IMediaPlayer getMediaPlayer() {
@@ -43,13 +50,21 @@ public class GSYExoPlayerManager extends BasePlayerManager {
         }
         try {
             mediaPlayer.setLooping(((GSYExoModel) msg.obj).isLooping());
-            Debuger.printfError("###### " + ((GSYExoModel) msg.obj).getOverrideExtension());
+
             mediaPlayer.setOverrideExtension(((GSYExoModel) msg.obj).getOverrideExtension());
             mediaPlayer.setDataSource(((GSYExoModel) msg.obj).getUrls(), ((GSYExoModel) msg.obj).getMapHeadData(), ((GSYExoModel) msg.obj).index, ((GSYExoModel) msg.obj).isCache());
             //很遗憾，EXO2的setSpeed只能在播放前生效
             if (((GSYExoModel) msg.obj).getSpeed() != 1 && ((GSYExoModel) msg.obj).getSpeed() > 0) {
                 mediaPlayer.setSpeed(((GSYExoModel) msg.obj).getSpeed(), 1);
             }
+
+            surfaceControl =
+                new SurfaceControl.Builder()
+                    .setName(SURFACE_CONTROL_NAME)
+                    .setBufferSize(/* width= */ 0, /* height= */ 0)
+                    .build();
+            Surface videoSurface = new Surface(surfaceControl);
+            mediaPlayer.setSurface(videoSurface);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,9 +78,31 @@ public class GSYExoPlayerManager extends BasePlayerManager {
         if (msg.obj == null) {
             mediaPlayer.setSurface(dummySurface);
         } else {
-            Surface holder = (Surface) msg.obj;
-            surface = holder;
-            mediaPlayer.setSurface(holder);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && msg.obj instanceof SurfaceView) {
+                reparent((SurfaceView) msg.obj);
+            } else {
+                Surface holder = (Surface) msg.obj;
+                surface = holder;
+                mediaPlayer.setSurface(holder);
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void reparent(SurfaceView surfaceView) {
+        if (surfaceView == null) {
+            new SurfaceControl.Transaction()
+                .reparent(surfaceControl, /* newParent= */ null)
+                .setBufferSize(surfaceControl, /* w= */ 0, /* h= */ 0)
+                .setVisibility(surfaceControl, /* visible= */ false)
+                .apply();
+        } else {
+            SurfaceControl newParentSurfaceControl = surfaceView.getSurfaceControl();
+            new SurfaceControl.Transaction()
+                .reparent(surfaceControl, newParentSurfaceControl)
+                .setBufferSize(surfaceControl, surfaceView.getWidth(), surfaceView.getHeight())
+                .setVisibility(surfaceControl, /* visible= */ true)
+                .apply();
         }
     }
 
@@ -110,7 +147,7 @@ public class GSYExoPlayerManager extends BasePlayerManager {
 
     /**
      * 测试异步释放
-     * */
+     */
     @Override
     public void release() {
         if (mediaPlayer != null) {
@@ -135,6 +172,15 @@ public class GSYExoPlayerManager extends BasePlayerManager {
         if (dummySurface != null) {
             dummySurface.release();
             dummySurface = null;
+        }
+
+        if (surfaceControl != null) {
+            surfaceControl.release();
+            surfaceControl = null;
+        }
+        if (videoSurface != null) {
+            videoSurface.release();
+            videoSurface = null;
         }
     }
 

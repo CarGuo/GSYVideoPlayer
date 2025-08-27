@@ -14,6 +14,7 @@ import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
 
     ActivityDeatilExoListPlayerBinding binding;
 
+    private int type = GSYVideoType.getRenderType();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +39,18 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
         setContentView(rootView);
 
 
+        /// 保持当前设置
+        type = GSYVideoType.getRenderType();
+        ///暂停切换不出现步进，需要使用 SurfaceView
+        GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
+
+
         //GSYBaseActivityDetail 的 普通模式初始化
         initVideo();
 
         List<GSYVideoModel> urls = new ArrayList<>();
 
-        urls.add(new GSYVideoModel("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", "标题1"));
+        urls.add(new GSYVideoModel("https://flipfit-cdn.akamaized.net/flip_hls/6656423247ffe600199e8363-15125d/video_h1.m3u8", "标题1"));
         urls.add(new GSYVideoModel("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", "标题3"));
         urls.add(new GSYVideoModel("https://www.w3schools.com/html/mov_bbb.mp4", "标题2"));
         //binding.detailPlayer.setUp(urls, 1);
@@ -62,6 +71,8 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
         binding.detailPlayer.setIsTouchWiget(true);
         //关闭自动旋转
         binding.detailPlayer.setRotateViewAuto(false);
+        binding.detailPlayer.setAutoFullWithSize(true);
+
         binding.detailPlayer.setLockLand(false);
         binding.detailPlayer.setShowFullAnimation(false);
         binding.detailPlayer.setNeedLockFull(true);
@@ -88,6 +99,13 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /// 恢复设置
+        GSYVideoType.setRenderType(type);
+    }
 
     /**
      * 重载为GSYExoVideoManager的方法处理

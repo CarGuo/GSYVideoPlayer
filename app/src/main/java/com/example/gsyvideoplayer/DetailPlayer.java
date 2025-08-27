@@ -156,7 +156,18 @@ public class DetailPlayer extends AppCompatActivity {
         gsyVideoOption.setThumbImageView(imageView).setIsTouchWiget(true).setRotateViewAuto(false)
             //仅仅横屏旋转，不变直
             //.setOnlyRotateLand(true)
-            .setRotateWithSystem(false).setLockLand(true).setAutoFullWithSize(true).setShowFullAnimation(false).setNeedLockFull(true).setSeekOnStart(3000).setUrl(url).setMapHeadData(header).setCacheWithPlay(false).setSurfaceErrorPlay(false).setVideoTitle("测试视频").setVideoAllCallBack(new GSYSampleCallBack() {
+            .setRotateWithSystem(false)
+            .setLockLand(true)
+            .setAutoFullWithSize(true)
+            .setShowFullAnimation(false)
+            .setNeedLockFull(true)
+            .setSeekOnStart(3000)
+            .setUrl(url)
+            .setMapHeadData(header)
+            .setCacheWithPlay(false)
+            .setSurfaceErrorPlay(false)
+            .setVideoTitle("测试视频")
+            .setVideoAllCallBack(new GSYSampleCallBack() {
                 @Override
                 public void onPrepared(String url, Object... objects) {
                     Debuger.printfError("***** onPrepared **** " + objects[0]);
