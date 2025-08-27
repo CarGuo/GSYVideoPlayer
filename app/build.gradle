@@ -45,6 +45,12 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    ///剔除 librtmp-jni.so
+    packagingOptions {
+        exclude 'lib/arm64-v8a/librtmp-jni.so'
+    }
+
     namespace 'com.example.gsyvideoplayer'
 }
 
