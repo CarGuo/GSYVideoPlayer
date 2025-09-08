@@ -113,6 +113,33 @@ public class DetailPlayer extends AppCompatActivity {
         list.add(videoOptionMode15);
         list.add(videoOptionMode17);
         GSYVideoManager.instance().setOptionModelList(list);*/
+
+
+
+        ///  ijkplayer subtitle
+//        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "subtitle", 1);
+//        List<VideoOptionModel> list = new ArrayList<>();
+//        list.add(videoOptionModel);
+//        GSYVideoManager.instance().setOptionModelList(list);
+//        GSYVideoManager.instance().setPlayerInitSuccessListener(new IPlayerInitSuccessListener() {
+//            @Override
+//            public void onPlayerInitSuccess(IMediaPlayer player, GSYModel model) {
+//                if (player instanceof IjkMediaPlayer) {
+//                    IjkMediaPlayer ijkMediaPlayer = ((IjkMediaPlayer)player);
+//                    ijkMediaPlayer.setOnTimedTextListener(new IMediaPlayer.OnTimedTextListener() {
+//                        @Override
+//                        public void onTimedText(IMediaPlayer mp, IjkTimedText text) {
+//                            if (text != null) {
+//                                ///  render subtitle text
+//                                subtitleTextView.setText(text.getText());
+//                            }
+//                        }
+//                    });
+//                }
+//            }
+//        });
+
+
         /***************rtsp 配置****************/
 
 
