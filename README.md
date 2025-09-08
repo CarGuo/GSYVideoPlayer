@@ -2,7 +2,7 @@
 
 ## 支持 [IJKPlayer](https://github.com/Bilibili/ijkplayer)、 [Media3(EXOPlayer2)](https://github.com/androidx/media)、MediaPlayer、AliPlayer，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
-## 鸿蒙版本[openharmony-tpc/GSYVideoPlayer](https://gitee.com/openharmony-tpc/openharmony_tpc_samples/tree/master/GSYVideoPlayer)
+## * 鸿蒙版本[openharmony-tpc/GSYVideoPlayer](https://gitcode.com/openharmony-tpc/openharmony_tpc_samples/tree/master/GSYVideoPlayer)
 
 > ## 如果克隆太慢或者图片看不到，可尝试从以下地址同步
 > - **GitCode** https://gitcode.com/ZuoYueLiang/GSYVideoPlayer
