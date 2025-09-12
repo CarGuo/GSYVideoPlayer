@@ -8,15 +8,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.gsyvideoplayer.databinding.ActivityListVideoBinding;
 import com.example.gsyvideoplayer.databinding.ActivityMainBinding;
 import com.example.gsyvideoplayer.simple.SimpleActivity;
 import com.example.gsyvideoplayer.utils.JumpUtils;
+import com.example.gsyvideoplayer.view.DemoVideoActivity;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
@@ -50,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Debuger.enable();
 
+        binding.demo1.setOnClickListener(this);
         binding.openBtn.setOnClickListener(this);
         binding.listBtn.setOnClickListener(this);
         binding.listBtn2.setOnClickListener(this);
@@ -115,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.open_simple:
                 //简单的播放
                 startActivity(new Intent(this, SimpleActivity.class));
+
+            case R.id.demo_1:
+                //简单的播放
+                startActivity(new Intent(this, DemoVideoActivity.class));
                 break;
             case R.id.open_btn:
                 //直接一个页面播放的
@@ -269,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //GSYVideoManager.clearDefaultCache(MainActivity.this, url);
                 break;
             case R.id.tv_play:
-                JumpUtils.goToTVVideoPlayer(this,binding.tvPlay);
+                JumpUtils.goToTVVideoPlayer(this, binding.tvPlay);
                 break;
         }
     }

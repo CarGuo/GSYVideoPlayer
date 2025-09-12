@@ -2,6 +2,7 @@ apply plugin: "com.android.application"
 
 apply from: "$rootDir/gradle/base.gradle"
 apply from: "../gradle/exported.gradle"
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     defaultConfig {
@@ -19,6 +20,19 @@ android {
 
     viewBinding {
         enabled = true
+    }
+
+    dataBinding {
+        enable = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     signingConfigs {
@@ -91,9 +105,13 @@ dependencies {
     implementation dataDependencies.okhttp
 
     implementation dataDependencies.permissionsDispatcher
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     annotationProcessor dataDependencies.permissionsDispatcherProcessor
 
     debugImplementation dataDependencies.leakcanary
+
+    implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:3.0.14"
+    implementation "com.google.code.gson:gson:2.13.1"
 
     implementation 'androidx.activity:activity:1.10.1'
 }
