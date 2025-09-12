@@ -188,7 +188,7 @@ public class DetailPlayer extends AppCompatActivity {
             .setAutoFullWithSize(true)
             .setShowFullAnimation(false)
             .setNeedLockFull(true)
-            .setSeekOnStart(3000)
+            //.setSeekOnStart(3000)
             .setUrl(url)
             .setMapHeadData(header)
             .setCacheWithPlay(false)
