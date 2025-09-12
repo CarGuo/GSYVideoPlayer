@@ -5,295 +5,309 @@
     android:fitsSystemWindows="true"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/activity_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context="com.example.gsyvideoplayer.MainActivity">
+   <androidx.appcompat.widget.LinearLayoutCompat
+       android:layout_width="match_parent"
+       android:orientation="vertical"
+       android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/open_simple"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:text="简单播放" />
+       <Button
+           android:id="@+id/demo_1"
+           android:layout_width="240dp"
+           android:layout_height="wrap_content"
+           android:text="EXO播放列表demo" />
 
-        <Button
-            android:id="@+id/open_btn"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="打开Video" />
+       <LinearLayout
+           android:id="@+id/activity_main"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical"
+           android:paddingLeft="@dimen/activity_horizontal_margin"
+           android:paddingTop="@dimen/activity_vertical_margin"
+           android:visibility="gone"
+           android:paddingRight="@dimen/activity_horizontal_margin"
+           android:paddingBottom="@dimen/activity_vertical_margin"
+           tools:context="com.example.gsyvideoplayer.MainActivity">
 
-        <Button
-            android:id="@+id/open_control"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="带控制DEMO" />
+           <Button
+               android:id="@+id/open_simple"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:text="简单播放" />
 
-        <Button
-            android:id="@+id/transparent"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="透明" />
+           <Button
+               android:id="@+id/open_btn"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="打开Video" />
 
-        <Button
-            android:id="@+id/open_btn_empty"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="无UI界面" />
+           <Button
+               android:id="@+id/open_control"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="带控制DEMO" />
 
-        <Button
-            android:id="@+id/open_filter"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="滤镜" />
+           <Button
+               android:id="@+id/transparent"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="透明" />
 
+           <Button
+               android:id="@+id/open_btn_empty"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="无UI界面" />
 
-        <Button
-            android:id="@+id/open_btn_ad"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="带广告" />
-
-        <Button
-            android:id="@+id/open_btn_ad2"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="带广告2" />
-
-        <Button
-            android:id="@+id/open_btn_pick"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="无缝切换" />
-
-        <Button
-            android:id="@+id/list_btn"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="List列表" />
-
-        <Button
-            android:id="@+id/list_btn_2"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="List全屏和小窗口列表" />
-
-        <Button
-            android:id="@+id/view_pager2_activity"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="ViewPager2列表" />
-
-        <Button
-            android:id="@+id/view_pager_demo_activity"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="ViewPager Demo" />
-
-        <Button
-            android:id="@+id/recycler"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="recycler列表" />
-
-        <Button
-            android:id="@+id/open_btn_auto"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="自动recycler列表" />
+           <Button
+               android:id="@+id/open_filter"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="滤镜" />
 
 
-        <Button
-            android:id="@+id/recycler_2"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="recycler全屏和小窗口列表" />
+           <Button
+               android:id="@+id/open_btn_ad"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="带广告" />
 
-        <Button
-            android:id="@+id/list_detail"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Detail模式" />
+           <Button
+               android:id="@+id/open_btn_ad2"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="带广告2" />
 
-        <Button
-            android:id="@+id/list_detail_list"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Detail列表模式，切换下一集" />
+           <Button
+               android:id="@+id/open_btn_pick"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="无缝切换" />
 
-        <Button
-            android:id="@+id/tv_play"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="TV机顶盒播放器" />
+           <Button
+               android:id="@+id/list_btn"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="List列表" />
 
-        <Button
-            android:id="@+id/web_detail"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Web detail模式" />
+           <Button
+               android:id="@+id/list_btn_2"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="List全屏和小窗口列表" />
 
+           <Button
+               android:id="@+id/view_pager2_activity"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="ViewPager2列表" />
 
-        <Button
-            android:id="@+id/danmaku_video"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="弹幕demo" />
+           <Button
+               android:id="@+id/view_pager_demo_activity"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="ViewPager Demo" />
 
-        <Button
-            android:id="@+id/fragment_video"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Fragment下使用" />
+           <Button
+               android:id="@+id/recycler"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="recycler列表" />
 
-        <Button
-            android:id="@+id/more_type"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="多类型模式" />
-
-        <Button
-            android:id="@+id/input_type"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="输入url" />
-
-        <Button
-            android:id="@+id/open_scroll"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="联动detail" />
-
-        <Button
-            android:id="@+id/open_window"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="悬浮窗口" />
-
-        <Button
-            android:id="@+id/open_btn_multi"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="多任务支持" />
+           <Button
+               android:id="@+id/open_btn_auto"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="自动recycler列表" />
 
 
-        <Button
-            android:id="@+id/open_switch"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="列表详情切换" />
+           <Button
+               android:id="@+id/recycler_2"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="recycler全屏和小窗口列表" />
+
+           <Button
+               android:id="@+id/list_detail"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="Detail模式" />
+
+           <Button
+               android:id="@+id/list_detail_list"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="Detail列表模式，切换下一集" />
+
+           <Button
+               android:id="@+id/tv_play"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="TV机顶盒播放器" />
+
+           <Button
+               android:id="@+id/web_detail"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="Web detail模式" />
 
 
-        <Button
-            android:id="@+id/open_list_ad"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="列表带广告模式" />
+           <Button
+               android:id="@+id/danmaku_video"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="弹幕demo" />
+
+           <Button
+               android:id="@+id/fragment_video"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="Fragment下使用" />
+
+           <Button
+               android:id="@+id/more_type"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="多类型模式" />
+
+           <Button
+               android:id="@+id/input_type"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="输入url" />
+
+           <Button
+               android:id="@+id/open_scroll"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="联动detail" />
+
+           <Button
+               android:id="@+id/open_window"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="悬浮窗口" />
+
+           <Button
+               android:id="@+id/open_btn_multi"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="多任务支持" />
 
 
-        <Button
-            android:id="@+id/media_codec"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="硬解码支持" />
-
-        <Button
-            android:id="@+id/detail_download_activity"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="缓存下载支持" />
+           <Button
+               android:id="@+id/open_switch"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="列表详情切换" />
 
 
-        <Button
-            android:id="@+id/detail_download_exo_activity"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Exo特有缓存下载支持" />
+           <Button
+               android:id="@+id/open_list_ad"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="列表带广告模式" />
 
-        <Button
-            android:id="@+id/detail_normal_activity"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="普通 Activity" />
 
-        <Button
-            android:id="@+id/open_custom_exo"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="自定义Exo" />
+           <Button
+               android:id="@+id/media_codec"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="硬解码支持" />
 
-        <Button
-            android:id="@+id/detail_subtitle_activity"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="自定义Exo支持字幕" />
+           <Button
+               android:id="@+id/detail_download_activity"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="缓存下载支持" />
 
-        <Button
-            android:id="@+id/detail_audio_activity"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="音频" />
 
-        <Button
-            android:id="@+id/change_core"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Ijk 内核" />
+           <Button
+               android:id="@+id/detail_download_exo_activity"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="Exo特有缓存下载支持" />
 
-        <Button
-            android:id="@+id/change_cache"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Proxy 缓存" />
+           <Button
+               android:id="@+id/detail_normal_activity"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="普通 Activity" />
 
-        <Button
-            android:id="@+id/clear_cache"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="clear Cache" />
+           <Button
+               android:id="@+id/open_custom_exo"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="自定义Exo" />
 
-    </LinearLayout>
+           <Button
+               android:id="@+id/detail_subtitle_activity"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="自定义Exo支持字幕" />
+
+           <Button
+               android:id="@+id/detail_audio_activity"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="音频" />
+
+           <Button
+               android:id="@+id/change_core"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="Ijk 内核" />
+
+           <Button
+               android:id="@+id/change_cache"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="Proxy 缓存" />
+
+           <Button
+               android:id="@+id/clear_cache"
+               android:layout_width="240dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               android:text="clear Cache" />
+
+       </LinearLayout>
+
+   </androidx.appcompat.widget.LinearLayoutCompat>
 </ScrollView>
