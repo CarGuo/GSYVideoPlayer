@@ -46,10 +46,10 @@ android {
         abortOnError false
     }
 
-    ///剔除 librtmp-jni.so
-    packagingOptions {
-        exclude 'lib/arm64-v8a/librtmp-jni.so'
-    }
+//    //如果 16 KB 问题需要剔除 librtmp-jni.so
+//    packagingOptions {
+//        exclude 'lib/arm64-v8a/librtmp-jni.so'
+//    }
 
     namespace 'com.example.gsyvideoplayer'
 }
@@ -70,7 +70,6 @@ dependencies {
     implementation project(":gsyVideoPlayer-aliplay")
 
     //implementation 'com.shuyu:gsyvideoplayer:10.0.0'
-
 
 
     //implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:$gsyVideoVersion"
