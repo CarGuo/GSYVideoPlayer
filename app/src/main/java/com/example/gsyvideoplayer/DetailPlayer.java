@@ -61,6 +61,7 @@ public class DetailPlayer extends AppCompatActivity {
 
     private boolean isPlay;
     private boolean isPause;
+    private boolean inPipMode = false;
 
     private OrientationUtils orientationUtils;
 
@@ -448,6 +449,7 @@ public class DetailPlayer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    inPipMode = true;
                     DetailPlayer.this.enterPictureInPictureMode();
                 }
             }
@@ -512,6 +514,11 @@ public class DetailPlayer extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
+        inPipMode = isInPictureInPictureMode;
+    }
 
     @Override
     public void onBackPressed() {
@@ -565,7 +572,7 @@ public class DetailPlayer extends AppCompatActivity {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
-        if (isPlay && !isPause) {
+        if (isPlay && !isPause && !inPipMode) {
             binding.detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
         }
     }
@@ -662,7 +669,7 @@ public class DetailPlayer extends AppCompatActivity {
         //String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
         //String url = "http://vr.tudou.com/v2proxy/v?sid=95001&id=496378919&st=3&pw=";
         //String url = "http://pl-ali.youku.com/playlist/m3u8?type=mp4&ts=1490185963&keyframe=0&vid=XMjYxOTQ1Mzg2MA==&ep=ciadGkiFU8cF4SvajD8bYyuwJiYHXJZ3rHbN%2FrYDAcZuH%2BrC6DPcqJ21TPs%3D&sid=04901859548541247bba8&token=0524&ctype=12&ev=1&oip=976319194";
-        String url = "https://flipfit-cdn.akamaized.net/flip_hls/6656423247ffe600199e8363-15125d/video_h1.m3u8";
+        String url = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
         //String url = "https://res.exexm.com/cw_145225549855002";
         //String url = "http://storage.gzstv.net/uploads/media/huangmeiyan/jr05-09.mp4";//mepg
         //String url = "https://zh-files.oss-cn-qingdao.aliyuncs.com/20170808223928mJ1P3n57.mp4";//90度
