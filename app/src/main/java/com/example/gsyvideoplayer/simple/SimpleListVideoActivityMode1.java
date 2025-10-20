@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer.simple;
 
 import android.os.Bundle;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -54,16 +55,17 @@ public class SimpleListVideoActivityMode1 extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (GSYVideoManager.backFromWindowFull(this)) {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
-        super.onBackPressed();
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
-
     @Override
     protected void onPause() {
         super.onPause();

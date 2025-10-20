@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.C;
@@ -234,12 +235,10 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
         });
 
         binding.detailPlayer.setSubTitle("http://img.cdn.guoshuyu.cn/subtitle2.srt");
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+// ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
         // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
         if (orientationUtils != null) {
             orientationUtils.backToProtVideo();
@@ -248,10 +247,11 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
         if (GSYExoSubTitleVideoManager.backFromWindowFull(this)) {
             return;
         }
-        super.onBackPressed();
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
-
-
     @Override
     protected void onPause() {
         getCurPlay().onVideoPause();

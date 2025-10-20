@@ -97,6 +97,21 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
             }
         });
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+// ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+        if (GSYExoVideoManager.backFromWindowFull(this)) {
+            return;
+        }
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
 
 
@@ -110,20 +125,6 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
     /**
      * 重载为GSYExoVideoManager的方法处理
      */
-    @Override
-    public void onBackPressed() {
-        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
-        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-        if (GSYExoVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-
     @Override
     public GSYExo2PlayerView getGSYVideoPlayer() {
         return binding.detailPlayer;

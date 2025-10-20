@@ -2,6 +2,7 @@ package com.example.gsyvideoplayer.simple;
 
 import android.graphics.Point;
 import android.os.Bundle;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -109,18 +110,17 @@ public class SimpleListVideoActivityMode2 extends AppCompatActivity {
             }
 
         });
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (smallVideoHelper.backFromFull()) {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+if (smallVideoHelper.backFromFull()) {
             return;
         }
-        super.onBackPressed();
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
