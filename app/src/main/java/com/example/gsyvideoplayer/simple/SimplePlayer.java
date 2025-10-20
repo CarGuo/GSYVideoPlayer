@@ -2,6 +2,7 @@ package com.example.gsyvideoplayer.simple;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -60,7 +61,7 @@ public class SimplePlayer extends AppCompatActivity {
         videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
 
@@ -69,6 +70,21 @@ public class SimplePlayer extends AppCompatActivity {
         videoPlayer.setNeedOrientationUtils(false);
 
         videoPlayer.startPlayLogic();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+///       不需要回归竖屏
+//        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+//            videoPlayer.getFullscreenButton().performClick();
+//            return;
+//        }
+                //释放所有
+                videoPlayer.setVideoAllCallBack(null);
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
 
 
@@ -90,17 +106,5 @@ public class SimplePlayer extends AppCompatActivity {
         GSYVideoManager.releaseAllVideos();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
-    }
-
-    @Override
-    public void onBackPressed() {
-///       不需要回归竖屏
-//        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-//            videoPlayer.getFullscreenButton().performClick();
-//            return;
-//        }
-        //释放所有
-        videoPlayer.setVideoAllCallBack(null);
-        super.onBackPressed();
     }
 }
