@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer;
 
 import android.os.Build;
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,13 +29,15 @@ public class FragmentVideoActivity extends AppCompatActivity {
         transaction.replace(R.id.frameLayout, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
 
-    @Override
-    public void onBackPressed() {
-        if (newFragment.onBackPressed()) {
-            return;
-        }
-        finish();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (newFragment.onBackPressed()) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
 }

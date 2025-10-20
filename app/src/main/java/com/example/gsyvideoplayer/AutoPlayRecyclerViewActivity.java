@@ -9,6 +9,7 @@ import android.transition.Explode;
 import android.view.View;
 import android.view.Window;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -95,6 +96,17 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
             }
         });
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (GSYVideoManager.backFromWindowFull(AutoPlayRecyclerViewActivity.this)) {
+                    return;
+                }
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+
     }
 
     @Override
@@ -103,14 +115,6 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
         //如果旋转了就全屏
         mFull = newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER;
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
     }
 
     @Override
