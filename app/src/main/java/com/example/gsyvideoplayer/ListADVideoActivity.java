@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import android.transition.Explode;
 import android.view.LayoutInflater;
@@ -81,19 +82,20 @@ public class ListADVideoActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (GSYVideoADManager.backFromWindowFull(this)) {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+if (GSYVideoADManager.backFromWindowFull(this)) {
             return;
         }
         if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
-        super.onBackPressed();
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
-
     @Override
     protected void onPause() {
         super.onPause();

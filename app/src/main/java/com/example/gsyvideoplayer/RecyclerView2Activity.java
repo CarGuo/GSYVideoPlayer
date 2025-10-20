@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -102,17 +103,17 @@ public class RecyclerView2Activity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (smallVideoHelper.backFromFull()) {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+if (smallVideoHelper.backFromFull()) {
             return;
         }
-        super.onBackPressed();
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
