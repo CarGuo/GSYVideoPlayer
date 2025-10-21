@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.opengl.Matrix;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 
 import android.util.Log;
@@ -176,7 +177,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
         binding.detailPlayer.setBackFromFullScreenListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DetailFilterActivity.this.onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
 
@@ -231,6 +232,20 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
             @Override
             public void onClick(View v) {
                 //do nothing
+            }
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (orientationUtils != null) {
+                    orientationUtils.backToProtVideo();
+                }
+                if (getGSYVideoPlayer().isIfCurrentIsFullscreen()) {
+                    getGSYVideoPlayer().getFullscreenButton().performClick();
+                    return;
+                }
+                finish();
             }
         });
     }

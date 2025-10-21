@@ -7,6 +7,7 @@ import android.transition.Explode;
 import android.view.View;
 import android.view.Window;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -89,14 +90,15 @@ public class RecyclerViewActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (GSYVideoManager.backFromWindowFull(RecyclerViewActivity.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
 
     @Override

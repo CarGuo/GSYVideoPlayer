@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -98,21 +99,20 @@ public class SwitchDetailActivity extends AppCompatActivity {
 
         // 这里指定了被共享的视图元素
         ViewCompat.setTransitionName(detailPlayer, OPTION_VIEW);
-    }
 
-    @Override
-    public void onBackPressed() {
-        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
-        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (orientationUtils != null) {
+                    orientationUtils.backToProtVideo();
+                }
+                if (GSYVideoManager.backFromWindowFull(SwitchDetailActivity.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
-
 
     @Override
     protected void onPause() {

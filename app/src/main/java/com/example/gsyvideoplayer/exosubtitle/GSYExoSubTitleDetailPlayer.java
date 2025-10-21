@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.C;
@@ -34,17 +35,6 @@ import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer;
 
 public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
 
-//    @BindView(R.id.post_detail_nested_scroll)
-//    NestedScrollView postDetailNestedScroll;
-//
-//    //推荐使用StandardGSYVideoPlayer，功能一致
-//    //CustomGSYVideoPlayer部分功能处于试验阶段
-//    @BindView(R.id.detail_player)
-//    GSYExoSubTitleVideoView detailPlayer;
-//
-//    @BindView(R.id.activity_detail_player)
-//    RelativeLayout activityDetailPlayer;
-
     private boolean isPlay;
     private boolean isPause;
 
@@ -69,8 +59,6 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.mipmap.xxx1);
-
-        //detailPlayer.setThumbImageView(imageView);
 
         resolveNormalVideoUI();
 
@@ -234,23 +222,20 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
         });
 
         binding.detailPlayer.setSubTitle("http://img.cdn.guoshuyu.cn/subtitle2.srt");
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (orientationUtils != null) {
+                    orientationUtils.backToProtVideo();
+                }
+                if (GSYExoSubTitleVideoManager.backFromWindowFull(GSYExoSubTitleDetailPlayer.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
-
-    @Override
-    public void onBackPressed() {
-
-        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
-        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-
-        if (GSYExoSubTitleVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
 
     @Override
     protected void onPause() {

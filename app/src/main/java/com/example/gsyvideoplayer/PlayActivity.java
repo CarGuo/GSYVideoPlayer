@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 
@@ -49,6 +50,31 @@ public class PlayActivity extends AppCompatActivity {
 
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         init();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //先返回正常状态
+                if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    binding.videoPlayer.getFullscreenButton().performClick();
+                    return;
+                }
+                //释放所有
+                binding.videoPlayer.setVideoAllCallBack(null);
+                GSYVideoManager.releaseAllVideos();
+                if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                            overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
+                        }
+                    }, 500);
+                }
+            }
+        });
     }
 
     private void init() {
@@ -115,7 +141,7 @@ public class PlayActivity extends AppCompatActivity {
         binding.videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
 
@@ -143,30 +169,6 @@ public class PlayActivity extends AppCompatActivity {
         if (orientationUtils != null)
             orientationUtils.releaseListener();
     }
-
-    @Override
-    public void onBackPressed() {
-        //先返回正常状态
-        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            binding.videoPlayer.getFullscreenButton().performClick();
-            return;
-        }
-        //释放所有
-        binding.videoPlayer.setVideoAllCallBack(null);
-        GSYVideoManager.releaseAllVideos();
-        if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            super.onBackPressed();
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                    overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
-                }
-            }, 500);
-        }
-    }
-
 
     private void initTransition() {
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

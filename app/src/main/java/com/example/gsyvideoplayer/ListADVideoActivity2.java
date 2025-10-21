@@ -12,6 +12,7 @@ import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import androidx.activity.OnBackPressedCallback;
 
 import com.example.gsyvideoplayer.databinding.ActivityListVideoBinding;
 import com.example.gsyvideoplayer.model.VideoModel;
@@ -84,17 +85,18 @@ public class ListADVideoActivity2 extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (GSYVideoADManager.backFromWindowFull(this)) {
-            return;
-        }
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (GSYVideoADManager.backFromWindowFull(ListADVideoActivity2.this)) {
+                    return;
+                }
+                if (GSYVideoManager.backFromWindowFull(ListADVideoActivity2.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
 
     @Override

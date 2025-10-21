@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -66,14 +67,16 @@ public class ViewPagerDemoActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
-    @Override
-    public void onBackPressed() {
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (GSYVideoManager.backFromWindowFull(ViewPagerDemoActivity.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -74,17 +75,18 @@ public class ListVideoActivity extends AppCompatActivity {
             }
         });
 
-    }
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //为了支持重力旋转
+                onBackPressAdapter();
 
-    @Override
-    public void onBackPressed() {
-        //为了支持重力旋转
-        onBackPressAdapter();
-
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
+                if (GSYVideoManager.backFromWindowFull(ListVideoActivity.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
 
     @Override

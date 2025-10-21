@@ -1,11 +1,12 @@
 package com.example.gsyvideoplayer;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.exoplayer.SeekParameters;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailPlayerBinding;
@@ -24,7 +25,7 @@ import java.util.Map;
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 
-public class DetailNormalActivityPlayer extends Activity {
+public class DetailNormalActivityPlayer extends AppCompatActivity {
 
 
     private boolean isPlay;
@@ -148,23 +149,20 @@ public class DetailNormalActivityPlayer extends Activity {
                 binding.detailPlayer.startWindowFullscreen(DetailNormalActivityPlayer.this, false, true);
             }
         });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (orientationUtils != null) {
+                    orientationUtils.backToProtVideo();
+                }
+                if (GSYVideoManager.backFromWindowFull(DetailNormalActivityPlayer.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
-
-    @Override
-    public void onBackPressed() {
-
-        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
-        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
 
     @Override
     protected void onPause() {

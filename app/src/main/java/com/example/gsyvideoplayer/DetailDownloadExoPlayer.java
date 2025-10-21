@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -196,24 +197,21 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
             }
         });
 
-
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+                // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+                if (orientationUtils != null) {
+                    orientationUtils.backToProtVideo();
+                }
+                if (GSYVideoManager.backFromWindowFull(DetailDownloadExoPlayer.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
-
-    @Override
-    public void onBackPressed() {
-
-        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
-        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
-        }
-
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
 
     @Override
     protected void onPause() {

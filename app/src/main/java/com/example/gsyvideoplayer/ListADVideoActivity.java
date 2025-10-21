@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import android.transition.Explode;
 import android.view.LayoutInflater;
@@ -27,9 +28,6 @@ import java.util.List;
  * 带广告播放列表，支持中间插入广告模式
  */
 public class ListADVideoActivity extends AppCompatActivity {
-
-//    @BindView(R.id.video_list)
-//    ListView videoList;
 
     ListADNormalAdapter listADNormalAdapter;
     ActivityListVideoBinding binding;
@@ -81,17 +79,18 @@ public class ListADVideoActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (GSYVideoADManager.backFromWindowFull(this)) {
-            return;
-        }
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (GSYVideoADManager.backFromWindowFull(ListADVideoActivity.this)) {
+                    return;
+                }
+                if (GSYVideoManager.backFromWindowFull(ListADVideoActivity.this)) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
 
     @Override

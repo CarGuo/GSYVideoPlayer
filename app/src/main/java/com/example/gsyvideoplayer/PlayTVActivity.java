@@ -10,10 +10,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 
-import com.example.gsyvideoplayer.databinding.ActivityPlayBinding;
 import com.example.gsyvideoplayer.databinding.ActivityPlayTvBinding;
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
@@ -50,6 +50,31 @@ public class PlayTVActivity extends AppCompatActivity {
 
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         init();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //先返回正常状态
+                if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    binding.videoPlayerTv.getFullscreenButton().performClick();
+                    return;
+                }
+                //释放所有
+                binding.videoPlayerTv.setVideoAllCallBack(null);
+                GSYVideoManager.releaseAllVideos();
+                if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                            overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
+                        }
+                    }, 500);
+                }
+            }
+        });
     }
 
     private void init() {
@@ -116,7 +141,7 @@ public class PlayTVActivity extends AppCompatActivity {
         binding.videoPlayerTv.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
 
@@ -145,30 +170,6 @@ public class PlayTVActivity extends AppCompatActivity {
             orientationUtils.releaseListener();
     }
 
-    @Override
-    public void onBackPressed() {
-        //先返回正常状态
-        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            binding.videoPlayerTv.getFullscreenButton().performClick();
-            return;
-        }
-        //释放所有
-        binding.videoPlayerTv.setVideoAllCallBack(null);
-        GSYVideoManager.releaseAllVideos();
-        if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            super.onBackPressed();
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                    overridePendingTransition(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out);
-                }
-            }, 500);
-        }
-    }
-
-
     private void initTransition() {
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             postponeEnterTransition();
@@ -196,7 +197,7 @@ public class PlayTVActivity extends AppCompatActivity {
         }
         return false;
     }
-  
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         binding.videoPlayerTv.onKeyDown(keyCode,event);

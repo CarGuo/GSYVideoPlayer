@@ -3,6 +3,7 @@ package com.example.gsyvideoplayer;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.transition.Explode;
@@ -83,14 +84,15 @@ public class ListMultiVideoActivity extends AppCompatActivity {
 
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (CustomManager.backFromWindowFull(this, listMultiNormalAdapter.getFullKey())) {
-            return;
-        }
-        super.onBackPressed();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (CustomManager.backFromWindowFull(ListMultiVideoActivity.this, listMultiNormalAdapter.getFullKey())) {
+                    return;
+                }
+                finish();
+            }
+        });
     }
 
     @Override
