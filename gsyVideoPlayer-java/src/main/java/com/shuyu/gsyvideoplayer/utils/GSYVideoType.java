@@ -41,7 +41,7 @@ public class GSYVideoType {
     /**
      * SurfaceView，与动画全屏的效果不是很兼容
      */
-    public final static int SUFRACE = 1;
+    public final static int SURFACE = 1;
 
     /**
      * TextureView,默认

@@ -42,7 +42,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
         backupRendType = GSYVideoType.getRenderType();
 
         //设置为Surface播放模式，注意此设置是全局的
-        GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
+        GSYVideoType.setRenderType(GSYVideoType.SURFACE);
 
         resolveNormalVideoUI();
 

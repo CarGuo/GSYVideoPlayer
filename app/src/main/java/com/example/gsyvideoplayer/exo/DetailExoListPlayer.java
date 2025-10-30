@@ -3,11 +3,9 @@ package com.example.gsyvideoplayer.exo;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.core.widget.NestedScrollView;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.databinding.ActivityDeatilExoListPlayerBinding;
@@ -43,7 +41,7 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
         /// 保持当前设置
         type = GSYVideoType.getRenderType();
         ///暂停切换不出现步进，需要使用 SurfaceView
-        GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
+        GSYVideoType.setRenderType(GSYVideoType.SURFACE);
 
 
         //GSYBaseActivityDetail 的 普通模式初始化

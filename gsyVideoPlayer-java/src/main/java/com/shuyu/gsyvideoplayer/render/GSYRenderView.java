@@ -83,7 +83,7 @@ public class GSYRenderView {
                         final MeasureHelper.MeasureFormVideoParamsListener videoParamsListener,
                         final GSYVideoGLView.ShaderInterface effect, final float[] transform,
                         final GSYVideoGLViewBaseRender customRender, int mode) {
-        if (GSYVideoType.getRenderType() == GSYVideoType.SUFRACE) {
+        if (GSYVideoType.getRenderType() == GSYVideoType.SURFACE) {
             mShowView = GSYSurfaceView.addSurfaceView(context, textureViewContainer, rotate, gsySurfaceListener, videoParamsListener);
         } else if (GSYVideoType.getRenderType() == GSYVideoType.GLSURFACE) {
             mShowView = GSYVideoGLView.addGLView(context, textureViewContainer, rotate, gsySurfaceListener, videoParamsListener, effect, transform, customRender, mode);
