@@ -393,6 +393,8 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 ![框架图4](./img/p4.png)
 ![框架图5](./img/p2.png)
 
+> 更多可见：https://codewiki.google/github.com/carguo/gsyvideoplayer
+
 ## 四、运行效果
 
 * ### 1、打开一个播放(旋转、镜像、填充)
