@@ -1,5 +1,13 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+### v11.2.0 (2025-11-25)
+- fix #4169
+- fix #4174
+- fix #4171
+- add new function with clearVideoSurface [IjkExo2MediaPlayer]
+- fix #4199
+- fix #4204
+
 
 ### v11.1.0 (2025-08-04)
 
