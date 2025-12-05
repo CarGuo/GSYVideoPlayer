@@ -403,7 +403,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     @Override
     public void onAudioFocusLossTransient() {
         try {
-            if (getGSYVideoManager().listener() != null) {
+            // 如果正在准备中，不要暂停，避免设置 mPauseBeforePrepared 导致播放失败
+            if (mCurrentState != CURRENT_STATE_PREPAREING && getGSYVideoManager().listener() != null) {
                 getGSYVideoManager().listener().onVideoPause();
             }
         } catch (Exception var2) {
