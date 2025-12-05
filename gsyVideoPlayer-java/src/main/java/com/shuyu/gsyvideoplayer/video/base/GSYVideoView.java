@@ -390,8 +390,11 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                 if (GSYVideoView.this.mReleaseWhenLossAudio) {
                     GSYVideoView.this.releaseVideos();
                 } else {
-                    if (getGSYVideoManager().listener() != null)
-                        getGSYVideoManager().listener().onVideoPause();
+                    // 确保只有当前活跃的播放器才响应音频焦点变化
+                    GSYMediaPlayerListener listener = getGSYVideoManager().listener();
+                    if (listener != null && listener == GSYVideoView.this) {
+                        listener.onVideoPause();
+                    }
                 }
             }
         });
@@ -403,9 +406,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     @Override
     public void onAudioFocusLossTransient() {
         try {
-            // 如果正在准备中，不要暂停，避免设置 mPauseBeforePrepared 导致播放失败
-            if (mCurrentState != CURRENT_STATE_PREPAREING && getGSYVideoManager().listener() != null) {
-                getGSYVideoManager().listener().onVideoPause();
+            // 确保只有当前活跃的播放器才响应音频焦点变化
+            GSYMediaPlayerListener listener = getGSYVideoManager().listener();
+            if (listener != null && listener == this) {
+                listener.onVideoPause();
             }
         } catch (Exception var2) {
             var2.printStackTrace();
