@@ -287,8 +287,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         cancelProgressTimer();
         cancelDismissControlViewTimer();
 
-        // 释放音频焦点管理器资源
-        releaseAudioFocusManager();
+        // 只有当不是全屏模式时才释放音频焦点管理器资源
+        // 全屏模式下，原始播放器会被 detach，但全屏播放器仍需要使用音频焦点
+        if (!mIfCurrentIsFullscreen) {
+            releaseAudioFocusManager();
+        }
     }
 
     @Override
