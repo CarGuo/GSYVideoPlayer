@@ -344,8 +344,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     }
 
     protected void startPrepare() {
-        if (getGSYVideoManager().listener() != null
-                && getGSYVideoManager().listener() != this) {
+        if (getGSYVideoManager().listener() != null) {
             getGSYVideoManager().listener().onCompletion();
         }
         if (mVideoAllCallBack != null) {
@@ -828,6 +827,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             prepareVideo();
         }
 
+        addTextureView();
+
         try {
             if (getGSYVideoManager() != null) {
                 getGSYVideoManager().start();
@@ -842,8 +843,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        addTextureView();
 
         createNetWorkState();
 
