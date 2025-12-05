@@ -1,5 +1,7 @@
 ## GSYVideoPlayer 问题集锦
 
+**[Click to see the English version](QUESTION_EN.md)**
+
 #### ijkplayer模式的，你可能会需要的option大全 : [ff_ffplay_options.h](https://github.com/Bilibili/ijkplayer/blob/cced91e3ae3730f5c63f3605b00d25eafcf5b97b/ijkmedia/ijkplayer/ff_ffplay_options.h)
 
 > 在线分析：https://gpac.github.io/mp4box.js/test/filereader.html

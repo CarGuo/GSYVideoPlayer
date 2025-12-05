@@ -1,5 +1,7 @@
 ## GSYVideoPlayer项目说明（Beta1）
 
+**[Click to see the English version](GSYVIDEO_PLAYER_PROJECT_INFO_EN.md)**
+
 #### 项目经过多版本调整之后，目前大致结构分为如下 ：
 
 * **Player 播放内核层**：IjkMediaPlayer、ExoPlayr2、MediaPlayer（IPlayerManager）。

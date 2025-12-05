@@ -1,3 +1,4 @@
+[English Document](./BUILD_SO_EN.md)
 
 ##### 1、前言
 

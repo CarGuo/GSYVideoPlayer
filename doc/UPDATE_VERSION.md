@@ -1,5 +1,11 @@
 ## 下方个版本说明，可以当做简单的wiki使用~，效果可参考DEMO。
 
+**[Click to see the English version](UPDATE_VERSION_EN.md)**
+
+### v11.3.0 (2025-12-05)
+- link #3019
+- fix #4211
+
 ### v11.2.0 (2025-11-25)
 - fix #4169
 - fix #4174

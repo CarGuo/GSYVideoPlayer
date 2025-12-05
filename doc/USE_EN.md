@@ -1,63 +1,58 @@
-[English Document](./USE_EN.md)
+## Three Simple Ways to Use
 
-## 三种简单的使用方法
-
-
-*注意：下面几种方式所在的Activity不要忘记配置manifest的config。*
-```
+*Note: Do not forget to configure the manifest's `configChanges` for the Activity where the following methods are used.*
+```xml
 <activity
     android:name=".xxxxx"
     android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
     android:screenOrientation="portrait" />
-
 ```
 
-### 一、直接播放
+### 1. Direct Playback
 
 #### [SimplePlayer](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimplePlayer.java)
 
-### 二、列表中使用
+### 2. Usage in a List
 
-#### 模式一 [SimpleListVideoActivityMode1](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleListVideoActivityMode1.java)
+#### Mode 1: [SimpleListVideoActivityMode1](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleListVideoActivityMode1.java)
 
-1、adapter布局中添加播放控件
-```
+1.  Add the player control to the adapter's layout:
+```xml
 <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
     android:id="@+id/detail_player"
     android:layout_width="match_parent"
     android:layout_height="@dimen/post_media_height" />
-
 ```
 
-2、adapter中配置播放控件（也可以使用builder模式，详见下方detail模式中）
-```
-holder.gsyVideoPlayer.setUpLazy(url, true, null, null, "这是title");
-//增加title
+2.  Configure the player control in the adapter (you can also use the builder pattern, see the detail mode below):
+```java
+holder.gsyVideoPlayer.setUpLazy(url, true, null, null, "This is the title");
+// Add title
 holder.gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
-//设置返回键
+// Set back button
 holder.gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
-//设置全屏按键功能
+// Set fullscreen button functionality
 holder.gsyVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         holder.gsyVideoPlayer.startWindowFullscreen(context, false, true);
     }
 });
-//防止错位设置
+// Set to prevent position mismatch
 holder.gsyVideoPlayer.setPlayTag(TAG);
 holder.gsyVideoPlayer.setPlayPosition(position);
-//是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
+// Whether to automatically select portrait or landscape fullscreen based on video size
 holder.gsyVideoPlayer.setAutoFullWithSize(true);
-//音频焦点冲突时是否释放
+// Whether to release when audio focus is lost
 holder.gsyVideoPlayer.setReleaseWhenLossAudio(false);
-//全屏动画
+// Fullscreen animation
 holder.gsyVideoPlayer.setShowFullAnimation(true);
-//小屏时不触摸滑动
+// Disable touch sliding in small screen mode
 holder.gsyVideoPlayer.setIsTouchWiget(false);
 ```
 
-3、Activity中配置生命周期
-```
+3.  Configure the lifecycle in the Activity:
+```java
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ···
@@ -67,17 +62,17 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 int lastVisibleItem = firstVisibleItem + visibleItemCount;
-                //大于0说明有播放
+                // Greater than 0 means there is a playback
                 if (GSYVideoManager.instance().getPlayPosition() >= 0) {
-                    //当前播放的位置
+                    // Current playback position
                     int position = GSYVideoManager.instance().getPlayPosition();
-                    //对应的播放列表TAG
+                    // Corresponding playback list TAG
                     if (GSYVideoManager.instance().getPlayTag().equals(ListNormalAdapter.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
                         if(GSYVideoManager.isFullState(ListVideoActivity.this)) {
                             return;
                         }
-                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        // If scrolled out of view, release the player, similar to Toutiao
                         GSYVideoManager.releaseAllVideos();
                         adapter.notifyDataSetChanged();
                     }
@@ -114,11 +109,10 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
     }
 ```
 
+#### Mode 2: [SimpleListVideoActivityMode2](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleListVideoActivityMode2.java)
 
-#### 模式二  [SimpleListVideoActivityMode2](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleListVideoActivityMode2.java)
-
-一、item布局中添加
-```
+1.  Add to the item layout:
+```xml
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -129,7 +123,6 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
         android:layout_height="@dimen/post_media_height"
         android:scaleType="centerCrop"
         android:src="@mipmap/xxx1" />
-
 
     <ImageView
         android:id="@+id/list_item_btn"
@@ -143,16 +136,12 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
 </RelativeLayout>
 ```
 
-2、Activity中创建helper和配置生命周期
-```
+2.  Create a helper and configure the lifecycle in the Activity:
+```java
     GSYVideoHelper smallVideoHelper;
-
     ListVideoAdapter listVideoAdapter;
-
     GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
-
     int lastVisibleItem;
-
     int firstVisibleItem;
 
     @Override
@@ -160,9 +149,9 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_video2);
 
-        //创建小窗口帮助类
+        // Create small window helper
         smallVideoHelper = new GSYVideoHelper(this);
-        //配置
+        // Configuration
         gsySmallVideoHelperBuilder = new GSYVideoHelper.GSYVideoHelperBuilder();
         gsySmallVideoHelperBuilder
                 .setHideStatusBar(true)
@@ -175,18 +164,17 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
             @Override
             public void onQuitSmallWidget(String url, Object... objects) {
                 super.onQuitSmallWidget(url, objects);
-                //大于0说明有播放,//对应的播放列表TAG
+                // Greater than 0 means there is a playback, // Corresponding playback list TAG
                 if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(ListVideoAdapter.TAG)) {
-                    //当前播放的位置
+                    // Current playback position
                     int position = smallVideoHelper.getPlayPosition();
-                    //不可视的是时候
+                    // When not visible
                     if ((position < firstVisibleItem || position > lastVisibleItem)) {
-                        //释放掉视频
+                        // Release the video
                         smallVideoHelper.releaseVideoPlayer();
                         listVideoAdapter.notifyDataSetChanged();
                     }
                 }
-
             }
         });
 
@@ -201,15 +189,15 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 ListVideo2Activity.this.firstVisibleItem = firstVisibleItem;
                 lastVisibleItem = firstVisibleItem + visibleItemCount;
-                //大于0说明有播放,//对应的播放列表TAG
+                // Greater than 0 means there is a playback, // Corresponding playback list TAG
                 if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(ListVideoAdapter.TAG)) {
-                    //当前播放的位置
+                    // Current playback position
                     int position = smallVideoHelper.getPlayPosition();
-                    //不可视的是时候
+                    // When not visible
                     if ((position < firstVisibleItem || position > lastVisibleItem)) {
-                        //如果是小窗口就不需要处理
+                        // If it's a small window, no need to handle
                         if (!smallVideoHelper.isSmall()) {
-                            //小窗口
+                            // Small window
                             int size = CommonUtil.dip2px(ListVideo2Activity.this, 150);
                             smallVideoHelper.showSmallVideo(new Point(size, size), false, true);
                         }
@@ -220,10 +208,8 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
                     }
                 }
             }
-
         });
     }
-
 
     @Override
     public void onBackPressed() {
@@ -233,7 +219,6 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
         super.onBackPressed();
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -242,8 +227,8 @@ holder.gsyVideoPlayer.setIsTouchWiget(false);
     }
 ```
 
-3、adapter中使用helper
-```
+3.  Use the helper in the adapter:
+```java
 ···
 smallVideoHelper.addVideoPlayer(position, holder.imageView, TAG, holder.videoContainer, holder.playerBtn);
 
@@ -258,44 +243,39 @@ holder.playerBtn.setOnClickListener(new View.OnClickListener() {
                 smallVideoHelper.startPlay();
             }
 });
-
 ···
 ```
 
+### 3. Playback on a Detail Page
 
-### 三、详情页播放
+#### Mode 1: [SimpleDetailActivityMode1](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode1.java)
 
-#### 模式一  [SimpleDetailActivityMode1](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode1.java)
-
-1、布局中添加播放控件
-```
+1.  Add the player control to the layout:
+```xml
 <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
     android:id="@+id/detail_player"
     android:layout_width="match_parent"
     android:layout_height="@dimen/post_media_height" />
-
 ```
 
-2、Activity继承**GSYBaseActivityDetail**
-```
+2.  Make the Activity inherit **GSYBaseActivityDetail**:
+```java
 public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer>
 ```
 
-3、重载配置
-```
-
+3.  Override configuration:
+```java
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_player);
 
         detailPlayer = (StandardGSYVideoPlayer) findViewById(R.id.detail_player);
-        //增加title
+        // Add title
         detailPlayer.getTitleTextView().setVisibility(View.GONE);
         detailPlayer.getBackButton().setVisibility(View.GONE);
 
         initVideoBuilderMode();
-
     }
 
     @Override
@@ -305,7 +285,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
 
     @Override
     public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
-        //内置封面可参考SampleCoverVideo
+        // For a built-in cover, refer to SampleCoverVideo
         ImageView imageView = new ImageView(this);
         loadCover(imageView, url);
         return new GSYVideoOptionBuilder()
@@ -326,9 +306,8 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
 
     }
 
-
     /**
-     * 是否启动旋转横屏，true表示启动
+     * Whether to enable auto-rotation to landscape, true means enabled
      */
     @Override
     public boolean getDetailOrientationRotateAuto() {
@@ -336,22 +315,21 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     }
 ```
 
-#### 模式二  [SimpleDetailActivityMode2](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
+#### Mode 2: [SimpleDetailActivityMode2](https://github.com/CarGuo/GSYVideoPlayer/blob/master/app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
 
-1、布局中添加播放控件
-```
+1.  Add the player control to the layout:
+```xml
 <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
     android:id="@+id/detail_player"
     android:layout_width="match_parent"
     android:layout_height="@dimen/post_media_height" />
-
 ```
 
-2、onCreate中配置播放器、添加旋转外部旋转支持、增加监听。（也可以会直接通过player设置，不用builder）
-```
-//外部辅助的旋转，帮助全屏
+2.  In `onCreate`, configure the player, add external rotation support, and add listeners (you can also set it directly through the player without using the builder):
+```java
+// External helper for rotation, helps with fullscreen
 orientationUtils = new OrientationUtils(this, detailPlayer);
-//初始化不打开外部的旋转
+// Do not enable external rotation initially
 orientationUtils.setEnable(false);
 
 GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
@@ -364,12 +342,12 @@ gsyVideoOption.setThumbImageView(imageView)
         .setNeedLockFull(true)
         .setUrl(url)
         .setCacheWithPlay(false)
-        .setVideoTitle("测试视频")
+        .setVideoTitle("Test Video")
         .setVideoAllCallBack(new GSYSampleCallBack() {
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
-                //开始播放了才能旋转和全屏
+                // Can only rotate and go fullscreen after playback starts
                 orientationUtils.setEnable(true);
                 isPlay = true;
             }
@@ -378,7 +356,7 @@ gsyVideoOption.setThumbImageView(imageView)
             public void onQuitFullscreen(String url, Object... objects) {
                 super.onQuitFullscreen(url, objects);
                 Debuger.printfError("***** onQuitFullscreen **** " + objects[0]);//title
-                Debuger.printfError("***** onQuitFullscreen **** " + objects[1]);//当前非全屏player
+                Debuger.printfError("***** onQuitFullscreen **** " + objects[1]);//current non-fullscreen player
                 if (orientationUtils != null) {
                     orientationUtils.backToProtVideo();
                 }
@@ -387,7 +365,7 @@ gsyVideoOption.setThumbImageView(imageView)
             @Override
             public void onClick(View view, boolean lock) {
                 if (orientationUtils != null) {
-                    //配合下方的onConfigurationChanged
+                    // Cooperate with onConfigurationChanged below
                     orientationUtils.setEnable(!lock);
                 }
             }
@@ -396,18 +374,17 @@ gsyVideoOption.setThumbImageView(imageView)
 detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        //直接横屏
+        // Directly go to landscape
         orientationUtils.resolveByClick();
 
-        //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+        // The first true is whether to hide the action bar, the second true is whether to hide the status bar
         detailPlayer.startWindowFullscreen(SimpleDetailActivityMode2.this, true, true);
     }
 });
 ```
 
-3、配置生命周期
-
-```
+3.  Configure the lifecycle:
+```java
 @Override
 public void onBackPressed() {
     if (orientationUtils != null) {
@@ -418,7 +395,6 @@ public void onBackPressed() {
     }
     super.onBackPressed();
 }
-
 
 @Override
 protected void onPause() {
@@ -444,49 +420,44 @@ protected void onDestroy() {
         orientationUtils.releaseListener();
 }
 
-
-
 @Override
 public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    //如果旋转了就全屏
+    // If rotated, go fullscreen
     if (isPlay && !isPause) {
         detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
     }
 }
 ```
 
+### More Usage
 
-### 更多使用
+(The following settings are global)
 
-（以下设置全局生效哦）
-
-#### 切换内核
-```
-PlayerFactory.setPlayManager(Exo2PlayerManager.class);//EXO模式
-PlayerFactory.setPlayManager(SystemPlayerManager.class);//系统模式
-PlayerFactory.setPlayManager(IjkPlayerManager.class);//ijk模式
-PlayerFactory.setPlayManager(AliPlayerManager.class);//aliplay 内核模式
-```
-
-#### 调整代码结构，CacheFactory 更方便自定义，默认 ProxyCacheManager。
-
-```
-//CacheFactory.setCacheManager(new ExoPlayerCacheManager());//exo缓存模式，支持m3u8，只支持exo
-//CacheFactory.setCacheManager(new ProxyCacheManager());//代理缓存模式，支持所有模式，不支持m3u8等
+#### Switching Player Core
+```java
+PlayerFactory.setPlayManager(Exo2PlayerManager.class); // EXO mode
+PlayerFactory.setPlayManager(SystemPlayerManager.class); // System mode
+PlayerFactory.setPlayManager(IjkPlayerManager.class); // ijk mode
+PlayerFactory.setPlayManager(AliPlayerManager.class); // aliplay core mode
 ```
 
-#### 增加 ExoMediaSourceInterceptListener，方便 Exo 模式下使用自定义的 MediaSource。
-
+#### Code structure adjustment, `CacheFactory` is more convenient for customization, defaults to `ProxyCacheManager`.
+```java
+//CacheFactory.setCacheManager(new ExoPlayerCacheManager()); // exo cache mode, supports m3u8, only for exo
+//CacheFactory.setCacheManager(new ProxyCacheManager()); // proxy cache mode, supports all modes, does not support m3u8, etc.
 ```
+
+#### Added `ExoMediaSourceInterceptListener` to facilitate the use of custom `MediaSource` in Exo mode.
+```java
 ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptListener() {
            /**
-            * @param dataSource  链接
-            * @param preview     是否带上header，默认有header自动设置为true
-            * @param cacheEnable 是否需要缓存
-            * @param isLooping   是否循环
-            * @param cacheDir    自定义缓存目录
-            * @return 返回不为空时，使用返回的自定义mediaSource
+            * @param dataSource  URL
+            * @param preview     Whether to include headers, defaults to true if headers are present
+            * @param cacheEnable Whether caching is needed
+            * @param isLooping   Whether to loop
+            * @param cacheDir    Custom cache directory
+            * @return If not null, the returned custom mediaSource will be used
             */
             @Override
             public MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir) {
@@ -495,42 +466,36 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 });
 ```
 
-
-
-#### 切换比例
-
-```
-
-//默认显示比例
+#### Switching Aspect Ratio
+```java
+// Default aspect ratio
 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
 
-//16:9
+// 16:9
 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9);
 
-//全屏裁减显示，为了显示正常 CoverImageView 建议使用FrameLayout作为父布局
+// Fullscreen crop, for normal display, it is recommended to use FrameLayout as the parent layout for CoverImageView
 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
 
-//全屏拉伸显示，使用这个属性时，surface_container建议使用FrameLayout
+// Fullscreen stretch, when using this attribute, it is recommended to use FrameLayout for surface_container
 GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
 
- //4:3
+// 4:3
 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3);
-
 ```
 
-#### 切换渲染
-```
-//默认TextureView
+#### Switching Renderer
+```java
+// Default TextureView
 GSYVideoType.setRenderType(GSYVideoType.TEXTURE);
 
-//SurfaceView，动画切换等时候效果比较差
+// SurfaceView, the effect is poor during animation switching, etc.
 GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
 
-//GLSurfaceView、支持滤镜
+// GLSurfaceView, supports filters
 GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
-
 ```
 
-### 高级自定义
+### Advanced Customization
 
-[--- 项目解析说明、包含项目架构和解析](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/GSYVIDEO_PLAYER_PROJECT_INFO.md)***
+[--- Project Analysis, including project architecture and analysis](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/GSYVIDEO_PLAYER_PROJECT_INFO.md)***
