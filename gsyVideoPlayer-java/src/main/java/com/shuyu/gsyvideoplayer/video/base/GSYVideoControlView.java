@@ -916,6 +916,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
             try {
                 getGSYVideoManager().start();
+                mAudioFocusManager.requestAudioFocus();
             } catch (Exception e) {
                 e.printStackTrace();
             }
