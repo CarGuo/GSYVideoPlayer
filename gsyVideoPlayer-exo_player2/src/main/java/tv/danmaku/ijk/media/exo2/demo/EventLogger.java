@@ -30,6 +30,7 @@ import androidx.media3.common.TrackGroup;
 import androidx.media3.common.Tracks;
 import androidx.media3.common.VideoSize;
 import androidx.media3.common.text.Cue;
+import androidx.media3.common.text.CueGroup;
 import androidx.media3.exoplayer.DecoderCounters;
 import androidx.media3.exoplayer.DecoderReuseEvaluation;
 import androidx.media3.exoplayer.RendererCapabilities;
@@ -84,7 +85,7 @@ public final class EventLogger implements Player.Listener, MetadataOutput,
 
 
     @Override
-    public void onCues(List<Cue> cues) {
+    public void onCues(CueGroup cueGroup) {
 
     }
 
