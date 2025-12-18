@@ -22,6 +22,7 @@ import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Player;
 import androidx.media3.common.TrackSelectionParameters;
 import androidx.media3.common.text.Cue;
+import androidx.media3.common.text.CueGroup;
 import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.exoplayer.DefaultLoadControl;
@@ -49,14 +50,8 @@ public class GSYExoSubTitlePlayer extends IjkExo2MediaPlayer {
 
 
     @Override
-    public void onCues(List<Cue> cues) {
-        super.onCues(cues);
-        /// 这里
-    }
-
-    @Override
-    public void onMetadata(Metadata metadata) {
-        super.onMetadata(metadata);
+    public void onCues(CueGroup cueGroup) {
+        super.onCues(cueGroup);
         /// 这里
     }
 

@@ -24,6 +24,7 @@ import androidx.media3.common.Player;
 import androidx.media3.common.Tracks;
 import androidx.media3.common.VideoSize;
 import androidx.media3.common.text.Cue;
+import androidx.media3.common.text.CueGroup;
 import androidx.media3.exoplayer.DecoderCounters;
 import androidx.media3.exoplayer.DefaultLoadControl;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
@@ -306,12 +307,7 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
     }
 
     @Override
-    public void onCues(List<Cue> cues) {
-
-    }
-
-    @Override
-    public void onMetadata(Metadata metadata) {
+    public void onCues(CueGroup cueGroup) {
 
     }
 
