@@ -1,0 +1,243 @@
+/**
+ * 打印项目中所有 module 和 aar 包里使用的权限
+ * 使用方法：在根目录 build.gradle 中添加 apply from: 'gradle/permissions.gradle'
+ * 然后运行: ./gradlew printAllPermissions
+ */
+
+// 提取 manifest 中的权限
+def extractPermissionsFromManifest(File manifestFile) {
+    def permissions = []
+    try {
+        def manifest = new XmlSlurper().parse(manifestFile)
+
+        // 提取 uses-permission
+        manifest.'uses-permission'.each { perm ->
+            def name = perm.'@android:name'.toString()
+            if (name) {
+                permissions << name
+            }
+        }
+
+        // 提取 uses-permission-sdk-23
+        manifest.'uses-permission-sdk-23'.each { perm ->
+            def name = perm.'@android:name'.toString()
+            if (name) {
+                permissions << "${name} (SDK 23+)"
+            }
+        }
+
+        // 提取 permission (自定义权限)
+        manifest.'permission'.each { perm ->
+            def name = perm.'@android:name'.toString()
+            if (name) {
+                permissions << "${name} (自定义权限)"
+            }
+        }
+    } catch (Exception ignored) {
+        // 忽略解析异常
+    }
+    return permissions
+}
+
+// 从路径中提取 AAR 名称
+def extractAarName(File manifestFile) {
+    def path = manifestFile.absolutePath
+    def parent = manifestFile.parentFile
+
+    // 尝试找到有意义的名称
+    def current = parent
+    def depth = 0
+    while (current != null && depth < 5) {
+        def name = current.name
+        if (name.contains(':') || name.matches(/.*-\d+\.\d+.*/) ||
+            (name != 'main' && name != 'debug' && name != 'release' &&
+             name != 'AndroidManifest.xml' && !name.startsWith('transformed'))) {
+            // 可能包含版本号或者是 group:artifact 格式
+            if (name.matches(/[a-zA-Z][\w.-]+/)) {
+                return name
+            }
+        }
+        current = current.parentFile
+        depth++
+    }
+    return parent?.name ?: "unknown"
+}
+
+// 在根项目中定义任务
+if (project == rootProject) {
+
+    task printAllPermissions {
+        group = 'reporting'
+        description = '打印项目中所有 module 和 aar 包里使用的权限'
+
+        doLast {
+            println "\n" + "=" * 80
+            println "                    项目权限分析报告"
+            println "=" * 80
+
+            def allPermissions = [:] // 存储所有权限及其来源
+
+            // 遍历所有子项目
+            rootProject.subprojects.each { subproject ->
+                println "\n" + "-" * 60
+                println "📦 模块: ${subproject.name}"
+                println "-" * 60
+
+                def hasPermissions = false
+
+                // 1. 分析模块自身的 AndroidManifest.xml
+                def manifestFile = subproject.file("src/main/AndroidManifest.xml")
+                if (manifestFile.exists()) {
+                    def permissions = extractPermissionsFromManifest(manifestFile)
+                    if (!permissions.isEmpty()) {
+                        hasPermissions = true
+                        println "\n  📄 AndroidManifest.xml:"
+                        permissions.each { perm ->
+                            println "     ✓ ${perm}"
+                            if (!allPermissions.containsKey(perm)) {
+                                allPermissions[perm] = []
+                            }
+                            allPermissions[perm] << "${subproject.name}/AndroidManifest.xml"
+                        }
+                    }
+                }
+
+                // 2. 分析构建目录中合并后的 manifest
+                def mergedManifestDirs = [
+                    subproject.file("build/intermediates/merged_manifest"),
+                    subproject.file("build/intermediates/merged_manifests")
+                ]
+
+                mergedManifestDirs.each { dir ->
+                    if (dir.exists()) {
+                        dir.eachFileRecurse { file ->
+                            if (file.name == 'AndroidManifest.xml') {
+                                def variant = file.parentFile.name
+                                def permissions = extractPermissionsFromManifest(file)
+                                if (!permissions.isEmpty()) {
+                                    hasPermissions = true
+                                    println "\n  🔀 合并后的 Manifest (${variant}):"
+                                    permissions.sort().unique().each { perm ->
+                                        println "     ✓ ${perm}"
+                                        if (!allPermissions.containsKey(perm)) {
+                                            allPermissions[perm] = []
+                                        }
+                                        allPermissions[perm] << "${subproject.name} (merged-${variant})"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!hasPermissions) {
+                    println "\n  (未发现权限声明或未构建)"
+                }
+            }
+
+            // 3. 分析 AAR 依赖中的权限
+            println "\n" + "-" * 60
+            println "📦 AAR 依赖分析"
+            println "-" * 60
+
+            def processedAars = [] as Set
+            def gradleUserHome = gradle.gradleUserHomeDir
+
+            // 在 gradle caches 中查找 AAR 的 manifest
+            def cacheDirs = [
+                new File(gradleUserHome, "caches/transforms-3"),
+                new File(gradleUserHome, "caches/transforms-4")
+            ]
+
+            cacheDirs.each { cacheDir ->
+                if (cacheDir.exists()) {
+                    cacheDir.eachFileRecurse { file ->
+                        if (file.name == 'AndroidManifest.xml' && file.isFile()) {
+                            try {
+                                def aarName = extractAarName(file)
+                                def key = file.parentFile.parentFile?.name ?: aarName
+
+                                if (!processedAars.contains(key)) {
+                                    def permissions = extractPermissionsFromManifest(file)
+                                    if (!permissions.isEmpty()) {
+                                        processedAars << key
+                                        println "\n  📦 ${aarName}:"
+                                        permissions.each { perm ->
+                                            println "     ✓ ${perm}"
+                                            if (!allPermissions.containsKey(perm)) {
+                                                allPermissions[perm] = []
+                                            }
+                                            allPermissions[perm] << "AAR: ${aarName}"
+                                        }
+                                    }
+                                }
+                            } catch (Exception ignored) {
+                                // 忽略
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (processedAars.isEmpty()) {
+                println "\n  提示：未找到 AAR 权限缓存，请先运行 './gradlew assembleDebug' 构建项目"
+            }
+
+            // 打印汇总
+            println "\n" + "=" * 80
+            println "                    权限汇总"
+            println "=" * 80
+
+            if (allPermissions.isEmpty()) {
+                println "\n未发现任何权限声明"
+                println "提示：请先运行 './gradlew assembleDebug' 构建项目后再执行此任务"
+            } else {
+                allPermissions.sort().each { permission, sources ->
+                    println "\n📋 ${permission}"
+                    sources.unique().sort().each { source ->
+                        println "   └── ${source}"
+                    }
+                }
+            }
+
+            println "\n" + "=" * 80
+            println "共发现 ${allPermissions.size()} 个不同的权限"
+            println "=" * 80 + "\n"
+        }
+    }
+
+    // 快速分析任务 - 只分析源码中的 manifest
+    task printSourcePermissions {
+        group = 'reporting'
+        description = '快速打印各模块源码 AndroidManifest.xml 中的权限（无需构建）'
+
+        doLast {
+            println "\n" + "=" * 80
+            println "                    源码权限分析"
+            println "=" * 80
+
+            def allPermissions = [:]
+
+            rootProject.subprojects.each { subproject ->
+                def manifestFile = subproject.file("src/main/AndroidManifest.xml")
+                if (manifestFile.exists()) {
+                    def permissions = extractPermissionsFromManifest(manifestFile)
+                    if (!permissions.isEmpty()) {
+                        println "\n📦 ${subproject.name}:"
+                        permissions.each { perm ->
+                            println "   ✓ ${perm}"
+                            if (!allPermissions.containsKey(perm)) {
+                                allPermissions[perm] = []
+                            }
+                            allPermissions[perm] << subproject.name
+                        }
+                    }
+                }
+            }
+
+            println "\n" + "=" * 80
+            println "共发现 ${allPermissions.size()} 个不同的权限"
+            println "=" * 80 + "\n"
+        }
+    }
+}

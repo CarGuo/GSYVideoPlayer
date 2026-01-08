@@ -29,3 +29,7 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// 引入权限分析脚本
+apply from: "gradle/permissions.gradle"
+
