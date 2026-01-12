@@ -43,4 +43,12 @@
         android:layout_margin="10dp"
         android:text="exo track txt" />
 
+    <Button
+        android:id="@+id/export"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/change"
+        android:layout_margin="10dp"
+        android:text="export mp4" />
+
 </RelativeLayout>
