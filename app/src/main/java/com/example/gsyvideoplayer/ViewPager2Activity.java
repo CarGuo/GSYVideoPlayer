@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.gsyvideoplayer.adapter.ViewPagerAdapter;
@@ -18,6 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPager2Activity extends AppCompatActivity {
+    private static final String TAG = "ViewPager2Activity";
+    
+    //延迟时间常量，用于确保ViewHolder已附加到窗口
+    private static final int PLAY_POSITION_DELAY_MS = 100;
+    private static final int PLAY_RETRY_DELAY_MS = 50;
+    
     ActivityViewPager2Binding binding;
 
     List<VideoModel> dataList = new ArrayList<>();
@@ -125,18 +132,23 @@ public class ViewPager2Activity extends AppCompatActivity {
                         recyclerItemNormalHolder.getPlayer().startPlayLogic();
                     } else {
                         //如果还没附加到窗口，再等待一段时间
+                        Log.d(TAG, "Player not attached to window yet for position " + position + ", retrying after " + PLAY_RETRY_DELAY_MS + "ms");
                         binding.viewPager2.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 if (recyclerItemNormalHolder.getPlayer().isAttachedToWindow()) {
                                     recyclerItemNormalHolder.getPlayer().startPlayLogic();
+                                } else {
+                                    Log.w(TAG, "Player still not attached to window for position " + position + " after retry delay");
                                 }
                             }
-                        }, 50);
+                        }, PLAY_RETRY_DELAY_MS);
                     }
+                } else {
+                    Log.w(TAG, "ViewHolder not found for position " + position);
                 }
             }
-        }, 100);
+        }, PLAY_POSITION_DELAY_MS);
     }
 }
 
