@@ -24,6 +24,8 @@ public class ViewPager2Activity extends AppCompatActivity {
 
     ViewPagerAdapter viewPagerAdapter;
 
+    private int mCurrentPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,18 +43,27 @@ public class ViewPager2Activity extends AppCompatActivity {
         binding.viewPager2.setAdapter(viewPagerAdapter);
         binding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                //大于0说明有播放
-                int playPosition = GSYVideoManager.instance().getPlayPosition();
-                if (playPosition >= 0) {
-                    //对应的播放列表TAG
-                    if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
-                        && (position != playPosition)) {
-                        GSYVideoManager.releaseAllVideos();
-                        playPosition(position);
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                //当滑动停止时才开始播放，确保ViewHolder已经完全附加
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    //大于0说明有播放
+                    int playPosition = GSYVideoManager.instance().getPlayPosition();
+                    if (playPosition >= 0) {
+                        //对应的播放列表TAG
+                        if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
+                            && (mCurrentPosition != playPosition)) {
+                            GSYVideoManager.releaseAllVideos();
+                            playPosition(mCurrentPosition);
+                        }
                     }
                 }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                mCurrentPosition = position;
             }
         });
         binding.viewPager2.post(new Runnable() {
@@ -109,10 +120,23 @@ public class ViewPager2Activity extends AppCompatActivity {
                     viewPager2.getChildAt(0)).findViewHolderForAdapterPosition(position);
                 if (viewHolder != null) {
                     RecyclerItemNormalHolder recyclerItemNormalHolder = (RecyclerItemNormalHolder) viewHolder;
-                    recyclerItemNormalHolder.getPlayer().startPlayLogic();
+                    //确保播放器已经附加到窗口
+                    if (recyclerItemNormalHolder.getPlayer().isAttachedToWindow()) {
+                        recyclerItemNormalHolder.getPlayer().startPlayLogic();
+                    } else {
+                        //如果还没附加到窗口，再等待一段时间
+                        binding.viewPager2.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (recyclerItemNormalHolder.getPlayer().isAttachedToWindow()) {
+                                    recyclerItemNormalHolder.getPlayer().startPlayLogic();
+                                }
+                            }
+                        }, 50);
+                    }
                 }
             }
-        }, 50);
+        }, 100);
     }
 }
 
