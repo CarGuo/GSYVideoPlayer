@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.gsyvideoplayer.adapter.ViewPagerAdapter;
@@ -19,19 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPager2Activity extends AppCompatActivity {
-    private static final String TAG = "ViewPager2Activity";
-    
-    //延迟时间常量，用于确保ViewHolder已附加到窗口
-    private static final int PLAY_POSITION_DELAY_MS = 100;
-    private static final int PLAY_RETRY_DELAY_MS = 50;
-    
     ActivityViewPager2Binding binding;
 
     List<VideoModel> dataList = new ArrayList<>();
 
     ViewPagerAdapter viewPagerAdapter;
-
-    private int mCurrentPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,27 +41,18 @@ public class ViewPager2Activity extends AppCompatActivity {
         binding.viewPager2.setAdapter(viewPagerAdapter);
         binding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
-                //当滑动停止时才开始播放，确保ViewHolder已经完全附加
-                if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                    //大于0说明有播放
-                    int playPosition = GSYVideoManager.instance().getPlayPosition();
-                    if (playPosition >= 0) {
-                        //对应的播放列表TAG
-                        if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
-                            && (mCurrentPosition != playPosition)) {
-                            GSYVideoManager.releaseAllVideos();
-                            playPosition(mCurrentPosition);
-                        }
-                    }
-                }
-            }
-
-            @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                mCurrentPosition = position;
+                //大于0说明有播放
+                int playPosition = GSYVideoManager.instance().getPlayPosition();
+                if (playPosition >= 0) {
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
+                        && (position != playPosition)) {
+                        GSYVideoManager.releaseAllVideos();
+                        playPosition(position);
+                    }
+                }
             }
         });
         binding.viewPager2.post(new Runnable() {
@@ -127,28 +109,10 @@ public class ViewPager2Activity extends AppCompatActivity {
                     viewPager2.getChildAt(0)).findViewHolderForAdapterPosition(position);
                 if (viewHolder != null) {
                     RecyclerItemNormalHolder recyclerItemNormalHolder = (RecyclerItemNormalHolder) viewHolder;
-                    //确保播放器已经附加到窗口
-                    if (recyclerItemNormalHolder.getPlayer().isAttachedToWindow()) {
-                        recyclerItemNormalHolder.getPlayer().startPlayLogic();
-                    } else {
-                        //如果还没附加到窗口，再等待一段时间
-                        Log.d(TAG, "Player not attached to window yet for position " + position + ", retrying after " + PLAY_RETRY_DELAY_MS + "ms");
-                        binding.viewPager2.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (recyclerItemNormalHolder.getPlayer().isAttachedToWindow()) {
-                                    recyclerItemNormalHolder.getPlayer().startPlayLogic();
-                                } else {
-                                    Log.w(TAG, "Player still not attached to window for position " + position + " after retry delay");
-                                }
-                            }
-                        }, PLAY_RETRY_DELAY_MS);
-                    }
-                } else {
-                    Log.w(TAG, "ViewHolder not found for position " + position);
+                    recyclerItemNormalHolder.getPlayer().startPlayLogic();
                 }
             }
-        }, PLAY_POSITION_DELAY_MS);
+        }, 50);
     }
 }
 
