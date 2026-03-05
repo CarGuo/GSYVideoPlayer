@@ -25,7 +25,7 @@ public interface ExoMediaSourceInterceptListener {
      * @return 返回不为空时，使用返回的自定义mediaSource
      */
     @Nullable
-    MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, File cacheDir);
+    MediaSource getMediaSource(String dataSource, boolean preview, boolean cacheEnable, boolean isLooping, @Nullable File cacheDir);
 
 
     /**
@@ -40,7 +40,7 @@ public interface ExoMediaSourceInterceptListener {
         @Nullable TransferListener listener,
         int connectTimeoutMillis,
         int readTimeoutMillis,
-        Map<String, String> mapHeadData,
+        @Nullable Map<String, String> mapHeadData,
         boolean allowCrossProtocolRedirects);
 
     /**
