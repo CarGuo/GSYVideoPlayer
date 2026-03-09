@@ -134,7 +134,7 @@ index 9b7a3af8..03389a31 100755
  esac
 -
 diff --git a/android/contrib/tools/do-compile-ffmpeg.sh b/android/contrib/tools/do-compile-ffmpeg.sh
-index dffbd591..9de0f642 100755
+index dffbd591..0719fde3 100755
 --- a/android/contrib/tools/do-compile-ffmpeg.sh
 +++ b/android/contrib/tools/do-compile-ffmpeg.sh
 @@ -55,8 +55,7 @@ FF_DEP_LIBSOXR_LIB=
@@ -152,7 +152,7 @@ index dffbd591..9de0f642 100755
  
      FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS"
 -    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
-+    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS -Wl,-z,max-page-size=16384"
++    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
  
      FF_ASSEMBLER_SUB_DIRS="x86"
  
@@ -161,7 +161,7 @@ index dffbd591..9de0f642 100755
  
      FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS"
 -    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
-+    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS -Wl,-z,max-page-size=16384"
++    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
  
      FF_ASSEMBLER_SUB_DIRS="aarch64 neon"
  
@@ -297,15 +297,17 @@ index 8136ae13..b9b294b2 100644
  include $(BUILD_STATIC_LIBRARY)
  
 diff --git a/ijkmedia/ijkplayer/Android.mk b/ijkmedia/ijkplayer/Android.mk
-index a22569c8..a9ab223d 100644
+index a22569c8..52f49c9a 100644
 --- a/ijkmedia/ijkplayer/Android.mk
 +++ b/ijkmedia/ijkplayer/Android.mk
-@@ -79,7 +79,9 @@ LOCAL_SRC_FILES += ijkavutil/ijkstl.cpp
+@@ -79,7 +79,11 @@ LOCAL_SRC_FILES += ijkavutil/ijkstl.cpp
  
  LOCAL_SHARED_LIBRARIES := ijkffmpeg ijksdl
  LOCAL_STATIC_LIBRARIES := android-ndk-profiler ijksoundtouch
 +ifeq ($(filter $(TARGET_ARCH_ABI),arm64-v8a x86_64),$(TARGET_ARCH_ABI))
  LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
++LOCAL_LDFLAGS += -Wl,-z,common-page-size=16384
++LOCAL_LDFLAGS +=
 +endif
  LOCAL_MODULE := ijkplayer
  
@@ -367,15 +369,17 @@ index ac77b728..09cc2964 100644
      .read_close     = ijklivehook_read_close,
      .priv_class     = &ijklivehook_class,
 diff --git a/ijkmedia/ijksdl/Android.mk b/ijkmedia/ijksdl/Android.mk
-index 553ea054..2a0aad75 100644
+index 553ea054..ec1c4727 100644
 --- a/ijkmedia/ijksdl/Android.mk
 +++ b/ijkmedia/ijksdl/Android.mk
-@@ -74,7 +74,9 @@ LOCAL_SRC_FILES += android/ijksdl_vout_overlay_android_mediacodec.c
+@@ -74,7 +74,11 @@ LOCAL_SRC_FILES += android/ijksdl_vout_overlay_android_mediacodec.c
  
  LOCAL_SHARED_LIBRARIES := ijkffmpeg
  LOCAL_STATIC_LIBRARIES := cpufeatures yuv_static ijkj4a
 +ifeq ($(filter $(TARGET_ARCH_ABI),arm64-v8a x86_64),$(TARGET_ARCH_ABI))
  LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
++LOCAL_LDFLAGS += -Wl,-z,common-page-size=16384
++LOCAL_LDFLAGS +=
 +endif
  
  LOCAL_MODULE := ijksdl
