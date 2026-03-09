@@ -391,8 +391,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
                     GSYVideoView.this.releaseVideos();
                 } else {
                     // 确保只有当前活跃的播放器才响应音频焦点变化
+                    // 防止全屏切换时，旧播放器的焦点丢失回调错误地暂停新的全屏播放器
                     GSYMediaPlayerListener listener = getGSYVideoManager().listener();
-                    if (listener != null && getGSYVideoManager().isPlaying()) {
+                    if (listener != null && listener == GSYVideoView.this && getGSYVideoManager().isPlaying()) {
                         listener.onVideoPause();
                     }
                 }
@@ -407,8 +408,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public void onAudioFocusLossTransient() {
         try {
             // 确保只有当前活跃的播放器才响应音频焦点变化
+            // 防止全屏切换时，旧播放器的焦点丢失回调错误地暂停新的全屏播放器
             GSYMediaPlayerListener listener = getGSYVideoManager().listener();
-            if (listener != null && getGSYVideoManager().isPlaying()) {
+            if (listener != null && listener == GSYVideoView.this && getGSYVideoManager().isPlaying()) {
                 listener.onVideoPause();
             }
         } catch (Exception var2) {

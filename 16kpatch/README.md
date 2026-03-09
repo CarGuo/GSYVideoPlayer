@@ -1,15 +1,17 @@
-# 16kpatch 使用说明（arm64 生产 + x86_64 可构建）
+# 16kpatch 使用说明（64位16K + 32位可构建）
 
 ## 适用范围
 - 基线项目：默认 `ijkplayer`
 - 主机环境：Darwin arm64（Apple Silicon）
 - NDK：`22.1.7171670`（r22）
 - FFmpeg 依赖：`CarGuo/FFmpeg` tag `ijk-n4.3-20260301-007`
-- ABI 策略：`arm64-v8a` 生产 + `x86_64` 可构建
+- ABI 策略：
+  - `arm64-v8a` / `x86_64`：16K page size
+  - `armeabi-v7a`：可构建，4K page size
 
 ## 补丁文件说明
 - `ndk_r22_16k_commit.patch`
-  - 当前 `ijkplayer` 主仓改动快照（基于 `9ef1d2b2` 到当前工作树），覆盖构建脚本、16K 对齐、Stack Canary、init 固化、x86_64 构建支持、README 同步等。
+  - 当前 `ijkplayer` 主仓改动快照（基于 `9ef1d2b2` 到当前工作树），覆盖构建脚本、64位16K分流、armv7a(r22)兼容、init 固化、README 同步等。
 - `ndk_r22_ffmpeg_n4.3_ijk.patch`
   - FFmpeg 侧补丁（`n4.3..ijk-n4.3-20260301-007`），包含 ijk 协议/demuxer 兼容、OpenSSL 探测兼容、导出头、async 注册崩溃修复。
 - `ndk_r22_soundtouch.patch`
@@ -61,20 +63,22 @@ cd android/contrib
 ./compile-openssl.sh arm64
 ./compile-ffmpeg.sh arm64
 ./compile-ffmpeg.sh x86_64
+./compile-ffmpeg.sh armv7a
 
 cd ..
 ./compile-ijk.sh arm64
 ./compile-ijk.sh x86_64
+./compile-ijk.sh armv7a
 ```
 
 ## 验证建议
+- 64位 16K：
+  - `arm64-v8a` 与 `x86_64` 下 `libijkffmpeg.so/libijksdl.so/libijkplayer.so` 的 `PT_LOAD Align` 为 `0x4000`
+- 32位 4K：
+  - `armeabi-v7a` 下 `libijkffmpeg.so/libijksdl.so/libijkplayer.so` 的 `PT_LOAD Align` 为 `0x1000`
 - Stack Canary：`libijkffmpeg.so` 包含 `__stack_chk_fail@LIBC`
-- 16K Page Size：`arm64-v8a` 下 `libijkffmpeg.so/libijksdl.so/libijkplayer.so` 的 `PT_LOAD Align` 为 `0x4000`
-- x86_64 产物存在：
-  - `android/ijkplayer/ijkplayer-x86_64/src/main/libs/x86_64/libijkffmpeg.so`
-  - `android/ijkplayer/ijkplayer-x86_64/src/main/libs/x86_64/libijksdl.so`
-  - `android/ijkplayer/ijkplayer-x86_64/src/main/libs/x86_64/libijkplayer.so`
 
 ## 注意事项
-- 生产发布仍建议仅使用 arm64-v8a。
+- 生产发布优先 `arm64-v8a`。
+- `armeabi-v7a` 主要用于 32 位设备兼容；若目标机型存在 HEVC 软解崩溃风险，建议优先硬解或降低 armv7a 解码能力。
 - 若目标仓库已存在同名改动，`git apply --check` 可能失败；请先清理冲突或基于干净分支应用。
