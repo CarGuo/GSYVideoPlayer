@@ -43,6 +43,6 @@ jobs:
           java-version: 21
       - uses: gradle/gradle-build-action@v2
       - name: Publish Package
-        run: ./gradlew publish
+        run: ./gradlew publishReleasePublicationToGsyvideoplayerRepository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

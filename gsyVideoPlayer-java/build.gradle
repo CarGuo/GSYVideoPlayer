@@ -1,6 +1,7 @@
 apply from: "$rootDir/gradle/lib.gradle"
 
 apply from: "$rootDir/gradle/publish.gradle"
+apply from: "$rootDir/gradle/maven-central-publish.gradle"
 android {
     namespace 'com.shuyu.gsyvideoplayer'
 }
