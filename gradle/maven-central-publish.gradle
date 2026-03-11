@@ -1,3 +1,5 @@
+import java.nio.charset.StandardCharsets
+
 apply plugin: "maven-publish"
 apply plugin: "signing"
 
@@ -53,10 +55,11 @@ afterEvaluate {
     }
     
     signing {
-        def signingKey = System.getenv("GPG_PRIVATE_KEY")
+        def signingKeyBase64 = System.getenv("GPG_PRIVATE_KEY")
         def signingPassword = System.getenv("GPG_PASSPHRASE")
         
-        if (signingKey != null && signingPassword != null) {
+        if (signingKeyBase64 != null && signingPassword != null) {
+            def signingKey = new String(Base64.getMimeDecoder().decode(signingKeyBase64), StandardCharsets.UTF_8)
             useInMemoryPgpKeys(signingKey, signingPassword)
             sign publishing.publications.mavenCentral
         }
