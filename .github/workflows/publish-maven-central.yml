@@ -42,7 +42,7 @@ jobs:
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: ./gradlew publishMavenCentralPublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew publishMavenCentralPublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository -PPUBLISH_TARGET=mavenCentral
         
       - name: Create Release Summary
         run: |

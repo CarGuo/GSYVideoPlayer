@@ -9,36 +9,42 @@ android {
     }
 }
 
+// 判断发布目标：github 或 mavenCentral
+// 通过 Gradle 属性 PUBLISH_TARGET 控制，默认为 github
+def publishTarget = project.findProperty("PUBLISH_TARGET") ?: "github"
+
 afterEvaluate {
     publishing {
         publications {
-            release(MavenPublication) {
-                from components.release
+            if (publishTarget == "github") {
+                release(MavenPublication) {
+                    from components.release
 
-                group = PROJ_GROUP
-                artifactId = PROJ_ARTIFACTID
-                version = PROJ_VERSION
+                    groupId = project.findProperty("PROJ_GROUP") ?: "com.shuyu"
+                    artifactId = PROJ_ARTIFACTID
+                    version = PROJ_VERSION
 
-                pom {
-                    name = PROJ_NAME
-                    description = PROJ_DESCRIPTION
-                    url = PROJ_VCSURL
-                    licenses {
-                        license {
-                            name = "The Apache License, Version 2.0"
-                            url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                    pom {
+                        name = PROJ_NAME
+                        description = PROJ_DESCRIPTION
+                        url = PROJ_VCSURL
+                        licenses {
+                            license {
+                                name = "The Apache License, Version 2.0"
+                                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                            }
                         }
-                    }
-                    developers {
-                        developer {
-                            id = DEVELOPER_ID
-                            name = DEVELOPER_NAME
+                        developers {
+                            developer {
+                                id = DEVELOPER_ID
+                                name = DEVELOPER_NAME
+                            }
                         }
-                    }
-                    scm {
-                        connection = PROJ_ISSUETRACKERURL
-                        developerConnection = PROJ_VCSURL
-                        url = PROJ_WEBSITEURL
+                        scm {
+                            connection = PROJ_ISSUETRACKERURL
+                            developerConnection = PROJ_VCSURL
+                            url = PROJ_WEBSITEURL
+                        }
                     }
                 }
             }

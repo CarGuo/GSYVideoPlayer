@@ -3,14 +3,18 @@ import java.nio.charset.StandardCharsets
 apply plugin: "maven-publish"
 apply plugin: "signing"
 
+// 判断发布目标：github 或 mavenCentral
+def publishTarget = project.findProperty("PUBLISH_TARGET") ?: "github"
+
 afterEvaluate {
     publishing {
         publications {
+            if (publishTarget == "mavenCentral") {
             mavenCentral(MavenPublication) {
                 from components.release
 
                 // 使用 Maven Central 专用的 GROUP ID
-                group = project.findProperty("PROJ_GROUP_MAVEN_CENTRAL") ?: PROJ_GROUP
+                groupId = project.findProperty("PROJ_GROUP_MAVEN_CENTRAL") ?: "io.github.carguo"
                 artifactId = PROJ_ARTIFACTID
                 version = PROJ_VERSION
 
@@ -37,6 +41,7 @@ afterEvaluate {
                     }
                 }
             }
+            }
         }
         
         repositories {
@@ -54,14 +59,16 @@ afterEvaluate {
         }
     }
     
-    signing {
-        def signingKeyBase64 = System.getenv("GPG_PRIVATE_KEY")
-        def signingPassword = System.getenv("GPG_PASSPHRASE")
-        
-        if (signingKeyBase64 != null && signingPassword != null) {
-            def signingKey = new String(Base64.getMimeDecoder().decode(signingKeyBase64), StandardCharsets.UTF_8)
-            useInMemoryPgpKeys(signingKey, signingPassword)
-            sign publishing.publications.mavenCentral
+    if (publishTarget == "mavenCentral") {
+        signing {
+            def signingKeyBase64 = System.getenv("GPG_PRIVATE_KEY")
+            def signingPassword = System.getenv("GPG_PASSPHRASE")
+
+            if (signingKeyBase64 != null && signingPassword != null) {
+                def signingKey = new String(Base64.getMimeDecoder().decode(signingKeyBase64), StandardCharsets.UTF_8)
+                useInMemoryPgpKeys(signingKey, signingPassword)
+                sign publishing.publications.mavenCentral
+            }
         }
     }
 
