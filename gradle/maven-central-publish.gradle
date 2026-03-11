@@ -64,4 +64,10 @@ afterEvaluate {
             sign publishing.publications.mavenCentral
         }
     }
+
+    // Guard: the 'mavenCentral' publication (io.github.carguo group) is for Maven Central only.
+    // Disable the task that would accidentally publish it to GitHub Packages.
+    tasks.matching { it.name == "publishMavenCentralPublicationToGsyvideoplayerRepository" }.configureEach {
+        enabled = false
+    }
 }

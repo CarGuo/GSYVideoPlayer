@@ -55,4 +55,10 @@ afterEvaluate {
             }
         }
     }
+
+    // Guard: the 'release' publication (com.shuyu group) is for GitHub Packages only.
+    // Disable the task that would accidentally publish it to Maven Central's Sonatype repository.
+    tasks.matching { it.name == "publishReleasePublicationToSonatypeRepository" }.configureEach {
+        enabled = false
+    }
 }
