@@ -1,0 +1,73 @@
+apply plugin: "maven-publish"
+apply plugin: "signing"
+
+android {
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            mavenCentral(MavenPublication) {
+                from components.release
+
+                // 使用 Maven Central 专用的 GROUP ID
+                group = project.findProperty("PROJ_GROUP_MAVEN_CENTRAL") ?: PROJ_GROUP
+                artifactId = PROJ_ARTIFACTID
+                version = PROJ_VERSION
+
+                pom {
+                    name = PROJ_NAME
+                    description = PROJ_DESCRIPTION
+                    url = PROJ_VCSURL
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = DEVELOPER_ID
+                            name = DEVELOPER_NAME
+                        }
+                    }
+                    scm {
+                        connection = PROJ_ISSUETRACKERURL
+                        developerConnection = PROJ_VCSURL
+                        url = PROJ_WEBSITEURL
+                    }
+                }
+            }
+        }
+        
+        repositories {
+            maven {
+                name = "sonatype"
+                url = version.endsWith('SNAPSHOT') 
+                    ? "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                    : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                
+                credentials {
+                    username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: project.findProperty("ossrhUsername")
+                    password = System.getenv("MAVEN_CENTRAL_PASSWORD") ?: project.findProperty("ossrhPassword")
+                }
+            }
+        }
+    }
+    
+    signing {
+        def signingKey = System.getenv("GPG_PRIVATE_KEY")
+        def signingPassword = System.getenv("GPG_PASSPHRASE")
+        
+        if (signingKey != null && signingPassword != null) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
+        }
+        sign publishing.publications.mavenCentral
+    }
+}

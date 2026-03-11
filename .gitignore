@@ -324,3 +324,8 @@ fabric.properties
 
 keyid
 .idea/
+
+# Secrets for local act testing
+.secrets
+*.asc
+private-key.*

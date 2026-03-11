@@ -7,6 +7,20 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.6.1'
+        classpath 'io.github.gradle-nexus:publish-plugin:2.0.0'
+    }
+}
+
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: project.findProperty("ossrhUsername")
+            password = System.getenv("MAVEN_CENTRAL_PASSWORD") ?: project.findProperty("ossrhPassword")
+        }
     }
 }
 
