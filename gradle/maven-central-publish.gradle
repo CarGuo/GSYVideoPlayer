@@ -58,7 +58,7 @@ afterEvaluate {
         
         if (signingKey != null && signingPassword != null) {
             useInMemoryPgpKeys(signingKey, signingPassword)
+            sign publishing.publications.mavenCentral
         }
-        sign publishing.publications.mavenCentral
     }
 }
