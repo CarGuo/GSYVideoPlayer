@@ -1,15 +1,6 @@
 apply plugin: "maven-publish"
 apply plugin: "signing"
 
-android {
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-            withJavadocJar()
-        }
-    }
-}
-
 afterEvaluate {
     publishing {
         publications {
@@ -50,8 +41,8 @@ afterEvaluate {
             maven {
                 name = "sonatype"
                 url = version.endsWith('SNAPSHOT') 
-                    ? "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-                    : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                    ? "https://central.sonatype.com/repository/maven-snapshots/"
+                    : "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
                 
                 credentials {
                     username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: project.findProperty("ossrhUsername")
