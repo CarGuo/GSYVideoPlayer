@@ -34,8 +34,8 @@ allprojects {
         maven {
             url 'https://maven.pkg.github.com/CarGuo/GSYVideoPlayer'
             credentials {
-                username = 'carsmallguo'
-                password = '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'
+                username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user")
+                password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key")
             }
         }
     }
