@@ -42,7 +42,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/network)
 [![GitHub issues](https://img.shields.io/github/issues/CarGuo/GSYVideoPlayer.svg)](https://github.com/CarGuo/GSYVideoPlayer/issues)
-[![GitHub license](https://img.shields.io/github/license/CarGuo/GSYVideoPlayer/blob/master/LICENSE)](https://github.com/CarGuo/GSYVideoPlayer/blob/master/LICENSE)
+[![GitHub License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/CarGuo/GSYVideoPlayer/blob/master/LICENSE)
 
 []()
 [![Star](https://gitcode.com/ZuoYueLiang/GSYVideoPlayer/star/badge.svg)](https://gitcode.com/ZuoYueLiang/GSYVideoPlayer/overview)
