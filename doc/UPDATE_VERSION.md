@@ -2,6 +2,20 @@
 
 **[Click to see the English version](UPDATE_VERSION_EN.md)**
 
+### v12.0.0 (2026-03-13)
+
+- ex_so: update ffmpeg 4.3
+- ex_so: x86_64 support 16k page size
+- ex_so: armv7a update ffmpeg n4.3
+- ex_so: #4224 add common-page-size for 64-bit linker flags for Stack Canary
+- fix #4225 ff_hevc_sao_band_filter_neon_8+100)
+- #4178 exo player rtmp fix 16k
+- #4226 Fix NPE in Kotlin implementations of ExoMediaSourceInterceptListener
+- #4228 Fix fullscreen player requiring two clicks to resume from paused state
+- Update mediaVersion to 1.9.2
+- fix #4218 support export exo cache
+- Update minSdk to 23 and media version to 1.9
+
 ### v11.3.0 (2025-12-05)
 - link #3019
 - fix #4211

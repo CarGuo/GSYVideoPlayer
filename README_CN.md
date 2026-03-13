@@ -91,30 +91,30 @@ allprojects {
 ```groovy
  //完整版引入
 
-implementation 'io.github.carguo:gsyvideoplayer:11.3.0'
+implementation 'io.github.carguo:gsyvideoplayer:12.0.0'
 
 
 //是否需要AliPlayer模式
-implementation 'io.github.carguo:gsyvideoplayer-aliplay:11.3.0'
+implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:11.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:12.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-exo2:11.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:12.0.0'
 
  //是否需要AliPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:11.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'io.github.carguo:gsyvideoplayer-arm64:11.3.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv7a:11.3.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv5:11.3.0'
- implementation 'io.github.carguo:gsyvideoplayer-x86:11.3.0'
- implementation 'io.github.carguo:gsyvideoplayer-x64:11.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-arm64:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv7a:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv5:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x86:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x64:12.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
@@ -123,16 +123,16 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:11.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:12.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-exo2:11.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:12.0.0'
 
  //是否需要AliPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:11.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.0.0'
 
  //更多ijk的编码支持
- implementation 'io.github.carguo:gsyvideoplayer-ex_so:11.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-ex_so:12.0.0'
 
 ```
 
@@ -180,30 +180,30 @@ allprojects {
 
 ```groovy
  //完整版引入
- implementation 'com.shuyu:gsyvideoplayer:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer:12.0.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:12.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:12.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-exo2:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:12.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:12.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'com.shuyu:gsyvideoplayer-armv5:11.3.0'
- implementation 'com.shuyu:gsyvideoplayer-armv7a:11.3.0'
- implementation 'com.shuyu:gsyvideoplayer-arm64:11.3.0'
- implementation 'com.shuyu:gsyvideoplayer-x86:11.3.0'
- implementation 'com.shuyu:gsyvideoplayer-x64:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv5:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv7a:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-arm64:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-x86:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-x64:12.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
@@ -212,17 +212,17 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:12.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-exo2:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:12.0.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:12.0.0'
 
  //更多ijk的编码支持
- implementation 'com.shuyu:gsyvideoplayer-ex_so:11.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-ex_so:12.0.0'
 
 ```
 
@@ -250,30 +250,30 @@ allprojects {
 ```groovy
  //完整版引入
 
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v12.0.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v12.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v12.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v11.3.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v11.3.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v11.3.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v11.3.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v12.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
@@ -282,16 +282,16 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v12.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v12.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.0.0'
 
  //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v11.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v12.0.0'
 
 ```
 
@@ -430,6 +430,20 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 
 ## 五、近期版本
 
+### v12.0.0 (2026-03-13)
+
+- ex_so: update ffmpeg 4.3
+- ex_so: x86_64 support 16k page size
+- ex_so: armv7a update ffmpeg n4.3
+- ex_so: #4224 add common-page-size for 64-bit linker flags for Stack Canary
+- fix #4225 ff_hevc_sao_band_filter_neon_8+100)
+- #4178 exo player rtmp fix 16k
+- #4226 Fix NPE in Kotlin implementations of ExoMediaSourceInterceptListener
+- #4228 Fix fullscreen player requiring two clicks to resume from paused state
+- Update mediaVersion to 1.9.2
+- fix #4218 support export exo cache
+- Update minSdk to 23 and media version to 1.9
+
 ### v11.3.0 (2025-12-05)
 - link #3019
 - fix #4211
@@ -452,39 +466,6 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 - 更新和迁移底层依赖
 - fix #4140
 
-### v10.2.0 (2025-06-03)
-
-- update media 1.7.1
-- update aliyun player
-
-### v10.1.0 (2025-04-01)
-
-- update media 1.6.0
-- fix #4078
-- link 4075 fix glsurface adapter video rotate info
-- 增加 exo 切换轨道
-- miniSdk 21 ，compileSdk 35
-
-### v10.0.0 (2024-11-01)
-
-- update media3 1.4.1
-- update FFMpeg 4.1.6
-- update openssl-1.1.1w
-- support 16k page size
-- fix #3999 & #3649
-- fix #4014
-- fix #4019
-- fix #4023
-- fix #4021
-- update AGP
-
-### v9.0.0-release-jitpack (2024-07-29)
-
-* ex_so support 16k page size
-* update media3 1.4.0
-* fix #4014
-* fix #3999 & #3649 system mediaPlayer setSpeed cause play
-* fix #3972 ListGSYVideoPlayer 轮播场景焦点未移除导致播放器状态错误
 
 ### 更多版本请查阅：[版本更新说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)
 
