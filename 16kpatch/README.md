@@ -11,7 +11,7 @@
 
 ## 补丁文件说明
 - `ndk_r22_16k_commit.patch`
-  - 当前 `ijkplayer` 主仓改动快照（基于 `9ef1d2b2` 到当前工作树），覆盖构建脚本、64位16K分流、armv7a(r22)兼容、init 固化、README 同步等。
+  - 当前 `ijkplayer` 主仓改动快照（基于 `9ef1d2b2` 到当前工作树），覆盖构建脚本、64位16K分流、armv7a(r22)兼容、x86_64 HTTPS 修复、init 固化、README 同步等。
 - `ndk_r22_ffmpeg_n4.3_ijk.patch`
   - FFmpeg 侧补丁（`n4.3..ijk-n4.3-20260301-007`），包含 ijk 协议/demuxer 兼容、OpenSSL 探测兼容、导出头、async 注册崩溃修复。
 - `ndk_r22_soundtouch.patch`
@@ -60,6 +60,7 @@ cd ../../
 ./init-android.sh
 
 cd android/contrib
+./compile-openssl.sh x86_64
 ./compile-openssl.sh arm64
 ./compile-ffmpeg.sh arm64
 ./compile-ffmpeg.sh x86_64
@@ -81,4 +82,6 @@ cd ..
 ## 注意事项
 - 生产发布优先 `arm64-v8a`。
 - `armeabi-v7a` 主要用于 32 位设备兼容；若目标机型存在 HEVC 软解崩溃风险，建议优先硬解或降低 armv7a 解码能力。
+- `x86_64` 若需要 HTTPS，必须保证先完成 `./compile-openssl.sh x86_64`，再执行 `./compile-ffmpeg.sh x86_64`。
+- 当前主补丁已包含 FFmpeg 的“旧 configure 未启用 OpenSSL 时自动重配”逻辑，避免复用历史 `config.h` 导致 `CONFIG_HTTPS_PROTOCOL=0`。
 - 若目标仓库已存在同名改动，`git apply --check` 可能失败；请先清理冲突或基于干净分支应用。
