@@ -2,6 +2,11 @@
 
 **[Click to see the English version](UPDATE_VERSION_EN.md)**
 
+### v12.1.0 (2026-04-01)
+
+- update media3 1.10.0
+- ex_so: fix ex_so (x86_64) https #4238
+
 ### v12.0.0 (2026-03-13)
 
 - ex_so: update ffmpeg 4.3

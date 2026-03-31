@@ -90,30 +90,30 @@ allprojects {
 ```groovy
  //Complete version introduction
 
-implementation 'io.github.carguo:gsyvideoplayer:12.0.0'
+implementation 'io.github.carguo:gsyvideoplayer:12.1.0'
 
 
 //Whether AliPlayer mode is needed
-implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.0.0'
+implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.1.0'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:12.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-exo2:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:12.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.1.0'
 
  //so of ijk mode according to your needs
- implementation 'io.github.carguo:gsyvideoplayer-arm64:12.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv7a:12.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv5:12.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-x86:12.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-x64:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-arm64:12.1.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv7a:12.1.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv5:12.1.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x86:12.1.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x64:12.1.0'
 ```
 
 #### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
@@ -122,16 +122,16 @@ A and B normal versions support 263/264/265, etc. For mpeg encoding, there will 
 The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:12.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-exo2:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:12.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:12.1.0'
 
  //More ijk encoding support
- implementation 'io.github.carguo:gsyvideoplayer-ex_so:12.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-ex_so:12.1.0'
 
 ```
 
@@ -178,30 +178,30 @@ allprojects {
 
 ```groovy
  //Complete version introduction
- implementation 'com.shuyu:gsyvideoplayer:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer:12.1.0'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:12.1.0'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:12.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-exo2:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:12.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:12.1.0'
 
  //so of ijk mode according to your needs
- implementation 'com.shuyu:gsyvideoplayer-armv5:12.0.0'
- implementation 'com.shuyu:gsyvideoplayer-armv7a:12.0.0'
- implementation 'com.shuyu:gsyvideoplayer-arm64:12.0.0'
- implementation 'com.shuyu:gsyvideoplayer-x86:12.0.0'
- implementation 'com.shuyu:gsyvideoplayer-x64:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv5:12.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv7a:12.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-arm64:12.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-x86:12.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-x64:12.1.0'
 ```
 
 #### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
@@ -210,17 +210,17 @@ A and B normal versions support 263/264/265, etc. For mpeg encoding, there will 
 The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:12.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-exo2:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:12.1.0'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:12.1.0'
 
  //More ijk encoding support
- implementation 'com.shuyu:gsyvideoplayer-ex_so:12.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-ex_so:12.1.0'
 
 ```
 
@@ -248,30 +248,30 @@ allprojects {
 ```groovy
  //Complete version introduction
 
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v12.1.0'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.1.0'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v12.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v12.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.1.0'
 
  //so of ijk mode according to your needs
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v12.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v12.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v12.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v12.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v12.1.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v12.1.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v12.1.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v12.1.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v12.1.0'
 ```
 
 #### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
@@ -280,16 +280,16 @@ A and B normal versions support 263/264/265, etc. For mpeg encoding, there will 
 The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v12.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v12.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v12.1.0'
 
  //More ijk encoding support
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v12.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v12.1.0'
 
 ```
 
@@ -427,6 +427,11 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
 <img src="./img/07.gif" height="240px"/>
 
 ## V. Recent Versions
+
+### v12.1.0 (2026-04-01)
+
+- update media3 1.10.0
+- ex_so: fix ex_so (x86_64) https #4238
 
 ### v12.0.0 (2026-03-13)
 
