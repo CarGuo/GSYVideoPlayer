@@ -78,7 +78,10 @@ public class GifCreateHelper {
     public void startGif(File tmpPicPath) {
         mTmpPath = tmpPicPath;
         cancelTask();
-        mPicList.clear();
+        clearTmpFiles();
+        if (mTmpPath != null && !mTmpPath.exists()) {
+            mTmpPath.mkdirs();
+        }
         mTimerTask = new TaskLocal();
         //频率可以稍微控制下
         mTimer.schedule(mTimerTask, 0, mFrequencyCount);
@@ -92,14 +95,16 @@ public class GifCreateHelper {
     public void stopGif(final File path) {
         cancelTask();
         mSaveShotBitmapSuccess = true;
+        final List<String> pics = new ArrayList<>(mPicList);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (mPicList.size() > 2) {
+                if (pics.size() > 2) {
                     // inSampleSize  采样率，越大图片越小，越大图片越模糊，需要处理的时长越短
                     // scaleSize 缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
-                    createGif(path, mPicList, mDelay, mSampleSize, mScaleSize, mGSYVideoGifSaveListener);
+                    createGif(path, pics, mDelay, mSampleSize, mScaleSize, mGSYVideoGifSaveListener);
                 } else {
+                    clearTmpFiles();
                     mGSYVideoGifSaveListener.result(false, null);
                 }
             }
@@ -117,9 +122,26 @@ public class GifCreateHelper {
     }
 
     /**
+     * 彻底释放 GIF 录制相关资源
+     */
+    public void release() {
+        cancelTask();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer.purge();
+            mTimer = null;
+        }
+        clearTmpFiles();
+    }
+
+    /**
      * 开始保存帧图片
      */
     private void startSaveBitmap() {
+        if (mTmpPath == null || mPlayer == null) {
+            mSaveShotBitmapSuccess = true;
+            return;
+        }
         // 保存的文件路径，请确保文件夹目录已经创建
         File file = new File(mTmpPath, "GSY-TMP-FRAME" + System.currentTimeMillis() + ".tmp");
         mPlayer.saveFrame(file, new GSYVideoShotSaveListener() {
@@ -129,6 +151,8 @@ public class GifCreateHelper {
                 if (success) {
                     Debuger.printfError(" SUCCESS CREATE FILE " + file.getAbsolutePath());
                     mPicList.add(file.getAbsolutePath());
+                } else if (file != null && file.exists()) {
+                    file.delete();
                 }
             }
         });
@@ -152,22 +176,39 @@ public class GifCreateHelper {
         localAnimatedGifEncoder.start(baos);//start
         localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
         localAnimatedGifEncoder.setDelay(delay);
+        boolean hasValidFrame = false;
         for (int i = 0; i < pics.size(); i++) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = inSampleSize;
             options.inJustDecodeBounds = true; // 先获取原大小
             BitmapFactory.decodeFile(pics.get(i), options);
+            if (options.outWidth <= 0 || options.outHeight <= 0) {
+                continue;
+            }
             double w = (double) options.outWidth / scaleSize;
             double h = (double) options.outHeight / scaleSize;
             options.inJustDecodeBounds = false; // 获取新的大小
             Bitmap bitmap = BitmapFactory.decodeFile(pics.get(i), options);
+            if (bitmap == null) {
+                continue;
+            }
             Bitmap pic = ThumbnailUtils.extractThumbnail(bitmap, (int) w, (int) h);
+            if (pic == null) {
+                bitmap.recycle();
+                continue;
+            }
             localAnimatedGifEncoder.addFrame(pic);
+            hasValidFrame = true;
             bitmap.recycle();
             pic.recycle();
             gsyVideoGifSaveListener.process(i + 1, pics.size());
         }
         localAnimatedGifEncoder.finish();//finish
+        if (!hasValidFrame) {
+            clearTmpFiles();
+            gsyVideoGifSaveListener.result(false, file);
+            return;
+        }
         try {
             FileOutputStream fos = new FileOutputStream(file.getPath());
             baos.writeTo(fos);
@@ -177,10 +218,24 @@ public class GifCreateHelper {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+            clearTmpFiles();
             gsyVideoGifSaveListener.result(false, file);
             return;
         }
+        clearTmpFiles();
         gsyVideoGifSaveListener.result(true, file);
+    }
+
+    private void clearTmpFiles() {
+        for (String pic : mPicList) {
+            if (pic != null) {
+                File file = new File(pic);
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+        }
+        mPicList.clear();
     }
 
     /**

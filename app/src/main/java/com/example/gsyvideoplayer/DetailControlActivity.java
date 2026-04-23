@@ -173,7 +173,7 @@ public class DetailControlActivity extends GSYBaseActivityDetail<StandardGSYVide
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mGifCreateHelper.cancelTask();
+        mGifCreateHelper.release();
     }
 
 

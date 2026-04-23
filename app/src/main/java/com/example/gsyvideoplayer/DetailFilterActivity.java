@@ -294,6 +294,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
         //恢复到原本的绘制模式
         GSYVideoType.setRenderType(backupRendType);
         cancelTask();
+        mGifCreateHelper.release();
     }
 
     /**

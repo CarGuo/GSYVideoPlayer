@@ -165,7 +165,7 @@ public class DetailTransparentActivity extends GSYBaseActivityDetail<StandardGSY
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mGifCreateHelper.cancelTask();
+        mGifCreateHelper.release();
     }
 
 
