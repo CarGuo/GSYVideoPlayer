@@ -119,33 +119,29 @@ public class ExoSourceManager {
             uerAgent = mMapHeadData.get("User-Agent");
         }
         if ("android.resource".equals(contentUri.getScheme())) {
-            DataSpec dataSpec = new DataSpec(contentUri);
-            final RawResourceDataSource rawResourceDataSource = new RawResourceDataSource(mAppContext);
-            try {
-                rawResourceDataSource.open(dataSpec);
-            } catch (RawResourceDataSource.RawResourceDataSourceException e) {
-                e.printStackTrace();
-            }
             DataSource.Factory factory = new DataSource.Factory() {
                 @Override
                 public DataSource createDataSource() {
-                    return rawResourceDataSource;
+                    try {
+                        return new RawResourceDataSource(mAppContext);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw e;
+                    }
                 }
             };
             return new ProgressiveMediaSource.Factory(factory).createMediaSource(mediaItem);
 
         } else if ("assets".equals(contentUri.getScheme())) {
-            DataSpec dataSpec = new DataSpec(contentUri);
-            final AssetDataSource rawResourceDataSource = new AssetDataSource(mAppContext);
-            try {
-                rawResourceDataSource.open(dataSpec);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             DataSource.Factory factory = new DataSource.Factory() {
                 @Override
                 public DataSource createDataSource() {
-                    return rawResourceDataSource;
+                    try {
+                        return new AssetDataSource(mAppContext);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw e;
+                    }
                 }
             };
             return new ProgressiveMediaSource.Factory(factory).createMediaSource(mediaItem);

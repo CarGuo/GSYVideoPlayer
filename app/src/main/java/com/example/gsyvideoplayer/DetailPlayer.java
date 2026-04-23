@@ -7,12 +7,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -697,18 +694,13 @@ public class DetailPlayer extends AppCompatActivity {
 
 
     private void getPathForSearch(Uri uri) {
-        String[] selectionArgs = new String[]{DocumentsContract.getDocumentId(uri).split(":")[1]};
-        Cursor cursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + "=?", selectionArgs, null);
-        if (null != cursor) {
-            if (cursor.moveToFirst()) {
-                int index = cursor.getColumnIndex(MediaStore.Video.Media.DATA);
-                if (index > -1) {
-                    binding.detailPlayer.setUp(uri.toString(), false, "File");
-                    binding.detailPlayer.startPlayLogic();
-                }
-            }
-            cursor.close();
+        if (uri == null) {
+            Toast.makeText(this, "未获取到视频地址", Toast.LENGTH_SHORT).show();
+            return;
         }
+        Debuger.printfLog("Open document uri: " + uri);
+        binding.detailPlayer.setUp(uri.toString(), false, "File");
+        binding.detailPlayer.startPlayLogic();
     }
 
     protected void fileSearch() {
