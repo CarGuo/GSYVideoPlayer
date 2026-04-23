@@ -42,6 +42,7 @@ import android.text.TextUtils;
 import com.google.common.base.Ascii;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableSet;
 
@@ -58,8 +59,7 @@ public class ExoSourceManager {
 
     public static final int TYPE_RTMP = 14;
 
-    private static Cache mCache;
-    private static String mCachePath;
+    private static final Map<String, CacheHolder> sCacheHolderMap = new HashMap<>();
     /**
      * 忽律Https证书校验
      *
@@ -84,6 +84,7 @@ public class ExoSourceManager {
     private static DatabaseProvider sDatabaseProvider;
 
     private boolean isCached = false;
+    private String mCurrentCachePath;
 
     public static ExoSourceManager newInstance(Context context, @Nullable Map<String, String> mapHeadData) {
         return new ExoSourceManager(context, mapHeadData);
@@ -224,31 +225,14 @@ public class ExoSourceManager {
      * 本地缓存目录
      */
     public static synchronized Cache getCacheSingleInstance(Context context, File cacheDir) {
-        String dirs = context.getCacheDir().getAbsolutePath();
-        if (cacheDir != null) {
-            dirs = cacheDir.getAbsolutePath();
-        }
-        if (mCache == null) {
-            mCachePath = dirs + File.separator + "exo";
-            boolean isLocked = SimpleCache.isCacheFolderLocked(new File(mCachePath));
-            if (!isLocked) {
-                mCache = new SimpleCache(new File(mCachePath), new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE)
-                    , sDatabaseProvider != null ? sDatabaseProvider : new StandaloneDatabaseProvider(context));
-            }
-        }
-        return mCache;
+        return getOrCreateCacheHolder(context, cacheDir, false).cache;
     }
 
     public void release() {
         isCached = false;
-        if (mCache != null) {
-            try {
-                mCache.release();
-                mCache = null;
-                mCachePath = null;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (!TextUtils.isEmpty(mCurrentCachePath)) {
+            releaseCacheHolder(mCurrentCachePath);
+            mCurrentCachePath = null;
         }
     }
 
@@ -256,8 +240,10 @@ public class ExoSourceManager {
      * Cache需要release之后才能clear
      */
     public static void clearCache(Context context, File cacheDir, String url) {
+        CacheHolder cacheHolder = null;
         try {
-            Cache cache = getCacheSingleInstance(context, cacheDir);
+            cacheHolder = getOrCreateCacheHolder(context, cacheDir, false);
+            Cache cache = cacheHolder.cache;
             if (!TextUtils.isEmpty(url)) {
                 if (cache != null) {
                     removeCache(cache, url);
@@ -271,6 +257,10 @@ public class ExoSourceManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (cacheHolder != null && cacheHolder.refCount == 0) {
+                releaseCacheHolder(cacheHolder.cachePath);
+            }
         }
     }
 
@@ -365,11 +355,12 @@ public class ExoSourceManager {
      */
     private DataSource.Factory getDataSourceFactoryCache(Context context, boolean cacheEnable, boolean preview, File cacheDir, String uerAgent) {
         if (cacheEnable) {
-            Cache cache = getCacheSingleInstance(context, cacheDir);
+            CacheHolder cacheHolder = acquireCacheHolder(context, cacheDir);
+            Cache cache = cacheHolder.cache;
             if (cache != null) {
                 DataSink.Factory cacheSinkFactory = null;
                 if (sExoMediaSourceInterceptListener != null) {
-                    cacheSinkFactory = sExoMediaSourceInterceptListener.cacheWriteDataSinkFactory(mCachePath, mDataSource);
+                    cacheSinkFactory = sExoMediaSourceInterceptListener.cacheWriteDataSinkFactory(cacheHolder.cachePath, mDataSource);
                 }
                 isCached = resolveCacheState(cache, mDataSource);
                 CacheDataSource.Factory factory = new CacheDataSource.Factory();
@@ -384,6 +375,76 @@ public class ExoSourceManager {
             }
         }
         return getDataSourceFactory(context, preview, uerAgent, mMapHeadData);
+    }
+
+    private synchronized CacheHolder acquireCacheHolder(Context context, File cacheDir) {
+        String cachePath = buildCachePath(context, cacheDir);
+        if (!TextUtils.isEmpty(mCurrentCachePath) && mCurrentCachePath.equals(cachePath)) {
+            return getOrCreateCacheHolder(context, cacheDir, false);
+        }
+        if (!TextUtils.isEmpty(mCurrentCachePath) && !mCurrentCachePath.equals(cachePath)) {
+            releaseCacheHolder(mCurrentCachePath);
+            mCurrentCachePath = null;
+        }
+        CacheHolder cacheHolder = getOrCreateCacheHolder(context, cacheDir, true);
+        mCurrentCachePath = cacheHolder.cachePath;
+        return cacheHolder;
+    }
+
+    private static synchronized CacheHolder getOrCreateCacheHolder(Context context, File cacheDir, boolean incrementRef) {
+        String cachePath = buildCachePath(context, cacheDir);
+        CacheHolder cacheHolder = sCacheHolderMap.get(cachePath);
+        if (cacheHolder == null) {
+            File cacheFolder = new File(cachePath);
+            if (SimpleCache.isCacheFolderLocked(cacheFolder)) {
+                throw new IllegalStateException("Cache folder is locked: " + cachePath);
+            }
+            Cache cache = new SimpleCache(cacheFolder, new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE),
+                sDatabaseProvider != null ? sDatabaseProvider : new StandaloneDatabaseProvider(context));
+            cacheHolder = new CacheHolder(cachePath, cache);
+            sCacheHolderMap.put(cachePath, cacheHolder);
+        }
+        if (incrementRef) {
+            cacheHolder.refCount++;
+        }
+        return cacheHolder;
+    }
+
+    private static synchronized void releaseCacheHolder(String cachePath) {
+        CacheHolder cacheHolder = sCacheHolderMap.get(cachePath);
+        if (cacheHolder == null) {
+            return;
+        }
+        if (cacheHolder.refCount > 0) {
+            cacheHolder.refCount--;
+        }
+        if (cacheHolder.refCount == 0) {
+            try {
+                cacheHolder.cache.release();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            sCacheHolderMap.remove(cachePath);
+        }
+    }
+
+    private static String buildCachePath(Context context, File cacheDir) {
+        String dirs = context.getCacheDir().getAbsolutePath();
+        if (cacheDir != null) {
+            dirs = cacheDir.getAbsolutePath();
+        }
+        return dirs + File.separator + "exo";
+    }
+
+    private static final class CacheHolder {
+        private final String cachePath;
+        private final Cache cache;
+        private int refCount;
+
+        private CacheHolder(String cachePath, Cache cache) {
+            this.cachePath = cachePath;
+            this.cache = cache;
+        }
     }
 
 

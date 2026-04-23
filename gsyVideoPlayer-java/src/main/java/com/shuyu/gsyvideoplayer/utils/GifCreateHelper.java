@@ -96,6 +96,7 @@ public class GifCreateHelper {
         cancelTask();
         mSaveShotBitmapSuccess = true;
         final List<String> pics = new ArrayList<>(mPicList);
+        mPicList.clear();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -104,7 +105,7 @@ public class GifCreateHelper {
                     // scaleSize 缩减尺寸比例，对生成的截图进行缩减，越大图片越模糊，需要处理的时长越短
                     createGif(path, pics, mDelay, mSampleSize, mScaleSize, mGSYVideoGifSaveListener);
                 } else {
-                    clearTmpFiles();
+                    clearTmpFiles(pics);
                     mGSYVideoGifSaveListener.result(false, null);
                 }
             }
@@ -205,7 +206,7 @@ public class GifCreateHelper {
         }
         localAnimatedGifEncoder.finish();//finish
         if (!hasValidFrame) {
-            clearTmpFiles();
+            clearTmpFiles(pics);
             gsyVideoGifSaveListener.result(false, file);
             return;
         }
@@ -218,16 +219,21 @@ public class GifCreateHelper {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
-            clearTmpFiles();
+            clearTmpFiles(pics);
             gsyVideoGifSaveListener.result(false, file);
             return;
         }
-        clearTmpFiles();
+        clearTmpFiles(pics);
         gsyVideoGifSaveListener.result(true, file);
     }
 
     private void clearTmpFiles() {
-        for (String pic : mPicList) {
+        clearTmpFiles(mPicList);
+        mPicList.clear();
+    }
+
+    private void clearTmpFiles(List<String> pics) {
+        for (String pic : pics) {
             if (pic != null) {
                 File file = new File(pic);
                 if (file.exists()) {
@@ -235,7 +241,6 @@ public class GifCreateHelper {
                 }
             }
         }
-        mPicList.clear();
     }
 
     /**

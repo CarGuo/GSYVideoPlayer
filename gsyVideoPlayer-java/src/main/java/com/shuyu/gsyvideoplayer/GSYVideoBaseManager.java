@@ -148,11 +148,11 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     protected void init() {
         initMediaHandler();
-        mainThreadHandler = new Handler();
+        mainThreadHandler = new Handler(Looper.getMainLooper());
     }
 
     protected void initMediaHandler() {
-        mMediaHandler = new MediaHandler(mLooper == null ? (Looper.getMainLooper()) : mLooper);
+        mMediaHandler = new MediaHandler(mLooper == null ? Looper.getMainLooper() : mLooper);
     }
 
     protected IPlayerManager getPlayManager() {
