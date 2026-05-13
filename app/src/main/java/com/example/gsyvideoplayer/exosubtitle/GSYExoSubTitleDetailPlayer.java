@@ -80,13 +80,17 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
 
         // 1. 获取你项目中全局定义的 Cache 实例 (GSYVideoPlayer 内部使用的那个)
         // 如果你是自己定义的，请确保是单例
-        Cache cache = ExoSourceManager.getCacheSingleInstance(getApplicationContext(), null);
+        Cache cache = ExoSourceManager.acquireCacheSingleInstance(getApplicationContext(), null);
 
 
         // 2. 预检查
-        if (!Media3CacheExportHelper.isCompleteMp4Cache(cache, videoUrl)) {
-            Toast.makeText(this, "缓存不完整，无法导出为完整MP4", Toast.LENGTH_SHORT).show();
-            return;
+        try {
+            if (!Media3CacheExportHelper.isCompleteMp4Cache(cache, videoUrl)) {
+                Toast.makeText(this, "缓存不完整，无法导出为完整MP4", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } finally {
+            ExoSourceManager.releaseCacheSingleInstance(getApplicationContext(), null);
         }
 
         // --- [新增] 显示进度弹窗 ---

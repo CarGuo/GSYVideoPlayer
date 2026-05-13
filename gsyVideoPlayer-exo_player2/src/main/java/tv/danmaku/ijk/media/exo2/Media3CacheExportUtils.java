@@ -80,50 +80,55 @@ public class Media3CacheExportUtils {
                 // --- 2. Cache 获取逻辑 (复用单例) ---
                 // 使用 GSYVideoPlayer 现有的单例 Cache
                 // 修复了 "Another SimpleCache instance uses the folder" 错误
-                Cache cache = ExoSourceManager.getCacheSingleInstance(context, null);
+                Cache cache = ExoSourceManager.acquireCacheSingleInstance(context, null);
                 if (cache == null) {
                     throw new IllegalStateException("ExoPlayer Cache 未初始化，请先播放视频");
                 }
-
-                // --- 3. 导出核心逻辑 ---
-                DataSpec dataSpec = new DataSpec.Builder()
-                    .setUri(Uri.parse(videoUrl))
-                    .setFlags(DataSpec.FLAG_ALLOW_CACHE_FRAGMENTATION)
-                    .build();
+                try {
+                    // --- 3. 导出核心逻辑 ---
+                    DataSpec dataSpec = new DataSpec.Builder()
+                        .setUri(Uri.parse(videoUrl))
+                        .setFlags(DataSpec.FLAG_ALLOW_CACHE_FRAGMENTATION)
+                        .build();
 
                     // 使用 DefaultDataSource，如果缓存缺了一点点，它会自动联网补齐，而不是崩溃
-                CacheDataSource dataSource = new CacheDataSource(
-                    cache,
-                    new DefaultDataSource(context, true), // <--- 修正：传入 Context，支持 HTTP/HTTPS 和 File
-                    CacheDataSource.FLAG_BLOCK_ON_CACHE | CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR
-                );
+                    CacheDataSource dataSource = new CacheDataSource(
+                        cache,
+                        new DefaultDataSource(context, true), // <--- 修正：传入 Context，支持 HTTP/HTTPS 和 File
+                        CacheDataSource.FLAG_BLOCK_ON_CACHE | CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR
+                    );
+                    try {
+                        long contentLength = ContentMetadata.getContentLength(cache.getContentMetadata(videoUrl));
+                        if (contentLength <= 0) {
+                            contentLength = dataSource.open(dataSpec);
+                        } else {
+                            dataSource.open(dataSpec);
+                        }
 
-                long contentLength = ContentMetadata.getContentLength(cache.getContentMetadata(videoUrl));
-                if (contentLength <= 0) {
-                    contentLength = dataSource.open(dataSpec);
-                } else {
-                    dataSource.open(dataSpec);
-                }
+                        try (FileOutputStream fos = new FileOutputStream(finalTargetFile)) {
+                            byte[] buffer = new byte[1024 * 64];
+                            int read;
+                            long totalRead = 0;
 
-                FileOutputStream fos = new FileOutputStream(finalTargetFile);
-                byte[] buffer = new byte[1024 * 64];
-                int read;
-                long totalRead = 0;
+                            while ((read = dataSource.read(buffer, 0, buffer.length)) != -1) {
+                                fos.write(buffer, 0, read);
+                                totalRead += read;
 
-                while ((read = dataSource.read(buffer, 0, buffer.length)) != -1) {
-                    fos.write(buffer, 0, read);
-                    totalRead += read;
+                                if (contentLength > 0) {
+                                    float progress = (float) totalRead / contentLength;
+                                    mainHandler.post(() -> callback.onProgress(progress));
+                                }
+                            }
 
-                    if (contentLength > 0) {
-                        float progress = (float) totalRead / contentLength;
-                        mainHandler.post(() -> callback.onProgress(progress));
+                            fos.flush();
+                            fos.getFD().sync();
+                        }
+                    } finally {
+                        dataSource.close();
                     }
+                } finally {
+                    ExoSourceManager.releaseCacheSingleInstance(context, null);
                 }
-
-                fos.flush();
-                fos.getFD().sync();
-                fos.close();
-                dataSource.close();
 
                 // --- 4. 导出后处理 ---
                 // 尝试通知系统扫描文件（主要针对旧版本 Android 或公共目录）

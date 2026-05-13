@@ -60,6 +60,13 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
 
     private String url = DemoVideoUrls.MP4_BBB;
 
+    private final DownloadManager.Listener downloadListener = new DownloadManager.Listener() {
+        @Override
+        public void onDownloadChanged(DownloadManager downloadManager, Download download, @Nullable Exception finalException) {
+            Debuger.printfLog("#########", "download " + download.contentLength);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -305,14 +312,12 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
         CacheHelper.ensureDownloadManagerInitialized(getApplicationContext(), cachePath,
             false, null, header);
         try {
-            CacheHelper.getDownloadManager().addListener(new DownloadManager.Listener() {
-                @Override
-                public void onDownloadChanged(DownloadManager downloadManager, Download download, @Nullable Exception finalException) {
-                    Debuger.printfLog("#########", "download " + download.contentLength);
-                }
-            });
+            DownloadManager downloadManager = CacheHelper.getDownloadManager();
+            downloadManager.removeListener(downloadListener);
+            downloadManager.addListener(downloadListener);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Toast.makeText(this, "下载管理器初始化失败", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         CacheHelper.download(getMD5Str(url), Uri.parse(url));
@@ -324,17 +329,16 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
     }
 
     public static String getMD5Str(String str) {
-        byte[] digest = null;
         try {
             MessageDigest md5 = MessageDigest.getInstance("md5");
-            digest = md5.digest(str.getBytes("utf-8"));
+            byte[] digest = md5.digest(str.getBytes("utf-8"));
+            //16是表示转换为16进制数
+            return new BigInteger(1, digest).toString(16);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        //16是表示转换为16进制数
-        String md5Str = new BigInteger(1, digest).toString(16);
-        return md5Str;
+        return String.valueOf(str.hashCode());
     }
 }

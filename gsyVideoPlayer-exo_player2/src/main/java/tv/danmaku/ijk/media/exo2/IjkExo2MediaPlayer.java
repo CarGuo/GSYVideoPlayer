@@ -359,10 +359,8 @@ public class IjkExo2MediaPlayer extends AbstractMediaPlayer implements Player.Li
 
     @Override
     public void release() {
-        if (mInternalPlayer != null) {
-            reset();
-            mEventLogger = null;
-        }
+        reset();
+        mEventLogger = null;
     }
 
     protected void prepareAsyncInternal() {

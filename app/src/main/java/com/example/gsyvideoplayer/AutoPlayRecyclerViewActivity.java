@@ -1,7 +1,6 @@
 package com.example.gsyvideoplayer;
 
 
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
 import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
 import com.example.gsyvideoplayer.databinding.ActivityRecyclerViewBinding;
 import com.example.gsyvideoplayer.model.VideoModel;
@@ -33,11 +31,7 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
 
     LinearLayoutManager linearLayoutManager;
 
-    RecyclerBaseAdapter recyclerBaseAdapter;
-
     List<VideoModel> dataList = new ArrayList<>();
-
-    boolean mFull = false;
 
     ScrollCalculatorHelper scrollCalculatorHelper;
 
@@ -62,11 +56,8 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
         resolveData();
 
 
-        //限定范围为屏幕一半的上下偏移180
-        int playTop = CommonUtil.getScreenHeight(this) / 2 - CommonUtil.dip2px(this, 180);
-        int playBottom = CommonUtil.getScreenHeight(this) / 2 + CommonUtil.dip2px(this, 180);
         //自定播放帮助类
-        scrollCalculatorHelper = new ScrollCalculatorHelper(R.id.video_item_player, playTop, playBottom);
+        scrollCalculatorHelper = new ScrollCalculatorHelper(R.id.video_item_player, getPlayTop(), getPlayBottom());
 
         final RecyclerNormalAdapter recyclerNormalAdapter = new RecyclerNormalAdapter(this, dataList);
         linearLayoutManager = new LinearLayoutManager(this);
@@ -80,7 +71,9 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                scrollCalculatorHelper.onScrollStateChanged(recyclerView, newState);
+                if (!GSYVideoManager.isFullState(AutoPlayRecyclerViewActivity.this)) {
+                    scrollCalculatorHelper.onScrollStateChanged(recyclerView, newState);
+                }
             }
 
             @Override
@@ -90,8 +83,17 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
                 //这是滑动自动播放的代码
-                if (!mFull) {
+                if (!GSYVideoManager.isFullState(AutoPlayRecyclerViewActivity.this)) {
                     scrollCalculatorHelper.onScroll(recyclerView, firstVisibleItem, lastVisibleItem, lastVisibleItem - firstVisibleItem);
+                }
+            }
+        });
+
+        binding.listItemRecycler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!GSYVideoManager.isFullState(AutoPlayRecyclerViewActivity.this)) {
+                    scrollCalculatorHelper.onScrollStateChanged(binding.listItemRecycler, RecyclerView.SCROLL_STATE_IDLE);
                 }
             }
         });
@@ -110,14 +112,18 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        mFull = newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER;
+        if (scrollCalculatorHelper != null) {
+            scrollCalculatorHelper.setPlayRange(getPlayTop(), getPlayBottom());
+        }
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if (scrollCalculatorHelper != null) {
+            scrollCalculatorHelper.release();
+        }
         GSYVideoManager.onPause();
     }
 
@@ -130,6 +136,9 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (scrollCalculatorHelper != null) {
+            scrollCalculatorHelper.release();
+        }
         GSYVideoManager.releaseAllVideos();
     }
 
@@ -139,8 +148,15 @@ public class AutoPlayRecyclerViewActivity extends AppCompatActivity {
             VideoModel videoModel = new VideoModel();
             dataList.add(videoModel);
         }
-        if (recyclerBaseAdapter != null)
-            recyclerBaseAdapter.notifyDataSetChanged();
+    }
+
+    private int getPlayTop() {
+        //限定范围为屏幕一半的上下偏移180
+        return CommonUtil.getScreenHeight(this) / 2 - CommonUtil.dip2px(this, 180);
+    }
+
+    private int getPlayBottom() {
+        return CommonUtil.getScreenHeight(this) / 2 + CommonUtil.dip2px(this, 180);
     }
 
 }

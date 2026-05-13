@@ -265,6 +265,23 @@ public class ExoSourceManager {
         return getOrCreateCacheHolder(context, cacheDir, false, false).cache;
     }
 
+    public static synchronized Cache acquireCacheSingleInstance(Context context, File cacheDir) {
+        return getOrCreateCacheHolder(context, cacheDir, true, false).cache;
+    }
+
+    public static synchronized Cache acquireCacheSingleInstance(Context context, File cacheDir, boolean fallbackWhenLocked) {
+        CacheHolder cacheHolder = getOrCreateCacheHolder(context, cacheDir, true, fallbackWhenLocked);
+        return cacheHolder != null ? cacheHolder.cache : null;
+    }
+
+    public static synchronized void releaseCacheSingleInstance(Context context, File cacheDir) {
+        releaseCacheHolder(buildCachePath(context, cacheDir));
+    }
+
+    public static String getCachePath(Context context, File cacheDir) {
+        return buildCachePath(context, cacheDir);
+    }
+
     public void release() {
         isCached = false;
         if (!TextUtils.isEmpty(mCurrentCachePath)) {
@@ -277,29 +294,24 @@ public class ExoSourceManager {
      * Cache需要release之后才能clear
      */
     public static void clearCache(Context context, File cacheDir, String url) {
-        CacheHolder cacheHolder = null;
+        Cache cache = null;
         try {
-            cacheHolder = getOrCreateCacheHolder(context, cacheDir, false, true);
-            if (cacheHolder == null) {
+            cache = acquireCacheSingleInstance(context, cacheDir, true);
+            if (cache == null) {
                 return;
             }
-            Cache cache = cacheHolder.cache;
             if (!TextUtils.isEmpty(url)) {
-                if (cache != null) {
-                    removeCache(cache, url);
-                }
+                removeCache(cache, url);
             } else {
-                if (cache != null) {
-                    for (String key : cache.getKeys()) {
-                        removeCache(cache, key);
-                    }
+                for (String key : cache.getKeys()) {
+                    removeCache(cache, key);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (cacheHolder != null && cacheHolder.refCount == 0) {
-                releaseCacheHolder(cacheHolder.cachePath);
+            if (cache != null) {
+                releaseCacheSingleInstance(context, cacheDir);
             }
         }
     }
@@ -323,8 +335,15 @@ public class ExoSourceManager {
     }
 
     public static boolean cachePreView(Context context, File cacheDir, String url) {
-        CacheHolder cacheHolder = getOrCreateCacheHolder(context, cacheDir, false, true);
-        return cacheHolder != null && resolveCacheState(cacheHolder.cache, url);
+        Cache cache = null;
+        try {
+            cache = acquireCacheSingleInstance(context, cacheDir, true);
+            return cache != null && resolveCacheState(cache, url);
+        } finally {
+            if (cache != null) {
+                releaseCacheSingleInstance(context, cacheDir);
+            }
+        }
     }
 
     public boolean hadCached() {

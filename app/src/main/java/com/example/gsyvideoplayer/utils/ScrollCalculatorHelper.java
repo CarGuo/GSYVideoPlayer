@@ -1,12 +1,15 @@
 package com.example.gsyvideoplayer.utils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
-import android.graphics.Rect;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.*;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
@@ -27,12 +30,30 @@ public class ScrollCalculatorHelper {
     private int rangeBottom;
     private PlayRunnable runnable;
 
-    private Handler playHandler = new Handler();
+    private final Handler playHandler = new Handler(Looper.getMainLooper());
+
+    private AlertDialog wifiDialog;
 
     public ScrollCalculatorHelper(int playId, int rangeTop, int rangeBottom) {
         this.playId = playId;
         this.rangeTop = rangeTop;
         this.rangeBottom = rangeBottom;
+    }
+
+    public void setPlayRange(int rangeTop, int rangeBottom) {
+        this.rangeTop = rangeTop;
+        this.rangeBottom = rangeBottom;
+    }
+
+    public void release() {
+        if (runnable != null) {
+            playHandler.removeCallbacks(runnable);
+            runnable = null;
+        }
+        if (wifiDialog != null && wifiDialog.isShowing()) {
+            wifiDialog.dismiss();
+        }
+        wifiDialog = null;
     }
 
     public void onScrollStateChanged(RecyclerView view, int scrollState) {
@@ -44,7 +65,7 @@ public class ScrollCalculatorHelper {
     }
 
     public void onScroll(RecyclerView view, int firstVisibleItem, int lastVisibleItem, int visibleItemCount) {
-        if (firstVisible == firstVisibleItem) {
+        if (firstVisible == firstVisibleItem && lastVisible == lastVisibleItem && visibleCount == visibleItemCount) {
             return;
         }
         firstVisible = firstVisibleItem;
@@ -60,19 +81,20 @@ public class ScrollCalculatorHelper {
         }
 
         RecyclerView.LayoutManager layoutManager = view.getLayoutManager();
+        if (layoutManager == null) {
+            return;
+        }
 
         GSYBaseVideoPlayer gsyBaseVideoPlayer = null;
 
         boolean needPlay = false;
 
-        for (int i = 0; i < visibleCount; i++) {
+        int childCount = layoutManager.getChildCount();
+        for (int i = 0; i < childCount; i++) {
             if (layoutManager.getChildAt(i) != null && layoutManager.getChildAt(i).findViewById(playId) != null) {
                 GSYBaseVideoPlayer player = (GSYBaseVideoPlayer) layoutManager.getChildAt(i).findViewById(playId);
-                Rect rect = new Rect();
-                player.getLocalVisibleRect(rect);
-                int height = player.getHeight();
-                //说明第一个完全可视
-                if (rect.top == 0 && rect.bottom == height) {
+                //播放器中心点在播放区域内即可作为候选，避免要求完全可见导致漏播。
+                if (isInPlayRange(player)) {
                     gsyBaseVideoPlayer = player;
                     if ((player.getCurrentPlayer().getCurrentState() == GSYBaseVideoPlayer.CURRENT_STATE_NORMAL
                             || player.getCurrentPlayer().getCurrentState() == GSYBaseVideoPlayer.CURRENT_STATE_ERROR)) {
@@ -111,23 +133,52 @@ public class ScrollCalculatorHelper {
 
         @Override
         public void run() {
-            boolean inPosition = false;
-            //如果未播放，需要播放
-            if (gsyBaseVideoPlayer != null) {
-                int[] screenPosition = new int[2];
-                gsyBaseVideoPlayer.getLocationOnScreen(screenPosition);
-                int halfHeight = gsyBaseVideoPlayer.getHeight() / 2;
-                int rangePosition = screenPosition[1] + halfHeight;
-                //中心点在播放区域内
-                if (rangePosition >= rangeTop && rangePosition <= rangeBottom) {
-                    inPosition = true;
-                }
-                if (inPosition) {
+            try {
+                //如果未播放，需要播放
+                if (canStartPlay(gsyBaseVideoPlayer)) {
                     startPlayLogic(gsyBaseVideoPlayer, gsyBaseVideoPlayer.getContext());
-                    //gsyBaseVideoPlayer.startPlayLogic();
+                }
+            } finally {
+                if (runnable == this) {
+                    runnable = null;
                 }
             }
         }
+    }
+
+    private boolean canStartPlay(GSYBaseVideoPlayer player) {
+        if (player == null || !player.isShown() || !player.isAttachedToWindow()) {
+            return false;
+        }
+        Activity activity = scanForActivity(player.getContext());
+        if (activity != null && GSYVideoManager.isFullState(activity)) {
+            return false;
+        }
+        int currentState = player.getCurrentPlayer().getCurrentState();
+        return (currentState == GSYBaseVideoPlayer.CURRENT_STATE_NORMAL
+            || currentState == GSYBaseVideoPlayer.CURRENT_STATE_ERROR) && isInPlayRange(player);
+    }
+
+    private Activity scanForActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
+    }
+
+    private boolean isInPlayRange(GSYBaseVideoPlayer player) {
+        if (player == null || player.getHeight() <= 0) {
+            return false;
+        }
+        int[] screenPosition = new int[2];
+        player.getLocationOnScreen(screenPosition);
+        int halfHeight = player.getHeight() / 2;
+        int rangePosition = screenPosition[1] + halfHeight;
+        //中心点在播放区域内
+        return rangePosition >= rangeTop && rangePosition <= rangeBottom;
     }
 
 
@@ -146,13 +197,18 @@ public class ScrollCalculatorHelper {
             Toast.makeText(context, context.getResources().getString(com.shuyu.gsyvideoplayer.R.string.no_net), Toast.LENGTH_LONG).show();
             return;
         }
+        if (wifiDialog != null && wifiDialog.isShowing()) {
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(context.getResources().getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi));
         builder.setPositiveButton(context.getResources().getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                gsyBaseVideoPlayer.startPlayLogic();
+                if (canStartPlay(gsyBaseVideoPlayer)) {
+                    gsyBaseVideoPlayer.startPlayLogic();
+                }
             }
         });
         builder.setNegativeButton(context.getResources().getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi_cancel), new DialogInterface.OnClickListener() {
@@ -161,7 +217,14 @@ public class ScrollCalculatorHelper {
                 dialog.dismiss();
             }
         });
-        builder.create().show();
+        wifiDialog = builder.create();
+        wifiDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                wifiDialog = null;
+            }
+        });
+        wifiDialog.show();
     }
 
 }
