@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "org.jetbrains.kotlin.plugin.compose"
 
 apply from: "$rootDir/gradle/base.gradle"
 apply from: "../gradle/exported.gradle"
@@ -19,6 +21,19 @@ android {
 
     viewBinding {
         enabled = true
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     signingConfigs {
@@ -68,6 +83,20 @@ dependencies {
 
     implementation project(":gsyVideoPlayer")
     implementation project(":gsyVideoPlayer-aliplay")
+    implementation project(":gsyVideoPlayer-compose")
+
+    // Compose（仅 Demo 使用）
+    def composeBom = platform(composeDependencies.bom)
+    implementation composeBom
+    implementation composeDependencies.activityCompose
+    implementation composeDependencies.lifecycleRuntime
+    implementation composeDependencies.ui
+    implementation composeDependencies.foundation
+    implementation composeDependencies.runtime
+    implementation composeDependencies.material3
+    implementation composeDependencies.materialIcons
+    implementation composeDependencies.uiToolingPreview
+    debugImplementation composeDependencies.uiTooling
 
     //implementation 'com.shuyu:gsyvideoplayer:10.0.0'
 

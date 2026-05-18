@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.gsyvideoplayer.databinding.ActivityListVideoBinding;
 import com.example.gsyvideoplayer.databinding.ActivityMainBinding;
+import com.example.gsyvideoplayer.compose.ComposeDemoListActivity;
 import com.example.gsyvideoplayer.simple.SimpleActivity;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -93,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.detailDownloadExoActivity.setOnClickListener(this);
         binding.tvPlay.setOnClickListener(this);
         binding.transparent.setOnClickListener(this);
+
+        binding.composeDemo.setOnClickListener(this);
 
         boolean hadPermission = PermissionUtils.hasSelfPermissions(this, permissions);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hadPermission) {
@@ -282,6 +285,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tv_play:
                 JumpUtils.goToTVVideoPlayer(this,binding.tvPlay);
+                break;
+            case R.id.compose_demo:
+                startActivity(new Intent(this, ComposeDemoListActivity.class));
                 break;
         }
     }

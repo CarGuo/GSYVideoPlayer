@@ -137,6 +137,20 @@ The so introduced by C supports mpeg encoding and other supplementary protocols,
 
 ```
 
+#### D. Jetpack Compose Support (Optional)
+
+Starting from 13.0.0, the new `gsyvideoplayer-compose` module is shipped. It exposes Compose entries on top of the existing kernels and UI without touching any legacy code:
+
+- **Wrapper mode**: a single Composable `GSYVideoPlayerView { ... }` embeds `StandardGSYVideoPlayer` into a Compose screen, with automatic Lifecycle bridge and `release` on dispose.
+- **Native mode**: `GSYComposePlayer + GSYPlayerController` exposes a `GSYPlayerSnapshot` state stream, so the control UI can be drawn entirely in Compose while the rendering pipeline still uses the GSY multi-kernel core.
+
+```groovy
+implementation 'io.github.carguo:gsyvideoplayer-compose:13.0.0'
+// compose-bom is api-exposed from the module; consumers still manage androidx.compose.* per their own project setup.
+```
+
+See [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md). The sample app provides a `Compose Demo` entry with 9 runnable examples (Basic Wrapper, Switch URL, Multi-Window, List, Auto-Play List, List with Fullscreen, Detail Native, Full-Feature Native).
+
 ### 2. Github Package Dependency Method (Recommended)
 
 **Since Jitpack often has the problem of random loss of historical packages, a new Github Package dependency method is added. The usage is as follows**:

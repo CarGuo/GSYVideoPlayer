@@ -247,6 +247,51 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Transitions" />
+        <activity
+            android:name=".compose.ComposeDemoListActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.BasicWrapperActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.DetailNativeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.FullFeatureNativeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.ListPlayNativeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.SwitchUrlActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.MultiWindowActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.AutoPlayListActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.ListWithFullscreenActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="android.max_aspect"

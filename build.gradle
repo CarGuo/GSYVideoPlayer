@@ -8,6 +8,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.6.1'
         classpath 'io.github.gradle-nexus:publish-plugin:2.0.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+        classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${kotlinVersion}"
     }
 }
 

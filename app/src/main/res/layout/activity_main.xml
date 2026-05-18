@@ -316,5 +316,12 @@
             android:layout_marginTop="20dp"
             android:text="clear Cache" />
 
+        <Button
+            android:id="@+id/compose_demo"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Compose Demo 大全" />
+
     </LinearLayout>
 </ScrollView>

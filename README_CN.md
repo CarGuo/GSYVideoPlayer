@@ -138,6 +138,20 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```
 
+#### D、Jetpack Compose 支持（可选）
+
+13.0.0 起新增 `gsyvideoplayer-compose`，在保留全部内核与 UI 能力的前提下，提供 Compose 接入：
+
+- **Wrapper 模式**：一行 `GSYVideoPlayerView { ... }` 把 `StandardGSYVideoPlayer` 直接嵌入 Compose 屏，自动桥接 Lifecycle 与 release。
+- **Native 模式**：`GSYComposePlayer + GSYPlayerController` 暴露 `GSYPlayerSnapshot` 状态流，控制层可完全用 Compose 自绘，画面与多内核仍走原 GSY 渲染管线。
+
+```groovy
+implementation 'io.github.carguo:gsyvideoplayer-compose:13.0.0'
+// compose-bom 由模块 api 透出，使用方仍按自身工程版本管理 androidx.compose.* 即可
+```
+
+详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 9 个可运行示例（基础 / 切流 / 多窗口 / 列表 / 自动连播 / 列表内全屏 / 详情切换 / 全功能 Native）。
+
 ### 2、Github Package 依赖方式(推荐)
 
 **由于 Jitpack 经常存在历史包随机丢失问题，所以新增 Github Package 依赖方式，使用方式如下**：

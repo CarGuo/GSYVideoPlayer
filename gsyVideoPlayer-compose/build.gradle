@@ -1,0 +1,45 @@
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "org.jetbrains.kotlin.plugin.compose"
+
+apply from: "$rootDir/gradle/lib.gradle"
+
+apply from: "$rootDir/gradle/publish.gradle"
+apply from: "$rootDir/gradle/maven-central-publish.gradle"
+
+android {
+    namespace 'com.shuyu.gsyvideoplayer.compose'
+
+    buildFeatures {
+        compose true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+dependencies {
+    implementation androidDependencies.appCompat
+    implementation androidDependencies.core
+
+    api project(":gsyVideoPlayer-java")
+
+    implementation composeDependencies.activityCompose
+    implementation composeDependencies.lifecycleRuntime
+
+    def composeBom = platform(composeDependencies.bom)
+    implementation composeBom
+    implementation composeDependencies.ui
+    implementation composeDependencies.foundation
+    implementation composeDependencies.runtime
+    implementation composeDependencies.material
+    implementation composeDependencies.material3
+    implementation composeDependencies.materialIcons
+    implementation composeDependencies.uiToolingPreview
+    debugImplementation composeDependencies.uiTooling
+}
