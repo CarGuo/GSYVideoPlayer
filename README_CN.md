@@ -138,15 +138,21 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```
 
-#### D、Jetpack Compose 支持（可选）
+#### D、Jetpack Compose 支持（可选，未发布）
 
-13.0.0 起新增 `gsyvideoplayer-compose`，在保留全部内核与 UI 能力的前提下，提供 Compose 接入：
+> ⚠ **`gsyvideoplayer-compose` 模块当前尚未发布**。下文中的 `13.0.0` 仅为预留坐标 —— 仅当你自己 `./gradlew :gsyVideoPlayer-compose:publishToMavenLocal` 之后才能在本机解析；正式接入请使用 `implementation project(":gsyVideoPlayer-compose")` 直接引用源码模块。第一个对外发布版本以官方 release tag 为准。
 
-- **Wrapper 模式**：一行 `GSYVideoPlayerView { ... }` 把 `StandardGSYVideoPlayer` 直接嵌入 Compose 屏，自动桥接 Lifecycle 与 release。
-- **Native 模式**：`GSYComposePlayer + GSYPlayerController` 暴露 `GSYPlayerSnapshot` 状态流，控制层可完全用 Compose 自绘，画面与多内核仍走原 GSY 渲染管线。
+新增 `gsyvideoplayer-compose` 模块，在保留全部内核与 UI 能力的前提下，提供 Compose 接入：
+
+- **Wrapper 模式**：一行 `GSYVideoPlayerView { ... }` 把 `StandardGSYVideoPlayer` 直接嵌入 Compose 屏，自动桥接 Lifecycle 与 release；新增可选 `setUpKey: Any?` 参数，仅当数据标识变化时才重跑 `setUp`（幂等）。
+- **Native 模式**：`GSYComposeHostPlayer + GSYPlayerController` 暴露 `GSYPlayerSnapshot` 状态流，**外加** `events: SharedFlow<GSYPlayerEvent>` 一次性边沿事件（`Prepared` / `AutoComplete` / `Error`）。控制层可完全用 Compose 自绘，画面与多内核仍走原 GSY 渲染管线。旧的 `setOnError / setOnComplete / setOnPrepared` 仍可用，但已 `@Deprecated`，推荐迁移到 Flow。
 
 ```groovy
-implementation 'io.github.carguo:gsyvideoplayer-compose:13.0.0'
+// 源码依赖（当前模块未发布前的推荐方式）：
+implementation project(':gsyVideoPlayer-compose')
+
+// 预留坐标（仅 publishToMavenLocal 后可在本机解析）：
+// implementation 'io.github.carguo:gsyvideoplayer-compose:13.0.0'
 // compose-bom 由模块 api 透出，使用方仍按自身工程版本管理 androidx.compose.* 即可
 ```
 
@@ -189,6 +195,23 @@ allprojects {
 > 理论上就是右上角头像 - Settings - Developer Settings - Personal access tokens - tokens (classic) -
 > Generate new token（classic）- read:packages
 > 记得过期时间选择永久
+
+> 小提示：仓库根目录 `build.gradle` 现已支持从 Gradle 属性或环境变量读取 GitHub Packages 凭据，无需把自己的 token 写进源码：
+>
+> ```properties
+> # ~/.gradle/gradle.properties（推荐本地使用）
+> githubReadUser=<你的-github-账号>
+> githubReadToken=<你的-classic-token-含-read:packages>
+> ```
+>
+> 或在 CI 上：
+>
+> ```bash
+> export GITHUB_READ_USER=<你的-github-账号>
+> export GITHUB_READ_TOKEN=<你的-classic-token-含-read:packages>
+> ```
+>
+> 仓库里仍内置 `carsmallguo / ghp_...` 这一对兜底凭据，便于第一次 clone 即可构建；它随时可能被撤销，建议优先用你自己的 token。
 
 **你可以选择下面三种的其中一种，在module下的build.gradle添加。**
 

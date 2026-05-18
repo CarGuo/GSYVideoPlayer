@@ -137,15 +137,21 @@ The so introduced by C supports mpeg encoding and other supplementary protocols,
 
 ```
 
-#### D. Jetpack Compose Support (Optional)
+#### D. Jetpack Compose Support (Optional, Unreleased)
 
-Starting from 13.0.0, the new `gsyvideoplayer-compose` module is shipped. It exposes Compose entries on top of the existing kernels and UI without touching any legacy code:
+> ⚠ **The `gsyvideoplayer-compose` module is NOT yet published.** The `13.0.0` coordinate below is reserved — it can only be resolved via `./gradlew :gsyVideoPlayer-compose:publishToMavenLocal`, or by depending on the source module directly with `implementation project(":gsyVideoPlayer-compose")`. Wait for the official release tag for the first public artifact.
 
-- **Wrapper mode**: a single Composable `GSYVideoPlayerView { ... }` embeds `StandardGSYVideoPlayer` into a Compose screen, with automatic Lifecycle bridge and `release` on dispose.
-- **Native mode**: `GSYComposePlayer + GSYPlayerController` exposes a `GSYPlayerSnapshot` state stream, so the control UI can be drawn entirely in Compose while the rendering pipeline still uses the GSY multi-kernel core.
+The new `gsyvideoplayer-compose` module exposes Compose entries on top of the existing kernels and UI without touching any legacy code:
+
+- **Wrapper mode**: a single Composable `GSYVideoPlayerView { ... }` embeds `StandardGSYVideoPlayer` into a Compose screen, with automatic Lifecycle bridge and `release` on dispose. An optional `setUpKey: Any?` parameter lets you trigger `setUp` again only when the data identity changes (idempotent).
+- **Native mode**: `GSYComposeHostPlayer + GSYPlayerController` exposes a `GSYPlayerSnapshot` state stream **plus** an `events: SharedFlow<GSYPlayerEvent>` of one-shot edge events (`Prepared` / `AutoComplete` / `Error`), so the control UI can be drawn entirely in Compose while the rendering pipeline still uses the GSY multi-kernel core. The legacy `setOnError / setOnComplete / setOnPrepared` setters are still supported but `@Deprecated` in favour of the Flow API.
 
 ```groovy
-implementation 'io.github.carguo:gsyvideoplayer-compose:13.0.0'
+// Source dependency (recommended for now while the module is unreleased):
+implementation project(':gsyVideoPlayer-compose')
+
+// Reserved coordinate — only resolves locally via publishToMavenLocal:
+// implementation 'io.github.carguo:gsyvideoplayer-compose:13.0.0'
 // compose-bom is api-exposed from the module; consumers still manage androidx.compose.* per their own project setup.
 ```
 
@@ -187,6 +193,23 @@ allprojects {
 > In theory, it is the avatar in the upper right corner - Settings - Developer Settings - Personal access tokens - tokens (classic) -
 > Generate new token (classic) - read:packages
 > Remember to choose permanent for the expiration time
+
+> Tip: this repository's root `build.gradle` already supports reading the GitHub Packages credentials from a Gradle property or environment variable, so you don't have to hard-code your own token in the source tree:
+>
+> ```properties
+> # ~/.gradle/gradle.properties (recommended for local builds)
+> githubReadUser=<your-github-name>
+> githubReadToken=<your-classic-token-with-read:packages>
+> ```
+>
+> Or in CI:
+>
+> ```bash
+> export GITHUB_READ_USER=<your-github-name>
+> export GITHUB_READ_TOKEN=<your-classic-token-with-read:packages>
+> ```
+>
+> The hard-coded `carsmallguo / ghp_...` pair is only kept as a fallback so first-time clones still build out of the box; it may be revoked at any time, so prefer providing your own.
 
 **You can choose one of the following three and add it to the build.gradle under the module.**
 

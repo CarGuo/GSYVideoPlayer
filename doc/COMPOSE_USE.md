@@ -1,5 +1,11 @@
 # GSYVideoPlayer Compose 支持
 
+> ⚠ **当前状态：未发布（Unreleased）**
+>
+> `gsyVideoPlayer-compose` 模块已合入 master，但 **尚未对外发布到 Maven Central / GitHub Packages / JitPack**。下文中出现的 `13.0.0` 仅为预留坐标 —— 仅当你**自己** `./gradlew :gsyVideoPlayer-compose:publishToMavenLocal` 之后才能在你的项目里以坐标形式引用，否则只能走 `implementation project(":gsyVideoPlayer-compose")` 的源码依赖方式。
+>
+> 第一次正式发布的时间点请等待官方 release tag 公告。
+
 新增模块：`gsyVideoPlayer-compose`，提供两种使用方式：
 
 | 模式 | 适用场景 | 使用入口 |
@@ -14,10 +20,11 @@
 ## 一、引入依赖
 
 ```groovy
-// 方式 A：使用项目模块
+// 方式 A（当前唯一可用）：使用项目模块（源码依赖）
 implementation project(":gsyVideoPlayer-compose")
 
-// 方式 B：使用 Maven Central 发布版（13.0.0+）
+// 方式 B（预留坐标，模块尚未对外发布）：Maven Central / GitHub Packages
+// 仅当你自己 ./gradlew :gsyVideoPlayer-compose:publishToMavenLocal 后才能在本机解析
 implementation "io.github.carguo:gsyvideoplayer-compose:13.0.0"
 ```
 
