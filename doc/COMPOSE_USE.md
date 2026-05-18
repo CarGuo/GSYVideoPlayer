@@ -72,6 +72,22 @@ GSYAnyVideoPlayerView(
 )
 ```
 
+#### `setUpKey`：参数变化时如何让 `setUp` 重跑
+
+`setUp` 默认**只在 factory 阶段调用一次**。这是有意设计：每次 `recomposition` 都执行
+`builder.build(player)` 会重置 url / 重启播放，反而是 bug 而非 feature。
+
+如果你想让 url 等参数变化时**主动**重新执行 `setUp`，传 `setUpKey`：
+
+```kotlin
+GSYVideoPlayerView(
+    setUp = { player -> GSYVideoOptionBuilder().setUrl(url).build(player); player.startPlayLogic() },
+    setUpKey = url,   // url 变化时再次调用 setUp，否则 update 阶段是 no-op
+)
+```
+
+`setUpKey == null`（默认）：兼容老用法，`AndroidView.update` 不做任何事。
+
 ---
 
 ## 三、模式二：Compose 原生控件层
@@ -135,6 +151,47 @@ val snap: State<GSYPlayerSnapshot> = controller.snapshot
 ```
 Idle  Preparing  Playing  Buffering  Paused  Completed  Error
 ```
+
+### 4. 响应式订阅（推荐：events / stateFlow）
+
+> 自 v13.x 起，`GSYPlayerController` 提供与 Coroutine 完全对齐的响应式接口。
+> 旧版 `setOnError / setOnComplete / setOnPrepared` 仍保留但已标记 `@Deprecated`，
+> 推荐切换到 `events`（边沿事件）+ `stateFlow`（连续状态）。
+
+```kotlin
+import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
+
+val controller = rememberGSYPlayerController(url = url, autoPlay = true)
+
+// 1) 一次性"边沿事件"流：onPrepared / onAutoComplete / onPlayError
+LaunchedEffect(controller) {
+    controller.events.collect { event ->
+        when (event) {
+            is GSYPlayerEvent.Prepared      -> Log.d("Demo", "已准备就绪")
+            is GSYPlayerEvent.AutoComplete  -> Log.d("Demo", "播放完成")
+            is GSYPlayerEvent.Error         -> Log.e("Demo", "播错 what=${event.what} extra=${event.extra}")
+        }
+    }
+}
+
+// 2) 状态读取——StateFlow 形态，便于在 ViewModel / UseCase 里 collect
+LaunchedEffect(controller) {
+    controller.stateFlow
+        .map { it.isPlaying }
+        .distinctUntilChanged()
+        .collect { isPlaying -> /* ... */ }
+}
+
+// 3) Compose 直接渲染——仍可用 controller.snapshot
+val snap: GSYPlayerSnapshot by controller.snapshot
+```
+
+设计取舍：
+- **状态用 StateFlow / State**：当前状态值唯一、订阅者随时拿最新值，适合渲染。
+- **事件用 SharedFlow**：onPrepared / onAutoComplete / onPlayError 是一次性瞬时事件，
+  错过即错过；用状态字段做"事件"会逼业务方手写"事件去重"，不优雅。
+- `events` 默认 `replay = 0`、`extraBufferCapacity = 16`、溢出 `DROP_OLDEST`，
+  emit 不会阻塞、订阅前发生的事件不会重放。
 
 ---
 

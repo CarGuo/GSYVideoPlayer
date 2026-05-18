@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayState
+import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSnapshot
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
@@ -77,9 +78,16 @@ private fun FullFeatureNativeScreen() {
     val snap by controller.snapshot
 
     var hasError by remember { mutableStateOf(false) }
+    // 用响应式 events 流订阅 onPrepared / onPlayError；
+    // 一个 LaunchedEffect 即可同时处理多种边沿事件，无需多次 setter。
     LaunchedEffect(controller) {
-        controller.setOnError { _, _ -> hasError = true }
-        controller.setOnPrepared { hasError = false }
+        controller.events.collect { event ->
+            when (event) {
+                is GSYPlayerEvent.Error -> hasError = true
+                is GSYPlayerEvent.Prepared -> hasError = false
+                else -> Unit
+            }
+        }
     }
 
     Scaffold(

@@ -27,17 +27,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
 
@@ -73,27 +74,36 @@ private fun AutoPlayListScreen() {
 
     val listState = rememberLazyListState()
 
-    DisposableEffect(controller) {
-        controller.setOnComplete {
-            lastEvent = "#${playingIndex + 1} 播放完成"
-            if (!autoChainEnabled) return@setOnComplete
-            val next = playingIndex + 1
-            if (next in items.indices) {
-                val nextItem = items[next]
-                playingIndex = next
-                controller.setUp(nextItem.url, false, nextItem.title, autoPlay = true)
-                lastEvent = "自动切到 #${next + 1}"
-            } else {
-                lastEvent = "已到末尾，连播停止"
-                playingIndex = -1
+    // 用 rememberUpdatedState 把"会变化的外部状态"塞到一个稳定引用里，
+    // 这样长生命周期的 collect 协程闭包总能读到最新值，无需 restart。
+    val playingIndexState = rememberUpdatedState(playingIndex)
+    val autoChainEnabledState = rememberUpdatedState(autoChainEnabled)
+
+    // 通过响应式 events 流订阅 onAutoComplete / onPlayError，
+    // controller 重组期间该协程被取消，不会泄漏 listener。
+    LaunchedEffect(controller) {
+        controller.events.collect { event ->
+            when (event) {
+                is GSYPlayerEvent.AutoComplete -> {
+                    val current = playingIndexState.value
+                    lastEvent = "#${current + 1} 播放完成"
+                    if (!autoChainEnabledState.value) return@collect
+                    val next = current + 1
+                    if (next in items.indices) {
+                        val nextItem = items[next]
+                        playingIndex = next
+                        controller.setUp(nextItem.url, false, nextItem.title, autoPlay = true)
+                        lastEvent = "自动切到 #${next + 1}"
+                    } else {
+                        lastEvent = "已到末尾，连播停止"
+                        playingIndex = -1
+                    }
+                }
+                is GSYPlayerEvent.Error -> {
+                    lastEvent = "播放错误 what=${event.what} extra=${event.extra}"
+                }
+                else -> Unit
             }
-        }
-        controller.setOnError { what, extra ->
-            lastEvent = "播放错误 what=$what extra=$extra"
-        }
-        onDispose {
-            controller.setOnComplete(null)
-            controller.setOnError(null)
         }
     }
 
