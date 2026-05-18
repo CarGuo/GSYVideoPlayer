@@ -158,7 +158,7 @@ class GSYPlayerController internal constructor(
     }
 
     private fun syncFromHost(player: GSYComposeHostPlayer) {
-        val state = when (player.currentStatePublic) {
+        val state = when (player.currentState) {
             GSYVideoView.CURRENT_STATE_NORMAL -> GSYPlayState.Idle
             GSYVideoView.CURRENT_STATE_PREPAREING -> GSYPlayState.Preparing
             GSYVideoView.CURRENT_STATE_PLAYING -> GSYPlayState.Playing
@@ -190,7 +190,7 @@ class GSYPlayerController internal constructor(
 
     fun togglePlayPause() {
         val p = host ?: return
-        when (p.currentStatePublic) {
+        when (p.currentState) {
             GSYVideoView.CURRENT_STATE_PLAYING -> p.onVideoPause()
             GSYVideoView.CURRENT_STATE_PAUSE -> p.onVideoResume()
             GSYVideoView.CURRENT_STATE_AUTO_COMPLETE -> p.startPlayLogic()

@@ -12,20 +12,23 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
  * Compose 原生模式底层承载 Player：
  * 复用 StandardGSYVideoPlayer 的内核与渲染管线，但隐藏所有自带 UI，
  * 由 Compose 端自行绘制控制条与浮层。
+ *
+ * 包私有：仅在 com.shuyu.gsyvideoplayer.compose.native_ 内使用，
+ * 通过 {@link GSYPlayerController} / {@link GSYPlayerSurface} 暴露给上层。
  */
-public class GSYComposeHostPlayer extends StandardGSYVideoPlayer {
+class GSYComposeHostPlayer extends StandardGSYVideoPlayer {
 
-    public GSYComposeHostPlayer(Context context, Boolean fullFlag) {
+    GSYComposeHostPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
         hideSelfWidgets();
     }
 
-    public GSYComposeHostPlayer(Context context) {
+    GSYComposeHostPlayer(Context context) {
         super(context);
         hideSelfWidgets();
     }
 
-    public GSYComposeHostPlayer(Context context, AttributeSet attrs) {
+    GSYComposeHostPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         hideSelfWidgets();
     }
@@ -103,9 +106,4 @@ public class GSYComposeHostPlayer extends StandardGSYVideoPlayer {
 
     @Override
     protected void touchDoubleUp(MotionEvent e) { /* 不响应双击 */ }
-
-    /** 暴露给 Compose 层使用 */
-    public int getCurrentStatePublic() {
-        return mCurrentState;
-    }
 }

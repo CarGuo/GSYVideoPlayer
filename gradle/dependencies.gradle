@@ -6,7 +6,8 @@ ext {
     permissionsDispatcherVersion = "4.9.1"
     // Kotlin & Compose（仅 gsyVideoPlayer-compose 模块使用）
     kotlinVersion = "2.0.21"
-    composeCompilerVersion = "1.5.14"
+    // 注意：Compose Compiler 版本由 `org.jetbrains.kotlin.plugin.compose` 跟随 kotlinVersion 自动管理，
+    // 不再需要单独配置 composeCompilerVersion（Kotlin 2.0+ 之后 compose compiler 已并入 Kotlin 仓库）。
     composeBomVersion = "2024.06.00"
     activityComposeVersion = "1.9.0"
     lifecycleComposeVersion = "2.8.2"

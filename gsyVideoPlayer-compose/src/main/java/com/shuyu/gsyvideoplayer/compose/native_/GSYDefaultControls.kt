@@ -19,6 +19,9 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,6 +61,10 @@ fun GSYDefaultControls(
     modifier: Modifier = Modifier,
 ) {
     val snap by controller.snapshot
+
+    // 拖拽中本地预览：dragging != null 时 UI 跟随手指，但不真正 seek；
+    // 抬手（onValueChangeFinished）才一次性提交 seekTo，避免每帧 seek 卡顿。
+    var dragging by remember { mutableStateOf<Float?>(null) }
 
     Box(modifier) {
         // 中央按钮 / loading
@@ -107,15 +114,17 @@ fun GSYDefaultControls(
                     tint = Color.White,
                 )
             }
-            Text(formatTime(snap.currentPosition), color = Color.White)
+            Text(formatTime(displayPositionMs(snap.currentPosition, snap.duration, dragging)), color = Color.White)
             Box(modifier = Modifier.weight(1f).padding(horizontal = 8.dp)) {
                 val durationMs: Long = snap.duration.coerceAtLeast(0L)
-                val progress: Float = if (durationMs > 0L) {
+                val livedProgress: Float = if (durationMs > 0L) {
                     // 用 Double 计算，避免 Long 很大时 Float 精度丢失
                     (snap.currentPosition.toDouble() / durationMs.toDouble())
                         .toFloat()
                         .coerceIn(0f, 1f)
                 } else 0f
+                // 拖拽中以本地预览覆盖，松开后回到真实播放进度
+                val progress: Float = dragging ?: livedProgress
                 val bufferProgress: Float = (snap.bufferPercent / 100f).coerceIn(0f, 1f)
 
                 // 缓冲进度条放在 Slider 之下作为背景，避免遮挡 Slider 的拖拽手势
@@ -131,8 +140,14 @@ fun GSYDefaultControls(
                 Slider(
                     value = progress,
                     onValueChange = { v ->
-                        if (durationMs > 0L) {
-                            // Long * Double 防溢出；先 clamp 比例再换算
+                        // 拖拽期间：仅更新本地预览状态，不调用 seekTo
+                        dragging = v.coerceIn(0f, 1f)
+                    },
+                    onValueChangeFinished = {
+                        // 抬手：一次性提交 seek，并清除预览覆盖（让回写的真实进度接管）
+                        val v = dragging
+                        dragging = null
+                        if (v != null && durationMs > 0L) {
                             val ratio = v.coerceIn(0f, 1f).toDouble()
                             val target = (ratio * durationMs).toLong().coerceIn(0L, durationMs)
                             controller.seekTo(target)
@@ -154,4 +169,15 @@ private fun formatTime(ms: Long): String {
     val s = totalSec % 60
     return if (h > 0) String.format(Locale.US, "%d:%02d:%02d", h, m, s)
     else String.format(Locale.US, "%02d:%02d", m, s)
+}
+
+/**
+ * 拖拽中：以本地预览比例 dragging * duration 显示；非拖拽：使用真实 currentPosition。
+ */
+private fun displayPositionMs(currentPosition: Long, duration: Long, dragging: Float?): Long {
+    if (dragging == null) return currentPosition
+    val safeDuration = duration.coerceAtLeast(0L)
+    if (safeDuration <= 0L) return 0L
+    val ratio = dragging.coerceIn(0f, 1f).toDouble()
+    return (ratio * safeDuration).toLong().coerceIn(0L, safeDuration)
 }

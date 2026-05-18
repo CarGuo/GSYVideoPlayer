@@ -2,6 +2,7 @@ package com.shuyu.gsyvideoplayer.compose.native_
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -24,9 +25,14 @@ fun rememberGSYPlayerController(
     val context = LocalContext.current
     val controller = remember { GSYPlayerController(context) }
     if (url != null) {
-        remember(controller, url, cacheWithPlay, title, autoPlay) {
+        // 关键约束：不能在 remember 的 calculation lambda 里执行 controller.setUp(...)，
+        // 那是把"副作用"放在了"读 state"的位置——重组期会被多次调用，
+        // 也无法保证只在 key 变化时触发一次。改用 LaunchedEffect：
+        //   - key 变化时取消上一次协程并重新执行
+        //   - 离开 composition 时自动清理
+        //   - 在主线程的协程作用域内执行，避免 race
+        LaunchedEffect(controller, url, cacheWithPlay, title, autoPlay) {
             controller.setUp(url, cacheWithPlay, title, autoPlay)
-            url
         }
     }
     DisposableEffect(controller) {
