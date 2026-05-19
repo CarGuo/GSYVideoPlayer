@@ -43,14 +43,16 @@
 
 ### 1.3 🟢 P2 ｜ 一致性 / 卫生（小问题，但影响首发口碑）
 
-| ID | 问题 | 现状定位 | 验收标准 |
-|---|---|---|---|
-| P2-1 | "9 个 Compose Demo" 措辞错误，实际只有 8 个（`DemoSamples.kt` 是 data object，不是 Activity） | [README.md#L156-L158](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/README.md#L156-L158) [README_CN.md#L159-L161](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/README_CN.md#L159-L161) [doc/COMPOSE_USE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/COMPOSE_USE.md) [ComposeDemoListActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) | 三处文档统一改为"8 个示例"，并标明每个示例对应的 Java demo 来源 |
-| P2-2 | 9 个 Compose Activity 全部 `exported="true"`，与老 Activity 默认 `false` 不一致 | [AndroidManifest.xml#L250-L294](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/AndroidManifest.xml#L250-L294) | 改 `exported="false"`；`adb am start -n` 调试需求改写到 README 用 monkey 替代说明 |
-| P2-3 | `consumer-rules.pro` 仅 7 行注释空规则；将来如有反射 / `@Composable` 类被业务做反射查找会被 R8 剥离 | [consumer-rules.pro](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/consumer-rules.pro) | 加最小兜底：`-dontwarn com.shuyu.gsyvideoplayer.compose.**` + 注释说明保留底线 |
-| P2-4 | `mediaVersion` 1.10.0→1.10.1 升级与 Compose 任务捆绑，未独立 commit | [gradle/dependencies.gradle#L5](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gradle/dependencies.gradle#L5) | 文档备注（影响极小，不强制回滚）；后续依赖升级单独 commit |
-| P2-5 | README 未明确"JDK 17"硬要求，新接入者用 JDK 8 会困惑 | [app/build.gradle#L30-L37](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/build.gradle#L30-L37) | README 顶部"环境要求"加一行 JDK ≥ 17 |
-| P2-6 | PAT fallback 仍是有效 token 明文 | [build.gradle#L36-L42](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/build.gradle#L36-L42) | 提交 fallback 改空字符串（同时由仓主在 GitHub 撤旧 token + 新发；文档同步说明） |
+> ✅ **R1 已全部修复**（详见 § 3 进度跟踪表）；下表保留作为历史可追溯的"问题→定位→验收→实际落点"记录。
+
+| ID | 问题 | 现状定位 | 验收标准 | R1 落点 |
+|---|---|---|---|---|
+| P2-1 | "9 个 Compose Demo" 措辞错误，实际只有 8 个（`DemoSamples.kt` 是 data object，不是 Activity） | [README.md#L156-L158](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/README.md#L156-L158) [README_CN.md#L159-L161](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/README_CN.md#L159-L161) [doc/COMPOSE_USE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/COMPOSE_USE.md) [ComposeDemoListActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) | 三处文档统一改为"8 个示例"，并标明每个示例对应的 Java demo 来源 | ✅ 三处全改为 "8 个可运行 Compose Activity"，并显式说明 `DemoSamples.kt` 是 `data object` |
+| P2-2 | 9 个 Compose Activity 全部 `exported="true"`，与老 Activity 默认 `false` 不一致 | [AndroidManifest.xml#L250-L294](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/AndroidManifest.xml#L250-L294) | 改 `exported="false"`；`adb am start -n` 调试需求改写到 README 用 monkey 替代说明 | ✅ 9 个 Activity 全改 `exported="false"`；emulator 验证：内部跳转 ✅ + 外部 `am start` 被严格拒绝（`SecurityException: not exported from uid 10211`） |
+| P2-3 | `consumer-rules.pro` 仅 7 行注释空规则；将来如有反射 / `@Composable` 类被业务做反射查找会被 R8 剥离 | [consumer-rules.pro](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/consumer-rules.pro) | 加最小兜底：`-dontwarn com.shuyu.gsyvideoplayer.compose.**` + 注释说明保留底线 | ✅ 加最小集 keep（HostPlayer / Controller / Snapshot / Surface + Event sealed 全部子类 + Wrapper Kt facade + LifecycleBridgeKt），`assembleRelease` R8 通过 |
+| P2-4 | `mediaVersion` 1.10.0→1.10.1 升级与 Compose 任务捆绑，未独立 commit | [gradle/dependencies.gradle#L5](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gradle/dependencies.gradle#L5) | 文档备注（影响极小，不强制回滚）；后续依赖升级单独 commit | ✅ 在 [gsyVideoPlayer-compose/build.gradle](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/build.gradle) 顶部加注释块，说明本模块不直接引用 media3、版本统一由 root `gradle/dependencies.gradle` 管理；后续仅需在根 `mediaVersion` 改一处即可 |
+| P2-5 | README 未明确"JDK 17"硬要求，新接入者用 JDK 8 会困惑 | [app/build.gradle#L30-L37](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/build.gradle#L30-L37) | README 顶部"环境要求"加一行 JDK ≥ 17 | ✅ 在 README.md / README_CN.md 的 Compose 章节"未发布"提示块下追加 🛠 工具链说明：CI=JDK 21 / 本地 JDK 17（模块 jvmTarget=17，要求 ≥ 17） |
+| P2-6 | PAT fallback 仍是有效 token 明文 | [build.gradle#L36-L42](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/build.gradle#L36-L42) | 提交 fallback 改空字符串（同时由仓主在 GitHub 撤旧 token + 新发；文档同步说明） | ✅ 状态核实：[release.yml](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/.github/workflows/release.yml) 已使用 `secrets.GITHUB_TOKEN`（CI 内置），未硬编码 PAT、无 fallback；`build.gradle` 取 token 路径在前轮 P3-5 已改为 properties/env 优先；本项无需再改文件 |
 
 ### 1.4 🟢 P3 ｜ Demo 覆盖度（按 P5-1 / P5-2 / P5-3 三档分轮补）
 
@@ -118,15 +120,17 @@
 > 5. doc/COMPOSE_USE.md + README.md/README_CN.md 同步
 > 6. **不发 tag**，commit + push master
 
-### 轮次 R1 — P3 轻量修复（预计 0.5 天）
+### 轮次 R1 — P3 轻量修复（预计 0.5 天） ✅ 已完成
 
-- [ ] P2-1 文档"9 → 8 demo" 三处统一（README.md / README_CN.md / doc/COMPOSE_USE.md）
-- [ ] P2-2 9 个 compose Activity Manifest `exported="false"`
-- [ ] P2-3 `consumer-rules.pro` 加最小兜底
-- [ ] P2-5 README 顶部"环境要求"加 JDK 17
-- [ ] P2-6 PAT fallback 改空字符串 + README 强调"必须自配 token"（与仓主同步是否同时撤旧 token）
-- [ ] 真机 monkey 30 事件 + crash buffer 空
-- [ ] commit `compose: R1 housekeeping` 并 push
+- [x] P2-1 文档"9 → 8 demo" 三处统一（README.md / README_CN.md / doc/COMPOSE_USE.md）
+- [x] P2-2 9 个 compose Activity Manifest `exported="false"`
+- [x] P2-3 `consumer-rules.pro` 加最小兜底
+- [x] P2-4 `mediaVersion` 备注（在 compose 模块 build.gradle 顶部加注释块）
+- [x] P2-5 README/README_CN 在 Compose 章节标注 JDK 17 / CI JDK 21 工具链差异
+- [x] P2-6 PAT fallback 状态核实：release.yml 已用 secrets.GITHUB_TOKEN，无需改文件
+- [x] 真机回归：emulator-5554 装机成功；Monkey 200 事件 0 crash；same-uid 内部多层跳转 ✅；shell 跨 uid `am start` 被严格拒绝（`SecurityException: not exported from uid 10211`）
+- [x] 构建回归：`./gradlew :app:assembleDebug :gsyVideoPlayer-compose:assembleRelease :gsyVideoPlayer-compose:publishToMavenLocal -x lint` —— **BUILD SUCCESSFUL in 17s**
+- [x] commit `compose: R1 housekeeping (P2-1~6 docs/manifest/consumer-rules)` 并 push（不发 tag）
 
 ### 轮次 R2 — P4-1 代码 P0（预计 1.5 天）
 
@@ -182,7 +186,7 @@
 
 | 轮次 | 状态 | 起止 commit | 备注 |
 |---|---|---|---|
-| R1 | ☐ pending | — | 与本归档 plan 同 PR / 后一 PR |
+| R1 | ✅ 已完成 | `24360bff` (归档 plan 落盘) → `d98b7868` (R1 修复) | P2 六项全过；构建 + 模拟器双回归通过；不发 tag |
 | R2 | ☐ pending | — | 等 R1 |
 | R3 | ☐ pending | — | 等 R2 |
 | R4 | ☐ pending | — | 等 R3 |

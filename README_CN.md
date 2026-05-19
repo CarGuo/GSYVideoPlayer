@@ -141,6 +141,8 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 #### D、Jetpack Compose 支持（可选，未发布）
 
 > ⚠ **`gsyvideoplayer-compose` 模块当前尚未发布**。下文中的 `13.0.0` 仅为预留坐标 —— 仅当你自己 `./gradlew :gsyVideoPlayer-compose:publishToMavenLocal` 之后才能在本机解析；正式接入请使用 `implementation project(":gsyVideoPlayer-compose")` 直接引用源码模块。第一个对外发布版本以官方 release tag 为准。
+>
+> 🛠 **工具链说明：** 该模块在 **CI 上用 JDK 21 验证**（`.github/workflows/*.yml` 中 `actions/setup-java` 的 `java-version: 21`），**本地用 JDK 17 验证**（模块自身在 [gsyVideoPlayer-compose/build.gradle](gsyVideoPlayer-compose/build.gradle) 把 `sourceCompatibility / targetCompatibility / jvmTarget` 钉在 17）。两者都可以，只要本机 JDK **≥ 17** 就能跑通 Kotlin 2.0.21 + AGP 8.6.1。
 
 新增 `gsyvideoplayer-compose` 模块，在保留全部内核与 UI 能力的前提下，提供 Compose 接入：
 
@@ -156,7 +158,7 @@ implementation project(':gsyVideoPlayer-compose')
 // compose-bom 由模块 api 透出，使用方仍按自身工程版本管理 androidx.compose.* 即可
 ```
 
-详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 9 个可运行示例（基础 / 切流 / 多窗口 / 列表 / 自动连播 / 列表内全屏 / 详情切换 / 全功能 Native）。当前能力缺口与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md)。
+详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 **8 个可运行的 Compose Activity**（基础 / 切流 / 多窗口 / 列表 / 自动连播 / 列表内全屏 / 详情切换 / 全功能 Native）；`DemoSamples.kt` 是共享的 `data object` 测试 URL 集合，不是可运行的 Activity。当前能力缺口与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md)。
 
 ### 2、Github Package 依赖方式(推荐)
 

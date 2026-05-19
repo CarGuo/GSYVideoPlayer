@@ -140,6 +140,8 @@ The so introduced by C supports mpeg encoding and other supplementary protocols,
 #### D. Jetpack Compose Support (Optional, Unreleased)
 
 > ⚠ **The `gsyvideoplayer-compose` module is NOT yet published.** The `13.0.0` coordinate below is reserved — it can only be resolved via `./gradlew :gsyVideoPlayer-compose:publishToMavenLocal`, or by depending on the source module directly with `implementation project(":gsyVideoPlayer-compose")`. Wait for the official release tag for the first public artifact.
+>
+> 🛠 **Toolchain note:** the Compose module is verified on **JDK 21 in CI** (`.github/workflows/*.yml` — `actions/setup-java` `java-version: 21`) and **JDK 17 locally** (the module pins `sourceCompatibility / targetCompatibility / jvmTarget = 17` in [gsyVideoPlayer-compose/build.gradle](gsyVideoPlayer-compose/build.gradle)). Both are fine; just make sure your local JDK is **≥ 17** so Kotlin 2.0.21 + AGP 8.6.1 can build.
 
 The new `gsyvideoplayer-compose` module exposes Compose entries on top of the existing kernels and UI without touching any legacy code:
 
@@ -155,7 +157,7 @@ implementation project(':gsyVideoPlayer-compose')
 // compose-bom is api-exposed from the module; consumers still manage androidx.compose.* per their own project setup.
 ```
 
-See [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md). The sample app provides a `Compose Demo` entry with 9 runnable examples (Basic Wrapper, Switch URL, Multi-Window, List, Auto-Play List, List with Fullscreen, Detail Native, Full-Feature Native). Outstanding gaps and the rolling roadmap are tracked in [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md).
+See [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md). The sample app provides a `Compose Demo` entry with **8 runnable Compose Activities** (Basic Wrapper, Switch URL, Multi-Window, List, Auto-Play List, List with Fullscreen, Detail Native, Full-Feature Native) — `DemoSamples.kt` is a shared `data object` of test URLs, not a runnable Activity. Outstanding gaps and the rolling roadmap are tracked in [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md).
 
 ### 2. Github Package Dependency Method (Recommended)
 

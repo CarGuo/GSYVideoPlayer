@@ -232,7 +232,9 @@ CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
 
 ## 六、Demo
 
-App 模块下入口 `Compose Demo`（[ComposeDemoListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt)）汇总了 9 个可运行示例：
+App 模块下入口 `Compose Demo`（[ComposeDemoListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt)）汇总了 **8 个可运行的 Compose Activity**，外加 1 份共享测试数据：
+
+> 表中第 9 行的 `DemoSamples.kt` 是 `data object`（与 Java/XML Demo 共用同一组测试 URL），并非可运行 Activity，仅为方便溯源附在表尾。
 
 | # | 名称 | 入口 | 说明 |
 |---|---|---|---|

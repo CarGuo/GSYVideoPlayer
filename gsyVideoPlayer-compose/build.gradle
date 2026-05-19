@@ -1,3 +1,16 @@
+// ---------------------------------------------------------------------------
+// gsyvideoplayer-compose
+//
+// 注意：本模块本身不直接依赖 androidx.media3.*，因此【没有】出现 ${mediaVersion}。
+// media3 的版本统一由根工程 gradle/dependencies.gradle 中的
+//     mediaVersion = "1.x.y"
+// 控制，并通过 :gsyVideoPlayer-java -> :gsyVideoPlayer-exo_player2 链路按需向下游
+// 传递。这里通过 `api project(":gsyVideoPlayer-java")` 间接消费 GSY 内核，避免
+// compose 模块自行钉死 media3 版本，保持与父工程版本对齐。
+//
+// 升级流程：只需在 gradle/dependencies.gradle 改 mediaVersion 即可，本文件无须改动。
+// ---------------------------------------------------------------------------
+
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "org.jetbrains.kotlin.plugin.compose"
 
