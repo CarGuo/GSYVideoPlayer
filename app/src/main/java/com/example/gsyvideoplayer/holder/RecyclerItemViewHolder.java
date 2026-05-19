@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 
 
@@ -55,7 +56,7 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
                 if (position % 2 == 0) {
                     url = "https://res.exexm.com/cw_145225549855002";
                 } else {
-                    url = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+                    url = DemoVideoUrls.HLS_BIPBOP_GEAR3;
                 }
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
 

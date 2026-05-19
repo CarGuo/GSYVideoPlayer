@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gsyvideoplayer.R;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -38,7 +39,7 @@ public class SimpleDetailActivityMode2 extends AppCompatActivity {
 
         detailPlayer = (StandardGSYVideoPlayer) findViewById(R.id.detail_player);
 
-        String url = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+        String url = DemoVideoUrls.HLS_MUX;
 
         //增加封面
         ImageView imageView = new ImageView(this);

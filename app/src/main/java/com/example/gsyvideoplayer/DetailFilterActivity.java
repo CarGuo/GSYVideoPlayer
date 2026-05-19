@@ -28,6 +28,7 @@ import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender3;
 import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender4;
 import com.example.gsyvideoplayer.effect.PixelationEffect;
 import com.example.gsyvideoplayer.utils.CommonUtil;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
@@ -110,8 +111,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
 
     private float deep = 0.8f;
 
-    private String url = "https://www.w3schools.com/html/mov_bbb.mp4";
-    //private String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+    private String url = DemoVideoUrls.MP4_BBB;
 
     private Timer timer = new Timer();
 

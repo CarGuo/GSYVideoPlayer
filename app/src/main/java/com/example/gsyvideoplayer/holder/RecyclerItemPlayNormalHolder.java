@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -44,10 +45,10 @@ public class RecyclerItemPlayNormalHolder extends RecyclerItemBaseHolder {
         String url;
         String title;
         if (position % 2 == 0) {
-            url = "https://www.w3schools.com/html/mov_bbb.mp4";
+            url = DemoVideoUrls.MP4_BBB;
             title = "这是title";
         } else {
-            url = "https://www.w3schools.com/html/mov_bbb.mp4";
+            url = DemoVideoUrls.MP4_BBB;
             title = "哦？Title？";
         }
 

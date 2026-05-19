@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailSubtitlePlayerBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -202,7 +203,7 @@ public class SubtitleDetailPlayer extends AppCompatActivity {
     }
 
     private String getUrl() {
-        return "https://www.w3schools.com/html/mov_bbb.mp4";
+        return DemoVideoUrls.MP4_BBB;
     }
 
     private List<GSYSubtitleSource> createSubtitleSources() {
@@ -235,6 +236,6 @@ public class SubtitleDetailPlayer extends AppCompatActivity {
     }
 
     private String getNetworkSrtSubtitleUrl() {
-        return "http://img.cdn.guoshuyu.cn/subtitle2.srt";
+        return DemoVideoUrls.SUBTITLE_SRT;
     }
 }

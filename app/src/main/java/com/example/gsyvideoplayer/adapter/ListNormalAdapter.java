@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -83,7 +84,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
         //final String url = "https://res.exexm.com/cw_145225549855002";
         final String urlH = "https://test-haichi.oss-cn-hangzhou.aliyuncs.com/goods.core.base/VIDEO/4007067452261301700161221090_VIDEO?version=0";
-        final String urlV = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
+        final String urlV = DemoVideoUrls.HLS_MUX;
         final String url = (position % 2 == 0) ? urlH : urlV;
         //final String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
 

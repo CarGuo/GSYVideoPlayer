@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.gsyvideoplayer.R
+import com.example.gsyvideoplayer.utils.DemoVideoUrls
 import com.shuyu.gsyvideoplayer.compose.native_.GSYDefaultControls
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
@@ -84,7 +85,7 @@ private fun SubtitleScreen() {
                 .setLabel("VTT 本地")
                 .setLanguage("en")
                 .build(),
-            GSYSubtitleSource.Builder("http://img.cdn.guoshuyu.cn/subtitle2.srt")
+            GSYSubtitleSource.Builder(DemoVideoUrls.SUBTITLE_SRT)
                 .setId("network-srt")
                 .setLabel("SRT 网络")
                 .setLanguage("zh")

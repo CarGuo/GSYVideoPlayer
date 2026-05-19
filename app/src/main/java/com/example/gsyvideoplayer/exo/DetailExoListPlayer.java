@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.databinding.ActivityDeatilExoListPlayerBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -49,9 +50,9 @@ public class DetailExoListPlayer extends GSYBaseActivityDetail<GSYExo2PlayerView
 
         List<GSYVideoModel> urls = new ArrayList<>();
 
-        urls.add(new GSYVideoModel("https://flipfit-cdn.akamaized.net/flip_hls/6656423247ffe600199e8363-15125d/video_h1.m3u8", "标题1"));
-        urls.add(new GSYVideoModel("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", "标题3"));
-        urls.add(new GSYVideoModel("https://www.w3schools.com/html/mov_bbb.mp4", "标题2"));
+        urls.add(new GSYVideoModel(DemoVideoUrls.HLS_MUX, "标题1"));
+        urls.add(new GSYVideoModel(DemoVideoUrls.HLS_MUX, "标题3"));
+        urls.add(new GSYVideoModel(DemoVideoUrls.MP4_BBB, "标题2"));
         //binding.detailPlayer.setUp(urls, 1);
         binding.detailPlayer.setUp(urls, 0);
 

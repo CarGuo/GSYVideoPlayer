@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -68,8 +69,8 @@ public class SimpleListVideoModeAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final String urlH = "https://www.w3schools.com/html/mov_bbb.mp4";
-        final String urlV = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+        final String urlH = DemoVideoUrls.MP4_BBB;
+        final String urlV = DemoVideoUrls.HLS_MUX;
         final String url = (position % 2 == 0) ? urlH : urlV;
 
         if (position % 2 == 0) {

@@ -5,13 +5,14 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.databinding.ActivityKeepLastFrameDemoBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.KeepLastFrameVideo;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 
 public class KeepLastFrameDemoActivity extends GSYBaseActivityDetail<KeepLastFrameVideo> {
 
-    private static final String DEMO_VIDEO_URL = "https://www.w3schools.com/html/mov_bbb.mp4";
+    private static final String DEMO_VIDEO_URL = DemoVideoUrls.MP4_BBB;
 
     private ActivityKeepLastFrameDemoBinding binding;
 

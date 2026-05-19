@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.example.gsyvideoplayer.databinding.ActivityPlayBinding;
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
@@ -85,11 +86,11 @@ public class PlayActivity extends AppCompatActivity {
         //videoPlayer.setUp(url, true, new File(FileUtils.getPath()), "");
 
         //借用了jjdxm_ijkplayer的URL
-        String source1 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear1/prog_index.m3u8";
+        String source1 = DemoVideoUrls.HLS_BIPBOP_GEAR1;
         String name = "普通";
         SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
 
-        String source2 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+        String source2 = DemoVideoUrls.HLS_BIPBOP_GEAR3;
         String name2 = "清晰";
         SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
 

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.activity.OnBackPressedCallback;
 
 import com.example.gsyvideoplayer.R;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -31,7 +32,7 @@ public class SimplePlayer extends AppCompatActivity {
     private void init() {
         videoPlayer =  (StandardGSYVideoPlayer)findViewById(R.id.video_player);
 
-        String source1 = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+        String source1 = DemoVideoUrls.HLS_MUX;
         videoPlayer.setUp(source1, true, "测试视频");
 
         //增加封面

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
@@ -92,7 +93,7 @@ public class ListVideoAdapter extends BaseAdapter {
                 //listVideoUtil.setLoop(true);
                 smallVideoHelper.setPlayPositionAndTag(position, TAG);
                 //final String url = "https://res.exexm.com/cw_145225549855002";
-                final String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                final String url = DemoVideoUrls.MP4_BBB;
                 gsySmallVideoHelperBuilder.setVideoTitle("title " + position)
                         .setUrl(url);
                 smallVideoHelper.startPlay();

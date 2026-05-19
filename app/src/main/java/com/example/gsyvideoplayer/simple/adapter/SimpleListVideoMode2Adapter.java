@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
@@ -87,7 +88,7 @@ public class SimpleListVideoMode2Adapter extends BaseAdapter {
             public void onClick(View v) {
                 notifyDataSetChanged();
                 smallVideoHelper.setPlayPositionAndTag(position, TAG);
-                final String url = "https://www.w3schools.com/html/mov_bbb.mp4";
+                final String url = DemoVideoUrls.MP4_BBB;
                 gsySmallVideoHelperBuilder.setVideoTitle("title " + position)
                         .setUrl(url);
                 smallVideoHelper.startPlay();

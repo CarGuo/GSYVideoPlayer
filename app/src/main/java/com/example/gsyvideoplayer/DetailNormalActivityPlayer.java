@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.exoplayer.SeekParameters;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailPlayerBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -218,6 +219,6 @@ public class DetailNormalActivityPlayer extends AppCompatActivity {
 
 
     private String getUrl() {
-        return "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        return DemoVideoUrls.MP4_BBB;
     }
 }

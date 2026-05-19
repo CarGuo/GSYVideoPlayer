@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.databinding.ActivityExoAdaptiveTrackBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -29,10 +30,8 @@ import java.util.List;
  */
 public class ExoAdaptiveTrackActivity extends GSYBaseActivityDetail<GSYExo2PlayerView> {
 
-    private static final String HLS_MASTER_URL =
-        "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
-    private static final String DASH_MPD_URL =
-        "https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd";
+    private static final String HLS_MASTER_URL = DemoVideoUrls.HLS_MUX;
+    private static final String DASH_MPD_URL = DemoVideoUrls.DASH_ENVIVIO;
 
     private ActivityExoAdaptiveTrackBinding binding;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gsyvideoplayer.databinding.ActivityDanmakuLayoutBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.DanmakuVideoPlayer;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -57,7 +58,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         binding.danmakuPlayer.setEnlargeImageRes(R.drawable.custom_enlarge);
 
         //String url = "https://res.exexm.com/cw_145225549855002";
-        String url = "https://www.w3schools.com/html/mov_bbb.mp4";
+        String url = DemoVideoUrls.MP4_BBB;
         //String url = "https://res.exexm.com/cw_145225549855002";
         binding.danmakuPlayer.setUp(url, true, null, "测试视频");
 

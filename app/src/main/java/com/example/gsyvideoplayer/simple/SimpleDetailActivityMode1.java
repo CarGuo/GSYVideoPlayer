@@ -20,7 +20,6 @@ public class SimpleDetailActivityMode1 extends GSYBaseActivityDetail<StandardGSY
 
     StandardGSYVideoPlayer detailPlayer;
 
-    //    private String url = "http://7xjmzj.com1.z0.glb.clouddn.com/20171026175005_JObCxCE2.mp4";
     private String url = "http://alvideo.ippzone.com/zyvd/98/90/b753-55fe-11e9-b0d8-00163e0c0248";
 
     @Override

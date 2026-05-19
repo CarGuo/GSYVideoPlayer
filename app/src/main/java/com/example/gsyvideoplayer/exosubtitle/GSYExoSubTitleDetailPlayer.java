@@ -29,6 +29,7 @@ import androidx.media3.exoplayer.trackselection.TrackSelector;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.databinding.ActivityDetailExoSubtitlePlayerBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -421,7 +422,7 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
 
         ///TODO 注意，用这个 M3U8 的话，内部会有内嵌字幕 embedded caption
         ///TODO 所以就算你加了外挂字幕，也需要再切换一次才能看到外部字幕
-        return "https://www.w3schools.com/html/mov_bbb.mp4";
+        return DemoVideoUrls.MP4_BBB;
     }
 
     private List<GSYSubtitleSource> createSubtitleSources() {
@@ -454,7 +455,7 @@ public class GSYExoSubTitleDetailPlayer extends AppCompatActivity {
     }
 
     private String getNetworkSrtSubtitleUrl() {
-        return "http://img.cdn.guoshuyu.cn/subtitle2.srt";
+        return DemoVideoUrls.SUBTITLE_SRT;
     }
 
     private GSYSubtitleStyle createSubtitleStyle(int sizeSp) {

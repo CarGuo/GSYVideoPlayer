@@ -12,6 +12,7 @@ import androidx.activity.OnBackPressedCallback;
 
 import com.example.gsyvideoplayer.databinding.ActivityPlayEmptyControlBinding;
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
@@ -67,7 +68,7 @@ public class PlayEmptyControlActivity extends AppCompatActivity {
     }
 
     private void init() {
-        String url = "https://res.exexm.com/cw_145225549855002";
+        String url = DemoVideoUrls.SAMPLE_GSY;
 
         binding.videoPlayer.setUp(url, true, "");
 

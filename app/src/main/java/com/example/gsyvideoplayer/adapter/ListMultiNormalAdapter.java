@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.MultiSampleVideo;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -68,7 +69,7 @@ public class ListMultiNormalAdapter extends BaseAdapter {
         }
 
 
-        final String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        final String url = DemoVideoUrls.MP4_BBB;
 
         //多个播放时必须在setUpLazy、setUp和getGSYVideoManager()等前面设置
         holder.gsyVideoPlayer.setPlayTag(TAG);

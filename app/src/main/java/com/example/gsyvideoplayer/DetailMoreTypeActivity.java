@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.databinding.ActivityDetailMoreTypeBinding;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
@@ -53,12 +54,12 @@ public class DetailMoreTypeActivity extends AppCompatActivity {
         setContentView(rootView);
 
 
-        String source1 = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+        String source1 = DemoVideoUrls.HLS_MUX;
         //String source1 = "https://res.exexm.com/cw_145225549855002";
         String name = "普通";
         SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
 
-        String source2 = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+        String source2 = DemoVideoUrls.HLS_MUX;
         String name2 = "清晰";
         SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
 

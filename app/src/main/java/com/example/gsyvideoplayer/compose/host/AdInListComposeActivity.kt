@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.gsyvideoplayer.utils.DemoVideoUrls
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.compose.native_.GSYDefaultControls
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
@@ -51,8 +52,8 @@ class AdInListComposeActivity : ComponentActivity() {
     }
 }
 
-private const val AD_URL = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-private const val FEATURE_URL = "https://www.w3schools.com/html/mov_bbb.mp4"
+private const val AD_URL = DemoVideoUrls.HLS_MUX
+private const val FEATURE_URL = DemoVideoUrls.MP4_BBB
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

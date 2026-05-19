@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYBaseADActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
@@ -21,11 +22,11 @@ public class DetailADPlayer2 extends GSYBaseADActivityDetail<NormalGSYVideoPlaye
 
     private GSYADVideoPlayer adPlayer;
 
-    private String urlAd = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+    private String urlAd = DemoVideoUrls.HLS_BIPBOP_GEAR3;
 
-    private String urlAd2 = "http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
+    private String urlAd2 = DemoVideoUrls.HLS_BIPBOP_GEAR3;
 
-    private String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    private String url = DemoVideoUrls.MP4_BBB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

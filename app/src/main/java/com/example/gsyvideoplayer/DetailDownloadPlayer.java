@@ -13,6 +13,7 @@ import androidx.media3.exoplayer.SeekParameters;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.example.gsyvideoplayer.databinding.ActivityDetailDownloadPlayerBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.utils.MemoryCallBack;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -250,7 +251,7 @@ public class DetailDownloadPlayer extends AppCompatActivity {
 
     private String getUrl() {
 
-        String url = "https://www.w3schools.com/html/mov_bbb.mp4";
+        String url = DemoVideoUrls.MP4_BBB;
 
         return url;
     }

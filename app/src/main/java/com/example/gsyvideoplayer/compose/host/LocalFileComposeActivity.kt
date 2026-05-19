@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.gsyvideoplayer.R
+import com.example.gsyvideoplayer.utils.DemoVideoUrls
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.compose.native_.GSYDefaultControls
@@ -64,7 +65,7 @@ private fun LocalFileScreen() {
     val pkg = ctx.packageName
     val presets = remember(pkg) {
         listOf(
-            UrlPreset("HTTP 远程", "https://www.w3schools.com/html/mov_bbb.mp4", false),
+            UrlPreset("HTTP 远程", DemoVideoUrls.MP4_BBB, false),
             UrlPreset("本地 raw · test.mp4", "android.resource://$pkg/${R.raw.test}", true),
             UrlPreset("本地 raw · test4.mp4", "android.resource://$pkg/${R.raw.test4}", true),
         )

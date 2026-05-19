@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.gsyvideoplayer.utils.DemoVideoUrls
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.compose.native_.GSYDefaultControls
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
@@ -61,8 +62,8 @@ private data class ExoSource(
 )
 
 private val EXO_SOURCES = listOf(
-    ExoSource("MP4 · big_buck_bunny", "https://www.w3schools.com/html/mov_bbb.mp4"),
-    ExoSource("HLS · m3u8 测试流", "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"),
+    ExoSource("MP4 · big_buck_bunny", DemoVideoUrls.MP4_BBB),
+    ExoSource("HLS · m3u8 测试流", DemoVideoUrls.HLS_MUX),
     ExoSource("MP4 · GSY 默认样片", DemoSamples.SAMPLE_URL),
     ExoSource("MP4 · IMG_0382", DemoSamples.SAMPLE_URL_2),
 )

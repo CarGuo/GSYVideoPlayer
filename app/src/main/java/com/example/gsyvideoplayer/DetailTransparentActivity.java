@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.databinding.ActivityDetailControlBinding;
 import com.example.gsyvideoplayer.databinding.ActivityDetailTransparentControlBinding;
 import com.example.gsyvideoplayer.utils.CommonUtil;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.utils.JumpUtils;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -44,9 +45,6 @@ public class DetailTransparentActivity extends GSYBaseActivityDetail<StandardGSY
 
     //private final String url = "https://res.exexm.com/cw_145225549855002";
     private final String url = "https://res.exexm.com/cw_145225549855002";
-    //private String url = "http://livecdn1.news.cn/Live_MajorEvent01Phone/manifest.m3u8";
-    //private String url = "https://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/8908d124aa839d0d3fa9593855ef5957.m3u8";
-    //private String url2 = "http://ruigongkao.oss-cn-shenzhen.aliyuncs.com/transcode/video/source/video/3aca1a0db8db9418dcbc765848c8903e.m3u8";
 
 
     private GifCreateHelper mGifCreateHelper;

@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.example.gsyvideoplayer.listener.AppBarStateChangeListener;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -54,7 +55,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         initView();
 
-        String url = "https://www.w3schools.com/html/mov_bbb.mp4";
+        String url = DemoVideoUrls.MP4_BBB;
 
         //增加封面
         ImageView imageView = new ImageView(this);

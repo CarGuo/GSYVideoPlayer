@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.FloatingVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
@@ -42,7 +43,7 @@ public class FloatPlayerView extends FrameLayout {
 
         addView(videoPlayer, layoutParams);
 
-        String source1 = "https://www.w3schools.com/html/mov_bbb.mp4";
+        String source1 = DemoVideoUrls.MP4_BBB;
 
         videoPlayer.setUp(source1, true, "测试视频");
 

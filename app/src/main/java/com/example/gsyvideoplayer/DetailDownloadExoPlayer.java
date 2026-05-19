@@ -16,6 +16,7 @@ import androidx.media3.exoplayer.offline.Download;
 import androidx.media3.exoplayer.offline.DownloadManager;
 
 import com.example.gsyvideoplayer.databinding.ActivityDetailDownloadPlayerBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.cache.CacheFactory;
@@ -57,7 +58,7 @@ public class DetailDownloadExoPlayer extends AppCompatActivity {
     private Map<String, String> header = new HashMap<>();
 
 
-    private String url = "https://www.w3schools.com/html/mov_bbb.mp4";
+    private String url = DemoVideoUrls.MP4_BBB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

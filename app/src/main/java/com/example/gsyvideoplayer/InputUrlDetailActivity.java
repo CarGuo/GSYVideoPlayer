@@ -16,6 +16,7 @@ import androidx.core.widget.NestedScrollView;
 import com.bumptech.glide.Glide;
 import com.example.gsyvideoplayer.databinding.ActivityEmptyBinding;
 import com.example.gsyvideoplayer.databinding.ActivityInputUrlDetailBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.example.gsyvideoplayer.view.CustomInputDialog;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -48,7 +49,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
         setContentView(rootView);
 
 
-        url = "https://res.exexm.com/cw_145225549855002";
+        url = DemoVideoUrls.SAMPLE_GSY;
 
         //增加封面
         ImageView imageView = new ImageView(this);

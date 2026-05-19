@@ -14,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import com.example.gsyvideoplayer.databinding.ActivityListVideoBinding;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
 import com.shuyu.gsyvideoplayer.GSYVideoADManager;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -162,8 +163,8 @@ public class ListADVideoActivity extends AppCompatActivity {
             }
 
 
-            final String url = "https://www.w3schools.com/html/mov_bbb.mp4";
-            final String urlAD = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+            final String url = DemoVideoUrls.MP4_BBB;
+            final String urlAD = DemoVideoUrls.HLS_MUX;
 
             //多个播放时必须在setUpLazy、setUp和getGSYVideoManager()等前面设置
             holder.gsyVideoPlayer.setPlayTag(TAG);

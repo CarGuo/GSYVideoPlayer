@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.gsyvideoplayer.utils.DemoVideoUrls
 import com.example.gsyvideoplayer.video.MultiSampleVideo
 import com.example.gsyvideoplayer.video.manager.CustomManager
 
@@ -52,7 +53,7 @@ private data class ParallelEntry(
 )
 
 private val PARALLEL_ENTRIES: List<ParallelEntry> = listOf(
-    ParallelEntry("窗口 #1 · big_buck_bunny", "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", 0),
+    ParallelEntry("窗口 #1 · big_buck_bunny", DemoVideoUrls.MP4_BBB, 0),
     ParallelEntry("窗口 #2 · GSY 默认样片", DemoSamples.SAMPLE_URL, 1),
     ParallelEntry("窗口 #3 · IMG_0382", DemoSamples.SAMPLE_URL_2, 2),
 )

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.databinding.ActivityWebDetailBinding;
+import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -25,8 +26,7 @@ import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 
 public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
-    private static final String PREVIEW_VTT_URL =
-        "https://stdlwcdn.lwcdn.com/i/8fdb4e20-8ebb-4590-8844-dae39680d837/160p.vtt";
+    private static final String PREVIEW_VTT_URL = DemoVideoUrls.SUBTITLE_VTT;
 
     private boolean isSmall;
 
@@ -118,8 +118,7 @@ public class WebDetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPla
 
     @Override
     public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
-        String url = "https://www.w3schools.com/html/mov_bbb.mp4";
-        //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
+        String url = DemoVideoUrls.MP4_BBB;
         //增加封面。内置封面可参考SampleCoverVideo
         ImageView imageView = new ImageView(this);
         loadCover(imageView, url);

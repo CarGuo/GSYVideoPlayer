@@ -1,9 +1,10 @@
 package com.example.gsyvideoplayer.compose.host
 
+import com.example.gsyvideoplayer.utils.DemoVideoUrls
+
 internal object DemoSamples {
-    const val SAMPLE_URL = "https://res.exexm.com/cw_145225549855002"
-    const val SAMPLE_URL_2 =
-        "https://9-29-1305988530.cos.ap-shanghai.myqcloud.com/IMG_0382.MP4"
+    const val SAMPLE_URL = DemoVideoUrls.SAMPLE_GSY
+    const val SAMPLE_URL_2 = DemoVideoUrls.MP4_BBB
     const val SAMPLE_TITLE = "GSY Compose Sample"
 
     data class SampleItem(val title: String, val url: String, val cover: String? = null)
@@ -14,7 +15,7 @@ internal object DemoSamples {
             url = SAMPLE_URL,
         ),
         SampleItem(
-            title = "样片 #2 · IMG_0382",
+            title = "样片 #2 · BBB",
             url = SAMPLE_URL_2,
         ),
         SampleItem(
@@ -22,7 +23,7 @@ internal object DemoSamples {
             url = SAMPLE_URL,
         ),
         SampleItem(
-            title = "样片 #4 · IMG_0382（重复）",
+            title = "样片 #4 · BBB（重复）",
             url = SAMPLE_URL_2,
         ),
         SampleItem(

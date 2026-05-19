@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.gsyvideoplayer.utils.DemoVideoUrls
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.compose.native_.GSYDefaultControls
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
@@ -46,7 +47,7 @@ class WebDetailComposeActivity : ComponentActivity() {
 }
 
 private const val WEB_URL = "https://www.baidu.com"
-private const val VIDEO_URL = "https://www.w3schools.com/html/mov_bbb.mp4"
+private const val VIDEO_URL = DemoVideoUrls.MP4_BBB
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
