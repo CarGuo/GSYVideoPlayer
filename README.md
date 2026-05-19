@@ -157,7 +157,7 @@ implementation project(':gsyVideoPlayer-compose')
 // compose-bom is api-exposed from the module; consumers still manage androidx.compose.* per their own project setup.
 ```
 
-See [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md). The sample app provides a `Compose Demo` entry with **8 runnable Compose Activities** (Basic Wrapper, Switch URL, Multi-Window, List, Auto-Play List, List with Fullscreen, Detail Native, Full-Feature Native) — `DemoSamples.kt` is a shared `data object` of test URLs, not a runnable Activity. Outstanding gaps and the rolling roadmap are tracked in [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md).
+See [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md). The sample app provides a `Compose Demo` entry with **24 runnable Compose Activities** — covering Wrapper basics, Native detail/list/multi-window/auto-play/seamless-switch, plus P5 differentiating capabilities (filter, cache/download, ad pre-roll, subtitle, custom danmaku, EXO multi-source, parallel multi-window) and P5-2 modern app patterns (vertical short video, floating window, multi-type list, web mixed layout, audio-only, URL/local file, MediaCodec hardware switch, themed custom controls). `DemoSamples.kt` is a shared `data object` of test URLs, not a runnable Activity. Outstanding gaps and the rolling roadmap are tracked in [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md).
 
 ### 2. Github Package Dependency Method (Recommended)
 

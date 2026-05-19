@@ -282,21 +282,54 @@ CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
 
 ## 六、Demo
 
-App 模块下入口 `Compose Demo`（[ComposeDemoListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt)）汇总了 **8 个可运行的 Compose Activity**，外加 1 份共享测试数据：
+App 模块下入口 `Compose Demo`（[ComposeDemoListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt)）汇总了 **24 个可运行的 Compose Activity**，外加 1 份共享测试数据：
 
-> 表中第 9 行的 `DemoSamples.kt` 是 `data object`（与 Java/XML Demo 共用同一组测试 URL），并非可运行 Activity，仅为方便溯源附在表尾。
+> 表中第 25 行的 `DemoSamples.kt` 是 `data object`（与 Java/XML Demo 共用同一组测试 URL），并非可运行 Activity，仅为方便溯源附在表尾。
+
+### 6.1 P0 / P1 — 基础与对齐 Java 老 demo（8 项）
 
 | # | 名称 | 入口 | 说明 |
 |---|---|---|---|
-| 1 | Basic Wrapper | [BasicWrapperActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) | `GSYVideoPlayerView` 最小用法 |
-| 2 | Switch URL | [SwitchUrlActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt) | Wrapper 模式下切流 |
-| 3 | Multi-Window | [MultiWindowActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt) | 多个播放器同屏共存 |
-| 4 | List Play (Native) | [ListPlayNativeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt) | LazyColumn + Native Composable |
-| 5 | Auto-Play List | [AutoPlayListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt) | 滚动可视区自动播放/释放 |
+| 1 | Basic Wrapper（ΔD1 已升级） | [BasicWrapperActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) | `GSYVideoPlayerView` 最小用法 + 5 个高频 builder 选项（`setSeekRatio` / `setShowPauseCover` / `setReleaseWhenLossAudio` / `setStartAfterPrepared` / `setVideoAllCallBack`）实时演示 |
+| 2 | Switch URL（ΔD5 已升级） | [SwitchUrlActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt) | Wrapper 模式下切流；KDoc see-also → D8 无缝切换 |
+| 3 | Multi-Window（ΔD6 已升级） | [MultiWindowActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt) | 多个播放器同屏共存（互斥版）；指引 → D7 真并行版 |
+| 4 | List Play (Native)（ΔD4 已升级） | [ListPlayNativeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt) | LazyColumn + Native Composable；离屏 `setUp` 重置 vs `pause` Switch + `setShowPauseCover` Switch + Compose 自绘占位封面 |
+| 5 | Auto-Play List（ΔD7 已升级） | [AutoPlayListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt) | 滚动可视区自动播放/释放；KDoc 解释 surface 接管取舍 |
 | 6 | List with Fullscreen | [ListWithFullscreenActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) | 列表内层级式全屏 |
 | 7 | Detail Native | [DetailNativeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) | Native 模式详情页 |
 | 8 | Full-Feature Native | [FullFeatureNativeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) | 速率 / Seek / 错误 / 完成态 |
-| 9 | Demo 数据 | [DemoSamples.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DemoSamples.kt) | 复用与 Java/XML Demo 同一组测试 URL |
+
+### 6.2 P5-1 — GSY 招牌差异化能力（8 项）
+
+| # | 名称 | 入口 | 说明 |
+|---|---|---|---|
+| 9 | Native 滤镜 | [DetailFilterComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailFilterComposeActivity.kt) | 通过 `withHost` 注入 `setEffectFilter`，循环切换 6 种 GLSL 滤镜 |
+| 10 | Native 缓存 / 下载 | [CacheDownloadComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) | `ProxyCacheManager` 代理 + `isCacheReady` 状态 + 清缓存 |
+| 11 | Native 字幕 | [SubtitleComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SubtitleComposeActivity.kt) | 3 字幕源切换 + 字号 / 开关，IJK 内核 |
+| 12 | Native Seamless 切换（D8） | [SwitchSeamlessComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) | 同一 controller 跨 list/detail 复用，不重 `setUp` 不重拉流 |
+| 13 | Native 前贴片广告 | [AdInListComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AdInListComposeActivity.kt) | 单 controller AD → AutoComplete → 切正片，演示 events 边沿事件链 |
+| 14 | Native Compose 自绘弹幕 | [DanmakuComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DanmakuComposeActivity.kt) | Canvas + textMeasurer 与 `snapshot.currentPosition` 同步 |
+| 15 | Native EXO 多源切换 | [ExoSwitchSourceComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ExoSwitchSourceComposeActivity.kt) | `PlayerFactory.setPlayManager(Exo2PlayerManager)` + MP4/HLS + 5 档倍速 |
+| 16 | Wrapper 真并行多窗口 | [MultiWindowParallelComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowParallelComposeActivity.kt) | `MultiSampleVideo` + `CustomManager`，3 个并行播放（非互斥） |
+
+### 6.3 P5-2 — 现代 App 高频形态（8 项）
+
+| # | 名称 | 入口 | 说明 |
+|---|---|---|---|
+| 17 | 竖屏短视频 (VerticalPager) | [VerticalShortVideoComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/VerticalShortVideoComposeActivity.kt) | `VerticalPager` + 单 controller 跨页 `setUp`，循环播放 |
+| 18 | 悬浮窗（画中画） | [FloatingWindowComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FloatingWindowComposeActivity.kt) | `SYSTEM_ALERT_WINDOW` 拉起 `FloatPlayerView`，跨 Activity 常驻 |
+| 19 | 多类型列表 | [MoreTypeComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MoreTypeComposeActivity.kt) | LazyColumn 多 type cell（Normal/Ad/Cover/Unknown） |
+| 20 | 图文混排（视频 + WebView） | [WebDetailComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/WebDetailComposeActivity.kt) | 上方 Compose 播放器 + 下方 `AndroidView` WebView 双栈共存 |
+| 21 | 纯音频播放 | [AudioOnlyComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) | raw 资源 + `enableRawPlay`；Compose 端只接 controller，不用 Surface |
+| 22 | 自定义 URL / 本地文件 | [LocalFileComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/LocalFileComposeActivity.kt) | URL 输入 + cache 切换 + `raw://` / `http://` 多种源类型 |
+| 23 | MediaCodec 硬解切换 | [MediaCodecComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MediaCodecComposeActivity.kt) | `GSYVideoType.enableMediaCodec()` / `disableMediaCodec()` 实时切换 |
+| 24 | 自定义主题 Controls | [CustomControlsThemeComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/CustomControlsThemeComposeActivity.kt) | Compose 自绘控件取代 `GSYDefaultControls`：渐变浮层 + Slider seek + 多主题切换 |
+
+### 6.4 共享测试数据
+
+| # | 名称 | 入口 | 说明 |
+|---|---|---|---|
+| 25 | Demo 数据 | [DemoSamples.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DemoSamples.kt) | 复用与 Java/XML Demo 同一组测试 URL（`data object`，非可运行 Activity） |
 
 ---
 

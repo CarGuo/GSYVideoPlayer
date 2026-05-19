@@ -158,7 +158,7 @@ implementation project(':gsyVideoPlayer-compose')
 // compose-bom 由模块 api 透出，使用方仍按自身工程版本管理 androidx.compose.* 即可
 ```
 
-详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 **8 个可运行的 Compose Activity**（基础 / 切流 / 多窗口 / 列表 / 自动连播 / 列表内全屏 / 详情切换 / 全功能 Native）；`DemoSamples.kt` 是共享的 `data object` 测试 URL 集合，不是可运行的 Activity。当前能力缺口与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md)。
+详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 **24 个可运行的 Compose Activity** —— 覆盖 Wrapper 基础 / Native 详情·列表·多窗口·自动连播·切流·无缝切换 / P5 招牌差异化能力（滤镜、缓存下载、前贴片广告、字幕、自绘弹幕、EXO 多源、Wrapper 真并行多窗口）/ P5-2 现代 App 高频形态（竖屏短视频、悬浮窗、多类型列表、视频+WebView、纯音频、自定义 URL/本地文件、MediaCodec 硬解切换、主题化自绘 controls）。`DemoSamples.kt` 是共享的 `data object` 测试 URL 集合，不是可运行的 Activity。当前能力缺口与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md)。
 
 ### 2、Github Package 依赖方式(推荐)
 
