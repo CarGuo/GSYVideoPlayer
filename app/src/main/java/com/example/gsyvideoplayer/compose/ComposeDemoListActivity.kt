@@ -25,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.gsyvideoplayer.compose.host.AdInListComposeActivity
+import com.example.gsyvideoplayer.compose.host.AudioOnlyComposeActivity
 import com.example.gsyvideoplayer.compose.host.AutoPlayListActivity
 import com.example.gsyvideoplayer.compose.host.BasicWrapperActivity
 import com.example.gsyvideoplayer.compose.host.CacheDownloadComposeActivity
+import com.example.gsyvideoplayer.compose.host.CustomControlsThemeComposeActivity
 import com.example.gsyvideoplayer.compose.host.DanmakuComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailFilterComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailNativeActivity
@@ -36,6 +38,8 @@ import com.example.gsyvideoplayer.compose.host.FloatingWindowComposeActivity
 import com.example.gsyvideoplayer.compose.host.FullFeatureNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListPlayNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListWithFullscreenActivity
+import com.example.gsyvideoplayer.compose.host.LocalFileComposeActivity
+import com.example.gsyvideoplayer.compose.host.MediaCodecComposeActivity
 import com.example.gsyvideoplayer.compose.host.MoreTypeComposeActivity
 import com.example.gsyvideoplayer.compose.host.MultiWindowActivity
 import com.example.gsyvideoplayer.compose.host.MultiWindowParallelComposeActivity
@@ -164,6 +168,26 @@ private val DEMO_ENTRIES = listOf(
         title = "P5-2 · 图文混排（视频 + WebView）",
         subtitle = "对齐 Java WebDetailActivity：上方 Compose 播放器 + 下方 AndroidView WebView 双栈共存",
         target = WebDetailComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · 纯音频播放",
+        subtitle = "对齐 Java AudioDetailPlayer：raw 资源 + enableRawPlay；Compose 端只接 controller，不用 Surface",
+        target = AudioOnlyComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · 自定义 URL / 本地文件",
+        subtitle = "对齐 Java InputUrlDetailActivity：URL 输入 + cache 切换 + raw://、http:// 多种源类型",
+        target = LocalFileComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · MediaCodec 硬解切换",
+        subtitle = "对齐 Java RecyclerView3Activity：GSYVideoType.enableMediaCodec() / disableMediaCodec() 实时切换",
+        target = MediaCodecComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · 自定义主题 Controls",
+        subtitle = "Compose 自绘控件取代 GSYDefaultControls：渐变浮层 + Slider seek + 多主题切换",
+        target = CustomControlsThemeComposeActivity::class.java,
     ),
 )
 
