@@ -15,7 +15,7 @@
 | 是否破坏既有功能 | ✅ 0 破坏 | 持续保持（每轮 `:app:assembleDebug` + `:app:assembleRelease` + 真机 monkey + crash buffer 空） |
 | Wrapper 模式 vs Java | ✅ 几乎完全等价 | 维持，仅做小修补（autoPauseResume 已默认开） |
 | Native 模式 vs Java | ⚠️ "最小子集 + 逃生口堵死" | P4-1 → P4-2 推进至"等价" |
-| Demo 覆盖 | 8/41 ≈ 19.5%，**13 类差异化能力空白** | P5-1 必补 8 个 → P5-2 选补 8 个 → 总覆盖 ≈ 24/41 ≈ 58%（**当前进度：16/41 ≈ 39%，P5-1 8/8 已完成**） |
+| Demo 覆盖 | 8/41 ≈ 19.5%，**13 类差异化能力空白** | P5-1 必补 8 个 → P5-2 选补 8 个 → 总覆盖 ≈ 24/41 ≈ 58%（**当前进度：20/41 ≈ 49%，P5-1 8/8 已完成；P5-2 高优 4/8（D9/D10/D11/D14）已完成**） |
 | 文档与发布约束 | doc/COMPOSE_USE.md 已写明"未发布" | 持续与代码同步，每轮回归此文件 |
 
 ---
@@ -75,12 +75,12 @@
 
 | ID | 待补 Demo | 对位 Java demo |
 |---|---|---|
-| D9 | `VerticalShortVideoComposeActivity` | [ViewPager2Activity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/ViewPager2Activity.java) |
-| D10 | `FloatingWindowComposeActivity` | [WindowActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/WindowActivity.java) |
-| D11 | `MoreTypeComposeActivity` | [DetailMoreTypeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/DetailMoreTypeActivity.java) |
+| D9 | `VerticalShortVideoComposeActivity` ✅ | [ViewPager2Activity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/ViewPager2Activity.java) |
+| D10 | `FloatingWindowComposeActivity` ✅ | [WindowActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/WindowActivity.java) |
+| D11 | `MoreTypeComposeActivity` ✅ | [DetailMoreTypeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/DetailMoreTypeActivity.java) |
 | D12 | `AudioOnlyComposeActivity` | [AudioDetailPlayer](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/AudioDetailPlayer.java) |
 | D13 | `LocalFileComposeActivity` | [InputUrlDetailActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/InputUrlDetailActivity.java) 本地分支 |
-| D14 | `WebDetailComposeActivity` | [WebDetailActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/WebDetailActivity.java) |
+| D14 | `WebDetailComposeActivity` ✅ | [WebDetailActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/WebDetailActivity.java) |
 | D15 | `MediaCodecComposeActivity` | [RecyclerView3Activity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/RecyclerView3Activity.java) |
 | D16 | `CustomControlsThemeComposeActivity` | 参考 [LandLayoutVideo](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/LandLayoutVideo.java) / [SampleControlVideo](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/SampleControlVideo.java) |
 
@@ -172,7 +172,13 @@
 
 ### 轮次 R5 — P5-2 选补 demo（视进度执行）
 
-- [ ] D9 ~ D16（每个独立条目）
+- [x] D9 VerticalShortVideoCompose ✅ [VerticalShortVideoComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/VerticalShortVideoComposeActivity.kt) — Compose Foundation `VerticalPager + rememberPagerState`，单 controller 通过 `snapshotFlow { pagerState.currentPage }.distinctUntilChanged().collect` 跨页 setUp，仅在当前页 attach `GSYPlayerSurface`；setLooping(true) + setCacheWithPlay(true)；emulator 实证 page 1 `Playing 1/5` + page 2 切页后 logcat `GSYVideoPlayer: onPrepared` 链路通
+- [x] D10 FloatingWindowCompose ✅ [FloatingWindowComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FloatingWindowComposeActivity.kt) — `rememberLauncherForActivityResult(StartActivityForResult())` 申请 `SYSTEM_ALERT_WINDOW` + `Util.hasPermission` 检测；复用 [FloatPlayerView](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/view/FloatPlayerView.java)（Wrapper 路线）证明 Compose Activity 同样能驱动全局画中画；onDestroy → `FloatWindow.destroy()`；emulator 实证 `权限状态：✅ 已授予 / 悬浮窗状态：▶ 已显示`
+- [x] D11 MoreTypeCompose ✅ [MoreTypeComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MoreTypeComposeActivity.kt) — `enum CellType { Normal, Ad, Cover, Unknown }` 4 类 cell；6 条 entry LazyColumn；单 controller 仅 attach activeIndex；emulator 实证点 Normal cell 后 `当前激活：#1 样片 #1 · 普通视频 | Playing 1115/5547619 ms` + logcat `videoWidth: 480 videoHeight: 384`
+- [x] D14 WebDetailCompose ✅ [WebDetailComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/WebDetailComposeActivity.kt) — Column 上方 16:9 `GSYPlayerSurface + GSYDefaultControls`（Compose 区），下方 `AndroidView { WebView }` `Modifier.weight(1f)` 弹性占据剩余空间；emulator 实证 `当前：Playing | 1904/10027 ms` + logcat `libwebviewchromium_plat_support.so` 加载（WebView 渲染）+ `CURRENT_STATE_PLAYING`
+- [x] [ComposeDemoListActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) 16 → 20 项；4 个新 Activity 在 [AndroidManifest.xml](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/AndroidManifest.xml) 注册 `exported="false"` + configChanges 全集
+- [x] R5 上半场真机回归 ✅ emulator-5554 装机；4 个新 demo 通过 UI Automator 真点击进入 + 起播实证；Monkey 100 events `--pct-touch 60 --pct-motion 30` 0 FATAL；logcat AndroidRuntime FATAL/crash buffer 全空
+- [ ] D12 / D13 / D15 / D16 待 R5 下半场或后续轮次推进
 
 ### 轮次 R6 — P5-Δ 老 demo 升级 + 文档收口 + 首发评估
 
@@ -196,7 +202,7 @@
 | R2 | ✅ 已完成 | `276420b7` (R1 修复) → `6f5f846c` (R2 修复) | P0-1/2/3 三项全过；额外修复 GSYComposeHostPlayer public class+构造器（反射克隆门票）；构建 + 模拟器双回归通过；不发 tag |
 | R3 | ✅ 已完成 | `6f5f846c` (R2) → `fe66e7fd` (R3 P1 reactive parity) | P1 五项全过；events SharedFlow + stateFlow + setUserVideoAllCallBack + 8 直 setter + BufferingProgress/SeekComplete + ΔD3 手势；emulator Monkey 50 events 0 FATAL |
 | R4 | ✅ 已完成（8/8 demo） | `fe66e7fd` (R3) → `47ce1877` (R4 上半场 D1/D2/D4/D8) → 本轮 (R4 续 D3/D5/D6/D7) | P5-1 全部 8 项已落（滤镜 / 缓存下载 / 前贴片广告 / 字幕 / 自绘弹幕 / EXO 多源 / Wrapper 真并行 / Seamless 切换）；ComposeDemoListActivity 8 → 16 项；emulator 真 UI 点击实证：D6 EXO 内核切换 logcat 实证 + D5 长视频 Playing 48s/5547s + D3 ad→feature 阶段切换 + D7 真起播 0 crash；Monkey 100 events 0 FATAL |
-| R5 | ☐ pending | — | 视情况 |
+| R5 | ◐ 半完成（4/8） | `47ce1877` (R4 上半场) → `d05d0a8c` (R4 续 D3/D5/D6/D7) → 本轮 (R5 上半场 D9/D10/D11/D14) | P5-2 高优 4 项已落（VerticalPager 短视频 / 悬浮窗 + 系统权限申请 / 多类型 cell 列表 / WebView 图文混排）；ComposeDemoListActivity 16 → 20 项；emulator 真 UI 点击实证：D9 page1 `Playing 1/5` + 切页 onPrepared / D10 `悬浮窗状态：▶ 已显示` / D11 `Playing 1115/5547619 ms` + videoWidth 480x384 / D14 `Playing 1904/10027 ms` + libwebviewchromium 加载；Monkey 100 events 0 FATAL；D12/D13/D15/D16 待续轮 |
 | R6 | ☐ pending | — | 首发评估前置 |
 | R7 | ☐ pending | — | 选做 |
 

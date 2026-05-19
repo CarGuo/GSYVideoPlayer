@@ -32,14 +32,18 @@ import com.example.gsyvideoplayer.compose.host.DanmakuComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailFilterComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailNativeActivity
 import com.example.gsyvideoplayer.compose.host.ExoSwitchSourceComposeActivity
+import com.example.gsyvideoplayer.compose.host.FloatingWindowComposeActivity
 import com.example.gsyvideoplayer.compose.host.FullFeatureNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListPlayNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListWithFullscreenActivity
+import com.example.gsyvideoplayer.compose.host.MoreTypeComposeActivity
 import com.example.gsyvideoplayer.compose.host.MultiWindowActivity
 import com.example.gsyvideoplayer.compose.host.MultiWindowParallelComposeActivity
 import com.example.gsyvideoplayer.compose.host.SubtitleComposeActivity
 import com.example.gsyvideoplayer.compose.host.SwitchSeamlessComposeActivity
 import com.example.gsyvideoplayer.compose.host.SwitchUrlActivity
+import com.example.gsyvideoplayer.compose.host.VerticalShortVideoComposeActivity
+import com.example.gsyvideoplayer.compose.host.WebDetailComposeActivity
 
 class ComposeDemoListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,6 +144,26 @@ private val DEMO_ENTRIES = listOf(
         title = "P5 · Wrapper 真并行多窗口",
         subtitle = "对齐 Java ListMultiNormalAdapter：MultiSampleVideo + CustomManager，3 个并行播放（非互斥）",
         target = MultiWindowParallelComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · 竖屏短视频 (VerticalPager)",
+        subtitle = "对齐 Java ViewPager2Activity：VerticalPager + 单 controller 跨页 setUp，循环播放",
+        target = VerticalShortVideoComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · 悬浮窗（画中画）",
+        subtitle = "对齐 Java WindowActivity：SYSTEM_ALERT_WINDOW 拉起 FloatPlayerView，跨 Activity 常驻",
+        target = FloatingWindowComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · 多类型列表",
+        subtitle = "对齐 Java DetailMoreTypeActivity：LazyColumn 多 type cell（Normal/Ad/Cover/Unknown）",
+        target = MoreTypeComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · 图文混排（视频 + WebView）",
+        subtitle = "对齐 Java WebDetailActivity：上方 Compose 播放器 + 下方 AndroidView WebView 双栈共存",
+        target = WebDetailComposeActivity::class.java,
     ),
 )
 

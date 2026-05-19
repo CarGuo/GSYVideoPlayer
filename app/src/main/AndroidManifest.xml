@@ -332,6 +332,26 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.VerticalShortVideoComposeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.FloatingWindowComposeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.MoreTypeComposeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.host.WebDetailComposeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="android.max_aspect"
