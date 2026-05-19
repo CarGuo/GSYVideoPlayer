@@ -24,11 +24,13 @@
 
 ### 1.1 🔴 P0 ｜ 代码核心残缺（必修，且可能影响首发）
 
-| ID | 问题 | 现状定位 | 验收标准 |
-|---|---|---|---|
-| P0-1 | `GSYPlayerController.host` 是 `internal`，Native 模式所有"Standard 已有但 Controller 未暴露"的能力（字幕 / 滤镜 / 镜像 / 列表小窗 / setSeekOnStart / 快照截图 / GIF）无法通过逃生口访问 | [GSYPlayerController.kt#L23-L24](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt#L23-L24) | 提供 `controller.withHost { player -> ... }` 闭包（限定主线程 + 自动 null-check + released 期间 no-op）；新增单测/Demo 覆盖一次"调 setSubtitleSources" 路径 |
-| P0-2 | `installInternalCallback` 直接 `player.setVideoAllCallBack(...)`，覆盖用户 callback；用户用 `withHost` 调 `setVideoAllCallBack` 时也会反向覆盖内部 callback，事件流断裂 | [GSYPlayerController.kt#L165-L187](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt#L165-L187) | 改为"内部 callback 链式分发 + 保留用户 setUserVideoAllCallBack 注入点"；单测：用户 callback 与 events 同时触发时双方都收到 |
-| P0-3 | Native 模式没有全屏切换 API：`GSYPlayerController` 缺 `enterFullscreen / exitFullscreen`，`GSYPlayerEvent` 缺 `EnterFull / QuitFull` | [GSYPlayerEvent.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerEvent.kt) [GSYPlayerController.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt) | Controller 新增 `enterFullscreen(activity, hideActionBar=true, hideStatusBar=true)` / `exitFullscreen(activity)`；`GSYPlayerEvent` 加 `EnterFull` / `QuitFull`；Demo `FullFeatureNativeActivity` 接入按钮真机回归 ≤ 1.5s 切回 |
+> ✅ **R2 已全部修复**（详见 § 3 进度跟踪表）；下表保留作为历史可追溯的"问题→定位→验收→实际落点"记录。
+
+| ID | 问题 | 现状定位 | 验收标准 | R2 落点 |
+|---|---|---|---|---|
+| P0-1 ✅ | `GSYPlayerController.host` 是 `internal`，Native 模式所有"Standard 已有但 Controller 未暴露"的能力（字幕 / 滤镜 / 镜像 / 列表小窗 / setSeekOnStart / 快照截图 / GIF）无法通过逃生口访问 | [GSYPlayerController.kt#L23-L24](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt#L23-L24) | 提供 `controller.withHost { player -> ... }` 闭包（限定主线程 + 自动 null-check + released 期间 no-op）；新增单测/Demo 覆盖一次"调 setSubtitleSources" 路径 | ✅ Controller 新增 `withHost<R>(block)`：主线程检查（非主线程抛 IllegalStateException）+ released no-op 返回 null；KDoc 显式禁止在 block 里调 `setVideoAllCallBack`；`host: internal var` 保留不破坏二进制 |
+| P0-2 ✅ | `installInternalCallback` 直接 `player.setVideoAllCallBack(...)`，覆盖用户 callback；用户用 `withHost` 调 `setVideoAllCallBack` 时也会反向覆盖内部 callback，事件流断裂 | [GSYPlayerController.kt#L165-L187](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt#L165-L187) | 改为"内部 callback 链式分发 + 保留用户 setUserVideoAllCallBack 注入点"；单测：用户 callback 与 events 同时触发时双方都收到 | ✅ 重构为稳定 dispatcher 单例（`internalDispatcher`，22 项全覆盖）+ `@Volatile userCallback` 字段；新增 `setUserVideoAllCallBack(callback)` 公开入口；克隆全屏时 dispatcher 引用本身被 Java 侧 `setVideoAllCallBack` 复制，事件流跨克隆体不断 |
+| P0-3 ✅ | Native 模式没有全屏切换 API：`GSYPlayerController` 缺 `enterFullscreen / exitFullscreen`，`GSYPlayerEvent` 缺 `EnterFull / QuitFull` | [GSYPlayerEvent.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerEvent.kt) [GSYPlayerController.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt) | Controller 新增 `enterFullscreen(activity, hideActionBar=true, hideStatusBar=true)` / `exitFullscreen(activity)`；`GSYPlayerEvent` 加 `EnterFull` / `QuitFull`；Demo `FullFeatureNativeActivity` 接入按钮真机回归 ≤ 1.5s 切回 | ✅ Controller 新增 `enterFullscreen(activity, hideActionBar, hideStatusBar)` / `exitFullscreen(activity)` / `isFullscreen`；`GSYPlayerEvent` 加 `EnterFull` / `QuitFull` data object；ΔD2/ΔD8 接入；额外修复 [GSYComposeHostPlayer.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYComposeHostPlayer.java) class+构造器 → public（GSY 反射克隆要求 public Constructor，否则 NoSuchMethodException）；emulator 回归：双 host 树确认（原 host + `app:id/full_id` 克隆体），BACK 退出 OK，二轮 round trip 0 crash |
 
 ### 1.2 🟡 P1 ｜ 代码次重要残缺
 
@@ -98,13 +100,13 @@
 | ID | 已有 Demo | 浅在哪里 | 升级目标 |
 |---|---|---|---|
 | ΔD1 | [BasicWrapperActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) | builder 仅设了 5 项，缺 ~30+ 项配置示范 | 加 `setVideoAllCallBack` + `setSeekRatio` + `setShowPauseCover` 等 |
-| ΔD2 | [DetailNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) | 全屏只是 `requestedOrientation`，没用底层全屏管线 | P0-3 完成后接入 `controller.enterFullscreen` |
+| ΔD2 ✅ | [DetailNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) | 全屏只是 `requestedOrientation`，没用底层全屏管线 | ✅ R2 已切换为 `controller.enterFullscreen / exitFullscreen` + `events.EnterFull/QuitFull` 同步本地标志位；BackHandler(enabled=fullscreen) 拦 BACK |
 | ΔD3 | [FullFeatureNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) | 缺音量/亮度/进度手势条 + 中央 toast | P1-1 完成后接入 `Modifier.gsyGestureControl` |
 | ΔD4 | [ListPlayNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt) | 仅"滚出屏暂停"，没有"释放占位/封面恢复" | 演示 `setThumbImageView` + 离屏 release |
 | ΔD5 | [SwitchUrlActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt) | 名为"切换 URL"，实为 setUp 重置；没演示真 `SwitchUtil` | D8 出来后此 demo 文档加"see also"指向 |
 | ΔD6 | [MultiWindowActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt) | 单例 GSYVideoManager 互斥，没用 CustomManager | D7 出来后此 demo 改名为"互斥版"，新增"并行版"对照 |
 | ΔD7 | [AutoPlayListActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt) | 用 `events.AutoComplete` setUp 下一段，丢 surface 接管 | 先以注释说明取舍，等 P0-1 后可演示更深路径 |
-| ΔD8 | [ListWithFullscreenActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) | 用 `BackHandler+Insets` 模拟，没用底层全屏管线 | P0-3 完成后改用 `controller.enterFullscreen` |
+| ΔD8 ✅ | [ListWithFullscreenActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) | 用 `BackHandler+Insets` 模拟，没用底层全屏管线 | ✅ R2 已删除 `WindowInsetsControllerCompat` / 手动 `requestedOrientation` / `FullscreenLayer` 自绘，改为 `controller.enterFullscreen` + `events.EnterFull/QuitFull`，全屏渲染由内核克隆体接管 |
 
 ---
 
@@ -132,14 +134,17 @@
 - [x] 构建回归：`./gradlew :app:assembleDebug :gsyVideoPlayer-compose:assembleRelease :gsyVideoPlayer-compose:publishToMavenLocal -x lint` —— **BUILD SUCCESSFUL in 17s**
 - [x] commit `compose: R1 housekeeping (P2-1~6 docs/manifest/consumer-rules)` 并 push（不发 tag）
 
-### 轮次 R2 — P4-1 代码 P0（预计 1.5 天）
+### 轮次 R2 — P4-1 代码 P0（预计 1.5 天） ✅ 已完成
 
-- [ ] P0-1 `controller.withHost { player -> ... }` 公开闭包；保留 `host: internal` 不破坏二进制
-- [ ] P0-2 `installInternalCallback` 重构为内部分发器：`internalCallback` + `userCallback` 链式
-- [ ] P0-3 Controller `enterFullscreen / exitFullscreen` + `GSYPlayerEvent.EnterFull / QuitFull`
-- [ ] ΔD2 / ΔD8：[DetailNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) + [ListWithFullscreenActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) 切换到新全屏 API 并真机回归
-- [ ] doc/COMPOSE_USE.md 加"逃生口 withHost { ... } 用法"章节
-- [ ] commit `compose: R2 P0 fixes (withHost + callback fanout + fullscreen)`
+- [x] P0-1 `controller.withHost { player -> ... }` 公开闭包；保留 `host: internal` 不破坏二进制
+- [x] P0-2 `installInternalCallback` 重构为内部分发器：`internalCallback` + `userCallback` 链式
+- [x] P0-3 Controller `enterFullscreen / exitFullscreen` + `GSYPlayerEvent.EnterFull / QuitFull`
+- [x] ΔD2 / ΔD8：[DetailNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) + [ListWithFullscreenActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) 切换到新全屏 API 并真机回归
+- [x] doc/COMPOSE_USE.md 加"逃生口 withHost { ... } 用法"章节
+- [x] 额外修复：[GSYComposeHostPlayer](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYComposeHostPlayer.java) class+构造器 → public（GSY 反射克隆 `getConstructor(Class[])` 仅返回 public 构造器；非 public 时 emulator 报 NoSuchMethodException 全屏失败）
+- [x] 真机回归：emulator-5554 装机；Monkey 200 事件 0 crash；ΔD2 全屏进/退（双 host 树确认 `app:id/full_id` 克隆体出现/移除）；ΔD2 二轮 round trip dispatcher 复用稳定；ΔD8 全屏进/退（首次 setUp + 等 host attach 后的第二次点击进入全屏，符合 Compose 异步重组语义）；6 个其他 demo same-uid 启动；cross-uid `am start` 仍被严格拒绝；AndroidRuntime FATAL 与 crash buffer 全空
+- [x] 构建回归：`./gradlew :app:assembleDebug :gsyVideoPlayer-compose:assembleRelease :gsyVideoPlayer-compose:publishToMavenLocal -x lint` —— **BUILD SUCCESSFUL in 29s**
+- [x] commit `compose: R2 P0 fixes (withHost + callback fanout + fullscreen)` 并 push（不发 tag）
 
 ### 轮次 R3 — P4-2 代码 P1（预计 1.5 天）
 
@@ -187,7 +192,7 @@
 | 轮次 | 状态 | 起止 commit | 备注 |
 |---|---|---|---|
 | R1 | ✅ 已完成 | `24360bff` (归档 plan 落盘) → `276420b7` (R1 修复) | P2 六项全过；构建 + 模拟器双回归通过；不发 tag |
-| R2 | ☐ pending | — | 等 R1 |
+| R2 | ✅ 已完成 | `276420b7` (R1 修复) → `R2_COMMIT_PLACEHOLDER` (R2 修复) | P0-1/2/3 三项全过；额外修复 GSYComposeHostPlayer public class+构造器（反射克隆门票）；构建 + 模拟器双回归通过；不发 tag |
 | R3 | ☐ pending | — | 等 R2 |
 | R4 | ☐ pending | — | 等 R3 |
 | R5 | ☐ pending | — | 视情况 |

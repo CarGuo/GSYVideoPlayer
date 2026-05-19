@@ -1,6 +1,5 @@
 package com.example.gsyvideoplayer.compose.host
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -38,31 +37,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import com.shuyu.gsyvideoplayer.compose.native_.GSYDefaultControls
+import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
 
 class ListWithFullscreenActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, true)
         setContent {
             MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    ListWithFullscreenScreen(
-                        onRequestOrientation = { landscape ->
-                            requestedOrientation = if (landscape) {
-                                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                            } else {
-                                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                            }
-                        }
-                    )
+                    ListWithFullscreenScreen()
                 }
             }
         }
@@ -71,41 +58,30 @@ class ListWithFullscreenActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ListWithFullscreenScreen(
-    onRequestOrientation: (Boolean) -> Unit,
-) {
+private fun ListWithFullscreenScreen() {
     val items = remember { DemoSamples.SAMPLE_LIST }
     val controller = rememberGSYPlayerController()
     var playingIndex by remember { mutableIntStateOf(-1) }
     var fullscreen by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
+    val context = LocalContext.current
+    val activity = remember(context) { context as android.app.Activity }
 
-    val view = LocalView.current
-    LaunchedEffect(fullscreen) {
-        val window = (view.context as? android.app.Activity)?.window ?: return@LaunchedEffect
-        val controllerCompat = WindowInsetsControllerCompat(window, view)
-        if (fullscreen) {
-            controllerCompat.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            controllerCompat.hide(WindowInsetsCompat.Type.systemBars())
-            onRequestOrientation(true)
-        } else {
-            controllerCompat.show(WindowInsetsCompat.Type.systemBars())
-            onRequestOrientation(false)
+    // R2 P0-3：列表+全屏路径切换到 controller.enterFullscreen / exitFullscreen 由内核接管。
+    // 全屏时内核会反射克隆出第二个 host 接管渲染，并自动旋转/隐藏系统栏；
+    // Compose 端只需要订阅 events.EnterFull / QuitFull 同步本地 fullscreen 标志位即可。
+    LaunchedEffect(controller) {
+        controller.events.collect { ev ->
+            when (ev) {
+                GSYPlayerEvent.EnterFull -> fullscreen = true
+                GSYPlayerEvent.QuitFull -> fullscreen = false
+                else -> {}
+            }
         }
     }
 
     BackHandler(enabled = fullscreen) {
-        fullscreen = false
-    }
-
-    if (fullscreen && playingIndex in items.indices) {
-        FullscreenLayer(
-            title = items[playingIndex].title,
-            controller = controller,
-            onExit = { fullscreen = false },
-        )
-        return
+        controller.exitFullscreen(activity)
     }
 
     Scaffold(
@@ -121,7 +97,8 @@ private fun ListWithFullscreenScreen(
         ) {
             item {
                 Text(
-                    "对齐 Java DetailListPlayer：列表卡片可直接『进入全屏』，全屏返回回到原列表位（同 Activity，不跳转）。",
+                    "对齐 Java DetailListPlayer：列表卡片可直接『进入全屏』，由 GSY 内核接管旋转/系统栏隐藏，" +
+                        "返回键或调用 controller.exitFullscreen() 即可回到列表（同 Activity，不跳转）。",
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
@@ -143,7 +120,7 @@ private fun ListWithFullscreenScreen(
                             controller.setUp(item.url, false, item.title, autoPlay = true)
                             playingIndex = index
                         }
-                        fullscreen = true
+                        controller.enterFullscreen(activity)
                     },
                     surface = { mod ->
                         GSYPlayerSurface(controller = controller, modifier = mod)
@@ -197,36 +174,6 @@ private fun ListFsItem(
                 }
                 OutlinedButton(onClick = onFullscreenClick) { Text("进入全屏") }
             }
-        }
-    }
-}
-
-@Composable
-private fun FullscreenLayer(
-    title: String,
-    controller: com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerController,
-    onExit: () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black),
-    ) {
-        GSYPlayerSurface(controller = controller, modifier = Modifier.fillMaxSize())
-        GSYDefaultControls(controller = controller, modifier = Modifier.fillMaxSize())
-        Row(
-            modifier = Modifier
-                .padding(12.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            OutlinedButton(onClick = onExit) { Text("退出全屏") }
-            Text(
-                text = title,
-                color = Color.White,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 12.dp),
-            )
         }
     }
 }

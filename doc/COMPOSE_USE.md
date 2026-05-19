@@ -150,6 +150,23 @@ controller.seekTo(positionMs: Long)
 controller.setSpeed(1.5f, soundTouch = true)
 controller.release()
 
+// 全屏（R2 起新增，由 GSY 内核接管，等价于 Java 版 startWindowFullscreen / backFromFull）
+controller.enterFullscreen(activity, hideActionBar = true, hideStatusBar = true)
+controller.exitFullscreen(activity)              // 返回 Boolean，false 表示当前并不在全屏态
+val inFs: Boolean = controller.isFullscreen      // 直读底层标志位
+
+// 用户级 VideoAllCallBack（与内部 dispatcher 链式分发，不再覆盖 events）
+controller.setUserVideoAllCallBack(object : GSYSampleCallBack() {
+    override fun onClickStartIcon(url: String?, vararg objects: Any?) { /* 用户埋点 */ }
+})
+
+// 逃生口：直接拿底层 StandardGSYVideoPlayer 调用尚未封装的方法（必须主线程；release 后 no-op）
+controller.withHost { player ->
+    player.setSubTitle("https://example.com/sub.srt")        // 字幕
+    player.setMirrorRotation(true)                            // 镜像
+    player.taskShotPic { bmp -> /* 截图回调 */ }              // 快照
+}
+
 val snap: State<GSYPlayerSnapshot> = controller.snapshot
 // snap.value -> GSYPlayerSnapshot(state, currentPosition, duration,
 //                                 bufferPercent, isPlaying, videoWidth, videoHeight)
@@ -160,6 +177,11 @@ val snap: State<GSYPlayerSnapshot> = controller.snapshot
 ```
 Idle  Preparing  Playing  Buffering  Paused  Completed  Error
 ```
+
+> ⚠️ **关于 `withHost { ... }`**：这是为了在能力对齐补齐之前给业务一个**逃生口**（Escape Hatch），
+> 不是推荐路径。**禁止**在 block 里调 `player.setVideoAllCallBack(...)`——会把内部
+> dispatcher 顶掉，导致 `events` / `setOnXxx` / `setUserVideoAllCallBack` 全部失效。
+> 需要回调请改用 [`setUserVideoAllCallBack`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt) 入口。
 
 ### 4. 响应式订阅（推荐：events / stateFlow）
 
@@ -172,13 +194,15 @@ import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
 
 val controller = rememberGSYPlayerController(url = url, autoPlay = true)
 
-// 1) 一次性"边沿事件"流：onPrepared / onAutoComplete / onPlayError
+// 1) 一次性"边沿事件"流：onPrepared / onAutoComplete / onPlayError / onEnterFullscreen / onQuitFullscreen
 LaunchedEffect(controller) {
     controller.events.collect { event ->
         when (event) {
             is GSYPlayerEvent.Prepared      -> Log.d("Demo", "已准备就绪")
             is GSYPlayerEvent.AutoComplete  -> Log.d("Demo", "播放完成")
             is GSYPlayerEvent.Error         -> Log.e("Demo", "播错 what=${event.what} extra=${event.extra}")
+            GSYPlayerEvent.EnterFull        -> fullscreen = true   // 由内核接管全屏后回调
+            GSYPlayerEvent.QuitFull         -> fullscreen = false
         }
     }
 }
@@ -215,7 +239,33 @@ val snap: GSYPlayerSnapshot by controller.snapshot
 ### Native 模式
 
 `rememberGSYPlayerController` 会在离开 Composition 时自动 `release`。
-全屏推荐使用 `Dialog(properties = DialogProperties(usePlatformDefaultWidth = false))` 或 Compose Navigation 切路由。
+
+**全屏（推荐路径，自 R2 起）**——由 GSY 内核接管，与 Java 版 `startWindowFullscreen` 走同一管线（反射克隆 host 接管渲染、自动旋转、自动隐藏系统栏）：
+
+```kotlin
+val controller = rememberGSYPlayerController(url = url, autoPlay = true)
+val activity = LocalContext.current as Activity
+var fullscreen by remember { mutableStateOf(false) }
+
+LaunchedEffect(controller) {
+    controller.events.collect { ev ->
+        when (ev) {
+            GSYPlayerEvent.EnterFull -> fullscreen = true
+            GSYPlayerEvent.QuitFull  -> fullscreen = false
+            else -> {}
+        }
+    }
+}
+
+BackHandler(enabled = fullscreen) { controller.exitFullscreen(activity) }
+
+Button(onClick = { controller.enterFullscreen(activity) }) { Text("全屏") }
+```
+
+> 不再推荐 `Dialog(...) + 手动 requestedOrientation` 自绘全屏——两个 demo
+> [DetailNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt)
+> 与 [ListWithFullscreenActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt)
+> 已切换到上述路径，可作为参考。
 
 ---
 

@@ -13,22 +13,26 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
  * 复用 StandardGSYVideoPlayer 的内核与渲染管线，但隐藏所有自带 UI，
  * 由 Compose 端自行绘制控制条与浮层。
  *
- * 包私有：仅在 com.shuyu.gsyvideoplayer.compose.native_ 内使用，
- * 通过 {@link GSYPlayerController} / {@link GSYPlayerSurface} 暴露给上层。
+ * <p><b>类与构造器为 public 是反射克隆全屏所必需</b>——
+ * {@link com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer#startWindowFullscreen}
+ * 通过 {@link Class#getConstructor(Class[])} 反射构造同类全屏副本，
+ * 该 API 仅返回 public 构造器；非 public 时会抛 NoSuchMethodException。
+ * 业务上仍只通过 {@link GSYPlayerController} / {@link GSYPlayerSurface} 使用，
+ * 避免直接持有此类引用。
  */
-class GSYComposeHostPlayer extends StandardGSYVideoPlayer {
+public class GSYComposeHostPlayer extends StandardGSYVideoPlayer {
 
-    GSYComposeHostPlayer(Context context, Boolean fullFlag) {
+    public GSYComposeHostPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
         hideSelfWidgets();
     }
 
-    GSYComposeHostPlayer(Context context) {
+    public GSYComposeHostPlayer(Context context) {
         super(context);
         hideSelfWidgets();
     }
 
-    GSYComposeHostPlayer(Context context, AttributeSet attrs) {
+    public GSYComposeHostPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         hideSelfWidgets();
     }
