@@ -26,11 +26,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.gsyvideoplayer.compose.host.AutoPlayListActivity
 import com.example.gsyvideoplayer.compose.host.BasicWrapperActivity
+import com.example.gsyvideoplayer.compose.host.CacheDownloadComposeActivity
+import com.example.gsyvideoplayer.compose.host.DetailFilterComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailNativeActivity
 import com.example.gsyvideoplayer.compose.host.FullFeatureNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListPlayNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListWithFullscreenActivity
 import com.example.gsyvideoplayer.compose.host.MultiWindowActivity
+import com.example.gsyvideoplayer.compose.host.SubtitleComposeActivity
+import com.example.gsyvideoplayer.compose.host.SwitchSeamlessComposeActivity
 import com.example.gsyvideoplayer.compose.host.SwitchUrlActivity
 
 class ComposeDemoListActivity : ComponentActivity() {
@@ -92,6 +96,26 @@ private val DEMO_ENTRIES = listOf(
         title = "P1 · Native 列表 + 内层全屏",
         subtitle = "对齐 Java DetailListPlayer：列表卡片直接进入全屏，返回回到原列表位（同 Activity）",
         target = ListWithFullscreenActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5 · Native 滤镜",
+        subtitle = "对齐 Java DetailFilterActivity：通过 withHost 注入 setEffectFilter，循环切换 6 种 GLSL 滤镜",
+        target = DetailFilterComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5 · Native 缓存 / 下载",
+        subtitle = "对齐 Java DetailDownloadPlayer：ProxyCacheManager 代理 + isCacheReady 状态 + 清缓存",
+        target = CacheDownloadComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5 · Native 字幕",
+        subtitle = "对齐 Java SubtitleDetailPlayer：3 字幕源切换 + 字号/开关，IJK 内核",
+        target = SubtitleComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5 · Native Seamless 切换",
+        subtitle = "对齐 Java SwitchDetailActivity：同一 controller 跨 list/detail 复用，不重 setUp 不重拉流",
+        target = SwitchSeamlessComposeActivity::class.java,
     ),
 )
 

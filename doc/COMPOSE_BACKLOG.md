@@ -15,7 +15,7 @@
 | 是否破坏既有功能 | ✅ 0 破坏 | 持续保持（每轮 `:app:assembleDebug` + `:app:assembleRelease` + 真机 monkey + crash buffer 空） |
 | Wrapper 模式 vs Java | ✅ 几乎完全等价 | 维持，仅做小修补（autoPauseResume 已默认开） |
 | Native 模式 vs Java | ⚠️ "最小子集 + 逃生口堵死" | P4-1 → P4-2 推进至"等价" |
-| Demo 覆盖 | 8/41 ≈ 19.5%，**13 类差异化能力空白** | P5-1 必补 8 个 → P5-2 选补 8 个 → 总覆盖 ≈ 24/41 ≈ 58% |
+| Demo 覆盖 | 8/41 ≈ 19.5%，**13 类差异化能力空白** | P5-1 必补 8 个 → P5-2 选补 8 个 → 总覆盖 ≈ 24/41 ≈ 58%（**当前进度：12/41 ≈ 29%，P5-1 4/8 已完成**） |
 | 文档与发布约束 | doc/COMPOSE_USE.md 已写明"未发布" | 持续与代码同步，每轮回归此文件 |
 
 ---
@@ -159,15 +159,16 @@
 
 ### 轮次 R4 — P5-1 必补 demo（每个独立 commit / 8 commits 或一次合并）
 
-- [ ] D1 DetailFilterCompose
-- [ ] D2 CacheDownloadCompose
+- [x] D1 DetailFilterCompose ✅ [DetailFilterComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailFilterComposeActivity.kt) — `controller.withHost { player.setEffectFilter(...) }` 注入 6 种 GLSL 滤镜（NoEffect / Gamma / 黑白 / 反色 / Sepia / 高斯模糊），`GSYVideoType.setRenderType(GLSURFACE)` 在 onCreate 设置、onDestroy 还原
+- [x] D2 CacheDownloadCompose ✅ [CacheDownloadComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) — `ProxyCacheManager.instance().newProxy(ctx).getProxyUrl(url)` 套缓存代理 + `setCacheWithPlay(true)`；展示 `snapshot.isCacheReady` / `bufferPercent` / `netSpeedText`；清缓存按钮调 `GSYVideoManager.instance().clearAllDefaultCache(ctx)`
 - [ ] D3 AdInListCompose
-- [ ] D4 SubtitleCompose
+- [x] D4 SubtitleCompose ✅ [SubtitleComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SubtitleComposeActivity.kt) — `PlayerFactory.setPlayManager(IjkPlayerManager.class)` 切回 IJK；3 字幕源（SRT 本地 / VTT 本地 / SRT 网络）；`controller.withHost` 注入 `setSubtitleSources / setSubtitleStyle / setSubtitleEnabled / selectSubtitle`；字号 16↔22 sp 切换
 - [ ] D5 DanmakuCompose
 - [ ] D6 ExoSwitchSourceCompose
 - [ ] D7 MultiWindowParallelCompose（用 CustomManager）
-- [ ] D8 SwitchSeamlessCompose（共享 surface）
-- [ ] [ComposeDemoListActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) 8 → 16 项；文档 8 → 16 项
+- [x] D8 SwitchSeamlessCompose（共享 surface）✅ [SwitchSeamlessComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) — Compose 端 seamless 精髓：同一 controller 跨 list 缩略区与 detail 大屏区复用（`GSYPlayerSurface` attach/detach 切换位置），不重 setUp、不释放、进度连续
+- [x] [ComposeDemoListActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) 8 → 12 项；4 个新 Activity 在 [AndroidManifest.xml](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/AndroidManifest.xml) 注册 `exported="false"`
+- [x] R4 真机回归 ✅ emulator-5554 装机；4 个新 demo am start + BACK 全部正常；Monkey 50 events 0 FATAL；logcat AndroidRuntime FATAL/crash buffer 全空
 
 ### 轮次 R5 — P5-2 选补 demo（视进度执行）
 
@@ -193,8 +194,8 @@
 |---|---|---|---|
 | R1 | ✅ 已完成 | `24360bff` (归档 plan 落盘) → `276420b7` (R1 修复) | P2 六项全过；构建 + 模拟器双回归通过；不发 tag |
 | R2 | ✅ 已完成 | `276420b7` (R1 修复) → `6f5f846c` (R2 修复) | P0-1/2/3 三项全过；额外修复 GSYComposeHostPlayer public class+构造器（反射克隆门票）；构建 + 模拟器双回归通过；不发 tag |
-| R3 | ☐ pending | — | 等 R2 |
-| R4 | ☐ pending | — | 等 R3 |
+| R3 | ✅ 已完成 | `6f5f846c` (R2) → `fe66e7fd` (R3 P1 reactive parity) | P1 五项全过；events SharedFlow + stateFlow + setUserVideoAllCallBack + 8 直 setter + BufferingProgress/SeekComplete + ΔD3 手势；emulator Monkey 50 events 0 FATAL |
+| R4 | ◐ 半完成（4/8 demo） | `fe66e7fd` (R3) → 本轮 (D1/D2/D4/D8) | P5-1 高优 4 项已落（滤镜 / 缓存下载 / 字幕 / Seamless 切换）；ComposeDemoListActivity 8→12 项；emulator Monkey 50 events 0 FATAL；D3/D5/D6/D7 留 R4-续 |
 | R5 | ☐ pending | — | 视情况 |
 | R6 | ☐ pending | — | 首发评估前置 |
 | R7 | ☐ pending | — | 选做 |
