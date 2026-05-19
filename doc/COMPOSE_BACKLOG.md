@@ -192,7 +192,7 @@
 | 轮次 | 状态 | 起止 commit | 备注 |
 |---|---|---|---|
 | R1 | ✅ 已完成 | `24360bff` (归档 plan 落盘) → `276420b7` (R1 修复) | P2 六项全过；构建 + 模拟器双回归通过；不发 tag |
-| R2 | ✅ 已完成 | `276420b7` (R1 修复) → `R2_COMMIT_PLACEHOLDER` (R2 修复) | P0-1/2/3 三项全过；额外修复 GSYComposeHostPlayer public class+构造器（反射克隆门票）；构建 + 模拟器双回归通过；不发 tag |
+| R2 | ✅ 已完成 | `276420b7` (R1 修复) → `6f5f846c` (R2 修复) | P0-1/2/3 三项全过；额外修复 GSYComposeHostPlayer public class+构造器（反射克隆门票）；构建 + 模拟器双回归通过；不发 tag |
 | R3 | ☐ pending | — | 等 R2 |
 | R4 | ☐ pending | — | 等 R3 |
 | R5 | ☐ pending | — | 视情况 |
