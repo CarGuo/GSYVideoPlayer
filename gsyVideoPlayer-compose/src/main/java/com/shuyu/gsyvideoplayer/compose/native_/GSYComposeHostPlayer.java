@@ -22,6 +22,32 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
  */
 public class GSYComposeHostPlayer extends StandardGSYVideoPlayer {
 
+    /**
+     * Compose 端 Controller 注入的 hook，转发底层 [com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener]
+     * 中 VideoAllCallBack 不覆盖的 buffer / seek 边沿事件。
+     *
+     * <p>设计要点：
+     * <ul>
+     *   <li>仅 Controller 应在 attachHost / detachHost 中赋值，业务方禁止直写；</li>
+     *   <li>克隆全屏体由 GSY 内核 {@code cloneParams} 复制字段，但反射只复制 protected
+     *       字段；本类的两个 hook 字段是 public 但只可被同包 Controller 通过 attachHost 安装；
+     *       全屏克隆体由 Controller 重新走 attachHost 路径接管 hook，不依赖 cloneParams 的字段拷贝。</li>
+     * </ul>
+     */
+    public interface BufferingHook { void onBufferingUpdate(int percent); }
+    public interface SeekCompleteHook { void onSeekComplete(); }
+
+    private volatile BufferingHook bufferingHook;
+    private volatile SeekCompleteHook seekCompleteHook;
+
+    public void setBufferingHook(BufferingHook hook) {
+        this.bufferingHook = hook;
+    }
+
+    public void setSeekCompleteHook(SeekCompleteHook hook) {
+        this.seekCompleteHook = hook;
+    }
+
     public GSYComposeHostPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
         hideSelfWidgets();
@@ -35,6 +61,24 @@ public class GSYComposeHostPlayer extends StandardGSYVideoPlayer {
     public GSYComposeHostPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         hideSelfWidgets();
+    }
+
+    @Override
+    public void onBufferingUpdate(int percent) {
+        super.onBufferingUpdate(percent);
+        BufferingHook h = bufferingHook;
+        if (h != null) {
+            try { h.onBufferingUpdate(percent); } catch (Throwable ignored) {}
+        }
+    }
+
+    @Override
+    public void onSeekComplete() {
+        super.onSeekComplete();
+        SeekCompleteHook h = seekCompleteHook;
+        if (h != null) {
+            try { h.onSeekComplete(); } catch (Throwable ignored) {}
+        }
     }
 
     @Override

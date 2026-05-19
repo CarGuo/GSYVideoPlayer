@@ -148,14 +148,14 @@
 
 ### 轮次 R3 — P4-2 代码 P1（预计 1.5 天）
 
-- [ ] P1-1 `Modifier.gsyGestureControl(controller, ...)` + 锁屏联动
-- [ ] P1-2 `rememberGSYPlayerController(autoPauseResume = true)` 默认开
-- [ ] P1-3 `GSYPlayerEvent` 扩 19 项 + `installInternalCallback` 全数 emit
-- [ ] P1-4 Snapshot 扩 SAR / netSpeed / isCacheReady
-- [ ] P1-5 Controller 直 setter（headers / cachePath / setSeekOnStart 等 7 项）
-- [ ] P1-6 `events.BufferingProgress(percent)` 实时
-- [ ] ΔD3 [FullFeatureNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) 接入 gestureModifier
-- [ ] commit `compose: R3 P1 reactive parity (gestures + events + setters)`
+- [x] P1-1 `Modifier.gsyGestureControl(controller, ...)` + 锁屏联动 ✅ 新文件 [GSYGestureModifier.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYGestureModifier.kt)：横向 drag = seek（onDragEnd commit），左半屏纵向 = 亮度，右半屏纵向 = 音量；snapshot.isLocked 时所有手势短路；ΔD3 接入并加中央 toast
+- [x] P1-2 `rememberGSYPlayerController(autoPauseResume = true)` 默认开 ✅ ON_PAUSE → `GSYVideoManager.onPause()`，ON_RESUME → `GSYVideoManager.onResume()`
+- [x] P1-3 `GSYPlayerEvent` 扩 19 项 + `installInternalCallback` 全数 emit ✅ sealed class 5→24 项；dispatcher 22 项 callback 各加 `_events.tryEmit`
+- [x] P1-4 Snapshot 扩 SAR / netSpeed / isCacheReady ✅ 5 字段（videoSarNum/Den / netSpeed/Long/Text / isCacheReady） + syncFromHost 同步 + runCatching 兜底
+- [x] P1-5 Controller 直 setter ✅ 8 个 setter（headers / cachePath / setSeekOnStart / setLooping / setStartAfterPrepared / setOverrideExtension / setShowPauseCover / setReleaseWhenLossAudio）+ 缓存 reapply 机制（attach 新 host / 全屏克隆体后自动 reapply）+ 主线程门
+- [x] P1-6 `events.BufferingProgress(percent)` + `SeekComplete` 实时 ✅ [GSYComposeHostPlayer.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYComposeHostPlayer.java) 加 `BufferingHook` / `SeekCompleteHook`；Controller 在 attachHost / setUp 安装、detachHost / release 清理
+- [x] ΔD3 [FullFeatureNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) 接入 gestureModifier ✅ 三向手势 + 中央 toast
+- [x] R3 真机回归 ✅ ΔD3 进入 + 横/纵 swipe + Activity 存活；ΔD2 全屏 round trip；Monkey 50 events `--pct-touch 60 --pct-motion 30` 0 FATAL；状态显示 `Playing | 01:02 / 1:32:27`
 
 ### 轮次 R4 — P5-1 必补 demo（每个独立 commit / 8 commits 或一次合并）
 

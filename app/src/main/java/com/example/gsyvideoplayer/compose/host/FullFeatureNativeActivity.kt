@@ -44,10 +44,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.shuyu.gsyvideoplayer.compose.native_.GSYGestureType
+import com.shuyu.gsyvideoplayer.compose.native_.GSYGestureUpdate
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayState
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSnapshot
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
+import com.shuyu.gsyvideoplayer.compose.native_.gsyGestureControl
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
 import java.util.Locale
 import kotlin.math.abs
@@ -78,6 +81,8 @@ private fun FullFeatureNativeScreen() {
     val snap by controller.snapshot
 
     var hasError by remember { mutableStateOf(false) }
+    // 手势中央 toast：drag 时显示，松手 1.5s 后清空（onDragEnd 不会再触发 update，这里用 LaunchedEffect 监听变化）
+    var gestureToast by remember { mutableStateOf<GSYGestureUpdate?>(null) }
     // 用响应式 events 流订阅 onPrepared / onPlayError；
     // 一个 LaunchedEffect 即可同时处理多种边沿事件，无需多次 setter。
     LaunchedEffect(controller) {
@@ -106,7 +111,36 @@ private fun FullFeatureNativeScreen() {
                     .aspectRatio(16f / 9f)
                     .background(Color.Black)
             ) {
-                GSYPlayerSurface(controller, Modifier.fillMaxSize())
+                GSYPlayerSurface(
+                    controller = controller,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .gsyGestureControl(
+                            controller = controller,
+                            onGestureUpdate = { gestureToast = it },
+                            onGestureCommit = { gestureToast = null },
+                        ),
+                )
+
+                // 中央手势 toast：与原 GSYVideoControlView 的 popup dialog 等价表现
+                gestureToast?.let { toast ->
+                    Box(
+                        Modifier
+                            .align(Alignment.Center)
+                            .background(Color(0xCC000000))
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                    ) {
+                        Text(
+                            text = when (toast.type) {
+                                GSYGestureType.Volume -> "音量 ${(toast.progress * 100).toInt()}%"
+                                GSYGestureType.Brightness -> "亮度 ${(toast.progress * 100).toInt()}%"
+                                GSYGestureType.Progress -> "${formatTime(toast.seekTimeMs)} / ${formatTime(toast.durationMs)}"
+                                GSYGestureType.None -> ""
+                            },
+                            color = Color.White,
+                        )
+                    }
+                }
 
                 if (snap.isLocked) {
                     IconButton(

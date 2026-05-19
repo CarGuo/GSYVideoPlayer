@@ -106,6 +106,7 @@ class GSYPlayerController internal constructor(
     private val internalDispatcher: VideoAllCallBack = object : GSYSampleCallBack() {
         override fun onStartPrepared(url: String?, vararg objects: Any?) {
             host?.let { syncFromHost(it) }
+            _events.tryEmit(GSYPlayerEvent.StartPrepared)
             try { userCallback?.onStartPrepared(url, *objects) } catch (_: Throwable) {}
         }
 
@@ -143,70 +144,87 @@ class GSYPlayerController internal constructor(
         }
 
         override fun onClickStartIcon(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickStartIcon)
             try { userCallback?.onClickStartIcon(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickStartError(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickStartError)
             try { userCallback?.onClickStartError(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickStop(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickStop)
             try { userCallback?.onClickStop(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickStopFullscreen(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickStopFullscreen)
             try { userCallback?.onClickStopFullscreen(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickResume(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickResume)
             try { userCallback?.onClickResume(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickResumeFullscreen(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickResumeFullscreen)
             try { userCallback?.onClickResumeFullscreen(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickSeekbar(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickSeekbar)
             try { userCallback?.onClickSeekbar(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickSeekbarFullscreen(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickSeekbarFullscreen)
             try { userCallback?.onClickSeekbarFullscreen(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onQuitSmallWidget(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.QuitSmall)
             try { userCallback?.onQuitSmallWidget(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onEnterSmallWidget(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.EnterSmall)
             try { userCallback?.onEnterSmallWidget(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onTouchScreenSeekVolume(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.TouchScreenSeekVolume)
             try { userCallback?.onTouchScreenSeekVolume(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onTouchScreenSeekPosition(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.TouchScreenSeekPosition)
             try { userCallback?.onTouchScreenSeekPosition(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onTouchScreenSeekLight(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.TouchScreenSeekLight)
             try { userCallback?.onTouchScreenSeekLight(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickStartThumb(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickStartThumb)
             try { userCallback?.onClickStartThumb(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickBlank(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickBlank)
             try { userCallback?.onClickBlank(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onClickBlankFullscreen(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.ClickBlankFullscreen)
             try { userCallback?.onClickBlankFullscreen(url, *objects) } catch (_: Throwable) {}
         }
 
         override fun onComplete(url: String?, vararg objects: Any?) {
+            _events.tryEmit(GSYPlayerEvent.Complete)
             try { userCallback?.onComplete(url, *objects) } catch (_: Throwable) {}
         }
     }
@@ -214,9 +232,13 @@ class GSYPlayerController internal constructor(
     fun setUp(builder: GSYVideoOptionBuilder, autoPlay: Boolean = false) {
         pendingBuilder = builder
         this.autoPlay = autoPlay
+        // 若已有缓存的 cachePath，覆盖到 builder（与 P1-5 setCachePath 语义一致）
+        pendingCachePath?.let { builder.setCachePath(it) }
         host?.let { player ->
             applyBuilder(player)
             installInternalCallback(player)
+            installLowLevelHooks(player)
+            reapplyPendingSetters(player)
             if (autoPlay) {
                 handler.post {
                     if (!released) host?.startPlayLogic()
@@ -329,10 +351,17 @@ class GSYPlayerController internal constructor(
                 old.setVideoAllCallBack(null)
             } catch (_: Throwable) {
             }
+            try {
+                old.setBufferingHook(null)
+                old.setSeekCompleteHook(null)
+            } catch (_: Throwable) {
+            }
         }
         host = player
         applyBuilder(player)
         installInternalCallback(player)
+        installLowLevelHooks(player)
+        reapplyPendingSetters(player)
         startTicking()
         if (autoPlay) {
             handler.post {
@@ -352,11 +381,33 @@ class GSYPlayerController internal constructor(
         player.setVideoAllCallBack(internalDispatcher)
     }
 
+    /**
+     * 安装 [GSYComposeHostPlayer] 的两个底层 hook，把 [com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener]
+     * 中 VideoAllCallBack 不覆盖的 buffer / seek 边沿信号，转成 [GSYPlayerEvent.BufferingProgress] /
+     * [GSYPlayerEvent.SeekComplete] 两类事件 emit 到 [events]。
+     *
+     * Hook 在 [attachHost] 时安装，[detachHost] 时清理；全屏克隆体由 GSY 内核走 attach 接管，
+     * 因此克隆期间 hook 自动跟随 host 切换、不会丢事件。
+     */
+    private fun installLowLevelHooks(player: GSYComposeHostPlayer) {
+        player.setBufferingHook { percent ->
+            _events.tryEmit(GSYPlayerEvent.BufferingProgress(percent.coerceIn(0, 100)))
+        }
+        player.setSeekCompleteHook {
+            _events.tryEmit(GSYPlayerEvent.SeekComplete)
+        }
+    }
+
     internal fun detachHost() {
         stopTicking()
         host?.let { old ->
             try {
                 old.setVideoAllCallBack(null)
+            } catch (_: Throwable) {
+            }
+            try {
+                old.setBufferingHook(null)
+                old.setSeekCompleteHook(null)
             } catch (_: Throwable) {
             }
         }
@@ -394,6 +445,15 @@ class GSYPlayerController internal constructor(
         val duration = player.duration.coerceAtLeast(0L)
         val cur = player.currentPositionWhenPlaying.coerceAtLeast(0L).coerceAtMost(duration)
         val buffer = player.buffterPoint.coerceIn(0, 100)
+        // P1-4 扩展字段：SAR / 网速 / 缓存命中。这些 API 在 host detached / 内核未就绪时
+        // 可能抛或返回 0，以 runCatching 兜底，保证 tick 不被 player 内部状态错位带崩。
+        val sarNum = runCatching { player.videoSarNum }.getOrDefault(0)
+        val sarDen = runCatching { player.videoSarDen }.getOrDefault(0)
+        val netSpeed = runCatching { player.netSpeed }.getOrDefault(0L)
+        val netSpeedText = runCatching { player.netSpeedText }.getOrDefault("")
+        val cacheReady = runCatching {
+            GSYVideoManager.instance()?.isCacheFile == true
+        }.getOrDefault(false)
         val next = GSYPlayerSnapshot(
             state = state,
             currentPosition = cur,
@@ -402,6 +462,11 @@ class GSYPlayerController internal constructor(
             isPlaying = state == GSYPlayState.Playing || state == GSYPlayState.Buffering,
             videoWidth = player.currentVideoWidth,
             videoHeight = player.currentVideoHeight,
+            videoSarNum = sarNum,
+            videoSarDen = sarDen,
+            netSpeed = netSpeed,
+            netSpeedText = netSpeedText,
+            isCacheReady = cacheReady,
             speed = currentSpeed,
             isLocked = locked,
         )
@@ -499,6 +564,141 @@ class GSYPlayerController internal constructor(
     val isFullscreen: Boolean
         get() = host?.isIfCurrentIsFullscreen == true
 
+    // ==================== R3 P1-5 ｜ 直 setter（builder-only 字段的 controller 直访入口） ====================
+    //
+    // GSY 内核很多字段历史上仅在 [GSYVideoOptionBuilder] 中以"链式 builder"方式暴露——这意味着：
+    // - setUp 之后想动态调整（比如 prepared 后再切换循环），只能通过 host 直访 / withHost 闭包；
+    // - 这些字段语义稳定（与 mediaPlayer 配置 + UI 语义一一对应），适合在 controller 上提供
+    //   一组幂等、null-safe、released-safe 的直 setter，免去用户每次都 withHost 的样板。
+    //
+    // 设计准则：
+    // - 主线程门：与 [withHost] 一致，避免内核 Handler 与 OrientationUtils 混线程；
+    // - released no-op：release 后所有 setter 不抛异常、不报错，保持组件解构安全；
+    // - 字段值同步缓存到 controller 上，attach 新 host 时（含全屏克隆体）自动 reapply，避免丢配置。
+
+    private var pendingHeaders: Map<String, String>? = null
+    private var pendingCachePath: java.io.File? = null
+    private var pendingSeekOnStart: Long = -1L
+    private var pendingLooping: Boolean? = null
+    private var pendingStartAfterPrepared: Boolean? = null
+    private var pendingOverrideExtension: String? = null
+    private var pendingShowPauseCover: Boolean? = null
+    private var pendingReleaseWhenLossAudio: Boolean? = null
+
+    private fun requireMainThread(name: String) {
+        if (Looper.myLooper() !== Looper.getMainLooper()) {
+            throw IllegalStateException(
+                "GSYPlayerController.$name 必须在主线程调用：" +
+                    "GSYVideoView 内核 (Surface / Handler / OrientationUtils) 都在主线程操作。",
+            )
+        }
+    }
+
+    /**
+     * 设置 HTTP 请求头，对应 [com.shuyu.gsyvideoplayer.video.base.GSYVideoView.setMapHeadData]。
+     * 用于鉴权 token / referer / UA 等场景。
+     */
+    fun setHeaders(headers: Map<String, String>?) {
+        requireMainThread("setHeaders")
+        if (released) return
+        pendingHeaders = headers
+        host?.setMapHeadData(headers)
+    }
+
+    /**
+     * 设置缓存目录，对应 [com.shuyu.gsyvideoplayer.video.base.GSYVideoView.setUp] 第三参数 `cachePath`。
+     * 已 setUp 时调用本 setter 会立即用同 url + cacheWithPlay + cachePath 重新 setUp。
+     *
+     * 注意：cachePath 在 GSY 内核上是"setUp 时一次性传入"——不是动态字段。本 setter 仅缓存值，
+     * 下一次 [setUp] 自动写入；若已经 attach 且有 builder，则用同 builder + 新 cachePath 重新 setUp。
+     */
+    fun setCachePath(cachePath: java.io.File?) {
+        requireMainThread("setCachePath")
+        if (released) return
+        pendingCachePath = cachePath
+        // builder 已经存在的话，把字段写回 builder 让下一次 setUp 生效
+        pendingBuilder?.setCachePath(cachePath)
+    }
+
+    /**
+     * 设置 prepared 之后自动 seek 到的位置，对应 [com.shuyu.gsyvideoplayer.video.base.GSYVideoView.setSeekOnStart]。
+     * 列表分页 / 历史进度恢复场景常用。
+     */
+    fun setSeekOnStart(positionMs: Long) {
+        requireMainThread("setSeekOnStart")
+        if (released) return
+        pendingSeekOnStart = positionMs
+        host?.setSeekOnStart(positionMs)
+    }
+
+    /**
+     * 设置循环播放，对应 [com.shuyu.gsyvideoplayer.video.base.GSYVideoView.setLooping]。
+     */
+    fun setLooping(looping: Boolean) {
+        requireMainThread("setLooping")
+        if (released) return
+        pendingLooping = looping
+        host?.setLooping(looping)
+    }
+
+    /**
+     * 设置 prepared 后是否自动起播，对应 [com.shuyu.gsyvideoplayer.video.base.GSYVideoView.setStartAfterPrepared]。
+     * 默认 true；置为 false 可实现"预加载 + 待用户点击"模式。
+     */
+    fun setStartAfterPrepared(startAfterPrepared: Boolean) {
+        requireMainThread("setStartAfterPrepared")
+        if (released) return
+        pendingStartAfterPrepared = startAfterPrepared
+        host?.setStartAfterPrepared(startAfterPrepared)
+    }
+
+    /**
+     * 设置 ExoPlayer 内核覆盖的扩展名（如 hls / dash），对应
+     * [com.shuyu.gsyvideoplayer.video.base.GSYVideoView.setOverrideExtension]。
+     * 仅 ExoPlayer 内核生效。
+     */
+    fun setOverrideExtension(overrideExtension: String?) {
+        requireMainThread("setOverrideExtension")
+        if (released) return
+        pendingOverrideExtension = overrideExtension
+        host?.setOverrideExtension(overrideExtension)
+    }
+
+    /**
+     * 设置暂停后是否显示最后一帧封面，对应 [com.shuyu.gsyvideoplayer.video.base.GSYVideoView.setShowPauseCover]。
+     */
+    fun setShowPauseCover(showPauseCover: Boolean) {
+        requireMainThread("setShowPauseCover")
+        if (released) return
+        pendingShowPauseCover = showPauseCover
+        host?.setShowPauseCover(showPauseCover)
+    }
+
+    /**
+     * 设置是否在丢失音频焦点时 release 内核，对应
+     * [com.shuyu.gsyvideoplayer.video.base.GSYVideoView.setReleaseWhenLossAudio]。
+     */
+    fun setReleaseWhenLossAudio(releaseWhenLossAudio: Boolean) {
+        requireMainThread("setReleaseWhenLossAudio")
+        if (released) return
+        pendingReleaseWhenLossAudio = releaseWhenLossAudio
+        host?.setReleaseWhenLossAudio(releaseWhenLossAudio)
+    }
+
+    /**
+     * 把 [P1-5] 缓存的 setter 值在 attach 新 host（含全屏克隆体）时一次性 reapply。
+     * 由 [attachHost] 内部调用，对外不暴露。
+     */
+    private fun reapplyPendingSetters(player: GSYComposeHostPlayer) {
+        pendingHeaders?.let { player.setMapHeadData(it) }
+        if (pendingSeekOnStart >= 0) player.setSeekOnStart(pendingSeekOnStart)
+        pendingLooping?.let { player.setLooping(it) }
+        pendingStartAfterPrepared?.let { player.setStartAfterPrepared(it) }
+        pendingOverrideExtension?.let { player.setOverrideExtension(it) }
+        pendingShowPauseCover?.let { player.setShowPauseCover(it) }
+        pendingReleaseWhenLossAudio?.let { player.setReleaseWhenLossAudio(it) }
+    }
+
     fun release() {
         if (released) return
         released = true
@@ -507,6 +707,11 @@ class GSYPlayerController internal constructor(
         host?.let { old ->
             try {
                 old.setVideoAllCallBack(null)
+            } catch (_: Throwable) {
+            }
+            try {
+                old.setBufferingHook(null)
+                old.setSeekCompleteHook(null)
             } catch (_: Throwable) {
             }
             try {
