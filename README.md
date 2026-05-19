@@ -155,7 +155,7 @@ implementation project(':gsyVideoPlayer-compose')
 // compose-bom is api-exposed from the module; consumers still manage androidx.compose.* per their own project setup.
 ```
 
-See [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md). The sample app provides a `Compose Demo` entry with 9 runnable examples (Basic Wrapper, Switch URL, Multi-Window, List, Auto-Play List, List with Fullscreen, Detail Native, Full-Feature Native).
+See [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md). The sample app provides a `Compose Demo` entry with 9 runnable examples (Basic Wrapper, Switch URL, Multi-Window, List, Auto-Play List, List with Fullscreen, Detail Native, Full-Feature Native). Outstanding gaps and the rolling roadmap are tracked in [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md).
 
 ### 2. Github Package Dependency Method (Recommended)
 

@@ -5,6 +5,8 @@
 > `gsyVideoPlayer-compose` 模块已合入 master，但 **尚未对外发布到 Maven Central / GitHub Packages / JitPack**。下文中出现的 `13.0.0` 仅为预留坐标 —— 仅当你**自己** `./gradlew :gsyVideoPlayer-compose:publishToMavenLocal` 之后才能在你的项目里以坐标形式引用，否则只能走 `implementation project(":gsyVideoPlayer-compose")` 的源码依赖方式。
 >
 > 第一次正式发布的时间点请等待官方 release tag 公告。
+>
+> 当前能力缺口、已知问题与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](./COMPOSE_BACKLOG.md)；后续每一轮代码与 demo 推进都会同步更新该文件。
 
 新增模块：`gsyVideoPlayer-compose`，提供两种使用方式：
 

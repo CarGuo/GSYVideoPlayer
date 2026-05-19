@@ -156,7 +156,7 @@ implementation project(':gsyVideoPlayer-compose')
 // compose-bom 由模块 api 透出，使用方仍按自身工程版本管理 androidx.compose.* 即可
 ```
 
-详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 9 个可运行示例（基础 / 切流 / 多窗口 / 列表 / 自动连播 / 列表内全屏 / 详情切换 / 全功能 Native）。
+详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 9 个可运行示例（基础 / 切流 / 多窗口 / 列表 / 自动连播 / 列表内全屏 / 详情切换 / 全功能 Native）。当前能力缺口与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md)。
 
 ### 2、Github Package 依赖方式(推荐)
 
