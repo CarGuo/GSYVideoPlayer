@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -25,6 +26,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.compose.wrapper.GSYVideoPlayerView
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 
 class BasicWrapperActivity : ComponentActivity() {
@@ -55,6 +58,11 @@ private fun BasicWrapperScreen() {
     var title by remember { mutableStateOf(DemoSamples.SAMPLE_TITLE) }
     var cacheWithPlay by remember { mutableStateOf(false) }
     var rotateAuto by remember { mutableStateOf(false) }
+    var showPauseCover by remember { mutableStateOf(true) }
+    var releaseOnAudioLoss by remember { mutableStateOf(false) }
+    var seekRatio by remember { mutableStateOf(1f) }
+    var preparedCount by remember { mutableIntStateOf(0) }
+    var lastCallback by remember { mutableStateOf("尚未触发回调") }
     var playToken by remember { mutableStateOf(0) }
     var playerRef by remember { mutableStateOf<StandardGSYVideoPlayer?>(null) }
 
@@ -70,7 +78,9 @@ private fun BasicWrapperScreen() {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                "Wrapper 模式直接复用 StandardGSYVideoPlayer，全部内置 UI、手势、全屏、缓存、字幕等能力都可用。",
+                "Wrapper 模式直接复用 StandardGSYVideoPlayer，全部内置 UI、手势、全屏、缓存、字幕等能力都可用。\n" +
+                    "本 demo 同时演示 5 个高频 builder 选项：setVideoAllCallBack / setSeekRatio / " +
+                    "setShowPauseCover / setReleaseWhenLossAudio / setStartAfterPrepared。",
                 style = MaterialTheme.typography.bodyMedium,
             )
 
@@ -92,12 +102,47 @@ private fun BasicWrapperScreen() {
                                 .setLockLand(rotateAuto)
                                 .setShowFullAnimation(false)
                                 .setNeedLockFull(true)
+                                // —— 以下 5 项是 R6 ΔD1 新增的 builder 选项示范 ——
+                                .setSeekRatio(seekRatio)
+                                .setShowPauseCover(showPauseCover)
+                                .setReleaseWhenLossAudio(releaseOnAudioLoss)
+                                .setStartAfterPrepared(true)
+                                .setVideoAllCallBack(object : GSYSampleCallBack() {
+                                    override fun onPrepared(url: String?, vararg objects: Any?) {
+                                        super.onPrepared(url, *objects)
+                                        preparedCount += 1
+                                        lastCallback = "onPrepared #$preparedCount"
+                                    }
+
+                                    override fun onAutoComplete(url: String?, vararg objects: Any?) {
+                                        super.onAutoComplete(url, *objects)
+                                        lastCallback = "onAutoComplete"
+                                    }
+
+                                    override fun onPlayError(url: String?, vararg objects: Any?) {
+                                        super.onPlayError(url, *objects)
+                                        lastCallback = "onPlayError"
+                                    }
+
+                                    override fun onClickStartIcon(
+                                        url: String?,
+                                        vararg objects: Any?,
+                                    ) {
+                                        super.onClickStartIcon(url, *objects)
+                                        lastCallback = "onClickStartIcon"
+                                    }
+                                })
                                 .build(player)
                         },
                         onPlayerCreated = { playerRef = it },
                     )
                 }
             }
+
+            Text(
+                "回调状态：$lastCallback（onPrepared 累计 $preparedCount 次）",
+                style = MaterialTheme.typography.labelMedium,
+            )
 
             OutlinedTextField(
                 value = url,
@@ -118,6 +163,30 @@ private fun BasicWrapperScreen() {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Switch(checked = rotateAuto, onCheckedChange = { rotateAuto = it })
                 Text("  自动旋转横屏全屏", modifier = Modifier.padding(start = 8.dp))
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Switch(checked = showPauseCover, onCheckedChange = { showPauseCover = it })
+                Text("  暂停时显示封面（setShowPauseCover）", modifier = Modifier.padding(start = 8.dp))
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Switch(
+                    checked = releaseOnAudioLoss,
+                    onCheckedChange = { releaseOnAudioLoss = it },
+                )
+                Text(
+                    "  失去音频焦点直接 release（setReleaseWhenLossAudio）",
+                    modifier = Modifier.padding(start = 8.dp),
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("  滑动 seek 灵敏度（setSeekRatio）：${"%.2f".format(seekRatio)}x")
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf(0.5f, 1f, 2f, 3f).forEach { ratio ->
+                    OutlinedButton(onClick = { seekRatio = ratio }) {
+                        Text("${"%.1f".format(ratio)}x")
+                    }
+                }
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

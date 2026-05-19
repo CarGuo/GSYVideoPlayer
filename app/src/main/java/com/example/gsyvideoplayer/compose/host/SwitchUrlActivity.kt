@@ -34,6 +34,13 @@ import androidx.compose.ui.unit.dp
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
 
+/**
+ * ΔD5 R6 升级备注：本 Demo 演示的"切换 URL"实质是 controller.setUp 重置 ——
+ * 切换会丢失 surface 接管，必然出现一次黑屏 + 重新 prepare。需要"无缝接力"（同一 surface
+ * 跨实例复用、零黑屏）请参考：SwitchSeamlessComposeActivity（Demo 列表里的 D8）。
+ *
+ * see-also: SwitchSeamlessComposeActivity
+ */
 class SwitchUrlActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

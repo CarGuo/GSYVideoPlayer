@@ -42,6 +42,17 @@ import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
 
+/**
+ * ΔD7 R6 升级备注：本 Demo 演示"播完自动接力下一段"。
+ *
+ * 重要取舍：自动接力使用 events.AutoComplete 边沿触发 controller.setUp(下一段 url) 。
+ * 由于 setUp 会重置内部状态，**这一刻会丢失 surface 接管，必然出现一次黑屏 + 重新 prepare 的
+ * 抖动**。这是当前 Native 路径在 P0-1（surface 共享层）落地之前的已知短板。
+ *
+ * 如果业务对接力黑屏零容忍，请优先考虑：
+ *  1) 改 Wrapper + StandardGSYVideoPlayer 链路（自带 SwitchUtil seamless 切换路径）；
+ *  2) 等待后续 P0-1 surface 接管层 GA，再改回 Native 接力。
+ */
 class AutoPlayListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

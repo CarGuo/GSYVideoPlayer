@@ -75,7 +75,7 @@ private fun MultiWindowScreen() {
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Native 多窗口 Demo") }) }
+        topBar = { TopAppBar(title = { Text("Native 多窗口 Demo（互斥版）") }) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -86,7 +86,8 @@ private fun MultiWindowScreen() {
         ) {
             Text(
                 "对齐 Java MultiSampleVideo：同屏 3 个 Native Surface 各自独立。" +
-                    "受单 GSYVideoManager 限制，同一时刻仅一个真正在播，激活其它窗口会自动暂停前一个。",
+                    "受单 GSYVideoManager 限制，同一时刻仅一个真正在播，激活其它窗口会自动暂停前一个。\n" +
+                    "ΔD6 提示：如需「真并行」（多窗口同时出画 + 同时出声），请看 D7 多 CustomManager 实例并行版。",
                 style = MaterialTheme.typography.bodyMedium,
             )
 

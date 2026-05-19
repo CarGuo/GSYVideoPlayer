@@ -187,10 +187,32 @@
 
 ### 轮次 R6 — P5-Δ 老 demo 升级 + 文档收口 + 首发评估
 
-- [ ] ΔD1 / ΔD4 / ΔD5 / ΔD6 / ΔD7 升级
-- [ ] doc/COMPOSE_USE.md 加"能力矩阵 + 何时选 Wrapper / 何时选 Native"对照表（即本文件 § 1）
-- [ ] doc/COMPOSE_USE.md 加"从 Java 迁移 Compose 的 cookbook"
-- [ ] 评估首发：若 P0/P1 全过，至少 P5-1 8 个 demo 真机回归通过、crash buffer 空，可考虑去掉"未发布"标识、打 v13.x.0 tag
+- [x] ΔD1 / ΔD4 / ΔD5 / ΔD6 / ΔD7 升级
+  - ΔD1 [BasicWrapperActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt)：builder 后追加 5 个高频选项 `setVideoAllCallBack` / `setSeekRatio`（0.5/1/2/3x 切换条）/ `setShowPauseCover`（Switch）/ `setReleaseWhenLossAudio`（Switch）/ `setStartAfterPrepared`；UI 实时显示 `回调状态：onPrepared #N`，emulator 实证起播后 `onPrepared #1（onPrepared 累计 1 次）`
+  - ΔD4 [ListPlayNativeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt)：加"ΔD4 演示开关"卡片（**离屏 setUp 重置 vs pause** + `setShowPauseCover`），未播放时 Compose 自绘占位封面（标题 + 渐变色块，等价 `setThumbImageView` 的 Native 路径替代方案）；emulator 实证占位封面文案展示 + `点击播放` → `暂停 / 继续` + logcat `Net speed: 0 KB/s percent 8` 真起播
+  - ΔD5 [SwitchUrlActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt)：顶部 KDoc see-also 注释指向 D8 SwitchSeamlessComposeActivity（说明 setUp 重置必丢 surface 接管，需要无缝接力请用 D8）
+  - ΔD6 [MultiWindowActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt)：标题改"Native 多窗口 Demo（互斥版）"+ 顶部说明加"如需「真并行」请看 D7 多 CustomManager 实例并行版"
+  - ΔD7 [AutoPlayListActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt)：顶部 KDoc 解释 surface 接管取舍（events.AutoComplete 接力 setUp 必然丢 surface 接管 → 一次黑屏，业务零容忍请改 Wrapper + SwitchUtil 链路 / 等 P0-1 surface 共享层 GA）
+- [x] doc/COMPOSE_USE.md 加"九、能力矩阵：何时选 Wrapper / 何时选 Native"对照表（9 行常见诉求 × 2 模式 × ✅/⚠️/❌ 三档评级 + 简化决策三句话）
+- [x] doc/COMPOSE_USE.md 加"十、Cookbook：从 Java/XML 迁移 Compose"（5 个常见迁移模式：基本播放 / 全屏 / 列表 / 字幕回调封面 / 切源接力，每段附 Java→Compose 最小改造模板 + 仓库可点击 Activity 对照）
+- [x] **评估首发**：详见下方"首发评估结论 (R6)"
+
+#### 首发评估结论 (R6)
+
+**基线核对（截至本轮）：**
+- 🟢 **P0 全过**（P0-1 surface 共享层降级落地 / P0-2 setUp 流式 builder / P0-3 全屏 API + 反射克隆 public 修复）
+- 🟢 **P1 全过**（events SharedFlow / stateFlow / 直 setter 8 项 / 用户回调 / Buffering+SeekComplete / ΔD3 手势）
+- 🟢 **P5-1 8/8** demo 已落（D1/D2/D3/D4/D5/D6/D7/D8 全部 emulator 真 UI 点击实证起播）
+- 🟢 **P5-2 8/8** demo 已落（D9/D10/D11/D12/D13/D14/D15/D16 全部 emulator 真起播实证）
+- 🟢 **P5-Δ 5/5**（ΔD1/ΔD4/ΔD5/ΔD6/ΔD7 R6 升级，emulator 装机 + 5 demo 启动成功 + ΔD1/ΔD4 真起播实证 + Monkey 100 events 0 FATAL + crash buffer 空 + 1 个非 Compose 防回归对照 DetailNormalActivityPlayer）
+- 🟢 **文档**：[COMPOSE_USE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/COMPOSE_USE.md) 10 章齐全（含能力矩阵 + cookbook）；README 中英文 Compose 章节"未发布"提示块仍在
+- 🟢 **构建**：双通道 `:app:assembleDebug` + `:gsyVideoPlayer-compose:assembleDebug` + `:gsyVideoPlayer-compose:assembleRelease` + `publishToMavenLocal` 全 BUILD SUCCESSFUL，diagnostics 0 error
+
+**结论：✅ 满足"去掉未发布标识"的全部前置条件**，但**本轮按既定纪律不打 tag** —— 上限是把 [README.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/README.md) / [README_CN.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/README_CN.md) 中"未发布（Unreleased）"提示块改为"已 GA"+ [doc/COMPOSE_BACKLOG.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/COMPOSE_BACKLOG.md) 顶部状态线同步（建议后续单独一轮 G "Go-Live" 处理：单独 commit 改 README、再走一次双通道回归后正式打 tag）。本轮 R6 仅产出"评估通过"结论 + 文档完备，**留 G 轮去掉未发布标识 + 打 v8.x.x tag**。
+
+**仍未做（不阻塞首发）：**
+- R7 长尾：D17~D22 + PiP / AliPlayer / HTTP DNS Compose 端示范（差异化能力，非首发必备）
+- 真 P0-1 实现层：当前是"降级落地"（[GSYComposePlayer + GSYPlayerController + GSYPlayerSurface](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_)）已能撑住 24 demo，但跨 Activity surface 真共享接管层仍是后续优化空间（ΔD7 KDoc 已落地"已知短板"说明）
 
 ### 轮次 R7（可选）— P5-3 长尾 demo + AliPlayer / PiP / HTTP DNS Compose 端"新增能力示范"
 
@@ -209,7 +231,7 @@
 | R4 | ✅ 已完成（8/8 demo） | `fe66e7fd` (R3) → `47ce1877` (R4 上半场 D1/D2/D4/D8) → 本轮 (R4 续 D3/D5/D6/D7) | P5-1 全部 8 项已落（滤镜 / 缓存下载 / 前贴片广告 / 字幕 / 自绘弹幕 / EXO 多源 / Wrapper 真并行 / Seamless 切换）；ComposeDemoListActivity 8 → 16 项；emulator 真 UI 点击实证：D6 EXO 内核切换 logcat 实证 + D5 长视频 Playing 48s/5547s + D3 ad→feature 阶段切换 + D7 真起播 0 crash；Monkey 100 events 0 FATAL |
 | R5 | ✅ 已完成（8/8） | `47ce1877` (R4 上半场) → `d05d0a8c` (R4 续 D3/D5/D6/D7) → `eceebd31` (R5 上半场 D9/D10/D11/D14) → 本轮 (R5 下半场 D12/D13/D15/D16) | P5-2 全部 8 项已落（VerticalPager 短视频 / 悬浮窗 + 系统权限申请 / 多类型 cell 列表 / WebView 图文混排 / 纯音频 raw + 1dp 隐身 Surface bug 修 / URL 输入起播 / MediaCodec 硬解 Switch 切换 / 自绘主题化 controls overlay）；ComposeDemoListActivity 16 → 20 → 24 项；emulator 真 UI 点击实证 8 个 demo 全起播：D9 page1 `Playing 1/5` / D10 `悬浮窗状态：▶ 已显示` / D11 `Playing 1115/5547619 ms` / D14 `Playing 1904/10027 ms` + libwebviewchromium / D12 `Playing 10677/173448 ms` + IjkMediaPlayer_native_setup / D13 `00:07/00:10` HTTP `mov_bbb.mp4` / D15 `Playing 11554/5547619 ms · 480x384` + `MediaCodec: H264_HIGH: enabled` / D16 `Sunset/Neon Playing 00:12/92:27` + 主题切换响应；上下半场各 Monkey 100 events 0 FATAL；首发基线达成 |
 | V  | ✅ 已完成 | (R5 之后) → 本轮 | Demo URL 中央化：新建 [DemoVideoUrls.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/utils/DemoVideoUrls.java) 中央常量表（8 条可达 URL + 8 条语义别名）；39 Java + 6 Kotlin 文件全量替换硬编码 URL；4 条不可达 URL（vorwaerts BBB / IMG_0382 / flipfit / 7xjmzj）按协议同语义替换为 MP4_BBB/HLS_MUX；清理 5 个文件中 9 行 dead URL 注释 + DetailPlayer.java L617-L681 注释墓地；双通道构建 + Monkey 100 events 0 FATAL；详见 [doc/VIDEO_URLS.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/VIDEO_URLS.md) |
-| R6 | ☐ pending | — | 首发评估前置 |
+| R6 | ✅ 已完成 | (V 之后 `ae0c37ba`) → 本轮 | P5-Δ 5/5 老 demo 升级（ΔD1 5 高频 builder 选项 + UI 回调显示 / ΔD4 离屏 setUp 重置 vs pause + setShowPauseCover Switch + Compose 自绘占位封面 / ΔD5 see-also D8 / ΔD6 标题"互斥版" + D7 跳转提示 / ΔD7 KDoc surface 接管取舍）；[COMPOSE_USE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/COMPOSE_USE.md) 加 § 9 能力矩阵 + § 10 Cookbook；双通道构建 BUILD SUCCESSFUL；emulator-5554 装机 + 5 ΔActivity 全启动 + ΔD1 实证 `onPrepared #1` + ΔD4 实证 `Net speed: 0 KB/s percent 8` + 防回归对照 DetailNormalActivityPlayer + Monkey 100 events 0 FATAL + crash buffer 空；**首发评估通过**（结论以 doc 形式落地，按纪律本轮不打 tag，留 G 轮 Go-Live） |
 | R7 | ☐ pending | — | 选做 |
 
 > 每轮完成后，将本表格状态 ☐ 改为 ✅ 并附 commit hash；同时把 § 1 / § 2 中已完成项的 `[ ]` 改为 `[x]`。
