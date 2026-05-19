@@ -24,15 +24,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.gsyvideoplayer.compose.host.AdInListComposeActivity
 import com.example.gsyvideoplayer.compose.host.AutoPlayListActivity
 import com.example.gsyvideoplayer.compose.host.BasicWrapperActivity
 import com.example.gsyvideoplayer.compose.host.CacheDownloadComposeActivity
+import com.example.gsyvideoplayer.compose.host.DanmakuComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailFilterComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailNativeActivity
+import com.example.gsyvideoplayer.compose.host.ExoSwitchSourceComposeActivity
 import com.example.gsyvideoplayer.compose.host.FullFeatureNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListPlayNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListWithFullscreenActivity
 import com.example.gsyvideoplayer.compose.host.MultiWindowActivity
+import com.example.gsyvideoplayer.compose.host.MultiWindowParallelComposeActivity
 import com.example.gsyvideoplayer.compose.host.SubtitleComposeActivity
 import com.example.gsyvideoplayer.compose.host.SwitchSeamlessComposeActivity
 import com.example.gsyvideoplayer.compose.host.SwitchUrlActivity
@@ -116,6 +120,26 @@ private val DEMO_ENTRIES = listOf(
         title = "P5 · Native Seamless 切换",
         subtitle = "对齐 Java SwitchDetailActivity：同一 controller 跨 list/detail 复用，不重 setUp 不重拉流",
         target = SwitchSeamlessComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5 · Native 前贴片广告",
+        subtitle = "对齐 Java ListADVideoActivity：单 controller AD → AutoComplete → 切正片，演示 events 边沿事件链",
+        target = AdInListComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5 · Native Compose 自绘弹幕",
+        subtitle = "对齐 Java DanmakuVideoPlayer 思路：Canvas + textMeasurer 与 snapshot.currentPosition 同步",
+        target = DanmakuComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5 · Native EXO 多源切换",
+        subtitle = "对齐 Java DetailExoListPlayer：PlayerFactory.setPlayManager(Exo2PlayerManager) + MP4/HLS + 5 档倍速",
+        target = ExoSwitchSourceComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5 · Wrapper 真并行多窗口",
+        subtitle = "对齐 Java ListMultiNormalAdapter：MultiSampleVideo + CustomManager，3 个并行播放（非互斥）",
+        target = MultiWindowParallelComposeActivity::class.java,
     ),
 )
 

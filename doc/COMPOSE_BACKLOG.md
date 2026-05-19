@@ -15,7 +15,7 @@
 | 是否破坏既有功能 | ✅ 0 破坏 | 持续保持（每轮 `:app:assembleDebug` + `:app:assembleRelease` + 真机 monkey + crash buffer 空） |
 | Wrapper 模式 vs Java | ✅ 几乎完全等价 | 维持，仅做小修补（autoPauseResume 已默认开） |
 | Native 模式 vs Java | ⚠️ "最小子集 + 逃生口堵死" | P4-1 → P4-2 推进至"等价" |
-| Demo 覆盖 | 8/41 ≈ 19.5%，**13 类差异化能力空白** | P5-1 必补 8 个 → P5-2 选补 8 个 → 总覆盖 ≈ 24/41 ≈ 58%（**当前进度：12/41 ≈ 29%，P5-1 4/8 已完成**） |
+| Demo 覆盖 | 8/41 ≈ 19.5%，**13 类差异化能力空白** | P5-1 必补 8 个 → P5-2 选补 8 个 → 总覆盖 ≈ 24/41 ≈ 58%（**当前进度：16/41 ≈ 39%，P5-1 8/8 已完成**） |
 | 文档与发布约束 | doc/COMPOSE_USE.md 已写明"未发布" | 持续与代码同步，每轮回归此文件 |
 
 ---
@@ -161,14 +161,14 @@
 
 - [x] D1 DetailFilterCompose ✅ [DetailFilterComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailFilterComposeActivity.kt) — `controller.withHost { player.setEffectFilter(...) }` 注入 6 种 GLSL 滤镜（NoEffect / Gamma / 黑白 / 反色 / Sepia / 高斯模糊），`GSYVideoType.setRenderType(GLSURFACE)` 在 onCreate 设置、onDestroy 还原
 - [x] D2 CacheDownloadCompose ✅ [CacheDownloadComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) — `ProxyCacheManager.instance().newProxy(ctx).getProxyUrl(url)` 套缓存代理 + `setCacheWithPlay(true)`；展示 `snapshot.isCacheReady` / `bufferPercent` / `netSpeedText`；清缓存按钮调 `GSYVideoManager.instance().clearAllDefaultCache(ctx)`
-- [ ] D3 AdInListCompose
+- [x] D3 AdInListCompose ✅ [AdInListComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AdInListComposeActivity.kt) — 单 controller 通过 `events.AutoComplete` 边沿事件链 setUp 切正片，简化 Java 双 player 模式；emulator 实证 `阶段：广告播放中 → 正片播放中`
 - [x] D4 SubtitleCompose ✅ [SubtitleComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SubtitleComposeActivity.kt) — `PlayerFactory.setPlayManager(IjkPlayerManager.class)` 切回 IJK；3 字幕源（SRT 本地 / VTT 本地 / SRT 网络）；`controller.withHost` 注入 `setSubtitleSources / setSubtitleStyle / setSubtitleEnabled / selectSubtitle`；字号 16↔22 sp 切换
-- [ ] D5 DanmakuCompose
-- [ ] D6 ExoSwitchSourceCompose
-- [ ] D7 MultiWindowParallelCompose（用 CustomManager）
+- [x] D5 DanmakuCompose ✅ [DanmakuComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DanmakuComposeActivity.kt) — Compose Canvas + `rememberTextMeasurer` 自绘 12 条 3 轨弹幕，与 `controller.snapshot.currentPosition` 联动；不依赖 master.flame.danmaku；emulator 实证 `Playing 48s/5547s` 真起播
+- [x] D6 ExoSwitchSourceCompose ✅ [ExoSwitchSourceComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ExoSwitchSourceComposeActivity.kt) — `PlayerFactory.setPlayManager(Exo2PlayerManager.class)` 切 EXO 内核；4 源（MP4/HLS/GSY 默认/IMG_0382）+ 5 档倍速（0.75/1.0/1.25/1.5/2.0）；emulator logcat `ExoPlayerImpl: Init [AndroidXMedia3/1.10.1]` 实证；切 HLS 后新 instance Init + onPrepared
+- [x] D7 MultiWindowParallelCompose（CustomManager）✅ [MultiWindowParallelComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowParallelComposeActivity.kt) — Wrapper 模式 × 3 包 [MultiSampleVideo](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/MultiSampleVideo.java)，每个 view 独立 `setPlayTag + setPlayPosition` → 路由到独立 `CustomManager.getCustomManager(getKey())`；区别于现有 P1 [MultiWindowActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt)（互斥版）；`onDispose` 释放 3 个 manager
 - [x] D8 SwitchSeamlessCompose（共享 surface）✅ [SwitchSeamlessComposeActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) — Compose 端 seamless 精髓：同一 controller 跨 list 缩略区与 detail 大屏区复用（`GSYPlayerSurface` attach/detach 切换位置），不重 setUp、不释放、进度连续
-- [x] [ComposeDemoListActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) 8 → 12 项；4 个新 Activity 在 [AndroidManifest.xml](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/AndroidManifest.xml) 注册 `exported="false"`
-- [x] R4 真机回归 ✅ emulator-5554 装机；4 个新 demo am start + BACK 全部正常；Monkey 50 events 0 FATAL；logcat AndroidRuntime FATAL/crash buffer 全空
+- [x] [ComposeDemoListActivity.kt](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) 8 → 12 → 16 项；8 个新 Activity 在 [AndroidManifest.xml](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/AndroidManifest.xml) 注册 `exported="false"`
+- [x] R4 真机回归 ✅ emulator-5554 装机；上半场 4 个 demo am start + BACK + Monkey 50 events 0 FATAL；下半场 4 个 demo 通过 UI Automator 真点击进入：D6 logcat `ExoPlayerImpl: Init` + `onPrepared` + 切 HLS Release/Init / D5 长视频 Playing 48s/5547s / D3 阶段切换 ad→feature 实证 / D7 onPrepared + CURRENT_STATE_PLAYING；Monkey 100 events 0 FATAL；logcat AndroidRuntime FATAL/crash buffer 全空
 
 ### 轮次 R5 — P5-2 选补 demo（视进度执行）
 
@@ -195,7 +195,7 @@
 | R1 | ✅ 已完成 | `24360bff` (归档 plan 落盘) → `276420b7` (R1 修复) | P2 六项全过；构建 + 模拟器双回归通过；不发 tag |
 | R2 | ✅ 已完成 | `276420b7` (R1 修复) → `6f5f846c` (R2 修复) | P0-1/2/3 三项全过；额外修复 GSYComposeHostPlayer public class+构造器（反射克隆门票）；构建 + 模拟器双回归通过；不发 tag |
 | R3 | ✅ 已完成 | `6f5f846c` (R2) → `fe66e7fd` (R3 P1 reactive parity) | P1 五项全过；events SharedFlow + stateFlow + setUserVideoAllCallBack + 8 直 setter + BufferingProgress/SeekComplete + ΔD3 手势；emulator Monkey 50 events 0 FATAL |
-| R4 | ◐ 半完成（4/8 demo） | `fe66e7fd` (R3) → 本轮 (D1/D2/D4/D8) | P5-1 高优 4 项已落（滤镜 / 缓存下载 / 字幕 / Seamless 切换）；ComposeDemoListActivity 8→12 项；emulator Monkey 50 events 0 FATAL；D3/D5/D6/D7 留 R4-续 |
+| R4 | ✅ 已完成（8/8 demo） | `fe66e7fd` (R3) → `47ce1877` (R4 上半场 D1/D2/D4/D8) → 本轮 (R4 续 D3/D5/D6/D7) | P5-1 全部 8 项已落（滤镜 / 缓存下载 / 前贴片广告 / 字幕 / 自绘弹幕 / EXO 多源 / Wrapper 真并行 / Seamless 切换）；ComposeDemoListActivity 8 → 16 项；emulator 真 UI 点击实证：D6 EXO 内核切换 logcat 实证 + D5 长视频 Playing 48s/5547s + D3 ad→feature 阶段切换 + D7 真起播 0 crash；Monkey 100 events 0 FATAL |
 | R5 | ☐ pending | — | 视情况 |
 | R6 | ☐ pending | — | 首发评估前置 |
 | R7 | ☐ pending | — | 选做 |
