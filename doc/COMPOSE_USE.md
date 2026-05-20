@@ -320,7 +320,7 @@ App 模块下入口 `Compose Demo`（[ComposeDemoListActivity.kt](../app/src/mai
 | 18 | 悬浮窗（画中画） | [FloatingWindowComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FloatingWindowComposeActivity.kt) | `SYSTEM_ALERT_WINDOW` 拉起 `FloatPlayerView`，跨 Activity 常驻 |
 | 19 | 多类型列表 | [MoreTypeComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MoreTypeComposeActivity.kt) | LazyColumn 多 type cell（Normal/Ad/Cover/Unknown） |
 | 20 | 图文混排（视频 + WebView） | [WebDetailComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/WebDetailComposeActivity.kt) | 上方 Compose 播放器 + 下方 `AndroidView` WebView 双栈共存 |
-| 21 | 纯音频播放 | [AudioOnlyComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) | raw 资源 + `enableRawPlay`；Compose 端只接 controller，不用 Surface |
+| 21 | 纯音频播放 | [AudioOnlyComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) | raw 资源 + `enableRawPlay`；Compose 端 controller 仍要挂一个 `GSYPlayerSurface`（host 必须有 Surface 载体，1dp 隐身节点即可） |
 | 22 | 自定义 URL / 本地文件 | [LocalFileComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/LocalFileComposeActivity.kt) | URL 输入 + cache 切换 + `raw://` / `http://` 多种源类型 |
 | 23 | MediaCodec 硬解切换 | [MediaCodecComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MediaCodecComposeActivity.kt) | `GSYVideoType.enableMediaCodec()` / `disableMediaCodec()` 实时切换 |
 | 24 | 自定义主题 Controls | [CustomControlsThemeComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/CustomControlsThemeComposeActivity.kt) | Compose 自绘控件取代 `GSYDefaultControls`：渐变浮层 + Slider seek + 多主题切换 |
@@ -414,11 +414,11 @@ gsyVideoPlayer-compose/
 | 诉求 | Wrapper（`GSYVideoPlayerView` / `GSYAnyVideoPlayerView`） | Native（`GSYComposePlayer` / `GSYPlayerController` + `GSYPlayerSurface`） |
 |---|---|---|
 | 几乎零成本接入、与 Java demo 一一对应 | ✅ 推荐 | ⚠️ 需要自己写 UI / 状态订阅 |
-| 复用所有 `GSYVideoOptionBuilder` 链式选项（~30+ 项，含字幕、回调、缓存、滤镜） | ✅ 直接 `.build(player)` | ⚠️ 仅常用项有 controller 直挂入口（其余仍可通过 `controller.setOptions { ... }` 透传） |
+| 复用所有 `GSYVideoOptionBuilder` 链式选项（~30+ 项，含字幕、回调、缓存、滤镜） | ✅ 直接 `.build(player)` | ⚠️ 仅常用项有 controller 直挂入口（其余仍可通过 `controller.setUp(builder)` 完整透传，或 `controller.withHost { player -> ... }` 直访 host API） |
 | 内置全屏（`startWindowFullscreen`）、SwitchUtil 无缝切换 | ✅ 完整 | ❌ 需要自己组合（见 D8 SwitchSeamless） |
 | 列表多 item 各自独立播放（每行一个 player） | ✅ 但每个都是完整 View 树，性能略重 | ✅ 推荐：单 controller + LazyColumn 复用 surface |
 | 多窗口"真并行"（同屏多路同时出声） | ⚠️ 受 GSYVideoManager 互斥 | ✅ D7 多 CustomManager 实例 |
-| Compose 原生订阅 events / state（流式驱动 UI） | ❌ 内部仍是命令式 callback | ✅ 推荐：`controller.events` + `controller.state` |
+| Compose 原生订阅 events / state（流式驱动 UI） | ❌ 内部仍是命令式 callback | ✅ 推荐：`controller.events`（SharedFlow） + `controller.snapshot`（Compose `State<GSYPlayerSnapshot>`，`val s by controller.snapshot`） / `controller.stateFlow`（StateFlow） |
 | 完全自定义控件层（手势、按钮、字幕、画中画…） | ⚠️ 需要继承 `StandardGSYVideoPlayer` 重写 | ✅ 推荐：`GSYPlayerSurface` + 自绘 |
 | 需要"播完接力下一段"且**零黑屏** | ✅ Wrapper 路径走 SwitchUtil | ❌ 当前 Native setUp 会丢 surface 接管，会闪一下（P0-1 落地后改善，见 D7 注释） |
 | 需要在不打断播放的前提下，跨 Activity / Fragment 复用同一个播放实例 | ⚠️ 需要手写 `release` 兜底 | ✅ controller `rememberSaveable` 化是后续 backlog |
@@ -461,7 +461,7 @@ GSYVideoPlayerView(
 
 **Compose（Wrapper）**：保持上方 builder 不变，把这三项打开即可，全屏由内部 `OrientationUtils` 接管；返回键拦截在 `BackHandler { ... }` 内调用 `player.onBackFullscreen()`。
 
-**Compose（Native）**：自绘控件层，监听 `controller.state.isPlaying` + 自定义 fullscreenComposable 切换，参考 [ListWithFullscreenActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt)。
+**Compose（Native）**：自绘控件层，监听 `controller.snapshot.value.state.isPlaying` + 自定义 fullscreenComposable 切换，参考 [ListWithFullscreenActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt)。
 
 ### 3) 列表内播放
 
@@ -497,16 +497,16 @@ LaunchedEffect(listState, playingIndex) {
 })
 ```
 
-**Compose（Native）**：把 callback 替换为 `controller.events`（hot SharedFlow） / `controller.state`（StateFlow），用 `LaunchedEffect { controller.events.collect { ... } }` 即可订阅，**完全不依赖 callback 接口**。
+**Compose（Native）**：把 callback 替换为 `controller.events`（hot SharedFlow） / `controller.stateFlow`（StateFlow） / `controller.snapshot`（Compose `State<GSYPlayerSnapshot>`），用 `LaunchedEffect { controller.events.collect { ... } }` 即可订阅，**完全不依赖 callback 接口**。
 
 ### 5) 切源（同 player 切流 / 接力）
 
 | 场景 | 路径 | 说明 |
 |---|---|---|
 | 暴力切源（允许一次黑屏 + 重新 prepare） | `controller.setUp(newUrl, ...)` | [SwitchUrlActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt) |
-| 无缝切源（同 surface 跨实例复用，零黑屏） | `SwitchUtil.optionPlayer(...)` | [SwitchSeamlessComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) |
+| 无缝切源（同 controller 跨 Composable 复用，零黑屏） | 同一 `GSYPlayerController` + `GSYPlayerSurface` 在 list/detail 间换位 attach（host 内部 `setSurfaceToPlay` 接管，等价 Java 的 `SwitchUtil.savePlayState/clonePlayState`） | [SwitchSeamlessComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) |
 | 列表自动接力下一段 | `controller.events.collect { if (it is AutoComplete) controller.setUp(next) }` | [AutoPlayListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt) （顶部 KDoc 注释了 surface 接管取舍） |
 
 > **通用原则**：Java 里"链式 builder + callback"的写法，**Wrapper 路径几乎等价复用**；
-> Native 路径把 callback 换成 `events` / `state` 订阅，把 fullscreen 等粘性 View 行为改成"一个 Composable 状态切换"。
+> Native 路径把 callback 换成 `events` / `stateFlow` / `snapshot` 订阅，把 fullscreen 等粘性 View 行为改成"一个 Composable 状态切换"。
 

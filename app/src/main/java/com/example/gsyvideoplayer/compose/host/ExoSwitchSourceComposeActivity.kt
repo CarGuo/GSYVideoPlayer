@@ -41,16 +41,34 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 class ExoSwitchSourceComposeActivity : ComponentActivity() {
+    private var originalPlayManager: Class<*>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 切换到 EXO2 内核（与 Java DetailExoListPlayer 同条件）
         // 这是 GSY 的核心多内核能力之一：无需切换 Player 实现，UI 层完全复用。
+        // 进入页面前通过反射记录原 PlayManager 类，离开时还原，避免污染后续 demo。
+        originalPlayManager = runCatching {
+            val f = PlayerFactory::class.java.getDeclaredField("sPlayerManager")
+            f.isAccessible = true
+            f.get(null) as? Class<*>
+        }.getOrNull()
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         setContent {
             MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     ExoSwitchScreen()
                 }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        @Suppress("UNCHECKED_CAST")
+        originalPlayManager?.let {
+            runCatching {
+                PlayerFactory.setPlayManager(it as Class<out com.shuyu.gsyvideoplayer.player.IPlayerManager>)
             }
         }
     }

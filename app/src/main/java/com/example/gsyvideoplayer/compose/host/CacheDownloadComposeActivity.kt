@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,13 +61,13 @@ private fun CacheDownloadScreen() {
     val snap by controller.snapshot
 
     var statusText by remember { mutableStateOf("等待开始") }
-    val proxyUrl by remember {
-        derivedStateOf {
-            // 用 ProxyCacheManager 套一层代理，命中缓存时第二次播放本地秒开。
-            // 与 Java DetailDownloadPlayer 同 API 路径。
-            val server = ProxyCacheManager.instance().newProxy(appContext)
-            server.getProxyUrl(DemoSamples.SAMPLE_URL)
-        }
+    val proxyUrl = remember(appContext) {
+        // 用 ProxyCacheManager 套一层代理，命中缓存时第二次播放本地秒开。
+        // 与 Java DetailDownloadPlayer 同 API 路径。
+        // 注：不能用 derivedStateOf —— newProxy(...) 是带副作用的 IO 调用（会启动 HTTP 代理 server）。
+        // derivedStateOf 的 calculation 只能是纯派生函数，不允许有副作用。
+        val server = ProxyCacheManager.instance().newProxy(appContext)
+        server.getProxyUrl(DemoSamples.SAMPLE_URL)
     }
 
     LaunchedEffect(proxyUrl) {

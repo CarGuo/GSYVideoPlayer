@@ -80,11 +80,7 @@ private fun LocalFileScreen() {
         GSYVideoManager.instance().enableRawPlay(ctx.applicationContext)
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            runCatching { controller.release() }
-        }
-    }
+    // controller 释放由 rememberGSYPlayerController 内部 DisposableEffect 托管，无需重复调用。
 
     fun start(url: String) {
         if (url.isBlank()) return

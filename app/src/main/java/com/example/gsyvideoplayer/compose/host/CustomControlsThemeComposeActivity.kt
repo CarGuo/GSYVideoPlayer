@@ -80,11 +80,7 @@ private fun CustomControlsThemeScreen() {
         controller.setUp(builder, autoPlay = true)
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            runCatching { controller.release() }
-        }
-    }
+    // controller 释放由 rememberGSYPlayerController 内部 DisposableEffect 托管，无需重复调用。
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Compose 自定义主题 Controls Demo") }) }

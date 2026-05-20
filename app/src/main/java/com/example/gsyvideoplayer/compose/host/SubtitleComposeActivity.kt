@@ -45,15 +45,34 @@ import com.shuyu.gsyvideoplayer.subtitle.GSYSubtitleSource
 import com.shuyu.gsyvideoplayer.subtitle.GSYSubtitleStyle
 
 class SubtitleComposeActivity : ComponentActivity() {
+    private var originalPlayManager: Class<*>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 通用字幕路径需要 IJK 内核（与 Java SubtitleDetailPlayer 同条件）。
+        // 进入页面前通过反射记录原 PlayManager 类，离开时还原，避免污染后续 demo
+        // （PlayerFactory.sPlayerManager 是 process 级单例）。
+        originalPlayManager = runCatching {
+            val f = PlayerFactory::class.java.getDeclaredField("sPlayerManager")
+            f.isAccessible = true
+            f.get(null) as? Class<*>
+        }.getOrNull()
         PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
         setContent {
             MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     SubtitleScreen()
                 }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        @Suppress("UNCHECKED_CAST")
+        originalPlayManager?.let {
+            runCatching {
+                PlayerFactory.setPlayManager(it as Class<out com.shuyu.gsyvideoplayer.player.IPlayerManager>)
             }
         }
     }

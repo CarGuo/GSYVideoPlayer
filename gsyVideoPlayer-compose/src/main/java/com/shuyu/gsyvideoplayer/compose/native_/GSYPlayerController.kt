@@ -1,7 +1,6 @@
 package com.shuyu.gsyvideoplayer.compose.native_
 
 import android.app.Activity
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -9,8 +8,8 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,9 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class GSYPlayerController internal constructor(
-    private val context: Context,
-) {
+class GSYPlayerController internal constructor() {
 
     internal var host: GSYComposeHostPlayer? = null
         private set
@@ -471,6 +468,10 @@ class GSYPlayerController internal constructor(
             isLocked = locked,
         )
         _snapshot.value = next
+        // 双写守恒：stateFlow 与 snapshot 在同一行同步赋值（且整个 syncFromHost 由
+        // tickRunnable 在主线程 post 调用），二者数据值永远 ===；订阅模型的 commit
+        // 时机略有差异（Compose snapshot 在下一帧提交，StateFlow 立即可见），属语义
+        // 而非数据漂移。详见 README "Compose 状态读取" 一节。
         _stateFlow.value = next
     }
 

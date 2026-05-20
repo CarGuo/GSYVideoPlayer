@@ -55,7 +55,10 @@ class FloatingWindowComposeActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        GSYVideoManager.instance().releaseMediaPlayer()
+        // 不再强制 GSYVideoManager.releaseMediaPlayer()：
+        // 该方法是全局门面，会顺手干掉悬浮窗里仍在播的常驻 player（FloatWindow.player 与
+        // GSYVideoManager.instance() 共享同一个 IjkMediaPlayer 实例）。
+        // FloatWindow.destroy() 自身在 view detach + player release 上已正确处理。
         FloatWindow.destroy()
     }
 }

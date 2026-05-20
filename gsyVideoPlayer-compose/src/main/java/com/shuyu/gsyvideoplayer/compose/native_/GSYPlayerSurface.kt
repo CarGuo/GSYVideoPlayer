@@ -6,7 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.compose.common.LifecycleEffect
@@ -31,8 +30,7 @@ fun rememberGSYPlayerController(
     autoPlay: Boolean = false,
     autoPauseResume: Boolean = true,
 ): GSYPlayerController {
-    val context = LocalContext.current
-    val controller = remember { GSYPlayerController(context) }
+    val controller = remember { GSYPlayerController() }
     if (url != null) {
         // 关键约束：不能在 remember 的 calculation lambda 里执行 controller.setUp(...)，
         // 那是把"副作用"放在了"读 state"的位置——重组期会被多次调用，

@@ -54,13 +54,23 @@ class MediaCodecComposeActivity : ComponentActivity() {
 private fun MediaCodecScreen() {
     val controller = rememberGSYPlayerController()
     val snapshot by controller.snapshot
-    var hwOn by remember { mutableStateOf(GSYVideoType.isMediaCodec()) }
+    val originalHw = remember { GSYVideoType.isMediaCodec() }
+    var hwOn by remember { mutableStateOf(originalHw) }
     var lastEnabledAt by remember { mutableStateOf("") }
 
     DisposableEffect(Unit) {
         onDispose {
-            runCatching { controller.release() }
-            runCatching { GSYVideoType.disableMediaCodec() }
+            // 还原全局硬解开关，避免污染后续页面（GSYVideoType 是 process 级状态）。
+            runCatching {
+                if (originalHw) {
+                    GSYVideoType.enableMediaCodec()
+                    GSYVideoType.enableMediaCodecTexture()
+                } else {
+                    GSYVideoType.disableMediaCodec()
+                    GSYVideoType.disableMediaCodecTexture()
+                }
+            }
+            // controller 释放由 rememberGSYPlayerController 内部 DisposableEffect 托管。
         }
     }
 

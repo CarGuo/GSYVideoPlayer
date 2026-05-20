@@ -7,10 +7,12 @@ import android.view.WindowManager
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
@@ -19,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.layout.onSizeChanged
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.math.abs
 
 // =====================================================================================
@@ -100,11 +101,11 @@ fun Modifier.gsyGestureControl(
 
     // 当前手势会话状态（仅在一次 down → up 间有效）
     var sessionType by remember { mutableStateOf(GSYGestureType.None) }
-    var startX by remember { mutableStateOf(0f) }
-    var startVolume by remember { mutableStateOf(0) }
-    var startBrightness by remember { mutableStateOf(0f) }
-    var startPosition by remember { mutableStateOf(0L) }
-    var lastSeekTarget by remember { mutableStateOf(0L) }
+    var startX by remember { mutableFloatStateOf(0f) }
+    var startVolume by remember { mutableIntStateOf(0) }
+    var startBrightness by remember { mutableFloatStateOf(0f) }
+    var startPosition by remember { mutableLongStateOf(0L) }
+    var lastSeekTarget by remember { mutableLongStateOf(0L) }
     var lastUpdate by remember { mutableStateOf(GSYGestureUpdate(GSYGestureType.None, 0f)) }
 
     /**
@@ -203,13 +204,7 @@ fun Modifier.gsyGestureControl(
                         GSYGestureType.Volume -> {
                             val am = audioManager ?: return@detectVerticalDragGestures
                             val max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-                            // 与 GSYVideoControlView.touchSurfaceMove 同算法：deltaY = -dragAmount，
-                            // ratio = max * (-dragAmount) * 3 / height
-                            val accumDelta = (change.position.y - change.previousPosition.y).let {
-                                // 取本帧与上一帧 y 差值积累，非纯瞬时
-                                it + (-dragAmount)
-                            }
-                            // 直接按 dragAmount 累加更稳：每像素映射 (3 * max / height) 步
+                            // 与 GSYVideoControlView.touchSurfaceMove 同算法：每像素映射 (3 * max / height) 步。
                             val stepFloat = (-dragAmount * 3f * max / height)
                             val newVol = (am.getStreamVolume(AudioManager.STREAM_MUSIC) + stepFloat.toInt())
                                 .coerceIn(0, max)
