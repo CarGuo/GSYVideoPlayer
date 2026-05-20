@@ -4,7 +4,7 @@
 >
 > **Compose 模块当前状态：未发布（Unreleased）**。所有动作均不打 tag，随 master 滚动迭代；首发将以本文件 P4-1 全部完成 + P5-1 至少一半完成 为基线再视情况评估。
 >
-> 校对时间：2026-05-20。基线 commit：[`90ab81a8`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer)。
+> 校对时间：2026-05-20（J 轮 Java 端基础能力真机回归）。基线 commit：[`9cafdb08`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer)。
 
 ---
 
@@ -236,6 +236,7 @@
 | I-1 | ✅ 已完成 | `1e935452` (H) → `74c8a0eb` (Controller 拆分) | `GSYPlayerController.release()` / `dispose()` 拆分（避免 Compose 重组时误销毁 host）；构建 + emulator 双回归通过；不发 tag |
 | I-2 | ✅ 已完成 | `74c8a0eb` (I-1) → `c8ce3203` (PLAYBOOK + 脚本) → `90ab81a8` (PLAYBOOK 录入 I-2 结果 + Wrapper 自动播放注解修订) | 新增 [doc/COMPOSE_TEST_PLAYBOOK.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/COMPOSE_TEST_PLAYBOOK.md) + 配套可复用 shell/python 脚本；I-2 全量 Compose 回归（24 demo 真 UI 实证 + Monkey 0 FATAL）+ 修订 Wrapper 自动播放说明；不发 tag |
 | I-3 | ✅ 已完成 | `90ab81a8` (I-2) → 本轮 | 文档全量回归（37 份 markdown）：修复 [README_CN.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/README_CN.md) 坏链 `README_EN.md` → `README.md`；4 份发布文档示例版本 `11.3.0` → `13.0.0`（[ARCHITECTURE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/ARCHITECTURE.md) 5 处 / [DUAL_CHANNEL_PUBLISH.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/DUAL_CHANNEL_PUBLISH.md) 8 处 / [README_DEPENDENCY_GUIDE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/README_DEPENDENCY_GUIDE.md) 6 处 / [MAVEN_CENTRAL_AUTOMATION.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/MAVEN_CENTRAL_AUTOMATION.md) 2 处）；本表 §0 校对时间 + §3 进度表追加 H/I/I-2/I-3 四轮；纯文档变更，按纪律豁免模拟器回归；不发 tag |
+| J | ✅ 已完成 | `9cafdb08` (I-3) → 本轮 | **Java 端 4 项基础能力真机回归**（用户犀利质疑触发立项：18 轮自动化只测过 Compose，Java 端从未真测过 A 播放暂停 / B 拖进度 / C 全屏 / D 切换内核）。新增 [doc/JAVA_TEST_PLAYBOOK.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/JAVA_TEST_PLAYBOOK.md) + [doc/test_scripts/java_basic_regression.sh](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/test_scripts/java_basic_regression.sh)（一键 6/6 PASS） + [doc/test_scripts/java_cold_smoke.sh](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/test_scripts/java_cold_smoke.sh)（39 entry 38/39 PASS，唯一 FAIL 为 toggle 按钮非跳页）。**DetailPlayer 端到端 logcat 实证**：A `onClickStop`/`onClickResume`/`CURRENT_STATE_PAUSE`/`CURRENT_STATE_PLAYING`；B `onClickSeekbar`/`onSeekComplete`，progress 12%→80% / currentPosition 226489ms→1458000ms；C `orientation=landscape` + `WindowManager: finishDrawing of orientation change DetailPlayer 141ms`；D 三态文字循环 IJK→EXO→系统 + 切到 EXO 后 logcat 真实出现 `ExoPlayerImpl: Init [AndroidXMedia3/1.10.1]`，与默认 IJK 状态的 `nativeloader: libijkffmpeg.so` 形成内核切换底层实证。5 个代表 Activity（DetailPlayer / DetailListPlayer / DetailMoreType / DetailFilter / DetailADPlayer2）跑出真实差异：DetailListPlayer/MoreType/AD2 的暂停按钮坐标与 DetailPlayer 不同、DetailFilter `progress` 控件 ID 不同 → 后续 K 轮承接为各 Activity 提供 layout 适配映射。识别并文档化 5 个真实自动化坑（Activity 不 exported / resource-id 包名前缀 / textAllCaps / controls 自动隐藏 / sed 贪婪匹配）；不发 tag |
 | R7 | ☐ pending | — | 选做 |
 
 > 每轮完成后，将本表格状态 ☐ 改为 ✅ 并附 commit hash；同时把 § 1 / § 2 中已完成项的 `[ ]` 改为 `[x]`。
