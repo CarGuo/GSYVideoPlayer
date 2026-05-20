@@ -25,8 +25,8 @@
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                      Git Tag 触发                            │
-│                   git tag v11.3.0                           │
-│                git push origin v11.3.0                      │
+│                   git tag v13.0.0                           │
+│                git push origin v13.0.0                      │
 └─────────────────┬───────────────────────────┬───────────────┘
                   │                           │
     ┌─────────────▼─────────────┐  ┌─────────▼──────────────┐
@@ -50,7 +50,7 @@
     │                         │  │                          │
     │ com.shuyu:              │  │ io.github.carguo:        │
     │   gsyvideoplayer-java:  │  │   gsyvideoplayer-java:   │
-    │   11.3.0                │  │   11.3.0                 │
+    │   13.0.0                │  │   13.0.0                 │
     └─────────────────────────┘  └──────────────────────────┘
 ```
 
@@ -121,7 +121,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.shuyu:gsyvideoplayer-java:11.3.0'
+    implementation 'com.shuyu:gsyvideoplayer-java:13.0.0'
 }
 ```
 
@@ -132,7 +132,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.github.carguo:gsyvideoplayer-java:11.3.0'
+    implementation 'io.github.carguo:gsyvideoplayer-java:13.0.0'
 }
 ```
 

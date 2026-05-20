@@ -54,14 +54,14 @@ publishing {
 **GitHub Packages (现有)**
 ```gradle
 dependencies {
-    implementation 'com.shuyu:gsyvideoplayer-java:11.3.0'
+    implementation 'com.shuyu:gsyvideoplayer-java:13.0.0'
 }
 ```
 
 **Maven Central (新的)**
 ```gradle
 dependencies {
-    implementation 'io.github.carguo:gsyvideoplayer-java:11.3.0'
+    implementation 'io.github.carguo:gsyvideoplayer-java:13.0.0'
 }
 ```
 
@@ -70,15 +70,15 @@ dependencies {
 ### GitHub Packages
 ```bash
 # 自动触发 (已有)
-git tag v11.3.0
-git push origin v11.3.0
+git tag v13.0.0
+git push origin v13.0.0
 ```
 
 ### Maven Central
 ```bash
 # 自动触发 (新增)
-git tag v11.3.0
-git push origin v11.3.0
+git tag v13.0.0
+git push origin v13.0.0
 # 两个 workflow 会同时运行
 ```
 
@@ -193,8 +193,8 @@ publishing {
 ```
 
 这样配置后：
-- `./gradlew publish` → `com.shuyu:gsyvideoplayer-base:11.3.0` (GitHub)
-- `./gradlew publishMavenCentralPublicationToSonatypeRepository` → `io.github.carguo:gsyvideoplayer-base:11.3.0` (Maven Central)
+- `./gradlew publish` → `com.shuyu:gsyvideoplayer-base:13.0.0` (GitHub)
+- `./gradlew publishMavenCentralPublicationToSonatypeRepository` → `io.github.carguo:gsyvideoplayer-base:13.0.0` (Maven Central)
 
 ## 🎉 完成
 

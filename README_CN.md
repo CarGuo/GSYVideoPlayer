@@ -1,5 +1,5 @@
 
-**[Click to see the English version](README_EN.md)**
+**[Click to see the English version](README.md)**
 
 ![](./img/home_logo.png)
 

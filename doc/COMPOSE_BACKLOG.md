@@ -4,7 +4,7 @@
 >
 > **Compose 模块当前状态：未发布（Unreleased）**。所有动作均不打 tag，随 master 滚动迭代；首发将以本文件 P4-1 全部完成 + P5-1 至少一半完成 为基线再视情况评估。
 >
-> 校对时间：2026-05-19。基线 commit：[`46ef8db3`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer)。
+> 校对时间：2026-05-20。基线 commit：[`90ab81a8`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer)。
 
 ---
 
@@ -232,6 +232,10 @@
 | R5 | ✅ 已完成（8/8） | `47ce1877` (R4 上半场) → `d05d0a8c` (R4 续 D3/D5/D6/D7) → `eceebd31` (R5 上半场 D9/D10/D11/D14) → 本轮 (R5 下半场 D12/D13/D15/D16) | P5-2 全部 8 项已落（VerticalPager 短视频 / 悬浮窗 + 系统权限申请 / 多类型 cell 列表 / WebView 图文混排 / 纯音频 raw + 1dp 隐身 Surface bug 修 / URL 输入起播 / MediaCodec 硬解 Switch 切换 / 自绘主题化 controls overlay）；ComposeDemoListActivity 16 → 20 → 24 项；emulator 真 UI 点击实证 8 个 demo 全起播：D9 page1 `Playing 1/5` / D10 `悬浮窗状态：▶ 已显示` / D11 `Playing 1115/5547619 ms` / D14 `Playing 1904/10027 ms` + libwebviewchromium / D12 `Playing 10677/173448 ms` + IjkMediaPlayer_native_setup / D13 `00:07/00:10` HTTP `mov_bbb.mp4` / D15 `Playing 11554/5547619 ms · 480x384` + `MediaCodec: H264_HIGH: enabled` / D16 `Sunset/Neon Playing 00:12/92:27` + 主题切换响应；上下半场各 Monkey 100 events 0 FATAL；首发基线达成 |
 | V  | ✅ 已完成 | (R5 之后) → 本轮 | Demo URL 中央化：新建 [DemoVideoUrls.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/utils/DemoVideoUrls.java) 中央常量表（8 条可达 URL + 8 条语义别名）；39 Java + 6 Kotlin 文件全量替换硬编码 URL；4 条不可达 URL（vorwaerts BBB / IMG_0382 / flipfit / 7xjmzj）按协议同语义替换为 MP4_BBB/HLS_MUX；清理 5 个文件中 9 行 dead URL 注释 + DetailPlayer.java L617-L681 注释墓地；双通道构建 + Monkey 100 events 0 FATAL；详见 [doc/VIDEO_URLS.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/VIDEO_URLS.md) |
 | R6 | ✅ 已完成 | (V 之后 `ae0c37ba`) → 本轮 | P5-Δ 5/5 老 demo 升级（ΔD1 5 高频 builder 选项 + UI 回调显示 / ΔD4 离屏 setUp 重置 vs pause + setShowPauseCover Switch + Compose 自绘占位封面 / ΔD5 see-also D8 / ΔD6 标题"互斥版" + D7 跳转提示 / ΔD7 KDoc surface 接管取舍）；[COMPOSE_USE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/COMPOSE_USE.md) 加 § 9 能力矩阵 + § 10 Cookbook；双通道构建 BUILD SUCCESSFUL；emulator-5554 装机 + 5 ΔActivity 全启动 + ΔD1 实证 `onPrepared #1` + ΔD4 实证 `Net speed: 0 KB/s percent 8` + 防回归对照 DetailNormalActivityPlayer + Monkey 100 events 0 FATAL + crash buffer 空；**首发评估通过**（结论以 doc 形式落地，按纪律本轮不打 tag，留 G 轮 Go-Live） |
+| H | ✅ 已完成 | `ae0c37ba` (R6) → `1e935452` (H 轮 P0 修复) | H 轮 P0 fixes for library, demo and docs：补齐 Compose 库与 Demo 的小修补；Java/Compose 双通道构建 + emulator 模拟器回归通过；不发 tag |
+| I-1 | ✅ 已完成 | `1e935452` (H) → `74c8a0eb` (Controller 拆分) | `GSYPlayerController.release()` / `dispose()` 拆分（避免 Compose 重组时误销毁 host）；构建 + emulator 双回归通过；不发 tag |
+| I-2 | ✅ 已完成 | `74c8a0eb` (I-1) → `c8ce3203` (PLAYBOOK + 脚本) → `90ab81a8` (PLAYBOOK 录入 I-2 结果 + Wrapper 自动播放注解修订) | 新增 [doc/COMPOSE_TEST_PLAYBOOK.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/COMPOSE_TEST_PLAYBOOK.md) + 配套可复用 shell/python 脚本；I-2 全量 Compose 回归（24 demo 真 UI 实证 + Monkey 0 FATAL）+ 修订 Wrapper 自动播放说明；不发 tag |
+| I-3 | ✅ 已完成 | `90ab81a8` (I-2) → 本轮 | 文档全量回归（37 份 markdown）：修复 [README_CN.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/README_CN.md) 坏链 `README_EN.md` → `README.md`；4 份发布文档示例版本 `11.3.0` → `13.0.0`（[ARCHITECTURE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/ARCHITECTURE.md) 5 处 / [DUAL_CHANNEL_PUBLISH.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/DUAL_CHANNEL_PUBLISH.md) 8 处 / [README_DEPENDENCY_GUIDE.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/README_DEPENDENCY_GUIDE.md) 6 处 / [MAVEN_CENTRAL_AUTOMATION.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/MAVEN_CENTRAL_AUTOMATION.md) 2 处）；本表 §0 校对时间 + §3 进度表追加 H/I/I-2/I-3 四轮；纯文档变更，按纪律豁免模拟器回归；不发 tag |
 | R7 | ☐ pending | — | 选做 |
 
 > 每轮完成后，将本表格状态 ☐ 改为 ✅ 并附 commit hash；同时把 § 1 / § 2 中已完成项的 `[ ]` 改为 `[x]`。
