@@ -123,7 +123,7 @@ NET=$(echo "$LOG"    | grep -c   "Net speed:")
 
 | # | Title | Activity | 自动起播 | 内核 | 已知操作 |
 |---|---|---|---|---|---|
-| 0 | P0 · Wrapper 基础 | [`BasicWrapperActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) | 是 | Ijk | AndroidView 包装 |
+| 0 | P0 · Wrapper 基础 | [`BasicWrapperActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) | **按钮交互**（"开始播放" @ 178,2074）| Ijk | AndroidView 包装；setStartAfterPrepared(true) 但需先点 startPlayLogic |
 | 1 | P0 · Native 详情 | [`DetailNativeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) | 是 | Ijk | 经典 |
 | 2 | P0 · Native 完整控件层 | [`FullFeatureNativeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) | 是 | Ijk | 自绘控件 |
 | 3 | P1 · Native 列表 | [`ListPlayNativeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt) | **否** | Ijk | autoPlay=false，需点列表项 |
@@ -250,4 +250,27 @@ adb -s emulator-5554 logcat -d         | grep -c "ANR in"             # 应 == 0
 | 轮次 | 日期 | 范围 | 结果 |
 |---|---|---|---|
 | H | 2026-05-19 | P0 修复 | release/dispose 设计 bug 发现 |
-| **I** | **2026-05-20** | **17 Compose + 3 Java demo + lib 修复** | **全 PASS, 0 crash 0 ANR. commit `74c8a0eb`** |
+| I | 2026-05-20 | 17 Compose + 3 Java demo + lib 修复 | 全 PASS, 0 crash 0 ANR. commit `74c8a0eb` |
+| **I-2** | **2026-05-20** | **13 Compose demo (Wrap/D2/FullFeat/SwitchUrl/EXO/D2-after-EXO/Filter/Cache/Subtitle/AdInList/Danmaku/Vertical/Web/Theme)** | **全 PASS, 0 crash 0 ANR. emulator 切回 -gpu host 后 dump 正常** |
+
+### I-2 轮明细（2026-05-20）
+
+| Demo | Activity | 信号 | 状态 |
+|---|---|---|---|
+| Wrap（手动开始播放）| BasicWrapperActivity | prep=1 play=1 render=9 net=16 | PASS |
+| D2 | DetailNativeActivity | prep=1 play=2 render=9 net=16 | PASS |
+| FullFeature | FullFeatureNativeActivity | prep=1 play=1 render=9 net=15 | PASS |
+| SwitchUrl | SwitchUrlActivity | prep=1 play=2 render=9 net=16 | PASS |
+| EXO | ExoSwitchSourceComposeActivity | prep=1 play=2 render=9 net=0（EXO 不打 Net speed）| PASS |
+| **D2-after-EXO** | DetailNativeActivity | prep=1 play=1 render=5 net=3 Ijk=4 Exo=0 | **P0 防回归 PASS** |
+| Filter | DetailFilterComposeActivity | prep=1 play=1 render=9 net=15 | PASS |
+| Cache | CacheDownloadComposeActivity | prep=1 play=1 render=9 net=16 | PASS |
+| Subtitle | SubtitleComposeActivity | prep=1 play=1 render=9 net=13 | PASS |
+| AdInList | AdInListComposeActivity | prep=1 play=2 render=9 net=5 | PASS（16s wait）|
+| Danmaku | DanmakuComposeActivity | prep=1 play=1 render=9 net=15 | PASS |
+| Vertical | VerticalShortVideoComposeActivity | prep=1 play=1 render=9 net=16 | PASS |
+| Web | WebDetailComposeActivity | prep=1 play=3 render=13 net=3 | PASS |
+| Theme | CustomControlsThemeComposeActivity | prep=1 play=2 render=9 net=15 | PASS |
+
+> **本轮新发现坑**：emulator AVD `Pixel_7` 在 swiftshader_indirect 模式下渲染失败（屏幕全黑、dump null root）。**修复**：`emulator -avd Pixel_7 -no-snapshot-save -no-boot-anim -gpu host` 启动后恢复正常。
+> **PLAYBOOK 修正**：P0 · Wrapper 基础**不是自动起播**，需点列底部"开始播放"按钮（屏幕滚到最底，X≈178 Y≈2074）。表格中 #0 的"自动起播=是"已纠正（改为 builder.setStartAfterPrepared 配合按钮触发）。
