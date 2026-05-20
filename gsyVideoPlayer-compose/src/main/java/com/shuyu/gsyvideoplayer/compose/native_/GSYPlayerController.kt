@@ -701,6 +701,25 @@ class GSYPlayerController internal constructor() {
     }
 
     fun release() {
+        // 业务侧软释放：释放当前播放（stopPlay + 还原 state 到 NORMAL），
+        // 但保留 host 引用与 controller 自身，使后续 setUp() 仍可在同一 Surface 上重新起播。
+        // 永久销毁请使用内部 dispose()，由 rememberGSYPlayerController 的 DisposableEffect 触发。
+        if (released) return
+        stopTicking()
+        host?.let { old ->
+            try {
+                old.release()
+            } catch (_: Throwable) {
+            }
+        }
+        // 注意：不置空 host、不卸 dispatcher——保持 Surface 复用，setUp 可直接重新起播
+    }
+
+    /**
+     * 永久销毁 controller。仅由 [rememberGSYPlayerController] 的 DisposableEffect 在
+     * Composable 退出时调用。一旦 dispose，所有 setter / setUp 都变 no-op。
+     */
+    internal fun dispose() {
         if (released) return
         released = true
         stopTicking()

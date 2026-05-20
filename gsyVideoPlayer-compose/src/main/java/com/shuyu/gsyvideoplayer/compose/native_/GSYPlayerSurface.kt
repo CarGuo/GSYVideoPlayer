@@ -59,7 +59,7 @@ fun rememberGSYPlayerController(
         }
     }
     DisposableEffect(controller) {
-        onDispose { controller.release() }
+        onDispose { controller.dispose() }
     }
     return controller
 }

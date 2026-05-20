@@ -152,9 +152,8 @@ private fun MediaCodecScreen() {
                 Button(onClick = { startPlay() }) { Text("▶ 用当前模式起播") }
                 OutlinedButton(onClick = {
                     applyHw(!hwOn)
-                    controller.release()
                     startPlay()
-                }) { Text("切换 + Release + 重 setUp") }
+                }) { Text("切换硬解 + 重 setUp") }
             }
 
             Text(
