@@ -55,6 +55,9 @@ public class GSYVideoType {
     //硬解码标志
     private static boolean MEDIA_CODEC_FLAG = false;
 
+    //硬解码失败后是否允许自动回退软解
+    private static boolean SMART_MEDIA_CODEC_FLAG = false;
+
     //渲染类型
     private static int sRenderType = TEXTURE;
 
@@ -77,6 +80,21 @@ public class GSYVideoType {
     }
 
     /**
+     * 使能智能硬解码，播放前设置。
+     * 开启后仅在 IJK 硬解明确失败时尝试一次软解重建。
+     */
+    public static void enableSmartMediaCodec() {
+        SMART_MEDIA_CODEC_FLAG = true;
+    }
+
+    /**
+     * 关闭智能硬解码，播放前设置。
+     */
+    public static void disableSmartMediaCodec() {
+        SMART_MEDIA_CODEC_FLAG = false;
+    }
+
+    /**
      * 使能硬解码渲染优化
      */
     public static void enableMediaCodecTexture() {
@@ -95,6 +113,13 @@ public class GSYVideoType {
      */
     public static boolean isMediaCodec() {
         return MEDIA_CODEC_FLAG;
+    }
+
+    /**
+     * 是否开启智能硬解码
+     */
+    public static boolean isSmartMediaCodec() {
+        return SMART_MEDIA_CODEC_FLAG;
     }
 
     /**

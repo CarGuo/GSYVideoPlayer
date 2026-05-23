@@ -73,11 +73,16 @@ public class IjkPlayerManager extends BasePlayerManager {
 
         try {
             //开启硬解码
-            if (GSYVideoType.isMediaCodec()) {
+            if (GSYVideoType.isMediaCodec() && !gsyModel.isMediaCodecDisabled()) {
                 Debuger.printfLog("enable mediaCodec");
                 mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
                 mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
                 mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
+                if (GSYVideoType.isSmartMediaCodec()) {
+                    mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-fallback", 1);
+                }
+            } else if (GSYVideoType.isMediaCodec() && gsyModel.isMediaCodecDisabled()) {
+                Debuger.printfLog("smart mediaCodec fallback, disable mediaCodec for this player");
             }
 
             if (gsyModel.isCache() && cacheManager != null) {

@@ -38,6 +38,7 @@ import com.example.gsyvideoplayer.RecyclerView2Activity;
 import com.example.gsyvideoplayer.RecyclerView3Activity;
 import com.example.gsyvideoplayer.RecyclerViewActivity;
 import com.example.gsyvideoplayer.ScrollingActivity;
+import com.example.gsyvideoplayer.SmartMediaCodecFallbackActivity;
 import com.example.gsyvideoplayer.SubtitleDetailPlayer;
 import com.example.gsyvideoplayer.ViewPager2Activity;
 import com.example.gsyvideoplayer.ViewPagerDemoActivity;
@@ -195,6 +196,17 @@ public class JumpUtils {
      */
     public static void goMediaCodec(Activity activity) {
         Intent intent = new Intent(activity, RecyclerView3Activity.class);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+        ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
+    }
+
+    /**
+     * 跳转到智能硬解降级测试
+     *
+     * @param activity
+     */
+    public static void goSmartMediaCodecFallback(Activity activity) {
+        Intent intent = new Intent(activity, SmartMediaCodecFallbackActivity.class);
         ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
         ActivityCompat.startActivity(activity, intent, activityOptions.toBundle());
     }

@@ -26,6 +26,11 @@ public class GSYModel {
     String overrideExtension;
 
     /**
+     * 内部重试标记：本次播放即使全局开启了 MediaCodec，也强制走软解。
+     */
+    boolean mediaCodecDisabled;
+
+    /**
      * 视频元数据输入流
      */
     BufferedInputStream videoBufferedInputStream;
@@ -112,5 +117,13 @@ public class GSYModel {
 
     public void setVideoBufferedInputStream(BufferedInputStream videoBufferedInputStream) {
         this.videoBufferedInputStream = videoBufferedInputStream;
+    }
+
+    public boolean isMediaCodecDisabled() {
+        return mediaCodecDisabled;
+    }
+
+    public void setMediaCodecDisabled(boolean mediaCodecDisabled) {
+        this.mediaCodecDisabled = mediaCodecDisabled;
     }
 }

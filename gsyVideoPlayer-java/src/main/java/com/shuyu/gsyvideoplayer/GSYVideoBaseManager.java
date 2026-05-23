@@ -18,8 +18,10 @@ import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.BasePlayerManager;
 import com.shuyu.gsyvideoplayer.player.IPlayerInitSuccessListener;
 import com.shuyu.gsyvideoplayer.player.IPlayerManager;
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoViewBridge;
 
 import java.io.BufferedInputStream;
@@ -29,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import tv.danmaku.ijk.media.player.MediaInfo;
 
 /**
  * 基类管理器
@@ -48,7 +52,11 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     protected static final int HANDLER_RELEASE_SURFACE = 3;
 
+    protected static final int HANDLER_SMART_MEDIA_CODEC_FALLBACK = 4;
+
     protected static final int BUFFER_TIME_OUT_ERROR = -192;//外部超时错误码
+
+    private static final int MEDIA_ERROR_IJK_PLAYER = -10000;
 
     protected Context context;
 
@@ -122,6 +130,20 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
      * 是否需要外部超时判断
      */
     protected boolean needTimeOutOther;
+
+    private GSYModel currentModel;
+
+    private Surface currentSurface;
+
+    private boolean smartMediaCodecFallbacked;
+
+    private boolean smartMediaCodecFallbacking;
+
+    private boolean smartMediaCodecUsingHardDecode;
+
+    private long smartMediaCodecFallbackResumePosition;
+
+    private IMediaPlayer smartMediaCodecFallbackSourcePlayer;
 
     /**
      * 删除默认所有缓存文件
@@ -237,6 +259,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     @Override
     public void setDisplay(Surface holder) {
+        currentSurface = holder;
         Message msg = new Message();
         msg.what = HANDLER_SETDISPLAY;
         msg.obj = holder;
@@ -253,6 +276,21 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     @Override
     public void onPrepared(IMediaPlayer mp) {
+        if (smartMediaCodecFallbacking) {
+            try {
+                if (playerManager != null) {
+                    playerManager.start();
+                    if (smartMediaCodecFallbackResumePosition > 0) {
+                        playerManager.seekTo(smartMediaCodecFallbackResumePosition);
+                    }
+                }
+            } catch (Exception e) {
+                Debuger.printfWarning("smart mediaCodec fallback start error: " + e);
+            }
+            smartMediaCodecFallbacking = false;
+            smartMediaCodecFallbackResumePosition = 0;
+            smartMediaCodecFallbackSourcePlayer = null;
+        }
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -308,6 +346,12 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     @Override
     public boolean onError(IMediaPlayer mp, final int what, final int extra) {
+        if (trySmartMediaCodecFallback(mp, what, extra)) {
+            return true;
+        }
+        if (smartMediaCodecFallbacking && mp == smartMediaCodecFallbackSourcePlayer) {
+            return true;
+        }
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -322,6 +366,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     @Override
     public boolean onInfo(IMediaPlayer mp, final int what, final int extra) {
+        updateSmartMediaCodecDecodeState(mp);
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -352,6 +397,85 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
                 }
             }
         });
+    }
+
+    private boolean trySmartMediaCodecFallback(IMediaPlayer mp, int what, int extra) {
+        if (!shouldSmartMediaCodecFallback(mp, what, extra)) {
+            return false;
+        }
+        long resumePosition = 0;
+        try {
+            if (playerManager != null) {
+                resumePosition = playerManager.getCurrentPosition();
+            }
+        } catch (Exception e) {
+            Debuger.printfWarning("smart mediaCodec fallback get position error: " + e);
+        }
+        smartMediaCodecFallbacked = true;
+        smartMediaCodecFallbacking = true;
+        smartMediaCodecFallbackSourcePlayer = mp;
+        smartMediaCodecFallbackResumePosition = Math.max(0, resumePosition);
+
+        Message msg = new Message();
+        msg.what = HANDLER_SMART_MEDIA_CODEC_FALLBACK;
+        msg.obj = new SmartMediaCodecFallbackData(currentModel, smartMediaCodecFallbackResumePosition);
+        sendMessage(msg);
+        Debuger.printfWarning("smart mediaCodec fallback to soft decode, what=" + what + ", extra=" + extra + ", position=" + smartMediaCodecFallbackResumePosition);
+        return true;
+    }
+
+    private boolean shouldSmartMediaCodecFallback(IMediaPlayer mp, int what, int extra) {
+        if (!GSYVideoType.isSmartMediaCodec() || !GSYVideoType.isMediaCodec()) {
+            return false;
+        }
+        if (!(playerManager instanceof IjkPlayerManager) || !(mp instanceof IjkMediaPlayer)) {
+            return false;
+        }
+        if (smartMediaCodecFallbacked || smartMediaCodecFallbacking) {
+            return false;
+        }
+        if (currentModel == null || currentModel.isMediaCodecDisabled()) {
+            return false;
+        }
+        if (currentModel.getVideoBufferedInputStream() != null) {
+            return false;
+        }
+        return isMediaCodecUnsupportedError(what, extra);
+    }
+
+    private boolean isMediaCodecUnsupportedError(int what, int extra) {
+        if (what == IMediaPlayer.MEDIA_ERROR_UNSUPPORTED || extra == IMediaPlayer.MEDIA_ERROR_UNSUPPORTED) {
+            return true;
+        }
+        return what == MEDIA_ERROR_IJK_PLAYER && extra == IMediaPlayer.MEDIA_ERROR_UNSUPPORTED;
+    }
+
+    private void updateSmartMediaCodecDecodeState(IMediaPlayer mp) {
+        if (!GSYVideoType.isSmartMediaCodec() || !(mp instanceof IjkMediaPlayer)) {
+            return;
+        }
+        if (isMediaCodecDecoder(mp)) {
+            smartMediaCodecUsingHardDecode = true;
+        }
+    }
+
+    private boolean isMediaCodecDecoder(IMediaPlayer mp) {
+        if (!(mp instanceof IjkMediaPlayer)) {
+            return false;
+        }
+        try {
+            IjkMediaPlayer ijkMediaPlayer = (IjkMediaPlayer) mp;
+            if (ijkMediaPlayer.getVideoDecoder() == IjkMediaPlayer.FFP_PROPV_DECODER_MEDIACODEC) {
+                return true;
+            }
+            MediaInfo mediaInfo = ijkMediaPlayer.getMediaInfo();
+            return mediaInfo != null
+                && mediaInfo.mVideoDecoder != null
+                && mediaInfo.mVideoDecoder.toLowerCase().contains("mediacodec");
+        } catch (Exception e) {
+            Debuger.printfWarning("smart mediaCodec decoder check error: " + e);
+            return smartMediaCodecUsingHardDecode;
+        }
     }
 
 
@@ -575,6 +699,8 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDLER_PREPARE:
+                    currentModel = (GSYModel) msg.obj;
+                    resetSmartMediaCodecState();
                     initVideo(msg);
                     if (needTimeOutOther) {
                         startTimeOutBuffer();
@@ -592,17 +718,49 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
                     bufferPoint = 0;
                     setNeedMute(false);
                     cancelTimeOutBuffer();
+                    currentModel = null;
+                    resetSmartMediaCodecState();
                     break;
                 case HANDLER_RELEASE_SURFACE:
                     releaseSurface(msg);
+                    break;
+                case HANDLER_SMART_MEDIA_CODEC_FALLBACK:
+                    handleSmartMediaCodecFallback((SmartMediaCodecFallbackData) msg.obj);
                     break;
             }
         }
 
     }
 
+    private void handleSmartMediaCodecFallback(SmartMediaCodecFallbackData fallbackData) {
+        if (fallbackData == null || fallbackData.model == null || fallbackData.model != currentModel) {
+            smartMediaCodecFallbacking = false;
+            smartMediaCodecFallbackResumePosition = 0;
+            smartMediaCodecFallbackSourcePlayer = null;
+            return;
+        }
+        fallbackData.model.setMediaCodecDisabled(true);
+        smartMediaCodecFallbackResumePosition = fallbackData.resumePosition;
+        cancelTimeOutBuffer();
+        if (cacheManager != null) {
+            try {
+                cacheManager.release();
+            } catch (Exception e) {
+                Debuger.printfWarning("smart mediaCodec fallback cache release error: " + e);
+            }
+        }
+        Message msg = new Message();
+        msg.what = HANDLER_PREPARE;
+        msg.obj = fallbackData.model;
+        initVideo(msg);
+        if (needTimeOutOther) {
+            startTimeOutBuffer();
+        }
+    }
+
     private void initVideo(Message msg) {
         try {
+            currentModel = (GSYModel) msg.obj;
             currentVideoWidth = 0;
             currentVideoHeight = 0;
 
@@ -633,6 +791,11 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             mediaPlayer.setOnErrorListener(this);
             mediaPlayer.setOnInfoListener(this);
             mediaPlayer.setOnVideoSizeChangedListener(this);
+            if (smartMediaCodecFallbacking && currentSurface != null && currentSurface.isValid()) {
+                Message displayMsg = new Message();
+                displayMsg.obj = currentSurface;
+                showDisplay(displayMsg);
+            }
             mediaPlayer.prepareAsync();
 
         } catch (Exception e) {
@@ -658,6 +821,9 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         }
         bufferPoint = 0;
         cancelTimeOutBuffer();
+        smartMediaCodecFallbacking = false;
+        smartMediaCodecFallbackResumePosition = 0;
+        smartMediaCodecFallbackSourcePlayer = null;
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -666,6 +832,24 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
                 }
             }
         });
+    }
+
+    private void resetSmartMediaCodecState() {
+        smartMediaCodecFallbacked = false;
+        smartMediaCodecFallbacking = false;
+        smartMediaCodecUsingHardDecode = false;
+        smartMediaCodecFallbackResumePosition = 0;
+        smartMediaCodecFallbackSourcePlayer = null;
+    }
+
+    private static class SmartMediaCodecFallbackData {
+        final GSYModel model;
+        final long resumePosition;
+
+        SmartMediaCodecFallbackData(GSYModel model, long resumePosition) {
+            this.model = model;
+            this.resumePosition = resumePosition;
+        }
     }
 
 

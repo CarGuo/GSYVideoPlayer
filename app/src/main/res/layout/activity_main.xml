@@ -239,6 +239,13 @@
             android:text="硬解码支持" />
 
         <Button
+            android:id="@+id/smart_media_codec"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="智能硬解降级" />
+
+        <Button
             android:id="@+id/detail_download_activity"
             android:layout_width="240dp"
             android:layout_height="wrap_content"

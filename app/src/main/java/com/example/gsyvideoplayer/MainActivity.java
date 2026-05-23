@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.openSimple.setOnClickListener(this);
         binding.openSwitch.setOnClickListener(this);
         binding.mediaCodec.setOnClickListener(this);
+        binding.smartMediaCodec.setOnClickListener(this);
         binding.detailNormalActivity.setOnClickListener(this);
         binding.detailDownloadActivity.setOnClickListener(this);
         binding.detailAudioActivity.setOnClickListener(this);
@@ -229,6 +230,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.media_codec:
                 JumpUtils.goMediaCodec(this);
+                break;
+            case R.id.smart_media_codec:
+                JumpUtils.goSmartMediaCodecFallback(this);
                 break;
             case R.id.detail_normal_activity:
                 JumpUtils.goToDetailNormalActivity(this);
