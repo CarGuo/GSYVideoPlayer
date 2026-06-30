@@ -353,6 +353,8 @@ PlayerFactory.setPlayManager(AliPlayerManager.class);
 
 
 //exo缓存模式，支持m3u8，只支持exo
+//需要在 Exo 缓存创建前设置，默认 512 MB
+ExoSourceManager.setCacheMaxSize(1024L * 1024L * 1024L);
 CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
 //代理缓存模式，支持所有模式，不支持m3u8等，默认
 CacheFactory.setCacheManager(ProxyCacheManager.class);

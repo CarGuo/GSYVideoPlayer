@@ -56,7 +56,9 @@ public class ExoSourceManager {
 
     private static final String TAG = "ExoSourceManager";
 
-    private static final long DEFAULT_MAX_SIZE = 512 * 1024 * 1024;
+    public static final long DEFAULT_CACHE_MAX_SIZE = 512L * 1024L * 1024L;
+
+    private static long sCacheMaxSize = DEFAULT_CACHE_MAX_SIZE;
 
     public static final int TYPE_RTMP = 14;
 
@@ -203,6 +205,39 @@ public class ExoSourceManager {
 
     public static ExoMediaSourceInterceptListener getExoMediaSourceInterceptListener() {
         return sExoMediaSourceInterceptListener;
+    }
+
+    /**
+     * Returns the max bytes used by new Exo {@link SimpleCache} instances.
+     */
+    public static synchronized long getCacheMaxSize() {
+        return sCacheMaxSize;
+    }
+
+    /**
+     * Sets the max bytes used by new Exo {@link SimpleCache} instances.
+     * <p>
+     * This must be called before any Exo cache instance is acquired. Existing
+     * Media3 cache evictors cannot be resized after the cache is created.
+     */
+    public static synchronized void setCacheMaxSize(long cacheMaxSize) {
+        if (cacheMaxSize <= 0) {
+            throw new IllegalArgumentException("cacheMaxSize must be greater than 0");
+        }
+        if (!sCacheHolderMap.isEmpty()) {
+            throw new IllegalStateException("Exo cache max size must be set before cache is created");
+        }
+        sCacheMaxSize = cacheMaxSize;
+    }
+
+    /**
+     * Restores the default Exo cache max size.
+     */
+    public static synchronized void resetCacheMaxSize() {
+        if (!sCacheHolderMap.isEmpty()) {
+            throw new IllegalStateException("Exo cache max size must be reset before cache is created");
+        }
+        sCacheMaxSize = DEFAULT_CACHE_MAX_SIZE;
     }
 
 
@@ -412,7 +447,7 @@ public class ExoSourceManager {
                 }
                 throw new IllegalStateException("Exo cache folder is locked: " + cachePath);
             }
-            Cache cache = new SimpleCache(cacheFolder, new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE),
+            Cache cache = new SimpleCache(cacheFolder, new LeastRecentlyUsedCacheEvictor(sCacheMaxSize),
                 sDatabaseProvider != null ? sDatabaseProvider : new StandaloneDatabaseProvider(context));
             cacheHolder = new CacheHolder(cachePath, cache);
             sCacheHolderMap.put(cachePath, cacheHolder);

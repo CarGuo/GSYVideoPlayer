@@ -472,6 +472,7 @@ PlayerFactory.setPlayManager(AliPlayerManager.class);//aliplay 内核模式
 #### 调整代码结构，CacheFactory 更方便自定义，默认 ProxyCacheManager。
 
 ```
+//ExoSourceManager.setCacheMaxSize(1024L * 1024L * 1024L);//exo缓存大小，需要在 Exo 缓存创建前设置，默认 512 MB
 //CacheFactory.setCacheManager(new ExoPlayerCacheManager());//exo缓存模式，支持m3u8，只支持exo
 //CacheFactory.setCacheManager(new ProxyCacheManager());//代理缓存模式，支持所有模式，不支持m3u8等
 ```

@@ -444,6 +444,7 @@ PlayerFactory.setPlayManager(AliPlayerManager.class); // aliplay core mode
 
 #### Code structure adjustment, `CacheFactory` is more convenient for customization, defaults to `ProxyCacheManager`.
 ```java
+//ExoSourceManager.setCacheMaxSize(1024L * 1024L * 1024L); // exo cache size, set before Exo cache is created, default is 512 MB
 //CacheFactory.setCacheManager(new ExoPlayerCacheManager()); // exo cache mode, supports m3u8, only for exo
 //CacheFactory.setCacheManager(new ProxyCacheManager()); // proxy cache mode, supports all modes, does not support m3u8, etc.
 ```

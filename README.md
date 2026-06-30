@@ -351,6 +351,8 @@ PlayerFactory.setPlayManager(AliPlayerManager.class);
 
 
 //exo cache mode, supports m3u8, only supports exo
+//Set before Exo cache is created. Default is 512 MB.
+ExoSourceManager.setCacheMaxSize(1024L * 1024L * 1024L);
 CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
 //Proxy cache mode, supports all modes, does not support m3u8, etc., default
 CacheFactory.setCacheManager(ProxyCacheManager.class);
