@@ -17,8 +17,8 @@
 
 | 渠道 | GROUP ID | 依赖示例 |
 |-----|----------|---------|
-| **GitHub Packages** | `com.shuyu` | `implementation 'com.shuyu:gsyvideoplayer-java:13.0.0'` |
-| **Maven Central** | `io.github.carguo` | `implementation 'io.github.carguo:gsyvideoplayer-java:13.0.0'` |
+| **GitHub Packages** | `com.shuyu` | `implementation 'com.shuyu:gsyvideoplayer-java:13.1.0'` |
+| **Maven Central** | `io.github.carguo` | `implementation 'io.github.carguo:gsyvideoplayer-java:13.1.0'` |
 
 两个渠道**互不干扰**，可以同时使用！
 

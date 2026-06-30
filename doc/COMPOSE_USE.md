@@ -1,10 +1,8 @@
 # GSYVideoPlayer Compose 支持
 
-> ⚠ **当前状态：未发布（Unreleased）**
+> **当前状态：v13.1.0 起随主版本发布**
 >
-> `gsyVideoPlayer-compose` 模块已合入 master，但 **尚未对外发布到 Maven Central / GitHub Packages / JitPack**。下文中出现的 `13.0.0` 仅为预留坐标 —— 仅当你**自己** `./gradlew :gsyVideoPlayer-compose:publishToMavenLocal` 之后才能在你的项目里以坐标形式引用，否则只能走 `implementation project(":gsyVideoPlayer-compose")` 的源码依赖方式。
->
-> 第一次正式发布的时间点请等待官方 release tag 公告。
+> `gsyVideoPlayer-compose` 模块已纳入 Maven Central / GitHub Packages 发布流。外部项目可直接使用 `io.github.carguo:gsyvideoplayer-compose:13.1.0`；在本仓库内开发或调试时，仍可使用 `implementation project(":gsyVideoPlayer-compose")` 的源码依赖方式。
 >
 > 当前能力缺口、已知问题与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](./COMPOSE_BACKLOG.md)；后续每一轮代码与 demo 推进都会同步更新该文件。
 
@@ -22,12 +20,11 @@
 ## 一、引入依赖
 
 ```groovy
-// 方式 A（当前唯一可用）：使用项目模块（源码依赖）
-implementation project(":gsyVideoPlayer-compose")
+// 方式 A：Maven Central / GitHub Packages
+implementation "io.github.carguo:gsyvideoplayer-compose:13.1.0"
 
-// 方式 B（预留坐标，模块尚未对外发布）：Maven Central / GitHub Packages
-// 仅当你自己 ./gradlew :gsyVideoPlayer-compose:publishToMavenLocal 后才能在本机解析
-implementation "io.github.carguo:gsyvideoplayer-compose:13.0.0"
+// 方式 B：本仓库内源码依赖
+implementation project(":gsyVideoPlayer-compose")
 ```
 
 模块本身已 `api` 依赖 `gsyVideoPlayer-java`，无需重复引入；但如果你需要 EXO/Ali 内核，还需按照原有方式额外引入对应坐标。
@@ -509,4 +506,3 @@ LaunchedEffect(listState, playingIndex) {
 
 > **通用原则**：Java 里"链式 builder + callback"的写法，**Wrapper 路径几乎等价复用**；
 > Native 路径把 callback 换成 `events` / `stateFlow` / `snapshot` 订阅，把 fullscreen 等粘性 View 行为改成"一个 Composable 状态切换"。
-

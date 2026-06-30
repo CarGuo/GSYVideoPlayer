@@ -4,6 +4,16 @@
 
 ### Unreleased
 
+### v13.1.0 (2026-06-30)
+
+- Publish the `gsyvideoplayer-compose` artifact to the Maven Central / GitHub Packages dual-channel release flow.
+- Add the `gsyVideoPlayer-compose` module with Wrapper (AndroidView bridge) and Native (Compose-drawn controls) integration modes.
+- Add 24 runnable Compose demo activities covering basic playback, lists, auto-play, multi-window, source switching, cache/download, subtitles, ads, custom danmaku, filters, WebView mixed layouts, audio-only, local files, and MediaCodec switching.
+- Add the smart MediaCodec fallback demo and research notes for identifying hardware-decoder-related failures before downgrading to software decode.
+- Improve the auto-play list demo lifecycle handling to reduce playback state drift during list reuse.
+- Improve Exo cache lifecycle and max-size configuration, with regression coverage for export/configuration behavior.
+- Add Java / Compose regression playbooks and align dual-channel publishing docs and dependency examples to v13.1.0.
+
 ### v13.0.0 (2026-05-07)
 
 - Add an Exo HLS master / DASH MPD adaptive quality demo with video track listing, TrackSelector auto mode, and fixed video track override.

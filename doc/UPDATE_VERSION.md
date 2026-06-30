@@ -4,6 +4,16 @@
 
 ### Unreleased
 
+### v13.1.0 (2026-06-30)
+
+- 发布 `gsyvideoplayer-compose` artifact，支持 Maven Central / GitHub Packages 双渠道坐标。
+- 新增 `gsyVideoPlayer-compose` 模块，提供 Wrapper（AndroidView 包装）和 Native（Compose 自绘控制层）两种接入模式。
+- App Demo 新增 24 个 Compose Activity，覆盖基础播放、列表、自动连播、多窗口、切流、缓存下载、字幕、广告、弹幕、滤镜、WebView 混合、纯音频、本地文件、MediaCodec 切换等场景。
+- 新增智能 MediaCodec 硬解失败自动降级软解 Demo，并补充调研文档说明硬解相关错误的判定边界。
+- 优化自动播放列表 Demo 的生命周期处理，减少滑动复用场景中的播放状态错乱。
+- 优化 Exo cache 生命周期与最大缓存配置，补充导出和配置相关回归测试。
+- 补充 Java / Compose 回归测试 playbook，统一双渠道发布文档和依赖示例到 v13.1.0。
+
 ### v13.0.0 (2026-05-07)
 
 - 新增 Exo HLS master / DASH MPD 自适应清晰度 Demo，支持查看 video track 列表、恢复 TrackSelector 自动选择、固定某个清晰度 track。

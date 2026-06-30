@@ -7,20 +7,23 @@
 ```gradle
 dependencies {
     // 核心库
-    implementation 'io.github.carguo:gsyvideoplayer-java:13.0.0'
-    
+    implementation 'io.github.carguo:gsyvideoplayer-java:13.1.0'
+
     // 基础库
-    implementation 'io.github.carguo:gsyvideoplayer-base:13.0.0'
-    
+    implementation 'io.github.carguo:gsyvideoplayer-base:13.1.0'
+
     // 其他变体
-    implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.0.0'
-    implementation 'io.github.carguo:gsyvideoplayer-arm64:13.0.0'
-    implementation 'io.github.carguo:gsyvideoplayer-x86:13.0.0'
+    implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.1.0'
+    implementation 'io.github.carguo:gsyvideoplayer-arm64:13.1.0'
+    implementation 'io.github.carguo:gsyvideoplayer-x86:13.1.0'
+
+    // Compose 可选支持
+    implementation 'io.github.carguo:gsyvideoplayer-compose:13.1.0'
     // ...
 }
 ```
 
-**优点**: 
+**优点**:
 - ✅ 不需要配置 GitHub token
 - ✅ 公开访问
 - ✅ 与其他 Maven Central 依赖一致
@@ -41,7 +44,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.shuyu:gsyvideoplayer-java:13.0.0'
+    implementation 'com.shuyu:gsyvideoplayer-java:13.1.0'
 }
 ```
 
