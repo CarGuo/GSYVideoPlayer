@@ -509,6 +509,7 @@ Common entry points:
 - `Filter`: GLSurfaceView filters and GL effect scenes.
 - `Seamless switch`: multi-URL quality switching for separate URLs.
 - `EXO adaptive quality`: HLS master / DASH MPD adaptive quality demo for standard multi-bitrate streams.
+- `Cast Demo`: `CastDemoActivity` opens the DLNA device picker. `SampleCastControlVideo` demonstrates how the local player collapses into a remote-control overlay while casting, and how it resumes at the last known remote position on disconnect. Enable `Loopback Receiver` for TV-less smoke tests.
 
 Exo adaptive quality APIs:
 
@@ -524,6 +525,37 @@ Composed player screenshot APIs:
 player.taskShotPicWithView(listener);
 player.saveFrameWithView(file, listener);
 ```
+
+DLNA/UPnP cast APIs:
+
+```java
+// 1. Get the built-in cast capability (defaults to jUPnP 3.0.3 DLNA)
+CastCapability cast = GSYVideoManager.instance().getCastCapability();
+
+// 2. Device discovery
+cast.getProvider().startDiscovery(new CastListener() {
+    @Override public void onDeviceFound(CastDevice device) { /* show in a list */ }
+    @Override public void onDeviceLost(CastDevice device)  { /* remove from the list */ }
+});
+
+// 3. Cast at the current local position when the user picks a device
+long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
+CastMediaInfo media = new CastMediaInfo(
+        url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
+CastSession session = cast.connect(selectedDevice);
+session.setMediaItem(media);   // SPI runs SetAVTransportURI → Play → Seek(localPositionMs)
+
+// 4. Remote control / disconnect
+session.pause();
+session.seekTo(60_000L);
+session.stop();
+session.disconnect();
+
+// 5. Release discovery
+cast.getProvider().stopDiscovery();
+```
+
+Reference the demo in [SampleCastControlVideo](../app/src/main/java/com/example/gsyvideoplayer/video/SampleCastControlVideo.java) and [CastDemoActivity](../app/src/main/java/com/example/gsyvideoplayer/CastDemoActivity.java). Protocol details and the overall architecture live in [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) and [CAST_ARCHITECTURE.md](CAST_ARCHITECTURE.md).
 
 ### Advanced Customization
 

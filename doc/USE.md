@@ -544,6 +544,7 @@ GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 - `滤镜`：GLSurfaceView 滤镜和多种 GL 效果场景。
 - `无缝切换`：多 URL 清晰度切换 Demo，适合多个独立 URL 的切换。
 - `EXO自适应清晰度`：HLS master / DASH MPD 自适应清晰度 Demo，适合服务端提供标准多码率流的场景。
+- `投屏 Demo`：`CastDemoActivity` 打开 DLNA 设备选择列表，`SampleCastControlVideo` 演示投屏后本地塌陷成远端遥控 overlay，断开后本地按最近远端进度继续；可开启 `Loopback Receiver` 无真电视自测。
 
 Exo 自适应清晰度相关 API：
 
@@ -559,6 +560,37 @@ GSYExoVideoManager.instance().setVideoTrackOverride(groupIndex, trackIndex);
 player.taskShotPicWithView(listener);
 player.saveFrameWithView(file, listener);
 ```
+
+DLNA/UPnP 投屏 API：
+
+```java
+// 1. 拿到内核内置的投屏能力（默认走 jUPnP 3.0.3 DLNA 实现）
+CastCapability cast = GSYVideoManager.instance().getCastCapability();
+
+// 2. 设备发现
+cast.getProvider().startDiscovery(new CastListener() {
+    @Override public void onDeviceFound(CastDevice device) { /* 展示到设备列表 */ }
+    @Override public void onDeviceLost(CastDevice device)  { /* 从设备列表移除 */ }
+});
+
+// 3. 用户选中设备，携带当前本地播放进度投屏
+long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
+CastMediaInfo media = new CastMediaInfo(
+        url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
+CastSession session = cast.connect(selectedDevice);
+session.setMediaItem(media);   // SPI 内部走 SetAVTransportURI → Play → Seek(localPositionMs)
+
+// 4. 遥控 / 断开
+session.pause();
+session.seekTo(60_000L);
+session.stop();
+session.disconnect();
+
+// 5. 释放发现
+cast.getProvider().stopDiscovery();
+```
+
+Demo 参考 [SampleCastControlVideo](../app/src/main/java/com/example/gsyvideoplayer/video/SampleCastControlVideo.java) 与 [CastDemoActivity](../app/src/main/java/com/example/gsyvideoplayer/CastDemoActivity.java)。投屏协议细节和整体架构见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) 与 [CAST_ARCHITECTURE.md](CAST_ARCHITECTURE.md)。
 
 ### 高级自定义
 

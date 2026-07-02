@@ -247,3 +247,39 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v13.1.0'
 
 ```
+
+## 投屏（DLNA/UPnP）依赖
+
+投屏能力做在 `gsyVideoPlayer-java` 内部，不再单独发布 module。默认实现走 jUPnP 3.0.3 的 DLNA `AVTransport:1` 协议，所以 **只有真正需要投屏的下游** 需要额外引入 jUPnP，其他集成方 AAR 零增量。
+
+依赖坐标（Maven Central）：
+
+```groovy
+dependencies {
+    // 内核：包含 CastCapability / CastProvider / CastSession SPI + JupnpDlnaProvider 默认实现
+    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v13.1.0'
+
+    // 投屏能力：DLNA/UPnP 走 jUPnP 3.0.3
+    implementation 'org.jupnp:org.jupnp:3.0.3'
+    implementation 'org.jupnp:org.jupnp.support:3.0.3'
+}
+```
+
+集中版本管理放在 [gradle/dependencies.gradle](../gradle/dependencies.gradle) 的 `deps.jupnp`：
+
+```groovy
+deps.jupnp = [
+    core   : "org.jupnp:org.jupnp:3.0.3",
+    support: "org.jupnp:org.jupnp.support:3.0.3",
+]
+```
+
+注意事项：
+
+- 网络权限：接收端和发送端需要 `INTERNET`、`ACCESS_WIFI_STATE`、`CHANGE_WIFI_MULTICAST_STATE`、`ACCESS_NETWORK_STATE`。同一 Wi-Fi 局域网内 SSDP 才能发现设备。
+- Android 独立进程：Demo 的 `Loopback Receiver` 在独立 `:dlna` 进程，避免 jUPnP static 状态污染主进程；下游自集成时可参考 [DevReceiverService](../app/src/main/java/com/example/gsyvideoplayer/cast/DevReceiverService.java)。
+- Android 13+ 需要给内部广播加 `RECEIVER_NOT_EXPORTED`，参考 [CastReceiverManager](../app/src/main/java/com/example/gsyvideoplayer/cast/CastReceiverManager.java)。
+- 悬浮窗接收端需要 `SYSTEM_ALERT_WINDOW` 权限，正式集成建议改成 `Activity` 或 `Surface` 呈现，不必沿用悬浮窗。
+- 不需要投屏就不用引入 jUPnP；`CastCapability` 会走空实现，SPI 保留原样。
+
+更多能力目标与测试判据见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) 与 [CAST_TEST_PLAYBOOK.md](CAST_TEST_PLAYBOOK.md)。

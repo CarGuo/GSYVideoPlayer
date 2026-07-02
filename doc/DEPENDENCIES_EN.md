@@ -246,3 +246,39 @@ The so introduced by C supports mpeg encoding and other supplementary protocols,
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v13.1.0'
 
 ```
+
+## Cast (DLNA/UPnP) Dependencies
+
+The cast capability lives inside `gsyVideoPlayer-java` — no separate publishing module. The default implementation speaks DLNA `AVTransport:1` on top of jUPnP 3.0.3, so **only downstream projects that actually need casting** have to add jUPnP; everybody else pays zero AAR increment.
+
+Maven Central coordinates:
+
+```groovy
+dependencies {
+    // Kernel: CastCapability / CastProvider / CastSession SPI + the default JupnpDlnaProvider
+    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v13.1.0'
+
+    // Cast capability: DLNA/UPnP on jUPnP 3.0.3
+    implementation 'org.jupnp:org.jupnp:3.0.3'
+    implementation 'org.jupnp:org.jupnp.support:3.0.3'
+}
+```
+
+Centralised version management lives in [gradle/dependencies.gradle](../gradle/dependencies.gradle) as `deps.jupnp`:
+
+```groovy
+deps.jupnp = [
+    core   : "org.jupnp:org.jupnp:3.0.3",
+    support: "org.jupnp:org.jupnp.support:3.0.3",
+]
+```
+
+Notes:
+
+- Network permissions: both sender and receiver need `INTERNET`, `ACCESS_WIFI_STATE`, `CHANGE_WIFI_MULTICAST_STATE`, and `ACCESS_NETWORK_STATE`. Devices only discover each other on the same Wi-Fi LAN via SSDP.
+- Android separate process: the demo `Loopback Receiver` runs in a dedicated `:dlna` process to keep jUPnP's static state out of the main process. See [DevReceiverService](../app/src/main/java/com/example/gsyvideoplayer/cast/DevReceiverService.java) when self-integrating.
+- Android 13+ requires `RECEIVER_NOT_EXPORTED` for internal broadcasts. See [CastReceiverManager](../app/src/main/java/com/example/gsyvideoplayer/cast/CastReceiverManager.java).
+- The floating-window receiver requires `SYSTEM_ALERT_WINDOW`. Production integrations should render the incoming stream in an `Activity` or `Surface` instead of a floating window.
+- If you do not need casting, do not pull in jUPnP; `CastCapability` falls back to a no-op implementation and the SPI stays intact.
+
+See [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) and [CAST_TEST_PLAYBOOK.md](CAST_TEST_PLAYBOOK.md) for the capability goals and pass/fail criteria.

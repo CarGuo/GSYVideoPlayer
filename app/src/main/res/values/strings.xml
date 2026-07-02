@@ -129,4 +129,71 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+
+    <!-- M7-a-4 in-app Loopback DevReceiver strings. Default (English) copy — keep in sync
+         with values-zh-rCN/strings.xml. Format args:
+           dev_receiver_notif_ready  → %1$s = instance name, %2$s = TCP port
+           dev_receiver_notif_error  → %1$s = failure reason
+           dev_receiver_device_prefix→ %1$s = device model
+           dev_receiver_uri_prefix   → %1$s = title(newline)uri OR uri
+           dev_receiver_state_prefix → %1$s = state ("PLAYING @ 3000ms" etc) -->
+    <string name="dev_receiver_toggle_start">Enable Loopback Receiver</string>
+    <string name="dev_receiver_toggle_stop">Disable Loopback Receiver</string>
+    <string name="dev_receiver_toggle_status_ready">Loopback ready: %1$s @ :%2$s</string>
+    <string name="dev_receiver_toggle_status_error">Loopback error: %1$s</string>
+    <string name="dev_receiver_toggle_status_stopped">Loopback stopped</string>
+    <string name="dev_receiver_toggle_need_overlay">Overlay permission required for the receiver mini window. Please grant it and try again.</string>
+    <string name="dev_receiver_notif_channel_name">GSY Cast Loopback</string>
+    <string name="dev_receiver_notif_channel_desc">Local receiver used for in-app cast verification.</string>
+    <string name="dev_receiver_notif_title">GSY Cast Loopback Receiver</string>
+    <string name="dev_receiver_notif_starting">Starting…</string>
+    <string name="dev_receiver_notif_ready">Advertising as %1$s (port %2$s)</string>
+    <string name="dev_receiver_notif_error">Error: %1$s</string>
+    <string name="dev_receiver_notif_action_stop">Stop</string>
+    <string name="dev_receiver_screen_title">Cast received</string>
+    <string name="dev_receiver_device_prefix">Device: %1$s</string>
+    <string name="dev_receiver_uri_prefix">%1$s</string>
+    <string name="dev_receiver_state_prefix">State: %1$s</string>
+    <string name="cast_receiver_floating_badge">CAST · RECEIVER</string>
+
+    <!-- M7-a-5 DLNA cast strings (SPI-based). Kept in sync with values-zh-rCN/strings.xml. -->
+    <string name="cast_demo_hint">M7-a-5 Cast Demo (DLNA/UPnP)\n\n1) Tap the "Cast" entry in the top-right, pick a DLNA renderer discovered on the LAN, or enter the IP manually.\n2) Self loop: tap "Enable Loopback Receiver" bottom-right, then tap "Cast" and pick the "GSY Loopback" entry.\n3) The stand-alone gsy-cast-receiver desktop app is retired; all verification happens inside this App.\n\nRed lines: player core / video_layout_standard / publish.gradle must remain untouched.</string>
+    <string name="cast_remote_header">Casting…</string>
+    <string name="cast_remote_toggle_desc">Play / Pause</string>
+    <string name="cast_remote_volume_label">Volume</string>
+    <string name="cast_remote_disconnect">Disconnect</string>
+    <string name="cast_entry_label">Cast</string>
+    <string name="cast_entry_active_prefix">▣ %1$s · ✕</string>
+    <string name="cast_entry_active_unknown_host">?</string>
+    <string name="cast_dialog_title">Select DLNA Renderer</string>
+    <string name="cast_dialog_scanning">Scanning…</string>
+    <string name="cast_dialog_no_devices">No DLNA devices found. Try again or use manual IP.</string>
+    <string name="cast_dialog_manual_entry">Manual IP…</string>
+    <string name="cast_manual_dialog_title">Manual DLNA Host</string>
+    <string name="cast_manual_dialog_hint">e.g. 192.168.1.42</string>
+    <string name="cast_manual_invalid_ipv4">Invalid IPv4: %1$s</string>
+    <string name="cast_manual_device_name">Manual %1$s</string>
+    <string name="cast_toast_no_url">No URL available to cast yet</string>
+    <string name="cast_toast_casting_to">Casting to %1$s</string>
+    <string name="cast_toast_connect_failed">Cast failed: %1$s</string>
+    <string name="cast_toast_disconnected">Cast disconnected</string>
+    <string name="cast_toast_error">Cast error: %1$s</string>
+    <string name="cast_session_menu_title">Cast session · %1$s</string>
+    <string name="cast_session_menu_switch">Switch renderer</string>
+    <string name="cast_session_menu_disconnect">Disconnect</string>
+    <string name="cast_session_menu_resume_local">Resume locally</string>
+    <string name="cast_state_idle">Idle</string>
+    <string name="cast_state_connecting">Connecting…</string>
+    <string name="cast_state_loading">Loading…</string>
+    <string name="cast_state_playing">Playing</string>
+    <string name="cast_state_paused">Paused</string>
+    <string name="cast_state_buffering">Buffering…</string>
+    <string name="cast_state_stopped">Stopped</string>
+    <string name="cast_state_error">Error</string>
+
+    <!-- M7-a-5 loopback receiver (jUPnP LocalDevice in :dlna process) -->
+    <string name="loopback_renderer_friendly_name">GSY Loopback (%1$s)</string>
+    <string name="loopback_renderer_manufacturer">GSY</string>
+    <string name="loopback_renderer_model_name">GSY Loopback Renderer</string>
+    <string name="loopback_renderer_model_description">In-app DLNA MediaRenderer for cast verification</string>
 </resources>

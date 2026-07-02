@@ -11,6 +11,11 @@ android {
         versionCode 21
         versionName PROJ_VERSION
 
+        // M7-a-5：jUPnP 3.x 依赖 Jetty 9.4，Jetty 9.4 底层用了 MethodHandle.invoke，
+        // 这是 VM level 能力，D8 core-library-desugaring 无法降级，官方 dex 起步就是 API 26。
+        // 因此 :app（也只有 :app 需要 DLNA 能力）单独把 minSdk 提到 26。内核 AAR 依旧 23。
+        minSdk 26
+
         multiDexEnabled true
 
         ndk {
@@ -118,10 +123,16 @@ dependencies {
     implementation dataDependencies.okhttpUtil
     implementation dataDependencies.okhttp
 
+    // M7-a-4: NanoHTTPD for the in-app Loopback DevReceiver's HTTP control server.
+    implementation dataDependencies.nanohttpd
+
     implementation dataDependencies.permissionsDispatcher
     annotationProcessor dataDependencies.permissionsDispatcherProcessor
 
     debugImplementation dataDependencies.leakcanary
 
     implementation 'androidx.activity:activity:1.10.1'
+
+    //M2d 投屏 demo 纯 JVM 单元测试（SampleCastControlVideo 的静态工具方法）
+    testImplementation testDependencies.junit
 }

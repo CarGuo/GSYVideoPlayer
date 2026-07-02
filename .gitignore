@@ -326,6 +326,14 @@ keyid
 .idea/
 .junie/
 
+# Local cast E2E debugging scratch (M4)
+m4-*.json
+m4-shots/
+m4-receiver.log
+
+# Cast E2E scratch (uiautomator dumps, screenshots)
+.tmp/
+
 # Secrets for local act testing
 .secrets
 *.asc

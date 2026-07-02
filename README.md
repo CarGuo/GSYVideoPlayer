@@ -30,6 +30,7 @@
  **openssl** | **Currently ex_so's arm64/x86_64  uses openssl 1.1.1w**
  **FFmpeg**  | **Currently ex_so's arm64/x86_64 uses FFmpeg 4.3**
  **FFmpeg**  | **Currently ex_so's arm64/x86_64  supports G711a(pcm_alaw)**
+ **Cast**      | **First-class DLNA/UPnP casting built on jUPnP 3.0.3; `CastCapability` / `CastProvider` / `CastSession` SPI, `SetAVTransportURI → Play → Seek` chain preserves the local position when casting mid-playback; ships with a single-device Loopback Receiver for on-device smoke tests. [Details](doc/CAST_FEATURE_PLAN.md).**
  **More**      | **No black screen when pausing front and back switching; multi-URL quality switching; Exo HLS/DASH adaptive quality; seamless switching support; keep-last-frame demo; WebVTT progress bar preview.**
  **Customization**     | **Customizable rendering layer, custom management layer, custom playback layer (control layer), custom cache layer.**
 
@@ -487,6 +488,14 @@ WEBVTT
 Library APIs include `GSYVideoPreviewVttParser`, `GSYVideoPreviewProvider`, and `GSYVideoPreviewFrame`. The app layer loads the frame image and crops the sprite area if needed. See `PreViewGSYVideoPlayer#setPreviewVttUrl(String previewVttUrl)`.
 
 ## V. Recent Versions
+
+### Unreleased / feature/cast-capability
+
+- Add first-class DLNA/UPnP cast capability inside `gsyVideoPlayer-java`: `CastCapability` / `CastProvider` / `CastSession` / `CastListener` SPI are the stable public contract, and the default `JupnpDlnaProvider` / `JupnpDlnaSession` implementation speaks DLNA `AVTransport:1` on top of jUPnP 3.0.3.
+- `CastMediaInfo` now carries an immutable `startPositionMs` field. The `SetAVTransportURI → Play → Seek` chain guarantees "casting mid-playback resumes at the same position remotely" and disconnect returns the local player to the last known remote position.
+- `SampleCastControlVideo` collapses into a remote-control overlay while casting — the local surface and audio are released, and a clean resume path restores local playback on disconnect. `CastDemoActivity` provides the DLNA device picker plus a Loopback Receiver toggle.
+- Ships an on-device Loopback Receiver (`DevReceiverService` in `:dlna` process + `LoopbackAvTransportService` + `CastReceiverFloatingWindow`) for end-to-end smoke tests without a real TV. Cross-process state is bridged with `sendBroadcast` + `setPackage` private intents.
+- All strings live in `res/values{,-zh-rCN}/strings.xml`. Android 13+ receivers use `RECEIVER_NOT_EXPORTED` and the notification/foreground-service permission model is honoured.
 
 ### v13.1.0 (2026-06-30)
 

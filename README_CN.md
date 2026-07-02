@@ -31,6 +31,7 @@
  **openssl** | **目前  ex_so 的 arm64/x86_64 使用 openssl 1.1.1w**
  **FFmpeg**  | **目前  ex_so 的 arm64/x86_64 使用 FFmpeg 4.3**
  **FFmpeg**  | **目前  ex_so 的 arm64/x86_64 支持 G711a(pcm_alaw)**
+ **投屏**      | **内核一等公民 DLNA/UPnP 投屏能力，基于 jUPnP 3.0.3；`CastCapability` / `CastProvider` / `CastSession` SPI，SetAVTransportURI → Play → Seek 支持中途投屏保留本地进度；带单机 Loopback Receiver 便于自测。[说明](doc/CAST_FEATURE_PLAN.md)。**
  **更多**      | **暂停前后台切换不黑屏；多 URL 清晰度切换；Exo HLS/DASH 自适应清晰度；无缝切换支持；完成后保留最后一帧 Demo；进度条 WebVTT 小窗口预览。**
  **自定义**     | **可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
 
@@ -489,6 +490,14 @@ WEBVTT
 库层提供了 `GSYVideoPreviewVttParser`、`GSYVideoPreviewProvider`、`GSYVideoPreviewFrame`，业务层只需要把 VTT 解析成 provider，再按拖动进度取出对应图片和裁剪区域。demo 可参考 `PreViewGSYVideoPlayer#setPreviewVttUrl(String previewVttUrl)`。
 
 ## 五、近期版本
+
+### 未发布 / feature/cast-capability
+
+- 新增 DLNA/UPnP 投屏能力，作为 `gsyVideoPlayer-java` 内核一等公民：`CastCapability` / `CastProvider` / `CastSession` / `CastListener` SPI 接口稳定对外，默认实现 `JupnpDlnaProvider` / `JupnpDlnaSession` 基于 jUPnP 3.0.3 走 DLNA `AVTransport:1` 标准协议。
+- 投屏 `CastMediaInfo` 支持不可变 `startPositionMs` 字段，`SetAVTransportURI → Play → Seek` 链路保证"本地播到 40% → 投屏后从 40% 继续"，断开后本地在最近远端位置继续。
+- `SampleCastControlVideo` 演示塌陷成远端遥控 overlay，投屏时释放本地 surface / audio，断开后无缝恢复本地播放；`CastDemoActivity` 提供 DLNA 设备选择 + Loopback 接收器开关。
+- 内置 `DevReceiverService` (`:dlna` 独立进程) + `LoopbackAvTransportService` + `CastReceiverFloatingWindow` 组成单机 Loopback Receiver，便于在没有真电视时端到端自测；跨进程状态用 `sendBroadcast` + `setPackage` 私有广播回填。
+- 文案全部走 `res/values{,-zh-rCN}/strings.xml`，Android 13+ 已适配 `RECEIVER_NOT_EXPORTED` / `POST_NOTIFICATIONS` 权限模型。
 
 ### v13.1.0 (2026-06-30)
 

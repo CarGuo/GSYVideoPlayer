@@ -15,6 +15,7 @@ This document summarizes recent demo and playback changes so maintainers can qui
 | Exo adaptive quality | `EXO adaptive quality` | `ExoAdaptiveTrackActivity`, `GSYExo2MediaPlayer` | Uses one HLS master playlist or DASH MPD and lets Media3 TrackSelector switch video tracks in one media timeline. |
 | Graceful player init failure handling | Global capability | `GSYVideoBaseManager`, each `IPlayerManager` | Routes player creation/init failures through error callbacks and cleanup instead of crashing directly. |
 | Exo cache lifecycle and GIF cleanup | Global capability | `ExoSourceManager`, `GifCreateHelper` | Tightens Exo cache open/release behavior and cleans GIF generation state more reliably. |
+| DLNA/UPnP casting | `Cast Demo` | `CastCapability`, `JupnpDlnaProvider`, `JupnpDlnaSession`, `SampleCastControlVideo`, `CastDemoActivity` | First-class cast capability built on jUPnP 3.0.3 DLNA `AVTransport:1`; `SetAVTransportURI → Play → Seek` preserves the local position when casting mid-playback; ships with an on-device Loopback Receiver for end-to-end smoke testing. |
 
 ## Recent Commit Coverage
 
@@ -193,3 +194,39 @@ Manual checks:
 - `EXO adaptive quality`: HLS and DASH play, tracks are listed, and auto/fixed quality switching works.
 - Playback failure and init exceptions: confirm they route to error callbacks and do not crash the app.
 - Exo cache and GIF: confirm exit/re-enter/failure paths clean resources.
+- `Cast Demo`: pick a DLNA device and confirm the local player collapses into a remote-control overlay; on disconnect the local player resumes at the last known remote position. Enable the `Loopback Receiver` for TV-less smoke tests.
+
+## DLNA/UPnP Casting
+
+Cast capability lives inside `gsyVideoPlayer-java` as a first-class kernel SPI — no separate publishing module. The default implementation speaks DLNA `AVTransport:1` on top of jUPnP 3.0.3. The three SPI interfaces are:
+
+- `CastCapability` — entry point, obtained via `GSYVideoBaseManager.getCastCapability()`.
+- `CastProvider` — device discovery. Exposes `startDiscovery(CastListener)` / `stopDiscovery()`.
+- `CastSession` — a single cast session lifecycle: `setMediaItem(CastMediaInfo)` → `play/pause/stop/seekTo` → `disconnect()`.
+
+Casting from a mid-playback position:
+
+```java
+CastCapability cast = GSYVideoManager.instance().getCastCapability();
+cast.getProvider().startDiscovery(new CastListener() {
+    @Override public void onDeviceFound(CastDevice device) { /* show in a list */ }
+});
+
+// When the user picks a device:
+long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
+CastMediaInfo media = new CastMediaInfo(url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
+CastSession session = cast.connect(selectedDevice);
+session.setMediaItem(media);  // SPI internally does SetAVTransportURI → Play → Seek(localPositionMs)
+```
+
+Demo: `MainActivity` exposes a dedicated `Cast Demo` entry (`CastDemoActivity`) that provides both the DLNA device picker and the Loopback Receiver toggle. The demo player `SampleCastControlVideo` collapses into a remote-control overlay once casting succeeds — the local surface and audio are released, and the local player resumes at the last known remote position after disconnect.
+
+On-device Loopback Receiver:
+- `DevReceiverService` runs in a dedicated `:dlna` process and registers a jUPnP `LocalDevice` (`urn:schemas-upnp-org:device:MediaRenderer:1`) together with `LoopbackAvTransportService` + `LoopbackRenderingControlService`.
+- `CastReceiverFloatingWindow` renders the incoming stream in a SYSTEM_ALERT_WINDOW floating window (`CastReceiverPlayer` embeds an IJK kernel).
+- `getPositionInfo` / `getTransportInfo` report real progress and state, so the sender's 1 Hz polling shows the actual remote position.
+- Service ↔ Activity state changes are synchronised via `setPackage` private broadcasts (`ACTION_STATE_READY` / `ACTION_STATE_STOPPED` / `ACTION_STATE_ERROR`). `RECEIVER_NOT_EXPORTED` is applied on Android 13+.
+
+Dependency toggle: the cast dependency is declared as `deps.jupnp` in [gradle/dependencies.gradle](../gradle/dependencies.gradle) (`org.jupnp:org.jupnp:3.0.3` + `org.jupnp:org.jupnp.support:3.0.3`) and is only pulled in when the cast source set of `gsyVideoPlayer-java` is enabled; downstream projects that do not use cast pay zero AAR increment (see [DEPENDENCIES_EN.md](DEPENDENCIES_EN.md)).
+
+See [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) and [CAST_TEST_PLAYBOOK.md](CAST_TEST_PLAYBOOK.md) for the capability goals and pass/fail criteria.

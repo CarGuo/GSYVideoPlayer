@@ -10,6 +10,24 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
+    <!-- M7-a-3 mDNS discovery: WifiManager.MulticastLock lets us receive 224.0.0.251:5353
+         packets on vendor ROMs (Xiaomi/Huawei/OPPO) that filter multicast in power save. -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <!-- M7-a-5 jUPnP：MulticastSocket 长时间收 SSDP，需要 WAKE_LOCK 避免 doze 掉线；
+         Android 12+ (API 33+) SSDP 属于 nearby wifi 用途，需要 NEARBY_WIFI_DEVICES 权限。 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="33" />
+
+    <!-- M7-a-4 in-app Loopback DevReceiver: foreground service (media playback) hosts the
+         mDNS advertiser + NanoHTTPD control server; notification requires POST_NOTIFICATIONS
+         on Android 13+. FOREGROUND_SERVICE_MEDIA_PLAYBACK is only enforced on targetSdk 34+
+         but we declare it now for forward compatibility. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".GSYApplication"
@@ -253,6 +271,33 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Transitions" />
+        <activity
+            android:name=".CastDemoActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Transitions" />
+
+        <!-- Loopback DevReceiver 现在渲染在应用内悬浮小窗（CastReceiverFloatingWindow）
+             + 独立的 CastReceiverManager IJK 实例，不再拉起独立 Activity。原先的
+             .cast.DevReceiverPlayerActivity 已随架构重构一并删除。 -->
+
+        <!-- M7-a-5 主进程 DLNA 发现栈：JupnpDlnaProvider 通过 bindService 挂到这里，
+             用 AndroidUpnpServiceConfiguration + AndroidRouter 承担 SSDP 客户端职责。
+             与 :dlna 进程内的 UpnpServiceImpl（receiver）走不同进程/不同 socket。 -->
+        <service
+            android:name="org.jupnp.android.AndroidUpnpServiceImpl"
+            android:exported="false" />
+
+        <!-- M7-a-5 Loopback DevReceiver：跑在独立进程 :dlna。这样主进程 sender 侧的
+             jUPnP 发现栈 + 本地 receiver 端 jUPnP 栈各占各的 UDP socket / Registry，
+             天然避免 M-SEARCH 自己看不到自己的坑。
+             foregroundServiceType=mediaPlayback 匹配 Android 14+ allowlist 要求。 -->
+        <service
+            android:name=".cast.DevReceiverService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"
+            android:process=":dlna" />
         <activity
             android:name=".compose.ComposeDemoListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

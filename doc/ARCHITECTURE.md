@@ -15,6 +15,7 @@
 | 完成后保留最后一帧 | Demo player | `KeepLastFrameVideo` 只作为 Demo 级验证，不改变基础播放器默认完成态和释放策略。 |
 | 播放器初始化失败处理 | Manager + Player | `GSYVideoBaseManager` 和各 `IPlayerManager` 将内核创建/初始化异常收敛到错误回调和资源清理。 |
 | Exo cache 与 GIF 清理 | Cache + Utils | `ExoSourceManager` 管理 Exo cache 生命周期，`GifCreateHelper` 负责 GIF 生成状态和临时资源清理。 |
+| 投屏（DLNA / Chromecast，规划中） | UI overlay + Cast 管理层 | 内核只负责本地时间线，`GSYCastManager` 独立处理远端播放/进度；投屏中本地暂停并保留 UI，退投时按远端最后 position 恢复本地播放。规划详情见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md)、[CAST_RECEIVER_DESIGN.md](CAST_RECEIVER_DESIGN.md)、[CAST_TEST_PLAYBOOK.md](CAST_TEST_PLAYBOOK.md)。 |
 
 更多入口、API 和回归说明见 [RECENT_FEATURES.md](RECENT_FEATURES.md)。
 

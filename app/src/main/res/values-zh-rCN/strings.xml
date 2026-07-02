@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M7-a-4 in-app Loopback DevReceiver 中文文案。keys 与 values/strings.xml 一一对应。 -->
+    <string name="dev_receiver_toggle_start">启用回环接收器</string>
+    <string name="dev_receiver_toggle_stop">停用回环接收器</string>
+    <string name="dev_receiver_toggle_status_ready">回环就绪：%1$s @ :%2$s</string>
+    <string name="dev_receiver_toggle_status_error">回环错误：%1$s</string>
+    <string name="dev_receiver_toggle_status_stopped">回环已停止</string>
+    <string name="dev_receiver_toggle_need_overlay">接收端悬浮小窗需要悬浮窗权限，请授权后重试。</string>
+    <string name="dev_receiver_notif_channel_name">GSY 投屏回环</string>
+    <string name="dev_receiver_notif_channel_desc">用于 App 内投屏验证的本地接收器。</string>
+    <string name="dev_receiver_notif_title">GSY 投屏回环接收器</string>
+    <string name="dev_receiver_notif_starting">启动中…</string>
+    <string name="dev_receiver_notif_ready">已广告为 %1$s（端口 %2$s）</string>
+    <string name="dev_receiver_notif_error">错误：%1$s</string>
+    <string name="dev_receiver_notif_action_stop">停止</string>
+    <string name="dev_receiver_screen_title">已收到投屏</string>
+    <string name="dev_receiver_device_prefix">设备：%1$s</string>
+    <string name="dev_receiver_uri_prefix">%1$s</string>
+    <string name="dev_receiver_state_prefix">状态：%1$s</string>
+    <string name="cast_receiver_floating_badge">投屏 · 接收端</string>
+
+    <!-- M7-a-5 DLNA cast 中文文案，与 values/strings.xml 一一对齐 -->
+    <string name="cast_demo_hint">M7-a-5 Cast Demo（DLNA/UPnP）\n\n1）点击右上角《投屏》选择局域网内的 DLNA 设备，或手动输入 IP。\n2）单机自投自收：点右下《启用回环接收器》→ 再点《投屏》→ 选《GSY 回环》。\n3）桌面 gsy-cast-receiver 已下线，验收全部在 App 内闭环。\n\n红线：不修改播放内核 / video_layout_standard / publish.gradle。</string>
+    <string name="cast_remote_header">投屏中…</string>
+    <string name="cast_remote_toggle_desc">播放 / 暂停</string>
+    <string name="cast_remote_volume_label">音量</string>
+    <string name="cast_remote_disconnect">断开投屏</string>
+    <string name="cast_entry_label">投屏</string>
+    <string name="cast_entry_active_prefix">▣ %1$s · ✕</string>
+    <string name="cast_entry_active_unknown_host">?</string>
+    <string name="cast_dialog_title">选择 DLNA 设备</string>
+    <string name="cast_dialog_scanning">扫描中…</string>
+    <string name="cast_dialog_no_devices">未发现 DLNA 设备，请重试或手动输入 IP。</string>
+    <string name="cast_dialog_manual_entry">手动输入 IP…</string>
+    <string name="cast_manual_dialog_title">手动 DLNA 地址</string>
+    <string name="cast_manual_dialog_hint">例如 192.168.1.42</string>
+    <string name="cast_manual_invalid_ipv4">非法 IPv4：%1$s</string>
+    <string name="cast_manual_device_name">手动 %1$s</string>
+    <string name="cast_toast_no_url">尚未加载 URL，无法投屏</string>
+    <string name="cast_toast_casting_to">正在投屏至 %1$s</string>
+    <string name="cast_toast_connect_failed">投屏失败：%1$s</string>
+    <string name="cast_toast_disconnected">已断开投屏</string>
+    <string name="cast_toast_error">投屏错误：%1$s</string>
+    <string name="cast_session_menu_title">投屏会话 · %1$s</string>
+    <string name="cast_session_menu_switch">切换设备</string>
+    <string name="cast_session_menu_disconnect">断开投屏</string>
+    <string name="cast_session_menu_resume_local">恢复本地播放</string>
+    <string name="cast_state_idle">空闲</string>
+    <string name="cast_state_connecting">连接中…</string>
+    <string name="cast_state_loading">加载中…</string>
+    <string name="cast_state_playing">播放中</string>
+    <string name="cast_state_paused">已暂停</string>
+    <string name="cast_state_buffering">缓冲中…</string>
+    <string name="cast_state_stopped">已停止</string>
+    <string name="cast_state_error">错误</string>
+
+    <!-- M7-a-5 回环接收端（:dlna 进程内 jUPnP LocalDevice） -->
+    <string name="loopback_renderer_friendly_name">GSY 回环（%1$s）</string>
+    <string name="loopback_renderer_manufacturer">GSY</string>
+    <string name="loopback_renderer_model_name">GSY 回环渲染器</string>
+    <string name="loopback_renderer_model_description">用于 App 内投屏验证的 DLNA MediaRenderer</string>
+</resources>

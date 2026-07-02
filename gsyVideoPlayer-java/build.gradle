@@ -13,4 +13,12 @@ dependencies {
     api viewDependencies.ijkplayer
     api project(":gsyVideoPlayer-proxy_cache")
     api project(":gsyVideoPlayer-base")
+
+    // M7-a-5: DLNA/UPnP cast stack —— 内核一等公民能力，随 AAR api-transitive 发出去
+    api viewDependencies.jupnpCore
+    api viewDependencies.jupnpAndroid
+    api viewDependencies.jupnpSupport
+    api viewDependencies.jettyServer
+    api viewDependencies.jettyServlet
+    api viewDependencies.jettyClient
 }

@@ -48,6 +48,18 @@ ext {
         danmakuFlameMaster   : "com.github.CarGuo.DanmakuFlameMaster:DanmakuFlameMaster:${danmakuFlameMasterSoVersion}",
         floatWindow          : "com.github.yhaolpz:FloatWindow:1.0.6",
 
+        // M7-a-5: DLNA/UPnP cast stack. jUPnP is the maintained fork of Cling (org.fourthline.cling)
+        // and is the de-facto standard UPnP AV control point on Android for domestic apps (抖音/爱奇艺/腾讯视频
+        // 全部走 DLNA)。jUPnP 3.x 需要显式带 Jetty 9 (org.eclipse.jetty:jetty-server/servlet/client) 作为 http
+        // transport。这几个依赖挂在 gsyVideoPlayer-java 内核里 api 出去 —— 消费方 pull 内核 AAR 时自动带上，
+        // 沿用 ijkplayer/floatWindow 一样的 api-transitive 玩法。
+        jupnpCore            : "org.jupnp:org.jupnp:3.0.3",
+        jupnpAndroid         : "org.jupnp:org.jupnp.android:3.0.3",
+        jupnpSupport         : "org.jupnp:org.jupnp.support:3.0.3",
+        jettyServer          : "org.eclipse.jetty:jetty-server:9.4.53.v20231009",
+        jettyServlet         : "org.eclipse.jetty:jetty-servlet:9.4.53.v20231009",
+        jettyClient          : "org.eclipse.jetty:jetty-client:9.4.53.v20231009",
+
         ndkBitmap            : [
             "com.github.CarGuo.DanmakuFlameMaster:ndkbitmap-armv7a:${danmakuFlameMasterSoVersion}",
             "com.github.CarGuo.DanmakuFlameMaster:ndkbitmap-x86:${danmakuFlameMasterSoVersion}",
@@ -82,5 +94,11 @@ ext {
         permissionsDispatcher         : "com.github.permissions-dispatcher:permissionsdispatcher:${permissionsDispatcherVersion}",
         permissionsDispatcherProcessor: "com.github.permissions-dispatcher:permissionsdispatcher-processor:${permissionsDispatcherVersion}",
 
+        // M7-a-4: NanoHTTPD backs the in-app Loopback DevReceiver's HTTP control endpoint
+        // (POST /cast/{load,play,pause,stop,seek} + GET /cast/status). 2.3.1 targets Java 6
+        // bytecode, no transitive deps, LGPL 2.1 — compatible with our Apache 2.0 downstream
+        // as an unmodified linked library. Only referenced by :app for local receipt tooling;
+        // never ships through gsyVideoPlayer-cast / library AARs.
+        nanohttpd                     : "org.nanohttpd:nanohttpd:2.3.1",
     ]
 }

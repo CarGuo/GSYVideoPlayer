@@ -330,5 +330,12 @@
             android:layout_marginTop="20dp"
             android:text="Compose Demo 大全" />
 
+        <Button
+            android:id="@+id/cast_demo"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="投屏 Demo (M2c)" />
+
     </LinearLayout>
 </ScrollView>
