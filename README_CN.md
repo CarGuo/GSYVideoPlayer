@@ -640,7 +640,7 @@ WEBVTT
 
 ## Star History Chart
 
-[![Star History Chart](https://api.star-history.com/svg?repos=CarGuo/GSYVideoPlayer&type=Date)](https://star-history.com/#CarGuo/GSYVideoPlayer&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=CarGuo/GSYVideoPlayer&type=Date)](https://star-history.dera.page/#CarGuo/GSYVideoPlayer&Date)
 
 ## 温馨提示
 
