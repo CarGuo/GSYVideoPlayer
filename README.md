@@ -638,7 +638,7 @@ It is recommended to use ndk filtering, please refer to [Reference 4: 4. NDK so 
 
 ## Star History Chart
 
-[![Star History Chart](https://api.star-history.com/svg?repos=CarGuo/GSYVideoPlayer&type=Date)](https://star-history.com/#CarGuo/GSYVideoPlayer&Date)
+![Star History Chart](https://star-history-eight.vercel.app/api/svg??repos=CarGuo/GSYVideoPlayer&type=Date)
 
 ## Warm Reminder
 
