@@ -104,6 +104,8 @@ output.json
 # BlueJ files
 *.ctxt
 *.txt
+# 2026-08-19: The pinned RTMP rebuild definition is source, not generated text.
+!third_party/rtmp-client/CMakeLists.txt
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

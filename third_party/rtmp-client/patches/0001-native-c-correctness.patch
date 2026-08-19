@@ -1,0 +1,18 @@
+diff --git a/rtmp-client/src/main/cpp/flvmuxer/xiecc_rtmp.c b/rtmp-client/src/main/cpp/flvmuxer/xiecc_rtmp.c
+index efb0ca3..8e8312b 100644
+--- a/rtmp-client/src/main/cpp/flvmuxer/xiecc_rtmp.c
++++ b/rtmp-client/src/main/cpp/flvmuxer/xiecc_rtmp.c
+@@ -1,6 +1,7 @@
+ #include <stdint.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include "rtmp.h"
+ #include "log.h"
+ #include "xiecc_rtmp.h"
+@@ -222,4 +223,5 @@ int rtmp_close() {
+         RTMP_Free(rtmp);
+         rtmp = NULL;
+     }
++    return 0;
+ }

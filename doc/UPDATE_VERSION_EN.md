@@ -2,7 +2,10 @@
 
 **[Click to see the Chinese version](UPDATE_VERSION.md)**
 
-### Unreleased
+### v13.2.0 (2026-08-19)
+
+- Add the independently publishable `gsyvideoplayer-rtmp` module, rebuild its Media3 RTMP native client from pinned upstream source with the project's existing NDK r22b, and verify its 16 KB PT_LOAD/RELRO layout with both documented linker flags; update AliPlayer to 7.5.0, its first official 16 KB-compatible release.
+- Add first-class DLNA/UPnP casting on jUPnP 3.0.3 with a stable SPI and an on-device Loopback Receiver test path.
 
 ### v13.1.0 (2026-06-30)
 

@@ -7,18 +7,21 @@
 ```gradle
 dependencies {
     // 核心库
-    implementation 'io.github.carguo:gsyvideoplayer-java:13.1.0'
+    implementation 'io.github.carguo:gsyvideoplayer-java:13.2.0'
 
     // 基础库
-    implementation 'io.github.carguo:gsyvideoplayer-base:13.1.0'
+    implementation 'io.github.carguo:gsyvideoplayer-base:13.2.0'
 
     // 其他变体
-    implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.1.0'
-    implementation 'io.github.carguo:gsyvideoplayer-arm64:13.1.0'
-    implementation 'io.github.carguo:gsyvideoplayer-x86:13.1.0'
+    implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.2.0'
+    implementation 'io.github.carguo:gsyvideoplayer-arm64:13.2.0'
+    implementation 'io.github.carguo:gsyvideoplayer-x86:13.2.0'
 
     // Compose 可选支持
-    implementation 'io.github.carguo:gsyvideoplayer-compose:13.1.0'
+    implementation 'io.github.carguo:gsyvideoplayer-compose:13.2.0'
+
+    // RTMP 可选直接依赖；gsyvideoplayer-exo2 已通过 api 传递
+    implementation 'io.github.carguo:gsyvideoplayer-rtmp:13.2.0'
     // ...
 }
 ```
@@ -44,7 +47,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.shuyu:gsyvideoplayer-java:13.1.0'
+    implementation 'com.shuyu:gsyvideoplayer-java:13.2.0'
 }
 ```
 

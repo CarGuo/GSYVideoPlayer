@@ -82,7 +82,10 @@ ext {
             "androidx.media3:media3-ui:${mediaVersion}",
         ],
         aliplay:  [
-            "com.aliyun.sdk.android:AliyunPlayer:7.2.0-full"
+            // 2026-08-19: 7.5.0 is the first AliPlayer release whose native
+            // downloader is officially built for 16 KB pages. 7.2.0's
+            // libsaasDownloader.so is the only failing ELF in the demo APK.
+            "com.aliyun.sdk.android:AliyunPlayer:7.5.0-full"
         ]
     ]
 

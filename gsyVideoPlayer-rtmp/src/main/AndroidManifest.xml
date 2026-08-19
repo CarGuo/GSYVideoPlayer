@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  2026-08-19: The RTMP client is a first-class GSY library module so the same
+  source, native binaries and publishing pipeline are used locally and remotely.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" />

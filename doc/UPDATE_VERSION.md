@@ -2,7 +2,10 @@
 
 **[Click to see the English version](UPDATE_VERSION_EN.md)**
 
-### Unreleased
+### v13.2.0 (2026-08-19)
+
+- 新增可独立发布的 `gsyvideoplayer-rtmp` 模块：基于固定上游提交和项目现用 NDK r22b 重建 Media3 RTMP 原生客户端，并通过官方双 linker 参数验证 16 KB PT_LOAD/RELRO 布局；同时将 AliPlayer 升至首个官方适配 16 KB 的 7.5.0。
+- 新增基于 jUPnP 3.0.3 的 DLNA/UPnP 投屏内核能力、标准 SPI 和单机 Loopback Receiver 测试链路。
 
 ### v13.1.0 (2026-06-30)
 

@@ -12,7 +12,9 @@ dependencies {
     api("androidx.media3:media3-datasource-rtmp:${mediaVersion}") {
         exclude group: 'io.antmedia', module: 'rtmp-client'
     }
-    api "com.github.mcxinyu:LibRtmp-Client-for-Android:v3.2.0.m2"
+    // 2026-08-19: Keep the 16 KB-compatible RTMP native client in the normal
+    // GSY module/publication graph instead of resolving a repository-local AAR.
+    api project(":gsyVideoPlayer-rtmp")
 
     api project(":gsyVideoPlayer-base")
 }
