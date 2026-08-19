@@ -99,6 +99,9 @@ implementation 'io.github.carguo:gsyvideoplayer:13.2.1'
 
 //是否需要AliPlayer模式
 implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.1'
+
+//是否需要 DLNA/UPnP 投屏（可选，minSdk 26）
+implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
 ```
 
 #### B、添加java和你想要的so支持：
@@ -233,6 +236,9 @@ allprojects {
 
  //是否需要AliPlayer模式
  implementation 'com.shuyu:gsyvideoplayer-aliplay:13.2.1'
+
+ //是否需要 DLNA/UPnP 投屏（可选，minSdk 26）
+ implementation 'com.shuyu:gsyvideoplayer-cast:13.2.1'
 ```
 
 #### B、添加java和你想要的so支持：
@@ -315,6 +321,9 @@ allprojects {
 
  //是否需要AliPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.2.1'
+
+ //是否需要 DLNA/UPnP 投屏（可选，minSdk 26）
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v13.2.1'
 ```
 
 #### B、添加java和你想要的so支持：

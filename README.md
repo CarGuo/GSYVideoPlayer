@@ -98,6 +98,9 @@ implementation 'io.github.carguo:gsyvideoplayer:13.2.1'
 
 //Whether AliPlayer mode is needed
 implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.1'
+
+//Whether DLNA/UPnP casting is needed (optional, minSdk 26)
+implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
 ```
 
 #### B. Add java and the so support you want:
@@ -231,6 +234,9 @@ allprojects {
 
  //Whether AliPlayer mode is needed
  implementation 'com.shuyu:gsyvideoplayer-aliplay:13.2.1'
+
+ //Whether DLNA/UPnP casting is needed (optional, minSdk 26)
+ implementation 'com.shuyu:gsyvideoplayer-cast:13.2.1'
 ```
 
 #### B. Add java and the so support you want:
@@ -313,6 +319,9 @@ allprojects {
 
  //Whether AliPlayer mode is needed
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.2.1'
+
+ //Whether DLNA/UPnP casting is needed (optional, minSdk 26)
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v13.2.1'
 ```
 
 #### B. Add java and the so support you want:
