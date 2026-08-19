@@ -529,30 +529,52 @@ player.saveFrameWithView(file, listener);
 DLNA/UPnP cast APIs:
 
 ```java
-// 1. Get the built-in cast capability (defaults to jUPnP 3.0.3 DLNA)
-CastCapability cast = GSYVideoManager.instance().getCastCapability();
+// build.gradle: add only when casting is needed; its real minSdk is 26
+// implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
 
-// 2. Device discovery
-cast.getProvider().startDiscovery(new CastListener() {
-    @Override public void onDeviceFound(CastDevice device) { /* show in a list */ }
-    @Override public void onDeviceLost(CastDevice device)  { /* remove from the list */ }
+// 1. Core exposes only protocol-neutral SPI; the optional cast module supplies DLNA
+CastCapability cast = GSYVideoManager.instance().getCastCapability();
+cast.registerProvider(new JupnpDlnaProvider());
+cast.addListener(new CastListener() {
+    @Override public void onDeviceListChanged(List<CastDevice> devices) {
+        // Refresh the picker and retain the user's selectedDevice
+    }
+
+    @Override public void onSessionStateChanged(CastSession session, CastState state) {
+        // Refresh cast state
+    }
+
+    @Override public void onError(Throwable error) {
+        // Surface discovery, connection, or session errors
+    }
 });
 
-// 3. Cast at the current local position when the user picks a device
-long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
-CastMediaInfo media = new CastMediaInfo(
-        url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
-CastSession session = cast.connect(selectedDevice);
-session.setMediaItem(media);   // SPI runs SetAVTransportURI → Play → Seek(localPositionMs)
+// 2. Device discovery
+cast.startDiscovery(context);
 
-// 4. Remote control / disconnect
-session.pause();
-session.seekTo(60_000L);
-session.stop();
-session.disconnect();
+// 3. Connect asynchronously after selection, preserving the local playback position
+cast.connect(selectedDevice, new CastProvider.ConnectCallback() {
+    @Override public void onConnected(CastSession session) {
+        long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
+        CastMediaInfo media = new CastMediaInfo(
+                url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
+        session.setMediaItem(media); // SetAVTransportURI → Play → Seek(localPositionMs)
 
-// 5. Release discovery
-cast.getProvider().stopDiscovery();
+        // Control calls are submitted to the provider's background executor
+        session.pause();
+        session.seekTo(60_000L);
+    }
+
+    @Override public void onError(Throwable error) {
+        // Handle connection failure
+    }
+});
+
+// 4. Stop remote playback, disconnect, and release discovery when finished
+CastSession session = cast.getActiveSession();
+if (session != null) session.stop();
+cast.disconnect();
+cast.stopDiscovery();
 ```
 
 Reference the demo in [SampleCastControlVideo](../app/src/main/java/com/example/gsyvideoplayer/video/SampleCastControlVideo.java) and [CastDemoActivity](../app/src/main/java/com/example/gsyvideoplayer/CastDemoActivity.java). Protocol details and the overall architecture live in [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) and [CAST_ARCHITECTURE.md](CAST_ARCHITECTURE.md).

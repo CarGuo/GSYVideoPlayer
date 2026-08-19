@@ -18,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <p>典型使用流程（app 层）：
  * <pre>
  *     CastCapability cap = GSYVideoManager.instance().getCastCapability();
+ *     // JupnpDlnaProvider is supplied by the optional gsyvideoplayer-cast artifact.
  *     cap.registerProvider(new JupnpDlnaProvider());
  *     cap.addListener(myListener);
  *     // 拿到 devices，选一个后：

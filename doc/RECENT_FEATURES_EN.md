@@ -15,7 +15,7 @@ This document summarizes recent demo and playback changes so maintainers can qui
 | Exo adaptive quality | `EXO adaptive quality` | `ExoAdaptiveTrackActivity`, `GSYExo2MediaPlayer` | Uses one HLS master playlist or DASH MPD and lets Media3 TrackSelector switch video tracks in one media timeline. |
 | Graceful player init failure handling | Global capability | `GSYVideoBaseManager`, each `IPlayerManager` | Routes player creation/init failures through error callbacks and cleanup instead of crashing directly. |
 | Exo cache lifecycle and GIF cleanup | Global capability | `ExoSourceManager`, `GifCreateHelper` | Tightens Exo cache open/release behavior and cleans GIF generation state more reliably. |
-| DLNA/UPnP casting | `Cast Demo` | `CastCapability`, `JupnpDlnaProvider`, `JupnpDlnaSession`, `SampleCastControlVideo`, `CastDemoActivity` | First-class cast capability built on jUPnP 3.0.3 DLNA `AVTransport:1`; `SetAVTransportURI → Play → Seek` preserves the local position when casting mid-playback; ships with an on-device Loopback Receiver for end-to-end smoke testing. |
+| DLNA/UPnP casting | `Cast Demo` | `CastCapability`, `JupnpDlnaProvider`, `JupnpDlnaSession`, `SampleCastControlVideo`, `CastDemoActivity` | The protocol-neutral SPI stays in core while optional `gsyvideoplayer-cast` supplies jUPnP 3.0.3 DLNA `AVTransport:1`; `SetAVTransportURI → Play → Seek` preserves the local position and an on-device Loopback Receiver supports end-to-end tests. |
 
 ## Recent Commit Coverage
 
@@ -198,25 +198,39 @@ Manual checks:
 
 ## DLNA/UPnP Casting
 
-Cast capability lives inside `gsyVideoPlayer-java` as a first-class kernel SPI — no separate publishing module. The default implementation speaks DLNA `AVTransport:1` on top of jUPnP 3.0.3. The three SPI interfaces are:
+The protocol-neutral cast SPI remains in `gsyVideoPlayer-java`. Starting with 13.2.1, the default
+jUPnP 3.0.3 DLNA `AVTransport:1` implementation is supplied by the optional
+`gsyvideoplayer-cast` module. The three SPI interfaces are:
 
 - `CastCapability` — entry point, obtained via `GSYVideoBaseManager.getCastCapability()`.
-- `CastProvider` — device discovery. Exposes `startDiscovery(CastListener)` / `stopDiscovery()`.
-- `CastSession` — a single cast session lifecycle: `setMediaItem(CastMediaInfo)` → `play/pause/stop/seekTo` → `disconnect()`.
+- `CastProvider` — protocol SPI registered with `CastCapability`; the optional module supplies the default `JupnpDlnaProvider`.
+- `CastSession` — a single cast session lifecycle: `setMediaItem(CastMediaInfo)` → `play/pause/stop/seekTo` → `release()`.
 
 Casting from a mid-playback position:
 
 ```java
 CastCapability cast = GSYVideoManager.instance().getCastCapability();
-cast.getProvider().startDiscovery(new CastListener() {
-    @Override public void onDeviceFound(CastDevice device) { /* show in a list */ }
-});
+cast.registerProvider(new JupnpDlnaProvider());
+cast.addListener(castListener); // onDeviceListChanged / onSessionStateChanged / onError
+cast.startDiscovery(context.getApplicationContext());
 
 // When the user picks a device:
 long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
 CastMediaInfo media = new CastMediaInfo(url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
-CastSession session = cast.connect(selectedDevice);
-session.setMediaItem(media);  // SPI internally does SetAVTransportURI → Play → Seek(localPositionMs)
+cast.connect(selectedDevice, new CastProvider.ConnectCallback() {
+    @Override public void onConnected(CastSession session) {
+        session.addListener(sessionListener);
+        session.setMediaItem(media); // SetAVTransportURI → Play → Seek(localPositionMs)
+    }
+
+    @Override public void onError(Throwable error) { /* show the connection error */ }
+});
+
+// When the user ends casting or the screen is destroyed, stop the receiver before cleanup.
+CastSession active = cast.getActiveSession();
+if (active != null) active.stop();
+cast.disconnect();
+cast.stopDiscovery();
 ```
 
 Demo: `MainActivity` exposes a dedicated `Cast Demo` entry (`CastDemoActivity`) that provides both the DLNA device picker and the Loopback Receiver toggle. The demo player `SampleCastControlVideo` collapses into a remote-control overlay once casting succeeds — the local surface and audio are released, and the local player resumes at the last known remote position after disconnect.
@@ -227,6 +241,8 @@ On-device Loopback Receiver:
 - `getPositionInfo` / `getTransportInfo` report real progress and state, so the sender's 1 Hz polling shows the actual remote position.
 - Service ↔ Activity state changes are synchronised via `setPackage` private broadcasts (`ACTION_STATE_READY` / `ACTION_STATE_STOPPED` / `ACTION_STATE_ERROR`). `RECEIVER_NOT_EXPORTED` is applied on Android 13+.
 
-Dependency toggle: the cast dependency is declared as `deps.jupnp` in [gradle/dependencies.gradle](../gradle/dependencies.gradle) (`org.jupnp:org.jupnp:3.0.3` + `org.jupnp:org.jupnp.support:3.0.3`) and is only pulled in when the cast source set of `gsyVideoPlayer-java` is enabled; downstream projects that do not use cast pay zero AAR increment (see [DEPENDENCIES_EN.md](DEPENDENCIES_EN.md)).
+Dependency toggle: add `io.github.carguo:gsyvideoplayer-cast:13.2.1` when DLNA is required. The
+artifact exposes the tested jUPnP/Jetty set and declares its real `minSdk 26`. The default player
+does not include Jetty and keeps its API 23 floor (see [DEPENDENCIES_EN.md](DEPENDENCIES_EN.md)).
 
 See [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) and [CAST_TEST_PLAYBOOK.md](CAST_TEST_PLAYBOOK.md) for the capability goals and pass/fail criteria.

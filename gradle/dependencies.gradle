@@ -48,11 +48,9 @@ ext {
         danmakuFlameMaster   : "com.github.CarGuo.DanmakuFlameMaster:DanmakuFlameMaster:${danmakuFlameMasterSoVersion}",
         floatWindow          : "com.github.yhaolpz:FloatWindow:1.0.6",
 
-        // M7-a-5: DLNA/UPnP cast stack. jUPnP is the maintained fork of Cling (org.fourthline.cling)
-        // and is the de-facto standard UPnP AV control point on Android for domestic apps (抖音/爱奇艺/腾讯视频
-        // 全部走 DLNA)。jUPnP 3.x 需要显式带 Jetty 9 (org.eclipse.jetty:jetty-server/servlet/client) 作为 http
-        // transport。这几个依赖挂在 gsyVideoPlayer-java 内核里 api 出去 —— 消费方 pull 内核 AAR 时自动带上，
-        // 沿用 ijkplayer/floatWindow 一样的 api-transitive 玩法。
+        // 13.2.1: DLNA/UPnP implementation dependencies are isolated in the optional
+        // gsyVideoPlayer-cast module. Core player artifacts must not expose jUPnP/Jetty.
+        // Jetty 9.4.53 uses MethodHandle.invoke and therefore requires API 26 at dex/runtime.
         jupnpCore            : "org.jupnp:org.jupnp:3.0.3",
         jupnpAndroid         : "org.jupnp:org.jupnp.android:3.0.3",
         jupnpSupport         : "org.jupnp:org.jupnp.support:3.0.3",

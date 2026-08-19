@@ -348,7 +348,7 @@ public class JupnpDlnaSession implements CastSession {
                 @Override
                 public void received(ActionInvocation invocation, TransportInfo info) {
                     try {
-                        setState(mapState(info.getCurrentTransportState()));
+                        setState(resolvePolledState(state, info.getCurrentTransportState()));
                         consecutivePollFailures.set(0);
                     } finally {
                         onSoapDone();
@@ -378,6 +378,23 @@ public class JupnpDlnaSession implements CastSession {
         if (pollInflight.decrementAndGet() == 0) {
             afterTick();
         }
+    }
+
+    /**
+     * 13.2.1: Resolve the remote AVTransport state against the local load lifecycle.
+     *
+     * <p>Many renderers acknowledge {@code SetAVTransportURI} before the asynchronous {@code Play}
+     * action has moved their decoder out of {@code STOPPED}. Treating that first poll as terminal
+     * tears down an otherwise healthy cast session. While this session is still {@link CastState#LOADING},
+     * {@code STOPPED}/{@code NO_MEDIA_PRESENT} therefore retain LOADING; after any active state has
+     * been observed, STOPPED keeps its normal end-of-playback meaning.</p>
+     */
+    static CastState resolvePolledState(CastState currentState, TransportState remoteState) {
+        if ((remoteState == TransportState.STOPPED || remoteState == TransportState.NO_MEDIA_PRESENT)
+                && currentState == CastState.LOADING) {
+            return CastState.LOADING;
+        }
+        return mapState(remoteState);
     }
 
     private static CastState mapState(TransportState ts) {

@@ -11,14 +11,14 @@
 任何测试**不允许**：
 1. 修改主项目源码测试基线；
 2. 让 [java_basic_regression.sh](./test_scripts/java_basic_regression.sh) 或 [java_cold_smoke.sh](./test_scripts/java_cold_smoke.sh) 通过率下降；
-3. 强制引入新依赖到 `app` / `gsyVideoPlayer-java`。
+3. 把 jUPnP/Jetty 重新引入 `gsyVideoPlayer-java` 或默认聚合 artifact。
 
 **每轮 M PR 合入前**必须回归 4 项断言：
 
 | # | 命令 | 期望 |
 | --- | --- | --- |
 | 1 | `./gradlew assembleDebug` | 全绿 |
-| 2 | `./gradlew :gsyVideoPlayer-java:test` | 全绿 |
+| 2 | `./gradlew :gsyVideoPlayer-java:test :gsyVideoPlayer-cast:test :app:assembleRelease` | 单测全绿，R8 后 jUPnP 反射元数据完整 |
 | 3 | `bash doc/test_scripts/java_basic_regression.sh "Detail模式"` | Cast-A~E 覆盖前保持 A/B/C/D 全绿 |
 | 4 | `bash doc/test_scripts/java_cold_smoke.sh` | ≥ 38/39（M2 后为 ≥ 39/40） |
 
@@ -28,10 +28,10 @@
 
 | 编号 | 能力 | 通过判据（发送端 logcat + 接收端 UPnP 事件） |
 | --- | --- | --- |
-| Cast-A | 设备发现 | Android `onDeviceFound: <FriendlyName>` 在 5s 内出现（jUPnP RegistryListener 回调） |
-| Cast-B | 连接投屏 | Android `onCastConnected`；接收端 AVTransport1 收到 `SetAVTransportURI` action |
+| Cast-A | 设备发现 | `CastListener.onDeviceListChanged` 在 5s 内收到 renderer（jUPnP RegistryListener 回调） |
+| Cast-B | 连接投屏 | `ConnectCallback.onConnected`；接收端 AVTransport1 收到 `SetAVTransportURI` action |
 | Cast-C | 远端起播 + 本地暂停 | 接收端 `Play` action + `TransportState=PLAYING`；Android `changeUiToPauseShow` + `CURRENT_STATE_PLAYING (remote)` |
-| Cast-D | 远端 seek | 接收端 `Seek` action（Unit=REL_TIME）；Android `onCastSeek complete`；两端 position 差 ≤ 2s |
+| Cast-D | 远端 seek | 接收端 `Seek` action（Unit=REL_TIME）；`onPositionChanged` 回报位置与目标差 ≤ 2s |
 | Cast-E | 退投恢复本地 | 接收端 `Stop` action；Android `onSeekComplete` 到远端 last position + `CURRENT_STATE_PLAYING` |
 
 ---
@@ -42,7 +42,9 @@
 
 ### 2.1 Layer 1 — JVM 单元测试（占 60%）
 
-**位置**：`gsyVideoPlayer-java/src/test/java/com/shuyu/gsyvideoplayer/cast/...`（Android JUnit4，覆盖 SPI + jUPnP DLNA 实现）+ `app/src/test/java/com/example/gsyvideoplayer/cast/...`（覆盖本地 loopback receiver 装配逻辑）。
+**位置**：`gsyVideoPlayer-java/src/test/java/com/shuyu/gsyvideoplayer/cast/...`（协议无关 SPI）+
+`gsyVideoPlayer-cast/src/test/java/com/shuyu/gsyvideoplayer/cast/dlna/...`（jUPnP DLNA 实现）+
+`app/src/test/java/com/example/gsyvideoplayer/cast/...`（本地 loopback receiver 装配逻辑）。
 
 命名风格对齐 [GSYSubtitleParserTest.java](../gsyVideoPlayer-java/src/test/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleParserTest.java) / [GSYVideoPreviewVttParserTest.java](../gsyVideoPlayer-java/src/test/java/com/shuyu/gsyvideoplayer/preview/GSYVideoPreviewVttParserTest.java)。
 
@@ -52,9 +54,10 @@
 | `CastDeviceParserTest` | jUPnP `RemoteDevice` / DIDL-Lite metadata → `CastDevice` 字段完整 |
 | `CastMediaInfoTest` | URL / Header / Subtitle track 序列化，UTF-8 转义 |
 | `CastSessionStateTest` | 状态机 `IDLE → CONNECTING → PLAYING → PAUSED → DISCONNECTED`，禁跳 `IDLE → PLAYING` |
+| `JupnpDlnaSessionStateTest` | 13.2.1 回归：起播前短暂 `STOPPED` 保持 `LOADING`；播放建立后的 `STOPPED` 才是终态 |
 | `CastEventDebouncerTest` | 高频 `onProgress` 节流（100ms） |
-| `DlnaCastProviderTest` | `RegistryListener` 事件 → `onDeviceFound`/`onDeviceLost` 映射 |
-| `DlnaCastSessionActionTest` | `SetAVTransportURI` / `Play` / `Pause` / `Stop` / `Seek` / `GetPositionInfo` 参数拼装与错误码分类 |
+| `JupnpDlnaProviderTest`（规划） | `RegistryListener` 事件 → `onDeviceListChanged` 快照映射 |
+| `JupnpDlnaSessionActionTest`（规划） | `SetAVTransportURI` / `Play` / `Pause` / `Stop` / `Seek` / `GetPositionInfo` 参数拼装与错误码分类 |
 | （app 侧）`DevReceiverServiceLifecycleTest` | 前台 Service 的 jUPnP `UpnpService` 启停幂等，`LocalDevice` UDN 稳定 |
 | （app 侧）`LoopbackAvTransportServiceTest` | AVTransport1 各 action 回调驱动本机播放器的状态机分支 |
 
@@ -62,6 +65,7 @@
 
 ```powershell
 ./gradlew :gsyVideoPlayer-java:test
+./gradlew :gsyVideoPlayer-cast:test
 ./gradlew :app:testDebugUnitTest
 ```
 
@@ -69,7 +73,7 @@
 
 ### 2.2 Layer 2 — 协议集成测试（App 内 loopback receiver）
 
-**思路**：在同一台设备内，`DevReceiverService(:dlna)` 前台 Service 内起 jUPnP `UpnpService` + `LocalDevice`(MediaRenderer:1) + `LoopbackAvTransportService`，跑真实 SSDP/UPnP 协议链（loopback 地址 + jUPnP 自带 StreamServer），发送端 `DlnaCastProvider` 通过 `RegistryListener` 发现该本机 renderer 并推流。
+**思路**：在同一台设备内，`DevReceiverService(:dlna)` 前台 Service 内起 jUPnP `UpnpService` + `LocalDevice`(MediaRenderer:1) + `LoopbackAvTransportService`，跑真实 SSDP/UPnP 协议链（loopback 地址 + jUPnP 自带 StreamServer），发送端 `JupnpDlnaProvider` 通过 `RegistryListener` 发现该本机 renderer 并推流。
 
 - 位置：`app/src/androidTest/java/com/example/gsyvideoplayer/cast/...`
 - 工具：`androidx.test` + `AndroidJUnit4`
@@ -78,7 +82,7 @@
 
 | 用例 | 步骤 | 断言 |
 | --- | --- | --- |
-| `discovery_within_5s` | 启动 `DevReceiverService(:dlna)` 后建 `DlnaCastProvider`，5s 内发现本机 renderer | `deviceList.size ≥ 1`（`RegistryListener.remoteDeviceAdded` 触发） |
+| `discovery_within_5s` | 启动 `DevReceiverService(:dlna)` 后建 `JupnpDlnaProvider`，5s 内发现本机 renderer | `deviceList.size ≥ 1`（`RegistryListener.remoteDeviceAdded` 触发） |
 | `load_and_play` | 建立 `CastSession` → `SetAVTransportURI`(HLS demo) → `Play` | 3s 内 `GetTransportInfo.CurrentTransportState=PLAYING` |
 | `seek_accuracy` | `Seek Unit=REL_TIME Target=00:00:30` | `GetPositionInfo.RelTime` ∈ [28s, 32s] |
 | `disconnect_cleanup` | 关闭 Service 后 SSDP `byebye` 已发送，jUPnP `UpnpService.shutdown()` 完成 | `Registry` 空 + 端口无泄漏（`netstat` 检测） |
@@ -117,21 +121,21 @@ tap_by_id "cast_btn"
 wait_logcat "remoteDeviceAdded.*MediaRenderer" 5
 
 tap_by_text "$(get_first_renderer_label)"
-wait_logcat "DlnaCastSession.*CONNECTED" 5      # Cast-B（AVTransport1 SetAVTransportURI 已发出）
+wait_logcat "JupnpDlnaSession.*SetAVTransportURI success" 5  # Cast-B
 
 # Cast-C: 手机端本地暂停 + receiver receipt 起播
 assert_logcat "changeUiToPauseShow"
-assert_logcat "LoopbackAvTransportService.*SetAVTransportURI"
-assert_logcat "LoopbackAvTransportService.*Play"
+assert_logcat "LoopbackAvTransport.*setAVTransportURI"
+assert_logcat "LoopbackAvTransport.*play speed=1"
 
 # Cast-D: seek
 swipe_progress 12 80
-wait_logcat "LoopbackAvTransportService.*Seek.*REL_TIME" 3
-wait_logcat "onCastSeek complete" 3
+wait_logcat "LoopbackAvTransport.*seek unit=REL_TIME" 3
+# 随后的 SessionListener.onPositionChanged 应回报目标位置 ±2s
 
 # Cast-E: 退投恢复
 tap_by_id "cast_disconnect"
-wait_logcat "LoopbackAvTransportService.*Stop" 3
+wait_logcat "LoopbackAvTransport.*stop" 3
 wait_logcat "onSeekComplete" 3
 assert_logcat "CURRENT_STATE_PLAYING"
 ```
@@ -170,8 +174,8 @@ assert_logcat "CURRENT_STATE_PLAYING"
 | 1 | 打开 App → 点 "投屏DEMO" | — | 进入 `CastDemoActivity` |
 | 2 | 点右下角 "启用回环接收器" 悬浮按钮 | `DevReceiverService(:dlna)` 前台通知栏出现 | `UpnpService started` + `LocalDevice announced` |
 | 3 | 点播放器右上 "投屏" 按钮 | 设备列表出现本机 `MediaRenderer` FriendlyName | `RegistryListener.remoteDeviceAdded` |
-| 4 | 选中本机 renderer | `LoopbackAvTransportService.SetAVTransportURI` + `Play` 被调用；PIP receipt Activity 起来真解码渲染 | `DlnaCastSession → CastState.CONNECTED → PLAYING`；`TransportState=PLAYING` |
-| 5 | 手机本地进度条拖到 50% | `Seek Unit=REL_TIME Target=xx:xx:xx`；receipt Activity 跳转 | `onCastSeek complete`，差 ≤ 2s |
+| 4 | 选中本机 renderer | `LoopbackAvTransportService.SetAVTransportURI` + `Play` 被调用；PIP receipt Activity 起来真解码渲染 | `JupnpDlnaSession → CastState.LOADING → PLAYING`；`TransportState=PLAYING` |
+| 5 | 手机本地进度条拖到 50% | `Seek Unit=REL_TIME Target=xx:xx:xx`；receipt Activity 跳转 | `SessionListener.onPositionChanged` 回报位置与目标差 ≤ 2s |
 | 6 | 点击暂停 | `Pause` action；receipt 画面静止 | `TransportState=PAUSED_PLAYBACK` |
 | 7 | 点击"断开投屏" | `Stop` action；receipt Activity 退出 | `onSeekComplete` 回本地 last position + 本地 `CURRENT_STATE_PLAYING` |
 
@@ -180,7 +184,7 @@ assert_logcat "CURRENT_STATE_PLAYING"
 ```powershell
 ./gradlew :app:installDebug
 adb shell am start -n com.example.gsyvideoplayer/.CastDemoActivity
-adb logcat -s DlnaCastSession NsdDiscoveryCtrl CastControlVideo DevReceiverService
+adb logcat -s JupnpDlnaSession JupnpDlnaProvider SampleCastControlVideo DevReceiverService LoopbackAvTransport
 ```
 
 ---
@@ -203,7 +207,7 @@ adb logcat -s DlnaCastSession NsdDiscoveryCtrl CastControlVideo DevReceiverServi
 
 | 层 | 是否上 CI | 位置 |
 | --- | --- | --- |
-| Layer 1 单元测试（Android/gsyVideoPlayer-java + app） | ✅ 必上 | [.github/workflows/ci.yml](../.github/workflows/ci.yml) 的 `./gradlew test` 阶段 |
+| Layer 1 单元测试（gsyVideoPlayer-java + gsyVideoPlayer-cast）与 Release/R8 构建 | ✅ 必上 | [.github/workflows/ci.yml](../.github/workflows/ci.yml) 的 Build job |
 | Layer 2 协议集成（本机 loopback） | ⚠️ 可选 | 需 emulator runner + SSDP 多播（jUPnP StreamServer + `MulticastLock`），先本地跑；后续用 CI Linux runner + 有 Wi-Fi 模拟器 |
 | Layer 3 UI 自动化 | ❌ 暂缓 | 与 J 轮结论一致，先本地跑 |
 | Layer 4 手工回归 | — | 发版前 checklist |
@@ -226,19 +230,19 @@ adb logcat -s DlnaCastSession NsdDiscoveryCtrl CastControlVideo DevReceiverServi
 
 ## 7. 日志埋点约定（发送端）
 
-对齐 [Debuger.java](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/Debuger.java) 现有习惯，在 `CastSession` / `DlnaCastSession` 生命周期回调 + `DlnaCastProvider` 发现回调关键节点打日志：
+对齐 [Debuger.java](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/Debuger.java) 现有习惯，在 `CastSession` 生命周期回调及
+`gsyVideoPlayer-cast` 内的 `JupnpDlnaSession` / `JupnpDlnaProvider` 关键节点打日志：
 
 ```java
-// CastListener 回调（gsyVideoPlayer-java/cast/CastListener.java）
-Debuger.printfLog("onDeviceFound: " + device.getFriendlyName());
-Debuger.printfLog("onCastConnecting: " + device.getUdn());
-Debuger.printfLog("onCastConnected");
-Debuger.printfLog("onCastStateChanged: " + castState);   // IDLE/CONNECTING/CONNECTED/PLAYING/PAUSED
+// CastListener / ConnectCallback 回调
+Debuger.printfLog("onDeviceListChanged: " + devices.size());
+Debuger.printfLog("onConnected: " + session);
+Debuger.printfLog("onCastStateChanged: " + castState);   // IDLE/CONNECTING/LOADING/PLAYING/PAUSED
 Debuger.printfLog("onCastProgress: " + positionMs + "/" + durationMs);
 Debuger.printfLog("onCastError " + code + " " + msg);
 Debuger.printfLog("onCastDisconnected");
 
-// DLNA action 落点（DlnaCastSession 内部）
+// DLNA action 落点（JupnpDlnaSession 内部）
 Debuger.printfLog("AVTransport1.SetAVTransportURI " + uri);
 Debuger.printfLog("AVTransport1.Play");
 Debuger.printfLog("AVTransport1.Pause");
@@ -246,7 +250,7 @@ Debuger.printfLog("AVTransport1.Seek REL_TIME " + hhmmss);
 Debuger.printfLog("AVTransport1.Stop");
 ```
 
-**Tag 统一使用** `GSYCast` / `DlnaCastSession`，脚本用 `adb logcat -s GSYCast DlnaCastSession` 抓取，避免与主库日志混淆。
+**Tag 使用** `JupnpDlnaProvider` / `JupnpDlnaSession` / `SampleCastControlVideo`，脚本按这些真实类名抓取，避免与主库日志混淆。
 
 ---
 
@@ -281,7 +285,7 @@ Debuger.printfLog("AVTransport1.Stop");
 - 自研 HTTP/JSON 6-endpoint 协议（`POST /cast/{load,play,pause,stop,seek}` + `GET /cast/status`）→ 由标准 UPnP AVTransport1 action 取代（`SetAVTransportURI` / `Play` / `Pause` / `Stop` / `Seek` / `GetPositionInfo`）
 - `_gsycast._tcp.local.` 私有 mDNS 服务 + TXT 契约 `proto=gsy-cast / ver / port / backend / spec` → 由 UPnP SSDP + `urn:schemas-upnp-org:device:MediaRenderer:1` 取代
 - 桌面 JVM receiver（`gsy-cast-receiver` 独立模块 + `--headless` / `--backend fx` / JavaFX MediaPlayer）→ 由 App 内 `DevReceiverService(:dlna)` + jUPnP `LocalDevice` + `LoopbackAvTransportService` 单机 loopback 取代
-- 私协议侧发送端组件（发送侧 mDNS parser、NsdManager 集成、`submitDiscoveredCandidates` mock 融合、跨 /24 `adb reverse` 兜底） → 由 jUPnP `RegistryListener` + `DlnaCastProvider` 一体化取代
+- 私协议侧发送端组件（发送侧 mDNS parser、NsdManager 集成、`submitDiscoveredCandidates` mock 融合、跨 /24 `adb reverse` 兜底） → 由 jUPnP `RegistryListener` + `JupnpDlnaProvider` 一体化取代
 - Loopback 命名约定（含设备 model 后缀的私有 friendly name 格式）→ 由 UPnP 标准 FriendlyName / UDN 取代
 
 **若需查阅历史记录**：请在 git 历史中检出 v0.13 及之前的版本（tag/commit 参见分支 `feature/cast-capability` 早期提交），本文件不再内嵌旧判据表、旧脚本、旧协议契约。所有新增测试用例、判据表、日志匹配串**必须以 §1~§8 为准**。

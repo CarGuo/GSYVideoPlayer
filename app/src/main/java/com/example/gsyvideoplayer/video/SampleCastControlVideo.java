@@ -138,6 +138,10 @@ public class SampleCastControlVideo extends StandardGSYVideoPlayer {
 
                 @Override
                 public void onSessionStateChanged(CastSession session, CastState state) {
+                    // 13.2.1: A manual disconnect marks the session inactive before CastCapability
+                    // emits IDLE. Only a still-active cast may turn a terminal callback into the
+                    // unexpected-end recovery path; otherwise the explicit disconnect path owns it.
+                    final boolean wasActiveCast = mCastSession;
                     mLastState = state == null ? CastState.IDLE : state;
                     if (mLastState == CastState.IDLE || mLastState == CastState.STOPPED
                             || mLastState == CastState.ERROR) {
@@ -145,7 +149,7 @@ public class SampleCastControlVideo extends StandardGSYVideoPlayer {
                         // 并把本地播放器接回来。否则 surface_container 会露出裸黑框。
                         final boolean wasCollapsed = mLocalReleasedForCast;
                         mCastSession = false;
-                        if (wasCollapsed) {
+                        if (wasActiveCast && wasCollapsed) {
                             mMain.post(SampleCastControlVideo.this::handleUnexpectedRemoteEnd);
                         } else {
                             mMain.post(SampleCastControlVideo.this::applyCastEntryUi);
@@ -928,9 +932,10 @@ public class SampleCastControlVideo extends StandardGSYVideoPlayer {
         mCastSession = false;
         // 主动 disconnect：session 已进入死亡窗口，先把 listener 摘掉再走 capability.disconnect()，
         // 避免 disconnect 后期回调的 STATE=IDLE 再次触发 handleUnexpectedRemoteEnd 递归。
-        if (mBoundSession != null) {
+        final CastSession sessionToStop = mBoundSession;
+        if (sessionToStop != null) {
             try {
-                mBoundSession.removeListener(mSessionListener);
+                sessionToStop.removeListener(mSessionListener);
             } catch (Throwable t) {
                 Log.w(TAG, "disconnect: pre removeListener failed", t);
             }
@@ -941,6 +946,12 @@ public class SampleCastControlVideo extends StandardGSYVideoPlayer {
             @Override
             public void run() {
                 try {
+                    // 13.2.1: Disconnecting the controller alone leaves a DLNA renderer playing.
+                    // Submit AVTransport.Stop before releasing the session so remote and local
+                    // playback cannot continue at the same time.
+                    if (sessionToStop != null) {
+                        sessionToStop.stop();
+                    }
                     GSYVideoManager.instance().getCastCapability().disconnect();
                 } catch (Throwable t) {
                     Log.e(TAG, "capability.disconnect() failed", t);

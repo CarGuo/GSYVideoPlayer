@@ -43,7 +43,7 @@ jobs:
           java-version: 21
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: publishToMavenLocal
+          arguments: publishToMavenLocal verifyCastDependencyIsolation
 
   build:
     name: Build
@@ -56,4 +56,5 @@ jobs:
           java-version: 21
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: app:assembleDebug
+          # 13.2.1: Release/R8 is required because jUPnP binds local services via reflection.
+          arguments: app:assembleDebug app:assembleRelease gsyVideoPlayer-java:test gsyVideoPlayer-cast:test

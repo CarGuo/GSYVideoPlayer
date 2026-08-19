@@ -589,9 +589,9 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
     /**
      * 内核层投屏能力入口（DLNA/UPnP/…）。
-     * <p>返回全局单例 {@link CastCapability}。首次访问不会自动注册任何 provider，
-     * app 层需要显式 {@code getCastCapability().registerProvider(new JupnpDlnaProvider())}
-     * 以便按需 bind/unbind 系统服务，精细控制生命周期。</p>
+     * <p>返回全局单例 {@link CastCapability}。首次访问不会自动注册任何 provider。
+     * DLNA 实现从 13.2.1 起位于可选的 {@code gsyvideoplayer-cast} artifact；app 显式依赖后，
+     * 注册 {@code JupnpDlnaProvider} 以便按需 bind/unbind 系统服务。</p>
      */
     public CastCapability getCastCapability() {
         return CastCapability.getInstance();

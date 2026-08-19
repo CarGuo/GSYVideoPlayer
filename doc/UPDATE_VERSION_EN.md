@@ -2,6 +2,13 @@
 
 **[Click to see the Chinese version](UPDATE_VERSION.md)**
 
+### v13.2.1 (2026-08-19)
+
+- Add the independently published optional `gsyvideoplayer-cast` module and move `JupnpDlnaProvider`, `JupnpDlnaSession`, jUPnP 3.0.3, and Jetty 9.4.53 out of `gsyvideoplayer-java`.
+- Default `gsyvideoplayer` / `gsyvideoplayer-java` consumers no longer resolve jUPnP or Jetty and keep the API 23 floor required by Media3 1.10.1; only explicit cast consumers require API 26.
+- Let the cast AAR merge the jUPnP service, network/multicast permissions, and reflection-safe R8 consumer rules, with publishing-POM isolation and Release/R8 regression checks.
+- Fix the startup race where a renderer's transient `STOPPED` state ended a healthy cast; explicit disconnect now sends `Stop` first and restores local playback only once.
+
 ### v13.2.0 (2026-08-19)
 
 - Add the independently publishable `gsyvideoplayer-rtmp` module, rebuild its Media3 RTMP native client from pinned upstream source with the project's existing NDK r22b, and verify its 16 KB PT_LOAD/RELRO layout with both documented linker flags; update AliPlayer to 7.5.0, its first official 16 KB-compatible release.

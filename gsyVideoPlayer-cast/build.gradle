@@ -1,0 +1,24 @@
+apply from: "$rootDir/gradle/lib.gradle"
+
+apply from: "$rootDir/gradle/publish.gradle"
+apply from: "$rootDir/gradle/maven-central-publish.gradle"
+
+android {
+    namespace 'com.shuyu.gsyvideoplayer.cast'
+
+    defaultConfig {
+        // 13.2.1：Jetty 9.4.53 使用 MethodHandle.invoke，D8 与 Android VM 的真实下限均为 API 26。
+        minSdk 26
+    }
+}
+
+dependencies {
+    api project(":gsyVideoPlayer-java")
+
+    api viewDependencies.jupnpCore
+    api viewDependencies.jupnpAndroid
+    api viewDependencies.jupnpSupport
+    api viewDependencies.jettyServer
+    api viewDependencies.jettyServlet
+    api viewDependencies.jettyClient
+}

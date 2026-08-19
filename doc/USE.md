@@ -564,30 +564,52 @@ player.saveFrameWithView(file, listener);
 DLNA/UPnP 投屏 API：
 
 ```java
-// 1. 拿到内核内置的投屏能力（默认走 jUPnP 3.0.3 DLNA 实现）
-CastCapability cast = GSYVideoManager.instance().getCastCapability();
+// build.gradle：只有需要投屏时才添加，真实 minSdk 为 26
+// implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
 
-// 2. 设备发现
-cast.getProvider().startDiscovery(new CastListener() {
-    @Override public void onDeviceFound(CastDevice device) { /* 展示到设备列表 */ }
-    @Override public void onDeviceLost(CastDevice device)  { /* 从设备列表移除 */ }
+// 1. 核心只提供协议无关 SPI；DLNA Provider 来自可选 cast module
+CastCapability cast = GSYVideoManager.instance().getCastCapability();
+cast.registerProvider(new JupnpDlnaProvider());
+cast.addListener(new CastListener() {
+    @Override public void onDeviceListChanged(List<CastDevice> devices) {
+        // 更新设备列表，并保存用户选择的 selectedDevice
+    }
+
+    @Override public void onSessionStateChanged(CastSession session, CastState state) {
+        // 更新投屏状态
+    }
+
+    @Override public void onError(Throwable error) {
+        // 展示发现、连接或会话错误
+    }
 });
 
-// 3. 用户选中设备，携带当前本地播放进度投屏
-long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
-CastMediaInfo media = new CastMediaInfo(
-        url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
-CastSession session = cast.connect(selectedDevice);
-session.setMediaItem(media);   // SPI 内部走 SetAVTransportURI → Play → Seek(localPositionMs)
+// 2. 设备发现
+cast.startDiscovery(context);
 
-// 4. 遥控 / 断开
-session.pause();
-session.seekTo(60_000L);
-session.stop();
-session.disconnect();
+// 3. 用户选中设备后异步连接，并携带当前本地播放进度投屏
+cast.connect(selectedDevice, new CastProvider.ConnectCallback() {
+    @Override public void onConnected(CastSession session) {
+        long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
+        CastMediaInfo media = new CastMediaInfo(
+                url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
+        session.setMediaItem(media); // SetAVTransportURI → Play → Seek(localPositionMs)
 
-// 5. 释放发现
-cast.getProvider().stopDiscovery();
+        // 遥控操作直接提交给 Provider 的后台线程
+        session.pause();
+        session.seekTo(60_000L);
+    }
+
+    @Override public void onError(Throwable error) {
+        // 处理连接失败
+    }
+});
+
+// 4. 结束时先停止远端播放，再断开并停止发现
+CastSession session = cast.getActiveSession();
+if (session != null) session.stop();
+cast.disconnect();
+cast.stopDiscovery();
 ```
 
 Demo 参考 [SampleCastControlVideo](../app/src/main/java/com/example/gsyvideoplayer/video/SampleCastControlVideo.java) 与 [CastDemoActivity](../app/src/main/java/com/example/gsyvideoplayer/CastDemoActivity.java)。投屏协议细节和整体架构见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) 与 [CAST_ARCHITECTURE.md](CAST_ARCHITECTURE.md)。

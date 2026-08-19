@@ -47,6 +47,38 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+// 13.2.1: Publishing regression guard. Default artifacts must remain free of
+// optional jUPnP/Jetty dependencies, while the cast artifact must publish them.
+def verifiedPublication = (project.findProperty("PUBLISH_TARGET") ?: "github") == "mavenCentral"
+        ? [taskSuffix: "MavenCentral", directory: "mavenCentral"]
+        : [taskSuffix: "Release", directory: "release"]
+tasks.register("verifyCastDependencyIsolation") {
+    dependsOn(
+            ":gsyVideoPlayer-java:generatePomFileFor${verifiedPublication.taskSuffix}Publication",
+            ":gsyVideoPlayer:generatePomFileFor${verifiedPublication.taskSuffix}Publication",
+            ":gsyVideoPlayer-cast:generatePomFileFor${verifiedPublication.taskSuffix}Publication")
+
+    doLast {
+        def javaPom = project(":gsyVideoPlayer-java").layout.buildDirectory
+                .file("publications/${verifiedPublication.directory}/pom-default.xml").get().asFile.text
+        def aggregatePom = project(":gsyVideoPlayer").layout.buildDirectory
+                .file("publications/${verifiedPublication.directory}/pom-default.xml").get().asFile.text
+        def castPom = project(":gsyVideoPlayer-cast").layout.buildDirectory
+                .file("publications/${verifiedPublication.directory}/pom-default.xml").get().asFile.text
+
+        [javaPom, aggregatePom].each { pom ->
+            if (pom.contains("<groupId>org.jupnp</groupId>")
+                    || pom.contains("<groupId>org.eclipse.jetty</groupId>")) {
+                throw new GradleException("Default GSY artifacts must not publish jUPnP/Jetty")
+            }
+        }
+        if (!castPom.contains("<artifactId>gsyvideoplayer-java</artifactId>")
+                || !castPom.contains("<groupId>org.jupnp</groupId>")
+                || !castPom.contains("<groupId>org.eclipse.jetty</groupId>")) {
+            throw new GradleException("Cast POM is missing its core, jUPnP, or Jetty dependency")
+        }
+    }
+}
+
 // 引入权限分析脚本
 apply from: "gradle/permissions.gradle"
-

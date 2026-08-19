@@ -30,7 +30,7 @@
  **openssl** | **Currently ex_so's arm64/x86_64  uses openssl 1.1.1w**
  **FFmpeg**  | **Currently ex_so's arm64/x86_64 uses FFmpeg 4.3**
  **FFmpeg**  | **Currently ex_so's arm64/x86_64  supports G711a(pcm_alaw)**
- **Cast**      | **First-class DLNA/UPnP casting built on jUPnP 3.0.3; `CastCapability` / `CastProvider` / `CastSession` SPI, `SetAVTransportURI → Play → Seek` chain preserves the local position when casting mid-playback; ships with a single-device Loopback Receiver for on-device smoke tests. [Details](doc/CAST_FEATURE_PLAN.md).**
+ **Cast**      | **Optional `gsyvideoplayer-cast` DLNA/UPnP module built on jUPnP 3.0.3; the core keeps only the protocol-neutral `CastCapability` / `CastProvider` / `CastSession` SPI and does not pull Jetty. [Details](doc/CAST_FEATURE_PLAN.md).**
  **More**      | **No black screen when pausing front and back switching; multi-URL quality switching; Exo HLS/DASH adaptive quality; seamless switching support; keep-last-frame demo; WebVTT progress bar preview.**
  **Customization**     | **Customizable rendering layer, custom management layer, custom playback layer (control layer), custom cache layer.**
 
@@ -93,33 +93,36 @@ allprojects {
 ```groovy
  //Complete version introduction
 
-implementation 'io.github.carguo:gsyvideoplayer:13.2.0'
+implementation 'io.github.carguo:gsyvideoplayer:13.2.1'
 
 
 //Whether AliPlayer mode is needed
-implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.0'
+implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.1'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:13.2.1'
 
  //Whether ExoPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-exo2:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:13.2.1'
 
  //Optional direct RTMP module; exo2 already exposes it transitively
- implementation 'io.github.carguo:gsyvideoplayer-rtmp:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-rtmp:13.2.1'
+
+ //Optional DLNA/UPnP cast implementation (minSdk 26); the default player does not include Jetty
+ implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
 
  //Whether AliPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.1'
 
  //so of ijk mode according to your needs
- implementation 'io.github.carguo:gsyvideoplayer-arm64:13.2.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.2.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv5:13.2.0'
- implementation 'io.github.carguo:gsyvideoplayer-x86:13.2.0'
- implementation 'io.github.carguo:gsyvideoplayer-x64:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-arm64:13.2.1'
+ implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.2.1'
+ implementation 'io.github.carguo:gsyvideoplayer-armv5:13.2.1'
+ implementation 'io.github.carguo:gsyvideoplayer-x86:13.2.1'
+ implementation 'io.github.carguo:gsyvideoplayer-x64:13.2.1'
 ```
 
 #### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
@@ -128,16 +131,16 @@ A and B normal versions support 263/264/265, etc. For mpeg encoding, there will 
 The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:13.2.1'
 
  //Whether ExoPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-exo2:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:13.2.1'
 
  //Whether AliPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.1'
 
  //More ijk encoding support
- implementation 'io.github.carguo:gsyvideoplayer-ex_so:13.2.0'
+ implementation 'io.github.carguo:gsyvideoplayer-ex_so:13.2.1'
 
 ```
 
@@ -154,7 +157,7 @@ The new `gsyvideoplayer-compose` module exposes Compose entries on top of the ex
 
 ```groovy
 // Maven Central:
-implementation 'io.github.carguo:gsyvideoplayer-compose:13.2.0'
+implementation 'io.github.carguo:gsyvideoplayer-compose:13.2.1'
 
 // Source dependency for local development:
 implementation project(':gsyVideoPlayer-compose')
@@ -223,33 +226,36 @@ allprojects {
 
 ```groovy
  //Complete version introduction
- implementation 'com.shuyu:gsyvideoplayer:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer:13.2.1'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:13.2.1'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:13.2.1'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-exo2:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:13.2.1'
 
  //Optional direct RTMP module; exo2 already exposes it transitively
- implementation 'com.shuyu:gsyvideoplayer-rtmp:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-rtmp:13.2.1'
+
+ //Optional DLNA/UPnP cast implementation (minSdk 26); the default player does not include Jetty
+ implementation 'com.shuyu:gsyvideoplayer-cast:13.2.1'
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:13.2.1'
 
  //so of ijk mode according to your needs
- implementation 'com.shuyu:gsyvideoplayer-armv5:13.2.0'
- implementation 'com.shuyu:gsyvideoplayer-armv7a:13.2.0'
- implementation 'com.shuyu:gsyvideoplayer-arm64:13.2.0'
- implementation 'com.shuyu:gsyvideoplayer-x86:13.2.0'
- implementation 'com.shuyu:gsyvideoplayer-x64:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv5:13.2.1'
+ implementation 'com.shuyu:gsyvideoplayer-armv7a:13.2.1'
+ implementation 'com.shuyu:gsyvideoplayer-arm64:13.2.1'
+ implementation 'com.shuyu:gsyvideoplayer-x86:13.2.1'
+ implementation 'com.shuyu:gsyvideoplayer-x64:13.2.1'
 ```
 
 #### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
@@ -258,24 +264,24 @@ A and B normal versions support 263/264/265, etc. For mpeg encoding, there will 
 The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:13.2.1'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-exo2:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:13.2.1'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:13.2.1'
 
  //More ijk encoding support
- implementation 'com.shuyu:gsyvideoplayer-ex_so:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-ex_so:13.2.1'
 
 ```
 
 #### D. Jetpack Compose Support (Optional)
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-compose:13.2.0'
+ implementation 'com.shuyu:gsyvideoplayer-compose:13.2.1'
 ```
 
 ### 3. Jitpack Introduction Method (will continue to be released, but not highly recommended)
@@ -302,30 +308,33 @@ allprojects {
 ```groovy
  //Complete version introduction
 
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v13.2.1'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.2.1'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v13.2.1'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v13.2.1'
+
+ //Optional DLNA/UPnP cast implementation (minSdk 26)
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v13.2.1'
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.2.1'
 
  //so of ijk mode according to your needs
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v13.2.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v13.2.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v13.2.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v13.2.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v13.2.1'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v13.2.1'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v13.2.1'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v13.2.1'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v13.2.1'
 ```
 
 #### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
@@ -334,16 +343,16 @@ A and B normal versions support 263/264/265, etc. For mpeg encoding, there will 
 The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v13.2.1'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v13.2.1'
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.2.1'
 
  //More ijk encoding support
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v13.2.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v13.2.1'
 
 ```
 
@@ -494,6 +503,13 @@ WEBVTT
 Library APIs include `GSYVideoPreviewVttParser`, `GSYVideoPreviewProvider`, and `GSYVideoPreviewFrame`. The app layer loads the frame image and crops the sprite area if needed. See `PreViewGSYVideoPlayer#setPreviewVttUrl(String previewVttUrl)`.
 
 ## V. Recent Versions
+
+### v13.2.1 (2026-08-19)
+
+- Move `JupnpDlnaProvider`, `JupnpDlnaSession`, jUPnP, and Jetty into the independently published optional `gsyvideoplayer-cast` module.
+- Keep the protocol-neutral Cast SPI in `gsyvideoplayer-java`; default `gsyvideoplayer` and `gsyvideoplayer-java` consumers no longer resolve jUPnP/Jetty and retain the Media3-defined `minSdk 23` floor.
+- The optional cast artifact declares its real `minSdk 26` requirement and contributes its jUPnP service, network/multicast permissions, and reflection-safe R8 consumer rules.
+- Fix transient `STOPPED` handling during DLNA startup and make explicit disconnect stop the receiver before restoring local playback once.
 
 ### v13.2.0 (2026-08-19)
 

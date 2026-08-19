@@ -2,6 +2,13 @@
 
 **[Click to see the English version](UPDATE_VERSION_EN.md)**
 
+### v13.2.1 (2026-08-19)
+
+- 新增独立发布的可选 `gsyvideoplayer-cast` 模块，将 `JupnpDlnaProvider`、`JupnpDlnaSession`、jUPnP 3.0.3 与 Jetty 9.4.53 从 `gsyvideoplayer-java` 迁出。
+- 默认 `gsyvideoplayer` / `gsyvideoplayer-java` 不再传递 jUPnP/Jetty，最低版本保持 Media3 1.10.1 要求的 API 23；只有显式添加投屏模块时要求 API 26。
+- 投屏模块自动合并 jUPnP Service、网络/组播权限与反射安全的 R8 consumer rules，并加入发布 POM 隔离和 Release/R8 回归检查。
+- 修复 DLNA 起播阶段短暂 `STOPPED` 被误判为播放结束的竞态；主动断开会先向接收端发送 `Stop`，且只执行一次本地恢复。
+
 ### v13.2.0 (2026-08-19)
 
 - 新增可独立发布的 `gsyvideoplayer-rtmp` 模块：基于固定上游提交和项目现用 NDK r22b 重建 Media3 RTMP 原生客户端，并通过官方双 linker 参数验证 16 KB PT_LOAD/RELRO 布局；同时将 AliPlayer 升至首个官方适配 16 KB 的 7.5.0。

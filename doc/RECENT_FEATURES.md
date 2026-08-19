@@ -15,7 +15,7 @@
 | Exo 自适应清晰度 | `EXO自适应清晰度` | `ExoAdaptiveTrackActivity`、`GSYExo2MediaPlayer` | 使用单个 HLS master playlist 或 DASH MPD，由 Media3 TrackSelector 在同一时间线内自适应或固定 video track。 |
 | 播放器初始化失败安全处理 | 通用能力 | `GSYVideoBaseManager`、各 `IPlayerManager` | 内核创建或初始化失败时走错误回调和资源清理，避免直接 crash。 |
 | Exo 缓存生命周期和 GIF 清理 | 通用能力 | `ExoSourceManager`、`GifCreateHelper` | 收紧 Exo cache 的打开/释放流程，GIF 生成流程结束或失败时更可靠地清理。 |
-| DLNA/UPnP 投屏 | `投屏 Demo` | `CastCapability`、`JupnpDlnaProvider`、`JupnpDlnaSession`、`SampleCastControlVideo`、`CastDemoActivity` | 内核一等公民投屏能力，基于 jUPnP 3.0.3 走 DLNA `AVTransport:1` 标准协议，`SetAVTransportURI → Play → Seek` 保留中途投屏本地进度；带单机 Loopback Receiver 用于端到端自测。 |
+| DLNA/UPnP 投屏 | `投屏 Demo` | `CastCapability`、`JupnpDlnaProvider`、`JupnpDlnaSession`、`SampleCastControlVideo`、`CastDemoActivity` | 协议无关 SPI 留在核心，jUPnP 3.0.3 DLNA `AVTransport:1` 实现由可选 `gsyvideoplayer-cast` 提供；`SetAVTransportURI → Play → Seek` 保留中途投屏本地进度，并带单机 Loopback Receiver。 |
 
 ## 近期提交覆盖
 
@@ -198,25 +198,38 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ## DLNA/UPnP 投屏
 
-投屏能力以内核 SPI 形式并入 `gsyVideoPlayer-java`，不新增独立发布 module。默认实现走 jUPnP 3.0.3 的 DLNA `AVTransport:1` 协议。SPI 三件套：
+投屏的协议无关 SPI 保留在 `gsyVideoPlayer-java`；从 13.2.1 起，默认的 jUPnP 3.0.3
+DLNA `AVTransport:1` 实现由可选的 `gsyvideoplayer-cast` module 提供。SPI 三件套：
 
 - `CastCapability`：入口门面，通过 `GSYVideoBaseManager.getCastCapability()` 获取。
-- `CastProvider`：负责设备发现，暴露 `startDiscovery(CastListener)` / `stopDiscovery()`。
-- `CastSession`：一次投屏会话生命周期，`setMediaItem(CastMediaInfo)` → `play/pause/stop/seekTo` → `disconnect()`。
+- `CastProvider`：具体协议 SPI，由 App 注册到 `CastCapability`；默认 DLNA 实现是可选模块中的 `JupnpDlnaProvider`。
+- `CastSession`：一次投屏会话生命周期，`setMediaItem(CastMediaInfo)` → `play/pause/stop/seekTo` → `release()`。
 
 投屏中途起播示例：
 
 ```java
 CastCapability cast = GSYVideoManager.instance().getCastCapability();
-cast.getProvider().startDiscovery(new CastListener() {
-    @Override public void onDeviceFound(CastDevice device) { /* 展示到列表 */ }
-});
+cast.registerProvider(new JupnpDlnaProvider());
+cast.addListener(castListener); // onDeviceListChanged / onSessionStateChanged / onError
+cast.startDiscovery(context.getApplicationContext());
 
 // 用户选中设备后：
 long localPositionMs = videoPlayer.getCurrentPositionWhenPlaying();
 CastMediaInfo media = new CastMediaInfo(url, title, "video/mp4", /*durationMs*/ 0L, localPositionMs);
-CastSession session = cast.connect(selectedDevice);
-session.setMediaItem(media);  // SPI 内部会做 SetAVTransportURI → Play → Seek(localPositionMs)
+cast.connect(selectedDevice, new CastProvider.ConnectCallback() {
+    @Override public void onConnected(CastSession session) {
+        session.addListener(sessionListener);
+        session.setMediaItem(media); // SetAVTransportURI → Play → Seek(localPositionMs)
+    }
+
+    @Override public void onError(Throwable error) { /* 展示连接错误 */ }
+});
+
+// 页面退出或用户结束投屏：先停止远端，再释放会话与发现服务。
+CastSession active = cast.getActiveSession();
+if (active != null) active.stop();
+cast.disconnect();
+cast.stopDiscovery();
 ```
 
 Demo：`MainActivity` 底部有独立"投屏 Demo"入口 `CastDemoActivity`，可打开 DLNA 设备选择列表或开关 Loopback Receiver。演示播放器 `SampleCastControlVideo` 在投屏成功后自动塌陷成远端遥控 overlay，本地 surface / audio 释放；断开后按最近远端进度恢复本地播放。
@@ -227,6 +240,8 @@ Demo：`MainActivity` 底部有独立"投屏 Demo"入口 `CastDemoActivity`，�
 - `getPositionInfo` / `getTransportInfo` 回填真实进度状态，sender 端 1Hz 轮询看到的进度就是远端真实播放位置。
 - Service ↔ Activity 通过 `setPackage` 私有广播（`ACTION_STATE_READY` / `ACTION_STATE_STOPPED` / `ACTION_STATE_ERROR`）同步状态；Android 13+ 已适配 `RECEIVER_NOT_EXPORTED`。
 
-依赖开关：投屏依赖在 [gradle/dependencies.gradle](../gradle/dependencies.gradle) 的 `deps.jupnp` 定义（`org.jupnp:org.jupnp:3.0.3` + `org.jupnp:org.jupnp.support:3.0.3`），仅在 `gsyVideoPlayer-java` 启用 cast 源集时打入；下游不用投屏时 AAR 零增量（详见 [DEPENDENCIES.md](DEPENDENCIES.md)）。
+依赖开关：需要 DLNA 时添加 `io.github.carguo:gsyvideoplayer-cast:13.2.1`；该 artifact
+统一传递 jUPnP/Jetty，并声明真实 `minSdk 26`。默认播放器不含 Jetty，最低版本保持 API 23
+（详见 [DEPENDENCIES.md](DEPENDENCIES.md)）。
 
 更多能力目标与测试判据见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) 与 [CAST_TEST_PLAYBOOK.md](CAST_TEST_PLAYBOOK.md)。

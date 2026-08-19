@@ -2,7 +2,7 @@
 
 > 立项日期：2026-07-01
 > 分支：`feature/cast-capability`
-> 基线：master @ `v13.1.0`（commit `5cbab191`）
+> 基线：master @ `v13.1.0`（commit `5cbab191`）；13.2.1 起按可选 module 交付协议实现
 > 关联文档：[CAST_RECEIVER_DESIGN.md](./CAST_RECEIVER_DESIGN.md) · [CAST_TEST_PLAYBOOK.md](./CAST_TEST_PLAYBOOK.md) · [ARCHITECTURE.md](./ARCHITECTURE.md)
 
 ---
@@ -16,14 +16,15 @@
 1. **不改动播放内核**：`IJK / EXO(Media3) / System` 三大内核代码零改动，投屏能力通过 **内核 SPI（CastCapability / CastProvider / CastSession）** 挂接，UI overlay + 管理层与主播放器解耦。
 2. **不动 `gsyVideoPlayer-java` 公共 API**：`GSYBaseVideoPlayer`、`StandardGSYVideoPlayer`、`GSYVideoControlView`、`GSYVideoManager` 等对外 API 只允许**新增方法**，不改签名、不改语义、不改默认行为。SPI 接口以新增形式引入。
 3. **不改 Demo 默认行为**：`MainActivity` 现有 39 个入口按钮的顺序/文本/回调保持不变；投屏 Demo 作为**新按钮追加到列表末尾**。
-4. **不新增独立发布 module**：投屏能力（SPI + jUPnP DLNA/UPnP 实现）**并入 `gsyVideoPlayer-java`**（或作为可选源集），`settings.gradle` 不追加新 include；主发布链 `com.shuyu:gsyvideoplayer-java` 不受影响。
+4. **协议实现独立发布**：协议无关 SPI 留在 `gsyVideoPlayer-java`；jUPnP/Jetty 和 DLNA Provider
+   仅由可选的 `gsyvideoplayer-cast` 发布，默认播放器 POM 不得传递这些依赖。
 5. **不改测试基线**：J 轮基线的 4 项基础能力（播放/暂停、拖动进度、全屏切换、切换内核）在 `DetailPlayer` 上 100% 通过率必须保持；`java_cold_smoke.sh` 的 38/39 (97.4%) 通过率不允许下滑。
 6. **不引入必选新依赖到主 AAR**：投屏依赖 `jUPnP 3.0.3`（DLNA/UPnP）以可选方式引入；三方厂商 SDK（乐播等）保持 flavor / 独立 aar 分发。
 
 每一次 PR 合入前，必须回归下列 4 个断言：
 
 - `./gradlew assembleDebug` 全绿
-- `./gradlew :gsyVideoPlayer-java:test` 全绿
+- `./gradlew :gsyVideoPlayer-java:test :gsyVideoPlayer-cast:test` 全绿
 - `bash doc/test_scripts/java_basic_regression.sh "Detail模式"` 全绿
 - `bash doc/test_scripts/java_cold_smoke.sh` ≥ 38/39
 
@@ -35,10 +36,10 @@
 
 | 编号 | 能力 | 判据 |
 | --- | --- | --- |
-| Cast-A | 设备发现 | 5s 内出现至少 1 台设备，`onDeviceFound` 日志出现 |
-| Cast-B | 连接投屏 | `onCastConnecting` → `onCastConnected`，耗时 < 5s |
+| Cast-A | 设备发现 | 5s 内 `onDeviceListChanged` 收到至少 1 台设备 |
+| Cast-B | 连接投屏 | `ConnectCallback.onConnected` 成功，随后进入 `LOADING/PLAYING`，耗时 < 5s |
 | Cast-C | 远端起播 + 本地暂停 | 远端 `PLAYING` + 本地 `changeUiToPauseShow` |
-| Cast-D | 远端 seek 回传 | `onCastSeek complete`，UI 进度差 ≤ 2s |
+| Cast-D | 远端 seek 回传 | `SessionListener.onPositionChanged` 回报的位置与目标差 ≤ 2s |
 | Cast-E | 退投恢复本地 | 断开后 `onSeekComplete` 到远端最后 position，本地恢复 `CURRENT_STATE_PLAYING` |
 
 ---
@@ -58,15 +59,16 @@
 │   ├─ CastButton (video_layout_standard.xml 追加，非必现)     │
 │   └─ CastDeviceListDialog                                   │
 ├─────────────────────────────────────────────────────────────┤
-│ 内核 SPI 层（并入 gsyVideoPlayer-java）                     │
+│ 内核 SPI 层（gsyVideoPlayer-java，minSdk 23）              │
 │   ├─ CastCapability     ── 能力声明（是否支持 DLNA/其他协议）│
 │   ├─ CastProvider       ── 发现 / 建连 / 会话工厂            │
 │   ├─ CastSession        ── 单次投屏会话：load/play/pause/    │
 │   │                        stop/seek/status/事件回调         │
-│   ├─ 缺省实现：jUPnP 3.0.3 DLNA/UPnP                         │
-│   │    ├─ DlnaCastProvider  ── Registry + Discovery          │
-│   │    └─ DlnaCastSession   ── AVTransport1 action 封装      │
 │   └─ 三方厂商实现（Chromecast / 乐播 等）走同一 SPI 挂接      │
+├─────────────────────────────────────────────────────────────┤
+│ 可选协议实现（gsyVideoPlayer-cast，minSdk 26）              │
+│   ├─ JupnpDlnaProvider  ── Registry + Discovery             │
+│   └─ JupnpDlnaSession   ── AVTransport1 action 封装         │
 ├─────────────────────────────────────────────────────────────┤
 │ 本地 loopback 接收端（Demo 层，用于单机自投自收验收）        │
 │   DevReceiverService(:dlna) 前台 Service 内                 │
@@ -82,11 +84,14 @@
 
 ## 3. 模块划分
 
-### 3.1 无新增独立发布 module
+### 3.1 独立发布可选投屏 module
 
-投屏能力（SPI + jUPnP DLNA/UPnP 缺省实现）**并入 `gsyVideoPlayer-java`**，不再走"新增独立 module"路线；`settings.gradle` 无 include 追加。三方厂商 SDK（乐播等闭源）仍走 flavor / 独立 aar 分发。
+协议无关 SPI 保留在 `gsyVideoPlayer-java`；jUPnP DLNA/UPnP 实现由
+`gsyVideoPlayer-cast` 独立发布。默认播放器不传递 jUPnP/Jetty，维持 API 23 下限；只有显式
+依赖投屏 artifact 的应用受 Jetty 约束要求 API 26。三方厂商 SDK（乐播等闭源）仍走 flavor /
+独立 AAR 分发。
 
-### 3.2 `gsyVideoPlayer-java` 内 cast 目录建议结构
+### 3.2 SPI 与协议实现目录
 
 ```
 gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/
@@ -95,15 +100,17 @@ gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/
 ├── CastSession.java           （SPI：单次会话生命周期与命令面）
 ├── CastState.java             （枚举：IDLE/CONNECTING/PLAYING/PAUSED/...）
 ├── CastListener.java          （事件回调）
-├── model/
-│   ├── CastDevice.java
-│   └── CastMediaInfo.java
-└── dlna/                      （缺省实现：jUPnP 3.0.3）
-    ├── DlnaCastProvider.java
-    └── DlnaCastSession.java   （封装 AVTransport1 action）
+├── CastDevice.java
+└── CastMediaInfo.java
+
+gsyVideoPlayer-cast/src/main/java/com/shuyu/gsyvideoplayer/cast/dlna/
+├── DidlLite.java
+├── JupnpDlnaProvider.java     （jUPnP Registry + Discovery）
+└── JupnpDlnaSession.java      （封装 AVTransport1 action）
 ```
 
-> 注：jUPnP 依赖由该 flavor / 可选源集引入，不进入基础 AAR classpath，不影响下游只用本地播放能力的 App。
+> 注：`gsyvideoplayer-cast` 的 POM 统一传递 jUPnP/Jetty，并通过 AAR Manifest 合并所需 Service
+> 与组播权限；基础 AAR 的 classpath、Manifest 和 minSdk 均不受影响。
 
 ### 3.3 App 层：本地 loopback 接收端
 
@@ -185,6 +192,7 @@ app/src/main/java/com/example/gsyvideoplayer/cast/
 | 2026-07-01 | v0.1 | 立项，M0 规划文档落地 |
 | 2026-07-01 ~ 2026-07-02 | v0.2 ~ v0.13 | **历史迭代（已废弃架构）**：早期分支曾探索"独立发布 module + 自研 HTTP/JSON 私协议 + 桌面 JVM 接收器 + 单机自研 mDNS 广播 + adb loopback 兜底"路线，历时 12 版迭代，其间涉及的独立 module、私协议控制服务器、私自定义 mDNS 广告/解析组件、单机 loopback 通知栏命名等**均已在 v0.14 整体下线**，仅保留能力目标（Cast-A~E）与红线约束不变。若需追溯历史决策，见 git 历史 v0.2~v0.13 commit 段。 |
 | 2026-07-02 | v0.14 | **架构重定向到 jUPnP 3.0.3 DLNA/UPnP + 内核 SPI**：（1）取消独立发布 module，投屏能力（`CastCapability` / `CastProvider` / `CastSession` 三件 SPI + `dlna/` 缺省实现）并入 `gsyVideoPlayer-java`；（2）线上真投屏与本地验收**统一走 DLNA/UPnP 标准协议**——`DlnaCastProvider` 通过 jUPnP `Registry` + `RegistryListener` 做 SSDP 发现，`DlnaCastSession` 封装 `AVTransport:1` action（`SetAVTransportURI` / `Play` / `Pause` / `Stop` / `Seek` / `GetPositionInfo`）；（3）单机自投自收验收工具重构为 `DevReceiverService(:dlna)`：前台 Service (`foregroundServiceType=mediaPlayback`) 内起 jUPnP `UpnpService`，注册 `LocalDevice: urn:schemas-upnp-org:device:MediaRenderer:1` + `LoopbackAvTransportService`（AVTransport1 Service 实现，action 回调驱动本机播放器），设备名按 jUPnP UDN 规范生成；（4）废弃全部自研 HTTP/JSON 端点、自研 mDNS 广告/解析组件、adb reverse 兜底路径；（5）第三方厂商（Chromecast / 乐播）实现同一 SPI，作为可选 flavor / 独立 aar 挂接。 |
+| 2026-08-19 | v0.15 | **发布边界修正**：保持 v0.14 的标准 SPI 和 DLNA 协议不变，把 `JupnpDlnaProvider` / `JupnpDlnaSession`、jUPnP 与 Jetty 迁入独立 `gsyvideoplayer-cast` artifact。根因是 Jetty 9.4.53 的 `MethodHandle.invoke` 会把所有默认消费者的 Dex 下限抬到 API 26；拆分后默认播放器保持 Media3 1.10.1 的真实 API 23 下限，只有显式投屏消费者要求 API 26。 |
 
 ---
 
