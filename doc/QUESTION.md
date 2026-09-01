@@ -34,12 +34,38 @@ allprojects {
   而且有时候你需要的是clear一下。
 
 ```
--keep class tv.danmaku.ijk.** { *; }
--dontwarn tv.danmaku.ijk.**
--keep class com.shuyu.gsyvideoplayer.** { *; }
--dontwarn com.shuyu.gsyvideoplayer.**
+# ijk JNI 层：native 侧会反射回调 Java 层，必须整包保留
+-keep class tv.danmaku.ijk.media.player.** { *; }
+-dontwarn tv.danmaku.ijk.media.player.**
 
+# ---- GSYVideoPlayer 的三处关键反射点，务必保留 ----
+
+# 1) 全屏 / 小窗：GSYBaseVideoPlayer 通过 getConstructor(Context[,Boolean]).newInstance() 复刻自身
+-keep class * extends com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, java.lang.Boolean);
+}
+
+# 2) PlayerFactory：通过 Class.newInstance() 反射构造 IPlayerManager 实现
+-keep class * implements com.shuyu.gsyvideoplayer.player.IPlayerManager {
+    public <init>();
+}
+-keep interface com.shuyu.gsyvideoplayer.player.IPlayerManager { *; }
+
+# 3) CacheFactory：通过 Class.newInstance() 反射构造 ICacheManager 实现
+-keep class * implements com.shuyu.gsyvideoplayer.cache.ICacheManager {
+    public <init>();
+}
+-keep interface com.shuyu.gsyvideoplayer.cache.ICacheManager { *; }
+
+# Media3 官方 aar 已自带 consumer-rules，业务侧只需抑制警告
+-dontwarn androidx.media3.**
+-dontwarn com.google.android.exoplayer2.**
 ```
+
+> 说明：不要再使用 `-keep class com.shuyu.gsyvideoplayer.** { *; }` 与
+> `-keep class tv.danmaku.ijk.** { *; }` 这类整包保留，它们会把整个播放器锁住导致
+> R8 无法优化。上面的规则只保留反射点，其余交给 R8 做常规裁剪与优化。
 
 #### 3、找不到对应的so或者链接so错误。
 

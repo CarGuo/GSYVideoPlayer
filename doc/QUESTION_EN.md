@@ -34,12 +34,40 @@ Make sure that your unpacking Application configuration is normal. If obfuscatio
 And sometimes what you need is to clear it.
 
 ```
--keep class tv.danmaku.ijk.** { *; }
--dontwarn tv.danmaku.ijk.**
--keep class com.shuyu.gsyvideoplayer.** { *; }
--dontwarn com.shuyu.gsyvideoplayer.**
+# ijk JNI: native side reflects back into Java, keep the whole package
+-keep class tv.danmaku.ijk.media.player.** { *; }
+-dontwarn tv.danmaku.ijk.media.player.**
 
+# ---- Three reflection hotspots inside GSYVideoPlayer, MUST keep ----
+
+# 1) Fullscreen / small-window: GSYBaseVideoPlayer re-instantiates itself via
+#    getConstructor(Context[, Boolean]).newInstance()
+-keep class * extends com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, java.lang.Boolean);
+}
+
+# 2) PlayerFactory instantiates IPlayerManager implementations via Class.newInstance()
+-keep class * implements com.shuyu.gsyvideoplayer.player.IPlayerManager {
+    public <init>();
+}
+-keep interface com.shuyu.gsyvideoplayer.player.IPlayerManager { *; }
+
+# 3) CacheFactory instantiates ICacheManager implementations via Class.newInstance()
+-keep class * implements com.shuyu.gsyvideoplayer.cache.ICacheManager {
+    public <init>();
+}
+-keep interface com.shuyu.gsyvideoplayer.cache.ICacheManager { *; }
+
+# Media3 aar already ships its own consumer-rules, just silence warnings here
+-dontwarn androidx.media3.**
+-dontwarn com.google.android.exoplayer2.**
 ```
+
+> Note: do NOT use broad rules like `-keep class com.shuyu.gsyvideoplayer.** { *; }`
+> or `-keep class tv.danmaku.ijk.** { *; }` anymore. They freeze the entire player
+> and defeat R8 optimizations. The rules above keep only the reflection surface
+> and let R8 shrink / optimize everything else.
 
 #### 3. The corresponding so cannot be found or the so is linked incorrectly.
 
