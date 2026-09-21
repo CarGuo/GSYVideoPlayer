@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.example.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 /**
@@ -21,9 +22,24 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
  */
 public class LandLayoutVideo extends StandardGSYVideoPlayer {
 
+    // 全屏克隆布局类型：0=普通横屏全屏 1=BOOK 左右分置 2=TABLETOP 上下分置
+    private static final int FULL_LAYOUT_NORMAL = 0;
+    private static final int FULL_LAYOUT_BOOK = 1;
+    private static final int FULL_LAYOUT_TABLETOP = 2;
+
+    // 克隆体在构造期（cloneParams 之前）就要决定布局，故用静态字段在进入全屏前暂存姿态。
+    private static volatile int sPendingFullLayout = FULL_LAYOUT_NORMAL;
+
     private boolean isLinkScroll = false;
     ScaleGestureDetector scaleGestureDetector;
     float scaleFactor;
+
+    // 当前内嵌实例所处的半折叠姿态：0 非半折 / 1 BOOK / 2 TABLETOP
+    private int foldSplitMode = FULL_LAYOUT_NORMAL;
+
+    public void setFoldSplitMode(int mode) {
+        this.foldSplitMode = mode;
+    }
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -100,9 +116,22 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
     @Override
     public int getLayoutId() {
         if (mIfCurrentIsFullscreen) {
+            int layout = sPendingFullLayout;
+            if (layout == FULL_LAYOUT_BOOK) {
+                return R.layout.sample_video_full_book;
+            }
+            if (layout == FULL_LAYOUT_TABLETOP) {
+                return R.layout.sample_video_full_tabletop;
+            }
             return R.layout.sample_video_land;
         }
         return R.layout.sample_video_normal;
+    }
+
+    @Override
+    public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
+        sPendingFullLayout = foldSplitMode;
+        return super.startWindowFullscreen(context, actionBar, statusBar);
     }
 
     @Override

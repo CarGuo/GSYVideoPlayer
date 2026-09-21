@@ -103,71 +103,74 @@ public class FoldDetailActivity extends AppCompatActivity {
             && feature.getState() == FoldingFeature.State.HALF_OPENED
             && feature.getOrientation() == FoldingFeature.Orientation.HORIZONTAL;
 
-        boolean split = isBook || isTabletop;
-        LinearLayout root = binding.foldRoot;
+        boolean isLandscape = getResources().getConfiguration().orientation
+            == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
-        root.setOrientation(isBook ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
+        // 横屏完全展开：大屏左右分栏（无铰链条）
+        boolean isLandscapeFlat = isLandscape && !isBook && !isTabletop;
+
+        // 记录姿态供全屏克隆继承：1 book / 2 tabletop / 0 其它
+        binding.foldPlayer.setFoldSplitMode(isBook ? 1 : isTabletop ? 2 : 0);
+
+        LinearLayout root = binding.foldRoot;
+        root.setOrientation((isBook || isLandscapeFlat)
+            ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
 
         if (isBook) {
             binding.foldPosture.setText("左右折叠 · BOOK 竖向折痕");
         } else if (isTabletop) {
             binding.foldPosture.setText("上下折叠 · TABLETOP 横向折痕");
+        } else if (isLandscapeFlat) {
+            binding.foldPosture.setText("横向正向 · 大屏左右分栏");
         } else {
             binding.foldPosture.setText("展开态");
         }
 
-        binding.foldDivider.setVisibility(split ? View.VISIBLE : View.GONE);
+        boolean showDivider = isBook || isTabletop;
+        binding.foldDivider.setVisibility(showDivider ? View.VISIBLE : View.GONE);
 
         ViewGroup.LayoutParams playerParams = binding.foldPlayer.getLayoutParams();
         ViewGroup.LayoutParams dividerParams = binding.foldDivider.getLayoutParams();
+        ViewGroup.LayoutParams scrollParams = binding.foldInfoScroll.getLayoutParams();
 
         if (isBook) {
             playerParams.width = 0;
             playerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            if (playerParams instanceof LinearLayout.LayoutParams) {
-                ((LinearLayout.LayoutParams) playerParams).weight = 1f;
-                ((LinearLayout.LayoutParams) playerParams).gravity = Gravity.CENTER_VERTICAL;
-            }
+            ((LinearLayout.LayoutParams) playerParams).weight = 1f;
+            ((LinearLayout.LayoutParams) playerParams).gravity = Gravity.CENTER_VERTICAL;
             dividerParams.width = getHingeWidth(feature);
             dividerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            binding.foldInfoScroll.getLayoutParams().width = 0;
-            binding.foldInfoScroll.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-            setScrollWeight(1f);
+            scrollParams.width = 0;
+            scrollParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            ((LinearLayout.LayoutParams) scrollParams).weight = 1f;
+        } else if (isLandscapeFlat) {
+            playerParams.width = 0;
+            playerParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            ((LinearLayout.LayoutParams) playerParams).weight = 1f;
+            ((LinearLayout.LayoutParams) playerParams).gravity = Gravity.CENTER_VERTICAL;
+            dividerParams.width = 0;
+            dividerParams.height = 0;
+            scrollParams.width = 0;
+            scrollParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            ((LinearLayout.LayoutParams) scrollParams).weight = 1f;
         } else {
             playerParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            if (isTabletop) {
-                playerParams.height = 0;
-                if (playerParams instanceof LinearLayout.LayoutParams) {
-                    ((LinearLayout.LayoutParams) playerParams).weight = 1f;
-                    ((LinearLayout.LayoutParams) playerParams).gravity = Gravity.CENTER_HORIZONTAL;
-                }
-                dividerParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                dividerParams.height = getHingeWidth(feature);
-                binding.foldInfoScroll.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-                binding.foldInfoScroll.getLayoutParams().height = 0;
-                setScrollWeight(1f);
-            } else {
-                playerParams.height = (int) getResources().getDimension(R.dimen.post_media_height);
-                if (playerParams instanceof LinearLayout.LayoutParams) {
-                    ((LinearLayout.LayoutParams) playerParams).weight = 0f;
-                    ((LinearLayout.LayoutParams) playerParams).gravity = Gravity.NO_GRAVITY;
-                }
-                binding.foldInfoScroll.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-                binding.foldInfoScroll.getLayoutParams().height = 0;
-                setScrollWeight(1f);
-            }
+            playerParams.height = isTabletop ? 0
+                : (int) (getResources().getDisplayMetrics().widthPixels * 9f / 16f);
+            float pw = isTabletop ? 1f : 0f;
+            ((LinearLayout.LayoutParams) playerParams).weight = pw;
+            ((LinearLayout.LayoutParams) playerParams).gravity =
+                isTabletop ? Gravity.CENTER_HORIZONTAL : Gravity.NO_GRAVITY;
+            dividerParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            dividerParams.height = isTabletop ? getHingeWidth(feature) : 0;
+            scrollParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            scrollParams.height = 0;
+            ((LinearLayout.LayoutParams) scrollParams).weight = 1f;
         }
 
         binding.foldPlayer.setLayoutParams(playerParams);
         binding.foldDivider.setLayoutParams(dividerParams);
-    }
-
-    private void setScrollWeight(float weight) {
-        ViewGroup.LayoutParams p = binding.foldInfoScroll.getLayoutParams();
-        if (p instanceof LinearLayout.LayoutParams) {
-            ((LinearLayout.LayoutParams) p).weight = weight;
-        }
-        binding.foldInfoScroll.setLayoutParams(p);
+        binding.foldInfoScroll.setLayoutParams(scrollParams);
     }
 
     private int getHingeWidth(FoldingFeature feature) {
