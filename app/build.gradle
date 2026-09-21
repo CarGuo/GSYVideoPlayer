@@ -86,6 +86,9 @@ dependencies {
 
     implementation androidDependencies.multidex
 
+    implementation androidDependencies.windowCore
+    implementation androidDependencies.windowJava
+
     implementation project(":gsyVideoPlayer")
     // 13.2.1：投屏协议实现改为可选 module；Demo 显式依赖以保留 DLNA 功能。
     implementation project(":gsyVideoPlayer-cast")

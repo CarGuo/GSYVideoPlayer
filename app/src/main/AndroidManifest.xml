@@ -267,6 +267,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Transitions" />
 
+        <activity
+            android:name=".FoldDetailActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true" />
+        <activity
+            android:name=".compose.host.FoldComposeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true" />
+
         <!-- Loopback DevReceiver 现在渲染在应用内悬浮小窗（CastReceiverFloatingWindow）
              + 独立的 CastReceiverManager IJK 实例，不再拉起独立 Activity。原先的
              .cast.DevReceiverPlayerActivity 已随架构重构一并删除。 -->

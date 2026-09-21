@@ -34,6 +34,7 @@ import com.example.gsyvideoplayer.compose.host.DanmakuComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailFilterComposeActivity
 import com.example.gsyvideoplayer.compose.host.DetailNativeActivity
 import com.example.gsyvideoplayer.compose.host.ExoSwitchSourceComposeActivity
+import com.example.gsyvideoplayer.compose.host.FoldComposeActivity
 import com.example.gsyvideoplayer.compose.host.FloatingWindowComposeActivity
 import com.example.gsyvideoplayer.compose.host.FullFeatureNativeActivity
 import com.example.gsyvideoplayer.compose.host.ListPlayNativeActivity
@@ -188,6 +189,11 @@ private val DEMO_ENTRIES = listOf(
         title = "P5-2 · 自定义主题 Controls",
         subtitle = "Compose 自绘控件取代 GSYDefaultControls：渐变浮层 + Slider seek + 多主题切换",
         target = CustomControlsThemeComposeActivity::class.java,
+    ),
+    DemoEntry(
+        title = "P5-2 · 折叠屏适配",
+        subtitle = "BOOK 竖屏左右分栏 / TABLETOP 横屏上下分栏，视频与信息均避开铰链",
+        target = FoldComposeActivity::class.java,
     ),
 )
 

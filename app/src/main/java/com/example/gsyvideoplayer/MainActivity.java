@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         binding.castDemo.setOnClickListener(this);
 
+        binding.foldXml.setOnClickListener(this);
+        binding.foldCompose.setOnClickListener(this);
+
         boolean hadPermission = PermissionUtils.hasSelfPermissions(this, permissions);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hadPermission) {
             String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -298,6 +301,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.cast_demo:
                 //M2c 投屏 Demo 入口（发现列表 mock + 手动输入 IP 回退）
                 startActivity(new Intent(this, CastDemoActivity.class));
+                break;
+            case R.id.fold_xml:
+                startActivity(new Intent(this, FoldDetailActivity.class));
+                break;
+            case R.id.fold_compose:
+                startActivity(new Intent(this, com.example.gsyvideoplayer.compose.host.FoldComposeActivity.class));
                 break;
         }
     }
