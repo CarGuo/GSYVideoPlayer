@@ -54,6 +54,8 @@ public class FoldDetailActivity extends AppCompatActivity {
 
         resolvePlayerUI();
         buildPlayer();
+        binding.foldPlayer.getFullscreenButton().setOnClickListener(
+            v -> binding.foldPlayer.startWindowFullscreen(this, true, true));
         applyFoldState(null);
     }
 
@@ -75,6 +77,7 @@ public class FoldDetailActivity extends AppCompatActivity {
             .setIsTouchWiget(true)
             .setRotateViewAuto(false)
             .setRotateWithSystem(false)
+            .setNeedOrientationUtils(false)
             .setLockLand(false)
             .setShowFullAnimation(false)
             .setNeedLockFull(false)

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,8 +24,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -34,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.remember
 import androidx.compose.ui.layout.Layout
 import com.shuyu.gsyvideoplayer.compose.native_.GSYDefaultControls
+import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerEvent
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
 import androidx.window.layout.FoldingFeature
@@ -57,11 +64,26 @@ class FoldComposeActivity : ComponentActivity() {
 @Composable
 private fun FoldScreen() {
     val context = LocalContext.current
+    val activity = remember(context) { context as? Activity }
     val controller = rememberGSYPlayerController(
         url = DemoSamples.SAMPLE_URL,
         title = "Fold Compose Demo",
         autoPlay = true,
     )
+
+    var fullscreen by remember { mutableStateOf(false) }
+    LaunchedEffect(controller) {
+        controller.events.collect { ev ->
+            when (ev) {
+                GSYPlayerEvent.EnterFull -> fullscreen = true
+                GSYPlayerEvent.QuitFull -> fullscreen = false
+                else -> {}
+            }
+        }
+    }
+    BackHandler(enabled = fullscreen && activity != null) {
+        controller.exitFullscreen(activity!!)
+    }
 
     val layoutInfo by produceState<WindowLayoutInfo?>(initialValue = null, context) {
         val activity = context as? Activity
@@ -117,7 +139,19 @@ private fun FoldScreen() {
             player = {
                 Box(modifier = it.background(Color.Black)) {
                     GSYPlayerSurface(controller, Modifier.fillMaxSize())
-                    GSYDefaultControls(controller, Modifier.fillMaxSize())
+                    if (!fullscreen) {
+                        GSYDefaultControls(controller, Modifier.fillMaxSize())
+                        if (activity != null) {
+                            Button(
+                                onClick = { controller.enterFullscreen(activity) },
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(8.dp),
+                            ) {
+                                Text("全屏")
+                            }
+                        }
+                    }
                 }
             },
             hinge = {
