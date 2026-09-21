@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer.compose.host
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
@@ -79,9 +81,15 @@ private fun FoldScreen() {
     val isBook = foldFeature?.orientation == FoldingFeature.Orientation.VERTICAL
     val isTabletop = foldFeature?.orientation == FoldingFeature.Orientation.HORIZONTAL
 
+    val isLandscape = LocalConfiguration.current.orientation ==
+        Configuration.ORIENTATION_LANDSCAPE
+    // 横屏完全展开：大屏左右分栏
+    val isLandscapeFlat = isLandscape && !isBook && !isTabletop
+
     val postureText = when {
         isBook -> "左右折叠 · BOOK 竖向折痕"
         isTabletop -> "上下折叠 · TABLETOP 横向折痕"
+        isLandscapeFlat -> "横向正向 · 大屏左右分栏"
         else -> "展开态"
     }
 
@@ -90,12 +98,18 @@ private fun FoldScreen() {
         if (t > 0) t else with(LocalDensity.current) { 24.dp.roundToPx() }
     } ?: 0
 
+    val mode = when {
+        isBook -> FoldMode.BOOK
+        isTabletop -> FoldMode.TABLETOP
+        isLandscapeFlat -> FoldMode.LANDSCAPE_FLAT
+        else -> FoldMode.PORTRAIT_FLAT
+    }
+
     Scaffold(
         topBar = { TopAppBar(title = { Text("折叠屏 Compose Demo") }) }
     ) { padding ->
         FoldSplit(
-            isBook = isBook,
-            isTabletop = isTabletop,
+            mode = mode,
             hingePx = hingeSize,
             modifier = Modifier
                 .fillMaxSize()
@@ -116,10 +130,11 @@ private fun FoldScreen() {
     }
 }
 
+private enum class FoldMode { BOOK, TABLETOP, LANDSCAPE_FLAT, PORTRAIT_FLAT }
+
 @Composable
 private fun FoldSplit(
-    isBook: Boolean,
-    isTabletop: Boolean,
+    mode: FoldMode,
     hingePx: Int,
     modifier: Modifier = Modifier,
     player: @Composable (Modifier) -> Unit,
@@ -137,43 +152,43 @@ private fun FoldSplit(
         val w = constraints.maxWidth
         val h = constraints.maxHeight
 
-        val (pC, hC, iC) = when {
-            isBook -> {
-                val avail = (w - hingePx).coerceAtLeast(0)
-                val pw = avail / 2
-                Triple(
-                    Constraints.fixed(pw, h),
-                    Constraints.fixed(hingePx, h),
-                    Constraints.fixed(w - pw - hingePx, h),
-                )
-            }
-            isTabletop -> {
-                val avail = (h - hingePx).coerceAtLeast(0)
-                val ph = avail / 2
-                Triple(
-                    Constraints.fixed(w, ph),
-                    Constraints.fixed(w, hingePx),
-                    Constraints.fixed(w, h - ph - hingePx),
-                )
-            }
-            else -> {
-                val ph = (w * 9f / 16f).toInt().coerceAtMost(h)
-                Triple(
-                    Constraints.fixed(w, ph),
-                    Constraints.fixed(0, 0),
-                    Constraints.fixed(w, h - ph),
-                )
-            }
+        val horizontal = mode == FoldMode.BOOK || mode == FoldMode.LANDSCAPE_FLAT
+        val showHinge = mode == FoldMode.BOOK || mode == FoldMode.TABLETOP
+        val dividerPx = if (showHinge) hingePx else 0
+
+        val (pC, dC, iC) = if (horizontal) {
+            val avail = (w - dividerPx).coerceAtLeast(0)
+            val pw = avail / 2
+            Triple(
+                Constraints.fixed(pw, h),
+                Constraints.fixed(dividerPx, h),
+                Constraints.fixed((w - pw - dividerPx).coerceAtLeast(0), h),
+            )
+        } else if (mode == FoldMode.TABLETOP) {
+            val avail = (h - dividerPx).coerceAtLeast(0)
+            val ph = avail / 2
+            Triple(
+                Constraints.fixed(w, ph),
+                Constraints.fixed(w, dividerPx),
+                Constraints.fixed(w, (h - ph - dividerPx).coerceAtLeast(0)),
+            )
+        } else {
+            val ph = (w * 9f / 16f).toInt().coerceAtMost(h)
+            Triple(
+                Constraints.fixed(w, ph),
+                Constraints.fixed(0, 0),
+                Constraints.fixed(w, (h - ph).coerceAtLeast(0)),
+            )
         }
 
         val placeables = listOf(
             pMeas[0].measure(pC),
-            hMeas[0].measure(hC),
+            hMeas[0].measure(dC),
             iMeas[0].measure(iC),
         )
 
         layout(w, h) {
-            if (isBook) {
+            if (horizontal) {
                 placeables[0].placeRelative(0, 0)
                 placeables[1].placeRelative(placeables[0].width, 0)
                 placeables[2].placeRelative(placeables[0].width + placeables[1].width, 0)

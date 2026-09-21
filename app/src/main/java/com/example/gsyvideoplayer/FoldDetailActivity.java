@@ -32,6 +32,17 @@ public class FoldDetailActivity extends AppCompatActivity {
 
     private boolean isPlay;
 
+    // 缓存最近一次折叠特征；旋转导致配置变化时（部分真机不会重新派发 WindowLayoutInfo）
+    // 也能基于最新特征 + 新方向重算布局。
+    private FoldingFeature latestFoldFeature;
+
+    @Override
+    public void onConfigurationChanged(@NonNull android.content.res.Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // 此时新方向尚未完全生效，post 到下一帧再按新配置重算，保证取到新的宽高与方向。
+        binding.getRoot().post(() -> applyFoldState(latestFoldFeature));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +102,7 @@ public class FoldDetailActivity extends AppCompatActivity {
                 break;
             }
         }
+        latestFoldFeature = feature;
         applyFoldState(feature);
     }
 
