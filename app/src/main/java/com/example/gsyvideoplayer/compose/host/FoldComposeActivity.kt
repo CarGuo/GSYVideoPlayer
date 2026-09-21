@@ -71,6 +71,12 @@ private fun FoldScreen() {
         autoPlay = true,
     )
 
+    // 姿态注入（仅矩阵验证用）：-1 不注入，走真实 FoldingFeature；
+    // 0 FLAT / 1 BOOK / 2 TABLETOP。
+    val injectedPosture = remember(activity) {
+        activity?.intent?.getIntExtra("extra_posture", -1) ?: -1
+    }
+
     var fullscreen by remember { mutableStateOf(false) }
     LaunchedEffect(controller) {
         controller.events.collect { ev ->
@@ -100,8 +106,12 @@ private fun FoldScreen() {
             ?.firstOrNull { it.state == FoldingFeature.State.HALF_OPENED }
     }
 
-    val isBook = foldFeature?.orientation == FoldingFeature.Orientation.VERTICAL
-    val isTabletop = foldFeature?.orientation == FoldingFeature.Orientation.HORIZONTAL
+    val isBook = injectedPosture == 1
+        || (injectedPosture < 0
+            && foldFeature?.orientation == FoldingFeature.Orientation.VERTICAL)
+    val isTabletop = injectedPosture == 2
+        || (injectedPosture < 0
+            && foldFeature?.orientation == FoldingFeature.Orientation.HORIZONTAL)
 
     val isLandscape = LocalConfiguration.current.orientation ==
         Configuration.ORIENTATION_LANDSCAPE
@@ -115,10 +125,15 @@ private fun FoldScreen() {
         else -> "展开态"
     }
 
-    val hingeSize = foldFeature?.let {
+    val realHinge = foldFeature?.let {
         val t = minOf(it.bounds.width(), it.bounds.height())
         if (t > 0) t else with(LocalDensity.current) { 24.dp.roundToPx() }
     } ?: 0
+    val hingeSize = if (injectedPosture >= 0) {
+        with(LocalDensity.current) { 24.dp.roundToPx() }
+    } else {
+        realHinge
+    }
 
     val mode = when {
         isBook -> FoldMode.BOOK

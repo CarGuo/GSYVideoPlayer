@@ -36,6 +36,11 @@ public class FoldDetailActivity extends AppCompatActivity {
     // 也能基于最新特征 + 新方向重算布局。
     private FoldingFeature latestFoldFeature;
 
+    // 姿态注入（仅测试/矩阵验证用）：-1 不注入，走真实 FoldingFeature；
+    // 0 FLAT 展开 / 1 BOOK 竖向折痕 / 2 TABLETOP 横向折痕。
+    public static final String EXTRA_POSTURE = "extra_posture";
+    private int injectedPosture = -1;
+
     @Override
     public void onConfigurationChanged(@NonNull android.content.res.Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -48,6 +53,8 @@ public class FoldDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityFoldDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        injectedPosture = getIntent().getIntExtra(EXTRA_POSTURE, -1);
 
         windowInfoTracker =
             new WindowInfoTrackerCallbackAdapter(WindowInfoTracker.getOrCreate(this));
@@ -110,13 +117,20 @@ public class FoldDetailActivity extends AppCompatActivity {
     }
 
     private void applyFoldState(FoldingFeature feature) {
-        boolean isBook = feature != null
-            && feature.getState() == FoldingFeature.State.HALF_OPENED
-            && feature.getOrientation() == FoldingFeature.Orientation.VERTICAL;
+        if (injectedPosture >= 0) {
+            feature = null;
+        }
+        boolean isBook = (injectedPosture == 1)
+            || (injectedPosture < 0
+                && feature != null
+                && feature.getState() == FoldingFeature.State.HALF_OPENED
+                && feature.getOrientation() == FoldingFeature.Orientation.VERTICAL);
 
-        boolean isTabletop = feature != null
-            && feature.getState() == FoldingFeature.State.HALF_OPENED
-            && feature.getOrientation() == FoldingFeature.Orientation.HORIZONTAL;
+        boolean isTabletop = (injectedPosture == 2)
+            || (injectedPosture < 0
+                && feature != null
+                && feature.getState() == FoldingFeature.State.HALF_OPENED
+                && feature.getOrientation() == FoldingFeature.Orientation.HORIZONTAL);
 
         boolean isLandscape = getResources().getConfiguration().orientation
             == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
@@ -190,7 +204,7 @@ public class FoldDetailActivity extends AppCompatActivity {
 
     private int getHingeWidth(FoldingFeature feature) {
         if (feature == null) {
-            return 0;
+            return (int) (24 * getResources().getDisplayMetrics().density);
         }
         int width = feature.getBounds().width();
         int height = feature.getBounds().height();
