@@ -336,6 +336,9 @@ m4-receiver.log
 # Cast E2E scratch (uiautomator dumps, screenshots)
 .tmp/
 
+# Local testing scratch (screenshots, uiautomator dumps, heap dumps, scripts)
+app/test_evidence/
+
 # Secrets for local act testing
 .secrets
 *.asc
