@@ -1,3 +1,20 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    buildscript {
+        repositories {
+            google()
+            mavenCentral()
+        }
+        dependencies {
+            classpath("com.android.tools:r8:9.4.14")
+        }
+    }
+}
+
 include ":app",
     ":gsyVideoPlayer",
     ":gsyVideoPlayer-java",
