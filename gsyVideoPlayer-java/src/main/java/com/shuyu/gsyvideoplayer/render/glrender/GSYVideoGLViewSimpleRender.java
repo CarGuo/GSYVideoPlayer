@@ -71,6 +71,10 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
     private int muViewSizeHandle = -1;
 
+    private int muTimeHandle = -1;
+
+    private final long mStartNanos = System.nanoTime();
+
     private volatile boolean mUpdateSurface = false;
 
     private volatile boolean mTakeShotPic = false;
@@ -356,6 +360,10 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
         if (muViewSizeHandle != -1) {
             GLES20.glUniform2f(muViewSizeHandle, mCurrentViewWidth, mCurrentViewHeight);
         }
+        if (muTimeHandle != -1) {
+            float timeSeconds = (System.nanoTime() - mStartNanos) / 1_000_000_000.0f;
+            GLES20.glUniform1f(muTimeHandle, timeSeconds);
+        }
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         checkGlError("glDrawArrays");
@@ -392,11 +400,14 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
         int viewSizeHandle = GLES20.glGetUniformLocation(program, "uViewSize");
 
+        int timeHandle = GLES20.glGetUniformLocation(program, "uTime");
+
         maPositionHandle = positionHandle;
         maTextureHandle = textureHandle;
         muMVPMatrixHandle = mvpMatrixHandle;
         muSTMatrixHandle = stMatrixHandle;
         muViewSizeHandle = viewSizeHandle;
+        muTimeHandle = timeHandle;
         return true;
     }
 

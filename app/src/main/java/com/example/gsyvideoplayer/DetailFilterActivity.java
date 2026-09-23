@@ -41,6 +41,7 @@ import com.shuyu.gsyvideoplayer.render.effect.BlackAndWhiteEffect;
 import com.shuyu.gsyvideoplayer.render.effect.BrightnessEffect;
 import com.shuyu.gsyvideoplayer.render.effect.BloomEffect;
 import com.shuyu.gsyvideoplayer.render.effect.ContrastEffect;
+import com.shuyu.gsyvideoplayer.render.effect.CrtEffect;
 import com.shuyu.gsyvideoplayer.render.effect.CrossProcessEffect;
 import com.shuyu.gsyvideoplayer.render.effect.DocumentaryEffect;
 import com.shuyu.gsyvideoplayer.render.effect.DuotoneEffect;
@@ -49,6 +50,7 @@ import com.shuyu.gsyvideoplayer.render.effect.GammaEffect;
 import com.shuyu.gsyvideoplayer.render.effect.GaussianBlurEffect;
 import com.shuyu.gsyvideoplayer.render.effect.GaussianBlurMultiPassEffect;
 import com.shuyu.gsyvideoplayer.render.effect.GrainEffect;
+import com.shuyu.gsyvideoplayer.render.effect.GlitchEffect;
 import com.shuyu.gsyvideoplayer.render.effect.HueEffect;
 import com.shuyu.gsyvideoplayer.render.effect.IterativeBlurPyramidEffect;
 import com.shuyu.gsyvideoplayer.render.effect.InvertColorsEffect;
@@ -105,7 +107,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
         "自动修正", "像素化", "黑白", "对比度", "冲印", "纪录片", "双色调", "补光", "Gamma",
         "颗粒", "颗粒增强", "色相", "反色", "Lomo", "色阶", "桶形模糊", "饱和度", "棕褐",
         "锐化", "色温", "染色", "暗角", "无滤镜", "Overlay", "采样模糊", "高斯模糊", "亮度",
-        "美颜自然", "美颜强力"
+        "美颜自然", "美颜强力", "故障风", "CRT扫描线"
     };
 
     private static final String[] RENDER_SCENE_NAMES = {
@@ -650,6 +652,12 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
                 break;
             case 28:
                 effect = new BeautyEffect(0.85f, 0.6f);
+                break;
+            case 29:
+                effect = new GlitchEffect(0.85f);
+                break;
+            case 30:
+                effect = new CrtEffect(0.85f);
                 break;
         }
         binding.detailPlayer.setEffectFilter(effect);
