@@ -27,6 +27,7 @@ import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender2;
 import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender3;
 import com.example.gsyvideoplayer.effect.GSYVideoGLViewCustomRender4;
 import com.example.gsyvideoplayer.effect.PixelationEffect;
+import com.shuyu.gsyvideoplayer.render.glrender.GSYVideoGLViewMultiPassRender;
 import com.example.gsyvideoplayer.utils.CommonUtil;
 import com.example.gsyvideoplayer.utils.DemoVideoUrls;
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
@@ -37,6 +38,7 @@ import com.shuyu.gsyvideoplayer.render.effect.AutoFixEffect;
 import com.shuyu.gsyvideoplayer.render.effect.BarrelBlurEffect;
 import com.shuyu.gsyvideoplayer.render.effect.BlackAndWhiteEffect;
 import com.shuyu.gsyvideoplayer.render.effect.BrightnessEffect;
+import com.shuyu.gsyvideoplayer.render.effect.BloomEffect;
 import com.shuyu.gsyvideoplayer.render.effect.ContrastEffect;
 import com.shuyu.gsyvideoplayer.render.effect.CrossProcessEffect;
 import com.shuyu.gsyvideoplayer.render.effect.DocumentaryEffect;
@@ -44,8 +46,10 @@ import com.shuyu.gsyvideoplayer.render.effect.DuotoneEffect;
 import com.shuyu.gsyvideoplayer.render.effect.FillLightEffect;
 import com.shuyu.gsyvideoplayer.render.effect.GammaEffect;
 import com.shuyu.gsyvideoplayer.render.effect.GaussianBlurEffect;
+import com.shuyu.gsyvideoplayer.render.effect.GaussianBlurMultiPassEffect;
 import com.shuyu.gsyvideoplayer.render.effect.GrainEffect;
 import com.shuyu.gsyvideoplayer.render.effect.HueEffect;
+import com.shuyu.gsyvideoplayer.render.effect.IterativeBlurPyramidEffect;
 import com.shuyu.gsyvideoplayer.render.effect.InvertColorsEffect;
 import com.shuyu.gsyvideoplayer.render.effect.LamoishEffect;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
@@ -102,7 +106,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
     };
 
     private static final String[] RENDER_SCENE_NAMES = {
-        "默认渲染", "水印叠加", "双重播放", "图片穿孔", "模糊背景"
+        "默认渲染", "水印叠加", "双重播放", "图片穿孔", "模糊背景", "多Pass高斯", "金字塔迭代模糊", "Bloom辉光"
     };
 
     private int type = 0;
@@ -479,6 +483,27 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
                 binding.detailPlayer.setCustomGLRenderer(new GSYVideoGLViewCustomRender4());
                 binding.detailPlayer.setGLRenderMode(GSYVideoGLView.MODE_RENDER_SIZE);
                 break;
+            case 5: {
+                initialEffectName = "多Pass高斯";
+                GSYVideoGLViewMultiPassRender multiPassRender = new GSYVideoGLViewMultiPassRender();
+                multiPassRender.setMultiPassEffect(new GaussianBlurMultiPassEffect(6.0f));
+                binding.detailPlayer.setCustomGLRenderer(multiPassRender);
+                break;
+            }
+            case 6: {
+                initialEffectName = "金字塔迭代模糊";
+                GSYVideoGLViewMultiPassRender pyramidRender = new GSYVideoGLViewMultiPassRender();
+                pyramidRender.setMultiPassEffect(new IterativeBlurPyramidEffect(3));
+                binding.detailPlayer.setCustomGLRenderer(pyramidRender);
+                break;
+            }
+            case 7: {
+                initialEffectName = "Bloom辉光";
+                GSYVideoGLViewMultiPassRender bloomRender = new GSYVideoGLViewMultiPassRender();
+                bloomRender.setMultiPassEffect(new BloomEffect(3, 0.7f, 0.15f, 1.0f));
+                binding.detailPlayer.setCustomGLRenderer(bloomRender);
+                break;
+            }
             default:
                 break;
         }
@@ -491,6 +516,21 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
         if (renderSceneType == 3) {
             updateEffectInfo("固定遮罩");
             showToast("图片穿孔模式使用固定遮罩效果");
+            return;
+        }
+        if (renderSceneType == 5) {
+            updateEffectInfo("多Pass高斯");
+            showToast("多Pass高斯模式使用独立多 pass 渲染管线");
+            return;
+        }
+        if (renderSceneType == 6) {
+            updateEffectInfo("金字塔迭代模糊");
+            showToast("金字塔迭代模糊模式使用降采样金字塔多 pass 管线");
+            return;
+        }
+        if (renderSceneType == 7) {
+            updateEffectInfo("Bloom辉光");
+            showToast("Bloom辉光模式使用亮部提取 + 金字塔模糊 + 合成管线");
             return;
         }
         GSYVideoGLView.ShaderInterface effect = new NoEffect();
@@ -601,7 +641,8 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
     }
 
     private void updateFilterButtonState() {
-        boolean enabled = renderSceneType != 3;
+        boolean enabled = renderSceneType != 3 && renderSceneType != 5
+                && renderSceneType != 6 && renderSceneType != 7;
         binding.changeFilter.setEnabled(enabled);
         binding.changeFilter.setAlpha(enabled ? 1f : 0.45f);
     }

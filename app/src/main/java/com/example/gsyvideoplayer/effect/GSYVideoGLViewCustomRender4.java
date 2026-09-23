@@ -99,7 +99,6 @@ public class GSYVideoGLViewCustomRender4 extends GSYVideoGLViewSimpleRender {
         GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, transform, 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         checkGlError("custom glDrawArrays");
-        GLES20.glFinish();
     }
 
 

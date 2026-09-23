@@ -28,7 +28,6 @@ public class PixelationEffect implements GSYVideoGLView.ShaderInterface {
 
     private float pixel = 40f;
 
-
     public PixelationEffect() {
     }
 
@@ -41,27 +40,20 @@ public class PixelationEffect implements GSYVideoGLView.ShaderInterface {
 
     @Override
     public String getShader(GLSurfaceView mGlSurfaceView) {
-
-        String shader =  "#extension GL_OES_EGL_image_external : require\n" +
-                "precision mediump float;\n"+
-                "varying vec2 vTextureCoord;\n" +
-
-                "float imageWidthFactor = "+ (1 / (float)mGlSurfaceView.getWidth()) +";\n" +
-                "float imageHeightFactor = " + ( 1 /(float)mGlSurfaceView.getHeight()) + ";\n" +
-                "uniform samplerExternalOES sTexture;\n" +
-                "float pixel = " + pixel +";\n" +
-
-                "void main()\n" +
-                "{\n" +
-                "  vec2 uv  = vTextureCoord.xy;\n" +
-                "  float dx = pixel * imageWidthFactor;\n" +
-                "  float dy = pixel * imageHeightFactor;\n" +
-                "  vec2 coord = vec2(dx * floor(uv.x / dx), dy * floor(uv.y / dy));\n" +
-                "  vec3 tc = texture2D(sTexture, coord).xyz;\n" +
-                "  gl_FragColor = vec4(tc, 1.0);\n" +
-                "}";
-
-        return shader;
-
+        return "#extension GL_OES_EGL_image_external : require\n"
+                + "precision mediump float;\n"
+                + "uniform vec2 uViewSize;\n"
+                + "varying vec2 vTextureCoord;\n"
+                + "uniform samplerExternalOES sTexture;\n"
+                + "void main()\n"
+                + "{\n"
+                + "  vec2 uv = vTextureCoord.xy;\n"
+                + "  vec2 imageFactor = 1.0 / max(uViewSize, vec2(1.0));\n"
+                + "  float pixel = " + pixel + ";\n"
+                + "  vec2 delta = pixel * imageFactor;\n"
+                + "  vec2 coord = vec2(delta.x * floor(uv.x / delta.x), delta.y * floor(uv.y / delta.y));\n"
+                + "  vec4 tc = texture2D(sTexture, coord);\n"
+                + "  gl_FragColor = vec4(tc.rgb, tc.a);\n"
+                + "}";
     }
 }

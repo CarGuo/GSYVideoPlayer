@@ -73,19 +73,20 @@ public class BarrelBlurEffect implements GSYVideoGLView.ShaderInterface {
                 "  \n" +
                 "void main()  \n" +
                 "{     \n" +
-                "    vec2 uv=(gl_FragCoord.xy/vTextureCoord.xy);  \n" +
-                "  \n" +
                 "    vec3 sumcol = vec3(0.0);  \n" +
                 "    vec3 sumw = vec3(0.0);    \n" +
+                "    float alpha = 0.0;\n" +
                 "    for ( int i=0; i<num_iter;++i )  \n" +
                 "    {  \n" +
                 "        float t = float(i) * reci_num_iter_f;  \n" +
                 "        vec3 w = spectrum_offset( t );\n" +
+                "        vec4 sample = texture2D( sTexture, barrelDistortion(vTextureCoord, barrelPower*t ) );\n" +
                 "        sumw += w;\n" +
-                "        sumcol += w * texture2D( sTexture, barrelDistortion(vTextureCoord, barrelPower*t ) ).rgb;   \n" +
+                "        sumcol += w * sample.rgb;\n" +
+                "        alpha += w.r * sample.a;\n" +
                 "    }\n" +
-                "    gl_FragColor = vec4(sumcol.rgb / sumw, 1.0);  \n" +
-                "}  ";
+                "    gl_FragColor = vec4(sumcol.rgb / sumw, alpha);  \n" +
+                "}  "; 
 
     }
 }

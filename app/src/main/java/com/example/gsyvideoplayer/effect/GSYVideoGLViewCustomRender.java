@@ -144,7 +144,6 @@ public class GSYVideoGLViewCustomRender extends GSYVideoGLViewSimpleRender {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         checkGlError("glDrawArrays");
 
-        GLES20.glFinish();
         GLES20.glDisable(GLES20.GL_BLEND);
     }
 

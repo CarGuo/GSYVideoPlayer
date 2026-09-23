@@ -69,6 +69,8 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
     private int maTextureHandle;
 
+    private int muViewSizeHandle = -1;
+
     private volatile boolean mUpdateSurface = false;
 
     private volatile boolean mTakeShotPic = false;
@@ -122,12 +124,12 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
         takeBitmap(glUnused);
 
-        GLES20.glFinish();
-
     }
 
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
+        mCurrentViewWidth = width;
+        mCurrentViewHeight = height;
         GLES20.glViewport(0, 0, width, height);
     }
 
@@ -313,6 +315,9 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
         GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix,
                 0);
         GLES20.glUniformMatrix4fv(muSTMatrixHandle, 1, false, mSTMatrix, 0);
+        if (muViewSizeHandle != -1) {
+            GLES20.glUniform2f(muViewSizeHandle, mCurrentViewWidth, mCurrentViewHeight);
+        }
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         checkGlError("glDrawArrays");
@@ -347,10 +352,13 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
             return false;
         }
 
+        int viewSizeHandle = GLES20.glGetUniformLocation(program, "uViewSize");
+
         maPositionHandle = positionHandle;
         maTextureHandle = textureHandle;
         muMVPMatrixHandle = mvpMatrixHandle;
         muSTMatrixHandle = stMatrixHandle;
+        muViewSizeHandle = viewSizeHandle;
         return true;
     }
 
