@@ -70,6 +70,22 @@ public class GSYVideoGLView extends GLSurfaceView implements GLSurfaceListener, 
         String getShader(GLSurfaceView mGlSurfaceView);
     }
 
+    /**
+     * 需要自带 GL 纹理资产（如 LUT 查找表）的单 pass 效果。
+     * <p>
+     * 所有回调均在 GL 线程触发：{@link #onSurfaceReady} 负责加载并上传纹理，
+     * {@link #onBindTextures} 每帧把资产纹理绑到主纹理（OES 占用 GL_TEXTURE0）
+     * 之外的单元并设置 sampler，{@link #onSurfaceRelease} 删除纹理。
+     */
+    public interface TextureShaderInterface extends ShaderInterface {
+
+        void onSurfaceReady(GLSurfaceView glSurfaceView);
+
+        void onBindTextures(GLSurfaceView glSurfaceView, int program);
+
+        void onSurfaceRelease(GLSurfaceView glSurfaceView);
+    }
+
     public GSYVideoGLView(Context context) {
         super(context);
         init(context);

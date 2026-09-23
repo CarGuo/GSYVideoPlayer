@@ -83,6 +83,8 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
     private GSYVideoGLView.ShaderInterface mEffect = new NoEffect();
 
+    private GSYVideoGLView.TextureShaderInterface mReadyTextureEffect;
+
     public GSYVideoGLViewSimpleRender() {
         mTriangleVertices = ByteBuffer
                 .allocateDirect(
@@ -136,6 +138,7 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         mReleased = false;
+        mReadyTextureEffect = null;
 
         mProgram = createProgram(getVertexShader(), getFragmentShader());
         if (mProgram == 0) {
@@ -185,6 +188,7 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
             mTextureID[0] = 0;
             mTextureID[1] = 0;
         }
+        releaseReadyTextureEffect();
         if (mProgram != 0) {
             deleteProgram();
         }
@@ -251,13 +255,47 @@ public class GSYVideoGLViewSimpleRender extends GSYVideoGLViewBaseRender {
 
         GLES20.glUseProgram(mProgram);
         checkGlError("glUseProgram");
+        ensureTextureEffectReady();
         return true;
+    }
+
+    /**
+     * 保证当前效果自带的纹理资产已在 GL 线程上传；切换到其它效果时先释放旧纹理。
+     */
+    protected void ensureTextureEffectReady() {
+        GSYVideoGLView.TextureShaderInterface current =
+                mEffect instanceof GSYVideoGLView.TextureShaderInterface
+                        ? (GSYVideoGLView.TextureShaderInterface) mEffect : null;
+        if (mReadyTextureEffect == current) {
+            return;
+        }
+        if (mReadyTextureEffect != null) {
+            mReadyTextureEffect.onSurfaceRelease(mSurfaceView);
+            mReadyTextureEffect = null;
+        }
+        if (current != null) {
+            current.onSurfaceReady(mSurfaceView);
+            mReadyTextureEffect = current;
+        }
+    }
+
+    /**
+     * 释放当前已上传的纹理资产（GL 线程内调用）。
+     */
+    protected void releaseReadyTextureEffect() {
+        if (mReadyTextureEffect != null) {
+            mReadyTextureEffect.onSurfaceRelease(mSurfaceView);
+            mReadyTextureEffect = null;
+        }
     }
 
 
     protected void bindDrawFrameTexture() {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GL_TEXTURE_EXTERNAL_OES, mTextureID[0]);
+        if (mReadyTextureEffect != null) {
+            mReadyTextureEffect.onBindTextures(mSurfaceView, mProgram);
+        }
     }
 
 

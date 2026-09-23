@@ -52,6 +52,7 @@ import com.shuyu.gsyvideoplayer.render.effect.HueEffect;
 import com.shuyu.gsyvideoplayer.render.effect.IterativeBlurPyramidEffect;
 import com.shuyu.gsyvideoplayer.render.effect.InvertColorsEffect;
 import com.shuyu.gsyvideoplayer.render.effect.LamoishEffect;
+import com.shuyu.gsyvideoplayer.render.effect.LookupEffect;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
 import com.shuyu.gsyvideoplayer.render.effect.OverlayEffect;
 import com.shuyu.gsyvideoplayer.render.effect.PosterizeEffect;
@@ -106,10 +107,20 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
     };
 
     private static final String[] RENDER_SCENE_NAMES = {
-        "默认渲染", "水印叠加", "双重播放", "图片穿孔", "模糊背景", "多Pass高斯", "金字塔迭代模糊", "Bloom辉光"
+        "默认渲染", "水印叠加", "双重播放", "图片穿孔", "模糊背景", "多Pass高斯", "金字塔迭代模糊", "Bloom辉光", "LUT电影调色"
+    };
+
+    private static final String[] LUT_NAMES = {
+        "LUT原图", "LUT青橙", "LUT赛博朋克"
+    };
+
+    private static final String[] LUT_ASSETS = {
+        "lut/identity.png", "lut/teal_orange.png", "lut/cyberpunk.png"
     };
 
     private int type = 0;
+
+    private int lutType = 0;
 
     private int backupRendType;
 
@@ -504,6 +515,11 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
                 binding.detailPlayer.setCustomGLRenderer(bloomRender);
                 break;
             }
+            case 8: {
+                initialEffectFilter = new LookupEffect(LUT_ASSETS[0]);
+                initialEffectName = LUT_NAMES[0];
+                break;
+            }
             default:
                 break;
         }
@@ -531,6 +547,16 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
         if (renderSceneType == 7) {
             updateEffectInfo("Bloom辉光");
             showToast("Bloom辉光模式使用亮部提取 + 金字塔模糊 + 合成管线");
+            return;
+        }
+        if (renderSceneType == 8) {
+            String lutName = LUT_NAMES[lutType];
+            binding.detailPlayer.setEffectFilter(new LookupEffect(LUT_ASSETS[lutType]));
+            updateEffectInfo(lutName);
+            lutType++;
+            if (lutType >= LUT_NAMES.length) {
+                lutType = 0;
+            }
             return;
         }
         GSYVideoGLView.ShaderInterface effect = new NoEffect();
