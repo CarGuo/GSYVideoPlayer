@@ -35,6 +35,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.render.view.GSYVideoGLView;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.render.effect.AutoFixEffect;
+import com.shuyu.gsyvideoplayer.render.effect.BeautyEffect;
 import com.shuyu.gsyvideoplayer.render.effect.BarrelBlurEffect;
 import com.shuyu.gsyvideoplayer.render.effect.BlackAndWhiteEffect;
 import com.shuyu.gsyvideoplayer.render.effect.BrightnessEffect;
@@ -103,7 +104,8 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
     private static final String[] FILTER_EFFECT_NAMES = {
         "自动修正", "像素化", "黑白", "对比度", "冲印", "纪录片", "双色调", "补光", "Gamma",
         "颗粒", "颗粒增强", "色相", "反色", "Lomo", "色阶", "桶形模糊", "饱和度", "棕褐",
-        "锐化", "色温", "染色", "暗角", "无滤镜", "Overlay", "采样模糊", "高斯模糊", "亮度"
+        "锐化", "色温", "染色", "暗角", "无滤镜", "Overlay", "采样模糊", "高斯模糊", "亮度",
+        "美颜自然", "美颜强力"
     };
 
     private static final String[] RENDER_SCENE_NAMES = {
@@ -642,6 +644,12 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
                 break;
             case 26:
                 effect = new BrightnessEffect(deep);
+                break;
+            case 27:
+                effect = new BeautyEffect(0.55f, 0.35f);
+                break;
+            case 28:
+                effect = new BeautyEffect(0.85f, 0.6f);
                 break;
         }
         binding.detailPlayer.setEffectFilter(effect);
