@@ -57,6 +57,7 @@ import com.shuyu.gsyvideoplayer.render.effect.InvertColorsEffect;
 import com.shuyu.gsyvideoplayer.render.effect.LamoishEffect;
 import com.shuyu.gsyvideoplayer.render.effect.LookupEffect;
 import com.shuyu.gsyvideoplayer.render.effect.NoEffect;
+import com.shuyu.gsyvideoplayer.render.effect.OldTvSignalEffect;
 import com.shuyu.gsyvideoplayer.render.effect.OverlayEffect;
 import com.shuyu.gsyvideoplayer.render.effect.PosterizeEffect;
 import com.shuyu.gsyvideoplayer.render.effect.SampleBlurEffect;
@@ -107,7 +108,7 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
         "自动修正", "像素化", "黑白", "对比度", "冲印", "纪录片", "双色调", "补光", "Gamma",
         "颗粒", "颗粒增强", "色相", "反色", "Lomo", "色阶", "桶形模糊", "饱和度", "棕褐",
         "锐化", "色温", "染色", "暗角", "无滤镜", "Overlay", "采样模糊", "高斯模糊", "亮度",
-        "美颜自然", "美颜强力", "故障风", "CRT扫描线"
+        "美颜自然", "美颜强力", "故障风", "CRT扫描线", "老电视干扰"
     };
 
     private static final String[] RENDER_SCENE_NAMES = {
@@ -658,6 +659,9 @@ public class DetailFilterActivity extends GSYBaseActivityDetail<StandardGSYVideo
                 break;
             case 30:
                 effect = new CrtEffect(0.85f);
+                break;
+            case 31:
+                effect = new OldTvSignalEffect(0.9f);
                 break;
         }
         binding.detailPlayer.setEffectFilter(effect);
