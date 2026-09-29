@@ -31,6 +31,21 @@ class GSYPlayerController internal constructor() {
     @Volatile
     private var released: Boolean = false
 
+    /**
+     * host 是否仍挂在 window 上（即 [GSYPlayerSurface] 的 AndroidView 尚未走 onRelease）。
+     *
+     * 设计动机（GitHub issue #4259）：Compose 的清理顺序是 **子节点先于父节点**——
+     * `AndroidView.onRelease` 会先于 `rememberGSYPlayerController` 的
+     * `DisposableEffect.onDispose` 触发。因此不能在 [detachHost] 里把 [host] 直接置空，
+     * 否则 [dispose] 阶段的 `host?.let { it.release() }` 会被跳过，内核永远拿不到 release。
+     *
+     * 因此把「View 从 window 摘下」与「host 引用释放」这两件事解耦：
+     * - [attached] 表示 View 是否仍附着在 window（真正能被内核操作）；
+     * - [host] 仅在 [dispose] 里释放并置空，保证内核 release 一定被调用。
+     */
+    @Volatile
+    private var attached: Boolean = false
+
     private val tickRunnable = object : Runnable {
         override fun run() {
             if (!ticking || released) return
@@ -227,18 +242,21 @@ class GSYPlayerController internal constructor() {
     }
 
     fun setUp(builder: GSYVideoOptionBuilder, autoPlay: Boolean = false) {
+        if (released) return
         pendingBuilder = builder
         this.autoPlay = autoPlay
         // 若已有缓存的 cachePath，覆盖到 builder（与 P1-5 setCachePath 语义一致）
         pendingCachePath?.let { builder.setCachePath(it) }
-        host?.let { player ->
+        // 只在 View 仍附着时才把 builder 下发到 host——AndroidView.onRelease 后
+        // 再 setUp 只更新 pendingBuilder，等下一次 attachHost 时由 reapplyPendingSetters 生效。
+        activeHost()?.let { player ->
             applyBuilder(player)
             installInternalCallback(player)
             installLowLevelHooks(player)
             reapplyPendingSetters(player)
             if (autoPlay) {
                 handler.post {
-                    if (!released) host?.startPlayLogic()
+                    if (!released && attached) host?.startPlayLogic()
                 }
             }
         }
@@ -333,6 +351,9 @@ class GSYPlayerController internal constructor() {
             )
         }
         if (released) return null
+        // View 已从 window 摘下（AndroidView.onRelease 已跑）时，禁止业务再操作 host——
+        // 内核 Surface 可能已经 detach，这里返回 null 让调用方按 no-op 处理，避免闪退。
+        if (!attached) return null
         val player = host ?: return null
         return block(player)
     }
@@ -340,6 +361,7 @@ class GSYPlayerController internal constructor() {
     internal fun attachHost(player: GSYComposeHostPlayer) {
         if (released) return
         if (host === player) {
+            attached = true
             startTicking()
             return
         }
@@ -355,6 +377,7 @@ class GSYPlayerController internal constructor() {
             }
         }
         host = player
+        attached = true
         applyBuilder(player)
         installInternalCallback(player)
         installLowLevelHooks(player)
@@ -362,7 +385,7 @@ class GSYPlayerController internal constructor() {
         startTicking()
         if (autoPlay) {
             handler.post {
-                if (!released) host?.startPlayLogic()
+                if (!released && attached) host?.startPlayLogic()
             }
         }
     }
@@ -395,7 +418,18 @@ class GSYPlayerController internal constructor() {
         }
     }
 
+    /**
+     * View 端信号：[GSYPlayerSurface] 的 AndroidView 已从 composition 中移除。
+     *
+     * 该回调**只做 UI 侧解耦**：停 tick、卸 dispatcher、卸 hook；
+     * 但 **保留 [host] 引用**，交给 [dispose] 统一释放内核。
+     *
+     * 原因见 [attached] 的说明：Compose 会先卸 AndroidView 再卸父 DisposableEffect，
+     * 若这里就把 host 置空，[dispose] 里的 `host?.let { release() }` 会被跳过——
+     * 内核 MediaPlayer / Surface / 音频焦点都得不到释放（issue #4259）。
+     */
     internal fun detachHost() {
+        attached = false
         stopTicking()
         host?.let { old ->
             try {
@@ -408,7 +442,7 @@ class GSYPlayerController internal constructor() {
             } catch (_: Throwable) {
             }
         }
-        host = null
+        // 注意：保留 host 引用，等 dispose() 统一 release + 置空
     }
 
     private fun applyBuilder(player: GSYComposeHostPlayer) {
@@ -475,12 +509,27 @@ class GSYPlayerController internal constructor() {
         _stateFlow.value = next
     }
 
+    /**
+     * 只有在「未 released 且 View 仍附着」时才返回 host，否则返回 null。
+     *
+     * 所有对外的播控 / setter 都通过这个门进入，保证：
+     * - `release()` / `dispose()` 之后不再触碰内核；
+     * - `AndroidView.onRelease` 已跑到「controller.dispose 之前」的空窗期，业务
+     *   调用 `play/pause/seek/setter` 会自动 no-op，不误操作已解绑的 View。
+     *
+     * 注意：读取 [snapshot] / [stateFlow] 不走这里——那两者只是缓存值，读取无副作用。
+     */
+    private fun activeHost(): GSYComposeHostPlayer? {
+        if (released || !attached) return null
+        return host
+    }
+
     fun play() {
-        host?.startPlayLogic()
+        activeHost()?.startPlayLogic()
     }
 
     fun togglePlayPause() {
-        val p = host ?: return
+        val p = activeHost() ?: return
         when (p.currentState) {
             GSYVideoView.CURRENT_STATE_PLAYING -> p.onVideoPause()
             GSYVideoView.CURRENT_STATE_PAUSE -> p.onVideoResume()
@@ -492,39 +541,41 @@ class GSYPlayerController internal constructor() {
     }
 
     fun pause() {
-        host?.onVideoPause()
+        activeHost()?.onVideoPause()
     }
 
     fun resume() {
-        host?.onVideoResume()
+        activeHost()?.onVideoResume()
     }
 
     fun seekTo(positionMs: Long) {
-        val p = host ?: return
+        val p = activeHost() ?: return
         val duration = p.duration.coerceAtLeast(0L)
         val target = if (duration > 0L) positionMs.coerceIn(0L, duration) else positionMs.coerceAtLeast(0L)
         p.seekTo(target)
     }
 
     fun seekRelative(deltaMs: Long) {
-        val p = host ?: return
+        val p = activeHost() ?: return
         val cur = p.currentPositionWhenPlaying
         seekTo(cur + deltaMs)
     }
 
     fun setSpeed(speed: Float, soundTouch: Boolean = true) {
         currentSpeed = speed
-        host?.setSpeedPlaying(speed, soundTouch)
-        host?.let { syncFromHost(it) }
+        activeHost()?.let { p ->
+            p.setSpeedPlaying(speed, soundTouch)
+            syncFromHost(p)
+        }
     }
 
     fun setLocked(locked: Boolean) {
         this.locked = locked
-        host?.let { syncFromHost(it) }
+        activeHost()?.let { syncFromHost(it) }
     }
 
     fun retry() {
-        host?.startPlayLogic()
+        activeHost()?.startPlayLogic()
     }
 
     /**
@@ -543,7 +594,7 @@ class GSYPlayerController internal constructor() {
      */
     fun enterFullscreen(activity: Activity, hideActionBar: Boolean = true, hideStatusBar: Boolean = true) {
         if (released) return
-        val p = host ?: return
+        val p = activeHost() ?: return
         if (p.isIfCurrentIsFullscreen) return
         p.startWindowFullscreen(activity, hideActionBar, hideStatusBar)
     }
@@ -603,7 +654,7 @@ class GSYPlayerController internal constructor() {
         requireMainThread("setHeaders")
         if (released) return
         pendingHeaders = headers
-        host?.setMapHeadData(headers)
+        activeHost()?.setMapHeadData(headers)
     }
 
     /**
@@ -629,7 +680,7 @@ class GSYPlayerController internal constructor() {
         requireMainThread("setSeekOnStart")
         if (released) return
         pendingSeekOnStart = positionMs
-        host?.setSeekOnStart(positionMs)
+        activeHost()?.setSeekOnStart(positionMs)
     }
 
     /**
@@ -639,7 +690,7 @@ class GSYPlayerController internal constructor() {
         requireMainThread("setLooping")
         if (released) return
         pendingLooping = looping
-        host?.setLooping(looping)
+        activeHost()?.setLooping(looping)
     }
 
     /**
@@ -650,7 +701,7 @@ class GSYPlayerController internal constructor() {
         requireMainThread("setStartAfterPrepared")
         if (released) return
         pendingStartAfterPrepared = startAfterPrepared
-        host?.setStartAfterPrepared(startAfterPrepared)
+        activeHost()?.setStartAfterPrepared(startAfterPrepared)
     }
 
     /**
@@ -662,7 +713,7 @@ class GSYPlayerController internal constructor() {
         requireMainThread("setOverrideExtension")
         if (released) return
         pendingOverrideExtension = overrideExtension
-        host?.setOverrideExtension(overrideExtension)
+        activeHost()?.setOverrideExtension(overrideExtension)
     }
 
     /**
@@ -672,7 +723,7 @@ class GSYPlayerController internal constructor() {
         requireMainThread("setShowPauseCover")
         if (released) return
         pendingShowPauseCover = showPauseCover
-        host?.setShowPauseCover(showPauseCover)
+        activeHost()?.setShowPauseCover(showPauseCover)
     }
 
     /**
@@ -683,7 +734,7 @@ class GSYPlayerController internal constructor() {
         requireMainThread("setReleaseWhenLossAudio")
         if (released) return
         pendingReleaseWhenLossAudio = releaseWhenLossAudio
-        host?.setReleaseWhenLossAudio(releaseWhenLossAudio)
+        activeHost()?.setReleaseWhenLossAudio(releaseWhenLossAudio)
     }
 
     /**
@@ -718,10 +769,16 @@ class GSYPlayerController internal constructor() {
     /**
      * 永久销毁 controller。仅由 [rememberGSYPlayerController] 的 DisposableEffect 在
      * Composable 退出时调用。一旦 dispose，所有 setter / setUp 都变 no-op。
+     *
+     * 关键保证（issue #4259）：Compose 会先调 [detachHost]（由 AndroidView.onRelease
+     * 触发），再调本方法（由 DisposableEffect.onDispose 触发）。[detachHost] **不再
+     * 清空 host 引用**，因此这里的 `host?.let { it.release() }` 一定能拿到实例，
+     * 保证 MediaPlayer / Surface / 音频焦点等内核资源被释放。
      */
     internal fun dispose() {
         if (released) return
         released = true
+        attached = false
         stopTicking()
         handler.removeCallbacksAndMessages(null)
         host?.let { old ->
