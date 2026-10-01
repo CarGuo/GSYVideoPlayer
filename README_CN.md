@@ -3,6 +3,35 @@
 
 ![](./img/home_logo.png)
 
+## FFmpeg 5 分支：从这里开始
+
+**`ffmpeg-5.0` 分支实际使用 FFmpeg 5.1.10。** 本分支将已测试的 IJK 原生迁移库集成到 `gsyVideoPlayer-ex_so`，仅覆盖 **arm64-v8a、armeabi-v7a、x86_64**。每个 ABI 的 `libijkffmpeg.so`、`libijkplayer.so`、`libijksdl.so` 必须整套使用。现有 `armeabi`、`x86` 二进制及其他 SO 分发模块保持原版本，未在本次迁移中升级；GSY Java/运行时代码未改动。
+
+- [迁移范围、固定版本、原生编译和验证边界](doc/ffmpeg-5.0.md)
+- [九个交付库的 SHA-256 清单](doc/ffmpeg-5.0.SHA256SUMS)
+- 配套源码：[CarGuo/ijkplayer 的 `ffmpeg-5.0` 分支](https://github.com/CarGuo/ijkplayer/tree/ffmpeg-5.0) · [IJK 编译说明](https://github.com/CarGuo/ijkplayer/blob/ffmpeg-5.0/doc/FFMPEG5.md) · [CarGuo/FFmpeg 的 `ffmpeg-5.0` 分支](https://github.com/CarGuo/FFmpeg/tree/ffmpeg-5.0)
+
+### 快速试用当前候选库
+
+配置好 JDK 17+ 和 Android SDK 后，直接构建本分支的源码模块：
+
+```sh
+git clone --branch ffmpeg-5.0 https://github.com/CarGuo/GSYVideoPlayer.git
+cd GSYVideoPlayer
+sha256sum -c doc/ffmpeg-5.0.SHA256SUMS
+./gradlew :gsyVideoPlayer-ex_so:assembleDebug :app:assembleDebug
+./gradlew :gsyVideoPlayer-java:testDebugUnitTest :gsyVideoPlayer-cast:testDebugUnitTest
+```
+
+调试 AAR 输出到 `gsyVideoPlayer-ex_so/build/outputs/aar/`，Demo APK 输出到 `app/build/outputs/apk/debug/`。下方已发布的 `13.2.1` 依赖和 Release APK 链接**不会自动切换到本候选库**。如需重新编译 SO，请使用配套 IJK 分支的 `init-android-ffmpeg5.sh`、`android/contrib/compile-ffmpeg5.sh`、已测试的 NDK r22b 和 `module-lite-more.sh` 裁剪配置；旧自编译指南及 `init-android.sh` 不会复现这套 FFmpeg 5 构建。
+
+### 已验证结果与边界
+
+- **官方 API 35 x86_64、16 KB 模拟环境：** 加载通过；基础播放 21/21，附加回调断言 52 项，扩展解码 9/9，限定 RTSP/RTMP/MJPEG 用例 8/8 通过。真实 GSY 旋转画面为 6/8，MediaCodec 0°/270° 仍有黑画面；后续全新镜像在安装测试应用前发生 `system_server` 崩溃。16 KB 全角度硬解和持续运行验收尚未完成。
+- **API 30 x86_64、4 KB 模拟器：** HTTPS 正确/错误 CA 测试 2/2、服务端确认的 RTSP UDP、同步/异步 MediaCodec 解码/seek/结束，以及真实 GSY 旋转画面 8/8 均通过。连续播放 1202.4 秒，视频创建/释放 50/50 次通过，236 次采样输出帧率均为正。这些结果不替代 16 KB 缺项，也不等于零内存泄漏。
+- **构建与打包：** 调试 AAR 和 Demo APK 内的九库哈希一致；Java/cast 单测 14/14 通过。六个 64 位 SO 的 ELF LOAD 段为 16 KB 对齐，三个 ARMv7 SO 为 4 KB 对齐。构建成功不代表 Demo 所有页面都已验收。
+- **真机与 TLS 限制：** 运行证据主要来自 x86_64 模拟器，未覆盖 ARM64/ARMv7 真机或厂商硬解。OpenSSL 仍为 1.1.1w，TLS 验证默认关闭；HTTPS 用例显式设置 `tls_verify=1` 检查 CA，但该后端不验证主机名。本分支是迁移候选，不是完整 16 KB、真机或 TLS 安全认证。详见[完整边界](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits)。
+
 ## 支持 [IJKPlayer](https://github.com/CarGuo/ijkplayer)、 [Media3(EXOPlayer2)](https://github.com/androidx/media)、MediaPlayer、AliPlayer，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
 ## * 鸿蒙版本[openharmony-tpc/GSYVideoPlayer](https://gitcode.com/openharmony-tpc/openharmony_tpc_samples/tree/master/GSYVideoPlayer)
@@ -27,9 +56,9 @@
  **字幕**      | **支持通用外挂字幕 Overlay，SRT/WebVTT 可跨 IJK、Media3(EXOPlayer)、MediaPlayer 等内核使用；Media3 内嵌字幕可桥接到同一套 UI。[说明](doc/SUBTITLE_CN.md)。**
  **dash**    | **media3(exo2) 模式支持dash；Demo 支持 HLS master / DASH MPD 自适应清晰度轨道切换。**
  **stream**  | **支持元数据播放**
- **适配 16k**  | **ex_so 适配 16K Page Size**
- **openssl** | **目前  ex_so 的 arm64/x86_64 使用 openssl 1.1.1w**
- **FFmpeg**  | **目前  ex_so 的 arm64/x86_64 使用 FFmpeg 4.3**
+ **适配 16k**  | **本分支 ex_so 的 arm64-v8a/x86_64 SO 为 16 KB ELF 对齐；运行验证仍有[明确缺项](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits)。**
+ **openssl** | **三个已迁移 ex_so ABI 保留 OpenSSL 1.1.1w，详见 [TLS 边界](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits)。**
+ **FFmpeg**  | **本分支 ex_so 的 arm64-v8a/armeabi-v7a/x86_64 使用 FFmpeg 5.1.10；其他 ABI/模块保持原样。**
  **FFmpeg**  | **目前  ex_so 的 arm64/x86_64 支持 G711a(pcm_alaw)**
  **投屏**      | **可选 `gsyvideoplayer-cast` DLNA/UPnP 模块，基于 jUPnP 3.0.3；核心只保留协议无关的 `CastCapability` / `CastProvider` / `CastSession` SPI，不再默认引入 Jetty。[说明](doc/CAST_FEATURE_PLAN.md)。**
  **更多**      | **暂停前后台切换不黑屏；多 URL 清晰度切换；Exo HLS/DASH 自适应清晰度；无缝切换支持；完成后保留最后一帧 Demo；进度条 WebVTT 小窗口预览。**
@@ -59,6 +88,8 @@
 ### [--------------Demo APK 下载地址---------------](https://github.com/CarGuo/GSYVideoPlayer/releases)
 
 ## 一、使用依赖
+
+> **已发布版本参考：** 本节依赖坐标和按 ABI 分发的模块属于既有发布版本，不会因为正在阅读 `ffmpeg-5.0` 分支而包含本次候选库。请按上方快速入口使用源码；本次仅迁移本分支 `gsyVideoPlayer-ex_so` 中列出的三个 ABI。
 
 目前有三种托管方式：
 
@@ -104,7 +135,7 @@ implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.1'
 implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
 ```
 
-#### B、添加java和你想要的so支持：
+#### B、添加java和你想要的so支持（已发布的分 ABI 模块，本次未升级）：
 
 ```groovy
  implementation 'io.github.carguo:gsyvideoplayer-java:13.2.1'
@@ -183,13 +214,12 @@ allprojects {
         maven {
             url 'https://maven.pkg.github.com/CarGuo/GSYVideoPlayer'
 
-            // You can also use your own GitHub account and token
-            // For convenience, I have provided a token for an infrequently used account here
+            // Provide your own account and read:packages token outside the source tree
             credentials {
                 // your github name
-                username = 'carsmallguo'
+                username = System.getenv("GITHUB_READ_USER") ?: ""
                 // your github generate new token
-                password = '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'
+                password = System.getenv("GITHUB_READ_TOKEN") ?: ""
             }
         }
         maven {
@@ -206,7 +236,7 @@ allprojects {
 
 > 理论上就是右上角头像 - Settings - Developer Settings - Personal access tokens - tokens (classic) -
 > Generate new token（classic）- read:packages
-> 记得过期时间选择永久
+> 使用所需的最小权限和有限有效期，不要把 token 提交到源码仓库。
 
 > 小提示：仓库根目录 `build.gradle` 现已支持从 Gradle 属性或环境变量读取 GitHub Packages 凭据，无需把自己的 token 写进源码：
 >
@@ -223,7 +253,7 @@ allprojects {
 > export GITHUB_READ_TOKEN=<你的-classic-token-含-read:packages>
 > ```
 >
-> 仓库里仍内置 `carsmallguo / ghp_...` 这一对兜底凭据，便于第一次 clone 即可构建；它随时可能被撤销，建议优先用你自己的 token。
+> 不要依赖共享的兜底凭据，请通过上述配置提供自己的凭据。
 
 **你可以选择下面三种的其中一种，在module下的build.gradle添加。**
 
@@ -241,7 +271,7 @@ allprojects {
  implementation 'com.shuyu:gsyvideoplayer-cast:13.2.1'
 ```
 
-#### B、添加java和你想要的so支持：
+#### B、添加java和你想要的so支持（已发布的分 ABI 模块，本次未升级）：
 
 ```groovy
  implementation 'com.shuyu:gsyvideoplayer-java:13.2.1'
@@ -326,7 +356,7 @@ allprojects {
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v13.2.1'
 ```
 
-#### B、添加java和你想要的so支持：
+#### B、添加java和你想要的so支持（已发布的分 ABI 模块，本次未升级）：
 
 ```groovy
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v13.2.1'
@@ -460,7 +490,8 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
  接口文档入口        | **[--- 使用说明、接口文档 - 入口](https://github.com/CarGuo/GSYVideoPlayer/wiki)**
  **问题集锦入口**    | ***[--- 问题集锦 - 入口（大部分你遇到的问题都在这里解决） ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/QUESTION.md)***
  编码格式          | **[--- IJK so文件配置格式说明](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DECODERS.md)**
- 编译自定义SO       | **[--- IJKPlayer编译自定义SO - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/BUILD_SO.md)**
+ FFmpeg 5 原生编译       | **[--- 当前分支的编译、哈希和验证边界](doc/ffmpeg-5.0.md)**
+ 编译自定义SO（旧版）       | **[--- 历史 IJKPlayer 编译指南](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/BUILD_SO.md)**，包含旧工具链/命令；本分支请使用上方 FFmpeg 5 指南。
  版本更新说明        | **[--- 版本更新说明 - 入口](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)**
  compileSdk 太高 | --- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/3514)**
 

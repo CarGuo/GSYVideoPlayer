@@ -2,6 +2,35 @@
 
 **[中文文档](README_CN.md)**
 
+## FFmpeg 5 branch: start here
+
+**`ffmpeg-5.0` uses FFmpeg 5.1.10.** This branch packages the tested IJK native migration in `gsyVideoPlayer-ex_so` for **arm64-v8a, armeabi-v7a and x86_64 only**. Each ABI contains the matching `libijkffmpeg.so`, `libijkplayer.so` and `libijksdl.so`; replace them as a complete set. Existing `armeabi`/`x86` binaries and other SO distribution modules remain on their previous implementations. GSY Java/runtime code is unchanged.
+
+- [Migration, pinned versions, native build and validation limits](doc/ffmpeg-5.0.md)
+- [Exact nine-library SHA-256 manifest](doc/ffmpeg-5.0.SHA256SUMS)
+- Companion sources: [CarGuo/ijkplayer `ffmpeg-5.0`](https://github.com/CarGuo/ijkplayer/tree/ffmpeg-5.0) · [IJK build guide](https://github.com/CarGuo/ijkplayer/blob/ffmpeg-5.0/doc/FFMPEG5.md) · [CarGuo/FFmpeg `ffmpeg-5.0`](https://github.com/CarGuo/FFmpeg/tree/ffmpeg-5.0)
+
+### Try the checked-in candidate
+
+With JDK 17+ and the Android SDK configured, build the source modules from this branch:
+
+```sh
+git clone --branch ffmpeg-5.0 https://github.com/CarGuo/GSYVideoPlayer.git
+cd GSYVideoPlayer
+sha256sum -c doc/ffmpeg-5.0.SHA256SUMS
+./gradlew :gsyVideoPlayer-ex_so:assembleDebug :app:assembleDebug
+./gradlew :gsyVideoPlayer-java:testDebugUnitTest :gsyVideoPlayer-cast:testDebugUnitTest
+```
+
+The debug AAR is under `gsyVideoPlayer-ex_so/build/outputs/aar/`; the demo APK is under `app/build/outputs/apk/debug/`. Published `13.2.1` dependencies and release APK links below do **not** select this candidate. For a native rebuild, use the companion IJK branch's `init-android-ffmpeg5.sh` and `android/contrib/compile-ffmpeg5.sh` with the tested NDK r22b and `module-lite-more.sh` profile. The legacy custom-SO guide and `init-android.sh` do not reproduce this FFmpeg 5 build.
+
+### What was validated
+
+- **Official API 35 x86_64 16 KB emulation:** loading passed; core playback 21/21 plus 52 callback assertions, extra codecs 9/9 and scoped RTSP/RTMP/MJPEG cases 8/8 passed. Displayed GSY rotation passed 6/8; MediaCodec 0°/270° remained black. A later clean image crashed `system_server` before test-app installation. Full MediaCodec rotation and sustained execution remain unverified on 16 KB.
+- **API 30 x86_64 4 KB emulator:** HTTPS CA acceptance/rejection 2/2, server-confirmed RTSP UDP, synchronous/asynchronous MediaCodec decode/seek/completion and displayed GSY rotation 8/8 passed. Continuous playback ran 1202.4 seconds, with 50/50 video lifecycle cycles and positive output FPS in all 236 samples. These results do not close the 16 KB gaps or establish zero leaks.
+- **Build/package checks:** all nine SOs match the debug AAR and demo APK; Java/cast tests passed 14/14. The six 64-bit SOs have 16 KB ELF LOAD alignment; the three ARMv7 SOs have 4 KB alignment. Build success is not full demo UI validation.
+- **Device and TLS limits:** runtime coverage is primarily x86_64 emulators, not ARM64/ARMv7 devices or vendor hardware codecs. OpenSSL remains 1.1.1w; TLS verification defaults to off. The explicit HTTPS tests enable `tls_verify=1` for CA validation, but the backend does not verify hostname identity. This is a migration candidate, not complete 16 KB, device or TLS-security certification. See the [full limits](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits).
+
 ## Supports [IJKPlayer](https://github.com/CarGuo/ijkplayer), [Media3(EXOPlayer2)](https://github.com/androidx/media), MediaPlayer, AliPlayer, implementing a multi-functional video player. (Please read the following instructions carefully, most questions can be answered below).
 
 ## * HarmonyOS version [openharmony-tpc/GSYVideoPlayer](https://gitcode.com/openharmony-tpc/openharmony_tpc_samples/tree/master/GSYVideoPlayer)
@@ -26,9 +55,9 @@
  **Subtitles**      | **Unified external subtitle overlay supports SRT/WebVTT across IJK, Media3(EXOPlayer), and MediaPlayer; Media3 embedded cues can bridge to the same UI.**
  **Dash**    | **Media3(exo2) mode supports dash; the demo supports HLS master / DASH MPD adaptive quality track switching.**
  **Stream**  | **Supports metadata playback**
- **Adapt 16k**  | **ex_so adapts to 16K Page Size**
- **openssl** | **Currently ex_so's arm64/x86_64  uses openssl 1.1.1w**
- **FFmpeg**  | **Currently ex_so's arm64/x86_64 uses FFmpeg 4.3**
+ **Adapt 16k**  | **This branch's ex_so arm64-v8a/x86_64 SOs have 16 KB ELF alignment; runtime validation has [explicit remaining gaps](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits).**
+ **openssl** | **The three migrated ex_so ABIs retain OpenSSL 1.1.1w; see the [TLS limits](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits).**
+ **FFmpeg**  | **This branch's ex_so arm64-v8a/armeabi-v7a/x86_64 uses FFmpeg 5.1.10; other ABI/modules remain unchanged.**
  **FFmpeg**  | **Currently ex_so's arm64/x86_64  supports G711a(pcm_alaw)**
  **Cast**      | **Optional `gsyvideoplayer-cast` DLNA/UPnP module built on jUPnP 3.0.3; the core keeps only the protocol-neutral `CastCapability` / `CastProvider` / `CastSession` SPI and does not pull Jetty. [Details](doc/CAST_FEATURE_PLAN.md).**
  **More**      | **No black screen when pausing front and back switching; multi-URL quality switching; Exo HLS/DASH adaptive quality; seamless switching support; keep-last-frame demo; WebVTT progress bar preview.**
@@ -58,6 +87,8 @@
 ### [--------------Demo APK Download Address---------------](https://github.com/CarGuo/GSYVideoPlayer/releases)
 
 ## I. Using Dependencies
+
+> **Released-package reference:** the dependency coordinates and per-ABI packages in this section describe existing releases. They do not contain this branch's candidate merely because this README is on `ffmpeg-5.0`. Use the source quick-start above; only the three listed ABIs in this branch's `gsyVideoPlayer-ex_so` were migrated.
 
 There are currently three hosting methods:
 
@@ -103,7 +134,7 @@ implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.2.1'
 implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
 ```
 
-#### B. Add java and the so support you want:
+#### B. Add java and the so support you want (released per-ABI modules, unchanged here):
 
 ```groovy
  implementation 'io.github.carguo:gsyvideoplayer-java:13.2.1'
@@ -182,13 +213,12 @@ allprojects {
         maven {
             url 'https://maven.pkg.github.com/CarGuo/GSYVideoPlayer'
 
-            // You can also use your own GitHub account and token
-            // For convenience, I have provided a token for an infrequently used account here
+            // Provide your own account and read:packages token outside the source tree
             credentials {
                 // your github name
-                username = 'carsmallguo'
+                username = System.getenv("GITHUB_READ_USER") ?: ""
                 // your github generate new token
-                password = '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'
+                password = System.getenv("GITHUB_READ_TOKEN") ?: ""
             }
         }
         maven {
@@ -204,7 +234,7 @@ allprojects {
 
 > In theory, it is the avatar in the upper right corner - Settings - Developer Settings - Personal access tokens - tokens (classic) -
 > Generate new token (classic) - read:packages
-> Remember to choose permanent for the expiration time
+> Use the minimum required permissions and a limited expiration; keep the token out of source control.
 
 > Tip: this repository's root `build.gradle` already supports reading the GitHub Packages credentials from a Gradle property or environment variable, so you don't have to hard-code your own token in the source tree:
 >
@@ -221,7 +251,7 @@ allprojects {
 > export GITHUB_READ_TOKEN=<your-classic-token-with-read:packages>
 > ```
 >
-> The hard-coded `carsmallguo / ghp_...` pair is only kept as a fallback so first-time clones still build out of the box; it may be revoked at any time, so prefer providing your own.
+> Do not rely on a shared credential fallback. Supply your own credentials through the configuration above.
 
 **You can choose one of the following three and add it to the build.gradle under the module.**
 
@@ -239,7 +269,7 @@ allprojects {
  implementation 'com.shuyu:gsyvideoplayer-cast:13.2.1'
 ```
 
-#### B. Add java and the so support you want:
+#### B. Add java and the so support you want (released per-ABI modules, unchanged here):
 
 ```groovy
  implementation 'com.shuyu:gsyvideoplayer-java:13.2.1'
@@ -324,7 +354,7 @@ allprojects {
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v13.2.1'
 ```
 
-#### B. Add java and the so support you want:
+#### B. Add java and the so support you want (released per-ABI modules, unchanged here):
 
 ```groovy
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v13.2.1'
@@ -458,7 +488,8 @@ ExoSourceManager.setExoMediaSourceInterceptListener(new ExoMediaSourceInterceptL
  API Documentation Entrance        | **[--- Usage instructions, API documentation - Entrance](https://github.com/CarGuo/GSYVideoPlayer/wiki)**
  **FAQ Entrance**    | ***[--- FAQ - Entrance (most of the problems you encounter are solved here) ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/QUESTION.md)***
  Encoding Format          | **[--- IJK so file configuration format description](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DECODERS.md)**
- Compile Custom SO       | **[--- IJKPlayer Compile Custom SO - Entrance](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/BUILD_SO.md)**
+ FFmpeg 5 Native Build       | **[--- Current branch's build, checksums and validation limits](doc/ffmpeg-5.0.md)**
+ Compile Custom SO (Legacy)       | **[--- Historical IJKPlayer build guide](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/BUILD_SO.md)** — old toolchains/commands; use the FFmpeg 5 guide above for this branch.
  Version Update Instructions        | **[--- Version Update Instructions - Entrance](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)**
  compileSdk too high | --- **[#3514](https://github.com/CarGuo/GSYVideoPlayer/issues/3514)**
 
