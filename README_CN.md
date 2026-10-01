@@ -29,8 +29,8 @@
  **stream**  | **支持元数据播放**
  **适配 16k**  | **ex_so 适配 16K Page Size**
  **openssl** | **目前  ex_so 的 arm64/x86_64 使用 openssl 1.1.1w**
- **FFmpeg**  | **目前  ex_so 的 arm64/x86_64 使用 FFmpeg 4.3**
- **FFmpeg**  | **目前  ex_so 的 arm64/x86_64 支持 G711a(pcm_alaw)**
+ **FFmpeg**  | **目前  ex_so 的 arm64-v8a / armeabi-v7a / x86_64 均使用 FFmpeg n5.1.10**
+ **FFmpeg**  | **目前  ex_so 的 arm64-v8a / armeabi-v7a / x86_64 均支持 G711a(pcm_alaw)**
  **投屏**      | **可选 `gsyvideoplayer-cast` DLNA/UPnP 模块，基于 jUPnP 3.0.3；核心只保留协议无关的 `CastCapability` / `CastProvider` / `CastSession` SPI，不再默认引入 Jetty。[说明](doc/CAST_FEATURE_PLAN.md)。**
  **更多**      | **暂停前后台切换不黑屏；多 URL 清晰度切换；Exo HLS/DASH 自适应清晰度；无缝切换支持；完成后保留最后一帧 Demo；进度条 WebVTT 小窗口预览。**
  **自定义**     | **可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
@@ -514,6 +514,13 @@ WEBVTT
 库层提供了 `GSYVideoPreviewVttParser`、`GSYVideoPreviewProvider`、`GSYVideoPreviewFrame`，业务层只需要把 VTT 解析成 provider，再按拖动进度取出对应图片和裁剪区域。demo 可参考 `PreViewGSYVideoPlayer#setPreviewVttUrl(String previewVttUrl)`。
 
 ## 五、近期版本
+
+### v13.3.0 (2026-10-01)
+
+- ex_so：三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 从 n4.3 整体升级到 **FFmpeg n5.1.10**。
+- ex_so：`armeabi-v7a` 不再滞留在 n4.3，三端 FFmpeg 版本彻底对齐。
+- ex_so：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、新 channel layout、HLS/字幕 demuxer 变更），`arm64-v8a` / `x86_64` 继续保留 16 KB page size，`armeabi-v7a` 保留 `__stack_chk_fail` 链接。
+- 真机回归：本地 MP4、HTTP/HTTPS MP4、HLS master playlist 均正常 prepare 并稳定 30 fps 渲染，IJK 侧无 `UnsatisfiedLinkError`、无 FATAL、无 `FFP_MSG_ERROR`。
 
 ### v13.2.1 (2026-08-19)
 
