@@ -28,8 +28,8 @@
  **Stream**  | **Supports metadata playback**
  **Adapt 16k**  | **ex_so adapts to 16K Page Size**
  **openssl** | **Currently ex_so's arm64/x86_64  uses openssl 1.1.1w**
- **FFmpeg**  | **Currently ex_so's arm64/x86_64 uses FFmpeg 4.3**
- **FFmpeg**  | **Currently ex_so's arm64/x86_64  supports G711a(pcm_alaw)**
+ **FFmpeg**  | **Currently ex_so's arm64-v8a / armeabi-v7a / x86_64 all use FFmpeg n5.1.10**
+ **FFmpeg**  | **Currently ex_so's arm64-v8a / armeabi-v7a / x86_64 all support G711a(pcm_alaw)**
  **Cast**      | **Optional `gsyvideoplayer-cast` DLNA/UPnP module built on jUPnP 3.0.3; the core keeps only the protocol-neutral `CastCapability` / `CastProvider` / `CastSession` SPI and does not pull Jetty. [Details](doc/CAST_FEATURE_PLAN.md).**
  **More**      | **No black screen when pausing front and back switching; multi-URL quality switching; Exo HLS/DASH adaptive quality; seamless switching support; keep-last-frame demo; WebVTT progress bar preview.**
  **Customization**     | **Customizable rendering layer, custom management layer, custom playback layer (control layer), custom cache layer.**
@@ -512,6 +512,13 @@ WEBVTT
 Library APIs include `GSYVideoPreviewVttParser`, `GSYVideoPreviewProvider`, and `GSYVideoPreviewFrame`. The app layer loads the frame image and crops the sprite area if needed. See `PreViewGSYVideoPlayer#setPreviewVttUrl(String previewVttUrl)`.
 
 ## V. Recent Versions
+
+### v13.3.0 (2026-10-01)
+
+- ex_so: upgrade bundled FFmpeg from n4.3 to **n5.1.10** across `arm64-v8a` / `armeabi-v7a` / `x86_64` (`libijkffmpeg.so`).
+- ex_so: unify FFmpeg version for all three ABIs — `armeabi-v7a` is no longer stuck on n4.3.
+- ex_so: rebuild `libijkplayer.so` / `libijksdl.so` against FFmpeg 5 APIs (`AVCodecParameters`, new channel-layout API, HLS/subtitle demuxer updates) while keeping 16 KB page-size alignment on `arm64-v8a` / `x86_64` and `__stack_chk_fail` linkage on `armeabi-v7a`.
+- Verified on-device: local MP4, HTTP/HTTPS MP4 and HLS master playlists prepare and render steady 30 fps with no `UnsatisfiedLinkError`, no FATAL and no `FFP_MSG_ERROR` from the IJK pipeline.
 
 ### v13.2.1 (2026-08-19)
 

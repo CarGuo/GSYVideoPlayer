@@ -2,6 +2,13 @@
 
 **[Click to see the Chinese version](UPDATE_VERSION.md)**
 
+### v13.3.0 (2026-10-01)
+
+- ex_so: upgrade bundled FFmpeg from n4.3 to **n5.1.10** across `arm64-v8a` / `armeabi-v7a` / `x86_64` (`libijkffmpeg.so`).
+- ex_so: unify FFmpeg version for all three ABIs — `armeabi-v7a` is no longer stuck on n4.3.
+- ex_so: rebuild `libijkplayer.so` / `libijksdl.so` against FFmpeg 5 APIs (`AVCodecParameters`, new channel-layout API, HLS/subtitle demuxer updates) while keeping 16 KB page-size alignment on `arm64-v8a` / `x86_64` and `__stack_chk_fail` linkage on `armeabi-v7a`.
+- Verified on-device: local MP4, HTTP/HTTPS MP4 and HLS master playlists prepare and render steady 30 fps with no `UnsatisfiedLinkError`, no FATAL and no `FFP_MSG_ERROR` from the IJK pipeline.
+
 ### v13.2.1 (2026-08-19)
 
 - Add the independently published optional `gsyvideoplayer-cast` module and move `JupnpDlnaProvider`, `JupnpDlnaSession`, jUPnP 3.0.3, and Jetty 9.4.53 out of `gsyvideoplayer-java`.
