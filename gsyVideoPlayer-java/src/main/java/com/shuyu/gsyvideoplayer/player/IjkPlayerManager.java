@@ -59,6 +59,7 @@ public class IjkPlayerManager extends BasePlayerManager {
     public void initVideoPlayer(Context context, Message msg, List<VideoOptionModel> optionModelList, ICacheManager cacheManager) {
         mediaPlayer = (ijkLibLoader == null) ? new IjkMediaPlayer() : new IjkMediaPlayer(ijkLibLoader);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnMediaCodecSelectListener(GSYIjkMediaCodecSelector.INSTANCE);
         mediaPlayer.setOnNativeInvokeListener(new IjkMediaPlayer.OnNativeInvokeListener() {
             @Override
             public boolean onNativeInvoke(int i, Bundle bundle) {

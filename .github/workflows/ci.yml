@@ -43,7 +43,7 @@ jobs:
           java-version: 21
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: publishToMavenLocal verifyCastDependencyIsolation
+          arguments: verifyReleaseGuardTests publishToMavenLocal verifyCastDependencyIsolation
 
   build:
     name: Build

@@ -1,0 +1,69 @@
+{
+  "candidate": "13.3.0-ffmpeg5-platformrate-r3-codec2-java-r1-SNAPSHOT",
+  "full_demo_runtime_qualified": false,
+  "full_effective_native_source_pins_sha256": "428efebfbad4bbb0520bf978027dd2561bc57dfd8f5b17a6e89e36e86b53155b",
+  "gsyijkjava": "1.0.0",
+  "java_delta": "CODEC2_JAVA_R1",
+  "native_libraries": [
+    {
+      "abi": "arm64-v8a",
+      "bytes": 11815360,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/arm64-v8a/libijkffmpeg.so",
+      "sha256": "913ad7b65ccdd133f0ae5890d7d1c7b44338dafdc87cfc0634fc771b68cd0488"
+    },
+    {
+      "abi": "arm64-v8a",
+      "bytes": 558352,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/arm64-v8a/libijkplayer.so",
+      "sha256": "ea4de7d69282ab707a5b51cfb4c13d244230a54988a90a0c214e08a01fb8e9b4"
+    },
+    {
+      "abi": "arm64-v8a",
+      "bytes": 373408,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/arm64-v8a/libijksdl.so",
+      "sha256": "3011a2548ed6e8077a369591312df50949f115a979091b5aa441713099ad08ed"
+    },
+    {
+      "abi": "armeabi-v7a",
+      "bytes": 10932464,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/armeabi-v7a/libijkffmpeg.so",
+      "sha256": "6c069c7306830f4e6e0af4eaedcde1b25a12ff1e890b8b689737dd570aa7066e"
+    },
+    {
+      "abi": "armeabi-v7a",
+      "bytes": 377704,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/armeabi-v7a/libijkplayer.so",
+      "sha256": "d74e7f4a186fe9100225f882363f880ff04468af7ffceb09e2cfcf62f8fcafcd"
+    },
+    {
+      "abi": "armeabi-v7a",
+      "bytes": 321648,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/armeabi-v7a/libijksdl.so",
+      "sha256": "7af1c13e25894003be32f138839794b8f1c4513744d582596ec3f6edae0355f6"
+    },
+    {
+      "abi": "x86_64",
+      "bytes": 16231176,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/x86_64/libijkffmpeg.so",
+      "sha256": "7cb7407ba2e632c965e343ecfb99f0192977d230d05e7e000fc8c3cc652f8abb"
+    },
+    {
+      "abi": "x86_64",
+      "bytes": 603984,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/x86_64/libijkplayer.so",
+      "sha256": "31a930b0bf6555b20bb0a9608c21e33ef209f4cc690636d8bcbd6c258f75ca68"
+    },
+    {
+      "abi": "x86_64",
+      "bytes": 455632,
+      "path": "gsyVideoPlayer-ex_so/src/main/jniLibs/x86_64/libijksdl.so",
+      "sha256": "c4ea1c1d297ed3416f0aee95ee9ff3bb8c72b4e47c8290852dfc95189c976cf5"
+    }
+  ],
+  "native_manifest_sha256": "6442ea25cc98444800d55de10172b230eb18f4ea603139c9ba73f6f359da7d52",
+  "native_review_sha256": "4969a5082bbd08f38effb160b161b4c0d0dbe46262c7b596e584923236ea7902",
+  "native_revision": "v0.8.8-carguo-35-gd5c0b4eb-platformrate-r3",
+  "release_ready": false,
+  "schema": "gsy-platformrate-r3-contract-v1",
+  "source_freeze_runtime_review_pending": true
+}

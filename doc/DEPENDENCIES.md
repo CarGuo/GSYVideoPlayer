@@ -1,3 +1,5 @@
+> 下方稳定依赖坐标不包含本分支的R3候选。请按[当前升级/构建指南](PLATFORM_RATE_R3_UPGRADE.md)集成匹配源码或候选制品；稳定版本示例保持不变。
+
 # 托管方式
 
 **[Click to see the English version](DEPENDENCIES_EN.md)**
@@ -107,9 +109,9 @@ allprojects {
             // For convenience, I have provided a token for an infrequently used account here
             credentials {
                 // your github name
-                username = 'carsmallguo'
-                // your github generate new token
-                password = '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'
+                username = System.getenv('GITHUB_READ_USER')
+                // Configure GITHUB_READ_TOKEN locally; never commit a token
+                password = System.getenv('GITHUB_READ_TOKEN')
             }
         }
         maven {
@@ -285,7 +287,7 @@ dependencies {
 - 最低版本：默认 `gsyvideoplayer` 受 Media3 1.10.1 约束，最低为 API 23；显式添加投屏 module 后，Jetty 9.4.53 将真实下限提高到 API 26。
 - 网络权限：接收端和发送端需要 `INTERNET`、`ACCESS_WIFI_STATE`、`CHANGE_WIFI_MULTICAST_STATE`、`ACCESS_NETWORK_STATE`。同一 Wi-Fi 局域网内 SSDP 才能发现设备。
 - Android 独立进程：Demo 的 `Loopback Receiver` 在独立 `:dlna` 进程，避免 jUPnP static 状态污染主进程；下游自集成时可参考 [DevReceiverService](../app/src/main/java/com/example/gsyvideoplayer/cast/DevReceiverService.java)。
-- Android 13+ 需要给内部广播加 `RECEIVER_NOT_EXPORTED`，参考 [CastReceiverManager](../app/src/main/java/com/example/gsyvideoplayer/cast/CastReceiverManager.java)。
+- Android 13+ 需要给内部广播加 `RECEIVER_NOT_EXPORTED`，参考 [CastReceiverManager](../app/src/main/java/com/example/gsyvideoplayer/video/manager/CastReceiverManager.java)。
 - 悬浮窗接收端需要 `SYSTEM_ALERT_WINDOW` 权限，正式集成建议改成 `Activity` 或 `Surface` 呈现，不必沿用悬浮窗。
 - 不需要投屏就不要引入 `gsyvideoplayer-cast`；核心 SPI 仍可用于接入其他投屏 Provider。
 

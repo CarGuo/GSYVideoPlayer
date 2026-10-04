@@ -1,3 +1,5 @@
+> The published coordinates below do not contain this branch’s R3 candidate. Follow the [current upgrade/build guide](PLATFORM_RATE_R3_UPGRADE.md) for matching source or candidate artifacts; the stable-version examples remain unchanged.
+
 # Hosting Methods
 
 **[Click to see the Chinese version](DEPENDENCIES.md)**
@@ -107,9 +109,9 @@ allprojects {
             // For convenience, I have provided a token for an infrequently used account here
             credentials {
                 // your github name
-                username = 'carsmallguo'
-                // your github generate new token
-                password = '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'
+                username = System.getenv('GITHUB_READ_USER')
+                // Configure GITHUB_READ_TOKEN locally; never commit a token
+                password = System.getenv('GITHUB_READ_TOKEN')
             }
         }
         maven {
@@ -285,7 +287,7 @@ Notes:
 - Minimum SDK: the default `gsyvideoplayer` artifact is constrained to API 23 by Media3 1.10.1. Adding the cast module raises the real minimum to API 26 because of Jetty 9.4.53.
 - Network permissions: both sender and receiver need `INTERNET`, `ACCESS_WIFI_STATE`, `CHANGE_WIFI_MULTICAST_STATE`, and `ACCESS_NETWORK_STATE`. Devices only discover each other on the same Wi-Fi LAN via SSDP.
 - Android separate process: the demo `Loopback Receiver` runs in a dedicated `:dlna` process to keep jUPnP's static state out of the main process. See [DevReceiverService](../app/src/main/java/com/example/gsyvideoplayer/cast/DevReceiverService.java) when self-integrating.
-- Android 13+ requires `RECEIVER_NOT_EXPORTED` for internal broadcasts. See [CastReceiverManager](../app/src/main/java/com/example/gsyvideoplayer/cast/CastReceiverManager.java).
+- Android 13+ requires `RECEIVER_NOT_EXPORTED` for internal broadcasts. See [CastReceiverManager](../app/src/main/java/com/example/gsyvideoplayer/video/manager/CastReceiverManager.java).
 - The floating-window receiver requires `SYSTEM_ALERT_WINDOW`. Production integrations should render the incoming stream in an `Activity` or `Surface` instead of a floating window.
 - If you do not need casting, omit `gsyvideoplayer-cast`; the core SPI remains available for other providers.
 

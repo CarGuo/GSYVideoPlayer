@@ -1,36 +1,19 @@
+> `ffmpeg-5.0` 分支候选：`13.3.0-ffmpeg5-platformrate-r3-codec2-java-r1-SNAPSHOT`。Maven制品、标签和Release尚未发布；下方已有依赖示例不包含本候选。
 
-**[Click to see the English version](README.md)**
+**[English version](README.md)**
 
 ![](./img/home_logo.png)
 
-## FFmpeg 5 分支：从这里开始
+## FFmpeg5 platform-rate R3 与 Codec2 修复
 
-**`ffmpeg-5.0` 分支实际使用 FFmpeg 5.1.10。** 本分支将已测试的 IJK 原生迁移库集成到 `gsyVideoPlayer-ex_so`，仅覆盖 **arm64-v8a、armeabi-v7a、x86_64**。每个 ABI 的 `libijkffmpeg.so`、`libijkplayer.so`、`libijksdl.so` 必须整套使用。现有 `armeabi`、`x86` 二进制及其他 SO 分发模块保持原版本，未在本次迁移中升级；GSY Java/运行时代码未改动。
+本分支集成三个ABI的R3原生库与实际GSY管理器中的Codec2 Java兼容修复。倍速修复适用于API23+；API29+的Codec2回退只在原IJK选择器返回null时启用。请一起使用匹配的Java模块和九个SO。
 
-- [迁移范围、固定版本、原生编译和验证边界](doc/ffmpeg-5.0.md)
-- [九个交付库的 SHA-256 清单](doc/ffmpeg-5.0.SHA256SUMS)
-- 配套源码：[CarGuo/ijkplayer 的 `ffmpeg-5.0` 分支](https://github.com/CarGuo/ijkplayer/tree/ffmpeg-5.0) · [IJK 编译说明](https://github.com/CarGuo/ijkplayer/blob/ffmpeg-5.0/doc/FFMPEG5.md) · [CarGuo/FFmpeg 的 `ffmpeg-5.0` 分支](https://github.com/CarGuo/FFmpeg/tree/ffmpeg-5.0)
+五档本地倍速、Mux HTTPS-HLS、倍速/seek转换、Tail7及真实GSY控件生命周期均有对应的R3真机通过证据。原Functional7矩阵仍为6/7，Apple样例的DNS失败按不可用测试源保留，未改写为通过。完整源码构建与包检查已通过。
 
-### 快速试用当前候选库
+- [升级、构建、测试与发布防护](doc/PLATFORM_RATE_R3_UPGRADE.md)
+- [当前状态](doc/PLATFORM_RATE_R3_STATUS.md)、[原生契约](doc/gsy-platformrate-r3-candidate.json)、[九库哈希](doc/platformrate-r3.SHA256SUMS)
 
-配置好 JDK 17+ 和 Android SDK 后，直接构建本分支的源码模块：
-
-```sh
-git clone --branch ffmpeg-5.0 https://github.com/CarGuo/GSYVideoPlayer.git
-cd GSYVideoPlayer
-sha256sum -c doc/ffmpeg-5.0.SHA256SUMS
-./gradlew :gsyVideoPlayer-ex_so:assembleDebug :app:assembleDebug
-./gradlew :gsyVideoPlayer-java:testDebugUnitTest :gsyVideoPlayer-cast:testDebugUnitTest
-```
-
-调试 AAR 输出到 `gsyVideoPlayer-ex_so/build/outputs/aar/`，Demo APK 输出到 `app/build/outputs/apk/debug/`。下方已发布的 `13.2.1` 依赖和 Release APK 链接**不会自动切换到本候选库**。如需重新编译 SO，请使用配套 IJK 分支的 `init-android-ffmpeg5.sh`、`android/contrib/compile-ffmpeg5.sh`、已测试的 NDK r22b 和 `module-lite-more.sh` 裁剪配置；旧自编译指南及 `init-android.sh` 不会复现这套 FFmpeg 5 构建。
-
-### 已验证结果与边界
-
-- **官方 API 35 x86_64、16 KB 模拟环境：** 加载通过；基础播放 21/21，附加回调断言 52 项，扩展解码 9/9，限定 RTSP/RTMP/MJPEG 用例 8/8 通过。真实 GSY 旋转画面为 6/8，MediaCodec 0°/270° 仍有黑画面；后续全新镜像在安装测试应用前发生 `system_server` 崩溃。16 KB 全角度硬解和持续运行验收尚未完成。
-- **API 30 x86_64、4 KB 模拟器：** HTTPS 正确/错误 CA 测试 2/2、服务端确认的 RTSP UDP、同步/异步 MediaCodec 解码/seek/结束，以及真实 GSY 旋转画面 8/8 均通过。连续播放 1202.4 秒，视频创建/释放 50/50 次通过，236 次采样输出帧率均为正。这些结果不替代 16 KB 缺项，也不等于零内存泄漏。
-- **构建与打包：** 调试 AAR 和 Demo APK 内的九库哈希一致；Java/cast 单测 14/14 通过。六个 64 位 SO 的 ELF LOAD 段为 16 KB 对齐，三个 ARMv7 SO 为 4 KB 对齐。构建成功不代表 Demo 所有页面都已验收。
-- **真机与 TLS 限制：** 运行证据主要来自 x86_64 模拟器，未覆盖 ARM64/ARMv7 真机或厂商硬解。OpenSSL 仍为 1.1.1w，TLS 验证默认关闭；HTTPS 用例显式设置 `tls_verify=1` 检查 CA，但该后端不验证主机名。本分支是迁移候选，不是完整 16 KB、真机或 TLS 安全认证。详见[完整边界](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits)。
+真机范围为Pixel8/API35/ARM64/4096字节页；其他ABI及16KiB对齐属于静态验证。完整Demo UI、音质/完整音画同步与广泛设备兼容性未由上述套件覆盖。下方功能表描述上游功能。
 
 ## 支持 [IJKPlayer](https://github.com/CarGuo/ijkplayer)、 [Media3(EXOPlayer2)](https://github.com/androidx/media)、MediaPlayer、AliPlayer，实现了多功能的视频播放器。 (请仔细阅读下方各项说明，大多数问题可在下方找到解答)。
 
@@ -56,8 +39,8 @@ sha256sum -c doc/ffmpeg-5.0.SHA256SUMS
  **字幕**      | **支持通用外挂字幕 Overlay，SRT/WebVTT 可跨 IJK、Media3(EXOPlayer)、MediaPlayer 等内核使用；Media3 内嵌字幕可桥接到同一套 UI。[说明](doc/SUBTITLE_CN.md)。**
  **dash**    | **media3(exo2) 模式支持dash；Demo 支持 HLS master / DASH MPD 自适应清晰度轨道切换。**
  **stream**  | **支持元数据播放**
- **适配 16k**  | **本分支 ex_so 的 arm64-v8a/x86_64 SO 为 16 KB ELF 对齐；运行验证仍有[明确缺项](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits)。**
- **openssl** | **三个已迁移 ex_so ABI 保留 OpenSSL 1.1.1w，详见 [TLS 边界](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits)。**
+ **适配 16k**  | **候选 ELF64/ZIP 对齐与设备运行是独立验收项，见[精确状态](doc/ffmpeg-5.0.md)。**
+ **openssl** | **候选使用 OpenSSL3.5.9；源码/主机 TLS 证据与 Android 运行边界[分别记录](doc/ffmpeg-5.0.md)。**
  **FFmpeg**  | **本分支 ex_so 的 arm64-v8a/armeabi-v7a/x86_64 使用 FFmpeg 5.1.10；其他 ABI/模块保持原样。**
  **FFmpeg**  | **目前  ex_so 的 arm64/x86_64 支持 G711a(pcm_alaw)**
  **投屏**      | **可选 `gsyvideoplayer-cast` DLNA/UPnP 模块，基于 jUPnP 3.0.3；核心只保留协议无关的 `CastCapability` / `CastProvider` / `CastSession` SPI，不再默认引入 Jetty。[说明](doc/CAST_FEATURE_PLAN.md)。**

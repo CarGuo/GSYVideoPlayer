@@ -15,6 +15,9 @@ pluginManagement {
     }
 }
 
+// Run before project plugins, signing configuration, or build tasks.
+apply from: "gradle/release-version-settings.gradle"
+
 include ":app",
     ":gsyVideoPlayer",
     ":gsyVideoPlayer-java",

@@ -1,35 +1,19 @@
+> `ffmpeg-5.0` branch candidate: `13.3.0-ffmpeg5-platformrate-r3-codec2-java-r1-SNAPSHOT`. Maven artifacts, tags and releases remain unpublished. Existing dependency examples below do not contain this candidate.
+
 ![](./img/home_logo.png)
 
 **[中文文档](README_CN.md)**
 
-## FFmpeg 5 branch: start here
+## FFmpeg5 platform-rate R3 and Codec2 compatibility
 
-**`ffmpeg-5.0` uses FFmpeg 5.1.10.** This branch packages the tested IJK native migration in `gsyVideoPlayer-ex_so` for **arm64-v8a, armeabi-v7a and x86_64 only**. Each ABI contains the matching `libijkffmpeg.so`, `libijkplayer.so` and `libijksdl.so`; replace them as a complete set. Existing `armeabi`/`x86` binaries and other SO distribution modules remain on their previous implementations. GSY Java/runtime code is unchanged.
+This branch pairs the cumulative three-ABI R3 native set with the production GSY manager's Codec2 Java fix. Platform rates require API23+. The API29+ Codec2 fallback runs only after the original IJK selector returns null. Ship the matching Java module and all nine SOs together.
 
-- [Migration, pinned versions, native build and validation limits](doc/ffmpeg-5.0.md)
-- [Exact nine-library SHA-256 manifest](doc/ffmpeg-5.0.SHA256SUMS)
-- Companion sources: [CarGuo/ijkplayer `ffmpeg-5.0`](https://github.com/CarGuo/ijkplayer/tree/ffmpeg-5.0) · [IJK build guide](https://github.com/CarGuo/ijkplayer/blob/ffmpeg-5.0/doc/FFMPEG5.md) · [CarGuo/FFmpeg `ffmpeg-5.0`](https://github.com/CarGuo/FFmpeg/tree/ffmpeg-5.0)
+The five tested local rates, Mux HTTPS-HLS, rate/seek transitions, Tail7 and actual GSY widget lifecycles have scoped R3 physical passes. Functional7 retains its original 6/7 result: the Apple sample failed DNS and is excluded as an unavailable source, never relabeled a pass. Full source build and package checks passed.
 
-### Try the checked-in candidate
+- [Upgrade, build, test and publication guide](doc/PLATFORM_RATE_R3_UPGRADE.md)
+- [Current status](doc/PLATFORM_RATE_R3_STATUS.md), [native contract](doc/gsy-platformrate-r3-candidate.json), [nine-library hashes](doc/platformrate-r3.SHA256SUMS)
 
-With JDK 17+ and the Android SDK configured, build the source modules from this branch:
-
-```sh
-git clone --branch ffmpeg-5.0 https://github.com/CarGuo/GSYVideoPlayer.git
-cd GSYVideoPlayer
-sha256sum -c doc/ffmpeg-5.0.SHA256SUMS
-./gradlew :gsyVideoPlayer-ex_so:assembleDebug :app:assembleDebug
-./gradlew :gsyVideoPlayer-java:testDebugUnitTest :gsyVideoPlayer-cast:testDebugUnitTest
-```
-
-The debug AAR is under `gsyVideoPlayer-ex_so/build/outputs/aar/`; the demo APK is under `app/build/outputs/apk/debug/`. Published `13.2.1` dependencies and release APK links below do **not** select this candidate. For a native rebuild, use the companion IJK branch's `init-android-ffmpeg5.sh` and `android/contrib/compile-ffmpeg5.sh` with the tested NDK r22b and `module-lite-more.sh` profile. The legacy custom-SO guide and `init-android.sh` do not reproduce this FFmpeg 5 build.
-
-### What was validated
-
-- **Official API 35 x86_64 16 KB emulation:** loading passed; core playback 21/21 plus 52 callback assertions, extra codecs 9/9 and scoped RTSP/RTMP/MJPEG cases 8/8 passed. Displayed GSY rotation passed 6/8; MediaCodec 0°/270° remained black. A later clean image crashed `system_server` before test-app installation. Full MediaCodec rotation and sustained execution remain unverified on 16 KB.
-- **API 30 x86_64 4 KB emulator:** HTTPS CA acceptance/rejection 2/2, server-confirmed RTSP UDP, synchronous/asynchronous MediaCodec decode/seek/completion and displayed GSY rotation 8/8 passed. Continuous playback ran 1202.4 seconds, with 50/50 video lifecycle cycles and positive output FPS in all 236 samples. These results do not close the 16 KB gaps or establish zero leaks.
-- **Build/package checks:** all nine SOs match the debug AAR and demo APK; Java/cast tests passed 14/14. The six 64-bit SOs have 16 KB ELF LOAD alignment; the three ARMv7 SOs have 4 KB alignment. Build success is not full demo UI validation.
-- **Device and TLS limits:** runtime coverage is primarily x86_64 emulators, not ARM64/ARMv7 devices or vendor hardware codecs. OpenSSL remains 1.1.1w; TLS verification defaults to off. The explicit HTTPS tests enable `tls_verify=1` for CA validation, but the backend does not verify hostname identity. This is a migration candidate, not complete 16 KB, device or TLS-security certification. See the [full limits](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits).
+Physical scope is Pixel8/API35/ARM64/4096-byte pages. Other ABIs and 16KiB alignment have static checks. Full demo UI, acoustic quality/full A/V synchronization and broad-device behavior are outside this coverage. Feature tables below describe upstream capabilities.
 
 ## Supports [IJKPlayer](https://github.com/CarGuo/ijkplayer), [Media3(EXOPlayer2)](https://github.com/androidx/media), MediaPlayer, AliPlayer, implementing a multi-functional video player. (Please read the following instructions carefully, most questions can be answered below).
 
@@ -55,8 +39,8 @@ The debug AAR is under `gsyVideoPlayer-ex_so/build/outputs/aar/`; the demo APK i
  **Subtitles**      | **Unified external subtitle overlay supports SRT/WebVTT across IJK, Media3(EXOPlayer), and MediaPlayer; Media3 embedded cues can bridge to the same UI.**
  **Dash**    | **Media3(exo2) mode supports dash; the demo supports HLS master / DASH MPD adaptive quality track switching.**
  **Stream**  | **Supports metadata playback**
- **Adapt 16k**  | **This branch's ex_so arm64-v8a/x86_64 SOs have 16 KB ELF alignment; runtime validation has [explicit remaining gaps](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits).**
- **openssl** | **The three migrated ex_so ABIs retain OpenSSL 1.1.1w; see the [TLS limits](doc/ffmpeg-5.0.md#recorded-validation-and-remaining-limits).**
+ **Adapt 16k**  | **Candidate ELF64/ZIP alignment and device runtime are separate gates; see [exact status](doc/ffmpeg-5.0.md).**
+ **openssl** | **The candidate uses OpenSSL3.5.9; source/host TLS evidence and Android runtime limits are [recorded separately](doc/ffmpeg-5.0.md).**
  **FFmpeg**  | **This branch's ex_so arm64-v8a/armeabi-v7a/x86_64 uses FFmpeg 5.1.10; other ABI/modules remain unchanged.**
  **FFmpeg**  | **Currently ex_so's arm64/x86_64  supports G711a(pcm_alaw)**
  **Cast**      | **Optional `gsyvideoplayer-cast` DLNA/UPnP module built on jUPnP 3.0.3; the core keeps only the protocol-neutral `CastCapability` / `CastProvider` / `CastSession` SPI and does not pull Jetty. [Details](doc/CAST_FEATURE_PLAN.md).**
