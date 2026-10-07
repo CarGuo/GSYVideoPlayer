@@ -132,6 +132,14 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
      */
     protected boolean needTimeOutOther;
 
+    // A request invalidates callbacks immediately, before the media Handler processes it.
+    // Volatile publication also covers managers configured with a separate media Looper.
+    private volatile int playbackGeneration;
+
+    private volatile int activePlayerGeneration;
+
+    private volatile IMediaPlayer activePlayer;
+
     private GSYModel currentModel;
 
     private Surface currentSurface;
@@ -276,7 +284,11 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     @Override
-    public void onPrepared(IMediaPlayer mp) {
+    public synchronized void onPrepared(final IMediaPlayer mp) {
+        final int generation = activePlayerGeneration;
+        if (!isCurrentPlayer(mp, generation)) {
+            return;
+        }
         if (smartMediaCodecFallbacking) {
             try {
                 if (playerManager != null) {
@@ -295,37 +307,13 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                cancelTimeOutBuffer();
-                if (listener() != null) {
-                    listener().onPrepared();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onCompletion(IMediaPlayer mp) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                cancelTimeOutBuffer();
-                if (listener() != null) {
-                    listener().onAutoCompletion();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onBufferingUpdate(IMediaPlayer mp, final int percent) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (listener() != null) {
-                    if (percent > bufferPoint) {
-                        listener().onBufferingUpdate(percent);
-                    } else {
-                        listener().onBufferingUpdate(bufferPoint);
+                synchronized (GSYVideoBaseManager.this) {
+                    if (!isCurrentPlayer(mp, generation)) {
+                        return;
+                    }
+                    cancelTimeOutBuffer();
+                    if (listener() != null) {
+                        listener().onPrepared();
                     }
                 }
             }
@@ -333,20 +321,80 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     @Override
-    public void onSeekComplete(IMediaPlayer mp) {
+    public synchronized void onCompletion(final IMediaPlayer mp) {
+        final int generation = activePlayerGeneration;
+        if (!isCurrentPlayer(mp, generation)) {
+            return;
+        }
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                cancelTimeOutBuffer();
-                if (listener() != null) {
-                    listener().onSeekComplete();
+                synchronized (GSYVideoBaseManager.this) {
+                    if (!isCurrentPlayer(mp, generation)) {
+                        return;
+                    }
+                    cancelTimeOutBuffer();
+                    if (listener() != null) {
+                        listener().onAutoCompletion();
+                    }
                 }
             }
         });
     }
 
     @Override
-    public boolean onError(IMediaPlayer mp, final int what, final int extra) {
+    public synchronized void onBufferingUpdate(final IMediaPlayer mp, final int percent) {
+        final int generation = activePlayerGeneration;
+        if (!isCurrentPlayer(mp, generation)) {
+            return;
+        }
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (GSYVideoBaseManager.this) {
+                    if (!isCurrentPlayer(mp, generation)) {
+                        return;
+                    }
+                    if (listener() != null) {
+                        if (percent > bufferPoint) {
+                            listener().onBufferingUpdate(percent);
+                        } else {
+                            listener().onBufferingUpdate(bufferPoint);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public synchronized void onSeekComplete(final IMediaPlayer mp) {
+        final int generation = activePlayerGeneration;
+        if (!isCurrentPlayer(mp, generation)) {
+            return;
+        }
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (GSYVideoBaseManager.this) {
+                    if (!isCurrentPlayer(mp, generation)) {
+                        return;
+                    }
+                    cancelTimeOutBuffer();
+                    if (listener() != null) {
+                        listener().onSeekComplete();
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public synchronized boolean onError(final IMediaPlayer mp, final int what, final int extra) {
+        final int generation = activePlayerGeneration;
+        if (!isCurrentPlayer(mp, generation)) {
+            return true;
+        }
         if (trySmartMediaCodecFallback(mp, what, extra)) {
             return true;
         }
@@ -356,9 +404,14 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                cancelTimeOutBuffer();
-                if (listener() != null) {
-                    listener().onError(what, extra);
+                synchronized (GSYVideoBaseManager.this) {
+                    if (!isCurrentPlayer(mp, generation)) {
+                        return;
+                    }
+                    cancelTimeOutBuffer();
+                    if (listener() != null) {
+                        listener().onError(what, extra);
+                    }
                 }
             }
         });
@@ -366,20 +419,29 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     @Override
-    public boolean onInfo(IMediaPlayer mp, final int what, final int extra) {
+    public synchronized boolean onInfo(final IMediaPlayer mp, final int what, final int extra) {
+        final int generation = activePlayerGeneration;
+        if (!isCurrentPlayer(mp, generation)) {
+            return false;
+        }
         updateSmartMediaCodecDecodeState(mp);
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (needTimeOutOther) {
-                    if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
-                        startTimeOutBuffer();
-                    } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
-                        cancelTimeOutBuffer();
+                synchronized (GSYVideoBaseManager.this) {
+                    if (!isCurrentPlayer(mp, generation)) {
+                        return;
                     }
-                }
-                if (listener() != null) {
-                    listener().onInfo(what, extra);
+                    if (needTimeOutOther) {
+                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                            startTimeOutBuffer();
+                        } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                            cancelTimeOutBuffer();
+                        }
+                    }
+                    if (listener() != null) {
+                        listener().onInfo(what, extra);
+                    }
                 }
             }
         });
@@ -387,17 +449,31 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     @Override
-    public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
+    public synchronized void onVideoSizeChanged(final IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
+        final int generation = activePlayerGeneration;
+        if (!isCurrentPlayer(mp, generation)) {
+            return;
+        }
         currentVideoWidth = mp.getVideoWidth();
         currentVideoHeight = mp.getVideoHeight();
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (listener() != null) {
-                    listener().onVideoSizeChanged();
+                synchronized (GSYVideoBaseManager.this) {
+                    if (!isCurrentPlayer(mp, generation)) {
+                        return;
+                    }
+                    if (listener() != null) {
+                        listener().onVideoSizeChanged();
+                    }
                 }
             }
         });
+    }
+
+    private boolean isCurrentPlayer(IMediaPlayer mp, int generation) {
+        return mp != null && mp == activePlayer
+            && generation == activePlayerGeneration && generation == playbackGeneration;
     }
 
     private boolean trySmartMediaCodecFallback(IMediaPlayer mp, int what, int extra) {
@@ -416,10 +492,13 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         smartMediaCodecFallbacking = true;
         smartMediaCodecFallbackSourcePlayer = mp;
         smartMediaCodecFallbackResumePosition = Math.max(0, resumePosition);
+        // The failed decoder no longer owns events while its replacement is queued.
+        activePlayer = null;
+        cancelTimeOutBuffer();
 
         Message msg = new Message();
         msg.what = HANDLER_SMART_MEDIA_CODEC_FALLBACK;
-        msg.obj = new SmartMediaCodecFallbackData(currentModel, smartMediaCodecFallbackResumePosition);
+        msg.obj = new SmartMediaCodecFallbackData(currentModel, smartMediaCodecFallbackResumePosition, playbackGeneration);
         sendMessage(msg);
         Debuger.printfWarning("smart mediaCodec fallback to soft decode, what=" + what + ", extra=" + extra + ", position=" + smartMediaCodecFallbackResumePosition);
         return true;
@@ -695,7 +774,11 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         return false;
     }
 
-    protected void sendMessage(Message message) {
+    protected synchronized void sendMessage(Message message) {
+        if (message.what == HANDLER_PREPARE || message.what == HANDLER_RELEASE) {
+            message.arg1 = ++playbackGeneration;
+            cancelTimeOutBuffer();
+        }
         mMediaHandler.sendMessage(message);
     }
 
@@ -710,6 +793,9 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDLER_PREPARE:
+                    if (msg.arg1 != playbackGeneration) {
+                        break;
+                    }
                     currentModel = (GSYModel) msg.obj;
                     resetSmartMediaCodecState();
                     initVideo(msg);
@@ -720,6 +806,9 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
                 case HANDLER_SETDISPLAY:
                     break;
                 case HANDLER_RELEASE:
+                    synchronized (GSYVideoBaseManager.this) {
+                        activePlayer = null;
+                    }
                     if (playerManager != null) {
                         playerManager.release();
                     }
@@ -744,10 +833,8 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     private void handleSmartMediaCodecFallback(SmartMediaCodecFallbackData fallbackData) {
-        if (fallbackData == null || fallbackData.model == null || fallbackData.model != currentModel) {
-            smartMediaCodecFallbacking = false;
-            smartMediaCodecFallbackResumePosition = 0;
-            smartMediaCodecFallbackSourcePlayer = null;
+        if (fallbackData == null || fallbackData.model == null || fallbackData.model != currentModel
+            || fallbackData.generation != playbackGeneration) {
             return;
         }
         fallbackData.model.setMediaCodecDisabled(true);
@@ -763,6 +850,7 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         Message msg = new Message();
         msg.what = HANDLER_PREPARE;
         msg.obj = fallbackData.model;
+        msg.arg1 = fallbackData.generation;
         initVideo(msg);
         if (needTimeOutOther) {
             startTimeOutBuffer();
@@ -770,10 +858,18 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     }
 
     private void initVideo(Message msg) {
-        try {
+        final int generation = msg.arg1;
+        synchronized (this) {
+            if (generation != playbackGeneration) {
+                return;
+            }
+            cancelTimeOutBuffer();
+            activePlayer = null;
             currentModel = (GSYModel) msg.obj;
             currentVideoWidth = 0;
             currentVideoHeight = 0;
+        }
+        try {
 
             if (playerManager != null) {
                 playerManager.release();
@@ -791,8 +887,15 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
             setNeedMute(needMute);
             IMediaPlayer mediaPlayer = playerManager.getMediaPlayer();
             if (mediaPlayer == null) {
-                notifyPrepareError();
+                notifyPrepareError(generation);
                 return;
+            }
+            synchronized (this) {
+                if (generation != playbackGeneration) {
+                    return;
+                }
+                activePlayerGeneration = generation;
+                activePlayer = mediaPlayer;
             }
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setOnBufferingUpdateListener(this);
@@ -811,11 +914,14 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
 
         } catch (Exception e) {
             e.printStackTrace();
-            notifyPrepareError();
+            notifyPrepareError(generation);
         }
     }
 
-    private void notifyPrepareError() {
+    private void notifyPrepareError(final int generation) {
+        synchronized (this) {
+            activePlayer = null;
+        }
         if (playerManager != null) {
             try {
                 playerManager.release();
@@ -838,8 +944,13 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (listener() != null) {
-                    listener().onError(IMediaPlayer.MEDIA_ERROR_UNKNOWN, IMediaPlayer.MEDIA_ERROR_UNKNOWN);
+                synchronized (GSYVideoBaseManager.this) {
+                    if (generation != playbackGeneration) {
+                        return;
+                    }
+                    if (listener() != null) {
+                        listener().onError(IMediaPlayer.MEDIA_ERROR_UNKNOWN, IMediaPlayer.MEDIA_ERROR_UNKNOWN);
+                    }
                 }
             }
         });
@@ -856,10 +967,12 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     private static class SmartMediaCodecFallbackData {
         final GSYModel model;
         final long resumePosition;
+        final int generation;
 
-        SmartMediaCodecFallbackData(GSYModel model, long resumePosition) {
+        SmartMediaCodecFallbackData(GSYModel model, long resumePosition, int generation) {
             this.model = model;
             this.resumePosition = resumePosition;
+            this.generation = generation;
         }
     }
 
@@ -867,32 +980,45 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
     /**
      * 启动十秒的定时器进行 缓存操作
      */
-    protected void startTimeOutBuffer() {
-        // 启动定时
+    protected synchronized void startTimeOutBuffer() {
+        cancelTimeOutBuffer();
+        final IMediaPlayer player = activePlayer;
+        final int generation = activePlayerGeneration;
+        if (!needTimeOutOther || !isCurrentPlayer(player, generation)) {
+            return;
+        }
         Debuger.printfError("startTimeOutBuffer");
+        mTimeOutRunnable = new Runnable() {
+            @Override
+            public void run() {
+                synchronized (GSYVideoBaseManager.this) {
+                    if (mTimeOutRunnable != this || !needTimeOutOther
+                        || !isCurrentPlayer(player, generation)) {
+                        return;
+                    }
+                    mTimeOutRunnable = null;
+                    if (listener() != null) {
+                        Debuger.printfError("time out for error listener");
+                        listener().onError(BUFFER_TIME_OUT_ERROR, BUFFER_TIME_OUT_ERROR);
+                    }
+                }
+            }
+        };
         mainThreadHandler.postDelayed(mTimeOutRunnable, timeOut);
-
     }
 
     /**
-     * 取消 十秒的定时器进行 缓存操作
+     * 取消定时器；即使配置已关闭也要移除之前排队的任务。
      */
-    protected void cancelTimeOutBuffer() {
+    protected synchronized void cancelTimeOutBuffer() {
         Debuger.printfError("cancelTimeOutBuffer");
-        // 取消定时
-        if (needTimeOutOther) mainThreadHandler.removeCallbacks(mTimeOutRunnable);
+        if (mTimeOutRunnable != null) {
+            mainThreadHandler.removeCallbacks(mTimeOutRunnable);
+            mTimeOutRunnable = null;
+        }
     }
 
-
-    private Runnable mTimeOutRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (listener() != null) {
-                Debuger.printfError("time out for error listener");
-                listener().onError(BUFFER_TIME_OUT_ERROR, BUFFER_TIME_OUT_ERROR);
-            }
-        }
-    };
+    private Runnable mTimeOutRunnable;
 
     private void releaseSurface(Message msg) {
         if (msg.obj != null) {
@@ -975,9 +1101,12 @@ public abstract class GSYVideoBaseManager implements IMediaPlayer.OnPreparedList
      * @param timeOut          超时时间，毫秒 默认8000
      * @param needTimeOutOther 是否需要延时设置，默认关闭
      */
-    public void setTimeOut(int timeOut, boolean needTimeOutOther) {
+    public synchronized void setTimeOut(int timeOut, boolean needTimeOutOther) {
         this.timeOut = timeOut;
         this.needTimeOutOther = needTimeOutOther;
+        if (!needTimeOutOther) {
+            cancelTimeOutBuffer();
+        }
     }
 
     public IPlayerManager getCurPlayerManager() {
