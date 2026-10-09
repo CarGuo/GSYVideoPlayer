@@ -5,9 +5,13 @@
 ### v14.0.0 (2026-10-09)
 
 - IJK Native 升级：`gsyVideoPlayer-ex_so` 及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 统一升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**，三端版本与协议能力彻底对齐。
-- IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KB page size，`armeabi-v7a` 保留 `__stack_chk_fail` 链接。
+- IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KiB ELF 段对齐（静态布局检查不代表 16 KiB 页设备运行验证），`armeabi-v7a` 保留 `__stack_chk_fail` 链接。
 - 硬解与倍速：新增 `GSYIjkMediaCodecSelector`，在 Android 10+（API 29+）支持 `c2.android.*` Codec2 硬解兜底回退；支持 API 23+ `AudioTrack` 平台倍速与倍速感知的 EOF 完成判定。
 - RTSP 增强：支持 RTSP 初始化阶段（`OPTIONS` / `DESCRIBE` / `SETUP` / `PLAY`）`3xx` 重定向与微秒级 `timeout` 透传，新增可选 `rtsp-live-max-buffer-ms` 直播队列堆积恢复，并在 `GSYVideoBaseManager` 中加入会话代次隔离避免快速切流时迟到回调/超时串扰。
+- 音频兼容性：重采样和非音频主时钟不再仅因时钟映射不满足精确采样条件而中断播放；`soundtouch=1` 使用 0.25×–4× 软件变速（含 3×），`soundtouch=0` 的平台范围取决于设备。平台拒绝仅在确认恢复原状态后继续播放，恢复状态无法确认时停止输出。运行中切换引擎等待旧音频排空，并保留 seek、取消切换时的最新倍速请求。
+- 起播与错误状态：修复仅填入起播静音时，倍速切换等待播放头而无法起播的问题；已接收真实 PCM 的队列继续正常排空。异步错误在通知监听器前进入 Error，后续 seek/start/pause 需先 reset 或重建播放器，并保持 iOS 原有错误通知顺序，避免额外状态通知。
+- RTSP 包装层：`ijklivehook` 按实际打开的内部 RTSP 流判定直播能力，透传明确配置的 `timeout` / `rtsp_transport`；直播缓存上限仅接受 `0` 或 `500..60000` 毫秒。修复终止错误后失败 seek 导致缓冲状态无法结束的问题。
+- 本次原生修复对应 [IJK a599f60](https://github.com/CarGuo/ijkplayer/commit/a599f60268312f3093d6f0ca165a3d06c76970cb)，替换上述三 ABI 的配套 FFmpeg/player/SDL 库；未修改旧 `armeabi` / `x86` 库。最终 ARM64 候选在 Pixel 5 / API 30 的核心回归为 14 项通过、0 失败、3 项跳过，覆盖软件 0.25×–4×、96 kHz 重采样、带视频的 2× 和三项音频内容检查。两项极短音频尾部尚未确认；平台恢复自动用例跳过，但同次原生日志记录 20× 请求被拒后恢复 1× 并继续播放。不代表硬解、主观音质、所有机型或 16 KiB 页设备验证。
 - Compose 修复：修复宿主生命周期 `detachHost` 与 `dispose` 分离（#4259），以及 ExoPlayer 轮询缓冲进度同步到 `bufferPercent` 与 `mBufferPoint`（#4261）。
 
 ### v13.2.1 (2026-08-19)
