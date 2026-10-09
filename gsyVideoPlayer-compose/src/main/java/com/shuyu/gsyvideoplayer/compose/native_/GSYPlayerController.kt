@@ -585,6 +585,29 @@ class GSYPlayerController internal constructor() {
     }
 
     /**
+     * 调整渲染 View 布局参数以适应比例变化（配合 [com.shuyu.gsyvideoplayer.utils.GSYVideoType.setShowType] 使用），
+     * 对应 [com.shuyu.gsyvideoplayer.video.base.GSYTextureRenderView.changeTextureViewShowType]。
+     *
+     * 用法示例：
+     * ```kotlin
+     * GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9)
+     * controller.changeTextureViewShowType()
+     * ```
+     */
+    fun changeTextureViewShowType() {
+        requireMainThread("changeTextureViewShowType")
+        if (released) return
+        val p = activeHost() ?: return
+        p.changeTextureViewShowType()
+        p.renderProxy?.requestLayout()
+        val current = p.currentPlayer
+        if (current != null && current !== p) {
+            current.changeTextureViewShowType()
+            current.renderProxy?.requestLayout()
+        }
+    }
+
+    /**
      * 进入"窗口层全屏"——复用 GSY 内核的 [com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer.startWindowFullscreen]。
      *
      * 内核会反射克隆出**第二个** [GSYComposeHostPlayer] 作为全屏播放器，原 host 暂时停泊；

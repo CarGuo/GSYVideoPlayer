@@ -58,7 +58,7 @@ references:
 | `autoPlay` | false | attach 完成后自动 `startPlayLogic` |
 | `autoPauseResume` | true | 自动订阅 Lifecycle（同 wrapper） |
 
-返回 [GSYPlayerController](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt)，可以再调 `.play() / .pause() / .seekTo(ms) / .setSpeed(...) / .setUp(url, cache, title, autoPlay) / .dispose()`；状态订阅走 [GSYPlayerState](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerState.kt)（`StateFlow<GSYPlayerState>`），事件走 [GSYPlayerEvent](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerEvent.kt)。
+返回 [GSYPlayerController](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt)，可以再调 `.play() / .pause() / .seekTo(ms) / .setSpeed(...) / .changeTextureViewShowType() / .setUp(url, cache, title, autoPlay) / .dispose()`；状态订阅走 [GSYPlayerState](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerState.kt)（`StateFlow<GSYPlayerState>`），事件走 [GSYPlayerEvent](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerEvent.kt)。
 
 ## 最小可运行示例
 

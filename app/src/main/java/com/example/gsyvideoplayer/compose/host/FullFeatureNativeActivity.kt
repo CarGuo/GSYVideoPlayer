@@ -35,8 +35,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,6 +54,7 @@ import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSnapshot
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.gsyGestureControl
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import java.util.Locale
 import kotlin.math.abs
 
@@ -70,9 +73,27 @@ class FullFeatureNativeActivity : ComponentActivity() {
 
 private val SPEEDS = listOf(0.5f, 1.0f, 1.25f, 1.5f, 2.0f)
 
+private data class ShowTypeOption(val label: String, val type: Int)
+
+private val SHOW_TYPES = listOf(
+    ShowTypeOption("默认", GSYVideoType.SCREEN_TYPE_DEFAULT),
+    ShowTypeOption("16:9", GSYVideoType.SCREEN_TYPE_16_9),
+    ShowTypeOption("4:3", GSYVideoType.SCREEN_TYPE_4_3),
+    ShowTypeOption("全屏裁剪", GSYVideoType.SCREEN_TYPE_FULL),
+    ShowTypeOption("全屏拉伸", GSYVideoType.SCREEN_MATCH_FULL),
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FullFeatureNativeScreen() {
+    val backupShowType = remember { GSYVideoType.getShowType() }
+    var currentShowType by remember { mutableIntStateOf(backupShowType) }
+    DisposableEffect(Unit) {
+        onDispose {
+            GSYVideoType.setShowType(backupShowType)
+        }
+    }
+
     val controller = rememberGSYPlayerController(
         url = DemoSamples.SAMPLE_URL,
         title = "Compose Native Full",
@@ -191,9 +212,29 @@ private fun FullFeatureNativeScreen() {
                 }
             }
 
+            Text("显示比例", style = MaterialTheme.typography.titleSmall)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                SHOW_TYPES.forEach { option ->
+                    val selected = currentShowType == option.type
+                    AssistChip(
+                        onClick = {
+                            currentShowType = option.type
+                            GSYVideoType.setShowType(option.type)
+                            controller.changeTextureViewShowType()
+                        },
+                        label = { Text(option.label) },
+                        colors = if (selected) {
+                            AssistChipDefaults.assistChipColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            )
+                        } else AssistChipDefaults.assistChipColors(),
+                    )
+                }
+            }
+
             Spacer(Modifier.height(8.dp))
             Text(
-                "操作说明：中央按钮播放/暂停；左右两侧 ±15s；右上角小锁可锁定手势；播放出错时会出现 Retry。",
+                "操作说明：中央按钮播放/暂停；左右两侧 ±15s；右上角小锁可锁定手势；支持切换倍速与显示比例；播放出错时会出现 Retry。",
                 style = MaterialTheme.typography.bodySmall,
             )
         }

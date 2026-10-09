@@ -129,7 +129,7 @@ public abstract class GSYTextureRenderView extends FrameLayout implements IGSYSu
     /**
      * 调整TextureView去适应比例变化
      */
-    protected void changeTextureViewShowType() {
+    public void changeTextureViewShowType() {
         if (mTextureView != null) {
             int params = getTextureParams();
             ViewGroup.LayoutParams layoutParams = mTextureView.getLayoutParams();
