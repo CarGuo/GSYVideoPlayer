@@ -475,7 +475,13 @@ class GSYPlayerController internal constructor() {
         }
         val duration = player.duration.coerceAtLeast(0L)
         val cur = player.currentPositionWhenPlaying.coerceAtLeast(0L).coerceAtMost(duration)
-        val buffer = player.buffterPoint.coerceIn(0, 100)
+        // Exo2PlayerManager / AliPlayerManager 等内核不触发 onBufferingUpdate 回调，
+        // 而是通过 getBufferedPercentage() 轮询返回 0..100（Ijk / System 返回 -1）。
+        val managerBuffer = runCatching { player.gsyVideoManager.bufferedPercentage }.getOrDefault(-1)
+        val buffer = resolveBufferPercent(state, managerBuffer, player.buffterPoint)
+        if (managerBuffer > 0 && buffer != _snapshot.value.bufferPercent && buffer > 0) {
+            _events.tryEmit(GSYPlayerEvent.BufferingProgress(buffer))
+        }
         // P1-4 扩展字段：SAR / 网速 / 缓存命中。这些 API 在 host detached / 内核未就绪时
         // 可能抛或返回 0，以 runCatching 兜底，保证 tick 不被 player 内部状态错位带崩。
         val sarNum = runCatching { player.videoSarNum }.getOrDefault(0)
@@ -802,4 +808,30 @@ class GSYPlayerController internal constructor() {
         onCompleteListener = null
         onPreparedListener = null
     }
+}
+
+/**
+ * 统一合并内核轮询缓冲百分比（Exo2 / AliPlayer 的 `getBufferedPercentage()`，返回 `0..100`）
+ * 与回调缓冲点（Ijk / System / ProxyCache 的 `onBufferingUpdate` -> `mBufferPoint`）。
+ */
+internal fun resolveBufferPercent(
+    state: GSYPlayState,
+    managerBufferedPercentage: Int,
+    hostBufferPoint: Int,
+): Int {
+    val activeState = state == GSYPlayState.Playing ||
+        state == GSYPlayState.Buffering ||
+        state == GSYPlayState.Paused ||
+        state == GSYPlayState.Completed
+    val effectiveManagerBuffer = if (activeState && managerBufferedPercentage > 0) {
+        if (managerBufferedPercentage > 94) 100 else managerBufferedPercentage
+    } else {
+        -1
+    }
+    val rawBuffer = if (effectiveManagerBuffer > 0) {
+        effectiveManagerBuffer
+    } else {
+        hostBufferPoint
+    }
+    return rawBuffer.coerceIn(0, 100)
 }
