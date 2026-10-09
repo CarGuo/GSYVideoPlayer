@@ -565,7 +565,7 @@ DLNA/UPnP 投屏 API：
 
 ```java
 // build.gradle：只有需要投屏时才添加，真实 minSdk 为 26
-// implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
+// implementation 'io.github.carguo:gsyvideoplayer-cast:13.3.0'
 
 // 1. 核心只提供协议无关 SPI；DLNA Provider 来自可选 cast module
 CastCapability cast = GSYVideoManager.instance().getCastCapability();

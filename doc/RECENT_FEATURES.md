@@ -240,7 +240,7 @@ Demo：`MainActivity` 底部有独立"投屏 Demo"入口 `CastDemoActivity`，�
 - `getPositionInfo` / `getTransportInfo` 回填真实进度状态，sender 端 1Hz 轮询看到的进度就是远端真实播放位置。
 - Service ↔ Activity 通过 `setPackage` 私有广播（`ACTION_STATE_READY` / `ACTION_STATE_STOPPED` / `ACTION_STATE_ERROR`）同步状态；Android 13+ 已适配 `RECEIVER_NOT_EXPORTED`。
 
-依赖开关：需要 DLNA 时添加 `io.github.carguo:gsyvideoplayer-cast:13.2.1`；该 artifact
+依赖开关：需要 DLNA 时添加 `io.github.carguo:gsyvideoplayer-cast:13.3.0`；该 artifact
 统一传递 jUPnP/Jetty，并声明真实 `minSdk 26`。默认播放器不含 Jetty，最低版本保持 API 23
 （详见 [DEPENDENCIES.md](DEPENDENCIES.md)）。
 

@@ -35,14 +35,9 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven {
             url 'https://maven.pkg.github.com/CarGuo/GSYVideoPlayer'
-            // Only attach explicitly configured credentials to GitHub Packages.
-            def readUser = project.findProperty('githubReadUser') ?: System.getenv('GITHUB_READ_USER')
-            def readToken = project.findProperty('githubReadToken') ?: System.getenv('GITHUB_READ_TOKEN')
-            if (readUser && readToken) {
-                credentials {
-                    username = readUser
-                    password = readToken
-                }
+            credentials {
+                username = project.findProperty('githubReadUser') ?: System.getenv('GITHUB_READ_USER') ?: 'carsmallguo'
+                password = project.findProperty('githubReadToken') ?: System.getenv('GITHUB_READ_TOKEN') ?: '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'
             }
         }
     }

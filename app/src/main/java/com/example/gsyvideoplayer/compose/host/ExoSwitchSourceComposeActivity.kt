@@ -140,7 +140,7 @@ private fun ExoSwitchScreen() {
 
             Text(
                 "内核：EXO2 (Exo2PlayerManager) | 当前源：${EXO_SOURCES[sourceIndex].title}\n" +
-                    "状态：${snap.state} | ${snap.currentPosition} / ${snap.duration} ms | 倍速：${SPEED_OPTIONS[speedIndex]}x",
+                    "状态：${snap.state} | ${snap.currentPosition} / ${snap.duration} ms | 缓冲：${snap.bufferPercent}% | 倍速：${SPEED_OPTIONS[speedIndex]}x",
                 style = MaterialTheme.typography.bodySmall,
             )
 

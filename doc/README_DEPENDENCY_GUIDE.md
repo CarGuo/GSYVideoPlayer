@@ -7,24 +7,24 @@
 ```gradle
 dependencies {
     // 核心库
-    implementation 'io.github.carguo:gsyvideoplayer-java:13.2.1'
+    implementation 'io.github.carguo:gsyvideoplayer-java:13.3.0'
 
     // 基础库
-    implementation 'io.github.carguo:gsyvideoplayer-base:13.2.1'
+    implementation 'io.github.carguo:gsyvideoplayer-base:13.3.0'
 
     // 其他变体
-    implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.2.1'
-    implementation 'io.github.carguo:gsyvideoplayer-arm64:13.2.1'
-    implementation 'io.github.carguo:gsyvideoplayer-x86:13.2.1'
+    implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.3.0'
+    implementation 'io.github.carguo:gsyvideoplayer-arm64:13.3.0'
+    implementation 'io.github.carguo:gsyvideoplayer-x86:13.3.0'
 
     // Compose 可选支持
-    implementation 'io.github.carguo:gsyvideoplayer-compose:13.2.1'
+    implementation 'io.github.carguo:gsyvideoplayer-compose:13.3.0'
 
     // RTMP 可选直接依赖；gsyvideoplayer-exo2 已通过 api 传递
-    implementation 'io.github.carguo:gsyvideoplayer-rtmp:13.2.1'
+    implementation 'io.github.carguo:gsyvideoplayer-rtmp:13.3.0'
 
     // DLNA/UPnP 投屏可选依赖；默认播放器不包含 Jetty（该模块 minSdk 26）
-    implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
+    implementation 'io.github.carguo:gsyvideoplayer-cast:13.3.0'
     // ...
 }
 ```
@@ -50,9 +50,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.shuyu:gsyvideoplayer-java:13.2.1'
+    implementation 'com.shuyu:gsyvideoplayer-java:13.3.0'
     // 仅需要 DLNA/UPnP 投屏时添加
-    implementation 'com.shuyu:gsyvideoplayer-cast:13.2.1'
+    implementation 'com.shuyu:gsyvideoplayer-cast:13.3.0'
 }
 ```
 

@@ -34,49 +34,108 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
+import com.shuyu.gsyvideoplayer.cache.CacheFactory
+import com.shuyu.gsyvideoplayer.cache.ICacheManager
 import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager
 import com.shuyu.gsyvideoplayer.compose.native_.GSYDefaultControls
 import com.shuyu.gsyvideoplayer.compose.native_.GSYPlayerSurface
 import com.shuyu.gsyvideoplayer.compose.native_.rememberGSYPlayerController
+import com.shuyu.gsyvideoplayer.player.IPlayerManager
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
+import com.shuyu.gsyvideoplayer.player.PlayerFactory
+import com.shuyu.gsyvideoplayer.utils.Debuger
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
+import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager
 
 class CacheDownloadComposeActivity : ComponentActivity() {
+    private var originalPlayManager: Class<*>? = null
+    private var originalCacheManager: Class<*>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        originalPlayManager = runCatching {
+            val f = PlayerFactory::class.java.getDeclaredField("sPlayerManager")
+            f.isAccessible = true
+            f.get(null) as? Class<*>
+        }.getOrNull()
+        originalCacheManager = runCatching {
+            val f = CacheFactory::class.java.getDeclaredField("sICacheManager")
+            f.isAccessible = true
+            f.get(null) as? Class<*>
+        }.getOrNull()
+        val initialExo = intent?.getBooleanExtra(
+            "use_exo_cache",
+            PlayerFactory.getPlayManager() is Exo2PlayerManager ||
+                CacheFactory.getCacheManager() is ExoPlayerCacheManager,
+        ) ?: false
+        val initialUrl = intent?.getStringExtra("sample_url") ?: DemoSamples.SAMPLE_URL
         setContent {
             MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    CacheDownloadScreen()
+                    CacheDownloadScreen(initialExo = initialExo, sampleUrl = initialUrl)
                 }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        @Suppress("UNCHECKED_CAST")
+        originalPlayManager?.let {
+            runCatching {
+                PlayerFactory.setPlayManager(it as Class<out IPlayerManager>)
+            }
+        }
+        @Suppress("UNCHECKED_CAST")
+        originalCacheManager?.let {
+            runCatching {
+                CacheFactory.setCacheManager(it as Class<out ICacheManager>)
             }
         }
     }
 }
 
+private const val SHORT_CACHE_SAMPLE_URL =
+    "https://pointshow.oss-cn-hangzhou.aliyuncs.com/McTk51586843620689.mp4"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CacheDownloadScreen() {
+private fun CacheDownloadScreen(
+    initialExo: Boolean = false,
+    sampleUrl: String = DemoSamples.SAMPLE_URL,
+) {
     val context = LocalContext.current
     val appContext = remember(context) { context.applicationContext }
     val controller = rememberGSYPlayerController()
     val snap by controller.snapshot
 
+    var useExoCache by remember { mutableStateOf(initialExo) }
+    var currentUrl by remember { mutableStateOf(sampleUrl) }
     var statusText by remember { mutableStateOf("等待开始") }
-    val proxyUrl = remember(appContext) {
-        // 用 ProxyCacheManager 套一层代理，命中缓存时第二次播放本地秒开。
-        // 与 Java DetailDownloadPlayer 同 API 路径。
-        // 注：不能用 derivedStateOf —— newProxy(...) 是带副作用的 IO 调用（会启动 HTTP 代理 server）。
-        // derivedStateOf 的 calculation 只能是纯派生函数，不允许有副作用。
-        val server = ProxyCacheManager.instance().newProxy(appContext)
-        server.getProxyUrl(DemoSamples.SAMPLE_URL)
+
+    LaunchedEffect(useExoCache, snap.state, snap.bufferPercent, snap.isCacheReady) {
+        val modeLabel = if (useExoCache) "EXO2+ExoCache" else "IJK+ProxyCache"
+        Debuger.printfLog(
+            "CacheDownloadCompose: mode=$modeLabel state=${snap.state} " +
+                "pos=${snap.currentPosition}/${snap.duration} buffer=${snap.bufferPercent}% cacheReady=${snap.isCacheReady}",
+        )
     }
 
-    LaunchedEffect(proxyUrl) {
+    LaunchedEffect(useExoCache, currentUrl) {
+        if (useExoCache) {
+            PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
+            CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
+        } else {
+            PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
+            CacheFactory.setCacheManager(ProxyCacheManager::class.java)
+        }
         val builder = GSYVideoOptionBuilder()
-            .setUrl(proxyUrl)
+            .setUrl(currentUrl)
             .setCacheWithPlay(true)
             .setVideoTitle("Cache + Download Demo")
         controller.setUp(builder, autoPlay = true)
-        statusText = "已对接代理：$proxyUrl"
+        val modeLabel = if (useExoCache) "EXO2 + ExoPlayerCacheManager" else "IJK + ProxyCacheManager"
+        statusText = "已启用 $modeLabel：$currentUrl"
     }
 
     Scaffold(
@@ -91,9 +150,10 @@ private fun CacheDownloadScreen() {
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Text(
-                "对齐 Java DetailDownloadPlayer：用 ProxyCacheManager.newProxy + getProxyUrl 套一层缓存代理，" +
-                    "下方显示 isCacheReady 状态（来自 R3 P1-4 扩展的 Snapshot 字段）。点击「清缓存」会调用 " +
-                    "GSYVideoManager.instance().clearAllDefaultCache(ctx)。",
+                "对齐 Java DetailDownloadPlayer / DetailDownloadExoPlayer：开启 setCacheWithPlay(true) 交由 " +
+                    "CacheFactory 当前缓存管理器（ProxyCacheManager 或 ExoPlayerCacheManager）接管缓存，下方显示 " +
+                    "bufferPercent 与 isCacheReady 状态。注：EXO 默认缓冲上限约 50s，在 92 分钟长样片下约占 1%，" +
+                    "可点击「切 30s 短视频」快速观察 0% → 100% 完整缓存与二次秒开命中。",
                 style = MaterialTheme.typography.bodyMedium,
             )
 
@@ -109,6 +169,8 @@ private fun CacheDownloadScreen() {
 
             Text(
                 buildString {
+                    val modeLabel = if (useExoCache) "EXO2 + ExoPlayerCache" else "IJK + ProxyCache"
+                    append("模式：$modeLabel\n")
                     append("状态：${snap.state} | ${snap.currentPosition} / ${snap.duration} ms\n")
                     append("缓冲：${snap.bufferPercent}% | 网速：${snap.netSpeedText}\n")
                     append("缓存命中：${if (snap.isCacheReady) "✅ 已命中本地缓存" else "⏳ 流式加载中"}\n")
@@ -119,19 +181,34 @@ private fun CacheDownloadScreen() {
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = {
-                    // GSYVideoManager 是单例，所有 Compose / Java demo 都共享缓存目录。
                     GSYVideoManager.instance().clearAllDefaultCache(appContext)
                     statusText = "已调用 clearAllDefaultCache(ctx)"
                 }) { Text("清缓存") }
                 OutlinedButton(onClick = {
-                    // 重新 setUp 同 url，演示"清缓存后重新拉流"的反馈循环
                     val builder = GSYVideoOptionBuilder()
-                        .setUrl(proxyUrl)
+                        .setUrl(currentUrl)
                         .setCacheWithPlay(true)
                         .setVideoTitle("Cache + Download Demo")
                     controller.setUp(builder, autoPlay = true)
                     statusText = "已重新 setUp 触发重新加载"
                 }) { Text("重新加载") }
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = {
+                    useExoCache = !useExoCache
+                }) {
+                    Text(if (useExoCache) "切回 IJK+Proxy" else "切到 EXO+Cache")
+                }
+                OutlinedButton(onClick = {
+                    currentUrl = if (currentUrl == SHORT_CACHE_SAMPLE_URL) {
+                        DemoSamples.SAMPLE_URL
+                    } else {
+                        SHORT_CACHE_SAMPLE_URL
+                    }
+                }) {
+                    Text(if (currentUrl == SHORT_CACHE_SAMPLE_URL) "切 92min 长样片" else "切 30s 短视频")
+                }
             }
         }
     }

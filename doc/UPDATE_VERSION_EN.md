@@ -2,6 +2,14 @@
 
 **[Click to see the Chinese version](UPDATE_VERSION.md)**
 
+### v13.3.0 (2026-10-09)
+
+- IJK Native Upgrade: upgrade bundled `libijkffmpeg.so` across `arm64-v8a` / `armeabi-v7a` / `x86_64` in both `gsyVideoPlayer-ex_so` and `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` to **FFmpeg n5.1.10** + **OpenSSL 3.5.9**, unifying all three ABIs.
+- IJK Native Rebuild: rebuild `libijkplayer.so` / `libijksdl.so` against FFmpeg 5 APIs (`AVCodecParameters`, `AVChannelLayout`, HLS/subtitle demuxer updates, mid-stream HEVC parameter-set retention) while keeping 16 KB page-size alignment on `arm64-v8a` / `x86_64` and `__stack_chk_fail` linkage on `armeabi-v7a`.
+- Codec2 & Playback Rate: add `GSYIjkMediaCodecSelector` for Android 10+ (API 29+) `c2.android.*` Codec2 decoder fallback, plus API 23+ `AudioTrack` platform playback rate and rate-aware EOF completion handling.
+- RTSP Enhancements: support RTSP `3xx` redirects across `OPTIONS` / `DESCRIBE` / `SETUP` / `PLAY`, preserve microsecond `timeout` options, add opt-in `rtsp-live-max-buffer-ms` live queue recovery, and isolate `GSYVideoBaseManager` playback/timeout generations across rapid stream switches.
+- Compose Fixes: separate host `detachHost` and `dispose` lifecycles (#4259) and sync ExoPlayer polled buffering progress to `bufferPercent` and `mBufferPoint` (#4261).
+
 ### v13.2.1 (2026-08-19)
 
 - Add the independently published optional `gsyvideoplayer-cast` module and move `JupnpDlnaProvider`, `JupnpDlnaSession`, jUPnP 3.0.3, and Jetty 9.4.53 out of `gsyvideoplayer-java`.

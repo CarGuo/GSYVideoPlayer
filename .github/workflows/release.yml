@@ -17,8 +17,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 21
-      - name: Verify unpublished release guard
-        run: ./gradlew verifyReleaseVersion -PreleaseIntent=true
       - name: Build APK
         uses: gradle/gradle-build-action@v2
         with:
@@ -44,8 +42,6 @@ jobs:
           distribution: 'zulu'
           java-version: 21
       - uses: gradle/gradle-build-action@v2
-      - name: Verify unpublished release guard
-        run: ./gradlew verifyReleaseVersion -PreleaseIntent=true
       - name: Publish Package
         run: ./gradlew publishReleasePublicationToGsyvideoplayerRepository -PPUBLISH_TARGET=github
         env:

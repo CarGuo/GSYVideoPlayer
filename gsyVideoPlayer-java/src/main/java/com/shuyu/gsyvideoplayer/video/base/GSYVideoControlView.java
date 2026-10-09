@@ -1030,6 +1030,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
     protected void setProgressAndTime(long progress, long secProgress, long currentTime, long totalTime, boolean forceChange) {
+        if (getGSYVideoManager().getBufferedPercentage() > 0) {
+            secProgress = getGSYVideoManager().getBufferedPercentage();
+        }
+        if (secProgress > 94) secProgress = 100;
+        if (secProgress != 0) {
+            mBufferPoint = (int) secProgress;
+        }
 
         if (mGSYVideoProgressListener != null && mCurrentState == CURRENT_STATE_PLAYING) {
             mGSYVideoProgressListener.onProgress(progress, secProgress, currentTime, totalTime);
@@ -1048,10 +1055,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (!mTouchingProgressBar) {
             if (progress >= 0 || forceChange) mProgressBar.setProgress((int) progress);
         }
-        if (getGSYVideoManager().getBufferedPercentage() > 0) {
-            secProgress = getGSYVideoManager().getBufferedPercentage();
-        }
-        if (secProgress > 94) secProgress = 100;
         setSecondaryProgress(secProgress);
         mTotalTimeTextView.setText(CommonUtil.stringForTime(totalTime));
         if (currentTime > 0)

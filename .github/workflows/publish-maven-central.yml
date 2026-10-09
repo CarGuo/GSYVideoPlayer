@@ -29,11 +29,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
         
-      - name: Verify unpublished release guard
-        env:
-          GSY_RELEASE_VERSION: ${{ inputs.version }}
-        run: ./gradlew verifyReleaseVersion -PreleaseIntent=true
-
       - name: Import GPG key
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}

@@ -2,6 +2,14 @@
 
 **[Click to see the English version](UPDATE_VERSION_EN.md)**
 
+### v13.3.0 (2026-10-09)
+
+- IJK Native 升级：`gsyVideoPlayer-ex_so` 及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 统一升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**，三端版本与协议能力彻底对齐。
+- IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KB page size，`armeabi-v7a` 保留 `__stack_chk_fail` 链接。
+- 硬解与倍速：新增 `GSYIjkMediaCodecSelector`，在 Android 10+（API 29+）支持 `c2.android.*` Codec2 硬解兜底回退；支持 API 23+ `AudioTrack` 平台倍速与倍速感知的 EOF 完成判定。
+- RTSP 增强：支持 RTSP 初始化阶段（`OPTIONS` / `DESCRIBE` / `SETUP` / `PLAY`）`3xx` 重定向与微秒级 `timeout` 透传，新增可选 `rtsp-live-max-buffer-ms` 直播队列堆积恢复，并在 `GSYVideoBaseManager` 中加入会话代次隔离避免快速切流时迟到回调/超时串扰。
+- Compose 修复：修复宿主生命周期 `detachHost` 与 `dispose` 分离（#4259），以及 ExoPlayer 轮询缓冲进度同步到 `bufferPercent` 与 `mBufferPoint`（#4261）。
+
 ### v13.2.1 (2026-08-19)
 
 - 新增独立发布的可选 `gsyvideoplayer-cast` 模块，将 `JupnpDlnaProvider`、`JupnpDlnaSession`、jUPnP 3.0.3 与 Jetty 9.4.53 从 `gsyvideoplayer-java` 迁出。
