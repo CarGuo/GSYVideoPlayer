@@ -234,7 +234,7 @@ mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tc
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_flags", "prefer_tcp");
 
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "allowed_media_types", "video"); //根据媒体类型来配置
-// FFmpeg 5 的 RTSP timeout 单位是微秒：20_000_000 = 20 秒；20_000 只有 20 毫秒。
+// 14.0.0：FFmpeg 5 的 RTSP timeout 单位是微秒：20_000_000 = 20 秒；20_000 只有 20 毫秒。
 // 新版会保留此选项，不再把 RTSP timeout 当作 RTMP 参数删除。请检查旧配置，勿自动换算。
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "timeout", 20_000_000L);
 mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "buffer_size", 1316);

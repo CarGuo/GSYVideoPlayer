@@ -4,9 +4,12 @@
 
 ### v14.0.0 (2026-10-09)
 
+> 发布检查（2026-10-09）：当前候选在 ARMv7 真机上播放 HTTPS 会发生原生进程崩溃；默认选项和显式证书校验均可复现。独立 C 程序直接加载同一原生库、读取有效证书时也崩溃，ARM64 对照通过。原生问题修复并通过 [TLS 回归检查](../tests/tls-native/README.md) 前，不满足合并或发布条件。
+
 - IJK Native 升级：`gsyVideoPlayer-ex_so` 及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 统一升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**，三端版本与协议能力彻底对齐。
 - IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KiB ELF 段对齐（静态布局检查不代表 16 KiB 页设备运行验证），`armeabi-v7a` 保留 `__stack_chk_fail` 链接。
-- 硬解与倍速：新增 `GSYIjkMediaCodecSelector`，在 Android 10+（API 29+）支持 `c2.android.*` Codec2 硬解兜底回退；支持 API 23+ `AudioTrack` 平台倍速与倍速感知的 EOF 完成判定。
+- ABI 打包变更：默认整包及 `gsyvideoplayer-ex_so` 仅包含 `arm64-v8a` / `armeabi-v7a` / `x86_64`；需要旧 `armeabi` / `x86` 时须按需组合独立的 `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` 模块，这两种旧架构未升级到 FFmpeg 5。
+- 硬解与倍速：新增 `GSYIjkMediaCodecSelector`，优先保留 IJK 原有解码器选择；Android 10+（API 29+）在原选择为空时，按平台硬件加速能力筛选普通、非安全且非隧道必需的 `c2.*` Codec2 解码器，排除纯软件解码器。支持 API 23+ `AudioTrack` 平台倍速与倍速感知的 EOF 完成判定。
 - RTSP 增强：支持 RTSP 初始化阶段（`OPTIONS` / `DESCRIBE` / `SETUP` / `PLAY`）`3xx` 重定向与微秒级 `timeout` 透传，新增可选 `rtsp-live-max-buffer-ms` 直播队列堆积恢复，并在 `GSYVideoBaseManager` 中加入会话代次隔离避免快速切流时迟到回调/超时串扰。
 - 音频兼容性：重采样和非音频主时钟不再仅因时钟映射不满足精确采样条件而中断播放；`soundtouch=1` 使用 0.25×–4× 软件变速（含 3×），`soundtouch=0` 的平台范围取决于设备。平台拒绝仅在确认恢复原状态后继续播放，恢复状态无法确认时停止输出。运行中切换引擎等待旧音频排空，并保留 seek、取消切换时的最新倍速请求。
 - 起播与错误状态：修复仅填入起播静音时，倍速切换等待播放头而无法起播的问题；已接收真实 PCM 的队列继续正常排空。异步错误在通知监听器前进入 Error，后续 seek/start/pause 需先 reset 或重建播放器，并保持 iOS 原有错误通知顺序，避免额外状态通知。

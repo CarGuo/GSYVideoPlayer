@@ -517,9 +517,12 @@ Library APIs include `GSYVideoPreviewVttParser`, `GSYVideoPreviewProvider`, and 
 
 - IJK Native Upgrade: upgrade bundled `libijkffmpeg.so` across `arm64-v8a` / `armeabi-v7a` / `x86_64` in both `gsyVideoPlayer-ex_so` and `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` to **FFmpeg n5.1.10** + **OpenSSL 3.5.9**, unifying all three ABIs.
 - IJK Native Rebuild: rebuild `libijkplayer.so` / `libijksdl.so` against FFmpeg 5 APIs (`AVCodecParameters`, `AVChannelLayout`, HLS/subtitle demuxer updates, mid-stream HEVC parameter-set retention) while keeping 16 KB page-size alignment on `arm64-v8a` / `x86_64` and `__stack_chk_fail` linkage on `armeabi-v7a`.
-- Codec2 & Playback Rate: add `GSYIjkMediaCodecSelector` for Android 10+ (API 29+) `c2.android.*` Codec2 decoder fallback, plus API 23+ `AudioTrack` platform playback rate and rate-aware EOF completion handling.
+- ABI Packaging Change: the default aggregate and `gsyvideoplayer-ex_so` contain only `arm64-v8a` / `armeabi-v7a` / `x86_64`; legacy `armeabi` / `x86` require the standalone `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` modules, which are not upgraded to FFmpeg 5.
+- Codec2 & Playback Rate: preserve IJK's original decoder choice, then consider regular `c2.*` hardware decoders on Android 10+ (API 29+) when the original choice is empty; exclude software-only codecs and those requiring secure or tunneled playback. Support API 23+ `AudioTrack` platform playback rate and rate-aware EOF completion handling.
 - RTSP Enhancements: support RTSP `3xx` redirects across `OPTIONS` / `DESCRIBE` / `SETUP` / `PLAY`, preserve microsecond `timeout` options, add opt-in `rtsp-live-max-buffer-ms` live queue recovery, and isolate `GSYVideoBaseManager` playback/timeout generations across rapid stream switches.
 - Compose Fixes: separate host `detachHost` and `dispose` lifecycles (#4259) and sync ExoPlayer polled buffering progress to `bufferPercent` and `mBufferPoint` (#4261).
+
+The matched audio/RTSP native follow-up, software tempo range and bounded verification results are documented in [the full v14.0.0 changelog](doc/UPDATE_VERSION_EN.md#v1400-2026-10-09). **The current candidate is blocked by an ARMv7 HTTPS native crash; see the release review there.** Static 16 KiB alignment is separate from device runtime qualification.
 
 ### v13.2.1 (2026-08-19)
 

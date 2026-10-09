@@ -4,7 +4,7 @@ apply from: "$rootDir/gradle/publish.gradle"
 apply from: "$rootDir/gradle/maven-central-publish.gradle"
 android {
     namespace 'com.shuyu.gsyvideoplayer.ex_so'
-    // Library AAR merging does not honor ndk.abiFilters for prebuilt jniLibs.
+    // 14.0.0: Library AAR merging does not honor ndk.abiFilters for prebuilt jniLibs.
     // Exclude the legacy directories explicitly while keeping their source files.
     packaging {
         jniLibs {

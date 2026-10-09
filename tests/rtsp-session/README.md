@@ -5,7 +5,7 @@ checks. The baseline at `33070dab1ddebb4c516a40a2cc58af78e49dd252` passes
 **4/48**, with 44 failures and a nonzero exit. These are manager-level tests
 using Android/player stubs, not an Android build or device RTSP runtime result.
 The separate, narrowly scoped emulator evidence is in
-[RTSP-EMULATOR-RESULTS.md](../../doc/RTSP-EMULATOR-RESULTS.md).
+[the pinned IJK integration record](https://github.com/CarGuo/ijkplayer/blob/a599f60268312f3093d6f0ca165a3d06c76970cb/doc/FFMPEG5.md#historical-emulator-evidence-2026-10-05).
 
 ## Run against a checkout
 
