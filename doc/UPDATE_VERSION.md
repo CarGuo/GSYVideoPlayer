@@ -2,7 +2,7 @@
 
 **[Click to see the English version](UPDATE_VERSION_EN.md)**
 
-### v13.3.0 (2026-10-09)
+### v14.0.0 (2026-10-09)
 
 - IJK Native 升级：`gsyVideoPlayer-ex_so` 及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 统一升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**，三端版本与协议能力彻底对齐。
 - IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KB page size，`armeabi-v7a` 保留 `__stack_chk_fail` 链接。

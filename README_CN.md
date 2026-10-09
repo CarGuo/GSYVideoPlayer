@@ -94,39 +94,39 @@ allprojects {
 ```groovy
  //完整版引入
 
-implementation 'io.github.carguo:gsyvideoplayer:13.3.0'
+implementation 'io.github.carguo:gsyvideoplayer:14.0.0'
 
 
 //是否需要AliPlayer模式
-implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.3.0'
+implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
 //是否需要 DLNA/UPnP 投屏（可选，minSdk 26）
-implementation 'io.github.carguo:gsyvideoplayer-cast:13.3.0'
+implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-exo2:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:14.0.0'
 
  //可选直接依赖；exo2 已经通过 api 传递 RTMP 模块
- implementation 'io.github.carguo:gsyvideoplayer-rtmp:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-rtmp:14.0.0'
 
  //可选 DLNA/UPnP 投屏实现（minSdk 26）；默认播放器不包含 Jetty
- implementation 'io.github.carguo:gsyvideoplayer-cast:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
 
  //是否需要AliPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'io.github.carguo:gsyvideoplayer-arm64:13.3.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv7a:13.3.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv5:13.3.0'
- implementation 'io.github.carguo:gsyvideoplayer-x86:13.3.0'
- implementation 'io.github.carguo:gsyvideoplayer-x64:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-arm64:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv7a:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv5:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x86:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x64:14.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
@@ -135,16 +135,16 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-exo2:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:14.0.0'
 
  //是否需要AliPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
  //更多ijk的编码支持
- implementation 'io.github.carguo:gsyvideoplayer-ex_so:13.3.0'
+ implementation 'io.github.carguo:gsyvideoplayer-ex_so:14.0.0'
 
 ```
 
@@ -161,7 +161,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```groovy
 // Maven Central：
-implementation 'io.github.carguo:gsyvideoplayer-compose:13.3.0'
+implementation 'io.github.carguo:gsyvideoplayer-compose:14.0.0'
 
 // 本地源码开发：
 implementation project(':gsyVideoPlayer-compose')
@@ -231,39 +231,39 @@ allprojects {
 
 ```groovy
  //完整版引入
- implementation 'com.shuyu:gsyvideoplayer:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer:14.0.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
  //是否需要 DLNA/UPnP 投屏（可选，minSdk 26）
- implementation 'com.shuyu:gsyvideoplayer-cast:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-exo2:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:14.0.0'
 
  //可选直接依赖；exo2 已经通过 api 传递 RTMP 模块
- implementation 'com.shuyu:gsyvideoplayer-rtmp:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-rtmp:14.0.0'
 
  //可选 DLNA/UPnP 投屏实现（minSdk 26）；默认播放器不包含 Jetty
- implementation 'com.shuyu:gsyvideoplayer-cast:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'com.shuyu:gsyvideoplayer-armv5:13.3.0'
- implementation 'com.shuyu:gsyvideoplayer-armv7a:13.3.0'
- implementation 'com.shuyu:gsyvideoplayer-arm64:13.3.0'
- implementation 'com.shuyu:gsyvideoplayer-x86:13.3.0'
- implementation 'com.shuyu:gsyvideoplayer-x64:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv5:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv7a:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-arm64:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-x86:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-x64:14.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
@@ -272,24 +272,24 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-exo2:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:14.0.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
  //更多ijk的编码支持
- implementation 'com.shuyu:gsyvideoplayer-ex_so:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-ex_so:14.0.0'
 
 ```
 
 #### D、Jetpack Compose 支持（可选）
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-compose:13.3.0'
+ implementation 'com.shuyu:gsyvideoplayer-compose:14.0.0'
 ```
 
 ### 3、Jitpack 引入方法（会继续发布，但不是很推荐）
@@ -316,36 +316,36 @@ allprojects {
 ```groovy
  //完整版引入
 
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v14.0.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
  //是否需要 DLNA/UPnP 投屏（可选，minSdk 26）
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.0.0'
 
  //可选 DLNA/UPnP 投屏实现（minSdk 26）
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
  //根据你的需求ijk模式的so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v13.3.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v13.3.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v13.3.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v13.3.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v14.0.0'
 ```
 
 #### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
@@ -354,16 +354,16 @@ A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情
 C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.0.0'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
  //更多ijk的编码支持
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v13.3.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v14.0.0'
 
 ```
 
@@ -515,7 +515,7 @@ WEBVTT
 
 ## 五、近期版本
 
-### v13.3.0 (2026-10-09)
+### v14.0.0 (2026-10-09)
 
 - IJK Native 升级：`gsyVideoPlayer-ex_so` 及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 统一升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**，三端版本与协议能力彻底对齐。
 - IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KB page size，`armeabi-v7a` 保留 `__stack_chk_fail` 链接。

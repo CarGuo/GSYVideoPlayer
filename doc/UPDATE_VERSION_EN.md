@@ -2,7 +2,7 @@
 
 **[Click to see the Chinese version](UPDATE_VERSION.md)**
 
-### v13.3.0 (2026-10-09)
+### v14.0.0 (2026-10-09)
 
 - IJK Native Upgrade: upgrade bundled `libijkffmpeg.so` across `arm64-v8a` / `armeabi-v7a` / `x86_64` in both `gsyVideoPlayer-ex_so` and `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` to **FFmpeg n5.1.10** + **OpenSSL 3.5.9**, unifying all three ABIs.
 - IJK Native Rebuild: rebuild `libijkplayer.so` / `libijksdl.so` against FFmpeg 5 APIs (`AVCodecParameters`, `AVChannelLayout`, HLS/subtitle demuxer updates, mid-stream HEVC parameter-set retention) while keeping 16 KB page-size alignment on `arm64-v8a` / `x86_64` and `__stack_chk_fail` linkage on `armeabi-v7a`.

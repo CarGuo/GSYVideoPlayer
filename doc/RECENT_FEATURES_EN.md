@@ -241,7 +241,7 @@ On-device Loopback Receiver:
 - `getPositionInfo` / `getTransportInfo` report real progress and state, so the sender's 1 Hz polling shows the actual remote position.
 - Service ↔ Activity state changes are synchronised via `setPackage` private broadcasts (`ACTION_STATE_READY` / `ACTION_STATE_STOPPED` / `ACTION_STATE_ERROR`). `RECEIVER_NOT_EXPORTED` is applied on Android 13+.
 
-Dependency toggle: add `io.github.carguo:gsyvideoplayer-cast:13.3.0` when DLNA is required. The
+Dependency toggle: add `io.github.carguo:gsyvideoplayer-cast:14.0.0` when DLNA is required. The
 artifact exposes the tested jUPnP/Jetty set and declares its real `minSdk 26`. The default player
 does not include Jetty and keeps its API 23 floor (see [DEPENDENCIES_EN.md](DEPENDENCIES_EN.md)).
 
