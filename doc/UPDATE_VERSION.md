@@ -4,19 +4,59 @@
 
 ### v14.0.0 (2026-10-10)
 
-> 发布复查（2026-10-10）：在最初复现崩溃的 Redmi M2104K10AC / API 33 上，当前 ARMv7、ARM64 库均通过独立证书加载，以及各 15 项 GSY/JNI 播放检查；HTTPS 默认/显式校验和 HLS 分片错误 CA/SAN 拒绝均通过。合并后的 Debug/Release、48 项会话回归、36 次单测执行、双渠道本地发布及三 ABI 原生静态/打包检查通过。旧库崩溃对照及测试边界保留在 [TLS 回归记录](../tests/tls-native/README.md#release-review-on-the-originally-affected-device)。x86_64 和 16 KiB 页设备仍没有本次运行验证。
+本版覆盖 `v13.2.1..v14.0.0` 的全部 27 条提交（含两次合并），完整变更及逐提交对应关系见 [发布核对记录](V14_RELEASE_REVIEW.md)。`ffmpeg-5.0` 是迁移分支名，实际 FFmpeg 基线为 **n5.1.10**。
 
-- IJK Native 升级：`gsyVideoPlayer-ex_so` 及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 统一升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**，三端版本与协议能力彻底对齐。
-- IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KiB ELF 段对齐（静态布局检查不代表 16 KiB 页设备运行验证），`armeabi-v7a` 保留 `__stack_chk_fail` 链接。
-- ABI 打包变更：默认整包及 `gsyvideoplayer-ex_so` 仅包含 `arm64-v8a` / `armeabi-v7a` / `x86_64`；需要旧 `armeabi` / `x86` 时须按需组合独立的 `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` 模块，这两种旧架构未升级到 FFmpeg 5。
-- 硬解与倍速：新增 `GSYIjkMediaCodecSelector`，优先保留 IJK 原有解码器选择；Android 10+（API 29+）在原选择为空时，按平台硬件加速能力筛选普通、非安全且非隧道必需的 `c2.*` Codec2 解码器，排除纯软件解码器。支持 API 23+ `AudioTrack` 平台倍速与倍速感知的 EOF 完成判定。
-- RTSP 增强：支持 RTSP 初始化阶段（`OPTIONS` / `DESCRIBE` / `SETUP` / `PLAY`）`3xx` 重定向与微秒级 `timeout` 透传，新增可选 `rtsp-live-max-buffer-ms` 直播队列堆积恢复，并在 `GSYVideoBaseManager` 中加入会话代次隔离避免快速切流时迟到回调/超时串扰。
-- 音频兼容性：重采样和非音频主时钟不再仅因时钟映射不满足精确采样条件而中断播放；`soundtouch=1` 使用 0.25×–4× 软件变速（含 3×），`soundtouch=0` 的平台范围取决于设备。平台拒绝仅在确认恢复原状态后继续播放，恢复状态无法确认时停止输出。运行中切换引擎等待旧音频排空，并保留 seek、取消切换时的最新倍速请求。
-- 起播与错误状态：修复仅填入起播静音时，倍速切换等待播放头而无法起播的问题；已接收真实 PCM 的队列继续正常排空。异步错误在通知监听器前进入 Error，后续 seek/start/pause 需先 reset 或重建播放器，并保持 iOS 原有错误通知顺序，避免额外状态通知。
-- RTSP 包装层：`ijklivehook` 按实际打开的内部 RTSP 流判定直播能力，透传明确配置的 `timeout` / `rtsp_transport`；直播缓存上限仅接受 `0` 或 `500..60000` 毫秒。修复终止错误后失败 seek 导致缓冲状态无法结束的问题。
-- 音频修复基于 [IJK a599f60](https://github.com/CarGuo/ijkplayer/commit/a599f60268312f3093d6f0ca165a3d06c76970cb)，本次在此基础上加入 TLS 构建规避和新的 FFmpeg HLS 策略继承补丁，替换上述三 ABI 的配套 FFmpeg/player/SDL 库；未修改旧 `armeabi` / `x86` 库。此前、尚未加入本次 TLS/HLS 修复的 ARM64 库组在 2026-10-09 Pixel 5 / API 30 核心回归中为 14 项通过、0 失败、3 项跳过，覆盖软件 0.25×–4×、96 kHz 重采样、带视频的 2× 和三项音频内容检查。两项极短音频尾部尚未确认；平台恢复自动用例跳过，但同次原生日志记录 20× 请求被拒后恢复 1× 并继续播放。这些历史结果不验证本次重编的 ARM64 库组；新 ARM64 库已完成上方所述的有限 TLS/HLS 与 1×/3× 音频验证，但未重跑这组更广的历史音频回归。当前 x86_64 仍仅完成构建与静态检查。也不代表硬解、主观音质、所有机型或 16 KiB 页设备验证。
-- TLS/HLS 修复：OpenSSL 在 ARMv7 / Clang 11 下关闭触发错误代码生成的循环展开，并将编译选项纳入缓存标识；FFmpeg 保留嵌套 HLS 请求的显式证书/主机校验与代理配置，包括 keepalive 失败后重新连接。[构建集成](https://github.com/CarGuo/ijkplayer/commit/df3f5ca6)与 [FFmpeg 补丁](https://github.com/CarGuo/FFmpeg/commit/0c8735b51d29dbc74e18c235246d5230bd5db989)分别记录原因与回归范围；未修改 OpenSSL 上游源码或默认校验策略。
-- Compose 修复：修复宿主生命周期 `detachHost` 与 `dispose` 分离（#4259），以及 ExoPlayer 轮询缓冲进度同步到 `bufferPercent` 与 `mBufferPoint`（#4261）；新增 `controller.changeTextureViewShowType()`，配合 `GSYVideoType.setShowType()` 动态刷新显示比例。
+#### IJK、音频与网络播放
+
+- `gsyvideoplayer-ex_so` 与独立 `gsyvideoplayer-arm64` / `gsyvideoplayer-armv7a` / `gsyvideoplayer-x64` 统一使用 **FFmpeg n5.1.10 + OpenSSL 3.5.9**，每个 ABI 的 `libijkffmpeg.so` / `libijkplayer.so` / `libijksdl.so` 成套更新，整包与独立模块的库字节一致。
+- 默认 `gsyvideoplayer` 和 `gsyvideoplayer-ex_so` 只打包 `arm64-v8a` / `armeabi-v7a` / `x86_64`。旧 `armeabi` / `x86` 仅由按需引入的 `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` 提供，未升级到 FFmpeg 5。新版独立 ABI 模块与 `ex_so` 使用相同编解码配置，选择依据是 ABI 和包体积。
+- 按 FFmpeg 5 的 `AVCodecParameters` / `AVChannelLayout` 等 API 重编 IJK/SDL，更新 HLS、字幕和 HEVC 参数处理；增加 HTTP multipart MJPEG demuxer 和 raw MJPEG parser，修复 MJPEG EOF、MOV/HEVC seek/replay 及切码率参数集处理。
+- `arm64-v8a` / `x86_64` 保持 16 KiB ELF 段对齐；`armeabi-v7a` 保留 `__stack_chk_fail` 链接。ELF 对齐与 APK 对齐检查已通过，设备运行范围见下方验证说明。
+- 新增 `GSYIjkMediaCodecSelector`：优先保留 IJK 原有解码器选择；Android 10+（API 29+）在原选择为空时，筛选平台报告的普通 `c2.*` 硬件解码器，排除纯软件、安全模式必需和隧道模式必需的解码器。
+- 支持 API 23+ `AudioTrack` 平台倍速及倍速感知的 EOF 完成判定。`soundtouch=1` 使用 **0.25×–4×** 软件变速（含 3×）；`soundtouch=0` 的平台支持范围取决于设备。
+- 修复重采样、非音频主时钟和已提交音频的时间线/完成处理；运行中切换音频变速引擎等待旧音频排空，保留 seek 或取消切换时的最新倍速请求。仅含起播静音且未接收真实 PCM 的队列不再阻塞起播。
+- 平台拒绝倍速请求后，只有确认恢复原状态才继续播放；无法确认恢复则停止输出。异步终止错误在通知监听器前进入 Error，后续 seek/start/pause 必须先 reset 或重建播放器，避免失败 seek 留住缓冲状态。
+- RTSP 支持初始化阶段 `OPTIONS` / `DESCRIBE` / `SETUP` / 初次 `PLAY` 的 `3xx` 重定向，透传 FORMAT `timeout`（**微秒**）和 `rtsp_transport`。`ijklivehook` 按实际打开的内部流识别 RTSP 直播能力。
+- 新增可选 PLAYER `rtsp-live-max-buffer-ms`：默认 `0` 关闭；有效范围为 `500..60000` 毫秒，用于正常 1× RTSP 直播队列堆积恢复，可能丢弃旧媒体并产生跳跃或音频间隙。它不提供播放中 REDIRECT、多控制连接或自动重连。
+- `GSYVideoBaseManager` 以播放器实例和会话代次隔离回调、已排队消息及缓冲超时，防止快速切流、端口复用、release/prepare 和初始化失败时旧会话干扰新会话。
+- **已修复 ARMv7 HTTPS 证书加载崩溃**：NDK r22b / Clang 11 的 OpenSSL 构建关闭导致错误代码生成的循环展开，并把编译选项纳入 TLS 缓存标识；OpenSSL 上游源码保持不变。
+- FFmpeg 为嵌套 HLS playlist、segment、key、init 等请求及 keepalive 重连保留显式 TLS 校验、CA、主机名和代理配置，修复策略在子请求中丢失的问题。默认校验策略保持原行为，详见 [TLS 回归记录](../tests/tls-native/README.md)。
+
+#### GL 渲染与滤镜
+
+- 新增 `GLFrameBuffer` 和 `GSYVideoGLViewMultiPassRender`，支持 OES 输入转换、FBO ping-pong、多尺寸 FBO 池和降采样金字塔；复合 pass 可同时采样原始场景。
+- 新增 `GaussianBlurMultiPassEffect`（横/纵双 pass 高斯）、`IterativeBlurPyramidEffect`（Kawase 金字塔迭代模糊）和 `BloomEffect`（亮部提取、模糊和原图合成）。
+- 新增 `LookupEffect`，以 512×512 / 8×8 展开的 64³ LUT 调色并控制混合强度；`TextureShaderInterface` 在 GL 线程统一管理纹理创建、绑定和释放。Demo 内置 identity、teal_orange、cyberpunk 三套 LUT。
+- 新增 `BeautyEffect`，提供保边磨皮与暖色美白，Demo 展示自然和强力两档。
+- 渲染器自动注入按秒计的 `uTime`，新增 `GlitchEffect`、`CrtEffect`、`OldTvSignalEffect`，分别展示数字故障、CRT 扫描线和老电视模拟信号干扰。
+- 修正已有 shader 的零除、未使用变量、采样步长和 alpha 处理，并移除自定义 render 中多余的 `glFinish`。`DetailFilterActivity` 补齐多 pass、金字塔、Bloom、LUT 和新单 pass 滤镜入口；用法见 [近期能力说明](RECENT_FEATURES.md)。
+
+#### 折叠屏 Demo
+
+- 新增 XML `FoldDetailActivity` 和 Compose `FoldComposeActivity`，基于 Jetpack WindowManager 1.3.0 的 `FoldingFeature` 区分 FLAT / BOOK / TABLETOP，按真实铰链尺寸分隔内容。
+- XML 全屏克隆支持 BOOK 左右布局和 TABLETOP 上下布局；Compose 用稳定的自定义 `Layout` 保持姿态切换时播放器节点身份。旋转/展开时重新应用折叠状态，修复全屏按钮监听被 builder 覆盖的问题，并支持返回退出全屏。
+- 新增可选测试参数 `extra_posture=0/1/2`，分别注入 FLAT / BOOK / TABLETOP；未传入时使用真实折叠信息。主页面和 Compose 列表均有入口，Compose Demo 总数由 24 增至 **25**。注入姿态矩阵与实体折叠屏传感器验证的范围分别记录。
+
+#### Compose 与缓冲进度
+
+- 修复 #4259：分离 `detachHost` 与 `dispose`，保留 host 直到内核资源统一释放；通过 attached 状态限制对已卸载 View 的操作，避免 MediaPlayer、Surface 和音频焦点遗漏释放。
+- 修复 #4261：把 Exo/Ali 等内核轮询缓冲值合并到 `snapshot.bufferPercent` 和 `BufferingProgress` 事件；传统 View 的 `mBufferPoint`、二级进度和进度回调使用同一缓冲值，播放/暂停/缓冲/完成状态均可同步。
+- `GSYTextureRenderView.changeTextureViewShowType()` 改为 public，Compose 暴露 `controller.changeTextureViewShowType()`，配合 `GSYVideoType.setShowType()` 更新内嵌及全屏画面的显示比例；完整控件 Demo 新增比例选项并在退出时恢复原设置。
+- 缓存 Demo 支持 IJK + ProxyCache / EXO + ExoCache 切换、长短样片切换、缓存进度和命中状态，并在退出时恢复原播放器/缓存工厂；Exo 多源 Demo 补充缓冲百分比。
+
+#### 构建、R8、文档与回归
+
+- Gradle Wrapper 从 8.7 升至 **8.12**，AGP 从 8.6.1 升至 **8.9.1**，在 `settings.gradle` 固定 R8 **9.4.14**；Kotlin **2.0.21**，本地 JDK **17** / CI JDK **21**。
+- 精简 Demo 的 R8 规则及 FAQ 示例：保留 IJK JNI、播放器全屏/小窗反射构造器、PlayerFactory / CacheFactory 无参构造器和必要第三方规则，移除 GSY/Media3 整包保留、未使用 ButterKnife 规则及重复项。历史评分与体积对比见 [R8 报告](R8_ANALYZER_REPORT.md)，不代表 v14 APK 体积。
+- 新增 [13 个 GSYVideoPlayer 接入 skills](../skills/README.md)，覆盖接入、Builder、全屏、内核、列表、缓存、渲染、字幕、直播、投屏、Compose、自定义 View 和 R8；补齐直接引入方式的可选投屏依赖说明。
+- `app/test_evidence` 改为本地忽略目录，历史截图、dump 和临时验证文件不再进入版本控制；增加 GL 实现计划及执行记录。
+- CI 纳入 `48` 项会话回归和 Compose 单测；增加独立 native CA 加载检查。两种发布渠道统一使用 `14.0.0`，默认整包保持可选投屏依赖隔离。
+
+#### 发布验证范围
+
+2026-10-10，已修复的 ARMv7 和 ARM64 库在原问题设备 Redmi M2104K10AC / API 33 上分别通过 CA 加载及 **15 项 GSY/JNI 播放检查**，覆盖默认/显式校验 HTTPS、嵌套 HLS 错误 CA/SAN 拒绝、RTSP 初始化重定向、seek/完成、1×/3× 音频和 96 kHz 重采样。Debug/Release 构建、48 项会话回归、36 次单测执行（18 个独立用例 × 两种构建）、三 ABI 静态/打包检查和双渠道本地发布均通过。
+
+当前 x86_64 与 16 KiB 页设备运行、硬解画面及新库的完整声学回归仍未覆盖；旧库的历史测试不能替代新库验证。源码、九库 SHA-256、逐提交清单和详细结果见 [发布核对记录](V14_RELEASE_REVIEW.md)，历史崩溃对照保留在 [TLS 记录](../tests/tls-native/README.md#historical-controls-and-investigation)。
 
 ### v13.2.1 (2026-08-19)
 
@@ -202,7 +242,7 @@
 
 ### v8.1.6-jitpack(2021-09-13)
 
-* 增加支持横屏幕全屏和竖屏变化，屏幕不旋转，[SimpleActivity](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleActivity.java) [SimpleDetailActivityMode2](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
+* 增加支持横屏幕全屏和竖屏变化，屏幕不旋转，[SimpleActivity](../app/src/main/java/com/example/gsyvideoplayer/simple/SimpleActivity.java) [SimpleDetailActivityMode2](../app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
 * 修复设置了超时，重试后失效的问题
 * 增加针对某些dataBinding的场景， 当context detach activity被回收会出现。
 * exo player 2.14.2

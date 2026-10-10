@@ -1,11 +1,13 @@
 # Session lifecycle host regression tests
 
-The candidate `GSYVideoBaseManager.java` passes **48/48** deterministic host-JVM
+The released v14.0.0 `GSYVideoBaseManager.java` passes **48/48** deterministic host-JVM
 checks. The baseline at `33070dab1ddebb4c516a40a2cc58af78e49dd252` passes
 **4/48**, with 44 failures and a nonzero exit. These are manager-level tests
 using Android/player stubs, not an Android build or device RTSP runtime result.
 The separate, narrowly scoped emulator evidence is in
 [the pinned IJK integration record](https://github.com/CarGuo/ijkplayer/blob/a599f60268312f3093d6f0ca165a3d06c76970cb/doc/FFMPEG5.md#historical-emulator-evidence-2026-10-05).
+
+Current ARMv7/ARM64 native playback and release-build results are separate from this host gate; see [V14_RELEASE_REVIEW.md](../../doc/V14_RELEASE_REVIEW.md).
 
 ## Run against a checkout
 
@@ -30,7 +32,7 @@ baseline_dir=$(mktemp -d)
 git show 33070dab1ddebb4c516a40a2cc58af78e49dd252:gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoBaseManager.java > "$baseline_dir/GSYVideoBaseManager.java"
 python3 tests/rtsp-session/run_host_tests.py "$baseline_dir/GSYVideoBaseManager.java" --project-root . --label baseline
 # Expected: nonzero exit, 4 pass and 44 fail
-python3 tests/rtsp-session/run_host_tests.py --project-root . --label candidate
+python3 tests/rtsp-session/run_host_tests.py --project-root . --label v14.0.0
 # Expected: zero exit, 48 pass and 0 fail
 ```
 

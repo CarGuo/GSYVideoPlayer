@@ -1,205 +1,67 @@
-# 双渠道发布配置指南
+# 双渠道发布配置指南（v14.0.0）
 
-## 🎯 问题说明
+> 2026-10-10 校正：两个渠道共享版本，但由 `PUBLISH_TARGET` 分别选择 publication；同一次 Gradle 调用不会创建两个 publication。实际配置见 [publish.gradle](../gradle/publish.gradle)、[maven-central-publish.gradle](../gradle/maven-central-publish.gradle) 和 [根构建配置](../build.gradle)。
 
-项目需要同时发布到两个渠道，使用不同的 GROUP ID：
+| 渠道 | GROUP ID | PUBLISH_TARGET | Publication |
+| --- | --- | --- | --- |
+| GitHub Packages | `com.shuyu` | `github`（默认） | `release` |
+| Maven Central | `io.github.carguo` | `mavenCentral` | `mavenCentral` |
 
-| 渠道 | GROUP ID | 用途 |
-|-----|----------|------|
-| **GitHub Packages** | `com.shuyu` | 现有用户使用 |
-| **Maven Central** | `io.github.carguo` | 公开分发 |
+当前 `PROJ_VERSION=14.0.0`，各模块 artifactId 以自身 `gradle.properties` 为准。模块同时应用两个脚本；目标属性决定本次创建哪一个 publication 和内部依赖坐标。跨渠道发布任务有禁用守卫，不能省略 Maven Central 的目标参数。
 
-## ✅ 解决方案
+## 本地核对
 
-### 1. Gradle 配置
+以下命令生成本地产物及 POM，不上传远端；两组分别执行：
 
-在根目录 `gradle.properties` 中定义两个 GROUP ID：
-
-```properties
-# GitHub Packages 使用
-PROJ_GROUP=com.shuyu
-
-# Maven Central 使用
-PROJ_GROUP_MAVEN_CENTRAL=io.github.carguo
+```sh
+./gradlew publishToMavenLocal verifyCastDependencyIsolation -PPUBLISH_TARGET=github
+./gradlew publishToMavenLocal verifyCastDependencyIsolation -PPUBLISH_TARGET=mavenCentral
 ```
 
-### 2. 模块发布配置
+Maven Central 签名使用 `GPG_PRIVATE_KEY`（base64 ASCII-armored 私钥）和 `GPG_PASSPHRASE` 两个环境变量；凭据配置见 [完整指南](MAVEN_CENTRAL_PUBLISH.md)。检查所有模块版本一致，内部坐标使用对应 group，默认 java/整包没有 jUPnP/Jetty，只有可选 cast 包含这些依赖。
 
-每个模块的 `build.gradle` 可以同时支持两种发布：
+## 实际上传任务
 
-```gradle
-// GitHub Packages 发布 (保持原样)
-apply from: "$rootDir/gradle/publish.gradle"
+GitHub Packages 使用 `GITHUB_ACTOR` / `GITHUB_TOKEN`：
 
-// Maven Central 发布 (新增)
-apply from: "$rootDir/gradle/maven-central-publish.gradle"
-
-// 发布到 GitHub Packages
-publishing {
-    repositories {
-        maven {
-            name = "gsyvideoplayer"
-            url = "https://maven.pkg.github.com/CarGuo/GSYVideoPlayer"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}
+```sh
+./gradlew publishReleasePublicationToGsyvideoplayerRepository -PPUBLISH_TARGET=github
 ```
 
-### 3. 发布结果
+Maven Central 使用 Portal User Token 及 GPG 环境变量：
 
-**GitHub Packages (现有)**
-```gradle
+```sh
+./gradlew publishMavenCentralPublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository -PPUBLISH_TARGET=mavenCentral
+```
+
+本项目通过 Gradle Nexus Publish Plugin 2.0.0 管理 staging 创建、关闭与 release，配置的是 Central Portal OSSRH Staging API。参考 [Sonatype 官方兼容指南](https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/)。只有上传成功或 Gradle 命令成功，不等于用户已能从公开仓库下载；检查 staging/Portal 状态与最终 POM/AAR。
+
+## tag 与工作流
+
+[release.yml](../.github/workflows/release.yml) 在 `v*` tag 上构建 Release APK、创建 GitHub Release 并发布 GitHub Packages；[publish-maven-central.yml](../.github/workflows/publish-maven-central.yml) 同时发布 Maven Central。两者使用 JDK 21，独立运行；普通 master 文档提交只触发 CI。
+
+为新版本先修改 `PROJ_VERSION`、核对对应提交，再创建与版本一致的 annotated tag：
+
+```sh
+# 替换为尚未发布的新版本；已发布的 v14.0.0 不重新创建或覆盖。
+release_tag="v<new-version>"
+git tag -a "$release_tag" -m "$release_tag"
+git push origin "$release_tag"
+```
+
+当前手动 workflow 的 `version` 输入不会自动改写 `PROJ_VERSION`；发布前必须核对所选 ref 的属性，不能把输入值当作最终产物版本。
+
+## 使用方
+
+推荐 Maven Central：
+
+```groovy
+repositories { mavenCentral() }
 dependencies {
-    implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
+    implementation 'io.github.carguo:gsyvideoplayer:14.0.0'
+    // 可选投屏：API 26
+    implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
 }
 ```
 
-**Maven Central (新的)**
-```gradle
-dependencies {
-    implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
-}
-```
-
-## 📦 发布任务
-
-### GitHub Packages
-```bash
-# 自动触发 (已有)
-git tag v14.0.0
-git push origin v14.0.0
-```
-
-### Maven Central
-```bash
-# 自动触发 (新增)
-git tag v14.0.0
-git push origin v14.0.0
-# 两个 workflow 会同时运行
-```
-
-或手动触发：
-```bash
-# GitHub Packages
-./gradlew publish
-
-# Maven Central
-./gradlew publishMavenCentralPublicationToSonatypeRepository
-```
-
-## 🔍 验证配置
-
-运行测试脚本：
-
-```powershell
-# 查看所有发布任务
-./gradlew tasks --group publishing
-
-# 你会看到：
-# - publishReleasePublicationTo... (GitHub Packages)
-# - publishMavenCentralPublicationTo... (Maven Central)
-```
-
-## 📋 Gradle Tasks 说明
-
-| Task | 用途 | GROUP ID |
-|------|------|----------|
-| `publish` | 发布到 GitHub Packages | `com.shuyu` |
-| `publishMavenCentralPublicationToSonatypeRepository` | 发布到 Maven Central | `io.github.carguo` |
-| `publishToSonatype` | 发布到 Sonatype (Maven Central 前置) | `io.github.carguo` |
-| `closeAndReleaseSonatypeStagingRepository` | 自动 release 到 Maven Central | `io.github.carguo` |
-
-## 💡 最佳实践
-
-### 1. 同时发布
-```bash
-# 一条命令同时发布到两个渠道
-./gradlew publish publishToSonatype closeAndReleaseSonatypeStagingRepository
-```
-
-### 2. 单独发布
-
-**只发布到 GitHub Packages**
-```bash
-./gradlew publish
-```
-
-**只发布到 Maven Central**
-```bash
-./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
-```
-
-### 3. GitHub Actions 自动化
-
-两个 workflow 会独立运行：
-- `.github/workflows/release.yml` → GitHub Packages
-- `.github/workflows/publish-maven-central.yml` → Maven Central
-
-都会在打 tag 时触发，互不干扰。
-
-## ⚠️ 注意事项
-
-1. **不同的依赖声明**
-   - 新用户应该使用 Maven Central: `io.github.carguo`
-   - 老用户继续使用 GitHub Packages: `com.shuyu`
-
-2. **版本同步**
-   - 两个渠道使用相同的 `PROJ_VERSION`
-   - 确保同时发布相同版本
-
-3. **文档更新**
-   - 在 README 中说明两种依赖方式
-   - 推荐新用户使用 Maven Central (不需要 token)
-
-## 📝 示例：更新模块配置
-
-以 `gsyVideoPlayer-base` 为例：
-
-```gradle
-// gsyVideoPlayer-base/build.gradle
-apply from: "$rootDir/gradle/lib.gradle"
-
-// GitHub Packages (保持原样)
-apply from: "$rootDir/gradle/publish.gradle"
-
-// Maven Central (新增)
-apply from: "$rootDir/gradle/maven-central-publish.gradle"
-
-android {
-    namespace 'com.shuyu.gsy.base'
-}
-
-dependencies {
-    api viewDependencies.ijkplayer
-}
-
-// GitHub Packages 仓库配置
-publishing {
-    repositories {
-        maven {
-            name = "gsyvideoplayer"
-            url = "https://maven.pkg.github.com/CarGuo/GSYVideoPlayer"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}
-```
-
-这样配置后：
-- `./gradlew publish` → `com.shuyu:gsyvideoplayer-base:14.0.0` (GitHub)
-- `./gradlew publishMavenCentralPublicationToSonatypeRepository` → `io.github.carguo:gsyvideoplayer-base:14.0.0` (Maven Central)
-
-## 🎉 完成
-
-现在你可以：
-- ✅ 继续发布到 GitHub Packages (com.shuyu)
-- ✅ 同时发布到 Maven Central (io.github.carguo)
-- ✅ 两者互不干扰
-- ✅ 自动化或手动都支持
+GitHub Packages 改用 `com.shuyu` 并配置个人 `read:packages` 凭据。不要在同一应用同时引入两组相同播放器模块，避免重复类/so。ABI 和模块组合见 [DEPENDENCIES.md](DEPENDENCIES.md)，本版发布流水线与产物身份见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)。

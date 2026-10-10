@@ -8,6 +8,20 @@
 - Github Package ： 9.1.0 版本开始才有， 但是 11.0.0 之前， GSYIjkJava 的基础依赖还是在托管在 jitpack
 - Jitpack IO ：依然会发布，但是存在托管平台随机丢包
 
+### v14.0.0 的 ABI 与依赖选择
+
+`gsyvideoplayer` 整包已包含 Java、Exo2 和 `ex_so`。分模块接入 IJK 时，选择 `ex_so` 或所需的独立 ABI 模块；同一 ABI 不要同时引入两套 so。
+
+| 原生模块 | ABI | 本版原生库 |
+| --- | --- | --- |
+| `gsyvideoplayer-ex_so` | `arm64-v8a` / `armeabi-v7a` / `x86_64` | FFmpeg n5.1.10 + OpenSSL 3.5.9 |
+| `gsyvideoplayer-arm64` | `arm64-v8a` | 与 `ex_so` 对应 ABI 相同 |
+| `gsyvideoplayer-armv7a` | `armeabi-v7a` | 与 `ex_so` 对应 ABI 相同 |
+| `gsyvideoplayer-x64` | `x86_64` | 与 `ex_so` 对应 ABI 相同 |
+| `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` | 旧 `armeabi` / `x86` | 历史库，未升级到 FFmpeg 5，仅旧架构项目按需使用 |
+
+新版独立 ABI 模块与 `ex_so` 的格式/协议配置一致，不再按“普通版不支持 MPEG，扩展版才支持”选择。`compose`、`cast`、`aliplay` 仍按需添加；`cast` 要求 API 26，其余核心最低 API 23。编解码配置与构建见 [DECODERS.md](DECODERS.md) 和 [BUILD_SO.md](BUILD_SO.md)。
+
 ### 1、mavenCentral 引用(推荐)
 
 由于 jitpack 不断丢包，目前已迁移至 MavenCentral，使用方式如下：
@@ -36,6 +50,9 @@ implementation 'io.github.carguo:gsyvideoplayer:14.0.0'
 
 //是否需要AliPlayer模式
 implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
+
+// 可选 DLNA/UPnP 投屏（API 26）
+implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
@@ -55,18 +72,15 @@ implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
  //是否需要AliPlayer模式
  implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
- //根据你的需求ijk模式的so
+ //选择需要的 ABI；不要再同时添加 ex_so
  implementation 'io.github.carguo:gsyvideoplayer-arm64:14.0.0'
  implementation 'io.github.carguo:gsyvideoplayer-armv7a:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv5:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-x86:14.0.0'
  implementation 'io.github.carguo:gsyvideoplayer-x64:14.0.0'
 ```
 
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+#### C、分模块引入三 ABI 原生库
 
-A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
-C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+`ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
  implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
@@ -77,7 +91,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  //是否需要AliPlayer模式
  implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
- //更多ijk的编码支持
+ //三 ABI 的 IJK 原生库
  implementation 'io.github.carguo:gsyvideoplayer-ex_so:14.0.0'
 
 ```
@@ -138,6 +152,9 @@ allprojects {
 
  //是否需要AliPlayer模式
  implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
+
+// 可选 DLNA/UPnP 投屏（API 26）
+implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
@@ -157,18 +174,15 @@ allprojects {
  //是否需要AliPlayer模式
  implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
- //根据你的需求ijk模式的so
- implementation 'com.shuyu:gsyvideoplayer-armv5:14.0.0'
+ //选择需要的 ABI；不要再同时添加 ex_so
  implementation 'com.shuyu:gsyvideoplayer-armv7a:14.0.0'
  implementation 'com.shuyu:gsyvideoplayer-arm64:14.0.0'
- implementation 'com.shuyu:gsyvideoplayer-x86:14.0.0'
  implementation 'com.shuyu:gsyvideoplayer-x64:14.0.0'
 ```
 
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+#### C、分模块引入三 ABI 原生库
 
-A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
-C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+`ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
  implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
@@ -180,7 +194,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  //是否需要AliPlayer模式
  implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
- //更多ijk的编码支持
+ //三 ABI 的 IJK 原生库
  implementation 'com.shuyu:gsyvideoplayer-ex_so:14.0.0'
 
 ```
@@ -220,6 +234,9 @@ allprojects {
 
  //是否需要AliPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
+
+// 可选 DLNA/UPnP 投屏（API 26）
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
 ```
 
 #### B、添加java和你想要的so支持：
@@ -236,18 +253,15 @@ allprojects {
  //是否需要AliPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
- //根据你的需求ijk模式的so
+ //选择需要的 ABI；不要再同时添加 ex_so
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v14.0.0'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v14.0.0'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v14.0.0'
 ```
 
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+#### C、分模块引入三 ABI 原生库
 
-A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
-C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+`ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
@@ -258,7 +272,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  //是否需要AliPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
- //更多ijk的编码支持
+ //三 ABI 的 IJK 原生库
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v14.0.0'
 
 ```

@@ -22,26 +22,28 @@ references:
 
 ## 依赖
 
-- 主库：`com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:<version>`
-- ijk so（至少选一个 ABI 或用 `x86` 组合）：`gsyVideoPlayer-armv7a` / `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv5` / `gsyVideoPlayer-ex_so`
+- 推荐整包：`io.github.carguo:gsyvideoplayer:14.0.0`（已含 Java、Exo2、三 ABI ex_so）。
+- 分模块主库：`io.github.carguo:gsyvideoplayer-java:14.0.0`。
+- 分模块 IJK so：选 `io.github.carguo:gsyvideoplayer-ex_so:14.0.0`，或所需独立 artifact `gsyvideoplayer-arm64` / `gsyvideoplayer-armv7a` / `gsyvideoplayer-x64`，不重复引入同 ABI 两套库。
+- 默认 ABI 为 `arm64-v8a` / `armeabi-v7a` / `x86_64`（FFmpeg n5.1.10 / OpenSSL 3.5.9）；旧 armv5/x86 未升级，仅旧架构项目显式使用。
 - 权限：`INTERNET`、`WAKE_LOCK`、`ACCESS_NETWORK_STATE`（AndroidManifest）
 
-明细见 [doc/DEPENDENCIES.md](file:///D:/workspace/project/GSYVideoPlayer/doc/DEPENDENCIES.md)。
+明细见 [doc/DEPENDENCIES.md](../../doc/DEPENDENCIES.md)。
 
 ## 核心 API
 
 | 类 / 方法 | 位置 | 作用 |
 |---|---|---|
-| `StandardGSYVideoPlayer(Context)` | [StandardGSYVideoPlayer](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/StandardGSYVideoPlayer.java) | 主用 UI 组件，默认布局在 `R.layout.video_layout_standard` |
-| `setUp(url, cacheWithPlay, title)` | [GSYVideoView#L438-L451](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java#L438-L451) | 最短形式的地址绑定 |
-| `setUp(url, cacheWithPlay, cachePath, title)` | [GSYVideoView#L477-L488](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java#L477-L488) | 支持自定义缓存目录 |
-| `setUp(url, cacheWithPlay, cachePath, headers, title)` | [GSYVideoView#L453-L475](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java#L453-L475) | 附带 HTTP header |
+| `StandardGSYVideoPlayer(Context)` | [StandardGSYVideoPlayer](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/StandardGSYVideoPlayer.java) | 主用 UI 组件，默认布局在 `R.layout.video_layout_standard` |
+| `setUp(url, cacheWithPlay, title)` | [GSYVideoView#L438-L451](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java) | 最短形式的地址绑定 |
+| `setUp(url, cacheWithPlay, cachePath, title)` | [GSYVideoView#L477-L488](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java) | 支持自定义缓存目录 |
+| `setUp(url, cacheWithPlay, cachePath, headers, title)` | [GSYVideoView#L453-L475](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java) | 附带 HTTP header |
 | `startPlayLogic()` | `StandardGSYVideoPlayer`（继承自 `GSYVideoControlView`） | 触发 prepare→start 全流程 |
 | `getCurrentPlayer()` | `GSYBaseVideoPlayer` | 获取"当前活跃 player"（可能是全屏克隆体） |
-| `onVideoPause()` / `onVideoResume()` / `onVideoResume(boolean seek)` | [GSYVideoView#L518-L577](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java#L518-L577) | 对应 Activity `onPause / onResume`；直播场景传 `seek=false` |
-| `release()` | [GSYVideoView#L818](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java#L818) | 释放当前 Player 与 Surface |
-| `GSYVideoManager.releaseAllVideos()` | [GSYVideoManager#L99-L104](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoManager.java#L99-L104) | 全局收尾（切页面时兜底） |
-| `GSYVideoManager.onPause() / onResume()` | [GSYVideoManager#L110-L135](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoManager.java#L110-L135) | 全局暂停/恢复所有 GSY player |
+| `onVideoPause()` / `onVideoResume()` / `onVideoResume(boolean seek)` | [GSYVideoView#L518-L577](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java) | 对应 Activity `onPause / onResume`；直播场景传 `seek=false` |
+| `release()` | [GSYVideoView#L818](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYVideoView.java) | 释放当前 Player 与 Surface |
+| `GSYVideoManager.releaseAllVideos()` | [GSYVideoManager#L99-L104](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoManager.java) | 全局收尾（切页面时兜底） |
+| `GSYVideoManager.onPause() / onResume()` | [GSYVideoManager#L110-L135](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoManager.java) | 全局暂停/恢复所有 GSY player |
 
 ## 参数表：`setUp(...)`
 
@@ -65,9 +67,9 @@ references:
 
 ## Demo 对照
 
-- 最短一屏：[PlayActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/PlayActivity.java)
-- Fragment：[VideoFragment](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/fragment/VideoFragment.java) + [FragmentVideoActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/FragmentVideoActivity.java)
-- 空控件模式（自绘 UI）：[PlayEmptyControlActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/PlayEmptyControlActivity.java) + [EmptyControlVideo](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/EmptyControlVideo.java)
+- 最短一屏：[PlayActivity](../../app/src/main/java/com/example/gsyvideoplayer/PlayActivity.java)
+- Fragment：[VideoFragment](../../app/src/main/java/com/example/gsyvideoplayer/fragment/VideoFragment.java) + [FragmentVideoActivity](../../app/src/main/java/com/example/gsyvideoplayer/FragmentVideoActivity.java)
+- 空控件模式（自绘 UI）：[PlayEmptyControlActivity](../../app/src/main/java/com/example/gsyvideoplayer/PlayEmptyControlActivity.java) + [EmptyControlVideo](../../app/src/main/java/com/example/gsyvideoplayer/video/EmptyControlVideo.java)
 
 ## 常见坑
 

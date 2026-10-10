@@ -35,7 +35,7 @@ CastCapability (单例)  ← 主线程 API 入口
   └─ disconnect()
 ```
 
-对齐 Media3 `Player` 语义：`CastCapability ≈ Player 池`、`activeSession ≈ 当前 Player`、`CastProvider ≈ 渲染后端`、`CastListener/SessionListener ≈ Player.Listener`。见 [CastCapability](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) 与 [CastProvider](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastProvider.java) 的头 JavaDoc。
+对齐 Media3 `Player` 语义：`CastCapability ≈ Player 池`、`activeSession ≈ 当前 Player`、`CastProvider ≈ 渲染后端`、`CastListener/SessionListener ≈ Player.Listener`。见 [CastCapability](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) 与 [CastProvider](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastProvider.java) 的头 JavaDoc。
 
 ## 核心 API
 
@@ -43,16 +43,16 @@ CastCapability (单例)  ← 主线程 API 入口
 
 | 方法 | 位置 | 说明 |
 |---|---|---|
-| `getInstance()` | [#L38-L47](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L38-L47) | DCL 单例 |
-| `registerProvider(CastProvider)` | [#L85-L90](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L85-L90) | 注册；`protocol` 相同则覆盖 |
-| `unregisterProvider(String)` | [#L93-L103](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L93-L103) | 反注册并停止其发现 |
-| `startDiscovery(Context)` | [#L106-L125](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L106-L125) | 所有已注册 provider 同时开始发现 |
-| `stopDiscovery()` | [#L128-L135](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L128-L135) | 全部停止 |
-| `getAvailableDevices()` | [#L138-L146](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L138-L146) | 快照，跨 provider 聚合 |
-| `connect(CastDevice, ConnectCallback)` | [#L154-L183](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L154-L183) | 会自动 disconnect 旧会话 |
-| `disconnect()` | [#L186-L196](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L186-L196) | release 当前 session |
-| `getActiveSession()` | [#L199-L201](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L199-L201) | 拿当前会话（可能 null） |
-| `addListener / removeListener` | [#L203-L209](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java#L203-L209) | 主线程 listener |
+| `getInstance()` | [#L38-L47](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | DCL 单例 |
+| `registerProvider(CastProvider)` | [#L85-L90](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | 注册；`protocol` 相同则覆盖 |
+| `unregisterProvider(String)` | [#L93-L103](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | 反注册并停止其发现 |
+| `startDiscovery(Context)` | [#L106-L125](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | 所有已注册 provider 同时开始发现 |
+| `stopDiscovery()` | [#L128-L135](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | 全部停止 |
+| `getAvailableDevices()` | [#L138-L146](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | 快照，跨 provider 聚合 |
+| `connect(CastDevice, ConnectCallback)` | [#L154-L183](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | 会自动 disconnect 旧会话 |
+| `disconnect()` | [#L186-L196](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | release 当前 session |
+| `getActiveSession()` | [#L199-L201](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | 拿当前会话（可能 null） |
+| `addListener / removeListener` | [#L203-L209](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastCapability.java) | 主线程 listener |
 
 ### CastProvider（SPI 契约）
 
@@ -67,7 +67,7 @@ CastCapability (单例)  ← 主线程 API 入口
 
 ### CastSession（媒体控制）
 
-见 [CastSession](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastSession.java)：
+见 [CastSession](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastSession.java)：
 
 | 方法 | 说明 |
 |---|---|
@@ -75,17 +75,17 @@ CastCapability (单例)  ← 主线程 API 入口
 | `play() / pause() / stop()` | 播控 |
 | `seekTo(long ms)` | 定位 |
 | `setVolume(int 0-100)` / `setMute(boolean)` | 音量 |
-| `getState(): CastState` | IDLE / CONNECTING / CONNECTED / LOADING / PLAYING / PAUSED / STOPPED / ERROR，见 [CastState](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastState.java) |
+| `getState(): CastState` | IDLE / CONNECTING / CONNECTED / LOADING / PLAYING / PAUSED / STOPPED / ERROR，见 [CastState](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastState.java) |
 | `addListener(SessionListener)` | 位置/状态回调 |
 | `release()` | 归还 |
 
 ### CastMediaInfo（要投的媒体）
 
-见 [CastMediaInfo](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastMediaInfo.java)。字段：`url`、`title`、`durationMs`、`mimeType`、`headers`、`metadata`（`Map`）。
+见 [CastMediaInfo](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cast/CastMediaInfo.java)。字段：`url`、`title`、`durationMs`、`mimeType`、`headers`、`metadata`（`Map`）。
 
 ## DLNA 参考实现
 
-模块 `gsyvideoplayer-cast` 提供 [JupnpDlnaProvider](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-cast/src/main/java/com/shuyu/gsyvideoplayer/cast/dlna/JupnpDlnaProvider.java) 与 [JupnpDlnaSession](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-cast/src/main/java/com/shuyu/gsyvideoplayer/cast/dlna/JupnpDlnaSession.java)。业务代码调用：
+模块 `gsyvideoplayer-cast` 提供 [JupnpDlnaProvider](../../gsyVideoPlayer-cast/src/main/java/com/shuyu/gsyvideoplayer/cast/dlna/JupnpDlnaProvider.java) 与 [JupnpDlnaSession](../../gsyVideoPlayer-cast/src/main/java/com/shuyu/gsyvideoplayer/cast/dlna/JupnpDlnaSession.java)。业务代码调用：
 
 ```java
 CastCapability cap = CastCapability.getInstance();
@@ -98,18 +98,18 @@ cap.startDiscovery(context);
 
 ## 本地 Loopback（Demo 测试用）
 
-app 模块下的 [cast/](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/cast) 提供**可发现的接收端**，方便在同一台设备上完成集成测试：
+app 模块下的 [cast/](../../app/src/main/java/com/example/gsyvideoplayer/cast) 提供**可发现的接收端**，方便在同一台设备上完成集成测试：
 
-- [DevReceiverService](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/cast/DevReceiverService.java) —— foreground service，通过 jUPnP 注册"回环设备"。
-- [LoopbackDeviceFactory](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/cast/LoopbackDeviceFactory.java) —— 构造 UPnP MediaRenderer。
-- [LoopbackAvTransportService](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/cast/LoopbackAvTransportService.java) / [LoopbackRenderingControlService](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/cast/LoopbackRenderingControlService.java) —— AVTransport / RenderingControl 实现。
-- [CastReceiverFloatingWindow](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/cast/CastReceiverFloatingWindow.java) + [CastReceiverPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/CastReceiverPlayer.java) —— 可视化播放。
+- [DevReceiverService](../../app/src/main/java/com/example/gsyvideoplayer/cast/DevReceiverService.java) —— foreground service，通过 jUPnP 注册"回环设备"。
+- [LoopbackDeviceFactory](../../app/src/main/java/com/example/gsyvideoplayer/cast/LoopbackDeviceFactory.java) —— 构造 UPnP MediaRenderer。
+- [LoopbackAvTransportService](../../app/src/main/java/com/example/gsyvideoplayer/cast/LoopbackAvTransportService.java) / [LoopbackRenderingControlService](../../app/src/main/java/com/example/gsyvideoplayer/cast/LoopbackRenderingControlService.java) —— AVTransport / RenderingControl 实现。
+- [CastReceiverFloatingWindow](../../app/src/main/java/com/example/gsyvideoplayer/cast/CastReceiverFloatingWindow.java) + [CastReceiverPlayer](../../app/src/main/java/com/example/gsyvideoplayer/video/CastReceiverPlayer.java) —— 可视化播放。
 
 ## Demo 对照
 
-- 一体化：[CastDemoActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/CastDemoActivity.java)
-- Cast 相关控制页：[SampleCastControlVideo](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/SampleCastControlVideo.java)
-- 设计与测试：[doc/CAST_FEATURE_PLAN.md](file:///D:/workspace/project/GSYVideoPlayer/doc/CAST_FEATURE_PLAN.md)、[doc/CAST_RECEIVER_DESIGN.md](file:///D:/workspace/project/GSYVideoPlayer/doc/CAST_RECEIVER_DESIGN.md)、[doc/CAST_TEST_PLAYBOOK.md](file:///D:/workspace/project/GSYVideoPlayer/doc/CAST_TEST_PLAYBOOK.md)
+- 一体化：[CastDemoActivity](../../app/src/main/java/com/example/gsyvideoplayer/CastDemoActivity.java)
+- Cast 相关控制页：[SampleCastControlVideo](../../app/src/main/java/com/example/gsyvideoplayer/video/SampleCastControlVideo.java)
+- 设计与测试：[doc/CAST_FEATURE_PLAN.md](../../doc/CAST_FEATURE_PLAN.md)、[doc/CAST_RECEIVER_DESIGN.md](../../doc/CAST_RECEIVER_DESIGN.md)、[doc/CAST_TEST_PLAYBOOK.md](../../doc/CAST_TEST_PLAYBOOK.md)
 
 ## 常见坑
 

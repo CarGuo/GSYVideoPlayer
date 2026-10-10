@@ -16,8 +16,15 @@ This document summarizes recent demo and playback changes so maintainers can qui
 | Graceful player init failure handling | Global capability | `GSYVideoBaseManager`, each `IPlayerManager` | Routes player creation/init failures through error callbacks and cleanup instead of crashing directly. |
 | Exo cache lifecycle and GIF cleanup | Global capability | `ExoSourceManager`, `GifCreateHelper` | Tightens Exo cache open/release behavior and cleans GIF generation state more reliably. |
 | DLNA/UPnP casting | `Cast Demo` | `CastCapability`, `JupnpDlnaProvider`, `JupnpDlnaSession`, `SampleCastControlVideo`, `CastDemoActivity` | The protocol-neutral SPI stays in core while optional `gsyvideoplayer-cast` supplies jUPnP 3.0.3 DLNA `AVTransport:1`; `SetAVTransportURI → Play → Seek` preserves the local position and an on-device Loopback Receiver supports end-to-end tests. |
+| v14 GL pipeline/effects | Filter demo | `GSYVideoGLViewMultiPassRender`, `LookupEffect`, `BeautyEffect` | Multi-pass/pyramid/Bloom/LUT/animated effects; examples below. |
+| Foldables | XML / Compose foldable entries | `FoldDetailActivity`, `FoldComposeActivity` | FLAT / BOOK / TABLETOP, hinges and fullscreen; 25 Compose entries. |
+| Compose state/aspect ratio | Full-controls / cache demos | `GSYPlayerController` | Release, polled buffering and ratio API; see COMPOSE_USE.md. |
 
-## Recent Commit Coverage
+## v14.0.0 commit coverage
+
+See [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md) for every one of the 27 commits in `v13.2.1..v14.0.0`.
+
+## Historical v13.0.0 commit reference
 
 Recent commits map to the docs like this:
 
@@ -39,14 +46,52 @@ Recent playback feature notes are covered in:
 
 - `README_CN.md` / `README.md`: top-level feature summary and recent feature links.
 - `doc/USE.md` / `doc/USE_EN.md`: demo entry points and core APIs.
-- `doc/UPDATE_VERSION.md` / `doc/UPDATE_VERSION_EN.md`: Unreleased changelog summary.
+- `doc/UPDATE_VERSION.md` / `doc/UPDATE_VERSION_EN.md`: complete published-version changelogs.
 - `doc/ARCHITECTURE.md`: layer ownership across UI, Manager, Render, and Exo manager.
 - `doc/GSYVIDEO_PLAYER_PROJECT_INFO.md` / `doc/GSYVIDEO_PLAYER_PROJECT_INFO_EN.md`: recent feature mapping in the project structure guide.
 - `doc/SUBTITLE_CN.md`: unified subtitle guide.
 - `doc/KEEP_LAST_FRAME.md` / `doc/KEEP_LAST_FRAME_EN.md`: keep-last-frame guide.
 - `doc/RECENT_FEATURES.md` / `doc/RECENT_FEATURES_EN.md`: full recent feature overview, APIs, and regression checklist.
 
-Build, dependency, SO, publishing, decoder, and FAQ documents are not forced to repeat these playback feature notes because their scope is not demo entry points or playback architecture.
+The existing demo features above are organized by document topic. For the v14.0.0 native-library, ABI and toolchain migration, see the notes below and the build, dependency, publishing, decoder and FAQ guides.
+
+## v14.0.0 GL pipeline and new effects
+
+[DetailFilterActivity.java](../app/src/main/java/com/example/gsyvideoplayer/DetailFilterActivity.java) exposes multi-pass Gaussian, pyramid blur, Bloom and LUT under render scenes, and Beauty, Glitch, CRT and analog-TV interference under filters. Select `GSYVideoType.GLSURFACE` before creating the rendering view.
+
+| Effect | API | Integration |
+| --- | --- | --- |
+| Multi-pass Gaussian | `GaussianBlurMultiPassEffect(radius)` | `GSYVideoGLViewMultiPassRender` + `setCustomGLRenderer` |
+| Kawase pyramid | `IterativeBlurPyramidEffect(levels)` | Same renderer, per-pass output scaling |
+| Bloom | `BloomEffect(levels, threshold, knee, intensity)` | Same renderer, bright extraction and original-scene composition |
+| LUT | `LookupEffect(assetPath, intensity)` | `setEffectFilter`; 512x512 / 8x8 tiled 64³ LUT |
+| Beauty | `BeautyEffect(smoothLevel, whiteLevel)` | `setEffectFilter`; edge-preserving smoothing and warm whitening |
+| Animated effects | `GlitchEffect` / `CrtEffect` / `OldTvSignalEffect` | `setEffectFilter`; renderer-bound `uTime` |
+
+```java
+// Select GL before creating the rendering view; restore the prior type on exit.
+GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+GSYVideoGLViewMultiPassRender render = new GSYVideoGLViewMultiPassRender();
+render.setMultiPassEffect(new GaussianBlurMultiPassEffect(6.0f));
+player.setCustomGLRenderer(render);
+```
+
+The renderer performs OES-to-2D conversion, FBO ping-pong and multi-size buffer pooling. `GSYVideoGLViewMultiPassInterface` defines passes, `GSYVideoGLViewPyramidInterface` controls output scale, and `GSYVideoGLViewCompositeInterface` exposes original-scene sampling. The GL thread owns resource creation, binding, switching and release.
+
+The three sample LUT PNGs are [demo assets](../app/src/main/assets/lut), rather than default player-AAR assets. Copy the required LUT to your own app assets before calling `new LookupEffect("lut/teal_orange.png", 1.0f)`. `TextureShaderInterface` manages the additional texture lifecycle.
+
+Implementation and historical validation records: [FBO](FBO_MULTIPASS_FIRST_CARD_PLAN.md), [pyramid](PYRAMID_ITERATIVE_BLUR_PLAN.md), [Bloom](BLOOM_FIRST_CARD_PLAN.md), [LUT](LUT_COLOR_GRADING_FIRST_CARD_PLAN.md), [beauty](BEAUTY_FIRST_CARD_PLAN.md), [Glitch/CRT](GLITCH_FIRST_CARD_PLAN.md), [analog TV](OLDTV_SIGNAL_FIRST_CARD_PLAN.md).
+
+## v14.0.0 foldables and Compose
+
+- Main-screen XML / Compose foldable entries open [FoldDetailActivity](../app/src/main/java/com/example/gsyvideoplayer/FoldDetailActivity.java) / [FoldComposeActivity](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FoldComposeActivity.kt); the Compose demo is also entry 25 in the Compose list.
+- WindowManager 1.3.0 `FoldingFeature` selects BOOK side-by-side, TABLETOP stacked and FLAT layouts with actual hinge-sized separation. XML fullscreen uses dedicated posture layouts; stable Compose Layout preserves player-node identity.
+- Reapply layout after rotation/unfold and support fullscreen/Back handling. Opt-in `extra_posture=0/1/2` injects FLAT/BOOK/TABLETOP for testing; absent extras use real posture. Injected layouts do not qualify physical folding sensors.
+- See [COMPOSE_USE.md](COMPOSE_USE.md) for `detachHost` / `dispose` release, polled buffering, dynamic aspect ratio and IJK/EXO cache examples. There are now **25** runnable Compose demos.
+
+## v14.0.0 native playback and build
+
+See the [full changelog](UPDATE_VERSION_EN.md#v1400-2026-10-10) for FFmpeg n5.1.10 / OpenSSL 3.5.9 audio, Codec2, RTSP and TLS/HLS repairs, the three-ABI migration and Gradle/AGP/R8 upgrades. The ARMv7 TLS crash is repaired; current results and all 27 commits are in the [release audit](V14_RELEASE_REVIEW.md). Evaluate runtime evidence against the corresponding library identity.
 
 ## WebVTT Seek Preview
 

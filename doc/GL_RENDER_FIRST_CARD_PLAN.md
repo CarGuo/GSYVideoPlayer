@@ -162,13 +162,13 @@ OK (2 tests)
 
 ### 6.4 证据位置
 
-证据目录：[final-regression-live-20260922](file:///d:/workspace/project/GSYVideoPlayer/app/test_evidence/gl-first-card/final-regression-live-20260922)
+证据目录：final-regression-live-20260922（本地历史证据：`app/test_evidence/gl-first-card/final-regression-live-20260922`，未随仓库交付）
 
 关键证据：
 
 - `effect-00.png` 至 `effect-26.png`：27 个效果在播放中的截图；
-- [final-live-logcat.txt](file:///d:/workspace/project/GSYVideoPlayer/app/test_evidence/gl-first-card/final-regression-live-20260922/final-live-logcat.txt)：设备回归完整日志；
-- [instrumented-test-result.txt](file:///d:/workspace/project/GSYVideoPlayer/app/test_evidence/gl-first-card/final-regression-live-20260922/instrumented-test-result.txt)：`OK (2 tests)` 结果。
+- final-live-logcat.txt（本地历史证据：`app/test_evidence/gl-first-card/final-regression-live-20260922/final-live-logcat.txt`，未随仓库交付）：设备回归完整日志；
+- instrumented-test-result.txt（本地历史证据：`app/test_evidence/gl-first-card/final-regression-live-20260922/instrumented-test-result.txt`，未随仓库交付）：`OK (2 tests)` 结果。
 
 ## 7. 后续卡片
 

@@ -1,28 +1,19 @@
+# v14.0.0 编解码配置与 IJK 选项
 
-### 项目是基于ijkplayer编译的so，ijkplayer基于FFPMEG
+[English](DECODERS_EN.md)
 
-**[Click to see the English version](DECODERS_EN.md)**
+当前 `gsyvideoplayer-ex_so` 与独立 arm64/armv7a/x64 均为 **FFmpeg n5.1.10 + OpenSSL 3.5.9**，按 ABI 成套提供相同 native 库与格式配置。实际配置见 [module-lite-more.sh](../module-lite-more.sh) 和 [固定 IJK 配置](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/config/module-lite-more.sh)，不再以普通/扩展版的 MPEG 差异选型。
 
----------
+本版新增 HTTP multipart MJPEG demuxer（`mpjpeg`）和 raw MJPEG parser（`mjpeg`）。容器、编解码器和协议分别决定播放能力，MP4 不是一种视频编码；硬解能力还取决于设备的 MediaCodec。自定义格式需要重新构建完整 FFmpeg/player/SDL 库组，见 [BUILD_SO.md](BUILD_SO.md)。
 
-#### 出于so大小考虑，普通编译so只支持了常用的视频编码，如果需要支持额外类型，可依赖ex_so，如果依旧不满足，可重新编译ijkplayer源码，配置module.sh然后编译so，替换现在项目中的so，注意so的版本要和ijk的java版本一致。编译流程可参考首页编译https的so流程。
+- 当前 IJK PLAYER 选项：[ff_ffplay_options.h](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/ijkmedia/ijkplayer/ff_ffplay_options.h)。
+- 音频 `soundtouch` / 倍速、RTSP `timeout`（微秒）与 `rtsp-live-max-buffer-ms` 见 [QUESTION.md](QUESTION.md)。
+- 显式 TLS/CA 配置会继承至 HLS 子请求，默认校验策略保持原行为；ARMv7 证书加载崩溃已修复，见 [TLS 记录](../tests/tls-native/README.md)。
+- 旧 `armeabi` / `x86` 模块没有迁移到 FFmpeg 5，见 [DEPENDENCIES.md](DEPENDENCIES.md)。
 
----------
+## 历史编译选项参考
 
-#### 说明：如果出现有声音没画面，或者有画面没声音的异常情况，请先了解以下内容。（DEMO中有些列表开启了静音模式，属于正常情况）**
-
-简单来说，mp4并不是视频编码，可以称为视频容器，而H264/H263等这样才是视频编码，AAC为音频编码等。
-
-对于视频相关的，推荐雷宵骅的视频基础：[视音频编解码技术零基础学习方法](http://blog.csdn.net/leixiaohua1020/article/details/18893769)，这里你可以了解到视频和音频相关编码和协议的东西。
-
-
-项目普通so默认支持的视频编码和音频编码配置可查看[编译配置文件](https://github.com/CarGuo/GSYVideoPlayer/blob/master/module-lite.sh)。
-
-ex_so支持的视频编码和音频编码配置可查看[编译配置文件](https://github.com/CarGuo/GSYVideoPlayer/blob/master/module-lite-more.sh)。
-
-*ex_so多支持了mepg、concat协议，crypto协议*。
-
-
+下面保留旧版选项清单和音频编译示例，包含已过时或未在当前库启用的外部编码器与 API。它们不是本版格式清单或可直接复制的 FFmpeg 5 构建配置；当前能力以固定源码配置、目标媒体和设备验证为准。
 
 ### 常用音频编译方式小结
 

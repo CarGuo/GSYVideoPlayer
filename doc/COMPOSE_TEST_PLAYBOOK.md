@@ -40,7 +40,7 @@
 | **Audio**（raw mp3） | ≥1 | ≥1 | 无 | 无 |
 | **Java demo（callback 设 null）** | 可能 0 | ≥1 | `MEDIA_INFO_VIDEO_RENDERING_START` | `Net speed:` |
 
-通用统一过滤式（与 [real_test.sh](file:///tmp/real_test.sh) 一致）：
+通用统一过滤式（与 real_test.sh（历史本地辅助文件，未随仓库交付） 一致）：
 ```bash
 PREP=$(echo "$LOG"   | grep -c   "onPrepared")
 PLAY=$(echo "$LOG"   | grep -c   "CURRENT_STATE_PLAYING")
@@ -62,16 +62,16 @@ NET=$(echo "$LOG"    | grep -c   "Net speed:")
 | Demo 文本 | 跳转 Activity | (X,Y) | 自动起播 | 备注 |
 |---|---|---|---|---|
 | 简单播放 | `SimplePlayer.SimpleActivity` | (357, 388) | 是 | 无导航 bar |
-| **打开VIDEO** | [`PlayActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/PlayActivity.java#L181) | (357, 567) | 是 | 经典 demo，callback=null 不打 onPrepared 但 render+net 充足 |
+| **打开VIDEO** | [`PlayActivity`](../app/src/main/java/com/example/gsyvideoplayer/PlayActivity.java) | (357, 567) | 是 | 经典 demo，callback=null 不打 onPrepared 但 render+net 充足 |
 | 带控制DEMO | `DetailControlActivity` | (357, 746) | 是 | |
 | 完成保留最后一帧 | `KeepLastFrameDemoActivity` | (357, 925) | 是 | |
 | 透明 | `DetailTransparentActivity` | (357, 1104) | 是 | |
 | 无UI界面 | `PlayEmptyControlActivity` | (357, 1283) | 是 | |
-| **滤镜** | [`DetailFilterActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/DetailFilterActivity.java) | (357, 1462) | 是 | GLSL 滤镜，验证 GSYVideoType GL Surface 不被污染 |
+| **滤镜** | [`DetailFilterActivity`](../app/src/main/java/com/example/gsyvideoplayer/DetailFilterActivity.java) | (357, 1462) | 是 | GLSL 滤镜，验证 GSYVideoType GL Surface 不被污染 |
 | 带广告 | `DetailADPlayer` | (357, 1641) | 是 | |
 | 带广告2 | `DetailADPlayer2` | (357, 1820) | 是 | |
 | 无缝切换 | `SwitchListVideoActivity` | (357, 1999) | 列表，需点列表项 | |
-| **LIST列表** | [`ListVideoActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/ListVideoActivity.java) | (357, 2178) | 是（列表自动起播第一项） | |
+| **LIST列表** | [`ListVideoActivity`](../app/src/main/java/com/example/gsyvideoplayer/ListVideoActivity.java) | (357, 2178) | 是（列表自动起播第一项） | |
 | LIST全屏和小窗口列表 | `ListVideo2Activity` | (357, 2347) | 是 | |
 
 ### 滚屏 1 后（按 `swipe 540 1900 540 700 500` × 3）
@@ -106,7 +106,7 @@ NET=$(echo "$LOG"    | grep -c   "Net speed:")
 | IJK 内核 | `KernelDemoActivity` | (357, 1695) |
 | PROXY 缓存 | `ProxyCacheActivity` | (357, 1874) |
 | **CLEAR CACHE** | （按钮） | (357, 2053) |
-| **COMPOSE DEMO 大全** | [`.compose.ComposeDemoListActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) | **(357, 2232)** |
+| **COMPOSE DEMO 大全** | [`.compose.ComposeDemoListActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt) | **(357, 2232)** |
 
 > **快捷**：MainActivity 任意位置后**滚 2 次到底，COMPOSE DEMO 大全 永远在 (357, 2232) 附近**。
 
@@ -115,41 +115,41 @@ NET=$(echo "$LOG"    | grep -c   "Net speed:")
 ## 2. ComposeDemoListActivity（Compose demo 列表，**25 个**）
 
 > 列表 LazyColumn，**卡片高度随 subtitle 长度变化**（多行卡 ≈ 296 px，单行卡 ≈ 178 px），
-> 因此**绝对 Y 坐标不稳定**。推荐用 [locate_and_test.sh](file:///tmp/locate_and_test.sh) 滚屏定位。
+> 因此**绝对 Y 坐标不稳定**。推荐用 locate_and_test.sh（历史本地辅助文件，未随仓库交付） 滚屏定位。
 >
 > 但首屏 / 第二屏 demo 在不滚动时坐标稳定，列在表里以备 emergency 直接 tap。
 
-### 25 个 demo 完整索引（源：[ComposeDemoListActivity.kt#L71-L191](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt#L71-L191)）
+### 25 个 demo 完整索引（源：[ComposeDemoListActivity.kt#L71-L191](../app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt)）
 
 | # | Title | Activity | 自动起播 | 内核 | 已知操作 |
 |---|---|---|---|---|---|
-| 0 | P0 · Wrapper 基础 | [`BasicWrapperActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) | **按钮交互**（"开始播放" @ 178,2074）| Ijk | AndroidView 包装；setStartAfterPrepared(true) 但需先点 startPlayLogic |
-| 1 | P0 · Native 详情 | [`DetailNativeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) | 是 | Ijk | 经典 |
-| 2 | P0 · Native 完整控件层 | [`FullFeatureNativeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) | 是 | Ijk | 自绘控件 |
-| 3 | P1 · Native 列表 | [`ListPlayNativeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt) | **否** | Ijk | autoPlay=false，需点列表项 |
-| 4 | P1 · Native 切换 URL | [`SwitchUrlActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt) | 是 | Ijk | |
-| 5 | P1 · Native 多窗口 | [`MultiWindowActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt) | **否** | Ijk | autoPlay=false，3 Surface 互斥，需点窗口 |
-| 6 | P1 · Native 自动连播 | [`AutoPlayListActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt) | 是 | Ijk | 段间 release+attach |
-| 7 | P1 · Native 列表 + 内层全屏 | [`ListWithFullscreenActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) | 列表型，需点项 | Ijk | |
-| 8 | P5 · Native 滤镜 | [`DetailFilterComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailFilterComposeActivity.kt) | 是 | Ijk | withHost 注入 setEffectFilter |
-| 9 | P5 · Native 缓存 / 下载 | [`CacheDownloadComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) | 是 | Ijk + Proxy | derivedStateOf→remember 已修复 |
-| 10 | P5 · Native 字幕 | [`SubtitleComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SubtitleComposeActivity.kt) | 是 | **强制 Ijk**（PlayerFactory.setPlayManager(IjkPlayerManager)） | |
-| 11 | P5 · Native Seamless 切换 | [`SwitchSeamlessComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) | 列表型，需点 item1 起播 | Ijk | controller 跨页复用 |
-| 12 | P5 · Native 前贴片广告 | [`AdInListComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AdInListComposeActivity.kt) | 是 | Ijk | AD→AutoComplete→正片，buffer 较慢需 16s |
-| 13 | P5 · Native Compose 自绘弹幕 | [`DanmakuComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DanmakuComposeActivity.kt) | 是 | Ijk | Canvas + textMeasurer |
-| 14 | **P5 · Native EXO 多源切换** | [`ExoSwitchSourceComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ExoSwitchSourceComposeActivity.kt#L66-L72) | 是 | **EXO**（PlayerFactory.setPlayManager(Exo2PlayerManager)） | onDestroy 反射还原 IjkPlayerManager（**P0 防回归核心**） |
-| 15 | P5 · Wrapper 真并行多窗口 | [`MultiWindowParallelComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowParallelComposeActivity.kt) | 列表型 | Ijk + CustomManager | |
-| 16 | P5-2 · 竖屏短视频 (VerticalPager) | [`VerticalShortVideoComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/VerticalShortVideoComposeActivity.kt) | 是 | Ijk | VerticalPager 单 controller |
-| 17 | P5-2 · 悬浮窗（画中画） | [`FloatingWindowComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FloatingWindowComposeActivity.kt) | **按钮交互** | Ijk | 需 SYSTEM_ALERT_WINDOW 权限 |
-| 18 | P5-2 · 多类型列表 | [`MoreTypeComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MoreTypeComposeActivity.kt) | 列表型 | Ijk | |
-| 19 | P5-2 · 图文混排（视频 + WebView） | [`WebDetailComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/WebDetailComposeActivity.kt) | 是 | Ijk | WebView 共存 |
-| 20 | P5-2 · 纯音频播放 | [`AudioOnlyComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) | **按钮交互** | Ijk(audio) | raw://test33.mp3，进页面后点"播放"按钮；信号只有 prep+play 无 render |
-| 21 | P5-2 · 自定义 URL / 本地文件 | [`LocalFileComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/LocalFileComposeActivity.kt) | **按钮交互** | Ijk | "▶ 起播"按钮，"Release"软释放后可再次起播（本次拆分修复点） |
-| 22 | P5-2 · MediaCodec 硬解切换 | [`MediaCodecComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MediaCodecComposeActivity.kt) | **按钮交互** | Ijk + MediaCodec | "▶ 起播"按钮 + "切换硬解 + 重 setUp" |
-| 23 | P5-2 · 自定义主题 Controls | [`CustomControlsThemeComposeActivity`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/CustomControlsThemeComposeActivity.kt) | 是 | Ijk | Slider seek + 主题切换 |
-| 24 | P5-2 · 自定义主题 Controls（重复行？看源码确认） | 同上 | | | |
+| 0 | P0 · Wrapper 基础 | [`BasicWrapperActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) | **按钮交互**（"开始播放" @ 178,2074）| Ijk | AndroidView 包装；setStartAfterPrepared(true) 但需先点 startPlayLogic |
+| 1 | P0 · Native 详情 | [`DetailNativeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) | 是 | Ijk | 经典 |
+| 2 | P0 · Native 完整控件层 | [`FullFeatureNativeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) | 是 | Ijk | 自绘控件 |
+| 3 | P1 · Native 列表 | [`ListPlayNativeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt) | **否** | Ijk | autoPlay=false，需点列表项 |
+| 4 | P1 · Native 切换 URL | [`SwitchUrlActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt) | 是 | Ijk | |
+| 5 | P1 · Native 多窗口 | [`MultiWindowActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt) | **否** | Ijk | autoPlay=false，3 Surface 互斥，需点窗口 |
+| 6 | P1 · Native 自动连播 | [`AutoPlayListActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt) | 是 | Ijk | 段间 release+attach |
+| 7 | P1 · Native 列表 + 内层全屏 | [`ListWithFullscreenActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) | 列表型，需点项 | Ijk | |
+| 8 | P5 · Native 滤镜 | [`DetailFilterComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailFilterComposeActivity.kt) | 是 | Ijk | withHost 注入 setEffectFilter |
+| 9 | P5 · Native 缓存 / 下载 | [`CacheDownloadComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) | 是 | Ijk + Proxy | derivedStateOf→remember 已修复 |
+| 10 | P5 · Native 字幕 | [`SubtitleComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SubtitleComposeActivity.kt) | 是 | **强制 Ijk**（PlayerFactory.setPlayManager(IjkPlayerManager)） | |
+| 11 | P5 · Native Seamless 切换 | [`SwitchSeamlessComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) | 列表型，需点 item1 起播 | Ijk | controller 跨页复用 |
+| 12 | P5 · Native 前贴片广告 | [`AdInListComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AdInListComposeActivity.kt) | 是 | Ijk | AD→AutoComplete→正片，buffer 较慢需 16s |
+| 13 | P5 · Native Compose 自绘弹幕 | [`DanmakuComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DanmakuComposeActivity.kt) | 是 | Ijk | Canvas + textMeasurer |
+| 14 | **P5 · Native EXO 多源切换** | [`ExoSwitchSourceComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ExoSwitchSourceComposeActivity.kt) | 是 | **EXO**（PlayerFactory.setPlayManager(Exo2PlayerManager)） | onDestroy 反射还原 IjkPlayerManager（**P0 防回归核心**） |
+| 15 | P5 · Wrapper 真并行多窗口 | [`MultiWindowParallelComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowParallelComposeActivity.kt) | 列表型 | Ijk + CustomManager | |
+| 16 | P5-2 · 竖屏短视频 (VerticalPager) | [`VerticalShortVideoComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/VerticalShortVideoComposeActivity.kt) | 是 | Ijk | VerticalPager 单 controller |
+| 17 | P5-2 · 悬浮窗（画中画） | [`FloatingWindowComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FloatingWindowComposeActivity.kt) | **按钮交互** | Ijk | 需 SYSTEM_ALERT_WINDOW 权限 |
+| 18 | P5-2 · 多类型列表 | [`MoreTypeComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MoreTypeComposeActivity.kt) | 列表型 | Ijk | |
+| 19 | P5-2 · 图文混排（视频 + WebView） | [`WebDetailComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/WebDetailComposeActivity.kt) | 是 | Ijk | WebView 共存 |
+| 20 | P5-2 · 纯音频播放 | [`AudioOnlyComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) | **按钮交互** | Ijk(audio) | raw://test33.mp3，进页面后点"播放"按钮；信号只有 prep+play 无 render |
+| 21 | P5-2 · 自定义 URL / 本地文件 | [`LocalFileComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/LocalFileComposeActivity.kt) | **按钮交互** | Ijk | "▶ 起播"按钮，"Release"软释放后可再次起播（本次拆分修复点） |
+| 22 | P5-2 · MediaCodec 硬解切换 | [`MediaCodecComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MediaCodecComposeActivity.kt) | **按钮交互** | Ijk + MediaCodec | "▶ 起播"按钮 + "切换硬解 + 重 setUp" |
+| 23 | P5-2 · 自定义主题 Controls | [`CustomControlsThemeComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/CustomControlsThemeComposeActivity.kt) | 是 | Ijk | Slider seek + 主题切换 |
+| 24 | P5-2 · 折叠屏（BOOK/TABLETOP） | [`FoldComposeActivity`](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FoldComposeActivity.kt) | 是 | Ijk | FLAT/BOOK/TABLETOP、旋转、全屏、真实/注入姿态 |
 
-> 实际是 24 个 entries（index 0..23），上表 #24 重复行可忽略。
+> v14.0.0 实际为 25 个 entries（index 0..24）；最后一项为折叠屏 Demo。姿态注入用于布局/全屏矩阵，实体设备的传感器与铰链行为须另行验证。
 
 ### 滚屏首屏稳定坐标（仅参考，重启后可能错位）
 
@@ -176,13 +176,13 @@ bash /tmp/locate_and_test.sh "P5 · Native EXO 多源切换" "ExoSwitchSourceCom
 
 | 坑 | 位置 | 处理方式 |
 |---|---|---|
-| `controller.release()` 单调置 `released=true` 让控制器一次性失效 | [GSYPlayerController.kt#L703-L756](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt#L703-L756) | I 轮拆为 `release()` 软释放 + `dispose()` 永久销毁。已 commit `74c8a0eb` |
-| EXO demo 退出未还原 PlayerFactory 会污染 Java 端 | [ExoSwitchSourceComposeActivity.kt#L66-L72](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ExoSwitchSourceComposeActivity.kt#L66-L72) | onDestroy 反射写回 IjkPlayerManager，回归已验证 |
-| Audio demo 多次 release 触发崩溃 | [AudioOnlyComposeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) | H 轮已删重复 release |
-| Cache demo derivedStateOf 频繁重组 | [CacheDownloadComposeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) | 改为 remember |
-| Slider 拖拽路径 | [GSYDefaultControls.kt#L144](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYDefaultControls.kt#L144) | `dragging = v.coerceIn(0f, 1f)` 边界已校验 |
+| `controller.release()` 单调置 `released=true` 让控制器一次性失效 | [GSYPlayerController.kt#L703-L756](../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt) | I 轮拆为 `release()` 软释放 + `dispose()` 永久销毁。已 commit `74c8a0eb` |
+| EXO demo 退出未还原 PlayerFactory 会污染 Java 端 | [ExoSwitchSourceComposeActivity.kt#L66-L72](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ExoSwitchSourceComposeActivity.kt) | onDestroy 反射写回 IjkPlayerManager，回归已验证 |
+| Audio demo 多次 release 触发崩溃 | [AudioOnlyComposeActivity](../app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) | H 轮已删重复 release |
+| Cache demo derivedStateOf 频繁重组 | [CacheDownloadComposeActivity](../app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) | 改为 remember |
+| Slider 拖拽路径 | [GSYDefaultControls.kt#L144](../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYDefaultControls.kt) | `dragging = v.coerceIn(0f, 1f)` 边界已校验 |
 | zsh 不 word-split unquoted vars | shell 调用 | 用 `awk '{print $1}'` / `$2` 拆 X Y 再传 |
-| python regex `[^/]*bounds=` 跨节点失配 | [find_xy.py](file:///tmp/find_xy.py) | 改 `[^>]*?` |
+| python regex `[^/]*bounds=` 跨节点失配 | find_xy.py（历史本地辅助文件，未随仓库交付） | 改 `[^>]*?` |
 | swipe 速率 100ms 不生效 | shell | 用 400-500ms |
 
 ---
@@ -274,3 +274,13 @@ adb -s emulator-5554 logcat -d         | grep -c "ANR in"             # 应 == 0
 
 > **本轮新发现坑**：emulator AVD `Pixel_7` 在 swiftshader_indirect 模式下渲染失败（屏幕全黑、dump null root）。**修复**：`emulator -avd Pixel_7 -no-snapshot-save -no-boot-anim -gpu host` 启动后恢复正常。
 > **PLAYBOOK 修正**：P0 · Wrapper 基础**不是自动起播**，需点列底部"开始播放"按钮（屏幕滚到最底，X≈178 Y≈2074）。表格中 #0 的"自动起播=是"已纠正（改为 builder.setStartAfterPrepared 配合按钮触发）。
+
+## v14.0.0 增量回归
+
+- `GSYPlayerControllerBufferTest`：轮询缓冲值、回调值、边界值及非活动状态；纳入 CI 的 Compose 单测。
+- #4259：在 AndroidView 先 onRelease、controller 后 dispose 的顺序下确认 host 和内核资源被释放。
+- #4261：IJK + ProxyCache / EXO + ExoCache 分别检查 `bufferPercent`、`isCacheReady`，并确认退出后全局 PlayerFactory / CacheFactory 恢复。
+- `FullFeatureNativeActivity`：内嵌和全屏切换显示比例，退出后确认原 `GSYVideoType` 比例恢复。
+- `FoldComposeActivity`：FLAT/BOOK/TABLETOP × 横竖屏 × 普通/全屏；未注入时确认真实 FoldingFeature 路径。
+
+发布时实际结果及未覆盖范围见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)，本清单本身不表示新增用例已执行。

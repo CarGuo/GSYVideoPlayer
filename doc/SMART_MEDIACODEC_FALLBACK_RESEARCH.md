@@ -5,11 +5,13 @@
 > 状态：已实现并验证智能硬解失败降级软解；切 Surface 花屏修复暂不进入当前提交。
 > 验证设备：jfxgpjeul7lrpjkz（M2104K10AC，MTK，Android 13）
 > 关联文件：
-> - [IjkPlayerManager.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/IjkPlayerManager.java)
-> - [GSYVideoBaseManager.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoBaseManager.java)
-> - [GSYVideoType.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/GSYVideoType.java)
-> - [GSYTextureView.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/render/view/GSYTextureView.java)
-> - [BasePlayerManager.java](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/player/BasePlayerManager.java)
+> - [IjkPlayerManager.java](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/IjkPlayerManager.java)
+> - [GSYVideoBaseManager.java](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoBaseManager.java)
+> - [GSYVideoType.java](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/GSYVideoType.java)
+> - [GSYTextureView.java](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/render/view/GSYTextureView.java)
+> - [BasePlayerManager.java](../gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/player/BasePlayerManager.java)
+
+> v14.0.0 补充：IJK 在原解码器选择为空时，由 [GSYIjkMediaCodecSelector](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/GSYIjkMediaCodecSelector.java) 在 API 29+ 选择普通、非安全/非隧道必需的 Codec2 硬件解码器。它与本文的运行中“已确认硬解错误后重建软解”是两个阶段，不能把软件 `c2.android.*` 当作硬解，也不能把网络失败作为硬解降级依据。以下调研结论保留原日期和设备范围。
 
 ---
 
@@ -23,7 +25,7 @@
 
 ### 1.2 IJK 错误码语义（关键）
 
-来源：[bilibili/ijkplayer · ijkplayer_android_def.h](https://github.com/bilibili/ijkplayer/blob/master/ijkmedia/ijkplayer/android/ijkplayer_android_def.h)，对应项目里 [IMediaPlayer.MEDIA_ERROR_*](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoBaseManager.java#L665) 的常量定义。
+来源：[bilibili/ijkplayer · ijkplayer_android_def.h](https://github.com/bilibili/ijkplayer/blob/master/ijkmedia/ijkplayer/android/ijkplayer_android_def.h)，对应项目里 [IMediaPlayer.MEDIA_ERROR_*](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoBaseManager.java) 的常量定义。
 
 ```c
 enum media_error_type {
@@ -87,7 +89,7 @@ willFallbackToSoftDecode = (
 每条单独说：
 
 - **(A)** 必须等 `onInfo(MEDIA_INFO_VIDEO_DECODER_OPEN, extra)` 回调 `extra==1` 才算确知硬解。极少数情况 `onError` 在 `onInfo(10001)` 之前到（codec configure 阶段），可用 `_getPropertyLong` 兜底确认。
-- **(B)** **只有 `MEDIA_ERROR_UNSUPPORTED (-1010)` 是 100% 该回退**；`MEDIA_ERROR_IJK_PLAYER (-10000)` 配合 ext2 看具体子码。其他错误码（IO/SERVER_DIED/MALFORMED/TIMED_OUT）一律走原 [GSYVideoBaseManager.onError](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoBaseManager.java#L665) 的原生路径上抛业务层。
+- **(B)** **只有 `MEDIA_ERROR_UNSUPPORTED (-1010)` 是 100% 该回退**；`MEDIA_ERROR_IJK_PLAYER (-10000)` 配合 ext2 看具体子码。其他错误码（IO/SERVER_DIED/MALFORMED/TIMED_OUT）一律走原 [GSYVideoBaseManager.onError](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoBaseManager.java) 的原生路径上抛业务层。
 - **(C)** 每个 GSYModel 一个 `smartFallbackTriggered` flag，回退过一次禁止再回退，否则坏流软解也挂 → 又回硬解 → 死循环。
 
 ### 1.5 事前预防（可选）
@@ -142,7 +144,7 @@ willFallbackToSoftDecode = (
 ### 2.2 真机实测（基于 origin/master 原版，无任何代码改动）
 
 设备：`jfxgpjeul7lrpjkz` (M2104K10AC, MTK MT6779, Android 13)
-入口：[RecyclerView3Activity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/RecyclerView3Activity.java#L124-L130)（demo 中唯一调用 `enableMediaCodec()` 的页面）
+入口：[RecyclerView3Activity](../app/src/main/java/com/example/gsyvideoplayer/RecyclerView3Activity.java)（demo 中唯一调用 `enableMediaCodec()` 的页面）
 触发路径：列表小窗口 ↔ 普通窗口反复切换（IJK 输出 surface 在 SurfaceA / SurfaceB 间替换）
 
 ```
@@ -172,7 +174,7 @@ if (result == RE_INIT_MEDIA_CODEC && (
 }
 ```
 
-修复**不在 java 层**（不在 [GSYTextureView.onSurfaceTextureAvailable](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/render/view/GSYTextureView.java#L62-L79)），而在 IJK native：
+修复**不在 java 层**（不在 [GSYTextureView.onSurfaceTextureAvailable](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/render/view/GSYTextureView.java)），而在 IJK native：
 - `ffp_set_video_surface` / `ffpipenode_android_mediacodec_vdec` 在 surface 切换时返回 `RE_INIT_MEDIA_CODEC`
 - 让 native 层正确丢弃旧 mediacodec 实例并 reconfigure 到新 native window
 
@@ -192,7 +194,7 @@ if (result == RE_INIT_MEDIA_CODEC && (
 
 ### 2.5 java 层只能"缓解"，根因在 native
 
-GSY 的 [GSYTextureView.onSurfaceTextureAvailable](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/render/view/GSYTextureView.java#L62-L79) 在 `enableMediaCodecTexture()` 复用分支只调 `setSurfaceTexture(mSaveTexture)`，但 `mSurface` 这个 java 对象**没重建**——它包装的 native window 在 TextureView detach 期间状态可能已失效。把这个旧 `Surface` setSurface 给 IjkPlayer，IJK 再丢给 MediaCodec → 解码到失效 buffer slot → 表现为花屏 / 绿屏。
+GSY 的 [GSYTextureView.onSurfaceTextureAvailable](../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/render/view/GSYTextureView.java) 在 `enableMediaCodecTexture()` 复用分支只调 `setSurfaceTexture(mSaveTexture)`，但 `mSurface` 这个 java 对象**没重建**——它包装的 native window 在 TextureView detach 期间状态可能已失效。把这个旧 `Surface` setSurface 给 IjkPlayer，IJK 再丢给 MediaCodec → 解码到失效 buffer slot → 表现为花屏 / 绿屏。
 
 ```java
 // gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/render/view/GSYTextureView.java
@@ -264,7 +266,7 @@ public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int hei
 - 代码：已新增 Java 层智能硬解开关、native `gsy-ijk` 首帧前硬解失败转软解、Java 一次性软解重建兜底
 - 设备：jfxgpjeul7lrpjkz 已 uninstall 之前误装的改动版 APK
 - 测试脚本：`/tmp/validate_smart_mediacodec.sh`（外置临时脚本，未污染仓库），可在确定方案后继续作为回归脚手架
-- 关联沉淀文档：[JAVA_TEST_PLAYBOOK.md](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/JAVA_TEST_PLAYBOOK.md)、[doc/test_scripts/java_basic_regression.sh](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/test_scripts/java_basic_regression.sh)
+- 关联沉淀文档：[JAVA_TEST_PLAYBOOK.md](JAVA_TEST_PLAYBOOK.md)、[doc/test_scripts/java_basic_regression.sh](test_scripts/java_basic_regression.sh)
 
 ---
 
@@ -288,4 +290,4 @@ public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int hei
 
 - [ ] 至少要覆盖的设备组合：MTK ✅ 已测、Qualcomm 待补、Kirin 待补
 - [ ] 要覆盖的流：H.264 1080P ✅、H.265 1080P 待补、4K H.265 待补、HLS live 待补
-- [ ] 回归脚本是否纳入 [doc/test_scripts/](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/doc/test_scripts/) 沉淀（参数化 device id）？
+- [ ] 回归脚本是否纳入 doc/test_scripts/（历史本地辅助脚本，未随仓库交付） 沉淀（参数化 device id）？

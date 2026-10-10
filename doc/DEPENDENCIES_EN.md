@@ -8,6 +8,20 @@ There are currently three hosting methods:
 - Github Package: Available from version 9.1.0, but before version 11.0.0, the basic dependencies of GSYIjkJava are still hosted on jitpack.
 - Jitpack IO: Will continue to be released, but there is a random loss of packages on the hosting platform.
 
+### ABI and dependency selection in v14.0.0
+
+The `gsyvideoplayer` aggregate already includes Java, Exo2 and `ex_so`. For modular IJK setup, choose `ex_so` or the required standalone ABI modules; do not include two native sets for the same ABI.
+
+| Native artifact | ABI | Native libraries in this release |
+| --- | --- | --- |
+| `gsyvideoplayer-ex_so` | `arm64-v8a` / `armeabi-v7a` / `x86_64` | FFmpeg n5.1.10 + OpenSSL 3.5.9 |
+| `gsyvideoplayer-arm64` | `arm64-v8a` | Identical to the matching `ex_so` tuple |
+| `gsyvideoplayer-armv7a` | `armeabi-v7a` | Identical to the matching `ex_so` tuple |
+| `gsyvideoplayer-x64` | `x86_64` | Identical to the matching `ex_so` tuple |
+| `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` | Legacy `armeabi` / `x86` | Historical libraries, not upgraded to FFmpeg 5; explicit legacy use only |
+
+Migrated standalone modules and `ex_so` share codec/protocol configuration. Choose by ABI and package size, rather than the former standard/extended MPEG distinction. Add `compose`, `cast` and `aliplay` only as needed; `cast` requires API 26, while the core requires API 23. See [DECODERS_EN.md](DECODERS_EN.md) and [BUILD_SO_EN.md](BUILD_SO_EN.md).
+
 ### 1. MavenCentral Reference (Recommended)
 
 Since jitpack keeps losing packages, it has been migrated to MavenCentral. The usage is as follows:
@@ -36,6 +50,9 @@ implementation 'io.github.carguo:gsyvideoplayer:14.0.0'
 
 //Whether AliPlayer mode is needed
 implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
+
+// Optional DLNA/UPnP cast (API 26)
+implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
 ```
 
 #### B. Add java and the so support you want:
@@ -55,18 +72,15 @@ implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
  //Whether AliPlayer mode is needed
  implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
- //so of ijk mode according to your needs
+ //Select required ABIs; do not also add ex_so
  implementation 'io.github.carguo:gsyvideoplayer-arm64:14.0.0'
  implementation 'io.github.carguo:gsyvideoplayer-armv7a:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv5:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-x86:14.0.0'
  implementation 'io.github.carguo:gsyvideoplayer-x64:14.0.0'
 ```
 
-#### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
+#### C. Modular setup with all three migrated ABIs
 
-A and B normal versions support 263/264/265, etc. For mpeg encoding, there will be sound but no picture.
-The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
+`ex_so` bundles all three migrated ABIs with the same codec configuration as the standalone modules in B. Select B when only a subset of ABIs is needed.
 
 ```groovy
  implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
@@ -77,7 +91,7 @@ The so introduced by C supports mpeg encoding and other supplementary protocols,
  //Whether AliPlayer mode is needed
  implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
- //More ijk encoding support
+ //IJK native libraries for the three migrated ABIs
  implementation 'io.github.carguo:gsyvideoplayer-ex_so:14.0.0'
 
 ```
@@ -137,6 +151,9 @@ allprojects {
 
  //Whether AliPlayer mode is needed
  implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
+
+// Optional DLNA/UPnP cast (API 26)
+implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
 ```
 
 #### B. Add java and the so support you want:
@@ -156,18 +173,15 @@ allprojects {
  //Whether AliPlayer mode is needed
  implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
- //so of ijk mode according to your needs
- implementation 'com.shuyu:gsyvideoplayer-armv5:14.0.0'
+ //Select required ABIs; do not also add ex_so
  implementation 'com.shuyu:gsyvideoplayer-armv7a:14.0.0'
  implementation 'com.shuyu:gsyvideoplayer-arm64:14.0.0'
- implementation 'com.shuyu:gsyvideoplayer-x86:14.0.0'
  implementation 'com.shuyu:gsyvideoplayer-x64:14.0.0'
 ```
 
-#### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
+#### C. Modular setup with all three migrated ABIs
 
-A and B normal versions support 263/264/265, etc. For mpeg encoding, there will be sound but no picture.
-The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
+`ex_so` bundles all three migrated ABIs with the same codec configuration as the standalone modules in B. Select B when only a subset of ABIs is needed.
 
 ```groovy
  implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
@@ -179,7 +193,7 @@ The so introduced by C supports mpeg encoding and other supplementary protocols,
  //Whether AliPlayer mode is needed
  implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
- //More ijk encoding support
+ //IJK native libraries for the three migrated ABIs
  implementation 'com.shuyu:gsyvideoplayer-ex_so:14.0.0'
 
 ```
@@ -219,6 +233,9 @@ allprojects {
 
  //Whether AliPlayer mode is needed
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
+
+// Optional DLNA/UPnP cast (API 26)
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
 ```
 
 #### B. Add java and the so support you want:
@@ -235,18 +252,15 @@ allprojects {
  //Whether AliPlayer mode is needed
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
- //so of ijk mode according to your needs
+ //Select required ABIs; do not also add ex_so
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v14.0.0'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v14.0.0'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v14.0.0'
 ```
 
-#### C. Support other format protocols (mpeg, rtsp, concat, crypto protocols, support 16k Page Size)
+#### C. Modular setup with all three migrated ABIs
 
-A and B normal versions support 263/264/265, etc. For mpeg encoding, there will be sound but no picture.
-The so introduced by C supports mpeg encoding and other supplementary protocols, but the so package is relatively larger.
+`ex_so` bundles all three migrated ABIs with the same codec configuration as the standalone modules in B. Select B when only a subset of ABIs is needed.
 
 ```groovy
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
@@ -257,7 +271,7 @@ The so introduced by C supports mpeg encoding and other supplementary protocols,
  //Whether AliPlayer mode is needed
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
- //More ijk encoding support
+ //IJK native libraries for the three migrated ABIs
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v14.0.0'
 
 ```

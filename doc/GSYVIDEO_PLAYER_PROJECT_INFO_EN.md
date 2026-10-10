@@ -48,6 +48,11 @@ Recent playback changes map to the existing architecture like this:
 | Keep last frame | Demo Video layer | `KeepLastFrameVideo` validates the business behavior without changing the base player's default completion state. |
 | Player init failure handling | Manager + Player layer | `GSYVideoBaseManager` and each `IPlayerManager` route core creation/init exceptions into error callbacks and resource cleanup. |
 | Exo cache and GIF cleanup | Cache + Utils layer | `ExoSourceManager` manages the Exo cache lifecycle, while `GifCreateHelper` cleans GIF generation state and temporary resources. |
+| v14 multi-pass / LUT / animated effects | Render | GL thread owns FBOs, multi-size passes, extra textures and uTime; demos select/restore GL explicitly. |
+| v14 foldables | Demo / View / Compose UI | WindowManager supplies posture; demos own fullscreen clone layouts, stable Compose Layout and hinge separation. |
+| v14 session isolation | Manager | Player identity and session generation constrain callbacks, queued events and watchdogs; kernel work stays on existing workers. |
+| v14 FFmpeg / TLS / audio | IJK Native | Matched three-ABI tuples implement protocol/audio/TLS repairs; Java Codec2 selection uses platform capabilities. |
+| v14 Compose release/buffer/ratio | Controller + View | Separate detach/dispose, merge polled buffering and expose ratio refresh. |
 
 See [RECENT_FEATURES_EN.md](RECENT_FEATURES_EN.md) for entry points, APIs, and regression checks.
 

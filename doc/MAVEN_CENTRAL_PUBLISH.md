@@ -1,294 +1,78 @@
-# Maven Central 自动发布指南
+# Maven Central 自动发布与本地核对
 
-## 🎯 概述
+> v14.0.0 / 2026-10-10：本文依据当前 Gradle 配置与工作流修订，替换旧默认目标、签名任务及固定同步时间的说法。
 
-这个指南帮助你将项目自动发布到 Maven Central，并提供本地调试 GitHub Actions 的方法。
+## 当前实现
 
----
+本项目使用 Gradle Nexus Publish Plugin 2.0.0 与 Central Portal OSSRH Staging API。对应 [Sonatype 官方兼容指南](https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/) 的 Nexus staging 流程，由插件创建 staging、上传、close/release；不要只执行不带目标参数的 `publishToSonatype`。
 
-## 📋 前提准备
+| 配置 | 作用 |
+| --- | --- |
+| [build.gradle](../build.gradle) | Nexus 插件、Central staging/snapshot endpoint、cast 发布隔离检查 |
+| [gradle.properties](../gradle.properties) | `PROJ_VERSION` 与两组 GROUP ID |
+| [maven-central-publish.gradle](../gradle/maven-central-publish.gradle) | `PUBLISH_TARGET=mavenCentral` 时创建 `mavenCentral` publication 并签名 |
+| [publish.gradle](../gradle/publish.gradle) | 默认 `PUBLISH_TARGET=github` 时创建 `release` publication |
+| [publish-maven-central.yml](../.github/workflows/publish-maven-central.yml) | JDK 21、导入 GPG、上传和 close/release |
 
-### 1. 注册 Maven Central 账号
+两组 publication 在不同 Gradle 调用中生成，版本相同、group 不同。模块同时应用两个脚本，不用替换旧脚本破坏另一渠道。
 
-Maven Central 已迁移到新的门户系统：
+## 账号、Namespace 与 Secrets
 
-1. 访问 https://central.sonatype.com/
-2. 使用 GitHub 账号登录
-3. 创建 Namespace (例如: `io.github.carguo`)
-4. 验证 Namespace 所有权 (通过 GitHub repo 或 DNS)
+发布账号应持有 `io.github.carguo` Namespace，认证使用 **Central Portal User Token**，不是网页登录密码或旧 OSSRH token。配置四个 Secrets：
 
-### 2. 准备 GPG 密钥
+- `MAVEN_CENTRAL_USERNAME`：Portal User Token username。
+- `MAVEN_CENTRAL_PASSWORD`：同一 token password。
+- `GPG_PRIVATE_KEY`：ASCII-armored 私钥的 base64。
+- `GPG_PASSPHRASE`：私钥口令。
 
-如果已有 Kleopatra 生成的密钥:
+本地认证也可用 Gradle 属性 `ossrhUsername` / `ossrhPassword`；签名脚本当前读取上述两个 GPG 环境变量。不要把凭据提交到仓库。
 
-```powershell
-# 导出私钥 (会提示输入密码)
+导出已用于签名的密钥，例如：
+
+```sh
 gpg --armor --export-secret-keys YOUR_KEY_ID > private-key.asc
-
-# 查看密钥 ID
-gpg --list-secret-keys --keyid-format=long
-
-# 将私钥转为 base64 (用于 GitHub Secrets)
-$content = Get-Content private-key.asc -Raw
-$bytes = [System.Text.Encoding]::UTF8.GetBytes($content)
-[Convert]::ToBase64String($bytes) | Set-Clipboard
+# 把 private-key.asc 的完整内容转换为 base64，写入 GPG_PRIVATE_KEY secret。
+# 按 Central 当前 GPG 要求提供对应公钥。
 ```
 
-### 3. 配置 GitHub Secrets
+[GPG 要求](https://central.sonatype.org/publish/requirements/gpg/)与 [Portal token](https://central.sonatype.org/publish/generate-portal-token/)以官方说明为准。
 
-在你的 GitHub 仓库设置 Secrets (Settings → Secrets and variables → Actions):
+## 本地构建、POM 与签名核对
 
-| Secret 名称 | 说明 | 获取方式 |
-|------------|------|---------|
-| `MAVEN_CENTRAL_USERNAME` | Maven Central 用户名 | 从 https://central.sonatype.com/ Account 页面获取 |
-| `MAVEN_CENTRAL_PASSWORD` | Maven Central 密码/Token | 从 https://central.sonatype.com/ 生成 User Token |
-| `GPG_PRIVATE_KEY` | GPG 私钥 (base64) | 使用上面的命令导出 |
-| `GPG_PASSPHRASE` | GPG 密钥密码 | 你的 GPG 密钥密码 |
+分别核对两个目标，不上传远端：
 
-**重要**: Maven Central 新系统建议使用 User Token 而非密码
-
----
-
-## 🚀 使用方法
-
-### 自动触发 (推荐)
-
-打 tag 时自动发布:
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
+```sh
+./gradlew publishToMavenLocal verifyCastDependencyIsolation -PPUBLISH_TARGET=github
+./gradlew publishToMavenLocal verifyCastDependencyIsolation -PPUBLISH_TARGET=mavenCentral
 ```
 
-### 手动触发
+核对全部模块版本、artifactId、内部依赖 group、AAR 实际 ABI 与配套 so；默认整包/Java 不应引入 jUPnP/Jetty，只有 cast 保留它们。签名需先提供 GPG 环境变量，再运行：
 
-1. 进入 GitHub Actions 页面
-2. 选择 "Publish to Maven Central" workflow
-3. 点击 "Run workflow"
-4. 输入版本号
-5. 点击 "Run workflow" 确认
-
----
-
-## 🔧 本地调试 GitHub Actions
-
-### 方法 1: 使用 act (推荐)
-
-`act` 允许你在本地运行 GitHub Actions。
-
-#### 安装 act
-
-```powershell
-# 使用 Chocolatey
-choco install act-cli
-
-# 或使用 Scoop
-scoop install act
-
-# 或下载二进制文件
-# https://github.com/nektos/act/releases
+```sh
+./gradlew signMavenCentralPublication -PPUBLISH_TARGET=mavenCentral
 ```
 
-#### 基本使用
+`GPG_PASSPHRASE` 单独存在不会创建 signing 配置；私钥与口令须同时提供。旧 `signReleasePublication` 不是当前 Central 目标的签名任务。历史 PowerShell 辅助脚本未适配此流程，使用以上准确命令。
 
-```powershell
-# 列出所有 workflows
-act -l
+## 发布
 
-# 运行特定 workflow (使用 workflow dispatch)
-act workflow_dispatch -W .github/workflows/publish-maven-central.yml
+`v*` tag 触发当前工作流。创建新 tag 前确认 `PROJ_VERSION` 与 tag 去掉 `v` 后一致，并确认 tag 指向已经验证的提交；已发布版本不覆盖。
 
-# 使用 secrets (创建 .secrets 文件)
-act -s MAVEN_CENTRAL_USERNAME=youruser -s MAVEN_CENTRAL_PASSWORD=yourpass
+本地实际上传和关闭/release 命令与 CI 一致：
 
-# 或使用 secrets 文件
-# 创建 .secrets 文件:
-# MAVEN_CENTRAL_USERNAME=youruser
-# MAVEN_CENTRAL_PASSWORD=yourpass
-# GPG_PASSPHRASE=yourpassphrase
-act workflow_dispatch --secret-file .secrets
-
-# 使用输入参数
-act workflow_dispatch -W .github/workflows/publish-maven-central.yml --input version=1.0.0
-
-# Dry-run (不实际执行)
-act -n
-
-# 使用更大的 Docker 镜像 (包含更多工具)
-act -P ubuntu-latest=catthehacker/ubuntu:full-latest
+```sh
+./gradlew publishMavenCentralPublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository -PPUBLISH_TARGET=mavenCentral
 ```
 
-#### 调试技巧
+手动 workflow 允许填写 version，但当前脚本并不据此修改属性或自动切换 ref；实际版本仍取所选 ref 的 `PROJ_VERSION`。选择正确 ref 后再核对。
 
-```powershell
-# 详细日志
-act -v
+## 结果确认与排查
 
-# 交互式 shell (workflow 失败时)
-act workflow_dispatch --container-architecture linux/amd64 -s GITHUB_TOKEN=fake
+- **认证失败**：核对 Portal token 与 Namespace 权限，不能用旧 OSSRH token。
+- **签名任务缺失或无签名**：核对 `PUBLISH_TARGET=mavenCentral`、两个 GPG 环境变量和签名日志。
+- **任务 NO-SOURCE / 未上传**：核对目标参数、publication 创建与每个模块的实际上传任务。
+- **staging 失败**：查看 initialize、upload、close 和 release 的实际日志与 Portal deployment 状态。
+- **公开仓库仍 404**：确认发布状态与目标版本，在 `repo.maven.apache.org/maven2/io/github/carguo/<artifact>/<version>/` 检查 POM/AAR；上传或工作流成功不等于已可下载，不保证固定同步时间。
+- **重复发布**：已存在的同版本产物不覆盖；发布修正应使用新的版本身份。
 
-# 重用 Docker 容器 (加快调试)
-act --reuse
-```
-
-### 方法 2: 本地模拟脚本
-
-创建一个本地测试脚本 `test-publish.ps1`:
-
-```powershell
-# test-publish.ps1
-# 模拟 GitHub Actions 环境变量
-
-$env:MAVEN_CENTRAL_USERNAME = "your-username"
-$env:MAVEN_CENTRAL_PASSWORD = "your-password"
-$env:GPG_PASSPHRASE = "your-gpg-passphrase"
-
-# 可选: 导入 GPG 密钥
-# gpg --import path/to/private-key.asc
-
-# 测试构建和发布到本地
-Write-Host "Testing build and publish to MavenLocal..."
-./gradlew clean publishToMavenLocal
-
-# 检查输出
-$mavenLocalPath = "$env:USERPROFILE\.m2\repository"
-Write-Host "Check artifacts at: $mavenLocalPath"
-
-# 测试签名
-Write-Host "`nTesting signing..."
-./gradlew signReleasePublication
-
-Write-Host "`nDone! Check the output above for errors."
-```
-
-### 方法 3: 分步验证
-
-不使用完整 workflow，分步测试:
-
-```powershell
-# 1. 测试构建
-./gradlew clean build
-
-# 2. 测试发布到本地 (不需要凭证)
-./gradlew publishToMavenLocal
-
-# 3. 测试签名 (需要 GPG 设置)
-$env:GPG_PASSPHRASE = "your-passphrase"
-./gradlew signReleasePublication
-
-# 4. 查看将要发布的内容
-./gradlew publishToMavenLocal --dry-run
-
-# 5. 查看所有发布任务
-./gradlew tasks --group publishing
-```
-
----
-
-## 📝 更新现有模块
-
-如果你想让现有模块使用新的 Maven Central 发布配置，替换 `build.gradle` 中的:
-
-```gradle
-// 将
-apply from: "$rootDir/gradle/publish.gradle"
-
-// 替换为
-apply from: "$rootDir/gradle/maven-central-publish.gradle"
-```
-
-或者同时支持两者:
-
-```gradle
-// GitHub Packages
-apply from: "$rootDir/gradle/publish.gradle"
-
-// Maven Central  
-apply from: "$rootDir/gradle/maven-central-publish.gradle"
-```
-
----
-
-## ⚠️ 注意事项
-
-### GPG 密钥要求
-
-- 密钥长度至少 2048 位
-- 必须上传公钥到密钥服务器:
-  ```bash
-  gpg --keyserver keyserver.ubuntu.com --send-keys YOUR_KEY_ID
-  gpg --keyserver keys.openpgp.org --send-keys YOUR_KEY_ID
-  ```
-
-### 首次发布
-
-- Maven Central 审核可能需要几小时到一天
-- 之后的发布会自动同步 (约 10-30 分钟)
-
-### 版本号
-
-- SNAPSHOT 版本会发布到 snapshot 仓库
-- Release 版本会发布到正式仓库并自动 release
-
-### 本地调试限制
-
-`act` 的限制:
-- 某些 GitHub-specific 功能可能不可用
-- 需要 Docker (Windows 上建议使用 WSL2)
-- 大型 workflow 可能很慢
-
----
-
-## 🔍 故障排查
-
-### GPG 签名失败
-
-```bash
-# 检查密钥
-gpg --list-keys
-
-# 测试签名
-echo "test" > test.txt
-gpg --sign test.txt
-rm test.txt*
-```
-
-### Maven Central 认证失败
-
-1. 确认 User Token 正确
-2. 验证 Namespace 已激活
-3. 检查 Secrets 是否正确设置
-
-### act 运行失败
-
-```powershell
-# 更新 act
-choco upgrade act-cli
-
-# 使用最新的 runner 镜像
-act -P ubuntu-latest=catthehacker/ubuntu:full-latest
-
-# 检查 Docker 是否运行
-docker ps
-```
-
----
-
-## 📚 参考资源
-
-- [Maven Central Portal](https://central.sonatype.com/)
-- [Maven Central 发布指南](https://central.sonatype.org/publish/publish-guide/)
-- [act GitHub](https://github.com/nektos/act)
-- [Gradle Nexus Publish Plugin](https://github.com/gradle-nexus/publish-plugin)
-
----
-
-## 💡 保留原有 mc.ps1 脚本
-
-原有的 `mc.ps1` 脚本仍然可用作备份方案。新的自动化流程本质上做了相同的事情:
-1. ✅ 构建 artifacts
-2. ✅ GPG 签名
-3. ✅ 生成 checksums
-4. ✅ 上传到 Maven Central
-
-区别在于 GitHub Actions 会自动完成所有步骤。
+v14.0.0 的实际工作流、产物和验证范围见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)。更多目标配置见 [DUAL_CHANNEL_PUBLISH.md](DUAL_CHANNEL_PUBLISH.md)，使用方依赖见 [DEPENDENCIES.md](DEPENDENCIES.md)。

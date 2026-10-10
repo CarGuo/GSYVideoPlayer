@@ -1,25 +1,19 @@
-### The project's .so files are compiled based on ijkplayer, which is based on FFmpeg
+# v14.0.0 codec configuration and IJK options
 
----------
+[中文](DECODERS.md)
 
-#### For .so file size considerations, the standard compiled .so only supports common video encodings. If you need support for additional types, you can depend on ex_so. If that is still not sufficient, you can recompile the ijkplayer source code, configure module.sh, then compile the .so files and replace the current ones in the project. Note that the .so version must match the ijk java version. The compilation process can refer to the process of compiling .so with https support on the homepage.
+Current `gsyvideoplayer-ex_so` and standalone arm64/armv7a/x64 ship **FFmpeg n5.1.10 + OpenSSL 3.5.9**, with identical matched native tuples and codec profiles for each ABI. See [module-lite-more.sh](../module-lite-more.sh) and the [pinned IJK configuration](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/config/module-lite-more.sh); the former standard/extended MPEG distinction no longer selects these modules.
 
----------
+This release adds the HTTP multipart MJPEG demuxer (`mpjpeg`) and raw MJPEG parser (`mjpeg`). Containers, codecs and protocols are separate capabilities; MP4 is not a video codec, and hardware decoding also depends on device MediaCodec support. Rebuild the complete FFmpeg/player/SDL tuple for custom profiles; see [BUILD_SO_EN.md](BUILD_SO_EN.md).
 
-#### Note: If you experience sound without video, or video without sound, please read the following information first. (Some lists in the DEMO have mute mode enabled, which is a normal situation).**
+- Current IJK PLAYER options: [ff_ffplay_options.h](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/ijkmedia/ijkplayer/ff_ffplay_options.h).
+- Audio `soundtouch` / tempo, RTSP `timeout` (microseconds) and `rtsp-live-max-buffer-ms`: [QUESTION_EN.md](QUESTION_EN.md).
+- Explicit TLS/CA settings follow nested HLS requests; default verification behavior is unchanged. ARMv7 certificate loading is repaired; see [TLS results](../tests/tls-native/README.md).
+- Legacy `armeabi` / `x86` modules are not migrated to FFmpeg 5: [DEPENDENCIES_EN.md](DEPENDENCIES_EN.md).
 
-Simply put, mp4 is not a video encoding, it can be called a video container. H264/H263 are video encodings, and AAC is an audio encoding.
+## Historical compilation-option reference
 
-For video-related topics, Lei Xiaohua's video basics are recommended: [A Zero-Based Learning Method for Audio and Video Coding Technology](http://blog.csdn.net/leixiaohua1020/article/details/18893769). Here you can learn about video and audio related encoding and protocols.
-
-
-The default supported video and audio encoding configurations for the project's standard .so can be found in the [compilation configuration file](https://github.com/CarGuo/GSYVideoPlayer/blob/master/module-lite.sh).
-
-The video and audio encoding configurations supported by ex_so can be found in the [compilation configuration file](https://github.com/CarGuo/GSYVideoPlayer/blob/master/module-lite-more.sh).
-
-*ex_so adds support for mpeg, concat protocol, and crypto protocol*.
-
-
+The older option lists and audio examples below include obsolete or currently disabled external encoders/APIs. They are not this release's enabled-codec inventory or a ready-to-copy FFmpeg 5 profile. Use pinned configuration and media/device verification for current capability.
 
 ### Summary of Common Audio Compilation Methods
 

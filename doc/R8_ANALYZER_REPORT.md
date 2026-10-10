@@ -1,9 +1,9 @@
 # R8 Configuration Analyzer 前后对比
 
 > 生成日期：2026-09-01
-> R8 版本：`com.android.tools:r8:9.4.14`（通过 [settings.gradle](../settings.gradle) 的 `pluginManagement.buildscript` 注入，本地临时；AGP 保持 8.6.1）
+> R8 版本：`com.android.tools:r8:9.4.14`（通过 [settings.gradle](../settings.gradle) 的 `pluginManagement.buildscript` 注入，2026-09-01 对照时 AGP 8.6.1；v14 使用 AGP 8.9.1）
 > 构建目标：`:app:assembleRelease`（Ijk + Exo/Media3 + Aliyun 全套播放器）
-> 对比对象：本次提交 `58f8133f build(r8): minimize keep rules to reflection surface only` **之前 (`8da01e8e`) 与之后 (HEAD)** 的 `app/proguard-rules.pro`
+> 对比对象：本次提交 `58f8133f build(r8): minimize keep rules to reflection surface only` **之前 (`8da01e8e`) 与之后 (`58f8133f`)** 的 `app/proguard-rules.pro`
 
 ---
 
@@ -42,7 +42,7 @@ Optimization 保持 0.00 % 的原因：`-optimizations !class/merging/*,!code/si
 | Keep rules 总数 | 364 | 353 | −11 |
 | Global keep rules | 1 | 1 | 0 |
 
-R8 需要保护的存活对象**整体减少 ~19 %**，直接体现在 dex 更小、验证更快、启动更快。
+该对照构建的存活对象总量减少约 19%；未独立测量验证耗时或启动速度，不据此推断 v14 的性能。
 
 ---
 
@@ -68,29 +68,20 @@ APK 里 4 个 ijk `.so`（libijkffmpeg / libijkplayer / libijksdl / libndkbitmap
 | Optimization 开关 | 只有 `-optimizationpasses 5` | 追加 `-allowaccessmodification`、`-repackageclasses ''` | 需搭配 `proguard-android-optimize.txt` |
 | Media3 / Exo | 整包保留 | 换成 `-dontwarn`，交给 aar 自带的 consumer-rules | Media3 官方 aar 已含正确规则 |
 
-完整规则见提交 `58f8133f` 的 [app/proguard-rules.pro](../app/proguard-rules.pro)；实操指引已同步到 [doc/QUESTION.md](QUESTION.md#L36-L68) 与 [doc/QUESTION_EN.md](QUESTION_EN.md#L36-L70)。
+完整规则见提交 `58f8133f` 的 [app/proguard-rules.pro](../app/proguard-rules.pro)；实操指引已同步到 [doc/QUESTION.md](QUESTION.md#2classnotfoundexception和混淆) 与 [doc/QUESTION_EN.md](QUESTION_EN.md#2-classnotfoundexception-and-obfuscation)。
 
 ---
 
-## 5. 复现步骤
+## 5. 报告生成与历史范围
 
-```powershell
-# 一次性把 R8 9.4.14 注入到 pluginManagement（本地已注入，暂未提交）
-# 见 settings.gradle 顶部的 pluginManagement 块
+v14 的 `settings.gradle` 已提交 R8 9.4.14 固定配置，无需临时注入。可生成当前 Release 的 HTML 报告：
 
-# 生成一次报告到指定目录（目录必须先存在）
-mkdir build\r8-analyzer\after
-.\gradlew.bat :app:clean :app:assembleRelease --no-daemon `
-  "-Dcom.android.tools.r8.dumpkeepradiushtmltodirectory=D:\workspace\project\GSYVideoPlayer\build\r8-analyzer\after"
-
-# 提取三项分数（脚本使用 protobufjs 复刻报告前端的公式）
-cd build\r8-analyzer ; npm i protobufjs@7.2.4 --no-audit --no-fund
-node score.mjs .
+```sh
+mkdir -p build/r8-analyzer/current
+./gradlew :app:assembleRelease "-Dcom.android.tools.r8.dumpkeepradiushtmltodirectory=$PWD/build/r8-analyzer/current"
 ```
 
-`score.mjs` 位于 [build/r8-analyzer/score.mjs](../build/r8-analyzer/score.mjs)，只从 HTML 内嵌的 `keepradius-proto` schema + `keepradius-data` base64 payload 反序列化 `KeepRadiusContainer`，遍历 `keptClassInfoTable / keptFieldInfoTable / keptMethodInfoTable` 并按 R8 官方公式计算三项 disallow 计数与分数。
-
----
+打开生成的报告查看保留范围。本页数值属于 2026-09-01 的原始对照构建，不是当前 APK 的分数或体积。原 `score.mjs` 是当时本地生成的辅助文件，未随仓库交付；上方保留计算公式供核对，不把缺失脚本作为复现前提。
 
 ## 6. 后续优化空间
 

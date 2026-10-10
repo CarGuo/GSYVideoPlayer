@@ -4,20 +4,59 @@
 
 ### v14.0.0 (2026-10-10)
 
-> Release review (2026-10-10): on the originally affected Redmi M2104K10AC / API 33, the current ARMv7 and ARM64 libraries each pass independent CA loading and 15 GSY/JNI playback checks, including default/verified HTTPS and nested HLS wrong-CA/SAN rejection. The merged Debug/Release builds, 48 session regressions, 36 unit-test executions, local publication for both channels and native static/packaging checks for all three ABIs pass. Historical crashing controls and qualification limits remain in the [TLS regression record](../tests/tls-native/README.md#release-review-on-the-originally-affected-device). Current x86_64 and 16 KiB-page runtime remain untested.
+This release covers all 27 commits in `v13.2.1..v14.0.0`, including two merges. See the [release audit](V14_RELEASE_REVIEW.md) for the commit-by-commit mapping. `ffmpeg-5.0` is the migration branch name; the actual FFmpeg baseline is **n5.1.10**.
 
-- IJK Native Upgrade: upgrade bundled `libijkffmpeg.so` across `arm64-v8a` / `armeabi-v7a` / `x86_64` in both `gsyVideoPlayer-ex_so` and `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` to **FFmpeg n5.1.10** + **OpenSSL 3.5.9**, unifying all three ABIs.
-- IJK Native Rebuild: rebuild `libijkplayer.so` / `libijksdl.so` against FFmpeg 5 APIs (`AVCodecParameters`, `AVChannelLayout`, HLS/subtitle demuxer updates, mid-stream HEVC parameter-set retention) while keeping 16 KiB ELF segment alignment on `arm64-v8a` / `x86_64` (a static layout check, not 16 KiB-page device qualification) and `__stack_chk_fail` linkage on `armeabi-v7a`.
-- ABI Packaging Change: the default aggregate and `gsyvideoplayer-ex_so` contain only `arm64-v8a` / `armeabi-v7a` / `x86_64`. Consumers needing legacy `armeabi` / `x86` must explicitly compose the standalone `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` modules; those legacy architectures are not upgraded to FFmpeg 5.
-- Codec2 & Playback Rate: add `GSYIjkMediaCodecSelector`, preserving IJK's original decoder choice first. When it returns no decoder on Android 10+ (API 29+), select a regular `c2.*` decoder reported as hardware accelerated, excluding software-only codecs and those requiring secure or tunneled playback. Also add API 23+ `AudioTrack` platform playback rate and rate-aware EOF completion handling.
-- RTSP Enhancements: support initialization-stage RTSP `3xx` redirects across `OPTIONS` / `DESCRIBE` / `SETUP` / initial `PLAY`, preserve microsecond `timeout` options, add opt-in `rtsp-live-max-buffer-ms` live queue recovery, and isolate `GSYVideoBaseManager` playback/timeout generations across rapid stream switches.
-- Audio Compatibility: resampling and non-audio-master synchronization no longer stop playback solely because exact sample-to-clock mapping is unavailable. `soundtouch=1` selects 0.25x–4x software tempo, including 3x; platform range with `soundtouch=0` remains device-dependent. Rejected platform requests continue only after verified restoration; an unverified state stops output. Runtime engine changes drain old audio and preserve the latest rate across seek/cancellation.
-- Audio Startup: prevent an underfilled synthetic-only startup epoch from blocking rate changes; never discard an epoch that accepted real PCM.
-- RTSP Error State: publish one native error while entering Error before the listener; later seek/start/pause require reset or reopen. Preserve the existing iOS error-notification order without adding a duplicate state event.
-- RTSP Wrapper: derive `ijklivehook` live capability from the opened inner RTSP stream, forward explicit `timeout` / `rtsp_transport`, and accept only `0` or `500..60000` ms for the live cap. Fix stuck buffering after a terminal error followed by a failed seek.
-- The audio fixes are based on [IJK a599f60](https://github.com/CarGuo/ijkplayer/commit/a599f60268312f3093d6f0ca165a3d06c76970cb); this update adds the TLS build workaround and FFmpeg HLS policy-inheritance patch, replacing matched FFmpeg/player/SDL sets for the three ABIs above. Legacy `armeabi` / `x86` libraries are unchanged. The earlier, pre-TLS/HLS ARM64 tuple had 14 passed, 0 failed and 3 skipped checks in the 2026-10-09 Pixel 5 / API 30 core gate, covering software 0.25x–4x, 96 kHz resampling, A/V playback at 2x and three captured-audio content checks. Both very short audio tails remain unqualified. The automatic platform-restoration check was skipped; supplemental native logs from the same run show a rejected 20x request restored to 1x with continued playback. These historical results do not qualify the newly rebuilt ARM64 tuple. The new ARM64 tuple has the separate bounded TLS/HLS and 1x/3x audio evidence above; that run did not repeat this broader historical audio gate. Current x86_64 remains build/static-only. This also does not qualify hardware decoding, perceptual quality, all devices or 16 KiB-page runtime.
-- TLS/HLS Fixes: disable the loop-unrolling optimization that produces invalid ARMv7 / Clang 11 OpenSSL code and include the flags in the cache identity. Preserve explicit certificate/peer-name and proxy policy across nested HLS requests, including keepalive reconnects. The [build integration](https://github.com/CarGuo/ijkplayer/commit/df3f5ca6) and [FFmpeg patch](https://github.com/CarGuo/FFmpeg/commit/0c8735b51d29dbc74e18c235246d5230bd5db989) document the causes and regression scope; upstream OpenSSL source and default verification policy are unchanged.
-- Compose Fixes: separate host `detachHost` and `dispose` lifecycles (#4259), sync ExoPlayer polled buffering progress to `bufferPercent` and `mBufferPoint` (#4261), and expose `controller.changeTextureViewShowType()` to refresh aspect ratio after `GSYVideoType.setShowType()`.
+#### IJK, audio and network playback
+
+- Update `gsyvideoplayer-ex_so` and standalone `gsyvideoplayer-arm64` / `gsyvideoplayer-armv7a` / `gsyvideoplayer-x64` to **FFmpeg n5.1.10 + OpenSSL 3.5.9**. Each ABI ships a matched `libijkffmpeg.so` / `libijkplayer.so` / `libijksdl.so` tuple; aggregate and standalone modules contain identical bytes.
+- Default `gsyvideoplayer` and `gsyvideoplayer-ex_so` package only `arm64-v8a` / `armeabi-v7a` / `x86_64`. Legacy `armeabi` / `x86` remain available through explicitly selected `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` and are not upgraded to FFmpeg 5. Migrated standalone modules share the `ex_so` codec configuration; choose them for ABI selection and size.
+- Rebuild IJK/SDL for `AVCodecParameters` / `AVChannelLayout` and other FFmpeg 5 APIs, including HLS, subtitle and HEVC parameter handling. Add the HTTP multipart MJPEG demuxer and raw MJPEG parser; repair MJPEG EOF, MOV/HEVC seek/replay and mid-stream parameter-set handling.
+- Retain 16 KiB ELF segment alignment on `arm64-v8a` / `x86_64` and `__stack_chk_fail` linkage on `armeabi-v7a`. ELF and APK alignment checks pass; runtime coverage is stated below.
+- Add `GSYIjkMediaCodecSelector`: preserve IJK's decoder choice first, then consider regular `c2.*` decoders reported as hardware accelerated on Android 10+ (API 29+) if the original selection is empty. Exclude software-only codecs and those requiring secure or tunneled playback.
+- Support API 23+ `AudioTrack` platform rates and rate-aware EOF completion. `soundtouch=1` uses **0.25x–4x** software tempo, including 3x; the platform range with `soundtouch=0` remains device-dependent.
+- Repair resampling, non-audio-master synchronization and submitted-audio timing/completion. Runtime tempo-engine handoff drains old audio and preserves the latest rate across seek/cancellation. A synthetic-silence-only startup epoch no longer blocks startup; real PCM retains its drain barrier.
+- Continue after a rejected platform rate only when restoration is verified; otherwise stop output. Enter Error before notifying a terminal-error listener, requiring reset/reopen before subsequent seek/start/pause, and prevent a failed seek from leaving buffering stuck.
+- Support initial RTSP `OPTIONS` / `DESCRIBE` / `SETUP` / first `PLAY` `3xx` redirects; forward FORMAT `timeout` in **microseconds** and `rtsp_transport`. `ijklivehook` derives RTSP live capability from the opened inner stream.
+- Add opt-in PLAYER `rtsp-live-max-buffer-ms`: `0` disables it; `500..60000` ms bounds live queue recovery at normal 1x. Recovery may discard old media and cause jumps or audio gaps. It does not provide playback-time REDIRECT, independent multi-control sessions or automatic reconnect.
+- Isolate callbacks, queued messages and buffering watchdogs in `GSYVideoBaseManager` by player identity and session generation, covering rapid switches, port revisits, release/prepare ordering and initialization failures.
+- **Fix the ARMv7 HTTPS certificate-loading crash**: disable the invalid loop-unrolling optimization for OpenSSL built with NDK r22b / Clang 11 and include flags in the TLS cache identity. Upstream OpenSSL source is unchanged.
+- Preserve explicitly configured TLS verification, CA, peer-name and proxy policy for nested HLS playlists, segments, keys, initialization resources and keepalive reconnects. Default verification behavior is unchanged; see the [TLS regression record](../tests/tls-native/README.md).
+
+#### GL rendering and effects
+
+- Add `GLFrameBuffer` and `GSYVideoGLViewMultiPassRender` with OES conversion, FBO ping-pong, a multi-size FBO pool and downsampling pyramids. Composite passes can also sample the original scene.
+- Add `GaussianBlurMultiPassEffect` (horizontal/vertical Gaussian), `IterativeBlurPyramidEffect` (Kawase pyramid blur) and `BloomEffect` (bright extraction, blur and scene composition).
+- Add `LookupEffect` using a 512x512 / 8x8 tiled 64³ LUT with adjustable blend strength. `TextureShaderInterface` manages texture creation, binding and release on the GL thread; the demo bundles identity, teal_orange and cyberpunk LUTs.
+- Add `BeautyEffect` with edge-preserving smoothing and warm whitening; the demo provides natural and strong presets.
+- Inject `uTime` in seconds and add `GlitchEffect`, `CrtEffect` and `OldTvSignalEffect` for digital glitches, CRT scanlines and analog-TV interference.
+- Repair zero division, unused shader variables, sampling steps and alpha handling; remove redundant `glFinish` from custom renders. `DetailFilterActivity` exposes the new multi-pass, pyramid, Bloom, LUT and single-pass effects; see [recent features](RECENT_FEATURES_EN.md).
+
+#### Foldable demos
+
+- Add XML `FoldDetailActivity` and Compose `FoldComposeActivity` using Jetpack WindowManager 1.3.0 `FoldingFeature` for FLAT / BOOK / TABLETOP layouts with real hinge-sized separation.
+- XML fullscreen clones support BOOK side-by-side and TABLETOP stacked layouts. Compose uses a stable custom `Layout` to preserve the player node across posture changes. Reapply posture after rotation/unfold, repair fullscreen listeners overwritten by the builder, and handle Back to exit fullscreen.
+- Add opt-in `extra_posture=0/1/2` for FLAT / BOOK / TABLETOP test injection; absent extras retain real fold information. Both the main screen and Compose list expose the demos, increasing runnable Compose entries from 24 to **25**. Injected matrix evidence is distinct from physical folding-sensor qualification.
+
+#### Compose and buffering
+
+- Fix #4259 by separating `detachHost` from `dispose`, retaining the host until unified release and guarding detached-view operations with attached state so MediaPlayer, Surface and audio focus are released.
+- Fix #4261 by merging polled Exo/Ali buffering into `snapshot.bufferPercent` and `BufferingProgress` events. Traditional View `mBufferPoint`, secondary progress and progress callbacks use the same buffered value, including playing, paused, buffering and completed states.
+- Make `GSYTextureRenderView.changeTextureViewShowType()` public and expose `controller.changeTextureViewShowType()` for Compose. Call it after `GSYVideoType.setShowType()` to update embedded/fullscreen aspect ratio; the full-controls demo adds ratio choices and restores the prior setting on exit.
+- Extend the cache demo with IJK + ProxyCache / EXO + ExoCache switching, long/short fixtures, buffering and cache-hit state, restoring player/cache factories on exit. Display buffering percentage in the Exo multi-source demo.
+
+#### Build, R8, documentation and regressions
+
+- Upgrade Gradle Wrapper **8.7 → 8.12** and AGP **8.6.1 → 8.9.1**, pin R8 **9.4.14** in `settings.gradle`, and retain Kotlin **2.0.21**, local JDK **17** / CI JDK **21**.
+- Narrow the demo R8 rules and FAQ examples to IJK JNI, fullscreen/small-window reflection constructors, PlayerFactory / CacheFactory no-arg constructors and required third-party rules. Remove package-wide GSY/Media3 keeps, unused ButterKnife rules and duplicates. The [R8 report](R8_ANALYZER_REPORT.md) describes a historical comparison, not the v14 APK size.
+- Add [13 GSYVideoPlayer integration skills](../skills/README.md) covering setup, Builder, fullscreen, kernels, lists, cache, rendering, subtitles, live/ads, cast, Compose, custom views and R8. Document the optional cast dependency in direct setup.
+- Ignore `app/test_evidence` locally and remove tracked screenshots/dumps/scratch evidence; add GL implementation plans and execution records.
+- Add the `48` session regressions and Compose unit tests to CI plus an independent native CA-loading gate. Align both publication channels to `14.0.0` while retaining optional cast dependency isolation.
+
+#### Release verification scope
+
+On 2026-10-10 the repaired ARMv7 and ARM64 tuples each passed CA loading and **15 GSY/JNI playback checks** on the originally affected Redmi M2104K10AC / API 33. Scope includes default/verified HTTPS, nested HLS wrong-CA/SAN rejection, initial RTSP redirects, seek/completion, 1x/3x audio and 96 kHz resampling. Debug/Release builds, 48 session regressions, 36 unit executions (18 unique cases across both builds), three-ABI static/packaging checks and local publication for both channels passed.
+
+Current x86_64 and 16 KiB-page runtime, hardware-decoded pixels and the complete acoustic gate on the new tuples remain unqualified. Older-library results do not qualify new bytes. Source pins, nine-library SHA-256 values, every commit and detailed results are in the [release audit](V14_RELEASE_REVIEW.md); original crashing controls remain in the [historical TLS record](../tests/tls-native/README.md#historical-controls-and-investigation).
 
 ### v13.2.1 (2026-08-19)
 
@@ -203,7 +242,7 @@
 
 ### v8.1.6-jitpack(2021-09-13)
 
-* Add support for horizontal full screen and vertical screen changes, the screen does not rotate, [SimpleActivity](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleActivity.java) [SimpleDetailActivityMode2](./app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
+* Add support for horizontal full screen and vertical screen changes, the screen does not rotate, [SimpleActivity](../app/src/main/java/com/example/gsyvideoplayer/simple/SimpleActivity.java) [SimpleDetailActivityMode2](../app/src/main/java/com/example/gsyvideoplayer/simple/SimpleDetailActivityMode2.java)
 * Fix the problem that the timeout is set and it becomes invalid after retrying
 * Add for some dataBinding scenarios, which will occur when the context detach activity is recycled.
 * exo player 2.14.2

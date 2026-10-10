@@ -21,13 +21,13 @@ references:
 
 | 模式 | 入口 | 说明 |
 |---|---|---|
-| **Wrapper**（推荐上手） | [GSYVideoPlayerView](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/wrapper/GSYVideoPlayerView.kt) / [GSYAnyVideoPlayerView](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/wrapper/GSYAnyVideoPlayerView.kt) | `AndroidView` 直接承载 `StandardGSYVideoPlayer` / 任意 `NormalGSYVideoPlayer` 子类，保留全部内置能力 |
-| **Native**（纯 Compose 控件） | [rememberGSYPlayerController](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerSurface.kt) + [GSYPlayerSurface](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerSurface.kt) + [GSYDefaultControls](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYDefaultControls.kt) | 只承载画面，控制层完全用 Compose 自绘 |
-| **通用工具** | [LifecycleBridge](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/common/LifecycleBridge.kt) | `LifecycleEffect { event -> ... }` 用于订阅宿主 Lifecycle |
+| **Wrapper**（推荐上手） | [GSYVideoPlayerView](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/wrapper/GSYVideoPlayerView.kt) / [GSYAnyVideoPlayerView](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/wrapper/GSYAnyVideoPlayerView.kt) | `AndroidView` 直接承载 `StandardGSYVideoPlayer` / 任意 `NormalGSYVideoPlayer` 子类，保留全部内置能力 |
+| **Native**（纯 Compose 控件） | [rememberGSYPlayerController](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerSurface.kt) + [GSYPlayerSurface](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerSurface.kt) + [GSYDefaultControls](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYDefaultControls.kt) | 只承载画面，控制层完全用 Compose 自绘 |
+| **通用工具** | [LifecycleBridge](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/common/LifecycleBridge.kt) | `LifecycleEffect { event -> ... }` 用于订阅宿主 Lifecycle |
 
 ## Wrapper API：`GSYVideoPlayerView`
 
-见 [GSYVideoPlayerView#L28-L36](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/wrapper/GSYVideoPlayerView.kt#L28-L36)：
+见 [GSYVideoPlayerView#L28-L36](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/wrapper/GSYVideoPlayerView.kt)：
 
 | 参数 | 类型 | 说明 |
 |---|---|---|
@@ -40,7 +40,7 @@ references:
 
 ## Wrapper API：`GSYAnyVideoPlayerView<T : NormalGSYVideoPlayer>`
 
-见 [GSYAnyVideoPlayerView#L26-L35](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/wrapper/GSYAnyVideoPlayerView.kt#L26-L35)。相比 `GSYVideoPlayerView` 多出：
+见 [GSYAnyVideoPlayerView#L26-L35](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/wrapper/GSYAnyVideoPlayerView.kt)。相比 `GSYVideoPlayerView` 多出：
 
 | 参数 | 类型 | 说明 |
 |---|---|---|
@@ -48,7 +48,7 @@ references:
 
 ## Native API：`rememberGSYPlayerController`
 
-见 [rememberGSYPlayerController#L26-L32](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerSurface.kt#L26-L32)：
+见 [rememberGSYPlayerController#L26-L32](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerSurface.kt)：
 
 | 参数 | 默认 | 说明 |
 |---|---|---|
@@ -58,7 +58,7 @@ references:
 | `autoPlay` | false | attach 完成后自动 `startPlayLogic` |
 | `autoPauseResume` | true | 自动订阅 Lifecycle（同 wrapper） |
 
-返回 [GSYPlayerController](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt)，可以再调 `.play() / .pause() / .seekTo(ms) / .setSpeed(...) / .changeTextureViewShowType() / .setUp(url, cache, title, autoPlay) / .dispose()`；状态订阅走 [GSYPlayerState](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerState.kt)（`StateFlow<GSYPlayerState>`），事件走 [GSYPlayerEvent](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerEvent.kt)。
+返回 [GSYPlayerController](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt)，可以再调 `.play() / .pause() / .seekTo(ms) / .setSpeed(...) / .changeTextureViewShowType() / .setUp(url, cache, title, autoPlay) / .dispose()`；状态订阅走 [GSYPlayerState](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerState.kt)（`StateFlow<GSYPlayerState>`），事件走 [GSYPlayerEvent](../../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerEvent.kt)。
 
 ## 最小可运行示例
 
@@ -113,25 +113,31 @@ DisposableEffect(lifecycle) {
 
 | 场景 | Activity |
 |---|---|
-| 原生桥接示例 | [DetailNativeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) / [BasicWrapperActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) / [FullFeatureNativeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) |
-| 广告 + 主片（列表内） | [AdInListComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AdInListComposeActivity.kt) |
-| 列表 + 全屏 | [ListWithFullscreenActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) / [ListPlayNativeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt) / [AutoPlayListActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt) |
-| 抖音式竖屏 | [VerticalShortVideoComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/VerticalShortVideoComposeActivity.kt) |
-| 滤镜 | [DetailFilterComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailFilterComposeActivity.kt) |
-| 无缝切源 / Exo 切源 | [SwitchSeamlessComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) / [ExoSwitchSourceComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ExoSwitchSourceComposeActivity.kt) / [SwitchUrlActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt) |
-| 字幕 | [SubtitleComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/SubtitleComposeActivity.kt) |
-| 弹幕 | [DanmakuComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DanmakuComposeActivity.kt) |
-| 缓存 / 下载 | [CacheDownloadComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) |
-| 硬解 / MediaCodec | [MediaCodecComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MediaCodecComposeActivity.kt) |
-| 悬浮小窗 | [FloatingWindowComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/FloatingWindowComposeActivity.kt) |
-| 音频独立 | [AudioOnlyComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) |
-| 多类型混排 | [MoreTypeComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MoreTypeComposeActivity.kt) |
-| 多窗口并行 | [MultiWindowActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt) / [MultiWindowParallelComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowParallelComposeActivity.kt) |
-| 本地文件 | [LocalFileComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/LocalFileComposeActivity.kt) |
-| 自定义主题 | [CustomControlsThemeComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/CustomControlsThemeComposeActivity.kt) |
-| WebView 详情 | [WebDetailComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/WebDetailComposeActivity.kt) |
+| 原生桥接示例 | [DetailNativeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt) / [BasicWrapperActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/BasicWrapperActivity.kt) / [FullFeatureNativeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/FullFeatureNativeActivity.kt) |
+| 广告 + 主片（列表内） | [AdInListComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/AdInListComposeActivity.kt) |
+| 列表 + 全屏 | [ListWithFullscreenActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt) / [ListPlayNativeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListPlayNativeActivity.kt) / [AutoPlayListActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/AutoPlayListActivity.kt) |
+| 抖音式竖屏 | [VerticalShortVideoComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/VerticalShortVideoComposeActivity.kt) |
+| 滤镜 | [DetailFilterComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailFilterComposeActivity.kt) |
+| 无缝切源 / Exo 切源 | [SwitchSeamlessComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchSeamlessComposeActivity.kt) / [ExoSwitchSourceComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/ExoSwitchSourceComposeActivity.kt) / [SwitchUrlActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/SwitchUrlActivity.kt) |
+| 字幕 | [SubtitleComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/SubtitleComposeActivity.kt) |
+| 弹幕 | [DanmakuComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/DanmakuComposeActivity.kt) |
+| 缓存 / 下载 | [CacheDownloadComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/CacheDownloadComposeActivity.kt) |
+| 硬解 / MediaCodec | [MediaCodecComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/MediaCodecComposeActivity.kt) |
+| 悬浮小窗 | [FloatingWindowComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/FloatingWindowComposeActivity.kt) |
+| 音频独立 | [AudioOnlyComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/AudioOnlyComposeActivity.kt) |
+| 多类型混排 | [MoreTypeComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/MoreTypeComposeActivity.kt) |
+| 多窗口并行 | [MultiWindowActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowActivity.kt) / [MultiWindowParallelComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/MultiWindowParallelComposeActivity.kt) |
+| 本地文件 | [LocalFileComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/LocalFileComposeActivity.kt) |
+| 自定义主题 | [CustomControlsThemeComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/CustomControlsThemeComposeActivity.kt) |
+| WebView 详情 | [WebDetailComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/WebDetailComposeActivity.kt) |
 
-样例 hosts 全在 [compose/host/](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host)。
+样例 hosts 全在 [compose/host/](../../app/src/main/java/com/example/gsyvideoplayer/compose/host)。
+
+## v14.0.0 状态与接入
+
+外部坐标为 `io.github.carguo:gsyvideoplayer-compose:14.0.0`（GitHub Packages 使用 `com.shuyu`）。IJK 使用方还需选择 `ex_so` 或独立 ABI 原生模块；完整组合见 [DEPENDENCIES.md](../../doc/DEPENDENCIES.md)。
+
+`detachHost` 只解绑 View 侧回调/tick，`dispose` 统一释放保留的 host；`snapshot.bufferPercent` 合并内核轮询与回调值。`controller.changeTextureViewShowType()` 在主线程更新当前内嵌/全屏比例。Compose Demo 共 25 项，新增折叠屏 BOOK/TABLETOP。详见 [COMPOSE_USE.md](../../doc/COMPOSE_USE.md)。
 
 ## 常见坑
 

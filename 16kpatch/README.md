@@ -1,6 +1,6 @@
 # 16kpatch 使用说明（64位16K + 32位可构建）
 
-> 更新说明（2026-10-09）：当前仓库 `gsyVideoPlayer-ex_so` 以及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 中打包的 `libijkffmpeg.so` 均已升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**（`arm64-v8a` / `armeabi-v7a` / `x86_64` 三端对齐）。本目录下的 `ndk_r22_ffmpeg_n4.3_ijk.patch` 与下文描述是 **n4.3 时期的历史构建流程**，保留给需要自行回滚、复现旧产物或在 n4.3 上做二次定制的使用者参考。基于 FFmpeg 5 重新构建新 so 的流程另行记录，不走此补丁。
+> v14.0.0 更新说明（2026-10-10）：当前仓库 `gsyVideoPlayer-ex_so` 以及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 中打包的 `libijkffmpeg.so` 均已升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**（`arm64-v8a` / `armeabi-v7a` / `x86_64` 三端对齐）。本目录下的 `ndk_r22_ffmpeg_n4.3_ijk.patch` 与下文描述是 **n4.3 时期的历史构建流程**，保留给需要自行回滚、复现旧产物或在 n4.3 上做二次定制的使用者参考。当前 FFmpeg 5 构建入口见 [BUILD_SO.md](../doc/BUILD_SO.md)，使用固定七补丁源码和已修复 ARMv7 TLS 的构建集成，不走此补丁。
 
 ## 适用范围
 - 基线项目：默认 `ijkplayer`
@@ -82,7 +82,7 @@ cd ..
   - `armeabi-v7a` 下 `libijkffmpeg.so/libijksdl.so/libijkplayer.so` 的 `PT_LOAD Align` 为 `0x1000`
 - Stack Canary：`libijkffmpeg.so` 包含 `__stack_chk_fail@LIBC`
 
-## 注意事项
+## 历史 n4.3 注意事项
 - 生产发布优先 `arm64-v8a`。
 - `armeabi-v7a` 主要用于 32 位设备兼容；若目标机型存在 HEVC 软解崩溃风险，建议优先硬解或降低 armv7a 解码能力。
 - `x86_64` 若需要 HTTPS，必须保证先完成 `./compile-openssl.sh x86_64`，再执行 `./compile-ffmpeg.sh x86_64`。

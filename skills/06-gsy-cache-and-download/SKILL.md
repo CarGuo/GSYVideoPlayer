@@ -45,7 +45,7 @@ builder.setCachePath(dir);
 
 ## `ICacheManager` API
 
-见 [ICacheManager](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/cache/ICacheManager.java)。核心方法：
+见 [ICacheManager](../../gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/cache/ICacheManager.java)。核心方法：
 
 | 方法 | 说明 |
 |---|---|
@@ -57,14 +57,14 @@ builder.setCachePath(dir);
 
 ## `ProxyCacheManager` 关键静态方法
 
-在 [ProxyCacheManager](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cache/ProxyCacheManager.java) 里：
+在 [ProxyCacheManager](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cache/ProxyCacheManager.java) 里：
 
 - `clearAllCache(Context, File)` —— 清空整个缓存目录。
 - 内部 `HttpProxyCacheServer` 单例 lazy 初始化，第一次 `doCacheLogic` 时才起服务；Application 就绪即可。
 
 ## `ProxyCacheUserAgentHeadersInjector`
 
-自定义 UA / Cookie / Referer 注入到代理层：见 [ProxyCacheUserAgentHeadersInjector](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cache/ProxyCacheUserAgentHeadersInjector.java)。挂到 `HttpProxyCacheServer.Builder.headerInjector()` 上，或直接用 `Map` 传给 `setUp`。
+自定义 UA / Cookie / Referer 注入到代理层：见 [ProxyCacheUserAgentHeadersInjector](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cache/ProxyCacheUserAgentHeadersInjector.java)。挂到 `HttpProxyCacheServer.Builder.headerInjector()` 上，或直接用 `Map` 传给 `setUp`。
 
 ## 离线下载
 
@@ -72,9 +72,9 @@ builder.setCachePath(dir);
 
 1. 用 `HttpProxyCacheServer` 单独跑一次预下载（不 attach 到 Player），或直接开一条播放并 `setStartAfterPrepared(false)` 静默走全长；
 2. 事件 `VideoAllCallBack#onAutoComplete` 触发 → 缓存文件已完整；
-3. 用 [FileUtils](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/FileUtils.java) 拷贝 / 重命名到业务目录。
+3. 用 [FileUtils](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/FileUtils.java) 拷贝 / 重命名到业务目录。
 
-Demo：[DetailDownloadPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/DetailDownloadPlayer.java)（IJK）与 [DetailDownloadExoPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/DetailDownloadExoPlayer.java)（Exo）。
+Demo：[DetailDownloadPlayer](../../app/src/main/java/com/example/gsyvideoplayer/DetailDownloadPlayer.java)（IJK）与 [DetailDownloadExoPlayer](../../app/src/main/java/com/example/gsyvideoplayer/DetailDownloadExoPlayer.java)（Exo）。
 
 ## 不缓存的场景
 

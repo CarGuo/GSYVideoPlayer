@@ -26,14 +26,14 @@ references:
 
 | Kernel | Class | 来源模块 | 特点 |
 |---|---|---|---|
-| **IJK**（默认） | [IjkPlayerManager](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/IjkPlayerManager.java) | `gsyVideoPlayer-java` + `armv*/ex_so` | ffmpeg 全格式；so ~15 MB/ABI；软/硬解双通道 |
-| **System** | [SystemPlayerManager](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/SystemPlayerManager.java) | `gsyVideoPlayer-java` | 无 so；靠 `android.media.MediaPlayer`；直播/复杂容器兼容差 |
+| **IJK**（默认） | [IjkPlayerManager](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/IjkPlayerManager.java) | `gsyVideoPlayer-java` + 升级后的独立 ABI / `ex_so` | FFmpeg n5.1.10 的固定配置；软/硬解能力按格式与设备确认 |
+| **System** | [SystemPlayerManager](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/SystemPlayerManager.java) | `gsyVideoPlayer-java` | 无 so；靠 `android.media.MediaPlayer`；直播/复杂容器兼容差 |
 | **Exo/Media3** | `GSYExoPlayerManager`（Demo 内）／`GSYExo2MediaPlayer` | `gsyVideoPlayer-exo_player2` | DASH / HLS / SmoothStreaming / TrackSelection |
-| **Aliyun** | [AliPlayerManager](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-aliplay/src/main/java/com/shuyu/aliplay/AliPlayerManager.java) | `gsyVideoPlayer-aliplay` | 阿里云 vid/authInfo；HLS 加密 |
+| **Aliyun** | [AliPlayerManager](../../gsyVideoPlayer-aliplay/src/main/java/com/shuyu/aliplay/AliPlayerManager.java) | `gsyVideoPlayer-aliplay` | 阿里云 vid/authInfo；HLS 加密 |
 
 ## 切换 API
 
-**全局切换**：`PlayerFactory.setPlayManager(Class<? extends IPlayerManager>)`（内部 `getPlayManager` 用 `sPlayerManager.newInstance()` 反射构造，故被切入的类**必须**有 `public` 无参构造）。见 [PlayerFactory#L15-L27](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/PlayerFactory.java#L15-L27) 与本仓库 R8 保留规则 [proguard-rules.pro](file:///D:/workspace/project/GSYVideoPlayer/app/proguard-rules.pro)。
+**全局切换**：`PlayerFactory.setPlayManager(Class<? extends IPlayerManager>)`（内部 `getPlayManager` 用 `sPlayerManager.newInstance()` 反射构造，故被切入的类**必须**有 `public` 无参构造）。见 [PlayerFactory#L15-L27](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/PlayerFactory.java) 与本仓库 R8 保留规则 [proguard-rules.pro](../../app/proguard-rules.pro)。
 
 ```java
 // Exo
@@ -51,7 +51,7 @@ PlayerFactory.setPlayManager(AliPlayerManager.class);
 
 ## `IPlayerManager` 抽象
 
-统一接口见 [IPlayerManager](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/player/IPlayerManager.java)。核心方法（子类必须实现）：
+统一接口见 [IPlayerManager](../../gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/player/IPlayerManager.java)。核心方法（子类必须实现）：
 
 | 方法 | 说明 |
 |---|---|
@@ -64,11 +64,11 @@ PlayerFactory.setPlayManager(AliPlayerManager.class);
 | `isSurfaceSupportLockCanvas()` | 是否支持 `lockCanvas`（TextureView 补帧） |
 | `start / pause / stop / seekTo / release / getCurrentPosition / getDuration / getVideoSarNum / getVideoSarDen / getVideoWidth / getVideoHeight` | 基础控制 |
 
-推荐继承 [BasePlayerManager](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/player/BasePlayerManager.java) 以少写模板。
+推荐继承 [BasePlayerManager](../../gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/player/BasePlayerManager.java) 以少写模板。
 
 ## `IPlayerInitSuccessListener` hook
 
-[IPlayerInitSuccessListener](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/player/IPlayerInitSuccessListener.java) 允许在 `initVideoPlayer` 完成后对底层 Player 拿手（比如设置 Exo 的 TrackSelector）：
+[IPlayerInitSuccessListener](../../gsyVideoPlayer-base/src/main/java/com/shuyu/gsyvideoplayer/player/IPlayerInitSuccessListener.java) 允许在 `initVideoPlayer` 完成后对底层 Player 拿手（比如设置 Exo 的 TrackSelector）：
 
 ```java
 IjkPlayerManager.setIjkLibLoader(...);
@@ -84,18 +84,22 @@ GSYExoVideoManager.setPlayerInitSuccessListener(new IPlayerInitSuccessListener()
 
 | Player Manager | 对应 CacheManager |
 |---|---|
-| `IjkPlayerManager` / `SystemPlayerManager` | [ProxyCacheManager](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cache/ProxyCacheManager.java)（默认） |
+| `IjkPlayerManager` / `SystemPlayerManager` | [ProxyCacheManager](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cache/ProxyCacheManager.java)（默认） |
 | Exo/Media3 | `ExoPlayerCacheManager`（`gsyvideoplayer-exo_player2` 内） |
 | Aliyun | 由 Aliyun SDK 自身管理，一般 `CacheFactory` 保持 `ProxyCacheManager` 或自定义空实现 |
 
 ## 多实例并行
 
-用 [CustomManager](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/manager/CustomManager.java) 模式：拷贝 `GSYVideoManager` 单例套壳，在自定义 `GSYVideoView` 里覆盖 `getGSYVideoManager()`；不同页面互不影响，参考 [MultiSampleVideo](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/MultiSampleVideo.java) + [ListMultiVideoActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/ListMultiVideoActivity.java)。
+用 [CustomManager](../../app/src/main/java/com/example/gsyvideoplayer/video/manager/CustomManager.java) 模式：拷贝 `GSYVideoManager` 单例套壳，在自定义 `GSYVideoView` 里覆盖 `getGSYVideoManager()`；不同页面互不影响，参考 [MultiSampleVideo](../../app/src/main/java/com/example/gsyvideoplayer/video/MultiSampleVideo.java) + [ListMultiVideoActivity](../../app/src/main/java/com/example/gsyvideoplayer/ListMultiVideoActivity.java)。
 
 ## Demo 对照
 
-- Exo 切源 / 无缝切换：[DetailExoListPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/exo/DetailExoListPlayer.java)、[ExoAdaptiveTrackActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/exo/ExoAdaptiveTrackActivity.java)
-- MediaCodec 智能回退：[SmartMediaCodecFallbackActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/SmartMediaCodecFallbackActivity.java) + [doc/SMART_MEDIACODEC_FALLBACK_RESEARCH.md](file:///D:/workspace/project/GSYVideoPlayer/doc/SMART_MEDIACODEC_FALLBACK_RESEARCH.md)
+- Exo 切源 / 无缝切换：[DetailExoListPlayer](../../app/src/main/java/com/example/gsyvideoplayer/exo/DetailExoListPlayer.java)、[ExoAdaptiveTrackActivity](../../app/src/main/java/com/example/gsyvideoplayer/exo/ExoAdaptiveTrackActivity.java)
+- MediaCodec 智能回退：[SmartMediaCodecFallbackActivity](../../app/src/main/java/com/example/gsyvideoplayer/SmartMediaCodecFallbackActivity.java) + [doc/SMART_MEDIACODEC_FALLBACK_RESEARCH.md](../../doc/SMART_MEDIACODEC_FALLBACK_RESEARCH.md)
+
+## v14.0.0 原生选择
+
+IJK 当前三 ABI 成套库为 FFmpeg n5.1.10 / OpenSSL 3.5.9。`GSYIjkMediaCodecSelector` 先保留原 IJK 选择，再在 API 29+ 选择平台报告的普通 Codec2 硬件解码器，排除纯软件及安全/隧道必需解码器。这是初始化阶段的选择补充，与确认运行中硬解失败后重建软解的策略分开；见 [发布说明](../../doc/UPDATE_VERSION.md#v1400-2026-10-10)。
 
 ## 常见坑
 

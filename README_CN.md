@@ -15,7 +15,7 @@
 -------------|-------------------------------------------------------------------------------------------------------------------------------------------------
  **缓存**      | **边播边缓存，使用了[AndroidVideoCache](https://github.com/danikula/AndroidVideoCache)；Media3(ExoPlayer)使用SimpleCache。**
  **协议**      | **h263\4\5、Https、concat、rtsp、hls、rtmp、crypto、mpeg等等。[（ijk模式格式支持）](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/DECODERS.md)**
- **滤镜**      | **简单滤镜（马赛克、黑白、色彩过滤、高斯、模糊、模糊等等20多种）、动画、（水印、画面多重播放等）。**
+ **滤镜**      | **基础滤镜、水印、多重播放，以及多 pass 高斯、金字塔模糊、Bloom、LUT 调色、美颜、Glitch、CRT、老电视信号干扰。[说明](doc/RECENT_FEATURES.md)。**
  **帧图**      | **视频第一帧、视频帧截图功能、播放器 UI 组合截图功能，视频生成gif功能。**
  **播放**      | **列表播放、列表连续播放、重力旋转与手动旋转、视频本身rotation旋转属性、快播和慢播、网络视频加载速度。**
  **画面**      | **调整显示比例:默认、16:9、4:3、填充；播放时旋转画面角度（0,90,180,270）；镜像旋转。**
@@ -34,6 +34,7 @@
  **投屏**      | **可选 `gsyvideoplayer-cast` DLNA/UPnP 模块，基于 jUPnP 3.0.3；核心只保留协议无关的 `CastCapability` / `CastProvider` / `CastSession` SPI，不再默认引入 Jetty。[说明](doc/CAST_FEATURE_PLAN.md)。**
  **更多**      | **暂停前后台切换不黑屏；多 URL 清晰度切换；Exo HLS/DASH 自适应清晰度；无缝切换支持；完成后保留最后一帧 Demo；进度条 WebVTT 小窗口预览。**
  **自定义**     | **可自定义渲染层、自定义管理层、自定义播放层（控制层）、自定义缓存层。**
+ **折叠屏** | **XML / Compose 的 FLAT、BOOK、TABLETOP 分屏与全屏 Demo，按 FoldingFeature 铰链信息布局。**
 
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.carguo/gsyvideoplayer)](https://central.sonatype.com/artifact/io.github.carguo/gsyvideoplayer)
 [![](https://jitpack.io/v/CarGuo/GSYVideoPlayer.svg)](https://jitpack.io/#CarGuo/GSYVideoPlayer)
@@ -70,6 +71,20 @@
 #### [--- 版本更新说明 --- ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/UPDATE_VERSION.md)。
 
 #### [--- 近期播放能力说明 --- ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/RECENT_FEATURES.md)。
+
+### v14.0.0 的 ABI 与依赖选择
+
+`gsyvideoplayer` 整包已包含 Java、Exo2 和 `ex_so`。分模块接入 IJK 时，选择 `ex_so` 或所需的独立 ABI 模块；同一 ABI 不要同时引入两套 so。
+
+| 原生模块 | ABI | 本版原生库 |
+| --- | --- | --- |
+| `gsyvideoplayer-ex_so` | `arm64-v8a` / `armeabi-v7a` / `x86_64` | FFmpeg n5.1.10 + OpenSSL 3.5.9 |
+| `gsyvideoplayer-arm64` | `arm64-v8a` | 与 `ex_so` 对应 ABI 相同 |
+| `gsyvideoplayer-armv7a` | `armeabi-v7a` | 与 `ex_so` 对应 ABI 相同 |
+| `gsyvideoplayer-x64` | `x86_64` | 与 `ex_so` 对应 ABI 相同 |
+| `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` | 旧 `armeabi` / `x86` | 历史库，未升级到 FFmpeg 5，仅旧架构项目按需使用 |
+
+新版独立 ABI 模块与 `ex_so` 的格式/协议配置一致，不再按“普通版不支持 MPEG，扩展版才支持”选择。`compose`、`cast`、`aliplay` 仍按需添加；`cast` 要求 API 26，其余核心最低 API 23。编解码配置与构建见 [DECODERS.md](doc/DECODERS.md) 和 [BUILD_SO.md](doc/BUILD_SO.md)。
 
 ### 1、mavenCentral 引用(推荐)
 
@@ -121,18 +136,15 @@ implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
  //是否需要AliPlayer模式
  implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
- //根据你的需求ijk模式的so
+ //选择需要的 ABI；不要再同时添加 ex_so
  implementation 'io.github.carguo:gsyvideoplayer-arm64:14.0.0'
  implementation 'io.github.carguo:gsyvideoplayer-armv7a:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv5:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-x86:14.0.0'
  implementation 'io.github.carguo:gsyvideoplayer-x64:14.0.0'
 ```
 
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+#### C、分模块引入三 ABI 原生库
 
-A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
-C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+`ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
  implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
@@ -143,7 +155,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  //是否需要AliPlayer模式
  implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
 
- //更多ijk的编码支持
+ //三 ABI 的 IJK 原生库
  implementation 'io.github.carguo:gsyvideoplayer-ex_so:14.0.0'
 
 ```
@@ -152,7 +164,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
 
 `gsyvideoplayer-compose` 模块从 v13.1.0 开始随主版本发布。你可以像其它模块一样从 Maven Central / GitHub Packages 引用，也可以在本仓库内开发时继续使用 `implementation project(":gsyVideoPlayer-compose")` 直接引用源码模块。
 >
-> 🛠 **工具链说明：** 该模块在 **CI 上用 JDK 21 验证**（`.github/workflows/*.yml` 中 `actions/setup-java` 的 `java-version: 21`），**本地用 JDK 17 验证**（模块自身在 [gsyVideoPlayer-compose/build.gradle](gsyVideoPlayer-compose/build.gradle) 把 `sourceCompatibility / targetCompatibility / jvmTarget` 钉在 17）。两者都可以，只要本机 JDK **≥ 17** 就能跑通 Kotlin 2.0.21 + AGP 8.6.1。
+> 🛠 **工具链说明：** 该模块在 **CI 上用 JDK 21 验证**（`.github/workflows/*.yml` 中 `actions/setup-java` 的 `java-version: 21`），**本地用 JDK 17 验证**（模块自身在 [gsyVideoPlayer-compose/build.gradle](gsyVideoPlayer-compose/build.gradle) 把 `sourceCompatibility / targetCompatibility / jvmTarget` 钉在 17）。两者都可以，只要本机 JDK **≥ 17** 就能跑通 Kotlin 2.0.21 + AGP 8.9.1。
 
 新增 `gsyvideoplayer-compose` 模块，在保留全部内核与 UI 能力的前提下，提供 Compose 接入：
 
@@ -168,7 +180,7 @@ implementation project(':gsyVideoPlayer-compose')
 // compose-bom 由模块 api 透出，使用方仍按自身工程版本管理 androidx.compose.* 即可
 ```
 
-详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 **24 个可运行的 Compose Activity** —— 覆盖 Wrapper 基础 / Native 详情·列表·多窗口·自动连播·切流·无缝切换 / P5 招牌差异化能力（滤镜、缓存下载、前贴片广告、字幕、自绘弹幕、EXO 多源、Wrapper 真并行多窗口）/ P5-2 现代 App 高频形态（竖屏短视频、悬浮窗、多类型列表、视频+WebView、纯音频、自定义 URL/本地文件、MediaCodec 硬解切换、主题化自绘 controls）。`DemoSamples.kt` 是共享的 `data object` 测试 URL 集合，不是可运行的 Activity。当前能力缺口与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md)。
+详见 [doc/COMPOSE_USE.md](doc/COMPOSE_USE.md)，App 模块下 `Compose Demo` 入口提供 **25 个可运行的 Compose Activity** —— 覆盖 Wrapper 基础 / Native 详情·列表·多窗口·自动连播·切流·无缝切换 / P5 招牌差异化能力（滤镜、缓存下载、前贴片广告、字幕、自绘弹幕、EXO 多源、Wrapper 真并行多窗口）/ P5-2 现代 App 高频形态（竖屏短视频、悬浮窗、多类型列表、视频+WebView、纯音频、自定义 URL/本地文件、MediaCodec 硬解切换、主题化自绘 controls）及 v14 新增的折叠屏 BOOK/TABLETOP Demo。`DemoSamples.kt` 是共享的 `data object` 测试 URL 集合，不是可运行的 Activity。当前能力缺口与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](doc/COMPOSE_BACKLOG.md)。
 
 ### 2、Github Package 依赖方式(推荐)
 
@@ -258,18 +270,15 @@ allprojects {
  //是否需要AliPlayer模式
  implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
- //根据你的需求ijk模式的so
- implementation 'com.shuyu:gsyvideoplayer-armv5:14.0.0'
+ //选择需要的 ABI；不要再同时添加 ex_so
  implementation 'com.shuyu:gsyvideoplayer-armv7a:14.0.0'
  implementation 'com.shuyu:gsyvideoplayer-arm64:14.0.0'
- implementation 'com.shuyu:gsyvideoplayer-x86:14.0.0'
  implementation 'com.shuyu:gsyvideoplayer-x64:14.0.0'
 ```
 
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+#### C、分模块引入三 ABI 原生库
 
-A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
-C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+`ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
  implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
@@ -281,7 +290,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  //是否需要AliPlayer模式
  implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
 
- //更多ijk的编码支持
+ //三 ABI 的 IJK 原生库
  implementation 'com.shuyu:gsyvideoplayer-ex_so:14.0.0'
 
 ```
@@ -340,18 +349,15 @@ allprojects {
  //是否需要AliPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
- //根据你的需求ijk模式的so
+ //选择需要的 ABI；不要再同时添加 ex_so
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v14.0.0'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv5:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x86:v14.0.0'
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v14.0.0'
 ```
 
-#### C、支持其他格式协议的（mpeg，rtsp, concat、crypto协议，支持 16k Page Size）
+#### C、分模块引入三 ABI 原生库
 
-A、B普通版本支持263/264/265等，对于mpeg编码会有声音无画面情况。
-C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
+`ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
@@ -362,7 +368,7 @@ C 引入的so支持mpeg编码和其他补充协议，但是so包相对变大。
  //是否需要AliPlayer模式
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
 
- //更多ijk的编码支持
+ //三 ABI 的 IJK 原生库
  implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v14.0.0'
 
 ```
@@ -515,16 +521,18 @@ WEBVTT
 
 ## 五、近期版本
 
-### v14.0.0 (2026-10-09)
+### v14.0.0 (2026-10-10)
 
-- IJK Native 升级：`gsyVideoPlayer-ex_so` 及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 统一升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**，三端版本与协议能力彻底对齐。
-- IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KB page size，`armeabi-v7a` 保留 `__stack_chk_fail` 链接。
-- ABI 打包变更：默认整包及 `gsyvideoplayer-ex_so` 仅包含 `arm64-v8a` / `armeabi-v7a` / `x86_64`；旧 `armeabi` / `x86` 需按需组合独立的 `gsyvideoplayer-armv5` / `gsyvideoplayer-x86` 模块，这两种旧架构未升级到 FFmpeg 5。
-- 硬解与倍速：优先保留 IJK 原有解码器选择；Android 10+（API 29+）在原选择为空时，按平台能力筛选普通 `c2.*` 硬件解码器，排除纯软件解码器和安全或隧道模式必需的解码器。支持 API 23+ `AudioTrack` 平台倍速与倍速感知的 EOF 完成判定。
-- RTSP 增强：支持 RTSP 初始化阶段（`OPTIONS` / `DESCRIBE` / `SETUP` / `PLAY`）`3xx` 重定向与微秒级 `timeout` 透传，新增可选 `rtsp-live-max-buffer-ms` 直播队列堆积恢复，并在 `GSYVideoBaseManager` 中加入会话代次隔离避免快速切流时迟到回调/超时串扰。
-- Compose 修复：修复宿主生命周期 `detachHost` 与 `dispose` 分离（#4259），以及 ExoPlayer 轮询缓冲进度同步到 `bufferPercent` 与 `mBufferPoint`（#4261）。
+- **IJK 升级**：`ex_so` 与 arm64/armv7a/x64 统一到 **FFmpeg n5.1.10 + OpenSSL 3.5.9**，配套 FFmpeg/player/SDL 成套重编；补齐 MJPEG、HEVC seek/replay 等兼容性修复。
+- **TLS 修复**：已修复 ARMv7 HTTPS 证书加载崩溃，嵌套 HLS 请求保留显式 CA、主机校验与代理配置。最终 ARMv7 / ARM64 在原问题设备上分别通过 CA 加载和 15 项播放检查。
+- **音频与 RTSP**：软件变速支持 0.25×–4×，修复音频排空、起播及 EOF/错误状态；新增 RTSP 初始化重定向、可选直播队列上限和会话回调/超时隔离。`timeout` 单位为微秒。
+- **GL 管线与滤镜**：新增 FBO 多 pass、降采样金字塔、高斯模糊、Bloom、LUT 调色、保边美颜、Glitch、CRT 和老电视信号干扰；渲染器支持 `uTime` 和纹理资产生命周期。
+- **折叠屏**：新增 XML / Compose 的 FLAT、BOOK、TABLETOP 分屏 Demo，处理铰链、旋转、全屏与姿态测试注入；Compose Demo 增至 **25** 个。
+- **Compose**：修复 #4259 宿主卸载时的资源释放及 #4261 缓冲进度同步；新增动态显示比例 API，完善 IJK/EXO 缓存切换与缓冲展示 Demo。
+- **R8 与工具链**：精简反射/JNI 保留规则，Gradle **8.12**、AGP **8.9.1**、R8 **9.4.14**；新增 **13 个接入 skills**，CI 纳入会话和 Compose 回归。
+- **ABI 迁移**：默认整包/`ex_so` 为 `arm64-v8a` / `armeabi-v7a` / `x86_64`；旧 `armeabi` / `x86` 仅按需通过独立旧架构模块提供，未升级到 FFmpeg 5。
 
-配套音频/RTSP 原生修复、软件倍速范围及已验证范围详见 [v14.0.0 完整更新说明](doc/UPDATE_VERSION.md#v1400-2026-10-09)。**当前候选存在 ARMv7 HTTPS 原生崩溃，合并和发布条件尚未满足，见其中的发布检查记录。**16 KiB 静态对齐检查与设备运行验证分别记录。
+完整功能、迁移说明和验证范围见 [v14.0.0 更新说明](doc/UPDATE_VERSION.md#v1400-2026-10-10)；全部 **27 条提交**及源码/产物对应关系见 [发布核对记录](doc/V14_RELEASE_REVIEW.md)。当前 x86_64 和 16 KiB 页设备运行、硬解画面及完整声学回归仍未覆盖。
 
 ### v13.2.1 (2026-08-19)
 
@@ -620,31 +628,36 @@ WEBVTT
 
 ## 七、混淆
 
-```
--keep class com.shuyu.gsyvideoplayer.video.** { *; }
--dontwarn com.shuyu.gsyvideoplayer.video.**
--keep class com.shuyu.gsyvideoplayer.video.base.** { *; }
--dontwarn com.shuyu.gsyvideoplayer.video.base.**
--keep class com.shuyu.gsyvideoplayer.utils.** { *; }
--dontwarn com.shuyu.gsyvideoplayer.utils.**
--keep class com.shuyu.gsyvideoplayer.player.** {*;}
--dontwarn com.shuyu.gsyvideoplayer.player.**
--keep class tv.danmaku.ijk.** { *; }
--dontwarn tv.danmaku.ijk.**
--keep class androidx.media3.** {*;}
--keep interface androidx.media3.**
+v14.0.0 的规则按 JNI 与反射入口保留，不再对整个 GSY/Media3 包做 keep。自定义播放器全屏/小窗构造器及内核/缓存管理器无参构造器必须保留；完整说明见 [FAQ](doc/QUESTION.md) 和 [R8 报告](doc/R8_ANALYZER_REPORT.md)。
 
--keep class com.shuyu.alipay.** {*;}
--keep interface com.shuyu.alipay.**
+```proguard
+# ijk JNI 层：native 侧会反射回调 Java 层，必须整包保留
+-keep class tv.danmaku.ijk.media.player.** { *; }
+-dontwarn tv.danmaku.ijk.media.player.**
 
--keep public class * extends android.view.View{
-    *** get*();
-    void set*(***);
+# ---- GSYVideoPlayer 的三处关键反射点，务必保留 ----
+
+# 1) 全屏 / 小窗：GSYBaseVideoPlayer 通过 getConstructor(Context[,Boolean]).newInstance() 复刻自身
+-keep class * extends com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer {
     public <init>(android.content.Context);
     public <init>(android.content.Context, java.lang.Boolean);
-    public <init>(android.content.Context, android.util.AttributeSet);
-    public <init>(android.content.Context, android.util.AttributeSet, int);
 }
+
+# 2) PlayerFactory：通过 Class.newInstance() 反射构造 IPlayerManager 实现
+-keep class * implements com.shuyu.gsyvideoplayer.player.IPlayerManager {
+    public <init>();
+}
+-keep interface com.shuyu.gsyvideoplayer.player.IPlayerManager { *; }
+
+# 3) CacheFactory：通过 Class.newInstance() 反射构造 ICacheManager 实现
+-keep class * implements com.shuyu.gsyvideoplayer.cache.ICacheManager {
+    public <init>();
+}
+-keep interface com.shuyu.gsyvideoplayer.cache.ICacheManager { *; }
+
+# Media3 官方 aar 已自带 consumer-rules，业务侧只需抑制警告
+-dontwarn androidx.media3.**
+-dontwarn com.google.android.exoplayer2.**
 ```
 
 如果是阿里云播放器，可以参考它的文档（ https://help.aliyun.com/document_detail/124711.html?spm=a2c4g.124711.0.0.7fa0125dkwUPoU

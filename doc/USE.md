@@ -532,6 +532,13 @@ GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
 
 ```
 
+### v14.0.0 接入更新
+
+- `滤镜` Demo 增加多 pass 高斯、金字塔模糊、Bloom、LUT、美颜、Glitch/CRT/老电视干扰。多 pass 使用 `GSYVideoGLViewMultiPassRender` + `setCustomGLRenderer`，LUT/单 pass 使用 `setEffectFilter`；[完整示例](RECENT_FEATURES.md)。
+- 新增 [XML 折叠屏 Demo](../app/src/main/java/com/example/gsyvideoplayer/FoldDetailActivity.java) 和 [Compose 折叠屏 Demo](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FoldComposeActivity.kt)，支持 BOOK/TABLETOP 铰链布局、旋转和全屏。
+- 动态比例：主线程调用 `GSYVideoType.setShowType(...)` 后，View 调用 `player.getCurrentPlayer().changeTextureViewShowType()`；Compose 调用 `controller.changeTextureViewShowType()`，见 [COMPOSE_USE.md](COMPOSE_USE.md)。
+- IJK 默认三 ABI、FFmpeg 5、音频/RTSP/TLS 行为与旧配置迁移见 [DEPENDENCIES.md](DEPENDENCIES.md)、[QUESTION.md](QUESTION.md) 和 [v14 更新说明](UPDATE_VERSION.md#v1400-2026-10-10)。
+
 ### 近期新增能力
 
 近期新增和调整的播放能力可以先看 [RECENT_FEATURES.md](RECENT_FEATURES.md)，里面按 Demo 入口、主要类和回归方式做了集中说明。
@@ -612,7 +619,7 @@ cast.disconnect();
 cast.stopDiscovery();
 ```
 
-Demo 参考 [SampleCastControlVideo](../app/src/main/java/com/example/gsyvideoplayer/video/SampleCastControlVideo.java) 与 [CastDemoActivity](../app/src/main/java/com/example/gsyvideoplayer/CastDemoActivity.java)。投屏协议细节和整体架构见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) 与 [CAST_ARCHITECTURE.md](CAST_ARCHITECTURE.md)。
+Demo 参考 [SampleCastControlVideo](../app/src/main/java/com/example/gsyvideoplayer/video/SampleCastControlVideo.java) 与 [CastDemoActivity](../app/src/main/java/com/example/gsyvideoplayer/CastDemoActivity.java)。投屏协议细节和整体架构见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md) 与 [CAST_RECEIVER_DESIGN.md](CAST_RECEIVER_DESIGN.md)。
 
 ### 高级自定义
 

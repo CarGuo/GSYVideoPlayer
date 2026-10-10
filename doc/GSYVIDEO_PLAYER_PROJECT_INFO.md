@@ -48,6 +48,11 @@
 | 完成后保留最后一帧 | Demo Video 层 | `KeepLastFrameVideo` 只作为业务语义验证，不改变基础播放器默认完成态。 |
 | 播放器初始化失败处理 | Manager + Player 层 | `GSYVideoBaseManager` 和各 `IPlayerManager` 将内核创建/初始化异常收敛到错误回调和资源清理。 |
 | Exo cache 与 GIF 清理 | Cache + Utils 层 | `ExoSourceManager` 管理 Exo cache 生命周期，`GifCreateHelper` 负责 GIF 生成状态和临时资源清理。 |
+| v14 多 pass / LUT / 动态滤镜 | Render 层 | GL 线程管理 FBO、多尺寸 pass、额外纹理与 uTime；Demo 显式启用 GL 并恢复原配置。 |
+| v14 折叠屏 | Demo / View / Compose UI 层 | WindowManager 提供姿态；XML 全屏克隆布局、Compose 稳定 Layout 与铰链分隔由 Demo 管理。 |
+| v14 会话隔离 | Manager 层 | 播放器实例 + 会话代次约束回调、已排队消息和超时，内核工作留在原工作线程。 |
+| v14 FFmpeg / TLS / 音频 | IJK Native 层 | 三 ABI 成套库承载协议、音频时钟/倍速和 TLS 修复；Java Codec2 selector 提供平台解码器选择。 |
+| v14 Compose 释放/缓冲/比例 | Controller + View 层 | detach 与 dispose 分离，合并轮询缓冲并公开显示比例刷新 API。 |
 
 更完整的入口、API、回归清单见 [RECENT_FEATURES.md](RECENT_FEATURES.md)。
 

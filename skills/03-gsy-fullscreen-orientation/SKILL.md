@@ -30,8 +30,8 @@ references:
 
 | 类 / 方法 | 位置 | 说明 |
 |---|---|---|
-| `OrientationUtils(Activity, GSYBaseVideoPlayer)` | [OrientationUtils#L50-L52](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/OrientationUtils.java#L50-L52) | 主构造 |
-| `OrientationUtils(Activity, player, OrientationOption)` | [OrientationUtils#L54-L64](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/OrientationUtils.java#L54-L64) | 支持自定义旋转角度阈值 |
+| `OrientationUtils(Activity, GSYBaseVideoPlayer)` | [OrientationUtils#L50-L52](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/OrientationUtils.java) | 主构造 |
+| `OrientationUtils(Activity, player, OrientationOption)` | [OrientationUtils#L54-L64](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/OrientationUtils.java) | 支持自定义旋转角度阈值 |
 | `setEnable(boolean)` | `OrientationUtils` | 使能/失能自动旋转 |
 | `setRotateWithSystem(boolean)` | `OrientationUtils` | 是否跟随系统"旋转开关" |
 | `setIsOnlyRotateLand(boolean)` | `OrientationUtils` | true 时仅在横屏方向变化时响应 |
@@ -39,9 +39,9 @@ references:
 | `backToProtVideo()` | `OrientationUtils` | 返回键触发时把方向复位竖屏 |
 | `setIsPause(boolean)` | `OrientationUtils` | 生命周期 pause/resume 桥接 |
 | `releaseListener()` | `OrientationUtils` | `onDestroy` 释放监听 |
-| `startWindowFullscreen(Context, boolean, boolean)` | [GSYBaseVideoPlayer](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYBaseVideoPlayer.java) | 进入 window 全屏，返回克隆体 |
-| `GSYVideoManager.backFromWindowFull(Context)` | [GSYVideoManager#L82-L94](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoManager.java#L82-L94) | 返回键统一处理 |
-| `GSYVideoManager.isFullState(Activity)` | [GSYVideoManager#L143-L151](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoManager.java#L143-L151) | 当前是否全屏 |
+| `startWindowFullscreen(Context, boolean, boolean)` | [GSYBaseVideoPlayer](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYBaseVideoPlayer.java) | 进入 window 全屏，返回克隆体 |
+| `GSYVideoManager.backFromWindowFull(Context)` | [GSYVideoManager#L82-L94](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoManager.java) | 返回键统一处理 |
+| `GSYVideoManager.isFullState(Activity)` | [GSYVideoManager#L143-L151](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/GSYVideoManager.java) | 当前是否全屏 |
 
 ## `OrientationOption` 参数
 
@@ -66,9 +66,13 @@ references:
 
 ## Demo 对照
 
-- 最标准的全屏 + 旋转：[DetailPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/DetailPlayer.java)
-- 只旋转不切副本：[LandLayoutVideo](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/LandLayoutVideo.java) + [DetailNormalActivityPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/DetailNormalActivityPlayer.java)
-- 反射克隆入口：[GSYBaseVideoPlayer](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYBaseVideoPlayer.java)（`startWindowFullscreen` → `getConstructor(Context.class, Boolean.class)`）
+- 最标准的全屏 + 旋转：[DetailPlayer](../../app/src/main/java/com/example/gsyvideoplayer/DetailPlayer.java)
+- 只旋转不切副本：[LandLayoutVideo](../../app/src/main/java/com/example/gsyvideoplayer/video/LandLayoutVideo.java) + [DetailNormalActivityPlayer](../../app/src/main/java/com/example/gsyvideoplayer/DetailNormalActivityPlayer.java)
+- 反射克隆入口：[GSYBaseVideoPlayer](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYBaseVideoPlayer.java)（`startWindowFullscreen` → `getConstructor(Context.class, Boolean.class)`）
+
+## v14.0.0 折叠屏示例
+
+XML [FoldDetailActivity](../../app/src/main/java/com/example/gsyvideoplayer/FoldDetailActivity.java) 与 Compose [FoldComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/FoldComposeActivity.kt) 按 FoldingFeature 实现 BOOK/TABLETOP 分屏、铰链分隔与全屏。XML 全屏克隆布局通过 `LandLayoutVideo` 传递姿态；普通全屏 API 不会自动给任意业务页面添加折叠布局。用法及测试注入边界见 [RECENT_FEATURES.md](../../doc/RECENT_FEATURES.md)。
 
 ## 常见坑
 

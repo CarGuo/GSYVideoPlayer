@@ -2,7 +2,7 @@
 
 > **当前状态：v13.1.0 起随主版本发布**
 >
-> `gsyVideoPlayer-compose` 模块已纳入 Maven Central / GitHub Packages 发布流。外部项目可直接使用 `io.github.carguo:gsyvideoplayer-compose:13.1.0`；在本仓库内开发或调试时，仍可使用 `implementation project(":gsyVideoPlayer-compose")` 的源码依赖方式。
+> `gsyVideoPlayer-compose` 模块已纳入 Maven Central / GitHub Packages 发布流。外部项目可直接使用 `io.github.carguo:gsyvideoplayer-compose:14.0.0`；在本仓库内开发或调试时，仍可使用 `implementation project(":gsyVideoPlayer-compose")` 的源码依赖方式。
 >
 > 当前能力缺口、已知问题与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](./COMPOSE_BACKLOG.md)；后续每一轮代码与 demo 推进都会同步更新该文件。
 
@@ -13,15 +13,15 @@
 | **Wrapper（AndroidView 包装）** | 已用 GSY，想快速塞进 Compose 屏；保留全屏、手势、缓存、字幕、滤镜等全部能力 | `GSYVideoPlayerView { ... }` |
 | **Native（Compose 原生控件层）** | 想完全用 Compose 重绘控制 UI，但仍复用 GSY 多内核与渲染管线 | `GSYComposePlayer + GSYPlayerController` |
 
-模块基于 [gsyVideoPlayer-java](../gsyVideoPlayer-java)，**不修改任何旧代码**。
+模块基于 [gsyVideoPlayer-java](../gsyVideoPlayer-java)，复用已有多内核和渲染层。v14.0.0 同步传统 View 与 Compose 的缓冲和显示比例 API；IJK 使用方还需选择 `ex_so` 或独立 ABI 原生模块，详见 [DEPENDENCIES.md](DEPENDENCIES.md)。
 
 ---
 
 ## 一、引入依赖
 
 ```groovy
-// 方式 A：Maven Central / GitHub Packages
-implementation "io.github.carguo:gsyvideoplayer-compose:13.1.0"
+// 方式 A：Maven Central（GitHub Packages 改用 com.shuyu）
+implementation "io.github.carguo:gsyvideoplayer-compose:14.0.0"
 
 // 方式 B：本仓库内源码依赖
 implementation project(":gsyVideoPlayer-compose")
@@ -29,9 +29,22 @@ implementation project(":gsyVideoPlayer-compose")
 
 模块本身已 `api` 依赖 `gsyVideoPlayer-java`，无需重复引入；但如果你需要 EXO/Ali 内核，还需按照原有方式额外引入对应坐标。
 
-> **要求**：`minSdk ≥ 23`、Kotlin 2.0.x、AGP 8.6+、JDK 17。模块内部已通过 `compose-bom 2024.06.00` 统一 Compose 依赖版本，并使用 Compose Compiler Gradle Plugin（无需再单独指定 `composeCompilerVersion`）。
+> **要求**：`minSdk ≥ 23`、Kotlin 2.0.x、本仓库 AGP 8.9.1 / Gradle 8.12、JDK 17。模块内部已通过 `compose-bom 2024.06.00` 统一 Compose 依赖版本，并使用 Compose Compiler Gradle Plugin（无需再单独指定 `composeCompilerVersion`）。
 
 ---
+
+## v14.0.0 行为与 API 更新
+
+- `detachHost` 解绑回调和 tick，`dispose` 保留 host 直到统一释放内核资源；AndroidView 卸载后不会继续操作已分离的宿主（#4259）。
+- `snapshot.bufferPercent` 合并 Exo/Ali 的轮询值和 IJK/System 的回调值，并输出 `BufferingProgress`；缓冲进度不是整段媒体的下载比例（#4261）。
+- 在主线程先设置全局显示比例，再刷新当前 controller；方法同时更新内嵌宿主及当前全屏实例：
+
+```kotlin
+GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9)
+controller.changeTextureViewShowType()
+```
+
+`GSYVideoType` 是全局配置，Demo 在退出时恢复进入前的显示比例。`FullFeatureNativeActivity` 展示完整用法；`CacheDownloadComposeActivity` 展示 IJK/EXO 缓存切换及工厂恢复。折叠屏和 GL 接入见 [RECENT_FEATURES.md](RECENT_FEATURES.md)，完整变更见 [v14 更新说明](UPDATE_VERSION.md#v1400-2026-10-10)。
 
 ## 二、模式一：AndroidView 包装
 
@@ -178,7 +191,7 @@ Idle  Preparing  Playing  Buffering  Paused  Completed  Error
 > ⚠️ **关于 `withHost { ... }`**：这是为了在能力对齐补齐之前给业务一个**逃生口**（Escape Hatch），
 > 不是推荐路径。**禁止**在 block 里调 `player.setVideoAllCallBack(...)`——会把内部
 > dispatcher 顶掉，导致 `events` / `setOnXxx` / `setUserVideoAllCallBack` 全部失效。
-> 需要回调请改用 [`setUserVideoAllCallBack`](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt) 入口。
+> 需要回调请改用 [`setUserVideoAllCallBack`](../gsyVideoPlayer-compose/src/main/java/com/shuyu/gsyvideoplayer/compose/native_/GSYPlayerController.kt) 入口。
 
 ### 4. 响应式订阅（推荐：events / stateFlow）
 
@@ -260,8 +273,8 @@ Button(onClick = { controller.enterFullscreen(activity) }) { Text("全屏") }
 ```
 
 > 不再推荐 `Dialog(...) + 手动 requestedOrientation` 自绘全屏——两个 demo
-> [DetailNativeActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt)
-> 与 [ListWithFullscreenActivity](file:///Users/guoshuyu/workspace/android/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt)
+> [DetailNativeActivity](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DetailNativeActivity.kt)
+> 与 [ListWithFullscreenActivity](../app/src/main/java/com/example/gsyvideoplayer/compose/host/ListWithFullscreenActivity.kt)
 > 已切换到上述路径，可作为参考。
 
 ---
@@ -279,9 +292,9 @@ CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
 
 ## 六、Demo
 
-App 模块下入口 `Compose Demo`（[ComposeDemoListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt)）汇总了 **24 个可运行的 Compose Activity**，外加 1 份共享测试数据：
+App 模块下入口 `Compose Demo`（[ComposeDemoListActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/ComposeDemoListActivity.kt)）汇总了 **25 个可运行的 Compose Activity**，外加 1 份共享测试数据：
 
-> 表中第 25 行的 `DemoSamples.kt` 是 `data object`（与 Java/XML Demo 共用同一组测试 URL），并非可运行 Activity，仅为方便溯源附在表尾。
+> 表中第 26 行的 `DemoSamples.kt` 是 `data object`（与 Java/XML Demo 共用同一组测试 URL），并非可运行 Activity，仅为方便溯源附在表尾。
 
 ### 6.1 P0 / P1 — 基础与对齐 Java 老 demo（8 项）
 
@@ -322,11 +335,17 @@ App 模块下入口 `Compose Demo`（[ComposeDemoListActivity.kt](../app/src/mai
 | 23 | MediaCodec 硬解切换 | [MediaCodecComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/MediaCodecComposeActivity.kt) | `GSYVideoType.enableMediaCodec()` / `disableMediaCodec()` 实时切换 |
 | 24 | 自定义主题 Controls | [CustomControlsThemeComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/CustomControlsThemeComposeActivity.kt) | Compose 自绘控件取代 `GSYDefaultControls`：渐变浮层 + Slider seek + 多主题切换 |
 
-### 6.4 共享测试数据
+### 6.4 v14.0.0 折叠屏 Demo（1 项）
+
+| # | 名称 | 入口 | 说明 |
+| --- | --- | --- | --- |
+| 25 | Foldable | [FoldComposeActivity.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FoldComposeActivity.kt) | WindowManager FLAT / BOOK / TABLETOP、稳定 Layout、真实铰链尺寸、全屏与 `extra_posture` 测试注入 |
+
+### 6.5 共享测试数据
 
 | # | 名称 | 入口 | 说明 |
 |---|---|---|---|
-| 25 | Demo 数据 | [DemoSamples.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DemoSamples.kt) | 复用与 Java/XML Demo 同一组测试 URL（`data object`，非可运行 Activity） |
+| 26 | Demo 数据 | [DemoSamples.kt](../app/src/main/java/com/example/gsyvideoplayer/compose/host/DemoSamples.kt) | 复用与 Java/XML Demo 同一组测试 URL（`data object`，非可运行 Activity） |
 
 ---
 
@@ -356,7 +375,7 @@ io.github.carguo:gsyvideoplayer-compose:<PROJ_VERSION>
 
 ### 2) GitHub Packages
 
-打 tag（任意名）触发 [.github/workflows/release.yml](../.github/workflows/release.yml)：
+推送新的 `vX.Y.Z` tag 触发 [.github/workflows/release.yml](../.github/workflows/release.yml)，tag 应与 `gradle.properties` 中的 `PROJ_VERSION` 一致；已发布 tag 不应移动或重建：
 
 ```
 com.shuyu:gsyvideoplayer-compose:<PROJ_VERSION>

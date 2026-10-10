@@ -16,8 +16,15 @@
 | 播放器初始化失败安全处理 | 通用能力 | `GSYVideoBaseManager`、各 `IPlayerManager` | 内核创建或初始化失败时走错误回调和资源清理，避免直接 crash。 |
 | Exo 缓存生命周期和 GIF 清理 | 通用能力 | `ExoSourceManager`、`GifCreateHelper` | 收紧 Exo cache 的打开/释放流程，GIF 生成流程结束或失败时更可靠地清理。 |
 | DLNA/UPnP 投屏 | `投屏 Demo` | `CastCapability`、`JupnpDlnaProvider`、`JupnpDlnaSession`、`SampleCastControlVideo`、`CastDemoActivity` | 协议无关 SPI 留在核心，jUPnP 3.0.3 DLNA `AVTransport:1` 实现由可选 `gsyvideoplayer-cast` 提供；`SetAVTransportURI → Play → Seek` 保留中途投屏本地进度，并带单机 Loopback Receiver。 |
+| v14 GL 管线与新滤镜 | `滤镜` | `GSYVideoGLViewMultiPassRender`、`LookupEffect`、`BeautyEffect` 等 | 多 pass / 金字塔 / Bloom / LUT / 动态滤镜，见下方用法。 |
+| 折叠屏 | XML / Compose 折叠屏入口 | `FoldDetailActivity`、`FoldComposeActivity` | FLAT / BOOK / TABLETOP、铰链与全屏；Compose 共 25 项。 |
+| Compose 状态与显示比例 | 完整控件 / 缓存 Demo | `GSYPlayerController` | 资源释放、缓冲轮询与比例 API，见 COMPOSE_USE.md。 |
 
-## 近期提交覆盖
+## v14.0.0 提交覆盖
+
+`v13.2.1..v14.0.0` 的 27 条提交逐条映射见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)。
+
+## v13.0.0 时期提交参考
 
 按近期提交逐条对应如下：
 
@@ -39,14 +46,52 @@
 
 - `README_CN.md` / `README.md`：首页能力摘要和近期能力入口。
 - `doc/USE.md` / `doc/USE_EN.md`：使用层面的 Demo 入口和核心 API。
-- `doc/UPDATE_VERSION.md` / `doc/UPDATE_VERSION_EN.md`：Unreleased 版本变更摘要。
+- `doc/UPDATE_VERSION.md` / `doc/UPDATE_VERSION_EN.md`：已发布版本的完整变更说明。
 - `doc/ARCHITECTURE.md`：播放能力在 UI、Manager、Render、Exo manager 等层级上的设计归属。
 - `doc/GSYVIDEO_PLAYER_PROJECT_INFO.md` / `doc/GSYVIDEO_PLAYER_PROJECT_INFO_EN.md`：项目结构说明里的近期能力层级映射。
 - `doc/SUBTITLE_CN.md`：通用字幕专题说明。
 - `doc/KEEP_LAST_FRAME.md` / `doc/KEEP_LAST_FRAME_EN.md`：完成后保留最后一帧专题说明。
 - `doc/RECENT_FEATURES.md` / `doc/RECENT_FEATURES_EN.md`：近期能力总览、API 和回归清单。
 
-构建、依赖、SO、发布、解码器、FAQ 类文档没有强行加入本次播放能力说明，因为它们的主题不是 Demo 功能入口或播放架构。
+上述既有 Demo 能力按文档主题组织。v14.0.0 的原生库、ABI 与工具链迁移另见下方说明，以及构建、依赖、发布、解码器和 FAQ 文档。
+
+## v14.0.0 GL 管线与新滤镜
+
+[DetailFilterActivity.java](../app/src/main/java/com/example/gsyvideoplayer/DetailFilterActivity.java) 的“渲染场景”提供多 pass 高斯、金字塔模糊、Bloom 和 LUT；“滤镜”序列提供美颜、Glitch、CRT 和老电视干扰。这些是可选择的渲染能力，启用前设置 `GSYVideoType.GLSURFACE`。
+
+| 类型 | API | 接入方式 |
+| --- | --- | --- |
+| 多 pass 高斯 | `GaussianBlurMultiPassEffect(radius)` | `GSYVideoGLViewMultiPassRender` + `setCustomGLRenderer` |
+| Kawase 金字塔 | `IterativeBlurPyramidEffect(levels)` | 同上，逐 pass 输出尺寸缩放 |
+| Bloom | `BloomEffect(levels, threshold, knee, intensity)` | 同上，亮部提取后与原场景合成 |
+| LUT | `LookupEffect(assetPath, intensity)` | `setEffectFilter`；512×512 / 8×8 的 64³ LUT |
+| 美颜 | `BeautyEffect(smoothLevel, whiteLevel)` | `setEffectFilter`；保边磨皮 + 暖色美白 |
+| 动态效果 | `GlitchEffect` / `CrtEffect` / `OldTvSignalEffect` | `setEffectFilter`，使用渲染器自动绑定的 `uTime` |
+
+```java
+// 在创建渲染 View 前选择 GL；退出页面时恢复原 render type。
+GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+GSYVideoGLViewMultiPassRender render = new GSYVideoGLViewMultiPassRender();
+render.setMultiPassEffect(new GaussianBlurMultiPassEffect(6.0f));
+player.setCustomGLRenderer(render);
+```
+
+多 pass 使用 FBO ping-pong、多尺寸缓冲池和 OES → 2D 转换。`GSYVideoGLViewMultiPassInterface` 定义 pass，`GSYVideoGLViewPyramidInterface` 控制尺寸，`GSYVideoGLViewCompositeInterface` 提供原场景采样。GL 资源创建、绑定、切换与释放由渲染线程管理。
+
+LUT 的三张示例 PNG 在 [app/src/main/assets/lut](../app/src/main/assets/lut)，属于 Demo 资产；外部使用方应把所需 LUT 放入自己应用的 assets，再调用 `new LookupEffect("lut/teal_orange.png", 1.0f)`。`TextureShaderInterface` 统一管理额外纹理生命周期，不能把示例 PNG 当作播放器 AAR 的默认资产。
+
+实现与当时的验证记录见 [FBO](FBO_MULTIPASS_FIRST_CARD_PLAN.md)、[金字塔](PYRAMID_ITERATIVE_BLUR_PLAN.md)、[Bloom](BLOOM_FIRST_CARD_PLAN.md)、[LUT](LUT_COLOR_GRADING_FIRST_CARD_PLAN.md)、[美颜](BEAUTY_FIRST_CARD_PLAN.md)、[Glitch/CRT](GLITCH_FIRST_CARD_PLAN.md)、[老电视](OLDTV_SIGNAL_FIRST_CARD_PLAN.md)。
+
+## v14.0.0 折叠屏与 Compose
+
+- 主页面 `折叠屏XML` / `折叠屏Compose` 分别进入 [FoldDetailActivity](../app/src/main/java/com/example/gsyvideoplayer/FoldDetailActivity.java) / [FoldComposeActivity](../app/src/main/java/com/example/gsyvideoplayer/compose/host/FoldComposeActivity.kt)；后者也是 Compose 列表第 25 项。
+- WindowManager 1.3.0 的 `FoldingFeature` 驱动 BOOK 左右分屏、TABLETOP 上下分屏和 FLAT 布局，分隔宽度使用真实铰链尺寸。XML 全屏使用专门的 BOOK/TABLETOP 布局，Compose 稳定 Layout 保持播放器节点身份。
+- 旋转/展开时重新应用布局；全屏按钮与返回流程已修复。`extra_posture=0/1/2` 仅用于注入 FLAT/BOOK/TABLETOP 测试，不传时使用真实姿态；注入矩阵不能替代实体折叠屏传感器验收。
+- Compose `detachHost` / `dispose` 释放、轮询缓冲合并、动态显示比例与 IJK/EXO 缓存示例见 [COMPOSE_USE.md](COMPOSE_USE.md)；当前为 **25 个**可运行 Demo。
+
+## v14.0.0 原生播放与构建
+
+FFmpeg n5.1.10 / OpenSSL 3.5.9 的音频、Codec2、RTSP 与 TLS/HLS 修复、默认三 ABI 迁移和 Gradle/AGP/R8 升级见 [完整更新说明](UPDATE_VERSION.md#v1400-2026-10-10)。当前 ARMv7 TLS 崩溃已修复，最终结果和所有 27 条提交见 [发布核对记录](V14_RELEASE_REVIEW.md)。构建与验证边界应按当前库身份判断。
 
 ## WebVTT 进度条预览
 

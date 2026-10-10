@@ -31,7 +31,7 @@ GSYTextureRenderView（渲染管理）
                           └── NormalGSYVideoPlayer（无返回/无标题的简版）
 ```
 
-自定义组件通常继承 [StandardGSYVideoPlayer](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/StandardGSYVideoPlayer.java) 或 [NormalGSYVideoPlayer](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/NormalGSYVideoPlayer.java)。
+自定义组件通常继承 [StandardGSYVideoPlayer](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/StandardGSYVideoPlayer.java) 或 [NormalGSYVideoPlayer](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/NormalGSYVideoPlayer.java)。
 
 ## 必须实现的三件事
 
@@ -55,7 +55,7 @@ public MyVideoPlayer(Context c, Boolean fullFlag) { super(c, fullFlag); }
 public MyVideoPlayer(Context c, AttributeSet a) { super(c, a); }
 ```
 
-R8 侧已在 [proguard-rules.pro](file:///D:/workspace/project/GSYVideoPlayer/app/proguard-rules.pro) 保留：
+R8 侧已在 [proguard-rules.pro](../../app/proguard-rules.pro) 保留：
 ```
 -keep class * extends com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer {
     public <init>(android.content.Context);
@@ -90,11 +90,11 @@ R8 侧已在 [proguard-rules.pro](file:///D:/workspace/project/GSYVideoPlayer/ap
 
 ## 标准封面 / 清晰度 / 弹幕
 
-- 封面：Demo 组件 [SampleCoverVideo](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/SampleCoverVideo.java) 演示用 Glide 加载封面。
-- 清晰度切换：Demo 组件 [SwitchVideo](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/SwitchVideo.java) + [DetailListPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/DetailListPlayer.java)（多列源，`setUp(List<GSYVideoModel>, ...)`）。
-- 弹幕层：Demo 组件 [DanmakuVideoPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/DanmakuVideoPlayer.java) —— 在布局叠一层 `DanmakuView`，在 `onProgress` 里 `dispatch(long time)`。
-- 控制条自定义：Demo 组件 [SampleControlVideo](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/SampleControlVideo.java)（毛玻璃底栏 + 播放按钮）。
-- 横屏专用布局：Demo 组件 [LandLayoutVideo](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/LandLayoutVideo.java)（`getFullId()` 返回不同 layout）。
+- 封面：Demo 组件 [SampleCoverVideo](../../app/src/main/java/com/example/gsyvideoplayer/video/SampleCoverVideo.java) 演示用 Glide 加载封面。
+- 清晰度切换：Demo 组件 [SwitchVideo](../../app/src/main/java/com/example/gsyvideoplayer/switchplay/SwitchVideo.java) + [DetailListPlayer](../../app/src/main/java/com/example/gsyvideoplayer/DetailListPlayer.java)（多列源，`setUp(List<GSYVideoModel>, ...)`）。
+- 弹幕层：Demo 组件 [DanmakuVideoPlayer](../../app/src/main/java/com/example/gsyvideoplayer/video/DanmakuVideoPlayer.java) —— 在布局叠一层 `DanmakuView`，在 `onProgress` 里 `dispatch(long time)`。
+- 控制条自定义：Demo 组件 [SampleControlVideo](../../app/src/main/java/com/example/gsyvideoplayer/video/SampleControlVideo.java)（毛玻璃底栏 + 播放按钮）。
+- 横屏专用布局：Demo 组件 [LandLayoutVideo](../../app/src/main/java/com/example/gsyvideoplayer/video/LandLayoutVideo.java)（`getFullId()` 返回不同 layout）。
 
 ## 多状态视图（loading / error / paywall）
 

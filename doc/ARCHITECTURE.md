@@ -15,7 +15,12 @@
 | 完成后保留最后一帧 | Demo player | `KeepLastFrameVideo` 只作为 Demo 级验证，不改变基础播放器默认完成态和释放策略。 |
 | 播放器初始化失败处理 | Manager + Player | `GSYVideoBaseManager` 和各 `IPlayerManager` 将内核创建/初始化异常收敛到错误回调和资源清理。 |
 | Exo cache 与 GIF 清理 | Cache + Utils | `ExoSourceManager` 管理 Exo cache 生命周期，`GifCreateHelper` 负责 GIF 生成状态和临时资源清理。 |
-| 投屏（DLNA / Chromecast，规划中） | UI overlay + Cast 管理层 | 内核只负责本地时间线，`GSYCastManager` 独立处理远端播放/进度；投屏中本地暂停并保留 UI，退投时按远端最后 position 恢复本地播放。规划详情见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md)、[CAST_RECEIVER_DESIGN.md](CAST_RECEIVER_DESIGN.md)、[CAST_TEST_PLAYBOOK.md](CAST_TEST_PLAYBOOK.md)。 |
+| 投屏（可选 DLNA；Chromecast 尚未实现） | UI overlay + Cast 管理层 | 内核只负责本地时间线，`CastCapability` / `CastProvider` / `CastSession` 管理远端播放/进度；投屏中本地暂停并保留 UI，退投时按远端最后 position 恢复本地播放。已交付的可选 DLNA 与接收端设计见 [CAST_FEATURE_PLAN.md](CAST_FEATURE_PLAN.md)、[CAST_RECEIVER_DESIGN.md](CAST_RECEIVER_DESIGN.md)、[CAST_TEST_PLAYBOOK.md](CAST_TEST_PLAYBOOK.md)。 |
+| v14 多 pass / LUT / 动态滤镜 | Render 层 | GL 线程管理 FBO、多尺寸 pass、额外纹理与 uTime；Demo 显式启用 GL 并恢复原配置。 |
+| v14 折叠屏 | Demo / View / Compose UI 层 | WindowManager 提供姿态；XML 全屏克隆布局、Compose 稳定 Layout 与铰链分隔由 Demo 管理。 |
+| v14 会话隔离 | Manager 层 | 播放器实例 + 会话代次约束回调、已排队消息和超时，内核工作留在原工作线程。 |
+| v14 FFmpeg / TLS / 音频 | IJK Native 层 | 三 ABI 成套库承载协议、音频时钟/倍速和 TLS 修复；Java Codec2 selector 提供平台解码器选择。 |
+| v14 Compose 释放/缓冲/比例 | Controller + View 层 | detach 与 dispose 分离，合并轮询缓冲并公开显示比例刷新 API。 |
 
 更多入口、API 和回归说明见 [RECENT_FEATURES.md](RECENT_FEATURES.md)。
 
@@ -90,15 +95,15 @@ GSYVideoPlayer/
 │
 └── .github/workflows/
     ├── release.yml                             ← GitHub Packages workflow
-    │   └── ./gradlew publish
+    │   └── publishReleasePublicationToGsyvideoplayerRepository -PPUBLISH_TARGET=github
     │
     └── publish-maven-central.yml               ← Maven Central workflow
-        └── ./gradlew publishToSonatype closeAndRelease...
+        └── publishMavenCentralPublicationToSonatypeRepository + closeAndRelease... -PPUBLISH_TARGET=mavenCentral
 ```
 
 ## 📝 Publication 命名区分
 
-为了避免冲突，两个发布使用**不同的 publication 名称**：
+为了避免冲突，两个发布由 `PUBLISH_TARGET` 选择**不同的 publication 名称**，每次 Gradle 调用只创建一个：
 
 | 配置文件 | Publication 名称 | 用途 |
 |---------|-----------------|------|
@@ -108,10 +113,10 @@ GSYVideoPlayer/
 这样在 Gradle tasks 中可以明确区分：
 ```bash
 # GitHub Packages
-./gradlew publishReleasePublicationToGsyvideoplayerRepository
+./gradlew publishReleasePublicationToGsyvideoplayerRepository -PPUBLISH_TARGET=github
 
 # Maven Central
-./gradlew publishMavenCentralPublicationToSonatypeRepository
+./gradlew publishMavenCentralPublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository -PPUBLISH_TARGET=mavenCentral
 ```
 
 ## 🎯 用户使用场景

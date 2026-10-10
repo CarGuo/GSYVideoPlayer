@@ -2,7 +2,19 @@
 
 **[Click to see the English version](QUESTION_EN.md)**
 
-#### ijkplayer模式的，你可能会需要的option大全 : [ff_ffplay_options.h](https://github.com/Bilibili/ijkplayer/blob/cced91e3ae3730f5c63f3605b00d25eafcf5b97b/ijkmedia/ijkplayer/ff_ffplay_options.h)
+### v14.0.0 原生播放迁移
+
+- 默认 IJK 三 ABI 为 `arm64-v8a` / `armeabi-v7a` / `x86_64`；FFmpeg n5.1.10，OpenSSL 3.5.9。旧 `armeabi` / `x86` 不在默认整包中，未升级到 FFmpeg 5。
+- ARMv7 HTTPS 证书加载崩溃已修复，不需要删掉 ARMv7 或关闭证书校验。显式 `tls_verify` / `ca_file` 等配置会继承至 HLS 子资源；当前验证和限制见 [TLS README](../tests/tls-native/README.md)。
+- `soundtouch=1` 为 0.25×–4× 软件倍速；`soundtouch=0` 为设备相关平台倍速。切换引擎需要排空旧音频；超出范围或平台拒绝不能视为已经应用请求值。
+- RTSP FORMAT `timeout` 单位为微秒；PLAYER `rtsp-live-max-buffer-ms` 默认 `0`，仅接受 `0` 或 `500..60000` 毫秒。它用于 1× 直播队列恢复，会丢弃旧媒体，不是自动重连开关。
+- RTSP 重定向覆盖初始 OPTIONS/DESCRIBE/SETUP/PLAY，不覆盖播放中 REDIRECT 或任意跨端口多控制连接。终止错误后应 reset 或重新建播放器再 seek/start/pause。
+- Codec2 的补充选择只考虑 API 29+ 平台报告的普通硬件解码器，不把 `c2.android.*` 软件解码器宣传成硬件加速。
+
+完整变更、源码和已验证范围见 [v14 更新说明](UPDATE_VERSION.md#v1400-2026-10-10) 与 [发布核对记录](V14_RELEASE_REVIEW.md)。
+
+
+#### ijkplayer模式的，你可能会需要的option大全 : [ff_ffplay_options.h](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/ijkmedia/ijkplayer/ff_ffplay_options.h)
 
 > 在线分析：https://gpac.github.io/mp4box.js/test/filereader.html
 
@@ -25,7 +37,7 @@ allprojects {
 
 　项目最外部有一个dependencies.gradle，所有的项目依赖都在这里面，然后参考项目根目录的build.gradle，在最顶部有apply from: 'dependencies.gradle'，这样gsyVideoPlayer就可以找到对应的依赖了。gradle方便可参考察[Android蹲坑的疑难杂症集锦（兼Gradle） 二](http://www.jianshu.com/p/86e4b336c17d)
 
-  其次，因为so有五个平台，远程依赖库比较大，依赖的时候如果有条件，可以开启vpn，用L2TP协议，依赖下载会快一些。
+  v14.0.0 默认 native 整包包含 `arm64-v8a` / `armeabi-v7a` / `x86_64` 三个 ABI。外部项目优先按 [依赖指南](DEPENDENCIES.md) 从 Maven Central 接入；需要控制体积时按目标 ABI 选择独立模块或配置 ABI 过滤，避免重复引入 native 库。
 
 #### 2、ClassNotFoundException和混淆
 
@@ -109,7 +121,9 @@ sourceSets {
 
 　是否监听了列表滑动了，在监听里更新了列表之类的。
 
-#### 4、普通模式不支持3gp或者mepg，mepg可使用ex-so依赖。
+#### 4、播放格式与原生模块选择
+
+v14.0.0 的 arm64/armv7a/x64 与 ex_so 使用相同 FFmpeg 5 配置，不再按普通/扩展版的 MPEG 差异选择。先检查媒体容器、编解码器及设备能力，详见 [DECODERS.md](DECODERS.md)。
 
 如果拍摄的视频播放不了，可以尝试用使用系统录制的项目：[VideoRecord](https://github.com/CarGuo/VideoRecord)
 或者使用JAVACV录制的项目：[FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder )，测试视频是否可以播放。
@@ -438,7 +452,7 @@ GSYVideoManager.instance().setOptionModelList(list);
 更多配置可通过下方链接和图片参考配置
 
 
-##### [ff_ffplay_options](https://github.com/Bilibili/ijkplayer/blob/cced91e3ae3730f5c63f3605b00d25eafcf5b97b/ijkmedia/ijkplayer/ff_ffplay_options.h)
+##### [ff_ffplay_options](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/ijkmedia/ijkplayer/ff_ffplay_options.h)
 
 ![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/option1.jpg)
 ![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/option2.jpg)

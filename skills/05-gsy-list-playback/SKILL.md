@@ -32,16 +32,16 @@ references:
 关键点：**在 `onBindViewHolder` 里给每个 player `setPlayPosition(position)` + `setPlayTag(String)`**，防止滚动复用导致 URL 命中错人。
 
 `GSYVideoOptionBuilder`：
-- `setPlayTag(String)` [#L347](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/builder/GSYVideoOptionBuilder.java#L347)
-- `setPlayPosition(int)` [#L356](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/builder/GSYVideoOptionBuilder.java#L356)
+- `setPlayTag(String)` [#L347](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/builder/GSYVideoOptionBuilder.java)
+- `setPlayPosition(int)` [#L356](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/builder/GSYVideoOptionBuilder.java)
 
 滚动出屏自动释放：`RecyclerView.OnScrollListener` → 当前 firstVisible / lastVisible 之外的 holder 调 `GSYVideoManager.releaseAllVideos()`。
 
-见 [RecyclerViewActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/RecyclerViewActivity.java)。
+见 [RecyclerViewActivity](../../app/src/main/java/com/example/gsyvideoplayer/RecyclerViewActivity.java)。
 
 ## 路线 B：`ListVideoUtil`（跨 item 复用一个 player）
 
-工具类：[ListVideoUtil](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/ListVideoUtil.java)。
+工具类：[ListVideoUtil](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/ListVideoUtil.java)。
 
 | API | 说明 |
 |---|---|
@@ -52,11 +52,11 @@ references:
 | `isCurrentViewPlaying(int pos, String tag)` | 判定当前播放是否在这个 item |
 | `releaseVideoPlayer()` | 释放，通常在离开页面时调 |
 
-**自动可视区触发**用 [ScrollCalculatorHelper](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/utils/ScrollCalculatorHelper.java) 的 `onScrollReleaseAllVideos(...) / onScrollPlayVideo(...)`。见 [AutoPlayRecyclerViewActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/AutoPlayRecyclerViewActivity.java)。
+**自动可视区触发**用 [ScrollCalculatorHelper](../../app/src/main/java/com/example/gsyvideoplayer/utils/ScrollCalculatorHelper.java) 的 `onScrollReleaseAllVideos(...) / onScrollPlayVideo(...)`。见 [AutoPlayRecyclerViewActivity](../../app/src/main/java/com/example/gsyvideoplayer/AutoPlayRecyclerViewActivity.java)。
 
 ## 路线 C：`GSYVideoHelper` 小窗漂移
 
-工具类：[GSYVideoHelper](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/GSYVideoHelper.java)。核心思路：**列表 item / 详情页共用同一个 player 实例**，在离开列表时把 player parent 换到浮层容器，进入详情再换回去。
+工具类：[GSYVideoHelper](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/utils/GSYVideoHelper.java)。核心思路：**列表 item / 详情页共用同一个 player 实例**，在离开列表时把 player parent 换到浮层容器，进入详情再换回去。
 
 | API | 说明 |
 |---|---|
@@ -65,7 +65,7 @@ references:
 | `showSmallVideo(...)` / `smallVideoToNormal()` | 小窗 ↔ 正常 |
 | `releaseVideoPlayer()` | 释放 |
 
-Demo：[SmallVideoHelper](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/utils/SmallVideoHelper.java)（app 层包装） + [ListVideoActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/ListVideoActivity.java)。
+Demo：[SmallVideoHelper](../../app/src/main/java/com/example/gsyvideoplayer/utils/SmallVideoHelper.java)（app 层包装） + [ListVideoActivity](../../app/src/main/java/com/example/gsyvideoplayer/ListVideoActivity.java)。
 
 ## ViewPager2 竖播
 
@@ -73,10 +73,10 @@ Demo：[SmallVideoHelper](file:///D:/workspace/project/GSYVideoPlayer/app/src/ma
 - `ViewPager2.registerOnPageChangeCallback` 里 `onPageSelected` → `previousPlayer.onVideoPause(); currentPlayer.startPlayLogic()`；
 - 记得 `setUserInputEnabled` 竖向。
 
-Demo：[ViewPager2Activity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/ViewPager2Activity.java)（RecyclerView 变体） + Compose 版 [VerticalShortVideoComposeActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/compose/host/VerticalShortVideoComposeActivity.kt)。
+Demo：[ViewPager2Activity](../../app/src/main/java/com/example/gsyvideoplayer/ViewPager2Activity.java)（RecyclerView 变体） + Compose 版 [VerticalShortVideoComposeActivity](../../app/src/main/java/com/example/gsyvideoplayer/compose/host/VerticalShortVideoComposeActivity.kt)。
 
 ## 常见坑
 
 - **相同 URL 不重播**：忘了 `setPlayTag/setPlayPosition`，`setUp` 内部去重返回 false。
-- **切换过快出黑帧**：`setUp` 后立即 `startPlayLogic` 前先隐藏 `thumb`；或用 `KeepLastFrameVideo` 保留上一帧（详见 [doc/KEEP_LAST_FRAME.md](file:///D:/workspace/project/GSYVideoPlayer/doc/KEEP_LAST_FRAME.md)）。
-- **同屏多个 item 各自播放**：单例 `GSYVideoManager` 只能有一个 listener；同屏并行需要参考 [CustomManager](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/manager/CustomManager.java)。
+- **切换过快出黑帧**：`setUp` 后立即 `startPlayLogic` 前先隐藏 `thumb`；或用 `KeepLastFrameVideo` 保留上一帧（详见 [doc/KEEP_LAST_FRAME.md](../../doc/KEEP_LAST_FRAME.md)）。
+- **同屏多个 item 各自播放**：单例 `GSYVideoManager` 只能有一个 listener；同屏并行需要参考 [CustomManager](../../app/src/main/java/com/example/gsyvideoplayer/video/manager/CustomManager.java)。

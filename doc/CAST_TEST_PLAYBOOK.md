@@ -6,7 +6,7 @@
 
 ---
 
-## 0. 首要红线（对齐 [CAST_FEATURE_PLAN.md#0](./CAST_FEATURE_PLAN.md#L10-L28)）
+## 0. 首要红线（对齐 [CAST_FEATURE_PLAN.md#0](./CAST_FEATURE_PLAN.md#0-首要红线不可破坏项)）
 
 任何测试**不允许**：
 1. 修改主项目源码测试基线；
@@ -97,9 +97,9 @@
 
 ### 2.3 Layer 3 — UI 自动化（沿用 J 轮 adb + logcat 断言）
 
-**新增脚本**：[doc/test_scripts/java_cast_regression.sh](./test_scripts/java_cast_regression.sh)（M2 落地），完全模仿 [java_basic_regression.sh](./test_scripts/java_basic_regression.sh) 的 A/B/C/D 四段式，追加 Cast-A ~ Cast-E。
+**新增脚本**：doc/test_scripts/java_cast_regression.sh（历史本地辅助脚本，未随仓库交付）（M2 落地），完全模仿 [java_basic_regression.sh](./test_scripts/java_basic_regression.sh) 的 A/B/C/D 四段式，追加 Cast-A ~ Cast-E。
 
-**关键坑位（对齐 [JAVA_TEST_PLAYBOOK.md#6](./JAVA_TEST_PLAYBOOK.md#L226-L246) 5 大坑）**：
+**关键坑位（对齐 [JAVA_TEST_PLAYBOOK.md#6](./JAVA_TEST_PLAYBOOK.md#6-自动化坑清单5-个真实坑) 5 大坑）**：
 
 1. **入口进入路径**：投屏 demo Activity 也 `exported=false`，必须 `am start MainActivity` → 滚动 → 点击 "投屏DEMO"
 2. **控件 ID 前缀**：`com.example.gsyvideoplayer:id/cast_btn`（**不是** `com.shuyu.gsyvideoplayer:id/...`）
@@ -260,8 +260,8 @@ Debuger.printfLog("AVTransport1.Stop");
 | --- | --- |
 | M0 | 本文件 + [CAST_FEATURE_PLAN.md](./CAST_FEATURE_PLAN.md) + [CAST_RECEIVER_DESIGN.md](./CAST_RECEIVER_DESIGN.md) + [ARCHITECTURE.md](./ARCHITECTURE.md) 追加一行 |
 | M1 | 更新本文件 §5 CI 章节，附上编译截图 |
-| M2 | 补充 5 项能力实证日志（对齐 [JAVA_TEST_PLAYBOOK.md#3](./JAVA_TEST_PLAYBOOK.md#L58-L148) 格式） |
-| M3 | 补充 5 个 Activity 覆盖矩阵（对齐 [JAVA_TEST_PLAYBOOK.md#4](./JAVA_TEST_PLAYBOOK.md#L151-L168)） |
+| M2 | 补充 5 项能力实证日志（对齐 [JAVA_TEST_PLAYBOOK.md#3](./JAVA_TEST_PLAYBOOK.md#3-4-项基础能力实证detailplayer-全绿基线) 格式） |
+| M3 | 补充 5 个 Activity 覆盖矩阵（对齐 [JAVA_TEST_PLAYBOOK.md#4](./JAVA_TEST_PLAYBOOK.md#4-5-个代表-activity-端到端覆盖结果)） |
 | M4 | 补充 3 种协议 provider × 3 类接收端矩阵 |
 
 ---

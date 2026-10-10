@@ -23,7 +23,7 @@ references:
 
 ## 字幕 API
 
-顶层控制器：[GSYSubtitleController](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleController.java)。视图：[GSYSubtitleView](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleView.java)。
+顶层控制器：[GSYSubtitleController](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleController.java)。视图：[GSYSubtitleView](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleView.java)。
 
 | 方法 | 说明 |
 |---|---|
@@ -40,30 +40,30 @@ references:
 
 ## `GSYSubtitleSource` 字段
 
-见 [GSYSubtitleSource](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleSource.java)：
+见 [GSYSubtitleSource](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleSource.java)：
 
 | 字段 | 说明 |
 |---|---|
 | `id` | 唯一 id |
 | `label` | 显示名 |
 | `language` | ISO code |
-| `mime` | 见 [GSYSubtitleMime](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleMime.java)：`text/vtt`、`application/x-subrip`（srt）、`text/plain` |
+| `mime` | 见 [GSYSubtitleMime](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleMime.java)：`text/vtt`、`application/x-subrip`（srt）、`text/plain` |
 | `uri` | http 或 file uri |
 | `embedded` | 是否内嵌轨（Exo 场景） |
 
 ## 内置解析器
 
-- SRT：[GSYSrtSubtitleParser](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSrtSubtitleParser.java)
-- WebVTT：[GSYWebVttSubtitleParser](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYWebVttSubtitleParser.java)
-- 自定义 MIME：注册到 [GSYSubtitleParserFactory](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleParserFactory.java)
+- SRT：[GSYSrtSubtitleParser](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSrtSubtitleParser.java)
+- WebVTT：[GSYWebVttSubtitleParser](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYWebVttSubtitleParser.java)
+- 自定义 MIME：注册到 [GSYSubtitleParserFactory](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/subtitle/GSYSubtitleParserFactory.java)
 
 ## Exo 内嵌字幕
 
-`gsyvideoplayer-exo_player2` 的 Manager 会把 Exo 的 subtitle track 通过 `GSYSubtitleController` 上抛。Demo：[GSYExoSubTitlePlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/exosubtitle/GSYExoSubTitlePlayer.java) + [GSYExoSubTitleVideoManager](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/exosubtitle/GSYExoSubTitleVideoManager.java)。
+`gsyvideoplayer-exo_player2` 的 Manager 会把 Exo 的 subtitle track 通过 `GSYSubtitleController` 上抛。Demo：[GSYExoSubTitlePlayer](../../app/src/main/java/com/example/gsyvideoplayer/exosubtitle/GSYExoSubTitlePlayer.java) + [GSYExoSubTitleVideoManager](../../app/src/main/java/com/example/gsyvideoplayer/exosubtitle/GSYExoSubTitleVideoManager.java)。
 
 ## Seek 预览 API
 
-顶层：[GSYVideoPreviewProvider](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/preview/GSYVideoPreviewProvider.java) 与列表实现 [GSYVideoPreviewListProvider](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/preview/GSYVideoPreviewListProvider.java)。
+顶层：[GSYVideoPreviewProvider](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/preview/GSYVideoPreviewProvider.java) 与列表实现 [GSYVideoPreviewListProvider](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/preview/GSYVideoPreviewListProvider.java)。
 
 | 方法 | 说明 |
 |---|---|
@@ -74,7 +74,7 @@ references:
 
 ## `GSYVideoPreviewFrame` 字段
 
-见 [GSYVideoPreviewFrame](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/preview/GSYVideoPreviewFrame.java)：`startTimeMs`、`endTimeMs`、`imageUrl`、`cropX/Y/Width/Height`、`hasCrop()`。
+见 [GSYVideoPreviewFrame](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/preview/GSYVideoPreviewFrame.java)：`startTimeMs`、`endTimeMs`、`imageUrl`、`cropX/Y/Width/Height`、`hasCrop()`。
 
 ## 关键调用序（VTT 预览 + SRT 字幕）
 
@@ -85,9 +85,9 @@ references:
 
 ## Demo 对照
 
-- SRT 字幕：[SubtitleDetailPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/SubtitleDetailPlayer.java)（对应 `raw/demo_subtitle.srt` / `demo_subtitle_vtt.vtt`）
-- Exo 内嵌字幕：[GSYExoSubTitleDetailPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/exosubtitle/GSYExoSubTitleDetailPlayer.java)
-- 预览缩略图：[PreViewGSYVideoPlayer](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/video/PreViewGSYVideoPlayer.java) + [PlayPickActivity](file:///D:/workspace/project/GSYVideoPlayer/app/src/main/java/com/example/gsyvideoplayer/PlayPickActivity.java)
+- SRT 字幕：[SubtitleDetailPlayer](../../app/src/main/java/com/example/gsyvideoplayer/SubtitleDetailPlayer.java)（对应 `raw/demo_subtitle.srt` / `demo_subtitle_vtt.vtt`）
+- Exo 内嵌字幕：[GSYExoSubTitleDetailPlayer](../../app/src/main/java/com/example/gsyvideoplayer/exosubtitle/GSYExoSubTitleDetailPlayer.java)
+- 预览缩略图：[PreViewGSYVideoPlayer](../../app/src/main/java/com/example/gsyvideoplayer/video/PreViewGSYVideoPlayer.java) + [PlayPickActivity](../../app/src/main/java/com/example/gsyvideoplayer/PlayPickActivity.java)
 
 ## 常见坑
 

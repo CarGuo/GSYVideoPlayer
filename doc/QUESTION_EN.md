@@ -2,7 +2,19 @@
 
 **[Click to see the Chinese version](QUESTION.md)**
 
-#### ijkplayer mode, you may need a complete list of options: [ff_ffplay_options.h](https://github.com/Bilibili/ijkplayer/blob/cced91e3ae3730f5c63f3605b00d25eafcf5b97b/ijkmedia/ijkplayer/ff_ffplay_options.h)
+### v14.0.0 native playback migration
+
+- Default IJK ABIs are `arm64-v8a` / `armeabi-v7a` / `x86_64`, using FFmpeg n5.1.10 / OpenSSL 3.5.9. Legacy `armeabi` / `x86` are outside the default aggregate and not migrated to FFmpeg 5.
+- ARMv7 HTTPS certificate loading is fixed; removing ARMv7 or disabling verification is unnecessary. Explicit `tls_verify` / `ca_file` settings follow nested HLS resources; see [current TLS results and limits](../tests/tls-native/README.md).
+- `soundtouch=1` selects 0.25x–4x software tempo; `soundtouch=0` uses device-dependent platform rates. Handoff drains old audio; invalid/rejected requests must not be reported as applied.
+- RTSP FORMAT `timeout` is in microseconds. PLAYER `rtsp-live-max-buffer-ms` defaults to `0` and accepts only `0` or `500..60000` ms. Recovery at 1x discards old media; it is not an automatic reconnect option.
+- Redirects cover initial OPTIONS/DESCRIBE/SETUP/PLAY, not playback-time REDIRECT or arbitrary cross-port multi-control sessions. Reset/reopen after a terminal error before seek/start/pause.
+- Additional Codec2 selection considers regular platform-reported hardware decoders on API 29+, excluding software codecs such as `c2.android.*`.
+
+See the [v14 changelog](UPDATE_VERSION_EN.md#v1400-2026-10-10) and [release audit](V14_RELEASE_REVIEW.md) for source identity and verification scope.
+
+
+#### ijkplayer mode, you may need a complete list of options: [ff_ffplay_options.h](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/ijkmedia/ijkplayer/ff_ffplay_options.h)
 
 > Online analysis: https://gpac.github.io/mp4box.js/test/filereader.html
 
@@ -25,7 +37,7 @@ allprojects {
 
 There is a dependencies.gradle in the outermost part of the project, and all project dependencies are in it. Then refer to the build.gradle in the root directory of the project. There is apply from: 'dependencies.gradle' at the top, so that gsyVideoPlayer can find the corresponding dependencies. For gradle convenience, you can refer to [Collection of difficult and miscellaneous diseases of Android squatting (and Gradle) II](http://www.jianshu.com/p/86e4b336c17d)
 
-Secondly, because so has five platforms, the remote dependency library is relatively large. When relying, if conditions permit, you can turn on the vpn and use the L2TP protocol, and the dependency download will be faster.
+The v14.0.0 default native aggregate contains three ABIs: `arm64-v8a` / `armeabi-v7a` / `x86_64`. External projects should follow the [dependency guide](DEPENDENCIES_EN.md) for Maven Central integration. To reduce package size, select individual ABI modules or configure ABI filters, avoiding duplicate native libraries.
 
 #### 2. ClassNotFoundException and obfuscation
 
@@ -111,7 +123,9 @@ sourceSets {
 
 Did you monitor the list sliding and update the list in the monitoring.
 
-#### 4. Normal mode does not support 3gp or mepg, mepg can use ex-so dependency.
+#### 4. Media formats and native module selection
+
+v14.0.0 arm64/armv7a/x64 and ex_so share the same FFmpeg 5 profile. Check container, codec and device capabilities rather than the former standard/extended MPEG distinction; see [DECODERS_EN.md](DECODERS_EN.md).
 
 If the recorded video cannot be played, you can try to use the system recording project: [VideoRecord](https://github.com/CarGuo/VideoRecord)
 Or use the JAVACV recording project: [FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder), to test whether the video can be played.
@@ -440,7 +454,7 @@ GSYVideoManager.instance().setOptionModelList(list);
 For more configurations, please refer to the links and pictures below
 
 
-##### [ff_ffplay_options](https://github.com/Bilibili/ijkplayer/blob/cced91e3ae3730f5c63f3605b00d25eafcf5b97b/ijkmedia/ijkplayer/ff_ffplay_options.h)
+##### [ff_ffplay_options](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/ijkmedia/ijkplayer/ff_ffplay_options.h)
 
 ![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/option1.jpg)
 ![](https://raw.githubusercontent.com/CarGuo/GSYVideoPlayer/master/img/code/option2.jpg)

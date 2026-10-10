@@ -21,9 +21,9 @@ references:
 ## 三个必须的反射热点
 
 分别在源代码里：
-1. **PlayerFactory** [#L11-L13](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/PlayerFactory.java#L11-L13) —— `Class.newInstance()` 反射构造 `IPlayerManager` 实现。
-2. **CacheFactory** —— 同上，构造 `ICacheManager` 实现（见 [CacheFactory](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cache/CacheFactory.java)）。
-3. **GSYBaseVideoPlayer.startWindowFullscreen** —— 通过 `getConstructor(Context, Boolean)` 复刻自身，实现"全屏时另起一份 player"，见 [GSYBaseVideoPlayer](file:///D:/workspace/project/GSYVideoPlayer/gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYBaseVideoPlayer.java)。
+1. **PlayerFactory** [#L11-L13](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/player/PlayerFactory.java) —— `Class.newInstance()` 反射构造 `IPlayerManager` 实现。
+2. **CacheFactory** —— 同上，构造 `ICacheManager` 实现（见 [CacheFactory](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/cache/CacheFactory.java)）。
+3. **GSYBaseVideoPlayer.startWindowFullscreen** —— 通过 `getConstructor(Context, Boolean)` 复刻自身，实现"全屏时另起一份 player"，见 [GSYBaseVideoPlayer](../../gsyVideoPlayer-java/src/main/java/com/shuyu/gsyvideoplayer/video/base/GSYBaseVideoPlayer.java)。
 
 ## 推荐 `proguard-rules.pro`（IJK 内核，含 Media3 抑警）
 
@@ -63,7 +63,7 @@ references:
 }
 ```
 
-完整版参照仓库当前的 [proguard-rules.pro](file:///D:/workspace/project/GSYVideoPlayer/app/proguard-rules.pro)。
+完整版参照仓库当前的 [proguard-rules.pro](../../app/proguard-rules.pro)。
 
 ## Aliyun 内核追加
 
@@ -75,24 +75,11 @@ references:
 
 ## R8 Configuration Analyzer 使用
 
-AGP 8.6.x 未内置独立任务，但可以：
-
-1. 在 `settings.gradle` 里覆盖 R8 版本到 9.4.14+：
-   ```groovy
-   buildscript {
-     dependencies { classpath 'com.android.tools:r8:9.4.14' }
-   }
-   ```
-2. 用 system property 触发报告输出（AGP 9.3+ 或 R8 9.4+）：
-   ```
-   -Dcom.android.tools.r8.dumpkeepradiushtmltodirectory=D:/absolute/path/report
-   ```
-3. `./gradlew :app:assembleRelease` 后打开 report/index.html 查看 Blast Radius。
-4. 用仓库脚本 [build/r8-analyzer/score.mjs](file:///D:/workspace/project/GSYVideoPlayer/build/r8-analyzer/score.mjs) 提取 Shrinking / Optimization / Obfuscation 三档分数并做前后对比。
+本仓库 v14 使用 AGP 8.9.1 / Gradle 8.12，`settings.gradle` 已固定 R8 9.4.14。报告生成命令及历史评分边界见 [R8_ANALYZER_REPORT.md](../../doc/R8_ANALYZER_REPORT.md#5-报告生成与历史范围)。报告 HTML 可直接查看保留范围；历史本地 `score.mjs` 未随仓库交付，不作为接入前提。
 
 ## 分数对比示例
 
-见 [doc/R8_ANALYZER_REPORT.md](file:///D:/workspace/project/GSYVideoPlayer/doc/R8_ANALYZER_REPORT.md)：本项目将 `-keep class com.shuyu.gsyvideoplayer.** { *; }` 全量 keep 收敛成 3 条精准 keep 后，Shrinking / Optimization / Obfuscation 三档分数、live class/method 数、APK 尺寸对比。
+见 [doc/R8_ANALYZER_REPORT.md](../../doc/R8_ANALYZER_REPORT.md)：本项目将 `-keep class com.shuyu.gsyvideoplayer.** { *; }` 全量 keep 收敛成 3 条精准 keep 后，Shrinking / Optimization / Obfuscation 三档分数、live class/method 数、APK 尺寸对比。
 
 ## 校验清单（发版前）
 
