@@ -54,7 +54,11 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 21
+      # 14.0.0: Shared callback/timeout changes require the existing session regressions.
+      - name: Check RTSP session lifecycle
+        run: python3 tests/rtsp-session/run_host_tests.py
       - uses: gradle/gradle-build-action@v2
         with:
           # 13.2.1: Release/R8 is required because jUPnP binds local services via reflection.
-          arguments: app:assembleDebug app:assembleRelease gsyVideoPlayer-java:test gsyVideoPlayer-cast:test
+          # 14.0.0: Compose buffering regressions must also run before a release.
+          arguments: app:assembleDebug app:assembleRelease gsyVideoPlayer-java:test gsyVideoPlayer-cast:test gsyVideoPlayer-compose:test

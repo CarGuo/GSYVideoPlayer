@@ -530,7 +530,7 @@ DLNA/UPnP cast APIs:
 
 ```java
 // build.gradle: add only when casting is needed; its real minSdk is 26
-// implementation 'io.github.carguo:gsyvideoplayer-cast:13.2.1'
+// implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
 
 // 1. Core exposes only protocol-neutral SPI; the optional cast module supplies DLNA
 CastCapability cast = GSYVideoManager.instance().getCastCapability();

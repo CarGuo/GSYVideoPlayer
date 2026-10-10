@@ -4,4 +4,18 @@ apply from: "$rootDir/gradle/publish.gradle"
 apply from: "$rootDir/gradle/maven-central-publish.gradle"
 android {
     namespace 'com.shuyu.gsyvideoplayer.ex_so'
+    // 14.0.0: Library AAR merging does not honor ndk.abiFilters for prebuilt jniLibs.
+    // Exclude the legacy directories explicitly while keeping their source files.
+    packaging {
+        jniLibs {
+            excludes += ['**/armeabi/**', '**/x86/**']
+        }
+    }
+    // Only these ABIs belong to the FFmpeg 5 candidate. Legacy armeabi/x86
+    // source libraries remain in the repository but must not enter this AAR.
+    defaultConfig {
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
+    }
 }
