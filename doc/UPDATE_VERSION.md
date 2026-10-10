@@ -4,7 +4,7 @@
 
 ### v14.0.0 (2026-10-09)
 
-> 发布检查（2026-10-09）：当前候选在 ARMv7 真机上播放 HTTPS 会发生原生进程崩溃；默认选项和显式证书校验均可复现。独立 C 程序直接加载同一原生库、读取有效证书时也崩溃，ARM64 对照通过。原生问题修复并通过 [TLS 回归检查](../tests/tls-native/README.md) 前，不满足合并或发布条件。
+> TLS/HLS 修复候选：ARMv7 的 Clang 11 编译问题采用仅限该架构的 OpenSSL 优化规避；FFmpeg 同时修复 HLS 子播放列表、密钥、分片等请求中显式 TLS 校验策略的继承。按新源码重编 ARMv7 / ARM64 / x86_64 配套库后，当前 ARMv7 与 ARM64 库分别在 2026-10-10 Pixel 5 / API 30 的 32 位和 64 位进程中完成有限 TLS/HLS 与 1×/3× 音频验证：ARMv7 为 15 通过、1 失败，ARM64 为 12 通过、1 失败。两个矩阵各自唯一的失败都是保留的原始 ARMv7 崩溃负对照，矩阵总体仍为失败。当前 x86_64 仅完成构建与静态检查；ARM64 未执行 OpenSSL 官方单元程序，不能视为整版发布通过。见 [TLS 回归范围](../tests/tls-native/README.md)。
 
 - IJK Native 升级：`gsyVideoPlayer-ex_so` 及 `gsyVideoPlayer-armv64` / `gsyVideoPlayer-armv7a` / `gsyVideoPlayer-x86_64` 三条 ABI（`arm64-v8a` / `armeabi-v7a` / `x86_64`）的 `libijkffmpeg.so` 统一升级到 **FFmpeg n5.1.10** + **OpenSSL 3.5.9**，三端版本与协议能力彻底对齐。
 - IJK Native 重编：`libijkplayer.so` / `libijksdl.so` 按 FFmpeg 5 新 API 重编（`AVCodecParameters`、`AVChannelLayout`、HLS/字幕 demuxer、HEVC 切码率参数集保留），`arm64-v8a` / `x86_64` 保持 16 KiB ELF 段对齐（静态布局检查不代表 16 KiB 页设备运行验证），`armeabi-v7a` 保留 `__stack_chk_fail` 链接。
@@ -14,7 +14,7 @@
 - 音频兼容性：重采样和非音频主时钟不再仅因时钟映射不满足精确采样条件而中断播放；`soundtouch=1` 使用 0.25×–4× 软件变速（含 3×），`soundtouch=0` 的平台范围取决于设备。平台拒绝仅在确认恢复原状态后继续播放，恢复状态无法确认时停止输出。运行中切换引擎等待旧音频排空，并保留 seek、取消切换时的最新倍速请求。
 - 起播与错误状态：修复仅填入起播静音时，倍速切换等待播放头而无法起播的问题；已接收真实 PCM 的队列继续正常排空。异步错误在通知监听器前进入 Error，后续 seek/start/pause 需先 reset 或重建播放器，并保持 iOS 原有错误通知顺序，避免额外状态通知。
 - RTSP 包装层：`ijklivehook` 按实际打开的内部 RTSP 流判定直播能力，透传明确配置的 `timeout` / `rtsp_transport`；直播缓存上限仅接受 `0` 或 `500..60000` 毫秒。修复终止错误后失败 seek 导致缓冲状态无法结束的问题。
-- 本次原生修复对应 [IJK a599f60](https://github.com/CarGuo/ijkplayer/commit/a599f60268312f3093d6f0ca165a3d06c76970cb)，替换上述三 ABI 的配套 FFmpeg/player/SDL 库；未修改旧 `armeabi` / `x86` 库。最终 ARM64 候选在 Pixel 5 / API 30 的核心回归为 14 项通过、0 失败、3 项跳过，覆盖软件 0.25×–4×、96 kHz 重采样、带视频的 2× 和三项音频内容检查。两项极短音频尾部尚未确认；平台恢复自动用例跳过，但同次原生日志记录 20× 请求被拒后恢复 1× 并继续播放。不代表硬解、主观音质、所有机型或 16 KiB 页设备验证。
+- 音频修复基于 [IJK a599f60](https://github.com/CarGuo/ijkplayer/commit/a599f60268312f3093d6f0ca165a3d06c76970cb)，本次在此基础上加入 TLS 构建规避和新的 FFmpeg HLS 策略继承补丁，替换上述三 ABI 的配套 FFmpeg/player/SDL 库；未修改旧 `armeabi` / `x86` 库。此前、尚未加入本次 TLS/HLS 修复的 ARM64 库组在 2026-10-09 Pixel 5 / API 30 核心回归中为 14 项通过、0 失败、3 项跳过，覆盖软件 0.25×–4×、96 kHz 重采样、带视频的 2× 和三项音频内容检查。两项极短音频尾部尚未确认；平台恢复自动用例跳过，但同次原生日志记录 20× 请求被拒后恢复 1× 并继续播放。这些历史结果不验证本次重编的 ARM64 库组；新 ARM64 库已完成上方所述的有限 TLS/HLS 与 1×/3× 音频验证，但未重跑这组更广的历史音频回归。当前 x86_64 仍仅完成构建与静态检查。也不代表硬解、主观音质、所有机型或 16 KiB 页设备验证。
 - Compose 修复：修复宿主生命周期 `detachHost` 与 `dispose` 分离（#4259），以及 ExoPlayer 轮询缓冲进度同步到 `bufferPercent` 与 `mBufferPoint`（#4261）。
 
 ### v13.2.1 (2026-08-19)
