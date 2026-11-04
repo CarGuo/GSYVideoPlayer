@@ -2,6 +2,8 @@
 
 [中文](BUILD_SO.md)
 
+> 2026-11-04 increment: the three-ABI `libijkplayer.so` files now include [IJK PR #2](IJK_PR2_SO_UPDATE.md), with the original FFmpeg/SDL bytes retained. The pinned sources and full-build procedure below describe the v14 baseline; the incremental record lists this player-only update's source, hashes, tests and device limitations.
+
 > Updated 2026-10-10: the former FFmpeg 4.x / NDK r10-r13 / OpenSSL 1.1.1 tutorial does not generate this release's libraries. Use pinned sources and the separate NDK r22b FFmpeg 5 build entry; see the [release audit](V14_RELEASE_REVIEW.md).
 
 ## Source and toolchain identity

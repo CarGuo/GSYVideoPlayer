@@ -2,6 +2,8 @@
 
 [English](BUILD_SO_EN.md)
 
+> 2026-11-04 增量：三 ABI 的 `libijkplayer.so` 已更新到 [IJK PR #2](IJK_PR2_SO_UPDATE.md)，FFmpeg/SDL 保留原字节。下文固定源码与成套构建流程记录 v14 基础版本；本次 player-only 更新的提交、哈希、实测及设备限制见该增量记录。
+
 > 2026-10-10 修订：旧教程使用 FFmpeg 4.x、NDK r10/r13 和 OpenSSL 1.1.1，不能生成本版库。当前使用固定源码与 NDK r22b 的独立 FFmpeg 5 构建入口；版本和修复原因见 [发布核对记录](V14_RELEASE_REVIEW.md)。
 
 ## 固定源码与工具
