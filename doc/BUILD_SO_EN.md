@@ -2,6 +2,8 @@
 
 [中文](BUILD_SO.md)
 
+> 2026-11-05 full-rebuild draft: the [matched three-ABI native update](IJK_THREE_ABI_SO_UPDATE.md) pins merged IJK commit `896674e7`; all nine libraries were rebuilt and crop remains off by default. **Draft only, do not merge; not yet qualified as usable.** Original x86_64 bytes passed 16 KiB-userspace loading after the unchanged APK was installed with `--no-incremental` on ext4. The two earlier IncrementalFS SIGBUS failures remain recorded. The emulator Surface/system state then blocked the test before any HTTPS request or frame; HTTPS has not passed. The 11-04 increment and v14 source pin below remain historical; use the new record's commit to reproduce this bundle.
+
 > 2026-11-04 increment: the three-ABI `libijkplayer.so` files now include [IJK PR #2](IJK_PR2_SO_UPDATE.md), with the original FFmpeg/SDL bytes retained. The pinned sources and full-build procedure below describe the v14 baseline; the incremental record lists this player-only update's source, hashes, tests and device limitations.
 
 > Updated 2026-10-10: the former FFmpeg 4.x / NDK r10-r13 / OpenSSL 1.1.1 tutorial does not generate this release's libraries. Use pinned sources and the separate NDK r22b FFmpeg 5 build entry; see the [release audit](V14_RELEASE_REVIEW.md).
