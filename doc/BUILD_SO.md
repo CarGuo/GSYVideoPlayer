@@ -2,6 +2,8 @@
 
 [English](BUILD_SO_EN.md)
 
+> 2026-11-05 全量重编译草稿：[三 ABI 成套原生库更新](IJK_THREE_ABI_SO_UPDATE.md)固定 IJK 已合并提交 `896674e7`，九库均重新构建，crop 默认仍为 0。**草稿不可合并，尚不能称可用。** 原字节 x86_64 库在同一 APK 改用 `--no-incremental` 安装到 ext4 后通过 16 KiB 用户空间加载；此前两次 IncrementalFS SIGBUS 保留记录。随后模拟器 Surface/系统状态阻塞，HTTPS 请求和帧均未开始，不能报 HTTPS 通过。下列 11-04 增量和 v14 固定提交保留为历史记录，复现本轮请使用新记录中的提交。
+
 > 2026-11-04 增量：三 ABI 的 `libijkplayer.so` 已更新到 [IJK PR #2](IJK_PR2_SO_UPDATE.md)，FFmpeg/SDL 保留原字节。下文固定源码与成套构建流程记录 v14 基础版本；本次 player-only 更新的提交、哈希、实测及设备限制见该增量记录。
 
 > 2026-10-10 修订：旧教程使用 FFmpeg 4.x、NDK r10/r13 和 OpenSSL 1.1.1，不能生成本版库。当前使用固定源码与 NDK r22b 的独立 FFmpeg 5 构建入口；版本和修复原因见 [发布核对记录](V14_RELEASE_REVIEW.md)。
