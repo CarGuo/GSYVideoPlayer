@@ -1,71 +1,108 @@
-# IJK three-ABI matched native bundle (2026-11-05)
+# IJK native libraries: crop, EOS, HTTPS and 16 KiB
 
-This bundle rebuilds all nine libraries from merged [CarGuo/ijkplayer commit `896674e7a249f3d87a831adb2ac5c2b31d55aeff`](https://github.com/CarGuo/ijkplayer/commit/896674e7a249f3d87a831adb2ac5c2b31d55aeff), including the earlier output-format sizing fix and the opt-in H.264 crop fallback in [PR #4](https://github.com/CarGuo/ijkplayer/pull/4). It proposes replacing the native tuples imported by GSY PR #4264 after validation. The [PR #2 update record](IJK_PR2_SO_UPDATE.md) remains historical evidence for its original binaries, not runtime evidence for this rebuild.
+The ARM64, ARMv7 and x86_64 native bundles include the three IJK repairs below. Production source: [CarGuo/ijkplayer `df9e456a4ef4c770bc97bb179d58a0cf9d529011`](https://github.com/CarGuo/ijkplayer/commit/df9e456a4ef4c770bc97bb179d58a0cf9d529011).
 
-**DRAFT ONLY: DO NOT MERGE. This bundle is not yet qualified as usable.** The exact original x86_64 libraries now load successfully with a measured 16,384-byte userspace page size after installing the unchanged full HTTPS smoke APK with `--no-incremental` on ext4. The two earlier IncrementalFS installations of the same APK crashed with SIGBUS and remain part of the record. No SO padding or source/library change was needed for the successful load control. The observed installation-mode difference does not establish the underlying SIGBUS cause.
+## Included repairs
 
-**HTTPS playback: NOT STARTED / BLOCKED BY EMULATOR UI.** After native load succeeded, the Activity did not create a Surface within 15 seconds. The emulator showed keyguard/current-user initialization problems (`currentUser=-10000`), system ANRs and a black screen. No HTTPS request, preparation or decoded frame was reached. A native-load pass is not an HTTPS-playback pass or full 16 KiB runtime qualification.
+| Repair | Behavior |
+| --- | --- |
+| [Output-size/crop propagation, IJK #2](https://github.com/CarGuo/ijkplayer/pull/2) | Correct H.264 crop-only and single-axis size updates when MediaCodec reports an output-format event. This does not recreate the codec or handle a missing format event. |
+| [Opt-in H.264 crop rebuild, IJK #4](https://github.com/CarGuo/ijkplayer/pull/4) | For a supported crop-only SPS/PPS+IDR transition, hold the access unit, drain the old decoder generation, recreate and replay once. Includes seek-baseline restoration, NEW_EXTRADATA ownership and checked SDL operations. |
+| [EOS input progress, IJK #5](https://github.com/CarGuo/ijkplayer/pull/5) | Allow output to continue while EOS waits for an input slot, instead of holding the output codec mutex or announcing a reconfigure request. Retry/error handling, guards, counters and actual completion conditions are preserved. |
 
-The auxiliary audio attempts also did not reach HTTPS: the original audio test stalled during system-CA preparation and was stopped by its 225-second outer timeout; the raw-PEM-copy variant was killed by a system-startup ANR during identity validation. Further testing is stopped; these attempts add no HTTPS-playback evidence.
+The EOS repair applies automatically to asynchronous MediaCodec input, including AVC/HEVC with the crop workaround disabled. It does not change synchronous execution, Java APIs, timeout values or default options.
 
-## Provenance and scope
+## Enable the crop workaround
 
-- IJK source tree: `f7f6b78177f8f6462ba66c1a5c8beb3dc4c98203`.
-- FFmpeg n5.1.10 plus seven integration patches: `0c8735b51d29dbc74e18c235246d5230bd5db989`.
-- OpenSSL 3.5.9: `45e844fa2a14ec92d146bd8f5778ac130b6625fb`.
-- libyuv: `a0c7dd3e4b095649881f39152655437b8cde1589`; SoundTouch: `6bf39cd3bf6b0c156267d12446b0d6bdcfcd53c2`.
-- Linux x86_64, Android NDK r22b (`22.1.7171670`), `config/module-lite-more.sh`. The verified official NDK archive SHA-256 is `ac3a0421e76f71dd330d0cd55f9d99b9ac864c4c034fc67e0d671d022d4e806b`.
-- All nine SOs were freshly compiled. Dependency pins and the ARMv7/Clang 11 OpenSSL `-fno-unroll-loops` fix are unchanged. Identical output bytes do not mean a retained binary was reused.
+`mediacodec-h264-crop-workaround` defaults to **0**. Set it before preparing a new player when an affected H.264 stream/device needs the workaround. The path must already use asynchronous IJK MediaCodec decoding; this option does not enable hardware decoding and does not apply to HEVC, software decoding or synchronous input.
 
-Use the [pinned source build guide](https://github.com/CarGuo/ijkplayer/blob/896674e7a249f3d87a831adb2ac5c2b31d55aeff/doc/FFMPEG5.md) and `init-android-ffmpeg5.sh`. In the [full build sequence](BUILD_SO_EN.md), use the IJK commit above instead of the historical v14 baseline, then build `arm64`, `armv7a` and `x86_64`. Do not use the old FFmpeg 4 initializer. Retain the upstream [dependency and license notices](https://github.com/CarGuo/ijkplayer/blob/896674e7a249f3d87a831adb2ac5c2b31d55aeff/doc/FFMPEG5_HISTORY.md#tls-behavior-and-dependency-notices) when redistributing.
+For a direct IJK player:
 
-This update changes native bundles and documentation only. No Java source, backend selection or application default is changed. Legacy `armeabi`/`x86` libraries and RTMP are outside this update.
+```java
+ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,
+        "mediacodec-h264-crop-workaround", 1L);
+```
 
-## Replace each complete tuple
+In GSY, add the equivalent `VideoOptionModel` to a **copy of the manager's existing option list**, replacing only a duplicate entry for this option. Do not replace unrelated caller options. The [source integration guide](https://github.com/CarGuo/ijkplayer/blob/df9e456a4ef4c770bc97bb179d58a0cf9d529011/doc/H264_MEDIACODEC_CROP_WORKAROUND.md#build-and-enable) contains the complete list-preserving example. Set the option to 0 before preparing a fresh player to disable it.
 
-Always ship the matching `libijkffmpeg.so`, `libijksdl.so` and `libijkplayer.so` together. The crop fallback adds checked SDL operations, so a new player with an unrelated old SDL is unsupported.
+Keep `mediacodec-handle-resolution-change=1` if the caller already uses it. Accepted `NEW_EXTRADATA` transfers ownership to the existing resolution-change path. Source-description changes stop future crop admission; this does not disable the existing resolution-change handler.
 
-| ABI | Standalone destination | Additional matching destination |
+### Supported input and limits
+
+- Crop admission is limited to a bounded progressive 8-bit 4:2:0 H.264 subset with one complete SPS/PPS pair before one IDR slice. PPS and non-crop SPS content must stay compatible. Annex B and supported avcC framing are handled; unsupported parameter sets or framing do not enter this workaround.
+- After a committed crop change, a real flush can restore the pre-workaround configuration before reconsidering the new access unit. This is baseline restoration, not an arbitrary seek-configuration history. A later headerless target might not identify its required configuration.
+- A new crop transition needs a real Surface. Replacing a Surface or changing an authoritative stream description does not guarantee seamless or loss-free presentation. Existing codec failure paths remain failures rather than reporting a false completion.
+- The EOS repair has no separate option. Its general asynchronous-EOS behavior should not be confused with the crop option's default-off scope.
+
+## Use complete matching native tuples
+
+Package matching `libijkffmpeg.so`, `libijksdl.so` and `libijkplayer.so` for every selected ABI. The player uses `SDL_AMediaCodecJava_releaseChecked` and `SDL_AMediaFormatJava_setBufferChecked`; an unrelated older SDL is unsupported.
+
+| ABI | Standalone module directory | Matching `ex_so` directory |
 | --- | --- | --- |
 | arm64-v8a | `gsyVideoPlayer-armv64/src/main/jniLibs/arm64-v8a/` | `gsyVideoPlayer-ex_so/src/main/jniLibs/arm64-v8a/` |
 | armeabi-v7a | `gsyVideoPlayer-armv7a/src/main/jniLibs/armeabi-v7a/` | `gsyVideoPlayer-ex_so/src/main/jniLibs/armeabi-v7a/` |
 | x86_64 | `gsyVideoPlayer-x86_64/src/main/jniLibs/x86_64/` | `gsyVideoPlayer-ex_so/src/main/jniLibs/x86_64/` |
 
-Both destinations for an ABI contain identical bytes. Existing Git file modes are preserved. Select the required ABI modules or `ex_so`; do not package duplicate copies from both module choices.
+Both directories for an ABI contain identical bytes. Select standalone ABI modules or `ex_so`, avoiding duplicate native copies. Legacy `armeabi`/`x86` and RTMP libraries are outside this update. Native changes do not select an application backend or alter caller defaults. A repository merge does not publish a new Maven release.
 
-The player option `mediacodec-h264-crop-workaround` remains **0 by default**. Enable it only before preparing a new player on a validated asynchronous IJK H.264 MediaCodec path, preserving the caller's existing GSY option list. It does not enable hardware decoding. The [option and limitation guide](https://github.com/CarGuo/ijkplayer/blob/896674e7a249f3d87a831adb2ac5c2b31d55aeff/doc/H264_MEDIACODEC_CROP_WORKAROUND.md) describes the bounded crop-only SPS/IDR admission, baseline restoration and resolution-change coexistence. It does not qualify arbitrary seeks, seamless lifecycle transitions, every-frame presentation or all devices. PR #2 alone did not fix the recorded no-output-format-event dynamic-crop case. Keep `mediacodec-handle-resolution-change=1` when the application already uses it. Accepted `NEW_EXTRADATA` transfers ownership to the existing resolution-change path; source description changes stop new crop admission, and the bounded baseline-restore behavior is not an arbitrary seek-history map. Coexistence does not make the legacy resolution-change path loss-free. No Java/default behavior is changed by this bundle.
+## HTTPS and server authentication
 
-## HTTPS is compiled in; playback was not reached
+All three ABIs include OpenSSL, HTTPS and TLS, with certificate/hostname verification and explicit TLS-policy inheritance for nested HLS requests. **`tls_verify` defaults to `0`: default HTTPS does not authenticate the server.**
 
-HTTPS/TLS and OpenSSL are compiled in, including certificate/hostname verification and HLS nested TLS-option inheritance fixes. **`tls_verify` still defaults to `0`.** A successful default HTTPS connection therefore does not prove server identity was checked.
+For authenticated HTTPS, set these FORMAT options before opening the URL:
 
-For authenticated HTTPS, set format option `tls_verify=1` and a trusted PEM `ca_file` before opening the URL. The application owns CA provenance, updates and a readable local CA path. Preserve those options for nested HLS requests; do not give untrusted playlists client-authentication material. Do not disable verification to work around certificate errors. The smoke harness explicitly sets `tls_verify=1` and an app-private CA file assembled from parsed guest-system PEM roots, without a hostname override. This is not automatic Android Java trust-store integration. Strict positive playback and certificate/hostname rejection tests were **NOT REACHED because the Activity Surface was unavailable**. No HTTPS success is claimed.
+```java
+ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "tls_verify", 1L);
+ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "ca_file", trustedPemPath);
+```
 
-## 16 KiB and runtime limits
+GSY callers can pass the same FORMAT options through their existing `VideoOptionModel` list. The application must provide a readable PEM CA file with trusted provenance and updates. This OpenSSL backend does not automatically use Android's Java trust store. Keep explicit TLS policy for nested HLS, do not disable verification to bypass certificate errors, and do not provide client-authentication material to untrusted playlists.
 
-- ARM64 and x86_64: every SO passed 16,384-byte PT_LOAD alignment and GNU_RELRO checks; native minimum API is 21.
-- ARMv7: the existing 4,096-byte layout and native API 16 floor are retained. This is not independent 16 KiB device qualification.
-- GSY's Java core still requires API 23. Lower native floors do not lower the application's minimum API.
-- ELF alignment does not establish APK/AAB packaging alignment, successful loading or playback. Verify the final APK with `zipalign -c -P 16 -v 4 app.apk`, inspect the actual packaged libraries, and test the installed application on the intended 16 KiB system.
-- The same full HTTPS smoke APK, SHA-256 `acd037d290e50655be5028e705a5a8b6c68aae7a3683b356f64478e444d76d25`, failed twice with SIGBUS when installed on IncrementalFS. Reinstalling those unchanged APK bytes with `--no-incremental` placed them on ext4; all three original x86_64 libraries then loaded successfully with a measured 16,384-byte userspace page size.
-- The official API 35 compatibility image still uses a 4 KiB kernel. This is neither an ARM64 native 16 KiB-kernel test nor physical ARM64/ARMv7 runtime qualification.
-- The subsequent Activity Surface timeout, keyguard/current-user problems, system ANRs and black screen prevented HTTPS requests, preparation and frame output. Playback, TLS rejection tests and full GSY application/runtime regression remain unqualified.
-- No production SO was padded, rebuilt or otherwise changed for the installation control. All 18 native destinations retain their original preparation hashes. The installation difference is observed evidence, not a proved low-level crash diagnosis.
+OpenSSL 3.5 can reject old TLS versions and weak certificates. The native update does not lower those security settings. The ARMv7 certificate-loading fix is retained.
 
-An independent audit passed all **135 focused SHA, ELF, feature, version and build-manifest checks** against these nine final files. Static checks covered architecture, SONAME, native minimum-API notes, LOAD/RELRO, absence of TEXTREL/RPATH, non-executable stack, minimum-API strong imports, JNI entry points, checked SDL export/import pairing and PR #2 export continuity. All nine stripped outputs matched stripping their corresponding fresh unstripped outputs. These checks are not a complete security audit or an end-to-end application test.
+## ABI and 16 KiB packaging
 
-## Exact bytes
+| ABI | ELF LOAD page layout | Native minimum API |
+| --- | ---: | ---: |
+| arm64-v8a | 16,384 bytes | 21 |
+| x86_64 | 16,384 bytes | 21 |
+| armeabi-v7a | 4,096 bytes | 16 |
 
-The SHA-256 below applies to both module destinations for each ABI.
+GSY's Java core still requires API 23; lower native floors do not lower the application's minimum SDK. ARMv7 retains its existing 32-bit 4 KiB layout.
+
+16 KiB support also requires correct packaging of the final APK/AAB. Keep the selected ABI's matching libraries, use an Android build-tool configuration that supports 16 KiB native-library packaging, and check the final APK alignment, for example:
+
+```sh
+zipalign -c -P 16 -v 4 app.apk
+```
+
+ELF segment alignment and APK ZIP-entry alignment are separate requirements. Do not infer final application compatibility from the native library filenames or an ABI selection alone.
+
+## Source and dependency pins
+
+- IJK merged source: `df9e456a4ef4c770bc97bb179d58a0cf9d529011`, tree `0752500118251c3a7a71a9698da28e4ff516c3fc`.
+- FFmpeg n5.1.10 plus integration patches: `0c8735b51d29dbc74e18c235246d5230bd5db989`.
+- OpenSSL 3.5.9: `45e844fa2a14ec92d146bd8f5778ac130b6625fb`.
+- libyuv: `a0c7dd3e4b095649881f39152655437b8cde1589`; SoundTouch: `6bf39cd3bf6b0c156267d12446b0d6bdcfcd53c2`.
+- Toolchain: Android NDK r22b `22.1.7171670`, original per-ABI configurations. The ARMv7/Clang 11 OpenSSL `-fno-unroll-loops` setting is retained.
+
+Use the [FFmpeg 5 build guide](https://github.com/CarGuo/ijkplayer/blob/df9e456a4ef4c770bc97bb179d58a0cf9d529011/doc/FFMPEG5.md), `init-android-ffmpeg5.sh` and the pins above. Do not use the old FFmpeg 4 initializer. Retain the [dependency and license notices](https://github.com/CarGuo/ijkplayer/blob/df9e456a4ef4c770bc97bb179d58a0cf9d529011/doc/FFMPEG5_HISTORY.md#tls-behavior-and-dependency-notices) when redistributing.
+
+ARM64's embedded player label remains `ijk-896674e7-eos-paired-20261105`; ARMv7/x86_64 use `ijk-272f9fb-eos-final-20261106`. All contain the production changes in the merged source above. Use the exact file hashes below to identify the bundle rather than interpreting the version label as a commit identifier.
+
+## Exact files
+
+Each SHA-256 applies to both module destinations for its ABI.
 
 | ABI | Library | Bytes | SHA-256 |
 | --- | --- | ---: | --- |
 | arm64-v8a | `libijkffmpeg.so` | 11817008 | `699f8f59324ed0b9b68c395b8a330f4005d9e88e85489cccd034530d4623d73d` |
+| arm64-v8a | `libijkplayer.so` | 598000 | `8b9aa088df96236e093d4d820ad8164ab7047ba83dd085aceb1ac062e886adf3` |
 | arm64-v8a | `libijksdl.so` | 378336 | `9f7603c825af7b3ba1f3aa893223a4201a46b3bf19bce387adaf1027b7bdcc9e` |
-| arm64-v8a | `libijkplayer.so` | 598048 | `cb609eb66373cdfd448f554b08f61043a7c76f4eed1fbbe2e2bcf2e62b5158ea` |
 | armeabi-v7a | `libijkffmpeg.so` | 10849240 | `ede0450349007ab89bf65351bb60f94412c61ca009b3c96996fdc7faa869bd96` |
+| armeabi-v7a | `libijkplayer.so` | 410680 | `5852f2b834e761d064d66fd2f5841daa5cf52e794fbad764529867ff74603eec` |
 | armeabi-v7a | `libijksdl.so` | 326048 | `9e275b7be65b1068f7439ceeca772d6da9a0eff0ae9e126a11e87d50902650f6` |
-| armeabi-v7a | `libijkplayer.so` | 410744 | `7cb4f04ea75b457ece1abda5f2960cdcfc229a29ee62e05f3c3ae333d4e11d45` |
 | x86_64 | `libijkffmpeg.so` | 16233416 | `3557a976ba734f60bbc05b0110ba145711f7aa16f7e611e9375811aba68e022f` |
+| x86_64 | `libijkplayer.so` | 651904 | `e09b8f6be0de6e4196cae6f60e25e157cfd7392e186a8e8c47b05ed98f0c52a2` |
 | x86_64 | `libijksdl.so` | 462032 | `25ec7ff81b68e8a29555a2bab6413a8301ed95b16fd5e3823a887cf49a2ce7bc` |
-| x86_64 | `libijkplayer.so` | 651984 | `a4e3e8c99e1f35c53114564ccdd8fbbb5584c5efa068975f6fd2a8fce633170e` |

@@ -519,10 +519,16 @@ Library APIs include `GSYVideoPreviewVttParser`, `GSYVideoPreviewProvider`, and 
 
 ## V. Recent Versions
 
+### IJK native update (2026-11-06)
+
+The matched ARM64 / ARMv7 / x86_64 SOs include three IJK repair rounds: output-format crop/size propagation, the opt-in H.264 dynamic-crop fallback, and EOS input/output progress. The EOS repair is automatic; `mediacodec-h264-crop-workaround` remains **off by default**, and existing `mediacodec-handle-resolution-change=1` can remain enabled. No Java defaults or release version are changed.
+
+HTTPS/OpenSSL support is retained. For server authentication, explicitly set FORMAT `tls_verify=1` and a trusted `ca_file`; the default is 0. ARM64/x86_64 use a 16 KiB ELF layout, while ARMv7 keeps 4 KiB. Correct final APK/AAB native-library alignment is also required. See the [native-library guide](doc/IJK_THREE_ABI_SO_UPDATE.md) for options, supported inputs, ABI packaging, source pins and matching file hashes.
+
 ### v14.0.0 (2026-10-10)
 
 - **IJK upgrade**: unify `ex_so` and arm64/armv7a/x64 on **FFmpeg n5.1.10 + OpenSSL 3.5.9**, with matched FFmpeg/player/SDL tuples and MJPEG / HEVC seek/replay repairs.
-- **TLS fixes**: fix ARMv7 HTTPS certificate-loading crashes and preserve explicit CA, peer verification and proxy settings across nested HLS requests. Final ARMv7 / ARM64 each pass CA loading and 15 playback checks on the originally affected device.
+- **TLS fixes**: fix ARMv7 HTTPS certificate-loading crashes and preserve explicit CA, peer verification and proxy settings across nested HLS requests.
 - **Audio and RTSP**: support 0.25x–4x software tempo; repair audio drain, startup and EOF/error states; add initial RTSP redirects, opt-in live queue bounds and session callback/watchdog isolation. `timeout` is in microseconds.
 - **GL pipeline and effects**: add FBO multi-pass rendering, downsampling pyramids, Gaussian blur, Bloom, LUT grading, edge-preserving beauty, Glitch, CRT and analog-TV interference, plus `uTime` and texture-asset lifecycle support.
 - **Foldables**: add XML / Compose FLAT, BOOK and TABLETOP split demos with hinge, rotation, fullscreen and posture injection handling; increase runnable Compose demos to **25**.
@@ -530,7 +536,7 @@ Library APIs include `GSYVideoPreviewVttParser`, `GSYVideoPreviewProvider`, and 
 - **R8 and tooling**: narrow reflection/JNI keep rules; use Gradle **8.12**, AGP **8.9.1**, R8 **9.4.14**; add **13 integration skills** and session/Compose CI regressions.
 - **ABI migration**: the default aggregate/`ex_so` ships `arm64-v8a` / `armeabi-v7a` / `x86_64`. Legacy `armeabi` / `x86` require explicit standalone legacy modules and are not upgraded to FFmpeg 5.
 
-See the [full v14.0.0 changelog](doc/UPDATE_VERSION_EN.md#v1400-2026-10-10) for features, migration and verification scope, and the [release audit](doc/V14_RELEASE_REVIEW.md) for all **27 commits** and source/artifact mapping. Current x86_64 / 16 KiB-page runtime, hardware-decoded pixels and the complete acoustic gate remain unqualified.
+See the [full v14.0.0 changelog](doc/UPDATE_VERSION_EN.md#v1400-2026-10-10) for features, migration and verification scope, and the [release audit](doc/V14_RELEASE_REVIEW.md) for all **27 commits** and source/artifact mapping.
 
 ### v13.2.1 (2026-08-19)
 
@@ -709,3 +715,4 @@ Please refer to the IJKPlayer and AndroidVideoCache related agreements.
 The project started from jiecao, and was refactored after some changes.
 Occasionally, some variable and method names may still have a shadow of jiaozi, but it is basically a new project.
 ```
+

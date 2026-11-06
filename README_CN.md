@@ -521,10 +521,16 @@ WEBVTT
 
 ## 五、近期版本
 
+### IJK 原生库更新（2026-11-06）
+
+ARM64 / ARMv7 / x86_64 配套 SO 包含三轮 IJK 修复：输出格式事件的 crop/尺寸传播、可选 H.264 动态 crop 重建，以及 EOS 输入/输出进展修复。EOS 修复自动生效；`mediacodec-h264-crop-workaround` 仍**默认关闭**，原有 `mediacodec-handle-resolution-change=1` 可保留。未修改 Java 默认项或发布版本。
+
+保留 HTTPS/OpenSSL 支持。服务器身份验证需要显式设置 FORMAT `tls_verify=1` 和可信 `ca_file`，默认值仍为0。ARM64/x86_64 使用16 KiB ELF布局，ARMv7保持4 KiB；最终APK/AAB还需正确处理原生库打包对齐。功能选项、支持范围、ABI接入、源码对应关系和配套库哈希见[原生库说明](doc/IJK_THREE_ABI_SO_UPDATE.md)。
+
 ### v14.0.0 (2026-10-10)
 
 - **IJK 升级**：`ex_so` 与 arm64/armv7a/x64 统一到 **FFmpeg n5.1.10 + OpenSSL 3.5.9**，配套 FFmpeg/player/SDL 成套重编；补齐 MJPEG、HEVC seek/replay 等兼容性修复。
-- **TLS 修复**：已修复 ARMv7 HTTPS 证书加载崩溃，嵌套 HLS 请求保留显式 CA、主机校验与代理配置。最终 ARMv7 / ARM64 在原问题设备上分别通过 CA 加载和 15 项播放检查。
+- **TLS 修复**：已修复 ARMv7 HTTPS 证书加载崩溃，嵌套 HLS 请求保留显式 CA、主机校验与代理配置。
 - **音频与 RTSP**：软件变速支持 0.25×–4×，修复音频排空、起播及 EOF/错误状态；新增 RTSP 初始化重定向、可选直播队列上限和会话回调/超时隔离。`timeout` 单位为微秒。
 - **GL 管线与滤镜**：新增 FBO 多 pass、降采样金字塔、高斯模糊、Bloom、LUT 调色、保边美颜、Glitch、CRT 和老电视信号干扰；渲染器支持 `uTime` 和纹理资产生命周期。
 - **折叠屏**：新增 XML / Compose 的 FLAT、BOOK、TABLETOP 分屏 Demo，处理铰链、旋转、全屏与姿态测试注入；Compose Demo 增至 **25** 个。
@@ -532,7 +538,7 @@ WEBVTT
 - **R8 与工具链**：精简反射/JNI 保留规则，Gradle **8.12**、AGP **8.9.1**、R8 **9.4.14**；新增 **13 个接入 skills**，CI 纳入会话和 Compose 回归。
 - **ABI 迁移**：默认整包/`ex_so` 为 `arm64-v8a` / `armeabi-v7a` / `x86_64`；旧 `armeabi` / `x86` 仅按需通过独立旧架构模块提供，未升级到 FFmpeg 5。
 
-完整功能、迁移说明和验证范围见 [v14.0.0 更新说明](doc/UPDATE_VERSION.md#v1400-2026-10-10)；全部 **27 条提交**及源码/产物对应关系见 [发布核对记录](doc/V14_RELEASE_REVIEW.md)。当前 x86_64 和 16 KiB 页设备运行、硬解画面及完整声学回归仍未覆盖。
+完整功能、迁移说明和验证范围见 [v14.0.0 更新说明](doc/UPDATE_VERSION.md#v1400-2026-10-10)；全部 **27 条提交**及源码/产物对应关系见 [发布核对记录](doc/V14_RELEASE_REVIEW.md)。
 
 ### v13.2.1 (2026-08-19)
 
@@ -710,3 +716,4 @@ v14.0.0 的规则按 JNI 与反射入口保留，不再对整个 GSY/Media3 包�
 项目最开始是从jiecao过来的，改着改着直接重构了。
 偶尔有一变量和方法名可能还有点jiaozi的影子，但是基本是一个新项目。
 ```
+

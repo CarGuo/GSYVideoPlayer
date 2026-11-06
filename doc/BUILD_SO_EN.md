@@ -1,19 +1,15 @@
-# v14.0.0 IJK / FFmpeg 5 native builds
+# IJK / FFmpeg 5 native builds
 
 [中文](BUILD_SO.md)
 
-> 2026-11-05 full-rebuild draft: the [matched three-ABI native update](IJK_THREE_ABI_SO_UPDATE.md) pins merged IJK commit `896674e7`; all nine libraries were rebuilt and crop remains off by default. **Draft only, do not merge; not yet qualified as usable.** Original x86_64 bytes passed 16 KiB-userspace loading after the unchanged APK was installed with `--no-incremental` on ext4. The two earlier IncrementalFS SIGBUS failures remain recorded. The emulator Surface/system state then blocked the test before any HTTPS request or frame; HTTPS has not passed. The 11-04 increment and v14 source pin below remain historical; use the new record's commit to reproduce this bundle.
-
-> 2026-11-04 increment: the three-ABI `libijkplayer.so` files now include [IJK PR #2](IJK_PR2_SO_UPDATE.md), with the original FFmpeg/SDL bytes retained. The pinned sources and full-build procedure below describe the v14 baseline; the incremental record lists this player-only update's source, hashes, tests and device limitations.
-
-> Updated 2026-10-10: the former FFmpeg 4.x / NDK r10-r13 / OpenSSL 1.1.1 tutorial does not generate this release's libraries. Use pinned sources and the separate NDK r22b FFmpeg 5 build entry; see the [release audit](V14_RELEASE_REVIEW.md).
+> The current three-ABI bundle includes output sizing, H.264 crop and EOS repairs, pinned to merged source `df9e456a`. See the [native-library guide](IJK_THREE_ABI_SO_UPDATE.md) for options, HTTPS/TLS policy, 16 KiB packaging and matching hashes. Use the FFmpeg 5 / NDK r22b build entry below instead of the old FFmpeg 4 / NDK r10-r13 tutorial.
 
 ## Source and toolchain identity
 
-- IJK integration: [df3f5ca6ed56419e7af04de0fd3a7474bb41950b](https://github.com/CarGuo/ijkplayer/commit/df3f5ca6ed56419e7af04de0fd3a7474bb41950b).
+- IJK integration: [df9e456a4ef4c770bc97bb179d58a0cf9d529011](https://github.com/CarGuo/ijkplayer/commit/df9e456a4ef4c770bc97bb179d58a0cf9d529011).
 - FFmpeg: [0c8735b51d29dbc74e18c235246d5230bd5db989](https://github.com/CarGuo/FFmpeg/commit/0c8735b51d29dbc74e18c235246d5230bd5db989), **n5.1.10** plus seven IJK integration patches.
 - OpenSSL **3.5.9**: `45e844fa2a14ec92d146bd8f5778ac130b6625fb`. Initialization also pins libyuv / SoundTouch.
-- Recorded native build environment: Linux x86_64, Android NDK **22.1.7171670 (r22b)**, Bash, Git, Perl, GNU Make, sha256sum, NASM or YASM. Qualify other hosts separately rather than applying historical manual NDK edits.
+- Build environment: Linux x86_64, Android NDK **22.1.7171670 (r22b)**, Bash, Git, Perl, GNU Make, sha256sum, NASM or YASM. Qualify other hosts separately rather than applying historical manual NDK edits.
 
 ## Build in a new directory
 
@@ -22,7 +18,7 @@ Use `init-android-ffmpeg5.sh`, rather than the historical `init-android.sh` / `i
 ```sh
 git clone --branch ffmpeg-5.0 https://github.com/CarGuo/ijkplayer.git ijkplayer-ffmpeg5-v14
 cd ijkplayer-ffmpeg5-v14
-git checkout --detach df3f5ca6ed56419e7af04de0fd3a7474bb41950b
+git checkout --detach df9e456a4ef4c770bc97bb179d58a0cf9d529011
 ./init-android-ffmpeg5.sh
 
 export ANDROID_NDK=/absolute/path/to/android-ndk-r22b
@@ -51,9 +47,11 @@ Replace `libijkffmpeg.so`, `libijkplayer.so` and `libijksdl.so` together for eac
 
 ARM64/x86_64 16 KiB ELF alignment and APK packaging alignment need separate inspection; neither qualifies 16 KiB-page device runtime. The Java core requires API 23, independent of the lower ABI-specific native build floors.
 
-Release checks include nine-library SHA-256 matching, actual AAR/APK ABIs, native CA loading, audio/RTSP/TLS playback and Java session regression. See [current results](V14_RELEASE_REVIEW.md), the [runnable CA gate](../tests/tls-native/README.md), and the [pinned IJK build/behavior/license guide](https://github.com/CarGuo/ijkplayer/blob/df3f5ca6ed56419e7af04de0fd3a7474bb41950b/doc/FFMPEG5.md). Historical results there retain their own source/library identities.
 
 ## Historical references
 
 - [FFmpeg n4.3 / NDK r22 patches](../16kpatch/README.md): reproduce older artifacts, not this FFmpeg 5 release.
 - [The v13.2.1 build tutorial](https://github.com/CarGuo/GSYVideoPlayer/blob/v13.2.1/doc/BUILD_SO_EN.md): historical toolchains and APIs.
+
+
+For custom formats, TLS policy and license requirements, use the [pinned source build guide](https://github.com/CarGuo/ijkplayer/blob/df9e456a4ef4c770bc97bb179d58a0cf9d529011/doc/FFMPEG5.md).
