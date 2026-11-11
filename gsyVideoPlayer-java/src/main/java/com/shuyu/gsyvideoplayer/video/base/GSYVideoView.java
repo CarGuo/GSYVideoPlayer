@@ -520,12 +520,15 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             mPauseBeforePrepared = true;
         }
         try {
-            if (getGSYVideoManager() != null &&
-                getGSYVideoManager().isPlaying()) {
+            GSYVideoViewBridge manager = getGSYVideoManager();
+            // 14.0.0 / #4268: Buffering is resumable even when the backend
+            // temporarily reports isPlaying=false; pause its playback intent too.
+            if (manager != null && (mCurrentState == CURRENT_STATE_PLAYING
+                || mCurrentState == CURRENT_STATE_PLAYING_BUFFERING_START
+                || manager.isPlaying())) {
                 setStateAndUi(CURRENT_STATE_PAUSE);
-                mCurrentPosition = getGSYVideoManager().getCurrentPosition();
-                if (getGSYVideoManager() != null)
-                    getGSYVideoManager().pause();
+                mCurrentPosition = manager.getCurrentPosition();
+                manager.pause();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -721,17 +724,16 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     @Override
     public void onInfo(int what, int extra) {
         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
-            mBackUpPlayingBufferState = mCurrentState;
-            //避免在onPrepared之前就进入了buffering，导致一只loading
-            if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
+            // 14.0.0 / #4268: Buffer events only wrap PLAYING. Repeated or late
+            // notifications must not replace a newer pause/resume decision.
+            if (mHadPlay && mCurrentState == CURRENT_STATE_PLAYING) {
+                mBackUpPlayingBufferState = mCurrentState;
                 setStateAndUi(CURRENT_STATE_PLAYING_BUFFERING_START);
+            }
 
         } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
             if (mBackUpPlayingBufferState != -1) {
-                if (mBackUpPlayingBufferState == CURRENT_STATE_PLAYING_BUFFERING_START) {
-                    mBackUpPlayingBufferState = CURRENT_STATE_PLAYING;
-                }
-                if (mHadPlay && mCurrentState != CURRENT_STATE_PREPAREING && mCurrentState > 0)
+                if (mHadPlay && mCurrentState == CURRENT_STATE_PLAYING_BUFFERING_START)
                     setStateAndUi(mBackUpPlayingBufferState);
 
                 mBackUpPlayingBufferState = -1;
