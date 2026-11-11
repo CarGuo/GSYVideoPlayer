@@ -2,7 +2,7 @@
 
 **[Click to see the English version](QUESTION_EN.md)**
 
-### v14.0.0 原生播放迁移
+### v14.1.0 原生播放接入
 
 - 默认 IJK 三 ABI 为 `arm64-v8a` / `armeabi-v7a` / `x86_64`；FFmpeg n5.1.10，OpenSSL 3.5.9。旧 `armeabi` / `x86` 不在默认整包中，未升级到 FFmpeg 5。
 - ARMv7 HTTPS 证书加载崩溃已修复，不需要删掉 ARMv7 或关闭证书校验。显式 `tls_verify` / `ca_file` 等配置会继承至 HLS 子资源；当前验证和限制见 [TLS README](../tests/tls-native/README.md)。
@@ -37,7 +37,7 @@ allprojects {
 
 　项目最外部有一个dependencies.gradle，所有的项目依赖都在这里面，然后参考项目根目录的build.gradle，在最顶部有apply from: 'dependencies.gradle'，这样gsyVideoPlayer就可以找到对应的依赖了。gradle方便可参考察[Android蹲坑的疑难杂症集锦（兼Gradle） 二](http://www.jianshu.com/p/86e4b336c17d)
 
-  v14.0.0 默认 native 整包包含 `arm64-v8a` / `armeabi-v7a` / `x86_64` 三个 ABI。外部项目优先按 [依赖指南](DEPENDENCIES.md) 从 Maven Central 接入；需要控制体积时按目标 ABI 选择独立模块或配置 ABI 过滤，避免重复引入 native 库。
+  v14.1.0 默认 native 整包包含 `arm64-v8a` / `armeabi-v7a` / `x86_64` 三个 ABI。外部项目优先按 [依赖指南](DEPENDENCIES.md) 从 Maven Central 接入；需要控制体积时按目标 ABI 选择独立模块或配置 ABI 过滤，避免重复引入 native 库。
 
 #### 2、ClassNotFoundException和混淆
 
@@ -123,7 +123,7 @@ sourceSets {
 
 #### 4、播放格式与原生模块选择
 
-v14.0.0 的 arm64/armv7a/x64 与 ex_so 使用相同 FFmpeg 5 配置，不再按普通/扩展版的 MPEG 差异选择。先检查媒体容器、编解码器及设备能力，详见 [DECODERS.md](DECODERS.md)。
+v14.1.0 的 arm64/armv7a/x64 与 ex_so 使用相同 FFmpeg 5 配置，不再按普通/扩展版的 MPEG 差异选择。先检查媒体容器、编解码器及设备能力，详见 [DECODERS.md](DECODERS.md)。
 
 如果拍摄的视频播放不了，可以尝试用使用系统录制的项目：[VideoRecord](https://github.com/CarGuo/VideoRecord)
 或者使用JAVACV录制的项目：[FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder )，测试视频是否可以播放。

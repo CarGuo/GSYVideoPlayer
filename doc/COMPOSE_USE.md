@@ -2,7 +2,7 @@
 
 > **当前状态：v13.1.0 起随主版本发布**
 >
-> `gsyVideoPlayer-compose` 模块已纳入 Maven Central / GitHub Packages 发布流。外部项目可直接使用 `io.github.carguo:gsyvideoplayer-compose:14.0.0`；在本仓库内开发或调试时，仍可使用 `implementation project(":gsyVideoPlayer-compose")` 的源码依赖方式。
+> `gsyVideoPlayer-compose` 模块已纳入 Maven Central / GitHub Packages 发布流。外部项目可直接使用 `io.github.carguo:gsyvideoplayer-compose:14.1.0`；在本仓库内开发或调试时，仍可使用 `implementation project(":gsyVideoPlayer-compose")` 的源码依赖方式。
 >
 > 当前能力缺口、已知问题与分轮推进路线图已归档到 [doc/COMPOSE_BACKLOG.md](./COMPOSE_BACKLOG.md)；后续每一轮代码与 demo 推进都会同步更新该文件。
 
@@ -21,7 +21,7 @@
 
 ```groovy
 // 方式 A：Maven Central（GitHub Packages 改用 com.shuyu）
-implementation "io.github.carguo:gsyvideoplayer-compose:14.0.0"
+implementation "io.github.carguo:gsyvideoplayer-compose:14.1.0"
 
 // 方式 B：本仓库内源码依赖
 implementation project(":gsyVideoPlayer-compose")
@@ -32,6 +32,13 @@ implementation project(":gsyVideoPlayer-compose")
 > **要求**：`minSdk ≥ 23`、Kotlin 2.0.x、本仓库 AGP 8.9.1 / Gradle 8.12、JDK 17。模块内部已通过 `compose-bom 2024.06.00` 统一 Compose 依赖版本，并使用 Compose Compiler Gradle Plugin（无需再单独指定 `composeCompilerVersion`）。
 
 ---
+
+## v14.1.0 状态同步与生命周期修复
+
+- `snapshot.speed` 与 `stateFlow.speed` 统一读取当前 host 的倍速配置。新的 `setUp` 使用本次 builder 的倍速：默认是 `1f`，显式 `builder.setSpeed(...)` 则使用该值；应用配置及首次挂载后立即同步，不再沿用旧视频的 Controller 缓存（[#4267](https://github.com/CarGuo/GSYVideoPlayer/issues/4267)）。该值表示 host 配置，不是对内核实际播放速率的确认。
+- `autoPauseResume = true` 时，缓冲期间的 `ON_PAUSE` 仍能暂停，并在 `ON_RESUME` 恢复。迟到或重复的缓冲通知不会覆盖新的暂停/恢复决定；准备阶段的延迟暂停和 `startAfterPrepared = false` 路径保持原有行为（[#4268](https://github.com/CarGuo/GSYVideoPlayer/issues/4268)）。该状态机修复位于 Java 核心，Wrapper 和传统 View 调用方同样适用。
+
+完整变更见 [v14.1.0 更新说明](UPDATE_VERSION.md#v1410-2026-11-11)。
 
 ## v14.0.0 行为与 API 更新
 

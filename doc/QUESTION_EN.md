@@ -2,7 +2,7 @@
 
 **[Click to see the Chinese version](QUESTION.md)**
 
-### v14.0.0 native playback migration
+### v14.1.0 native playback integration
 
 - Default IJK ABIs are `arm64-v8a` / `armeabi-v7a` / `x86_64`, using FFmpeg n5.1.10 / OpenSSL 3.5.9. Legacy `armeabi` / `x86` are outside the default aggregate and not migrated to FFmpeg 5.
 - ARMv7 HTTPS certificate loading is fixed; removing ARMv7 or disabling verification is unnecessary. Explicit `tls_verify` / `ca_file` settings follow nested HLS resources; see [current TLS results and limits](../tests/tls-native/README.md).
@@ -37,7 +37,7 @@ allprojects {
 
 There is a dependencies.gradle in the outermost part of the project, and all project dependencies are in it. Then refer to the build.gradle in the root directory of the project. There is apply from: 'dependencies.gradle' at the top, so that gsyVideoPlayer can find the corresponding dependencies. For gradle convenience, you can refer to [Collection of difficult and miscellaneous diseases of Android squatting (and Gradle) II](http://www.jianshu.com/p/86e4b336c17d)
 
-The v14.0.0 default native aggregate contains three ABIs: `arm64-v8a` / `armeabi-v7a` / `x86_64`. External projects should follow the [dependency guide](DEPENDENCIES_EN.md) for Maven Central integration. To reduce package size, select individual ABI modules or configure ABI filters, avoiding duplicate native libraries.
+The v14.1.0 default native aggregate contains three ABIs: `arm64-v8a` / `armeabi-v7a` / `x86_64`. External projects should follow the [dependency guide](DEPENDENCIES_EN.md) for Maven Central integration. To reduce package size, select individual ABI modules or configure ABI filters, avoiding duplicate native libraries.
 
 #### 2. ClassNotFoundException and obfuscation
 
@@ -125,7 +125,7 @@ Did you monitor the list sliding and update the list in the monitoring.
 
 #### 4. Media formats and native module selection
 
-v14.0.0 arm64/armv7a/x64 and ex_so share the same FFmpeg 5 profile. Check container, codec and device capabilities rather than the former standard/extended MPEG distinction; see [DECODERS_EN.md](DECODERS_EN.md).
+v14.1.0 arm64/armv7a/x64 and ex_so share the same FFmpeg 5 profile. Check container, codec and device capabilities rather than the former standard/extended MPEG distinction; see [DECODERS_EN.md](DECODERS_EN.md).
 
 If the recorded video cannot be played, you can try to use the system recording project: [VideoRecord](https://github.com/CarGuo/VideoRecord)
 Or use the JAVACV recording project: [FFmpegRecorder](https://github.com/CrazyOrr/FFmpegRecorder), to test whether the video can be played.

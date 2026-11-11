@@ -22,9 +22,9 @@ references:
 
 ## 依赖
 
-- 推荐整包：`io.github.carguo:gsyvideoplayer:14.0.0`（已含 Java、Exo2、三 ABI ex_so）。
-- 分模块主库：`io.github.carguo:gsyvideoplayer-java:14.0.0`。
-- 分模块 IJK so：选 `io.github.carguo:gsyvideoplayer-ex_so:14.0.0`，或所需独立 artifact `gsyvideoplayer-arm64` / `gsyvideoplayer-armv7a` / `gsyvideoplayer-x64`，不重复引入同 ABI 两套库。
+- 推荐整包：`io.github.carguo:gsyvideoplayer:14.1.0`（已含 Java、Exo2、三 ABI ex_so）。
+- 分模块主库：`io.github.carguo:gsyvideoplayer-java:14.1.0`。
+- 分模块 IJK so：选 `io.github.carguo:gsyvideoplayer-ex_so:14.1.0`，或所需独立 artifact `gsyvideoplayer-arm64` / `gsyvideoplayer-armv7a` / `gsyvideoplayer-x64`，不重复引入同 ABI 两套库。
 - 默认 ABI 为 `arm64-v8a` / `armeabi-v7a` / `x86_64`（FFmpeg n5.1.10 / OpenSSL 3.5.9）；旧 armv5/x86 未升级，仅旧架构项目显式使用。
 - 权限：`INTERNET`、`WAKE_LOCK`、`ACCESS_NETWORK_STATE`（AndroidManifest）
 

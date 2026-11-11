@@ -20,6 +20,13 @@ This document summarizes recent demo and playback changes so maintainers can qui
 | Foldables | XML / Compose foldable entries | `FoldDetailActivity`, `FoldComposeActivity` | FLAT / BOOK / TABLETOP, hinges and fullscreen; 25 Compose entries. |
 | Compose state/aspect ratio | Full-controls / cache demos | `GSYPlayerController` | Release, polled buffering and ratio API; see COMPOSE_USE.md. |
 
+## v14.1.0 state fixes
+
+- `GSYPlayerController.snapshot.speed` / `stateFlow.speed` now share the current host configuration; each new `setUp` follows that builder's speed (#4267).
+- The Java core preserves pause/resume intent during buffering, so late or repeated buffer notifications cannot prevent lifecycle resume (#4268).
+
+See the [v14.1.0 release notes](UPDATE_VERSION_EN.md#v1410-2026-11-11) for native-library updates and the full changes.
+
 ## v14.0.0 commit coverage
 
 See [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md) for every one of the 27 commits in `v13.2.1..v14.0.0`.
@@ -286,7 +293,7 @@ On-device Loopback Receiver:
 - `getPositionInfo` / `getTransportInfo` report real progress and state, so the sender's 1 Hz polling shows the actual remote position.
 - Service ↔ Activity state changes are synchronised via `setPackage` private broadcasts (`ACTION_STATE_READY` / `ACTION_STATE_STOPPED` / `ACTION_STATE_ERROR`). `RECEIVER_NOT_EXPORTED` is applied on Android 13+.
 
-Dependency toggle: add `io.github.carguo:gsyvideoplayer-cast:14.0.0` when DLNA is required. The
+Dependency toggle: add `io.github.carguo:gsyvideoplayer-cast:14.1.0` when DLNA is required. The
 artifact exposes the tested jUPnP/Jetty set and declares its real `minSdk 26`. The default player
 does not include Jetty and keeps its API 23 floor (see [DEPENDENCIES_EN.md](DEPENDENCIES_EN.md)).
 

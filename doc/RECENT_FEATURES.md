@@ -20,6 +20,13 @@
 | 折叠屏 | XML / Compose 折叠屏入口 | `FoldDetailActivity`、`FoldComposeActivity` | FLAT / BOOK / TABLETOP、铰链与全屏；Compose 共 25 项。 |
 | Compose 状态与显示比例 | 完整控件 / 缓存 Demo | `GSYPlayerController` | 资源释放、缓冲轮询与比例 API，见 COMPOSE_USE.md。 |
 
+## v14.1.0 状态修复
+
+- `GSYPlayerController` 的 `snapshot.speed` / `stateFlow.speed` 与当前 host 配置同源，新 `setUp` 跟随本次 builder 的倍速（#4267）。
+- Java 核心保留缓冲期间的暂停/恢复决定，避免迟到或重复的缓冲通知导致生命周期恢复失效（#4268）。
+
+原生库与完整变更见 [v14.1.0 更新说明](UPDATE_VERSION.md#v1410-2026-11-11)。
+
 ## v14.0.0 提交覆盖
 
 `v13.2.1..v14.0.0` 的 27 条提交逐条映射见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)。
@@ -285,7 +292,7 @@ Demo：`MainActivity` 底部有独立"投屏 Demo"入口 `CastDemoActivity`，�
 - `getPositionInfo` / `getTransportInfo` 回填真实进度状态，sender 端 1Hz 轮询看到的进度就是远端真实播放位置。
 - Service ↔ Activity 通过 `setPackage` 私有广播（`ACTION_STATE_READY` / `ACTION_STATE_STOPPED` / `ACTION_STATE_ERROR`）同步状态；Android 13+ 已适配 `RECEIVER_NOT_EXPORTED`。
 
-依赖开关：需要 DLNA 时添加 `io.github.carguo:gsyvideoplayer-cast:14.0.0`；该 artifact
+依赖开关：需要 DLNA 时添加 `io.github.carguo:gsyvideoplayer-cast:14.1.0`；该 artifact
 统一传递 jUPnP/Jetty，并声明真实 `minSdk 26`。默认播放器不含 Jetty，最低版本保持 API 23
 （详见 [DEPENDENCIES.md](DEPENDENCIES.md)）。
 

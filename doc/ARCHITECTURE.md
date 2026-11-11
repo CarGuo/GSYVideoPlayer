@@ -31,8 +31,8 @@
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                      Git Tag 触发                            │
-│                   git tag v14.0.0                           │
-│                git push origin v14.0.0                      │
+│                   git tag v14.1.0                           │
+│                git push origin v14.1.0                      │
 └─────────────────┬───────────────────────────┬───────────────┘
                   │                           │
     ┌─────────────▼─────────────┐  ┌─────────▼──────────────┐
@@ -56,7 +56,7 @@
     │                         │  │                          │
     │ com.shuyu:              │  │ io.github.carguo:        │
     │   gsyvideoplayer-java:  │  │   gsyvideoplayer-java:   │
-    │   14.0.0                │  │   14.0.0                 │
+    │   14.1.0                │  │   14.1.0                 │
     └─────────────────────────┘  └──────────────────────────┘
 ```
 
@@ -134,9 +134,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
+    implementation 'com.shuyu:gsyvideoplayer-java:14.1.0'
     // 仅需要 DLNA/UPnP 投屏时添加
-    implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
+    implementation 'com.shuyu:gsyvideoplayer-cast:14.1.0'
 }
 ```
 
@@ -147,9 +147,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
+    implementation 'io.github.carguo:gsyvideoplayer-java:14.1.0'
     // 仅需要 DLNA/UPnP 投屏时添加
-    implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
+    implementation 'io.github.carguo:gsyvideoplayer-cast:14.1.0'
 }
 ```
 

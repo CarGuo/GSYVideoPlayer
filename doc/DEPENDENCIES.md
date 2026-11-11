@@ -8,7 +8,7 @@
 - Github Package ： 9.1.0 版本开始才有， 但是 11.0.0 之前， GSYIjkJava 的基础依赖还是在托管在 jitpack
 - Jitpack IO ：依然会发布，但是存在托管平台随机丢包
 
-### v14.0.0 的 ABI 与依赖选择
+### v14.1.0 的 ABI 与依赖选择
 
 `gsyvideoplayer` 整包已包含 Java、Exo2 和 `ex_so`。分模块接入 IJK 时，选择 `ex_so` 或所需的独立 ABI 模块；同一 ABI 不要同时引入两套 so。
 
@@ -45,37 +45,37 @@ allprojects {
 ```groovy
  //完整版引入
 
-implementation 'io.github.carguo:gsyvideoplayer:14.0.0'
+implementation 'io.github.carguo:gsyvideoplayer:14.1.0'
 
 
 //是否需要AliPlayer模式
-implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
+implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.1.0'
 
 // 可选 DLNA/UPnP 投屏（API 26）
-implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
+implementation 'io.github.carguo:gsyvideoplayer-cast:14.1.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:14.1.0'
 
  //是否需要ExoPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-exo2:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:14.1.0'
 
  //可选直接依赖；exo2 已经通过 api 传递 RTMP 模块
- implementation 'io.github.carguo:gsyvideoplayer-rtmp:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-rtmp:14.1.0'
 
  //可选投屏实现；不投屏不要添加（该模块真实 minSdk 为 26）
- implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-cast:14.1.0'
 
  //是否需要AliPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.1.0'
 
  //选择需要的 ABI；不要再同时添加 ex_so
- implementation 'io.github.carguo:gsyvideoplayer-arm64:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv7a:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-x64:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-arm64:14.1.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv7a:14.1.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x64:14.1.0'
 ```
 
 #### C、分模块引入三 ABI 原生库
@@ -83,23 +83,23 @@ implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
 `ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:14.1.0'
 
  //是否需要ExoPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-exo2:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:14.1.0'
 
  //是否需要AliPlayer模式
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.1.0'
 
  //三 ABI 的 IJK 原生库
- implementation 'io.github.carguo:gsyvideoplayer-ex_so:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-ex_so:14.1.0'
 
 ```
 
 #### D、Jetpack Compose 支持（可选）
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-compose:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-compose:14.1.0'
 ```
 
 `gsyvideoplayer-compose` 依赖 `gsyvideoplayer-java`，如果需要 ExoPlayer / AliPlayer / 指定 IJK so，仍按上面的方式额外引入对应模块。
@@ -147,37 +147,37 @@ allprojects {
 
 ```groovy
  //完整版引入
- implementation 'com.shuyu:gsyvideoplayer:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer:14.1.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.1.0'
 
 // 可选 DLNA/UPnP 投屏（API 26）
-implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
+implementation 'com.shuyu:gsyvideoplayer-cast:14.1.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:14.1.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-exo2:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:14.1.0'
 
  //可选直接依赖；exo2 已经通过 api 传递 RTMP 模块
- implementation 'com.shuyu:gsyvideoplayer-rtmp:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-rtmp:14.1.0'
 
  //可选投屏实现；不投屏不要添加（该模块真实 minSdk 为 26）
- implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-cast:14.1.0'
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.1.0'
 
  //选择需要的 ABI；不要再同时添加 ex_so
- implementation 'com.shuyu:gsyvideoplayer-armv7a:14.0.0'
- implementation 'com.shuyu:gsyvideoplayer-arm64:14.0.0'
- implementation 'com.shuyu:gsyvideoplayer-x64:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv7a:14.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-arm64:14.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-x64:14.1.0'
 ```
 
 #### C、分模块引入三 ABI 原生库
@@ -185,24 +185,24 @@ implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
 `ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:14.1.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-exo2:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:14.1.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.1.0'
 
  //三 ABI 的 IJK 原生库
- implementation 'com.shuyu:gsyvideoplayer-ex_so:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-ex_so:14.1.0'
 
 ```
 
 #### D、Jetpack Compose 支持（可选）
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-compose:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-compose:14.1.0'
 ```
 
 ### 3、Jitpack 引入方法（会继续发布，但不是很推荐）
@@ -229,34 +229,34 @@ allprojects {
 ```groovy
  //完整版引入
 
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v14.1.0'
 
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.1.0'
 
 // 可选 DLNA/UPnP 投屏（API 26）
-implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
+implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.1.0'
 ```
 
 #### B、添加java和你想要的so支持：
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.1.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.1.0'
 
  //可选投屏实现；不投屏不要添加（该模块真实 minSdk 为 26）
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.1.0'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.1.0'
 
  //选择需要的 ABI；不要再同时添加 ex_so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v14.1.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v14.1.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v14.1.0'
 ```
 
 #### C、分模块引入三 ABI 原生库
@@ -264,16 +264,16 @@ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
 `ex_so` 一次提供三种升级后的 ABI，与 B 中独立模块的编解码能力一致。若只需部分 ABI，选择 B 以减少包体积。
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.1.0'
 
  //是否需要ExoPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.1.0'
 
  //是否需要AliPlayer模式
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.1.0'
 
  //三 ABI 的 IJK 原生库
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v14.1.0'
 
 ```
 
@@ -287,8 +287,8 @@ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
 
 ```groovy
 dependencies {
-    implementation 'io.github.carguo:gsyvideoplayer:14.0.0'
-    implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
+    implementation 'io.github.carguo:gsyvideoplayer:14.1.0'
+    implementation 'io.github.carguo:gsyvideoplayer-cast:14.1.0'
 }
 ```
 

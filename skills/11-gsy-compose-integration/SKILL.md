@@ -133,11 +133,13 @@ DisposableEffect(lifecycle) {
 
 样例 hosts 全在 [compose/host/](../../app/src/main/java/com/example/gsyvideoplayer/compose/host)。
 
-## v14.0.0 状态与接入
+## v14.1.0 状态与接入
 
-外部坐标为 `io.github.carguo:gsyvideoplayer-compose:14.0.0`（GitHub Packages 使用 `com.shuyu`）。IJK 使用方还需选择 `ex_so` 或独立 ABI 原生模块；完整组合见 [DEPENDENCIES.md](../../doc/DEPENDENCIES.md)。
+外部坐标为 `io.github.carguo:gsyvideoplayer-compose:14.1.0`（GitHub Packages 使用 `com.shuyu`）。IJK 使用方还需选择 `ex_so` 或独立 ABI 原生模块；完整组合见 [DEPENDENCIES.md](../../doc/DEPENDENCIES.md)。
 
 `detachHost` 只解绑 View 侧回调/tick，`dispose` 统一释放保留的 host；`snapshot.bufferPercent` 合并内核轮询与回调值。`controller.changeTextureViewShowType()` 在主线程更新当前内嵌/全屏比例。Compose Demo 共 25 项，新增折叠屏 BOOK/TABLETOP。详见 [COMPOSE_USE.md](../../doc/COMPOSE_USE.md)。
+
+`snapshot.speed` / `stateFlow.speed` 跟随当前 host 的倍速配置；每次 `setUp` 采用本次 builder 的倍速（默认 `1f`），不会隐式继承上一段视频的倍速。生命周期暂停在缓冲期间仍可恢复，迟到的缓冲通知不会覆盖暂停/恢复决定（#4267、#4268）。
 
 ## 常见坑
 

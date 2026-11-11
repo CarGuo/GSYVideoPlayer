@@ -1,6 +1,6 @@
 # Maven Central 发布快速开始
 
-> v14.0.0 / 2026-10-10：使用当前双渠道目标配置；准确任务和实际工作流见 [DUAL_CHANNEL_PUBLISH.md](DUAL_CHANNEL_PUBLISH.md)。
+> v14.1.0 / 2026-11-11：使用当前双渠道目标配置；准确任务和实际工作流见 [DUAL_CHANNEL_PUBLISH.md](DUAL_CHANNEL_PUBLISH.md)。
 
 ## 1. 配置凭据与签名
 
@@ -39,4 +39,4 @@ Central 的实际任务为：
 
 ## 更多资料
 
-[完整指南](MAVEN_CENTRAL_PUBLISH.md) · [双渠道配置](DUAL_CHANNEL_PUBLISH.md) · [依赖接入](DEPENDENCIES.md) · [v14 发布核对](V14_RELEASE_REVIEW.md)
+[完整指南](MAVEN_CENTRAL_PUBLISH.md) · [双渠道配置](DUAL_CHANNEL_PUBLISH.md) · [依赖接入](DEPENDENCIES.md) · [v14.0.0 历史发布核对](V14_RELEASE_REVIEW.md)

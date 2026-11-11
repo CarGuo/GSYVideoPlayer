@@ -506,7 +506,7 @@ class GSYPlayerController internal constructor() {
             netSpeed = netSpeed,
             netSpeedText = netSpeedText,
             isCacheReady = cacheReady,
-            // 14.0.0 / #4267: Builder and direct Host setters also change speed;
+            // 14.1.0 / #4267: Builder and direct Host setters also change speed;
             // a Controller cache would keep publishing the previous video's value.
             speed = player.speed,
             isLocked = locked,

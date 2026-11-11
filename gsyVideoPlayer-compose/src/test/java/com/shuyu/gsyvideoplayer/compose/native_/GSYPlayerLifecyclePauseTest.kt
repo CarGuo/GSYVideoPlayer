@@ -21,7 +21,7 @@ import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
-/** 14.0.0 / #4268: Buffer notifications must preserve lifecycle pause/resume intent. */
+/** 14.1.0 / #4268: Buffer notifications must preserve lifecycle pause/resume intent. */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])
 @LooperMode(LooperMode.Mode.PAUSED)

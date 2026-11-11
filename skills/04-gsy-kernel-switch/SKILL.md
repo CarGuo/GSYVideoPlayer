@@ -97,7 +97,7 @@ GSYExoVideoManager.setPlayerInitSuccessListener(new IPlayerInitSuccessListener()
 - Exo 切源 / 无缝切换：[DetailExoListPlayer](../../app/src/main/java/com/example/gsyvideoplayer/exo/DetailExoListPlayer.java)、[ExoAdaptiveTrackActivity](../../app/src/main/java/com/example/gsyvideoplayer/exo/ExoAdaptiveTrackActivity.java)
 - MediaCodec 智能回退：[SmartMediaCodecFallbackActivity](../../app/src/main/java/com/example/gsyvideoplayer/SmartMediaCodecFallbackActivity.java) + [doc/SMART_MEDIACODEC_FALLBACK_RESEARCH.md](../../doc/SMART_MEDIACODEC_FALLBACK_RESEARCH.md)
 
-## v14.0.0 原生选择
+## v14.1.0 原生选择
 
 IJK 当前三 ABI 成套库为 FFmpeg n5.1.10 / OpenSSL 3.5.9。`GSYIjkMediaCodecSelector` 先保留原 IJK 选择，再在 API 29+ 选择平台报告的普通 Codec2 硬件解码器，排除纯软件及安全/隧道必需解码器。这是初始化阶段的选择补充，与确认运行中硬解失败后重建软解的策略分开；见 [发布说明](../../doc/UPDATE_VERSION.md#v1400-2026-10-10)。
 

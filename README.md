@@ -71,7 +71,7 @@ There are currently three hosting methods:
 
 #### [--- Recent Playback Features --- ](https://github.com/CarGuo/GSYVideoPlayer/blob/master/doc/RECENT_FEATURES_EN.md).
 
-### ABI and dependency selection in v14.0.0
+### ABI and dependency selection in v14.1.0
 
 The `gsyvideoplayer` aggregate already includes Java, Exo2 and `ex_so`. For modular IJK setup, choose `ex_so` or the required standalone ABI modules; do not include two native sets for the same ABI.
 
@@ -108,37 +108,37 @@ allprojects {
 ```groovy
  //Complete version introduction
 
-implementation 'io.github.carguo:gsyvideoplayer:14.0.0'
+implementation 'io.github.carguo:gsyvideoplayer:14.1.0'
 
 
 //Whether AliPlayer mode is needed
-implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
+implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.1.0'
 
 //Whether DLNA/UPnP casting is needed (optional, minSdk 26)
-implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
+implementation 'io.github.carguo:gsyvideoplayer-cast:14.1.0'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:14.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-exo2:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:14.1.0'
 
  //Optional direct RTMP module; exo2 already exposes it transitively
- implementation 'io.github.carguo:gsyvideoplayer-rtmp:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-rtmp:14.1.0'
 
  //Optional DLNA/UPnP cast implementation (minSdk 26); the default player does not include Jetty
- implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-cast:14.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.1.0'
 
  //Select required ABIs; do not also add ex_so
- implementation 'io.github.carguo:gsyvideoplayer-arm64:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-armv7a:14.0.0'
- implementation 'io.github.carguo:gsyvideoplayer-x64:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-arm64:14.1.0'
+ implementation 'io.github.carguo:gsyvideoplayer-armv7a:14.1.0'
+ implementation 'io.github.carguo:gsyvideoplayer-x64:14.1.0'
 ```
 
 #### C. Modular setup with all three migrated ABIs
@@ -146,16 +146,16 @@ implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
 `ex_so` bundles all three migrated ABIs with the same codec configuration as the standalone modules in B. Select B when only a subset of ABIs is needed.
 
 ```groovy
- implementation 'io.github.carguo:gsyvideoplayer-java:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-java:14.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-exo2:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-exo2:14.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-aliplay:14.1.0'
 
  //IJK native libraries for the three migrated ABIs
- implementation 'io.github.carguo:gsyvideoplayer-ex_so:14.0.0'
+ implementation 'io.github.carguo:gsyvideoplayer-ex_so:14.1.0'
 
 ```
 
@@ -172,7 +172,7 @@ The new `gsyvideoplayer-compose` module exposes Compose entries on top of the ex
 
 ```groovy
 // Maven Central:
-implementation 'io.github.carguo:gsyvideoplayer-compose:14.0.0'
+implementation 'io.github.carguo:gsyvideoplayer-compose:14.1.0'
 
 // Source dependency for local development:
 implementation project(':gsyVideoPlayer-compose')
@@ -241,37 +241,37 @@ allprojects {
 
 ```groovy
  //Complete version introduction
- implementation 'com.shuyu:gsyvideoplayer:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer:14.1.0'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.1.0'
 
  //Whether DLNA/UPnP casting is needed (optional, minSdk 26)
- implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-cast:14.1.0'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:14.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-exo2:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:14.1.0'
 
  //Optional direct RTMP module; exo2 already exposes it transitively
- implementation 'com.shuyu:gsyvideoplayer-rtmp:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-rtmp:14.1.0'
 
  //Optional DLNA/UPnP cast implementation (minSdk 26); the default player does not include Jetty
- implementation 'com.shuyu:gsyvideoplayer-cast:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-cast:14.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.1.0'
 
  //Select required ABIs; do not also add ex_so
- implementation 'com.shuyu:gsyvideoplayer-armv7a:14.0.0'
- implementation 'com.shuyu:gsyvideoplayer-arm64:14.0.0'
- implementation 'com.shuyu:gsyvideoplayer-x64:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-armv7a:14.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-arm64:14.1.0'
+ implementation 'com.shuyu:gsyvideoplayer-x64:14.1.0'
 ```
 
 #### C. Modular setup with all three migrated ABIs
@@ -279,24 +279,24 @@ allprojects {
 `ex_so` bundles all three migrated ABIs with the same codec configuration as the standalone modules in B. Select B when only a subset of ABIs is needed.
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-java:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-java:14.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-exo2:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-exo2:14.1.0'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.shuyu:gsyvideoplayer-aliplay:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-aliplay:14.1.0'
 
  //IJK native libraries for the three migrated ABIs
- implementation 'com.shuyu:gsyvideoplayer-ex_so:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-ex_so:14.1.0'
 
 ```
 
 #### D. Jetpack Compose Support (Optional)
 
 ```groovy
- implementation 'com.shuyu:gsyvideoplayer-compose:14.0.0'
+ implementation 'com.shuyu:gsyvideoplayer-compose:14.1.0'
 ```
 
 ### 3. Jitpack Introduction Method (will continue to be released, but not highly recommended)
@@ -323,34 +323,34 @@ allprojects {
 ```groovy
  //Complete version introduction
 
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer:v14.1.0'
 
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.1.0'
 
  //Whether DLNA/UPnP casting is needed (optional, minSdk 26)
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.1.0'
 ```
 
 #### B. Add java and the so support you want:
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.1.0'
 
  //Optional DLNA/UPnP cast implementation (minSdk 26)
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-cast:v14.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.1.0'
 
  //Select required ABIs; do not also add ex_so
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v14.0.0'
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-arm64:v14.1.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-armv7a:v14.1.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-x64:v14.1.0'
 ```
 
 #### C. Modular setup with all three migrated ABIs
@@ -358,16 +358,16 @@ allprojects {
 `ex_so` bundles all three migrated ABIs with the same codec configuration as the standalone modules in B. Select B when only a subset of ABIs is needed.
 
 ```groovy
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-java:v14.1.0'
 
  //Whether ExoPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-exo2:v14.1.0'
 
  //Whether AliPlayer mode is needed
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-aliplay:v14.1.0'
 
  //IJK native libraries for the three migrated ABIs
- implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v14.0.0'
+ implementation 'com.github.CarGuo.GSYVideoPlayer:gsyvideoplayer-ex_so:v14.1.0'
 
 ```
 
@@ -519,11 +519,18 @@ Library APIs include `GSYVideoPreviewVttParser`, `GSYVideoPreviewProvider`, and 
 
 ## V. Recent Versions
 
-### IJK native update (2026-11-06)
+### v14.1.0 (2026-11-11)
 
-The matched ARM64 / ARMv7 / x86_64 SOs include three IJK repair rounds: output-format crop/size propagation, the opt-in H.264 dynamic-crop fallback, and EOS input/output progress. The EOS repair is automatic; `mediacodec-h264-crop-workaround` remains **off by default**, and existing `mediacodec-handle-resolution-change=1` can remain enabled. No Java defaults or release version are changed.
+- **IJK native libraries**: ship matched ARM64 / ARMv7 / x86_64 tuples with H.264 output-format crop/size propagation, an opt-in crop rebuild path, and asynchronous MediaCodec EOS input/output progress repairs.
+- **Crop option**: `mediacodec-h264-crop-workaround` remains **off by default** and handles a bounded H.264 subset. The EOS repair applies automatically, including AVC/HEVC when the crop option is disabled; existing `mediacodec-handle-resolution-change=1` can remain enabled.
+- **Compose speed (#4267)**: publish Host speed configuration to `snapshot` and `stateFlow`, including immediately after a new `setUp` or Host attachment.
+- **Lifecycle pause/resume (#4268)**: prevent repeated or late buffering notifications from replacing pause/resume intent in the shared Java player core; buffering remains pausable when the backend temporarily reports `isPlaying=false`.
+- **Regression coverage**: add eight Host-based regression cases; Java/cast/Compose Debug and Release unit tests pass in **52 executions**, along with **48 session regressions**.
+- **Release checks**: Debug/Release demo builds, local publication of all 15 modules under both GitHub Packages and Maven Central coordinates, and cast dependency isolation pass. The Release APK also passes 16 KiB native-library packaging alignment checks.
 
 HTTPS/OpenSSL support is retained. For server authentication, explicitly set FORMAT `tls_verify=1` and a trusted `ca_file`; the default is 0. ARM64/x86_64 use a 16 KiB ELF layout, while ARMv7 keeps 4 KiB. Correct final APK/AAB native-library alignment is also required. See the [native-library guide](doc/IJK_THREE_ABI_SO_UPDATE.md) for options, supported inputs, ABI packaging, source pins and matching file hashes.
+
+See the [full v14.1.0 changelog](doc/UPDATE_VERSION_EN.md#v1410-2026-11-11) for the release scope and verification boundaries.
 
 ### v14.0.0 (2026-10-10)
 

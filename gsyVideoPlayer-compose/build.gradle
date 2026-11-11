@@ -36,7 +36,7 @@ android {
     }
 
     testOptions {
-        // 14.0.0 / #4267: Exercise the real Host/Builder state path in JVM regressions.
+        // 14.1.0 / #4267: Exercise the real Host/Builder state path in JVM regressions.
         unitTests.includeAndroidResources = true
     }
 }

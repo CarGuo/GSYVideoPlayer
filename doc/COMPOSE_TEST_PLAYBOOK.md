@@ -284,3 +284,15 @@ adb -s emulator-5554 logcat -d         | grep -c "ANR in"             # 应 == 0
 - `FoldComposeActivity`：FLAT/BOOK/TABLETOP × 横竖屏 × 普通/全屏；未注入时确认真实 FoldingFeature 路径。
 
 发布时实际结果及未覆盖范围见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)，本清单本身不表示新增用例已执行。
+
+
+## v14.1.0 增量回归
+
+- `GSYPlayerControllerSpeedTest`：重复 `setUp` 后立即同步默认倍速、builder 指定倍速及延迟挂载、通过 host 修改倍速后的轮询同步；同时核对 `snapshot` 和 `stateFlow`（#4267）。
+- `GSYPlayerLifecyclePauseTest`：重复/迟到的缓冲通知、缓冲结束前恢复、后端 `isPlaying=false` 时暂停，以及准备阶段暂停和预加载兼容路径；调用真实 host 状态方法与 `GSYVideoManager.onPause/onResume`，替换媒体后端以确定性重现时序（#4268）。
+
+```sh
+./gradlew :gsyVideoPlayer-compose:test
+```
+
+这两组共 8 个独立用例，分别运行 Debug / Release，并进入现有 Compose CI 单测。它们验证状态转换和配置同步，不替代真机音视频播放验证。

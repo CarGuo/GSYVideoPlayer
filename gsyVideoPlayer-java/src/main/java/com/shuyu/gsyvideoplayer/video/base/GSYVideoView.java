@@ -521,7 +521,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         }
         try {
             GSYVideoViewBridge manager = getGSYVideoManager();
-            // 14.0.0 / #4268: Buffering is resumable even when the backend
+            // 14.1.0 / #4268: Buffering is resumable even when the backend
             // temporarily reports isPlaying=false; pause its playback intent too.
             if (manager != null && (mCurrentState == CURRENT_STATE_PLAYING
                 || mCurrentState == CURRENT_STATE_PLAYING_BUFFERING_START
@@ -724,7 +724,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     @Override
     public void onInfo(int what, int extra) {
         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
-            // 14.0.0 / #4268: Buffer events only wrap PLAYING. Repeated or late
+            // 14.1.0 / #4268: Buffer events only wrap PLAYING. Repeated or late
             // notifications must not replace a newer pause/resume decision.
             if (mHadPlay && mCurrentState == CURRENT_STATE_PLAYING) {
                 mBackUpPlayingBufferState = mCurrentState;

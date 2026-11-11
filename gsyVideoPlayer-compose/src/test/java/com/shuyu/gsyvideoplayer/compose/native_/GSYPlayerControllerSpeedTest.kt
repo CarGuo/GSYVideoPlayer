@@ -16,7 +16,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import java.util.concurrent.TimeUnit
 
-/** 14.0.0 / #4267: Published speed must follow Host configuration across setup paths. */
+/** 14.1.0 / #4267: Published speed must follow Host configuration across setup paths. */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])
 @LooperMode(LooperMode.Mode.PAUSED)

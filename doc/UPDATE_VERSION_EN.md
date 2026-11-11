@@ -2,6 +2,32 @@
 
 **[Click to see the Chinese version](UPDATE_VERSION.md)**
 
+### v14.1.0 (2026-11-11)
+
+This release covers the matched IJK native-library updates and two Compose playback-state fixes in `v14.0.0..v14.1.0`. Current dependency examples use `14.1.0`; the FFmpeg **n5.1.10** / OpenSSL **3.5.9** baseline and default ABI selection are unchanged.
+
+#### IJK three-ABI native libraries
+
+- Synchronize matched `libijkffmpeg.so` / `libijkplayer.so` / `libijksdl.so` tuples in `gsyvideoplayer-ex_so` and standalone arm64 / armv7a / x64 modules. Both copies of each ABI are byte-identical; see the [native-library guide](IJK_THREE_ABI_SO_UPDATE.md) for all nine hashes and pinned source identities.
+- Repair H.264 visible-size propagation on MediaCodec output-format events, including crop-only and single-axis changes. This requires a device-provided format event; it does not recreate the decoder.
+- Add the opt-in PLAYER `mediacodec-h264-crop-workaround`, **disabled by default (0)**. For supported H.264 SPS/PPS+IDR crop transitions, drain the old decoder generation, recreate and replay once. Scope is a bounded H.264 subset on asynchronous MediaCodec input; HEVC, software decoding and synchronous input are excluded. Existing `mediacodec-handle-resolution-change=1` can remain enabled.
+- Repair asynchronous MediaCodec EOS input waiting: allow output to progress while EOS waits for an input slot, instead of holding the output codec mutex and blocking drain. This applies automatically, including AVC/HEVC with the crop option disabled, without changing synchronous input or default options.
+- Retain HTTPS/OpenSSL. Server authentication still requires explicit FORMAT `tls_verify=1` and a trusted `ca_file`; the default remains 0. ARM64/x86_64 retain a 16 KiB ELF layout and ARMv7 retains 4 KiB; final APK/AAB native-library packaging must also be aligned correctly.
+
+#### Compose and shared player state
+
+- Fix [#4267](https://github.com/CarGuo/GSYVideoPlayer/issues/4267): remove the Controller's duplicate speed cache and read Host configuration for both `snapshot.speed` and `stateFlow.speed`. Publish immediately after applying a new builder or attaching a Host, preserving the new builder's speed precedence.
+- Fix [#4268](https://github.com/CarGuo/GSYVideoPlayer/issues/4268): buffering notifications only wrap active playback; repeated START does not recapture state, and late START/END cannot replace later pause/resume intent. Logical playing/buffering states can pause even when the backend temporarily reports `isPlaying=false`. Preserve deferred pause during preparation, preloading and `seek=false`. The shared Java-core repair covers Compose, Wrapper and traditional View callers.
+- Add eight Robolectric regressions using real Host state methods for speed configuration, source changes, attachment, direct Host updates, and interleaved lifecycle/buffering events. They run in the existing Compose unit-test tasks.
+
+#### Release verification scope
+
+On 2026-11-11, Java, cast and Compose Debug/Release unit tests passed in **52 executions (26 unique cases across two builds)**, along with **48 session regressions**. Debug/Release demo builds, local publication of all 15 modules under both GitHub Packages and Maven Central coordinates, and cast dependency-isolation POM checks passed. The Release APK was verified as version `14.1.0` and passed 16 KiB native-library packaging alignment checks.
+
+All new speed regressions fail on the original code; three lifecycle issue regressions fail before the fix, while the two compatibility cases pass before and after it.
+
+All nine files in the current three-ABI bundle were checked against their matched hashes, with aggregate and standalone ABI copies identical. This round did not repeat device playback verification on these final bytes; the v14.0.0 device results below and earlier candidate-library records do not qualify this bundle. Option scope, source pins and file hashes are recorded in the [native-library guide](IJK_THREE_ABI_SO_UPDATE.md).
+
 ### v14.0.0 (2026-10-10)
 
 This release covers all 27 commits in `v13.2.1..v14.0.0`, including two merges. See the [release audit](V14_RELEASE_REVIEW.md) for the commit-by-commit mapping. `ffmpeg-5.0` is the migration branch name; the actual FFmpeg baseline is **n5.1.10**.

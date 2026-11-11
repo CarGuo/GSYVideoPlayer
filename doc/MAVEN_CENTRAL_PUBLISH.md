@@ -1,6 +1,6 @@
 # Maven Central 自动发布与本地核对
 
-> v14.0.0 / 2026-10-10：本文依据当前 Gradle 配置与工作流修订，替换旧默认目标、签名任务及固定同步时间的说法。
+> v14.1.0 / 2026-11-11：本文依据当前 Gradle 配置与工作流修订，替换旧默认目标、签名任务及固定同步时间的说法。
 
 ## 当前实现
 
@@ -75,4 +75,4 @@ gpg --armor --export-secret-keys YOUR_KEY_ID > private-key.asc
 - **公开仓库仍 404**：确认发布状态与目标版本，在 `repo.maven.apache.org/maven2/io/github/carguo/<artifact>/<version>/` 检查 POM/AAR；上传或工作流成功不等于已可下载，不保证固定同步时间。
 - **重复发布**：已存在的同版本产物不覆盖；发布修正应使用新的版本身份。
 
-v14.0.0 的实际工作流、产物和验证范围见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)。更多目标配置见 [DUAL_CHANNEL_PUBLISH.md](DUAL_CHANNEL_PUBLISH.md)，使用方依赖见 [DEPENDENCIES.md](DEPENDENCIES.md)。
+v14.0.0 的历史工作流、产物和验证范围见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)。更多目标配置见 [DUAL_CHANNEL_PUBLISH.md](DUAL_CHANNEL_PUBLISH.md)，使用方依赖见 [DEPENDENCIES.md](DEPENDENCIES.md)。

@@ -2,6 +2,32 @@
 
 **[Click to see the English version](UPDATE_VERSION_EN.md)**
 
+### v14.1.0 (2026-11-11)
+
+本版覆盖 `v14.0.0..v14.1.0` 的 IJK 成套原生库更新及两个 Compose 播控修复。当前依赖版本统一为 `14.1.0`；FFmpeg **n5.1.10**、OpenSSL **3.5.9** 和默认 ABI 组合保持不变。
+
+#### IJK 三 ABI 原生库
+
+- `gsyvideoplayer-ex_so` 与独立 arm64 / armv7a / x64 模块同步成套 `libijkffmpeg.so` / `libijkplayer.so` / `libijksdl.so`，同一 ABI 的两份产物字节一致；当前九库哈希与固定源码对应关系见 [原生库说明](IJK_THREE_ABI_SO_UPDATE.md)。
+- 修复 MediaCodec 输出格式事件中的 H.264 可见尺寸传播，覆盖 crop-only 和单轴尺寸变化；该修复依赖设备实际发出输出格式事件，不会自行重建解码器。
+- 新增可选 PLAYER `mediacodec-h264-crop-workaround`，**默认 0 关闭**。在受支持的 H.264 SPS/PPS+IDR crop 变化下，排空旧解码器代、重建并重放一次；仅适用于受限 H.264 输入的异步 MediaCodec 路径，不适用于 HEVC、软件解码或同步输入。既有 `mediacodec-handle-resolution-change=1` 可保留。
+- 修复异步 MediaCodec 的 EOS 输入等待：等待输入槽位时允许输出继续推进，避免占用输出 codec 互斥锁阻塞排空。该修复自动生效，也适用于关闭 crop 选项时的 AVC/HEVC，不改变同步输入路径或默认选项。
+- 保留 HTTPS/OpenSSL；服务端身份验证仍需显式设置 FORMAT `tls_verify=1` 和可信 `ca_file`，默认值为 0。ARM64/x86_64 保持 16 KiB ELF 布局，ARMv7 保持 4 KiB；最终 APK/AAB 的原生库打包对齐仍需正确配置。
+
+#### Compose 与共享播放器状态
+
+- 修复 [#4267](https://github.com/CarGuo/GSYVideoPlayer/issues/4267)：删除 Controller 的重复倍速缓存，`snapshot.speed` 与 `stateFlow.speed` 统一读取 Host 配置；应用新 builder 或挂载 Host 后立即同步，保留新 builder 的倍速优先级。
+- 修复 [#4268](https://github.com/CarGuo/GSYVideoPlayer/issues/4268)：缓冲通知只包装当前播放态，重复 START 不覆盖原状态，迟到 START/END 不覆盖后续暂停/恢复意图。逻辑播放态和缓冲态均可暂停，即使后端瞬时返回 `isPlaying=false`；保留准备阶段延迟暂停、预加载和 `seek=false` 的既有行为。修复位于 Java 公共核心，同时适用于 Compose、Wrapper 和传统 View 调用。
+- 新增 8 条 Robolectric 回归用例，使用真实 Host 状态方法，覆盖倍速配置、切源、挂载、直接 Host 修改，以及暂停/恢复与缓冲通知交错；纳入现有 Compose 单测任务。
+
+#### 发布验证范围
+
+2026-11-11，Java、cast 与 Compose 模块的 Debug/Release 单测共 **52 次执行（26 个独立用例 × 两种构建）**全部通过，**48 项会话回归**通过；Demo Debug/Release 构建、15 模块的 GitHub Packages / Maven Central 双渠道坐标本地发布及投屏依赖隔离 POM 检查通过。Release APK 已核对版本为 `14.1.0`，并通过 16 KiB 原生库打包对齐检查。
+
+新增倍速用例在旧代码全部失败；新增生命周期用例中的 3 条问题回归在旧代码失败，2 条兼容性用例在修复前后通过。
+
+当前三 ABI 共九个库文件已核对成套哈希，聚合模块与独立 ABI 模块的对应文件一致。本轮未对这些最终字节重新进行真机播放验证；下方 v14.0.0 的设备结果和早期候选库记录不能替代本版原生库实机验证。选项范围、源码固定点和文件哈希见 [原生库说明](IJK_THREE_ABI_SO_UPDATE.md)。
+
 ### v14.0.0 (2026-10-10)
 
 本版覆盖 `v13.2.1..v14.0.0` 的全部 27 条提交（含两次合并），完整变更及逐提交对应关系见 [发布核对记录](V14_RELEASE_REVIEW.md)。`ffmpeg-5.0` 是迁移分支名，实际 FFmpeg 基线为 **n5.1.10**。

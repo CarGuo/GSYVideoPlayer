@@ -1,13 +1,13 @@
-# 双渠道发布配置指南（v14.0.0）
+# 双渠道发布配置指南（v14.1.0）
 
-> 2026-10-10 校正：两个渠道共享版本，但由 `PUBLISH_TARGET` 分别选择 publication；同一次 Gradle 调用不会创建两个 publication。实际配置见 [publish.gradle](../gradle/publish.gradle)、[maven-central-publish.gradle](../gradle/maven-central-publish.gradle) 和 [根构建配置](../build.gradle)。
+> 2026-11-11 校正：两个渠道共享版本，但由 `PUBLISH_TARGET` 分别选择 publication；同一次 Gradle 调用不会创建两个 publication。实际配置见 [publish.gradle](../gradle/publish.gradle)、[maven-central-publish.gradle](../gradle/maven-central-publish.gradle) 和 [根构建配置](../build.gradle)。
 
 | 渠道 | GROUP ID | PUBLISH_TARGET | Publication |
 | --- | --- | --- | --- |
 | GitHub Packages | `com.shuyu` | `github`（默认） | `release` |
 | Maven Central | `io.github.carguo` | `mavenCentral` | `mavenCentral` |
 
-当前 `PROJ_VERSION=14.0.0`，各模块 artifactId 以自身 `gradle.properties` 为准。模块同时应用两个脚本；目标属性决定本次创建哪一个 publication 和内部依赖坐标。跨渠道发布任务有禁用守卫，不能省略 Maven Central 的目标参数。
+当前 `PROJ_VERSION=14.1.0`，各模块 artifactId 以自身 `gradle.properties` 为准。模块同时应用两个脚本；目标属性决定本次创建哪一个 publication 和内部依赖坐标。跨渠道发布任务有禁用守卫，不能省略 Maven Central 的目标参数。
 
 ## 本地核对
 
@@ -58,10 +58,10 @@ git push origin "$release_tag"
 ```groovy
 repositories { mavenCentral() }
 dependencies {
-    implementation 'io.github.carguo:gsyvideoplayer:14.0.0'
+    implementation 'io.github.carguo:gsyvideoplayer:14.1.0'
     // 可选投屏：API 26
-    implementation 'io.github.carguo:gsyvideoplayer-cast:14.0.0'
+    implementation 'io.github.carguo:gsyvideoplayer-cast:14.1.0'
 }
 ```
 
-GitHub Packages 改用 `com.shuyu` 并配置个人 `read:packages` 凭据。不要在同一应用同时引入两组相同播放器模块，避免重复类/so。ABI 和模块组合见 [DEPENDENCIES.md](DEPENDENCIES.md)，本版发布流水线与产物身份见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)。
+GitHub Packages 改用 `com.shuyu` 并配置个人 `read:packages` 凭据。不要在同一应用同时引入两组相同播放器模块，避免重复类/so。ABI 和模块组合见 [DEPENDENCIES.md](DEPENDENCIES.md)，v14.0.0 历史发布流水线与产物身份见 [V14_RELEASE_REVIEW.md](V14_RELEASE_REVIEW.md)。
