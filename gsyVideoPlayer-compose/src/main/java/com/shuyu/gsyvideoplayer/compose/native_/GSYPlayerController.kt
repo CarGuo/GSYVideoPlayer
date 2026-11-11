@@ -93,7 +93,6 @@ class GSYPlayerController internal constructor() {
     val events: SharedFlow<GSYPlayerEvent> = _events.asSharedFlow()
 
     private var pendingBuilder: GSYVideoOptionBuilder? = null
-    private var currentSpeed: Float = 1f
     private var locked: Boolean = false
     private var autoPlay: Boolean = false
 
@@ -254,6 +253,7 @@ class GSYPlayerController internal constructor() {
             installInternalCallback(player)
             installLowLevelHooks(player)
             reapplyPendingSetters(player)
+            syncFromHost(player)
             if (autoPlay) {
                 handler.post {
                     if (!released && attached) host?.startPlayLogic()
@@ -362,6 +362,7 @@ class GSYPlayerController internal constructor() {
         if (released) return
         if (host === player) {
             attached = true
+            syncFromHost(player)
             startTicking()
             return
         }
@@ -382,6 +383,7 @@ class GSYPlayerController internal constructor() {
         installInternalCallback(player)
         installLowLevelHooks(player)
         reapplyPendingSetters(player)
+        syncFromHost(player)
         startTicking()
         if (autoPlay) {
             handler.post {
@@ -504,7 +506,9 @@ class GSYPlayerController internal constructor() {
             netSpeed = netSpeed,
             netSpeedText = netSpeedText,
             isCacheReady = cacheReady,
-            speed = currentSpeed,
+            // 14.0.0 / #4267: Builder and direct Host setters also change speed;
+            // a Controller cache would keep publishing the previous video's value.
+            speed = player.speed,
             isLocked = locked,
         )
         _snapshot.value = next
@@ -568,7 +572,6 @@ class GSYPlayerController internal constructor() {
     }
 
     fun setSpeed(speed: Float, soundTouch: Boolean = true) {
-        currentSpeed = speed
         activeHost()?.let { p ->
             p.setSpeedPlaying(speed, soundTouch)
             syncFromHost(p)

@@ -34,6 +34,11 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    testOptions {
+        // 14.0.0 / #4267: Exercise the real Host/Builder state path in JVM regressions.
+        unitTests.includeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -55,4 +60,6 @@ dependencies {
     implementation composeDependencies.materialIcons
     implementation composeDependencies.uiToolingPreview
     debugImplementation composeDependencies.uiTooling
+
+    testImplementation testDependencies.robolectric
 }

@@ -50,6 +50,7 @@ data class GSYPlayerSnapshot(
      * 用于"缓存命中"小红点 / 上行节流等业务判断。
      */
     val isCacheReady: Boolean = false,
+    /** 当前 Host 的倍速配置，随 setUp(builder) 或倍速设置更新。 */
     val speed: Float = 1f,
     val isLocked: Boolean = false,
 )

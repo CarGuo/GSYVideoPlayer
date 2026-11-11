@@ -41,6 +41,8 @@ ext {
 
     testDependencies = [
         junit       : "junit:junit:4.13.2",
+        // 14.0.0 / #4267: Keep test dependencies compatible with the current AGP/Jetifier.
+        robolectric : "org.robolectric:robolectric:4.15.1",
         runner      : "androidx.test:runner:1.4.0",
         espressoCore: "androidx.test.espresso:espresso-core:3.4.0"
     ]
