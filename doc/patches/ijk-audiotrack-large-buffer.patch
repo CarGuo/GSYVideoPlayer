@@ -1,0 +1,22 @@
+--- a/ijkmedia/ijksdl/android/ijksdl_aout_android_audiotrack.c
++++ b/ijkmedia/ijksdl/android/ijksdl_aout_android_audiotrack.c
+@@ -715,10 +715,16 @@
+     if (opaque->frame_size <= 0 || opaque->frame_size > 256 || opaque->output_epoch == UINT64_MAX)
+         goto fail_playback;
+     size_t capacity = opaque->buffer_size / opaque->frame_size + 256 / opaque->frame_size + 2;
+-    /* Worst case is one span per output frame. Refuse excessive accounting
+-     * storage rather than silently discard queued media mappings. */
+-    if (capacity > 65536)
++    /* Allow large platform buffers without losing exact media mappings
++     * (one span per output frame in the worst case). Keep allocation bounded:
++     * 131072 spans is 10 MiB with an 80-byte SDL_AudioPlaybackSpan. */
++    const size_t max_playback_spans = 128 * 1024;
++    if (capacity > max_playback_spans) {
++        ALOGE("aout_open_audio_n: AudioTrack buffer requires %zu playback spans "
++              "(limit %zu, %d bytes, %d bytes/frame)",
++              capacity, max_playback_spans, opaque->buffer_size, opaque->frame_size);
+         goto fail_playback;
++    }
+     free(opaque->playback_spans);
+     opaque->playback_spans = calloc(capacity, sizeof(*opaque->playback_spans));
+     if (!opaque->playback_spans ||
