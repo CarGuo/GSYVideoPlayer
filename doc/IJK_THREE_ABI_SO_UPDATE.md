@@ -2,6 +2,8 @@
 
 The ARM64, ARMv7 and x86_64 native bundles include the three IJK repairs below. Production source: [CarGuo/ijkplayer `df9e456a4ef4c770bc97bb179d58a0cf9d529011`](https://github.com/CarGuo/ijkplayer/commit/df9e456a4ef4c770bc97bb179d58a0cf9d529011).
 
+The SDL bundles also apply the [IJK AudioTrack large-buffer patch](patches/ijk-audiotrack-large-buffer.patch) to the same source pin. It allows up to 131,072 playback-accounting spans, allocating only what the negotiated buffer needs. The Android AudioTrack buffer, routing and audio backend are unchanged. Only `libijksdl.so` is rebuilt. Apply the patch to the IJK source before building the SDL module; keep the FFmpeg and player libraries from the same native bundle.
+
 ## Included repairs
 
 | Repair | Behavior |
@@ -99,10 +101,10 @@ Each SHA-256 applies to both module destinations for its ABI.
 | --- | --- | ---: | --- |
 | arm64-v8a | `libijkffmpeg.so` | 11817008 | `699f8f59324ed0b9b68c395b8a330f4005d9e88e85489cccd034530d4623d73d` |
 | arm64-v8a | `libijkplayer.so` | 598000 | `8b9aa088df96236e093d4d820ad8164ab7047ba83dd085aceb1ac062e886adf3` |
-| arm64-v8a | `libijksdl.so` | 378336 | `9f7603c825af7b3ba1f3aa893223a4201a46b3bf19bce387adaf1027b7bdcc9e` |
+| arm64-v8a | `libijksdl.so` | 378496 | `4f391461189dc67b5234bfc0a7c5fd572e8cc32be07360786167faa2933e686f` |
 | armeabi-v7a | `libijkffmpeg.so` | 10849240 | `ede0450349007ab89bf65351bb60f94412c61ca009b3c96996fdc7faa869bd96` |
 | armeabi-v7a | `libijkplayer.so` | 410680 | `5852f2b834e761d064d66fd2f5841daa5cf52e794fbad764529867ff74603eec` |
-| armeabi-v7a | `libijksdl.so` | 326048 | `9e275b7be65b1068f7439ceeca772d6da9a0eff0ae9e126a11e87d50902650f6` |
+| armeabi-v7a | `libijksdl.so` | 326192 | `0b04baf163210255d56631668e33a4f2496319581cc911ba636e485ec51183dc` |
 | x86_64 | `libijkffmpeg.so` | 16233416 | `3557a976ba734f60bbc05b0110ba145711f7aa16f7e611e9375811aba68e022f` |
 | x86_64 | `libijkplayer.so` | 651904 | `e09b8f6be0de6e4196cae6f60e25e157cfd7392e186a8e8c47b05ed98f0c52a2` |
-| x86_64 | `libijksdl.so` | 462032 | `25ec7ff81b68e8a29555a2bab6413a8301ed95b16fd5e3823a887cf49a2ce7bc` |
+| x86_64 | `libijksdl.so` | 462160 | `eb5585223149a32096609602961e049995970428f2949ee62549255bff7a53fd` |
