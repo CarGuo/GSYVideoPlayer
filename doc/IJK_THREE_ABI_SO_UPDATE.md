@@ -1,8 +1,8 @@
-# IJK native libraries: crop, EOS, HTTPS and 16 KiB
+# IJK native libraries: crop, EOS, SoundTouch, HTTPS and 16 KiB
 
-The ARM64, ARMv7 and x86_64 native bundles include the three IJK repairs below. Production source: [CarGuo/ijkplayer `df9e456a4ef4c770bc97bb179d58a0cf9d529011`](https://github.com/CarGuo/ijkplayer/commit/df9e456a4ef4c770bc97bb179d58a0cf9d529011).
+The ARM64, ARMv7 and x86_64 native bundles include the three MediaCodec repairs below. MediaCodec baseline: [CarGuo/ijkplayer `df9e456a4ef4c770bc97bb179d58a0cf9d529011`](https://github.com/CarGuo/ijkplayer/commit/df9e456a4ef4c770bc97bb179d58a0cf9d529011).
 
-The SDL bundles also apply the [IJK AudioTrack large-buffer patch](patches/ijk-audiotrack-large-buffer.patch) to the same source pin. It allows up to 131,072 playback-accounting spans, allocating only what the negotiated buffer needs. The Android AudioTrack buffer, routing and audio backend are unchanged. Only `libijksdl.so` is rebuilt. Apply the patch to the IJK source before building the SDL module; keep the FFmpeg and player libraries from the same native bundle.
+The SDL bundles also apply the [IJK AudioTrack large-buffer patch](patches/ijk-audiotrack-large-buffer.patch) to that baseline. It allows up to 131,072 playback-accounting spans, allocating only what the negotiated buffer needs. The Android AudioTrack buffer, routing and audio backend are unchanged. Only `libijksdl.so` is rebuilt. Apply the patch to the IJK source before building the SDL module; keep the FFmpeg and player libraries from the same native bundle.
 
 ## Included repairs
 
@@ -13,6 +13,10 @@ The SDL bundles also apply the [IJK AudioTrack large-buffer patch](patches/ijk-a
 | [EOS input progress, IJK #5](https://github.com/CarGuo/ijkplayer/pull/5) | Allow output to continue while EOS waits for an input slot, instead of holding the output codec mutex or announcing a reconfigure request. Retry/error handling, guards, counters and actual completion conditions are preserved. |
 
 The EOS repair applies automatically to asynchronous MediaCodec input, including AVC/HEVC with the crop workaround disabled. It does not change synchronous execution, Java APIs, timeout values or default options.
+
+## SoundTouch audio continuity
+
+The player update for [#4274](https://github.com/CarGuo/GSYVideoPlayer/issues/4274) prevents small audio timestamp rounding differences from repeatedly flushing SoundTouch and breaking up otherwise continuous audio. Real timestamp discontinuities, format changes and seeks still reset the transform. This applies only when SoundTouch is active and does not change player options or audio routing. Only `libijkplayer.so` was rebuilt; the matching FFmpeg and SDL binaries are unchanged.
 
 ## Enable the crop workaround
 
@@ -83,7 +87,8 @@ ELF segment alignment and APK ZIP-entry alignment are separate requirements. Do 
 
 ## Source and dependency pins
 
-- IJK merged source: `df9e456a4ef4c770bc97bb179d58a0cf9d529011`, tree `0752500118251c3a7a71a9698da28e4ff516c3fc`.
+- IJK player (including SoundTouch): [`bf8e381780dc2046687dc135a78df3e24d05d7ca`](https://github.com/CarGuo/ijkplayer/commit/bf8e381780dc2046687dc135a78df3e24d05d7ca).
+- IJK MediaCodec/SDL baseline: `df9e456a4ef4c770bc97bb179d58a0cf9d529011`, tree `0752500118251c3a7a71a9698da28e4ff516c3fc`.
 - FFmpeg n5.1.10 plus integration patches: `0c8735b51d29dbc74e18c235246d5230bd5db989`.
 - OpenSSL 3.5.9: `45e844fa2a14ec92d146bd8f5778ac130b6625fb`.
 - libyuv: `a0c7dd3e4b095649881f39152655437b8cde1589`; SoundTouch: `6bf39cd3bf6b0c156267d12446b0d6bdcfcd53c2`.
@@ -91,7 +96,7 @@ ELF segment alignment and APK ZIP-entry alignment are separate requirements. Do 
 
 Use the [FFmpeg 5 build guide](https://github.com/CarGuo/ijkplayer/blob/df9e456a4ef4c770bc97bb179d58a0cf9d529011/doc/FFMPEG5.md), `init-android-ffmpeg5.sh` and the pins above. Do not use the old FFmpeg 4 initializer. Retain the [dependency and license notices](https://github.com/CarGuo/ijkplayer/blob/df9e456a4ef4c770bc97bb179d58a0cf9d529011/doc/FFMPEG5_HISTORY.md#tls-behavior-and-dependency-notices) when redistributing.
 
-ARM64's embedded player label remains `ijk-896674e7-eos-paired-20261105`; ARMv7/x86_64 use `ijk-272f9fb-eos-final-20261106`. All contain the production changes in the merged source above. Use the exact file hashes below to identify the bundle rather than interpreting the version label as a commit identifier.
+ARM64's embedded player label remains `ijk-896674e7-eos-paired-20261105`; ARMv7/x86_64 use `ijk-272f9fb-eos-final-20261106`. The labels predate the SoundTouch update and are not source revisions. Use the exact file hashes below to identify the bundle rather than interpreting the version label as a commit identifier.
 
 ## Exact files
 
@@ -100,11 +105,11 @@ Each SHA-256 applies to both module destinations for its ABI.
 | ABI | Library | Bytes | SHA-256 |
 | --- | --- | ---: | --- |
 | arm64-v8a | `libijkffmpeg.so` | 11817008 | `699f8f59324ed0b9b68c395b8a330f4005d9e88e85489cccd034530d4623d73d` |
-| arm64-v8a | `libijkplayer.so` | 598000 | `8b9aa088df96236e093d4d820ad8164ab7047ba83dd085aceb1ac062e886adf3` |
+| arm64-v8a | `libijkplayer.so` | 598256 | `50ad0623f67487b2ebb5e26b12594e3014c5659c90309c2109a8e6822d0bbbcf` |
 | arm64-v8a | `libijksdl.so` | 378496 | `4f391461189dc67b5234bfc0a7c5fd572e8cc32be07360786167faa2933e686f` |
 | armeabi-v7a | `libijkffmpeg.so` | 10849240 | `ede0450349007ab89bf65351bb60f94412c61ca009b3c96996fdc7faa869bd96` |
-| armeabi-v7a | `libijkplayer.so` | 410680 | `5852f2b834e761d064d66fd2f5841daa5cf52e794fbad764529867ff74603eec` |
+| armeabi-v7a | `libijkplayer.so` | 410920 | `c956df8bce3fbb1b6875900e9d1e8299f95f2da71870d35d42e6c3915c28c425` |
 | armeabi-v7a | `libijksdl.so` | 326192 | `0b04baf163210255d56631668e33a4f2496319581cc911ba636e485ec51183dc` |
 | x86_64 | `libijkffmpeg.so` | 16233416 | `3557a976ba734f60bbc05b0110ba145711f7aa16f7e611e9375811aba68e022f` |
-| x86_64 | `libijkplayer.so` | 651904 | `e09b8f6be0de6e4196cae6f60e25e157cfd7392e186a8e8c47b05ed98f0c52a2` |
+| x86_64 | `libijkplayer.so` | 652080 | `fcaca09fde9d38273be6b67edefbfda2e7cb43918617419eed790b7f5da71a07` |
 | x86_64 | `libijksdl.so` | 462160 | `eb5585223149a32096609602961e049995970428f2949ee62549255bff7a53fd` |
